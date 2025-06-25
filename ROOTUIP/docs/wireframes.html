@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Wireframe Concepts</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        h1 {
+            color: #0A1628;
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            color: #0A1628;
+            margin-top: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .wireframe {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .wireframe-header {
+            background: #0A1628;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 6px 6px 0 0;
+            font-weight: bold;
+        }
+        
+        .wireframe-content {
+            padding: 20px;
+        }
+        
+        .section {
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .section-label {
+            position: absolute;
+            top: -12px;
+            left: 10px;
+            background: white;
+            padding: 0 10px;
+            color: #666;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f8f8f8;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .nav-items {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #0A1628 0%, #1E3A5F 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .metric-box {
+            background: #f0f0f0;
+            padding: 20px;
+            text-align: center;
+            border-radius: 4px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #0066FF;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 10px;
+        }
+        
+        .calculator-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        
+        .form-inputs {
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 4px;
+        }
+        
+        .results-panel {
+            background: #0A1628;
+            color: white;
+            padding: 20px;
+            border-radius: 4px;
+        }
+        
+        .input-field {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            display: block;
+            width: 100%;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature-card {
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .integration-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .hub-circle {
+            width: 100px;
+            height: 100px;
+            background: #0066FF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .integration-item {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 4px;
+            width: 120px;
+            text-align: center;
+        }
+        
+        .annotation {
+            background: #fff3cd;
+            border: 1px solid #ffebd1;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 14px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>UIP Wireframe Concepts</h1>
+    
+    <h2>1. Homepage Wireframe</h2>
+    <div class="wireframe">
+        <div class="wireframe-header">UIP Homepage - Desktop View</div>
+        <div class="wireframe-content">
+            <!-- Navigation -->
+            <div class="section">
+                <span class="section-label">Navigation</span>
+                <div class="navbar">
+                    <div><strong>UIP Logo</strong></div>
+                    <div class="nav-items">
+                        <span>Platform</span>
+                        <span>Solutions</span>
+                        <span>ROI Calculator</span>
+                        <span>Resources</span>
+                    </div>
+                    <div>
+                        <span class="cta-button">Book Demo</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hero Section -->
+            <div class="section">
+                <span class="section-label">Hero Section</span>
+                <div class="hero">
+                    <h1 style="font-size: 48px; margin: 0 0 20px 0;">Stop Losing <span style="color: #00D4AA;">$14M Per Vessel</span><br>to Ocean Freight Inefficiencies</h1>
+                    <p style="font-size: 20px; opacity: 0.9;">The only AI platform that connects ALL carrier systems to eliminate detention & demurrage charges forever</p>
+                    <div style="margin: 30px 0;">
+                        <a href="#" class="cta-button">Calculate Your Savings</a>
+                        <a href="#" class="cta-button" style="background: transparent; border: 2px solid white;">See Live Demo</a>
+                    </div>
+                    <div style="border: 2px solid #00D4AA; padding: 20px; display: inline-block; margin-top: 30px; border-radius: 8px;">
+                        <div style="font-size: 14px; text-transform: uppercase; opacity: 0.8;">Industry Loss Right Now</div>
+                        <div style="font-size: 36px; color: #00D4AA; font-weight: bold;">$634,285</div>
+                        <div style="font-size: 14px; opacity: 0.7;">That's $634 every second</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trust Indicators -->
+            <div class="section">
+                <span class="section-label">Trust Indicators</span>
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div style="font-size: 32px; font-weight: bold; color: #00D4AA;">94%</div>
+                        <div>D&D Reduction</div>
+                    </div>
+                    <div class="metric-box">
+                        <div style="font-size: 32px; font-weight: bold; color: #00D4AA;">48hr</div>
+                        <div>Implementation</div>
+                    </div>
+                    <div class="metric-box">
+                        <div style="font-size: 32px; font-weight: bold; color: #00D4AA;">347%</div>
+                        <div>Average ROI</div>
+                    </div>
+                    <div class="metric-box">
+                        <div style="font-size: 32px; font-weight: bold; color: #00D4AA;">$127M+</div>
+                        <div>Saved Annually</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Problem Section -->
+            <div class="section">
+                <span class="section-label">Problem Section</span>
+                <h2 style="text-align: center;">The $20 Billion Problem Hiding in Your Operations</h2>
+                <div class="metrics-grid">
+                    <div class="feature-card">
+                        <div style="font-size: 40px;">📊</div>
+                        <h3>$7-9B in D&D</h3>
+                        <p>87% preventable</p>
+                    </div>
+                    <div class="feature-card">
+                        <div style="font-size: 40px;">🚢</div>
+                        <h3>200+ Systems</h3>
+                        <p>No standardization</p>
+                    </div>
+                    <div class="feature-card">
+                        <div style="font-size: 40px;">⚠️</div>
+                        <h3>67% Success</h3>
+                        <p>Manual disputes</p>
+                    </div>
+                    <div class="feature-card">
+                        <div style="font-size: 40px;">📉</div>
+                        <h3>Reactive Ops</h3>
+                        <p>Always too late</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="annotation">
+                💡 <strong>Design Note:</strong> Homepage focuses on immediate value proposition with shocking statistics. The live counter creates urgency, while trust indicators build credibility. Every element drives toward ROI calculator or demo booking.
+            </div>
+        </div>
+    </div>
+    
+    <h2>2. ROI Calculator Wireframe</h2>
+    <div class="wireframe">
+        <div class="wireframe-header">ROI Calculator Page</div>
+        <div class="wireframe-content">
+            <div class="section">
+                <span class="section-label">Page Header</span>
+                <h1 style="text-align: center;">See Your Savings in 30 Seconds</h1>
+                <p style="text-align: center;">Calculate your exact ROI based on your fleet size and current operations</p>
+            </div>
+            
+            <div class="section">
+                <span class="section-label">Calculator Interface</span>
+                <div class="calculator-layout">
+                    <div class="form-inputs">
+                        <h3>Your Current Operations</h3>
+                        <label>Number of Vessels</label>
+                        <input type="text" class="input-field" value="10">
+                        
+                        <label>Annual Container Volume</label>
+                        <input type="text" class="input-field" value="50,000">
+                        
+                        <label>Current D&D Charges (Annual)</label>
+                        <input type="text" class="input-field" value="$140,000,000">
+                        
+                        <label>Manual Processing Hours/Week</label>
+                        <input type="text" class="input-field" value="160">
+                        
+                        <div style="margin-top: 20px;">
+                            <input type="checkbox" checked> Include labor cost savings
+                            <br>
+                            <input type="checkbox" checked> Include efficiency gains
+                        </div>
+                    </div>
+                    
+                    <div class="results-panel">
+                        <h3>Your Potential Savings</h3>
+                        <div style="margin: 20px 0;">
+                            <div style="font-size: 14px; opacity: 0.8;">Annual Savings</div>
+                            <div style="font-size: 48px; color: #00D4AA; font-weight: bold;">$142M</div>
+                        </div>
+                        <div style="margin: 20px 0;">
+                            <div style="font-size: 14px; opacity: 0.8;">ROI Timeline</div>
+                            <div style="font-size: 36px; color: #00D4AA;">30 days</div>
+                        </div>
+                        <div style="margin: 20px 0;">
+                            <div style="font-size: 14px; opacity: 0.8;">5-Year Value</div>
+                            <div style="font-size: 36px; color: #00D4AA;">$710M</div>
+                        </div>
+                        <button style="width: 100%; padding: 15px; background: #00D4AA; color: white; border: none; border-radius: 4px; font-size: 18px; margin-top: 20px;">Get Detailed Analysis</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <span class="section-label">Credibility Section</span>
+                <div style="text-align: center; padding: 40px; background: #f8f8f8;">
+                    <h3>How We Calculate Your Savings</h3>
+                    <p>Our calculations are based on real data from 2.5M+ containers processed</p>
+                    <div class="metrics-grid" style="margin-top: 20px;">
+                        <div>✓ Conservative estimates</div>
+                        <div>✓ Industry benchmarks</div>
+                        <div>✓ Proven results</div>
+                        <div>✓ No hidden costs</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="annotation">
+                💡 <strong>Design Note:</strong> Calculator is the primary conversion tool. Left side inputs are simple and pre-filled with typical values. Right side shows dramatic savings in real-time. Results panel uses color psychology (green) and large numbers for impact.
+            </div>
+        </div>
+    </div>
+    
+    <h2>3. Platform Features Wireframe</h2>
+    <div class="wireframe">
+        <div class="wireframe-header">Platform Features Page</div>
+        <div class="wireframe-content">
+            <div class="section">
+                <span class="section-label">Hero Section</span>
+                <div style="text-align: center; padding: 40px; background: #f8f8f8;">
+                    <h1>The Only Platform That Connects Everything</h1>
+                    <p style="font-size: 20px;">Universal integration across ALL carrier data sources</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <span class="section-label">Integration Visual</span>
+                <div class="integration-visual">
+                    <div class="integration-item">API Integration</div>
+                    <div>→</div>
+                    <div class="hub-circle">UIP HUB</div>
+                    <div>←</div>
+                    <div class="integration-item">EDI Processing</div>
+                </div>
+                <div class="integration-visual">
+                    <div class="integration-item">Email Intelligence</div>
+                    <div>→</div>
+                    <div style="width: 100px;"></div>
+                    <div>←</div>
+                    <div class="integration-item">Manual Upload</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <span class="section-label">Feature Grid</span>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div style="font-size: 48px;">🤖</div>
+                        <h3>D&D Prevention AI</h3>
+                        <p>Predicts risks 14 days before charges occur</p>
+                        <ul style="text-align: left;">
+                            <li>Machine learning algorithms</li>
+                            <li>Pattern recognition</li>
+                            <li>Proactive alerts</li>
+                        </ul>
+                        <a href="#" style="color: #0066FF;">Learn More →</a>
+                    </div>
+                    <div class="feature-card">
+                        <div style="font-size: 48px;">⚡</div>
+                        <h3>Automated Disputes</h3>
+                        <p>94% success rate with zero manual effort</p>
+                        <ul style="text-align: left;">
+                            <li>Instant filing</li>
+                            <li>Evidence compilation</li>
+                            <li>Follow-up automation</li>
+                        </ul>
+                        <a href="#" style="color: #0066FF;">Learn More →</a>
+                    </div>
+                    <div class="feature-card">
+                        <div style="font-size: 48px;">🔍</div>
+                        <h3>Real-time Processing</h3>
+                        <p>GPU-powered OCR and data extraction</p>
+                        <ul style="text-align: left;">
+                            <li>10x faster processing</li>
+                            <li>99.9% accuracy</li>
+                            <li>Any document format</li>
+                        </ul>
+                        <a href="#" style="color: #0066FF;">Learn More →</a>
+                    </div>
+                    <div class="feature-card">
+                        <div style="font-size: 48px;">📈</div>
+                        <h3>Predictive Analytics</h3>
+                        <p>Prevent problems before they cost you</p>
+                        <ul style="text-align: left;">
+                            <li>Port congestion prediction</li>
+                            <li>Cost optimization</li>
+                            <li>Performance insights</li>
+                        </ul>
+                        <a href="#" style="color: #0066FF;">Learn More →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <span class="section-label">CTA Section</span>
+                <div style="text-align: center; padding: 40px; background: #0A1628; color: white;">
+                    <h2>Ready to Transform Your Operations?</h2>
+                    <p>Join industry leaders saving millions with intelligent automation</p>
+                    <a href="#" class="cta-button" style="background: #00D4AA;">Calculate Your Savings</a>
+                    <a href="#" class="cta-button" style="background: transparent; border: 2px solid white;">Book a Demo</a>
+                </div>
+            </div>
+            
+            <div class="annotation">
+                💡 <strong>Design Note:</strong> Features page uses visual hub-and-spoke model to show integration capabilities. Each feature card includes specific benefits and proof points. Progressive disclosure with "Learn More" links prevents overwhelming visitors.
+            </div>
+        </div>
+    </div>
+    
+    <h2>Mobile Responsive Considerations</h2>
+    <div class="wireframe">
+        <div class="wireframe-header">Mobile Design Guidelines</div>
+        <div class="wireframe-content">
+            <div class="section">
+                <span class="section-label">Mobile Navigation</span>
+                <ul>
+                    <li>Hamburger menu for main navigation</li>
+                    <li>Sticky "Book Demo" CTA button</li>
+                    <li>Simplified navigation with 4 main items max</li>
+                    <li>Search functionality prominent</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <span class="section-label">Mobile Hero</span>
+                <ul>
+                    <li>Headline: 32px max for readability</li>
+                    <li>Single column layout</li>
+                    <li>Loss counter below CTAs</li>
+                    <li>Vertical stack for trust indicators</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <span class="section-label">Mobile Calculator</span>
+                <ul>
+                    <li>Single column form</li>
+                    <li>Results appear below inputs</li>
+                    <li>Sticky results summary at bottom</li>
+                    <li>Large touch targets (44px minimum)</li>
+                </ul>
+            </div>
+            
+            <div class="annotation">
+                💡 <strong>Design Note:</strong> Mobile experience prioritizes speed and conversion. Calculator remains fully functional with smart defaults. CTAs are always visible. Content is scannable with clear hierarchy.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
