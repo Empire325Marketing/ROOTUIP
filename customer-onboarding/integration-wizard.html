@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Integration Setup Wizard - UIP Platform</title>
-    <link rel="icon" type="image/svg+xml" href="/ROOTUIP/js/logo-component.js">
+    <link rel="icon" type="image/svg+xml" href="/js/logo-component.js">
     <style>
         * {
             margin: 0;
@@ -577,7 +577,7 @@
                         <p class="wizard-subtitle">Connect your carrier systems and configure data flows</p>
                     </div>
                 </div>
-                <a href="/ROOTUIP/customer-onboarding/" class="btn btn-secondary">← Back to Onboarding</a>
+                <a href="/customer-onboarding/" class="btn btn-secondary">← Back to Onboarding</a>
             </div>
         </div>
 
@@ -704,12 +704,12 @@
                     <div style="background: #f7fafc; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
                         <h4 style="color: #2d3748; margin-bottom: 10px;">📊 Data Migration</h4>
                         <p style="color: #718096; margin-bottom: 10px;">Import your historical data to get complete visibility.</p>
-                        <a href="/ROOTUIP/customer-onboarding/data-migration.html" class="btn btn-primary" style="font-size: 0.9rem; padding: 8px 16px;">Start Data Migration</a>
+                        <a href="/customer-onboarding/data-migration.html" class="btn btn-primary" style="font-size: 0.9rem; padding: 8px 16px;">Start Data Migration</a>
                     </div>
                     <div style="background: #f7fafc; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
                         <h4 style="color: #2d3748; margin-bottom: 10px;">🎓 Team Training</h4>
                         <p style="color: #718096; margin-bottom: 10px;">Get your team up to speed with comprehensive training.</p>
-                        <a href="/ROOTUIP/customer-onboarding/training-portal.html" class="btn btn-primary" style="font-size: 0.9rem; padding: 8px 16px;">Begin Training</a>
+                        <a href="/customer-onboarding/training-portal.html" class="btn btn-primary" style="font-size: 0.9rem; padding: 8px 16px;">Begin Training</a>
                     </div>
                 </div>
             </div>
@@ -729,7 +729,7 @@
         </div>
     </div>
 
-    <script src="/ROOTUIP/js/logo-component.js"></script>
+    <script src="/js/logo-component.js"></script>
     <script>
         // Initialize logo
         document.getElementById('header-logo').innerHTML = UIPLogo.getLogo({
@@ -1193,7 +1193,7 @@
             }));
             
             // Navigate to next onboarding step
-            window.location.href = '/ROOTUIP/customer-onboarding/?step=migration';
+            window.location.href = '/customer-onboarding/?step=migration';
         }
 
         function saveProgress() {

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to UIP - Customer Onboarding</title>
-    <link rel="icon" type="image/svg+xml" href="/ROOTUIP/js/logo-component.js">
+    <link rel="icon" type="image/svg+xml" href="/js/logo-component.js">
     <style>
         * {
             margin: 0;
@@ -508,7 +508,7 @@
                 </div>
             </div>
             <div class="task-actions">
-                <a href="/ROOTUIP/customer-onboarding/integration-wizard.html" class="btn btn-primary">
+                <a href="/customer-onboarding/integration-wizard.html" class="btn btn-primary">
                     🚀 Start Integration Wizard
                 </a>
                 <button class="btn btn-secondary" onclick="scheduleCall()">
@@ -524,27 +524,27 @@
         <div class="quick-links">
             <h3>Quick Access</h3>
             <div class="links-grid">
-                <a href="/ROOTUIP/customer-onboarding/training-portal.html" class="quick-link">
+                <a href="/customer-onboarding/training-portal.html" class="quick-link">
                     <span class="quick-link-icon">🎓</span>
                     Training Portal
                 </a>
-                <a href="/ROOTUIP/customer-onboarding/support-center.html" class="quick-link">
+                <a href="/customer-onboarding/support-center.html" class="quick-link">
                     <span class="quick-link-icon">🛟</span>
                     Support Center
                 </a>
-                <a href="/ROOTUIP/customer-onboarding/data-migration.html" class="quick-link">
+                <a href="/customer-onboarding/data-migration.html" class="quick-link">
                     <span class="quick-link-icon">📊</span>
                     Data Migration
                 </a>
-                <a href="/ROOTUIP/platform/dashboard.html" class="quick-link">
+                <a href="/platform/dashboard.html" class="quick-link">
                     <span class="quick-link-icon">📈</span>
                     Platform Dashboard
                 </a>
-                <a href="/ROOTUIP/customer-onboarding/success-metrics.html" class="quick-link">
+                <a href="/customer-onboarding/success-metrics.html" class="quick-link">
                     <span class="quick-link-icon">🎯</span>
                     Success Metrics
                 </a>
-                <a href="/ROOTUIP/customer-onboarding/community.html" class="quick-link">
+                <a href="/customer-onboarding/community.html" class="quick-link">
                     <span class="quick-link-icon">👥</span>
                     Community Forum
                 </a>
@@ -606,7 +606,7 @@
         </div>
     </div>
 
-    <script src="/ROOTUIP/js/logo-component.js"></script>
+    <script src="/js/logo-component.js"></script>
     <script>
         // Initialize logo
         document.getElementById('logo-container').innerHTML = UIPLogo.getLogo({
@@ -779,13 +779,13 @@
             // Navigate based on milestone
             switch(milestoneId) {
                 case 'integration':
-                    window.location.href = '/ROOTUIP/customer-onboarding/integration-wizard.html';
+                    window.location.href = '/customer-onboarding/integration-wizard.html';
                     break;
                 case 'migration':
-                    window.location.href = '/ROOTUIP/customer-onboarding/data-migration.html';
+                    window.location.href = '/customer-onboarding/data-migration.html';
                     break;
                 case 'training':
-                    window.location.href = '/ROOTUIP/customer-onboarding/training-portal.html';
+                    window.location.href = '/customer-onboarding/training-portal.html';
                     break;
                 case 'testing':
                     showComingSoon('User Acceptance Testing');
@@ -846,7 +846,7 @@
         }
 
         function viewDocumentation() {
-            window.open('/ROOTUIP/customer-onboarding/support-center.html', '_blank');
+            window.open('/customer-onboarding/support-center.html', '_blank');
         }
 
         function showComingSoon(feature) {
