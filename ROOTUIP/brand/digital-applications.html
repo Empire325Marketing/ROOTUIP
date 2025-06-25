@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Brand Digital Applications</title>
+    <link rel="stylesheet" href="brand-colors.css">
+    <link rel="stylesheet" href="typography.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            background: var(--uip-gray-50);
+            color: var(--uip-gray-900);
+        }
+        
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 64px 24px;
+        }
+        
+        .section {
+            margin-bottom: 80px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: 32px;
+        }
+        
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            font-size: var(--text-base);
+        }
+        
+        .btn-primary {
+            background: var(--uip-blue-500);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--uip-blue-600);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--uip-navy-900);
+            border: 2px solid var(--uip-navy-900);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--uip-navy-900);
+            color: white;
+        }
+        
+        .btn-success {
+            background: var(--uip-teal-500);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: var(--uip-teal-600);
+        }
+        
+        /* Card Styles */
+        .card {
+            background: white;
+            border: 1px solid var(--uip-gray-200);
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        /* Metric Display */
+        .metric-card {
+            background: var(--uip-gradient-primary);
+            color: white;
+            padding: 32px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-family: var(--font-mono);
+            font-size: var(--text-5xl);
+            font-weight: 700;
+            color: var(--uip-teal-500);
+            line-height: 1;
+            margin: 16px 0;
+        }
+        
+        .metric-label {
+            font-size: var(--text-sm);
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-wider);
+            opacity: 0.8;
+        }
+        
+        /* Navigation Example */
+        .nav-example {
+            background: white;
+            border-bottom: 1px solid var(--uip-gray-200);
+            padding: 16px 0;
+        }
+        
+        .nav-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--uip-navy-900);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--uip-blue-500);
+        }
+        
+        /* Dashboard Widget */
+        .dashboard-widget {
+            background: var(--uip-gray-50);
+            border: 1px solid var(--uip-gray-200);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .widget-header {
+            background: white;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--uip-gray-200);
+        }
+        
+        .widget-content {
+            padding: 24px;
+        }
+        
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: var(--text-sm);
+            font-weight: 500;
+        }
+        
+        .status-success {
+            background: rgba(0, 212, 170, 0.1);
+            color: var(--uip-teal-600);
+        }
+        
+        .status-warning {
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--uip-orange-600);
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .data-table th {
+            background: var(--uip-gray-50);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: var(--text-sm);
+            color: var(--uip-gray-700);
+            border-bottom: 1px solid var(--uip-gray-200);
+        }
+        
+        .data-table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--uip-gray-100);
+        }
+        
+        .data-value {
+            font-family: var(--font-mono);
+            font-weight: 500;
+            color: var(--uip-navy-900);
+        }
+        
+        /* Hero Section */
+        .hero-example {
+            background: var(--uip-gradient-primary);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: var(--text-6xl);
+            font-weight: 800;
+            margin-bottom: 24px;
+            line-height: 1.1;
+        }
+        
+        .hero-subtitle {
+            font-size: var(--text-xl);
+            opacity: 0.9;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+        
+        .savings-counter {
+            background: rgba(0, 212, 170, 0.2);
+            border: 2px solid var(--uip-teal-500);
+            border-radius: 12px;
+            padding: 24px 48px;
+            display: inline-block;
+            margin-top: 32px;
+        }
+        
+        .counter-label {
+            font-size: var(--text-sm);
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-wider);
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        
+        .counter-value {
+            font-family: var(--font-mono);
+            font-size: var(--text-4xl);
+            font-weight: 700;
+            color: var(--uip-teal-500);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Example -->
+    <nav class="nav-example">
+        <div class="nav-container">
+            <div style="display: flex; align-items: center;">
+                <img src="logo.svg" alt="UIP Logo" style="height: 40px;">
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Platform</a></li>
+                <li><a href="#">Solutions</a></li>
+                <li><a href="#">Resources</a></li>
+                <li><a href="#">Company</a></li>
+            </ul>
+            <div>
+                <a href="#" class="btn btn-primary">Book Demo</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Section Example -->
+        <section class="section">
+            <h2 class="h2" style="margin-bottom: 24px;">Hero Section</h2>
+            <div class="hero-example">
+                <h1 class="hero-title">Stop Losing $14M Per Vessel<br>to Ocean Freight Inefficiencies</h1>
+                <p class="hero-subtitle">AI-powered automation that eliminates detention & demurrage charges forever</p>
+                <div>
+                    <a href="#" class="btn btn-primary" style="margin-right: 16px;">Calculate Your Savings</a>
+                    <a href="#" class="btn btn-secondary" style="background: transparent; border-color: white; color: white;">Watch Demo</a>
+                </div>
+                <div class="savings-counter">
+                    <div class="counter-label">Industry Loss This Second</div>
+                    <div class="counter-value">$634,285</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Buttons -->
+        <section class="section">
+            <h2 class="h2">Buttons</h2>
+            <div class="grid">
+                <div>
+                    <h4 class="h5" style="margin-bottom: 16px;">Primary Actions</h4>
+                    <button class="btn btn-primary">Book Demo</button>
+                    <button class="btn btn-primary" style="margin-left: 16px;">Calculate ROI</button>
+                </div>
+                <div>
+                    <h4 class="h5" style="margin-bottom: 16px;">Secondary Actions</h4>
+                    <button class="btn btn-secondary">Learn More</button>
+                    <button class="btn btn-secondary" style="margin-left: 16px;">Download PDF</button>
+                </div>
+                <div>
+                    <h4 class="h5" style="margin-bottom: 16px;">Success Actions</h4>
+                    <button class="btn btn-success">Start Saving</button>
+                    <button class="btn btn-success" style="margin-left: 16px;">View Results</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cards -->
+        <section class="section">
+            <h2 class="h2">Cards & Metrics</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="h5">Active Vessels</h3>
+                        <span class="status-indicator status-success">
+                            <span class="status-dot"></span>
+                            Online
+                        </span>
+                    </div>
+                    <div class="metric" style="color: var(--uip-navy-900);">127</div>
+                    <p class="body-sm" style="color: var(--uip-gray-600); margin-top: 8px;">+12% from last month</p>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-label">Annual Savings Per Vessel</div>
+                    <div class="metric-value">$14.2M</div>
+                    <div class="metric-label">94% D&D Reduction</div>
+                </div>
+                
+                <div class="dashboard-widget">
+                    <div class="widget-header">
+                        <h4 class="h6">Integration Status</h4>
+                    </div>
+                    <div class="widget-content">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <span class="body-sm">API Connections</span>
+                            <span class="data-value">247</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <span class="body-sm">EDI Partners</span>
+                            <span class="data-value">189</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="body-sm">Email Sources</span>
+                            <span class="data-value">94</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Table -->
+        <section class="section">
+            <h2 class="h2">Data Display</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Vessel ID</th>
+                        <th>Container Count</th>
+                        <th>D&D Risk</th>
+                        <th>Potential Savings</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="data-value">MSC-2847</td>
+                        <td class="data-value">2,847</td>
+                        <td>
+                            <span class="status-indicator status-warning">
+                                <span class="status-dot"></span>
+                                Medium
+                            </span>
+                        </td>
+                        <td class="data-value" style="color: var(--uip-teal-500);">$127,450</td>
+                        <td>
+                            <span class="status-indicator status-success">
+                                <span class="status-dot"></span>
+                                Optimized
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="data-value">CMA-9183</td>
+                        <td class="data-value">3,921</td>
+                        <td>
+                            <span class="status-indicator status-success">
+                                <span class="status-dot"></span>
+                                Low
+                            </span>
+                        </td>
+                        <td class="data-value" style="color: var(--uip-teal-500);">$89,200</td>
+                        <td>
+                            <span class="status-indicator status-success">
+                                <span class="status-dot"></span>
+                                Optimized
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Color Swatches -->
+        <section class="section">
+            <h2 class="h2">Color System</h2>
+            <div class="grid">
+                <div>
+                    <h4 class="h5" style="margin-bottom: 16px;">Primary Palette</h4>
+                    <div style="display: flex; gap: 8px;">
+                        <div style="width: 60px; height: 60px; background: var(--uip-navy-900); border-radius: 8px;"></div>
+                        <div style="width: 60px; height: 60px; background: var(--uip-navy-700); border-radius: 8px;"></div>
+                        <div style="width: 60px; height: 60px; background: var(--uip-navy-500); border-radius: 8px;"></div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="h5" style="margin-bottom: 16px;">Innovation Blue</h4>
+                    <div style="display: flex; gap: 8px;">
+                        <div style="width: 60px; height: 60px; background: var(--uip-blue-600); border-radius: 8px;"></div>
+                        <div style="width: 60px; height: 60px; background: var(--uip-blue-500); border-radius: 8px;"></div>
+                        <div style="width: 60px; height: 60px; background: var(--uip-blue-400); border-radius: 8px;"></div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="h5" style="margin-bottom: 16px;">Success Teal</h4>
+                    <div style="display: flex; gap: 8px;">
+                        <div style="width: 60px; height: 60px; background: var(--uip-teal-600); border-radius: 8px;"></div>
+                        <div style="width: 60px; height: 60px; background: var(--uip-teal-500); border-radius: 8px;"></div>
+                        <div style="width: 60px; height: 60px; background: var(--uip-teal-400); border-radius: 8px;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

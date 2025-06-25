@@ -1,0 +1,30 @@
+<!-- UIP Logo - Primary Version -->
+<svg width="240" height="60" viewBox="0 0 240 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Logo Mark -->
+  <g id="logo-mark">
+    <!-- Hexagon Container -->
+    <path d="M15 10 L35 10 L45 25 L35 40 L15 40 L5 25 Z" fill="#0A1628" stroke="none"/>
+    
+    <!-- AI Neural Network Pattern -->
+    <circle cx="15" cy="18" r="2" fill="#00D4AA"/>
+    <circle cx="35" cy="18" r="2" fill="#00D4AA"/>
+    <circle cx="25" cy="25" r="3" fill="#0066FF"/>
+    <circle cx="15" cy="32" r="2" fill="#00D4AA"/>
+    <circle cx="35" cy="32" r="2" fill="#00D4AA"/>
+    
+    <!-- Connecting Lines -->
+    <line x1="15" y1="18" x2="25" y2="25" stroke="#0066FF" stroke-width="1" opacity="0.6"/>
+    <line x1="35" y1="18" x2="25" y2="25" stroke="#0066FF" stroke-width="1" opacity="0.6"/>
+    <line x1="15" y1="32" x2="25" y2="25" stroke="#0066FF" stroke-width="1" opacity="0.6"/>
+    <line x1="35" y1="32" x2="25" y2="25" stroke="#0066FF" stroke-width="1" opacity="0.6"/>
+  </g>
+  
+  <!-- Wordmark -->
+  <g id="wordmark">
+    <!-- UIP -->
+    <text x="55" y="35" font-family="Inter, sans-serif" font-size="28" font-weight="700" fill="#0A1628">UIP</text>
+    
+    <!-- Tagline -->
+    <text x="55" y="48" font-family="Inter, sans-serif" font-size="10" font-weight="400" fill="#5E6B7C" letter-spacing="0.5">UNIFIED INTEGRATION INTELLIGENCE</text>
+  </g>
+</svg>

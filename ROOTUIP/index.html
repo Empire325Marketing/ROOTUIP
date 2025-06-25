@@ -3,70 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ROOTUIP - Innovative Business Solutions">
-    <title>ROOTUIP - Welcome</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="description" content="UIP - Stop Losing $14M Per Vessel to Ocean Freight Inefficiencies. AI-powered automation platform.">
+    <title>UIP - Unified Integration Intelligence Platform | Save $14M Per Vessel</title>
+    <link rel="stylesheet" href="brand/brand-colors.css">
+    <link rel="stylesheet" href="brand/typography.css">
+    <link rel="stylesheet" href="css/uip-style.css">
+    <link rel="icon" type="image/svg+xml" href="brand/logo-icon.svg">
 </head>
 <body>
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
-            <div class="logo">ROOTUIP</div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
+            <div class="nav-wrapper">
+                <div class="logo-container">
+                    <img src="brand/logo.svg" alt="UIP Logo" class="nav-logo">
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#platform">Platform</a></li>
+                    <li><a href="#solutions">Solutions</a></li>
+                    <li><a href="#roi">ROI Calculator</a></li>
+                    <li><a href="#resources">Resources</a></li>
+                </ul>
+                <div class="nav-cta">
+                    <a href="#demo" class="btn btn-primary">Book Demo</a>
+                </div>
+            </div>
         </div>
     </nav>
 
+    <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="container">
-            <h1>Welcome to ROOTUIP</h1>
-            <p class="tagline">Transforming Ideas Into Reality</p>
-            <a href="#contact" class="cta-button">Get Started</a>
-        </div>
-    </section>
-
-    <section id="about" class="about">
-        <div class="container">
-            <h2>About ROOTUIP</h2>
-            <p>We are dedicated to bringing innovative solutions to businesses worldwide. Our mission is to help you grow and succeed in today's digital landscape.</p>
-        </div>
-    </section>
-
-    <section id="services" class="services">
-        <div class="container">
-            <h2>Our Services</h2>
-            <div class="service-grid">
-                <div class="service-card">
-                    <h3>Innovation</h3>
-                    <p>Cutting-edge solutions for modern challenges</p>
+            <div class="hero-content">
+                <h1 class="hero-title">Stop Losing <span class="text-savings">$14M Per Vessel</span><br>to Ocean Freight Inefficiencies</h1>
+                <p class="hero-subtitle">The only AI platform that connects ALL carrier systems to eliminate detention & demurrage charges forever</p>
+                
+                <div class="hero-cta">
+                    <a href="#roi" class="btn btn-primary btn-lg">Calculate Your Savings</a>
+                    <a href="#demo" class="btn btn-secondary btn-lg">See Live Demo</a>
                 </div>
-                <div class="service-card">
-                    <h3>Strategy</h3>
-                    <p>Strategic planning for sustainable growth</p>
+                
+                <!-- Live Loss Counter -->
+                <div class="loss-counter">
+                    <div class="counter-label">Industry Loss Right Now</div>
+                    <div class="counter-value" id="lossCounter">$0</div>
+                    <div class="counter-sublabel">That's $634 every second</div>
                 </div>
-                <div class="service-card">
-                    <h3>Implementation</h3>
-                    <p>Expert execution of your business vision</p>
+            </div>
+            
+            <!-- Trust Indicators -->
+            <div class="trust-indicators">
+                <div class="trust-item">
+                    <div class="trust-value">94%</div>
+                    <div class="trust-label">D&D Reduction</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-value">48hr</div>
+                    <div class="trust-label">Implementation</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-value">347%</div>
+                    <div class="trust-label">Average ROI</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-value">$127M+</div>
+                    <div class="trust-label">Saved Annually</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="contact">
+    <!-- Problem Section -->
+    <section id="problem" class="problem-section">
         <div class="container">
-            <h2>Get In Touch</h2>
-            <p>Ready to start your journey with ROOTUIP?</p>
-            <p>Email: info@rootuip.com</p>
+            <h2 class="section-title">The $20 Billion Problem Hiding in Your Operations</h2>
+            <p class="section-subtitle">Ocean freight loses billions annually to preventable inefficiencies</p>
+            
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">📊</div>
+                    <h3>$7-9B in D&D Charges</h3>
+                    <p>87% are completely preventable with proper data integration</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🚢</div>
+                    <h3>200+ Carrier Systems</h3>
+                    <p>No standardization means your team wastes 160+ hours weekly</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⚠️</div>
+                    <h3>67% Dispute Success</h3>
+                    <p>Manual processes leave money on the table every day</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📉</div>
+                    <h3>Reactive Operations</h3>
+                    <p>You learn about charges after it's too late to prevent them</p>
+                </div>
+            </div>
         </div>
     </section>
 
-    <footer>
+    <!-- Platform Section -->
+    <section id="platform" class="platform-section">
         <div class="container">
-            <p>&copy; 2024 ROOTUIP. All rights reserved.</p>
+            <h2 class="section-title">The Only Platform That Connects Everything</h2>
+            <p class="section-subtitle">Universal integration across ALL carrier data sources</p>
+            
+            <div class="integration-showcase">
+                <div class="integration-hub">
+                    <img src="brand/logo-icon.svg" alt="UIP Hub" class="hub-icon">
+                    <div class="connection-lines">
+                        <div class="connection-line line-1"></div>
+                        <div class="connection-line line-2"></div>
+                        <div class="connection-line line-3"></div>
+                        <div class="connection-line line-4"></div>
+                    </div>
+                </div>
+                
+                <div class="integration-points">
+                    <div class="integration-card">
+                        <h4>API Integration</h4>
+                        <p>Direct carrier connections</p>
+                    </div>
+                    <div class="integration-card">
+                        <h4>EDI Processing</h4>
+                        <p>Legacy format handling</p>
+                    </div>
+                    <div class="integration-card">
+                        <h4>Email Intelligence</h4>
+                        <p>AI-powered parsing</p>
+                    </div>
+                    <div class="integration-card">
+                        <h4>Manual Upload</h4>
+                        <p>OCR + verification</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="platform-features">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>D&D Prevention AI</h3>
+                    <p>Predicts risks 14 days before charges occur</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Automated Disputes</h3>
+                    <p>94% success rate with zero manual effort</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Real-time Processing</h3>
+                    <p>GPU-powered OCR and data extraction</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Predictive Analytics</h3>
+                    <p>Prevent problems before they cost you</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI Calculator Section -->
+    <section id="roi" class="roi-section">
+        <div class="container">
+            <h2 class="section-title">Calculate Your Savings</h2>
+            <p class="section-subtitle">See your potential ROI in seconds</p>
+            
+            <div class="roi-calculator">
+                <div class="calculator-inputs">
+                    <div class="input-group">
+                        <label>Number of Vessels</label>
+                        <input type="number" id="vesselCount" value="10" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label>Annual Container Volume</label>
+                        <input type="number" id="containerVolume" value="50000" min="1000">
+                    </div>
+                    <div class="input-group">
+                        <label>Current D&D Charges (Annual)</label>
+                        <input type="number" id="ddCharges" value="140000000" min="0">
+                    </div>
+                    <div class="input-group">
+                        <label>Manual Processing Hours/Week</label>
+                        <input type="number" id="manualHours" value="160" min="0">
+                    </div>
+                </div>
+                
+                <div class="calculator-results">
+                    <h3>Your Potential Savings</h3>
+                    <div class="result-item">
+                        <span class="result-label">Annual Savings</span>
+                        <span class="result-value" id="annualSavings">$142M</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">ROI Timeline</span>
+                        <span class="result-value" id="roiTimeline">30 days</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">5-Year Value</span>
+                        <span class="result-value" id="fiveYearValue">$710M</span>
+                    </div>
+                    <a href="#demo" class="btn btn-success btn-block">Get Detailed Analysis</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo CTA Section -->
+    <section id="demo" class="demo-section">
+        <div class="container">
+            <h2 class="section-title">See UIP in Action</h2>
+            <p class="section-subtitle">Join industry leaders saving millions with intelligent automation</p>
+            
+            <div class="demo-form">
+                <form id="demoForm">
+                    <div class="form-grid">
+                        <input type="text" placeholder="First Name" required>
+                        <input type="text" placeholder="Last Name" required>
+                        <input type="email" placeholder="Work Email" required>
+                        <input type="text" placeholder="Company" required>
+                        <input type="tel" placeholder="Phone" required>
+                        <select required>
+                            <option value="">Fleet Size</option>
+                            <option value="10-50">10-50 vessels</option>
+                            <option value="50-100">50-100 vessels</option>
+                            <option value="100+">100+ vessels</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Book Your Demo</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="brand/logo.svg" alt="UIP Logo" class="footer-logo">
+                    <p>The future of ocean freight automation</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Integrations</a></li>
+                        <li><a href="#">Security</a></li>
+                        <li><a href="#">API Docs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">ROI Calculator</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Whitepapers</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 UIP. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
         </div>
     </footer>
+
+    <script src="js/uip-scripts.js"></script>
 </body>
 </html>

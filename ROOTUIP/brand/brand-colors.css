@@ -1,0 +1,54 @@
+/* UIP Brand Color System */
+
+:root {
+  /* Primary Colors */
+  --uip-navy-900: #0A1628;      /* Primary Dark - Headers, Logo */
+  --uip-navy-800: #162844;      /* Dark Backgrounds */
+  --uip-navy-700: #1E3A5F;      /* Navigation */
+  --uip-navy-600: #2B4C7E;      /* Interactive Elements */
+  --uip-navy-500: #3B5E9A;      /* Links */
+  
+  /* Secondary Colors */
+  --uip-blue-600: #0052CC;      /* Primary Actions */
+  --uip-blue-500: #0066FF;      /* Innovation Blue - CTAs */
+  --uip-blue-400: #3385FF;      /* Hover States */
+  --uip-blue-300: #66A3FF;      /* Backgrounds */
+  --uip-blue-200: #99C2FF;      /* Light Accents */
+  
+  /* Success/ROI Colors */
+  --uip-teal-600: #00A088;      /* Dark Success */
+  --uip-teal-500: #00D4AA;      /* Success Green - Savings */
+  --uip-teal-400: #33DDBB;      /* Positive Indicators */
+  --uip-teal-300: #66E6CC;      /* Light Success */
+  
+  /* Alert/Risk Colors */
+  --uip-orange-600: #CC5229;    /* High Risk */
+  --uip-orange-500: #FF6B35;    /* Warning Orange */
+  --uip-orange-400: #FF8A5E;    /* Medium Risk */
+  --uip-orange-300: #FFAA87;    /* Low Risk */
+  
+  /* Neutral Colors */
+  --uip-gray-900: #1A202C;      /* Text Primary */
+  --uip-gray-800: #2D3748;      /* Text Secondary */
+  --uip-gray-700: #4A5568;      /* Borders Dark */
+  --uip-gray-600: #5E6B7C;      /* Text Muted */
+  --uip-gray-500: #718096;      /* Borders */
+  --uip-gray-400: #A0AEC0;      /* Disabled */
+  --uip-gray-300: #CBD5E0;      /* Borders Light */
+  --uip-gray-200: #E2E8F0;      /* Backgrounds */
+  --uip-gray-100: #EDF2F7;      /* Light Backgrounds */
+  --uip-gray-50:  #F7FAFC;      /* White Alternative */
+  
+  /* Functional Colors */
+  --uip-background: #FFFFFF;
+  --uip-surface: #F8FAFB;
+  --uip-error: #E53E3E;
+  --uip-warning: var(--uip-orange-500);
+  --uip-success: var(--uip-teal-500);
+  --uip-info: var(--uip-blue-500);
+  
+  /* Gradients */
+  --uip-gradient-primary: linear-gradient(135deg, var(--uip-navy-900) 0%, var(--uip-navy-700) 100%);
+  --uip-gradient-innovation: linear-gradient(135deg, var(--uip-blue-600) 0%, var(--uip-teal-500) 100%);
+  --uip-gradient-savings: linear-gradient(135deg, var(--uip-teal-600) 0%, var(--uip-teal-400) 100%);
+}
