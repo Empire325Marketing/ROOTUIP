@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Platform - rootuip.com</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0A1628;
+            color: white;
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 3rem;
+            background: linear-gradient(135deg, #0A1628 0%, #1E293B 100%);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .domain {
+            font-size: 1.5rem;
+            color: #00D4AA;
+            margin-bottom: 1rem;
+        }
+
+        .live-links {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            color: #00D4AA;
+        }
+
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .link-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+
+        .link-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 212, 170, 0.2);
+            border-color: #00D4AA;
+        }
+
+        .link-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .link-url {
+            font-size: 0.875rem;
+            color: #00D4AA;
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+        }
+
+        .link-description {
+            font-size: 0.875rem;
+            color: #94A3B8;
+        }
+
+        .quick-access {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .quick-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .quick-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 212, 170, 0.4);
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .status-live {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10B981;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>UIP Platform</h1>
+            <div class="domain">🌐 rootuip.com</div>
+            <p style="color: #94A3B8; font-size: 1.125rem;">Universal Integration Intelligence Platform - Complete Suite</p>
+        </div>
+
+        <!-- Main Platform Links -->
+        <div class="live-links">
+            <h2 class="section-title">🚀 Main Platform Access</h2>
+            <div class="quick-access">
+                <a href="https://rootuip.com" class="quick-btn">Main Website</a>
+                <a href="https://rootuip.com/platform/auth/login.html" class="quick-btn">Platform Login</a>
+                <a href="https://rootuip.com/investor-relations/" class="quick-btn">Investor Relations</a>
+                <a href="https://rootuip.com/interactive-demo.html" class="quick-btn">Live Demo</a>
+            </div>
+        </div>
+
+        <!-- Sales & Marketing Tools -->
+        <div class="live-links">
+            <h2 class="section-title">💼 Sales & Marketing Tools</h2>
+            <div class="link-grid">
+                <a href="https://rootuip.com/roi-calculator.html" class="link-card">
+                    <div class="link-title">ROI Calculator <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/roi-calculator.html</div>
+                    <div class="link-description">Interactive D&D savings calculator for prospects</div>
+                </a>
+                
+                <a href="https://rootuip.com/interactive-demo.html" class="link-card">
+                    <div class="link-title">Interactive Demo <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/interactive-demo.html</div>
+                    <div class="link-description">Live platform demonstration with sample data</div>
+                </a>
+                
+                <a href="https://rootuip.com/presentation-deck.html" class="link-card">
+                    <div class="link-title">Presentation System <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/presentation-deck.html</div>
+                    <div class="link-description">Full-featured sales presentation deck</div>
+                </a>
+                
+                <a href="https://rootuip.com/sales-toolkit.html" class="link-card">
+                    <div class="link-title">Sales Toolkit Hub <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/sales-toolkit.html</div>
+                    <div class="link-description">Central hub for all sales resources</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Platform Dashboard -->
+        <div class="live-links">
+            <h2 class="section-title">🎯 Platform Dashboard</h2>
+            <div class="link-grid">
+                <a href="https://rootuip.com/platform/auth/login.html" class="link-card">
+                    <div class="link-title">Secure Login <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/platform/auth/login.html</div>
+                    <div class="link-description">MFA authentication with SSO support</div>
+                </a>
+                
+                <a href="https://rootuip.com/platform/dashboard.html" class="link-card">
+                    <div class="link-title">Executive Dashboard <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/platform/dashboard.html</div>
+                    <div class="link-description">Real-time KPIs and analytics</div>
+                </a>
+                
+                <a href="https://rootuip.com/platform/containers.html" class="link-card">
+                    <div class="link-title">Container Tracking <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/platform/containers.html</div>
+                    <div class="link-description">Live container status and management</div>
+                </a>
+                
+                <a href="https://rootuip.com/platform/dd-center.html" class="link-card">
+                    <div class="link-title">D&D Command Center <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/platform/dd-center.html</div>
+                    <div class="link-description">Prevention workflows and automation</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Investor Relations -->
+        <div class="live-links">
+            <h2 class="section-title">💰 Investor Relations Package</h2>
+            <div class="link-grid">
+                <a href="https://rootuip.com/investor-relations/" class="link-card">
+                    <div class="link-title">IR Portal <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/investor-relations/</div>
+                    <div class="link-description">Series A fundraising materials ($15-20M)</div>
+                </a>
+                
+                <a href="https://rootuip.com/investor-relations/executive-summary.html" class="link-card">
+                    <div class="link-title">Executive Summary <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/investor-relations/executive-summary.html</div>
+                    <div class="link-description">Investment thesis and key metrics</div>
+                </a>
+                
+                <a href="https://rootuip.com/investor-relations/financial-model.html" class="link-card">
+                    <div class="link-title">Financial Model <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/investor-relations/financial-model.html</div>
+                    <div class="link-description">10-year projections with scenarios</div>
+                </a>
+                
+                <a href="https://rootuip.com/investor-relations/unit-economics.html" class="link-card">
+                    <div class="link-title">Unit Economics <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/investor-relations/unit-economics.html</div>
+                    <div class="link-description">CAC, LTV, and cohort analysis</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Sales Enablement -->
+        <div class="live-links">
+            <h2 class="section-title">📋 Sales Enablement Materials</h2>
+            <div class="link-grid">
+                <a href="https://rootuip.com/sales-toolkit/case-study-template.html" class="link-card">
+                    <div class="link-title">Case Studies <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/sales-toolkit/case-study-template.html</div>
+                    <div class="link-description">Customer success story templates</div>
+                </a>
+                
+                <a href="https://rootuip.com/sales-toolkit/competitive-battle-cards.html" class="link-card">
+                    <div class="link-title">Battle Cards <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/sales-toolkit/competitive-battle-cards.html</div>
+                    <div class="link-description">Competitive comparison tools</div>
+                </a>
+                
+                <a href="https://rootuip.com/sales-toolkit/pricing-proposal-template.html" class="link-card">
+                    <div class="link-title">Pricing Proposals <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/sales-toolkit/pricing-proposal-template.html</div>
+                    <div class="link-description">Customizable pricing templates</div>
+                </a>
+                
+                <a href="https://rootuip.com/sales-toolkit/technical-specifications.html" class="link-card">
+                    <div class="link-title">Technical Specs <span class="status status-live">LIVE</span></div>
+                    <div class="link-url">rootuip.com/sales-toolkit/technical-specifications.html</div>
+                    <div class="link-description">Platform architecture details</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Complete Sitemap Link -->
+        <div class="live-links" style="text-align: center;">
+            <h2 class="section-title">📍 Complete Platform Index</h2>
+            <a href="https://rootuip.com/sitemap.html" class="quick-btn">View Full Sitemap</a>
+            <p style="margin-top: 1rem; color: #94A3B8;">Access all 58+ platform components and resources</p>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; margin-top: 3rem; padding: 2rem; color: #64748B;">
+            <p>🔒 All pages served over HTTPS with enterprise-grade security</p>
+            <p>✅ Mobile responsive • ⚡ Sub-2s load times • 🌐 Global CDN ready</p>
+        </div>
+    </div>
+</body>
+</html>
