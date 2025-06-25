@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UIP Platform - Executive Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     <style>
         * {
             margin: 0;
@@ -550,10 +552,7 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <a href="#" class="logo">
-                <div class="logo-icon">UIP</div>
-                <div class="logo-text">Platform</div>
-            </a>
+            <div class="uip-logo" data-size="medium" data-type="full" data-theme="white" data-link="true"></div>
         </div>
         
         <nav class="nav-menu">
@@ -836,6 +835,12 @@
             sparklines.forEach(sparkline => {
                 sparkline.innerHTML = '<div class="skeleton" style="height: 100%; width: 100%;"></div>';
             });
+        });
+    </script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
         });
     </script>
 </body>

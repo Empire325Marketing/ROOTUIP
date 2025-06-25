@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UIP Platform - Container Tracking</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     <style>
         * {
             margin: 0;
@@ -1171,6 +1173,12 @@
                 e.preventDefault();
                 document.getElementById('searchInput').focus();
             }
+        });
+    </script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
         });
     </script>
 </body>

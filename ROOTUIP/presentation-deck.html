@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UIP Presentation Deck - Transform Ocean Freight</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     
     <!-- CSS -->
     <link rel="stylesheet" href="brand/brand-colors.css">
@@ -1347,5 +1349,10 @@
     <script src="js/workflow-comparison.js"></script>
     <script src="js/export-presentation.js"></script>
     <script src="js/presentation-deck.js"></script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
 </body>
-</html>

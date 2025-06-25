@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="UIP - Stop Losing $14M Per Vessel to Ocean Freight Inefficiencies. AI-powered automation platform.">
     <title>UIP - Unified Integration Intelligence Platform | Save $14M Per Vessel</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     <link rel="stylesheet" href="brand/brand-colors.css">
     <link rel="stylesheet" href="brand/typography.css">
     <link rel="stylesheet" href="css/uip-style.css">
@@ -16,7 +18,7 @@
         <div class="container">
             <div class="nav-wrapper">
                 <div class="logo-container">
-                    <img src="brand/logo.svg" alt="UIP Logo" class="nav-logo">
+            <div class="uip-logo" data-size="medium" data-type="horizontal" data-theme="white" data-link="true"></div>
                 </div>
                 <ul class="nav-links">
                     <li><a href="#platform">Platform</a></li>
@@ -282,5 +284,10 @@
     </footer>
 
     <script src="js/uip-scripts.js"></script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
 </body>
-</html>

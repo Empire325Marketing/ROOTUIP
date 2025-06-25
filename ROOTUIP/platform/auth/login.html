@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UIP Platform - Secure Login</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     <style>
         * {
             margin: 0;
@@ -296,7 +298,7 @@
     
     <div class="login-container">
         <div class="logo-section">
-            <div class="logo">UIP</div>
+            <div class="uip-logo" data-size="large" data-type="icon" data-theme="color" data-link="false"></div>
             <h1>Welcome Back</h1>
             <p class="subtitle">Sign in to access your ocean freight command center</p>
         </div>
@@ -489,6 +491,12 @@
                 window.location.href = '/platform/dashboard.html';
             }
         }
+    </script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
     </script>
 </body>
 </html>

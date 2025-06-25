@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP Competitive Battle Cards | Win Against Any Alternative</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     <style>
         body {
             font-family: 'Inter', -apple-system, sans-serif;
@@ -680,6 +682,12 @@
             // Mark selected tab as active
             event.target.classList.add('active');
         }
+    </script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
     </script>
 </body>
 </html>

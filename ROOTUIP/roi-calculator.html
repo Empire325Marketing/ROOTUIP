@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Calculate your ocean freight savings with UIP. See how much you can save on detention & demurrage charges.">
     <title>ROI Calculator - Save $14M Per Vessel | UIP</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     
     <!-- CSS -->
     <link rel="stylesheet" href="brand/brand-colors.css">
@@ -29,7 +31,7 @@
         <div class="container">
             <div class="nav-wrapper">
                 <a href="/" class="logo-link">
-                    <img src="brand/logo.svg" alt="UIP Logo" class="nav-logo">
+            <div class="uip-logo" data-size="medium" data-type="horizontal" data-theme="white" data-link="true"></div>
                 </a>
                 <ul class="nav-links">
                     <li><a href="/">Home</a></li>
@@ -428,5 +430,10 @@
 
     <!-- Scripts -->
     <script src="js/roi-calculator.js"></script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
 </body>
-</html>

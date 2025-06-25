@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP Executive Summary | Series A Investment Opportunity</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     <style>
         body {
             font-family: 'Inter', -apple-system, sans-serif;
@@ -339,7 +341,7 @@
 <body>
     <div class="hero">
         <div class="hero-content">
-            <img src="../brand/logo.svg" alt="UIP" class="logo">
+            <div class="uip-logo" data-size="large" data-type="icon" data-theme="color" data-link="false"></div>
             <h1>The $15B Ocean Freight Opportunity</h1>
             <p class="tagline">AI-Powered Platform Eliminating $14M Per Vessel in Annual Losses</p>
             
@@ -666,5 +668,10 @@
             </div>
         </div>
     </div>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
 </body>
-</html>

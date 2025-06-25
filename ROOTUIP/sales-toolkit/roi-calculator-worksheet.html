@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP ROI Calculation Worksheet | Customer-Specific Savings Analysis</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     <style>
         body {
             font-family: 'Inter', -apple-system, sans-serif;
@@ -227,7 +229,7 @@
 </head>
 <body>
     <div class="header">
-        <img src="../brand/logo.svg" alt="UIP" class="logo">
+            <div class="uip-logo" data-size="large" data-type="icon" data-theme="color" data-link="false"></div>
         <h1>ROI Calculation Worksheet</h1>
         <p class="subtitle">Customer-Specific Savings Analysis</p>
     </div>
@@ -476,5 +478,10 @@
         // Initial calculation
         calculateROI();
     </script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
 </body>
-</html>

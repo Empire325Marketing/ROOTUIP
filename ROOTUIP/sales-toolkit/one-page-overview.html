@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP - Stop Losing $14M Per Vessel | One-Page Overview</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     <style>
         @page {
             size: letter;
@@ -164,7 +166,7 @@
 </head>
 <body>
     <div class="header">
-        <img src="../brand/logo.svg" alt="UIP" class="logo">
+            <div class="uip-logo" data-size="large" data-type="icon" data-theme="color" data-link="false"></div>
         <div class="tagline">Stop Losing <span class="highlight">$14M Per Vessel</span></div>
     </div>
 
@@ -307,5 +309,10 @@
             <span>🌐 uip.ai</span>
         </div>
     </div>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
 </body>
-</html>

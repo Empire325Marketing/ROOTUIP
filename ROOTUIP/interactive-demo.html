@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Experience UIP's ocean freight automation platform. See how we save $14M per vessel through real-time tracking and D&D prevention.">
     <title>Interactive Demo - UIP Platform | Save $14M Per Vessel</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     
     <!-- CSS -->
     <link rel="stylesheet" href="brand/brand-colors.css">
@@ -105,7 +107,7 @@
             <!-- Top Navigation Bar -->
             <nav class="demo-nav">
                 <div class="nav-left">
-                    <img src="brand/logo.svg" alt="UIP" class="nav-logo">
+            <div class="uip-logo" data-size="medium" data-type="horizontal" data-theme="white" data-link="true"></div>
                     <span class="nav-divider">|</span>
                     <span class="nav-role" id="userRole">Executive View</span>
                 </div>
@@ -1114,5 +1116,10 @@
     
     <!-- Scripts -->
     <script src="js/interactive-demo.js"></script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
 </body>
-</html>

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UIP Presentation Suite | Transform Ocean Freight</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     
     <!-- CSS -->
     <link rel="stylesheet" href="brand/brand-colors.css">
@@ -213,5 +215,10 @@
     <!-- Scripts -->
     <script src="js/presentation-data.js"></script>
     <script src="js/presentation-suite-v2.js"></script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
 </body>
-</html>

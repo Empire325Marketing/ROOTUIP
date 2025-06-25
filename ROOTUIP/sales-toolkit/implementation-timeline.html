@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP 14-Day Implementation Timeline</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -139,7 +141,7 @@
 </head>
 <body>
     <div class="header">
-        <img src="../brand/logo.svg" alt="UIP" class="logo">
+            <div class="uip-logo" data-size="large" data-type="icon" data-theme="color" data-link="false"></div>
         <h1>14-Day Implementation Timeline</h1>
         <p class="subtitle">From Contract to Full Automation in Two Weeks</p>
     </div>
@@ -249,5 +251,10 @@
             <li><strong>Continuous:</strong> Platform updates and new feature rollouts</li>
         </ul>
     </div>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
 </body>
-</html>

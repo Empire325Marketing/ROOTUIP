@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP Pricing Proposal</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -159,7 +161,7 @@
 <body>
     <div class="header">
         <div>
-            <img src="../brand/logo.svg" alt="UIP" class="logo">
+            <div class="uip-logo" data-size="large" data-type="icon" data-theme="color" data-link="false"></div>
         </div>
         <div class="proposal-info">
             <div>Proposal #: UIP-[YYYY-MM-DD-XXX]</div>
@@ -415,5 +417,10 @@
     <div style="text-align: center; margin-top: 3rem; color: #64748B; font-size: 0.875rem;">
         <p>This proposal is confidential and proprietary to UIP. All savings estimates are based on industry averages and customer-provided data.</p>
     </div>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
 </body>
-</html>

@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP Technical Specifications | Enterprise Ocean Freight Platform</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     <style>
         body {
             font-family: 'Inter', -apple-system, sans-serif;
@@ -168,7 +170,7 @@
 <body>
     <div class="header">
         <div>
-            <img src="../brand/logo.svg" alt="UIP" class="logo">
+            <div class="uip-logo" data-size="large" data-type="icon" data-theme="color" data-link="false"></div>
         </div>
         <div style="text-align: right;">
             <h1>Technical Specifications</h1>
@@ -437,5 +439,10 @@ GET    /api/v2/reports/generate
             <div>Dedicated customer success manager for optimization</div>
         </div>
     </div>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
 </body>
-</html>

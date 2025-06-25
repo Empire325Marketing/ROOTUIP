@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP Customer Success Story Template</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -99,7 +101,7 @@
 </head>
 <body>
     <div class="header">
-        <img src="../brand/logo.svg" alt="UIP" class="logo">
+            <div class="uip-logo" data-size="large" data-type="icon" data-theme="color" data-link="false"></div>
         <h1>[CUSTOMER NAME] Saves $[X]M with UIP</h1>
         <p class="subtitle">[Industry] • [Number] Vessels • [Timeframe]</p>
     </div>
@@ -254,5 +256,10 @@
             <li>Industry-leading 94% dispute success rate</li>
         </ul>
     </div>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
 </body>
-</html>
