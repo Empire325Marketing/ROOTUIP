@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Platform - Container Tracking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00D4AA;
+            --primary-dark: #00B894;
+            --secondary: #0A1628;
+            --gray-50: #F8FAFB;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.5;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-200);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        /* Stats Overview */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .stat-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* Search and Filter Bar */
+        .search-filter-bar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%2364748B' viewBox='0 0 24 24'%3E%3Cpath d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E") no-repeat 0.75rem center;
+            background-size: 18px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-200);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-chip:hover {
+            background: var(--gray-200);
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .filter-count {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.125rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+        }
+
+        /* Container Table */
+        .container-table-wrapper {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .table-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--gray-600);
+        }
+
+        .icon-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        .container-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .container-table th {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            background: var(--gray-50);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .container-table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .container-table tr:hover {
+            background: var(--gray-50);
+        }
+
+        .container-id {
+            font-weight: 600;
+            color: var(--gray-900);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .container-id:hover {
+            color: var(--primary);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.875rem;
+            border-radius: 20px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-active .status-dot {
+            background: var(--success);
+        }
+
+        .status-at-risk {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .status-at-risk .status-dot {
+            background: var(--warning);
+            animation: pulse 2s infinite;
+        }
+
+        .status-critical {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .status-critical .status-dot {
+            background: var(--danger);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .carrier-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .carrier-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--gray-600);
+        }
+
+        .location-info {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .location-info .port {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .eta-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .eta-date {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .eta-status {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .eta-delayed {
+            color: var(--danger);
+        }
+
+        .risk-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .risk-bar {
+            width: 60px;
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .risk-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .risk-low {
+            background: var(--success);
+        }
+
+        .risk-medium {
+            background: var(--warning);
+        }
+
+        .risk-high {
+            background: var(--danger);
+        }
+
+        .risk-value {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .table-actions-cell {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        /* Pagination */
+        .table-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .pagination {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .page-btn {
+            min-width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 0.75rem;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--gray-700);
+        }
+
+        .page-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Container Detail Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gray-100);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--gray-200);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .detail-section {
+            margin-bottom: 2rem;
+        }
+
+        .detail-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .detail-item {
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 8px;
+        }
+
+        .detail-label {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            width: 2px;
+            background: var(--gray-200);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--gray-50);
+            border-radius: 8px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+        }
+
+        .timeline-item.completed::before {
+            background: var(--primary);
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-description {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        /* Real-time Update Animation */
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .update-notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideIn 0.3s ease;
+            z-index: 100;
+        }
+
+        .update-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 212, 170, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container-table-wrapper {
+                overflow-x: auto;
+            }
+
+            .container-table {
+                min-width: 900px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .search-input {
+                min-width: 100%;
+            }
+
+            .table-footer {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Container Tracking</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="refreshData()">
+                    <span>🔄</span>
+                    <span>Refresh</span>
+                </button>
+                <button class="btn btn-primary" onclick="showAddContainer()">
+                    <span>➕</span>
+                    <span>Add Container</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">2,847</div>
+                <div class="stat-label">Total Containers</div>
+                <div class="stat-badge badge-success">↑ 156 this week</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">2,612</div>
+                <div class="stat-label">Active & Safe</div>
+                <div class="stat-badge badge-success">91.7%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">189</div>
+                <div class="stat-label">At Risk</div>
+                <div class="stat-badge badge-warning">6.6%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">46</div>
+                <div class="stat-label">Critical</div>
+                <div class="stat-badge badge-danger">1.6%</div>
+            </div>
+        </div>
+
+        <!-- Search and Filter Bar -->
+        <div class="search-filter-bar">
+            <div class="search-row">
+                <input type="text" class="search-input" placeholder="Search by container ID, carrier, port, or vessel..." id="searchInput">
+                <button class="btn btn-secondary" onclick="advancedSearch()">
+                    <span>⚙️</span>
+                    <span>Advanced</span>
+                </button>
+                <button class="btn btn-secondary" onclick="exportData()">
+                    <span>📥</span>
+                    <span>Export</span>
+                </button>
+            </div>
+            <div class="filter-row">
+                <span style="font-size: 0.875rem; color: var(--gray-600); margin-right: 0.5rem;">Quick Filters:</span>
+                <div class="filter-chip active" onclick="toggleFilter(this, 'all')">
+                    All Containers
+                    <span class="filter-count">2,847</span>
+                </div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'at-risk')">
+                    At Risk
+                    <span class="filter-count">189</span>
+                </div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'critical')">
+                    Critical
+                    <span class="filter-count">46</span>
+                </div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'delayed')">
+                    Delayed
+                    <span class="filter-count">124</span>
+                </div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'arriving-today')">
+                    Arriving Today
+                    <span class="filter-count">78</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Container Table -->
+        <div class="container-table-wrapper">
+            <div class="table-header">
+                <h2 class="table-title">Active Containers</h2>
+                <div class="table-actions">
+                    <button class="icon-btn" title="Grid View">⊞</button>
+                    <button class="icon-btn" title="Map View">🗺️</button>
+                    <button class="icon-btn" title="Settings">⚙️</button>
+                </div>
+            </div>
+            
+            <table class="container-table">
+                <thead>
+                    <tr>
+                        <th>Container ID</th>
+                        <th>Status</th>
+                        <th>Carrier</th>
+                        <th>Current Location</th>
+                        <th>ETA</th>
+                        <th>D&D Risk</th>
+                        <th style="text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="containerTableBody">
+                    <tr>
+                        <td>
+                            <a href="#" class="container-id" onclick="showContainerDetail('MSKU8374625')">
+                                <span>📦</span>
+                                <span>MSKU8374625</span>
+                            </a>
+                        </td>
+                        <td>
+                            <span class="status-badge status-active">
+                                <span class="status-dot"></span>
+                                <span>Active</span>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="carrier-logo">
+                                <div class="carrier-icon">MSK</div>
+                                <span>Maersk</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="location-info">
+                                <div class="port">Port of Shanghai</div>
+                                <div style="font-size: 0.75rem;">Vessel: Madrid Maersk</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="eta-info">
+                                <div class="eta-date">Mar 15, 2024</div>
+                                <div class="eta-status">On schedule</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="risk-indicator">
+                                <div class="risk-bar">
+                                    <div class="risk-fill risk-low" style="width: 20%"></div>
+                                </div>
+                                <span class="risk-value" style="color: var(--success)">Low</span>
+                            </div>
+                        </td>
+                        <td class="table-actions-cell">
+                            <button class="icon-btn" onclick="trackContainer('MSKU8374625')" title="Track">📍</button>
+                            <button class="icon-btn" onclick="viewDocuments('MSKU8374625')" title="Documents">📄</button>
+                            <button class="icon-btn" onclick="showContainerMenu('MSKU8374625')" title="More">⋮</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#" class="container-id" onclick="showContainerDetail('TCLU9283746')">
+                                <span>📦</span>
+                                <span>TCLU9283746</span>
+                            </a>
+                        </td>
+                        <td>
+                            <span class="status-badge status-at-risk">
+                                <span class="status-dot"></span>
+                                <span>At Risk</span>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="carrier-logo">
+                                <div class="carrier-icon" style="background: #FF6B00; color: white;">HL</div>
+                                <span>Hapag-Lloyd</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="location-info">
+                                <div class="port">Port of LA</div>
+                                <div style="font-size: 0.75rem;">Terminal: APM Pier 400</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="eta-info">
+                                <div class="eta-date">Mar 12, 2024</div>
+                                <div class="eta-status eta-delayed">Delayed 2 days</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="risk-indicator">
+                                <div class="risk-bar">
+                                    <div class="risk-fill risk-medium" style="width: 65%"></div>
+                                </div>
+                                <span class="risk-value" style="color: var(--warning)">Medium</span>
+                            </div>
+                        </td>
+                        <td class="table-actions-cell">
+                            <button class="icon-btn" onclick="trackContainer('TCLU9283746')" title="Track">📍</button>
+                            <button class="icon-btn" onclick="viewDocuments('TCLU9283746')" title="Documents">📄</button>
+                            <button class="icon-btn" onclick="showContainerMenu('TCLU9283746')" title="More">⋮</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#" class="container-id" onclick="showContainerDetail('CMAU7659821')">
+                                <span>📦</span>
+                                <span>CMAU7659821</span>
+                            </a>
+                        </td>
+                        <td>
+                            <span class="status-badge status-critical">
+                                <span class="status-dot"></span>
+                                <span>Critical</span>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="carrier-logo">
+                                <div class="carrier-icon" style="background: #004B87; color: white;">CMA</div>
+                                <span>CMA CGM</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="location-info">
+                                <div class="port">Port of Hamburg</div>
+                                <div style="font-size: 0.75rem;">Awaiting customs</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="eta-info">
+                                <div class="eta-date">Mar 10, 2024</div>
+                                <div class="eta-status eta-delayed">5 days overdue</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="risk-indicator">
+                                <div class="risk-bar">
+                                    <div class="risk-fill risk-high" style="width: 90%"></div>
+                                </div>
+                                <span class="risk-value" style="color: var(--danger)">High</span>
+                            </div>
+                        </td>
+                        <td class="table-actions-cell">
+                            <button class="icon-btn" onclick="trackContainer('CMAU7659821')" title="Track">📍</button>
+                            <button class="icon-btn" onclick="viewDocuments('CMAU7659821')" title="Documents">📄</button>
+                            <button class="icon-btn" onclick="showContainerMenu('CMAU7659821')" title="More">⋮</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="table-footer">
+                <div style="font-size: 0.875rem; color: var(--gray-600);">
+                    Showing 1-20 of 2,847 containers
+                </div>
+                <div class="pagination">
+                    <button class="page-btn" disabled>←</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">...</button>
+                    <button class="page-btn">142</button>
+                    <button class="page-btn">→</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container Detail Modal -->
+    <div class="modal" id="containerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Container Details: MSKU8374625</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-section">
+                    <h3 class="section-title">General Information</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Container ID</div>
+                            <div class="detail-value">MSKU8374625</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Type</div>
+                            <div class="detail-value">40' High Cube</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Carrier</div>
+                            <div class="detail-value">Maersk Line</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Vessel</div>
+                            <div class="detail-value">Madrid Maersk</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3 class="section-title">Journey Timeline</h3>
+                    <div class="timeline">
+                        <div class="timeline-item completed">
+                            <div class="timeline-date">Mar 1, 2024 - 08:00 UTC</div>
+                            <div class="timeline-title">Container Loaded</div>
+                            <div class="timeline-description">Port of Shanghai, Terminal 5</div>
+                        </div>
+                        <div class="timeline-item completed">
+                            <div class="timeline-date">Mar 1, 2024 - 14:30 UTC</div>
+                            <div class="timeline-title">Vessel Departed</div>
+                            <div class="timeline-description">Madrid Maersk departed on schedule</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Mar 15, 2024 - 06:00 UTC (Estimated)</div>
+                            <div class="timeline-title">Arrival at Destination</div>
+                            <div class="timeline-description">Port of Los Angeles, APM Terminal</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3 class="section-title">D&D Prevention Actions</h3>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn btn-primary">
+                            <span>📋</span>
+                            <span>Pre-file Customs</span>
+                        </button>
+                        <button class="btn btn-secondary">
+                            <span>🚚</span>
+                            <span>Schedule Pickup</span>
+                        </button>
+                        <button class="btn btn-secondary">
+                            <span>📧</span>
+                            <span>Notify Consignee</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Real-time Update Notification -->
+    <div class="update-notification" id="updateNotification" style="display: none;">
+        <div class="update-icon">🔄</div>
+        <div>
+            <div style="font-weight: 600;">Container Status Updated</div>
+            <div style="font-size: 0.875rem; color: var(--gray-600);">TCLU9283746 cleared customs</div>
+        </div>
+    </div>
+
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            filterContainers(searchTerm);
+        });
+
+        function filterContainers(searchTerm) {
+            const rows = document.querySelectorAll('#containerTableBody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        // Filter toggle
+        function toggleFilter(chip, filter) {
+            // Remove active from all chips
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            
+            // Apply filter logic here
+            console.log('Filtering by:', filter);
+        }
+
+        // Container actions
+        function showContainerDetail(containerId) {
+            document.getElementById('containerModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('containerModal').classList.remove('active');
+        }
+
+        function trackContainer(containerId) {
+            console.log('Tracking container:', containerId);
+            // Open tracking view
+        }
+
+        function viewDocuments(containerId) {
+            console.log('Viewing documents for:', containerId);
+            // Open documents view
+        }
+
+        function showContainerMenu(containerId) {
+            console.log('Showing menu for:', containerId);
+            // Show context menu
+        }
+
+        function refreshData() {
+            // Simulate data refresh
+            const notification = document.getElementById('updateNotification');
+            notification.style.display = 'flex';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+
+        function exportData() {
+            console.log('Exporting container data...');
+            // Export functionality
+        }
+
+        function advancedSearch() {
+            console.log('Opening advanced search...');
+            // Advanced search modal
+        }
+
+        function showAddContainer() {
+            console.log('Showing add container form...');
+            // Add container modal
+        }
+
+        // Simulate real-time updates
+        setInterval(() => {
+            const random = Math.random();
+            if (random > 0.9) {
+                refreshData();
+            }
+        }, 10000);
+
+        // Close modal on outside click
+        document.getElementById('containerModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closeModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+            if (e.key === '/' && e.ctrlKey) {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+    </script>
+</body>
+</html>

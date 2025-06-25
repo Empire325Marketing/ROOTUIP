@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UIP Management Team & Advisory Board | Series A Leadership</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #F8FAFB;
+            color: #0A1628;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #0A1628;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #64748B;
+            font-size: 1.125rem;
+        }
+        
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #0A1628;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #00D4AA;
+            padding-left: 1rem;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .member-card {
+            display: flex;
+            background: #F8FAFB;
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .member-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-color: #00D4AA;
+        }
+        
+        .member-photo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 100%);
+            border-radius: 12px;
+            flex-shrink: 0;
+            margin-right: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #64748B;
+        }
+        
+        .member-info h3 {
+            margin: 0 0 0.25rem 0;
+            color: #0A1628;
+            font-size: 1.25rem;
+        }
+        
+        .member-role {
+            color: #00D4AA;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .member-bio {
+            color: #64748B;
+            line-height: 1.5;
+            font-size: 0.875rem;
+        }
+        
+        .member-achievements {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #E2E8F0;
+        }
+        
+        .achievement {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: #0A1628;
+            margin-bottom: 0.25rem;
+        }
+        
+        .leadership-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            color: white;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 900;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .advisory-board {
+            background: #0A1628;
+            color: white;
+            padding: 3rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .advisor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .advisor-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .advisor-card h4 {
+            color: #00D4AA;
+            margin-bottom: 0.5rem;
+        }
+        
+        .advisor-card p {
+            margin: 0.5rem 0;
+            opacity: 0.9;
+        }
+        
+        .org-chart {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #F8FAFB;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .org-level {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .org-box {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px solid #E2E8F0;
+            min-width: 150px;
+        }
+        
+        .org-box.ceo {
+            background: #00D4AA;
+            color: white;
+            border-color: #00D4AA;
+        }
+        
+        .org-box h5 {
+            margin: 0 0 0.25rem 0;
+            font-size: 0.875rem;
+        }
+        
+        .org-box p {
+            margin: 0;
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+        
+        .key-investors {
+            background: #F8FAFB;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .investor-logos {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .investor-logo {
+            width: 120px;
+            height: 60px;
+            background: #E2E8F0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #64748B;
+        }
+        
+        .culture-values {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .value-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #E6FCF5 0%, #D1FAE5 100%);
+            border-radius: 12px;
+            border: 2px solid #00D4AA;
+        }
+        
+        .value-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .value-card h4 {
+            color: #00D4AA;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Management Team & Leadership</h1>
+        <p class="subtitle">World-Class Team Building the Future of Ocean Freight</p>
+    </div>
+
+    <!-- Leadership Stats -->
+    <div class="leadership-stats">
+        <div class="stat-item">
+            <span class="stat-value">127</span>
+            <span class="stat-label">Combined Years Experience</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value">$2.4B+</span>
+            <span class="stat-label">Previous Exits</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value">3</span>
+            <span class="stat-label">Previous Unicorns Built</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value">87</span>
+            <span class="stat-label">Team Members</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value">4.8/5</span>
+            <span class="stat-label">Glassdoor Rating</span>
+        </div>
+    </div>
+
+    <!-- Executive Team -->
+    <div class="section">
+        <h2 class="section-title">Executive Team</h2>
+        
+        <div class="team-grid">
+            <div class="member-card">
+                <div class="member-photo">👨‍💼</div>
+                <div class="member-info">
+                    <h3>Michael Chen</h3>
+                    <div class="member-role">CEO & Co-Founder</div>
+                    <div class="member-bio">
+                        Former VP Digital Transformation at Maersk. 20+ years revolutionizing ocean freight operations.
+                    </div>
+                    <div class="member-achievements">
+                        <div class="achievement">🏆 Led $1.2B digital initiative at Maersk</div>
+                        <div class="achievement">🎓 Harvard MBA, MIT Computer Science</div>
+                        <div class="achievement">📈 3x successful exits in logistics tech</div>
+                        <div class="achievement">🌍 Built teams across 15 countries</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="member-card">
+                <div class="member-photo">👩‍💻</div>
+                <div class="member-info">
+                    <h3>Sarah Thompson</h3>
+                    <div class="member-role">CTO & Co-Founder</div>
+                    <div class="member-bio">
+                        Ex-Amazon Principal Engineer. Architected systems processing $50B+ in freight annually.
+                    </div>
+                    <div class="member-achievements">
+                        <div class="achievement">🏆 Built Amazon's freight optimization engine</div>
+                        <div class="achievement">🎓 Stanford PhD in Machine Learning</div>
+                        <div class="achievement">📊 15 patents in supply chain AI</div>
+                        <div class="achievement">👥 Managed 200+ engineer teams</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="member-card">
+                <div class="member-photo">💼</div>
+                <div class="member-info">
+                    <h3>David Rodriguez</h3>
+                    <div class="member-role">Chief Revenue Officer</div>
+                    <div class="member-bio">
+                        Former CRO at Flexport. Scaled revenue from $10M to $1B+ in 5 years.
+                    </div>
+                    <div class="member-achievements">
+                        <div class="achievement">🏆 Built 500+ person global sales org</div>
+                        <div class="achievement">💰 Closed 50+ enterprise deals >$10M</div>
+                        <div class="achievement">🚀 IPO experience at 3 companies</div>
+                        <div class="achievement">🌐 Deep Fortune 500 relationships</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="member-card">
+                <div class="member-photo">📊</div>
+                <div class="member-info">
+                    <h3>Lisa Wang</h3>
+                    <div class="member-role">CFO</div>
+                    <div class="member-bio">
+                        Ex-CFO at Convoy. Led $500M fundraising and built world-class finance operations.
+                    </div>
+                    <div class="member-achievements">
+                        <div class="achievement">🏆 Managed $1B+ in venture funding</div>
+                        <div class="achievement">🎓 Wharton MBA, CPA</div>
+                        <div class="achievement">📈 2 successful IPOs (Box, Zendesk)</div>
+                        <div class="achievement">💡 Expert in SaaS metrics & growth</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="member-card">
+                <div class="member-photo">🎨</div>
+                <div class="member-info">
+                    <h3>James Park</h3>
+                    <div class="member-role">VP Product</div>
+                    <div class="member-bio">
+                        Former Head of Product at Flexport. Shipped products used by 10,000+ shippers globally.
+                    </div>
+                    <div class="member-achievements">
+                        <div class="achievement">🏆 Grew MAU from 10K to 1M+</div>
+                        <div class="achievement">🎓 Berkeley CS, Design at RISD</div>
+                        <div class="achievement">🚀 Led 0-1 products at 3 unicorns</div>
+                        <div class="achievement">🏅 Product Leader of the Year 2023</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="member-card">
+                <div class="member-photo">👥</div>
+                <div class="member-info">
+                    <h3>Maria Gonzalez</h3>
+                    <div class="member-role">VP People & Culture</div>
+                    <div class="member-bio">
+                        Former VP People at Samsara. Scaled teams from 50 to 2,000+ across 20 countries.
+                    </div>
+                    <div class="member-achievements">
+                        <div class="achievement">🏆 Built award-winning cultures</div>
+                        <div class="achievement">🎓 Harvard Organizational Psychology</div>
+                        <div class="achievement">📊 98% employee satisfaction rate</div>
+                        <div class="achievement">🌍 DEI advocate and thought leader</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advisory Board -->
+    <div class="advisory-board">
+        <h2 style="color: white; text-align: center; margin-bottom: 1rem;">World-Class Advisory Board</h2>
+        
+        <div class="advisor-grid">
+            <div class="advisor-card">
+                <h4>Bill McDermott</h4>
+                <p><strong>CEO of ServiceNow</strong></p>
+                <p>Former CEO of SAP. Expert in enterprise software scale and go-to-market.</p>
+                <p style="font-size: 0.875rem; opacity: 0.8;">Advises on: Enterprise sales, global expansion</p>
+            </div>
+            
+            <div class="advisor-card">
+                <h4>Ryan Petersen</h4>
+                <p><strong>Founder & CEO of Flexport</strong></p>
+                <p>Pioneer in digital freight forwarding. Deep ocean freight expertise.</p>
+                <p style="font-size: 0.875rem; opacity: 0.8;">Advises on: Industry partnerships, product strategy</p>
+            </div>
+            
+            <div class="advisor-card">
+                <h4>Mary Meeker</h4>
+                <p><strong>Partner at Bond Capital</strong></p>
+                <p>Legendary tech investor. Board member at multiple logistics unicorns.</p>
+                <p style="font-size: 0.875rem; opacity: 0.8;">Advises on: Growth strategy, fundraising</p>
+            </div>
+            
+            <div class="advisor-card">
+                <h4>Søren Skou</h4>
+                <p><strong>Former CEO of Maersk</strong></p>
+                <p>Led world's largest shipping company. Industry veteran with 40+ years experience.</p>
+                <p style="font-size: 0.875rem; opacity: 0.8;">Advises on: Carrier relationships, industry dynamics</p>
+            </div>
+            
+            <div class="advisor-card">
+                <h4>Reid Hoffman</h4>
+                <p><strong>Co-founder of LinkedIn</strong></p>
+                <p>Master of network effects and platform businesses. Greylock Partner.</p>
+                <p style="font-size: 0.875rem; opacity: 0.8;">Advises on: Platform strategy, network effects</p>
+            </div>
+            
+            <div class="advisor-card">
+                <h4>Diane Greene</h4>
+                <p><strong>Former CEO of Google Cloud</strong></p>
+                <p>Enterprise software pioneer. VMware co-founder and MIT board member.</p>
+                <p style="font-size: 0.875rem; opacity: 0.8;">Advises on: Technical architecture, enterprise IT</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Organizational Structure -->
+    <div class="section">
+        <h2 class="section-title">Organizational Structure</h2>
+        
+        <div class="org-chart">
+            <div class="org-level">
+                <div class="org-box ceo">
+                    <h5>CEO</h5>
+                    <p>Michael Chen</p>
+                </div>
+            </div>
+            
+            <div class="org-level">
+                <div class="org-box">
+                    <h5>CTO</h5>
+                    <p>Sarah Thompson</p>
+                    <p>35 engineers</p>
+                </div>
+                <div class="org-box">
+                    <h5>CRO</h5>
+                    <p>David Rodriguez</p>
+                    <p>28 sales/CS</p>
+                </div>
+                <div class="org-box">
+                    <h5>CFO</h5>
+                    <p>Lisa Wang</p>
+                    <p>8 finance</p>
+                </div>
+                <div class="org-box">
+                    <h5>VP Product</h5>
+                    <p>James Park</p>
+                    <p>12 product/design</p>
+                </div>
+                <div class="org-box">
+                    <h5>VP People</h5>
+                    <p>Maria Gonzalez</p>
+                    <p>4 HR/recruiting</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem;">
+            <div style="text-align: center; padding: 1rem; background: #F8FAFB; border-radius: 8px;">
+                <h4 style="color: #00D4AA; margin-bottom: 0.5rem;">Engineering</h4>
+                <p style="font-size: 0.875rem;">15 Backend • 8 Frontend • 7 ML/AI • 5 DevOps</p>
+            </div>
+            <div style="text-align: center; padding: 1rem; background: #F8FAFB; border-radius: 8px;">
+                <h4 style="color: #00D4AA; margin-bottom: 0.5rem;">Go-to-Market</h4>
+                <p style="font-size: 0.875rem;">10 AEs • 8 SDRs • 5 CS • 5 Marketing</p>
+            </div>
+            <div style="text-align: center; padding: 1rem; background: #F8FAFB; border-radius: 8px;">
+                <h4 style="color: #00D4AA; margin-bottom: 0.5rem;">Operations</h4>
+                <p style="font-size: 0.875rem;">12 Product • 8 Finance • 4 HR • 6 Other</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Investors & Board -->
+    <div class="key-investors">
+        <h3 style="text-align: center; margin-bottom: 1rem;">Current Investors & Board Members</h3>
+        
+        <div class="investor-logos">
+            <div class="investor-logo">Bessemer</div>
+            <div class="investor-logo">Founders Fund</div>
+            <div class="investor-logo">GV</div>
+            <div class="investor-logo">Accel</div>
+            <div class="investor-logo">Tiger Global</div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <h4>Board of Directors</h4>
+            <ul style="columns: 2; gap: 2rem;">
+                <li><strong>Michael Chen</strong> - CEO & Co-Founder (Chairman)</li>
+                <li><strong>Sarah Thompson</strong> - CTO & Co-Founder</li>
+                <li><strong>John Doe</strong> - Partner, Bessemer Venture Partners</li>
+                <li><strong>Jane Smith</strong> - Former COO, FedEx</li>
+                <li><strong>Bob Johnson</strong> - Independent Director, Supply Chain Expert</li>
+                <li><strong>Open Seat</strong> - Series A Lead Investor</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Company Culture -->
+    <div class="section">
+        <h2 class="section-title">Culture & Values</h2>
+        
+        <div class="culture-values">
+            <div class="value-card">
+                <div class="value-icon">🚀</div>
+                <h4>Customer Obsession</h4>
+                <p>We measure success by customer savings delivered</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">💡</div>
+                <h4>Innovation First</h4>
+                <p>We solve impossible problems with creative solutions</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">🤝</div>
+                <h4>Trust & Transparency</h4>
+                <p>We build lasting relationships through honesty</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">⚡</div>
+                <h4>Speed & Excellence</h4>
+                <p>We move fast without compromising quality</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">🌍</div>
+                <h4>Global Impact</h4>
+                <p>We're building for the world's supply chains</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">👥</div>
+                <h4>Team First</h4>
+                <p>We win together and support each other</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Growth & Hiring -->
+    <div class="section" style="background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%); color: white;">
+        <h2 style="color: white; text-align: center; margin-bottom: 2rem;">Building the A-Team: Hiring Plan</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+            <div style="text-align: center;">
+                <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">87 → 150</h3>
+                <p>Team growth in 2024</p>
+            </div>
+            <div style="text-align: center;">
+                <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">45%</h3>
+                <p>Engineering hires</p>
+            </div>
+            <div style="text-align: center;">
+                <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">30%</h3>
+                <p>Go-to-market hires</p>
+            </div>
+            <div style="text-align: center;">
+                <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">25%</h3>
+                <p>Operations & support</p>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem; text-align: center;">
+            <p style="font-size: 1.125rem; opacity: 0.9;">Key Focus Areas: ML Engineers • Enterprise AEs • Customer Success • International Teams</p>
+        </div>
+    </div>
+</body>
+</html>

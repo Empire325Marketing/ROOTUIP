@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Platform - D&D Command Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00D4AA;
+            --primary-dark: #00B894;
+            --secondary: #0A1628;
+            --gray-50: #F8FAFB;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.5;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Command Center Header */
+        .command-header {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--gray-800) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+
+        .command-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .command-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        /* Alert Banner */
+        .alert-banner {
+            background: linear-gradient(135deg, var(--danger) 0%, #DC2626 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: pulse-bg 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-bg {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.9; }
+        }
+
+        .alert-icon {
+            font-size: 1.5rem;
+            animation: ring 1s ease-in-out infinite;
+        }
+
+        @keyframes ring {
+            0%, 100% { transform: rotate(0deg); }
+            10% { transform: rotate(-10deg); }
+            20% { transform: rotate(10deg); }
+            30% { transform: rotate(-10deg); }
+            40% { transform: rotate(10deg); }
+            50% { transform: rotate(0deg); }
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .alert-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .alert-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Financial Overview Cards */
+        .financial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .financial-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .financial-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .financial-card.saved::before {
+            background: var(--success);
+        }
+
+        .financial-card.at-risk::before {
+            background: var(--warning);
+        }
+
+        .financial-card.lost::before {
+            background: var(--danger);
+        }
+
+        .financial-card.recovered::before {
+            background: var(--info);
+        }
+
+        .financial-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .financial-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .financial-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .financial-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+        }
+
+        .financial-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .trend-positive {
+            color: var(--success);
+        }
+
+        .trend-negative {
+            color: var(--danger);
+        }
+
+        /* Prevention Workflow */
+        .workflow-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .workflow-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .workflow-tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .workflow-tab:hover {
+            color: var(--gray-900);
+        }
+
+        .workflow-tab.active {
+            color: var(--primary);
+        }
+
+        .workflow-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .tab-badge {
+            display: inline-block;
+            margin-left: 0.5rem;
+            padding: 0.125rem 0.5rem;
+            background: var(--gray-200);
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .tab-badge.danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .tab-badge.warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        /* Action Items List */
+        .action-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .action-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .action-item:hover {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .action-priority {
+            width: 4px;
+            background: var(--gray-300);
+            border-radius: 2px;
+        }
+
+        .priority-critical {
+            background: var(--danger);
+        }
+
+        .priority-high {
+            background: var(--warning);
+        }
+
+        .priority-medium {
+            background: var(--info);
+        }
+
+        .action-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-300);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .action-checkbox:hover {
+            border-color: var(--primary);
+        }
+
+        .action-checkbox.checked {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .action-content {
+            flex: 1;
+        }
+
+        .action-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .action-details {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .action-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--gray-200);
+            background: white;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        .action-btn.primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .action-btn.primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        /* Automated Actions */
+        .automation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .automation-card {
+            background: var(--gray-50);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s ease;
+        }
+
+        .automation-card:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .automation-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .automation-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .automation-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background: var(--gray-300);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .automation-toggle.active {
+            background: var(--primary);
+        }
+
+        .automation-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .automation-toggle.active::after {
+            transform: translateX(24px);
+        }
+
+        .automation-name {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .automation-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .automation-stat {
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        /* Dispute Management */
+        .dispute-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .dispute-table th {
+            text-align: left;
+            padding: 1rem;
+            background: var(--gray-50);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .dispute-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .dispute-table tr:hover {
+            background: var(--gray-50);
+        }
+
+        .dispute-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.875rem;
+            border-radius: 20px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .status-processing {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--info);
+        }
+
+        .status-approved {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-rejected {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-end;
+            z-index: 100;
+        }
+
+        .fab {
+            width: 56px;
+            height: 56px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 212, 170, 0.4);
+        }
+
+        .fab-menu {
+            display: none;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .fab-menu.active {
+            display: flex;
+        }
+
+        .fab-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .fab-item:hover {
+            transform: translateX(-4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* AI Assistant */
+        .ai-assistant {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            width: 350px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            display: none;
+            flex-direction: column;
+            max-height: 500px;
+            z-index: 100;
+        }
+
+        .ai-assistant.active {
+            display: flex;
+        }
+
+        .ai-header {
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ai-title {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ai-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.25rem;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.2s ease;
+        }
+
+        .ai-close:hover {
+            opacity: 1;
+        }
+
+        .ai-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .ai-message {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .ai-avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--gray-200);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .ai-avatar.bot {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .ai-content {
+            flex: 1;
+            background: var(--gray-50);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .ai-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .ai-suggestion {
+            padding: 0.375rem 0.75rem;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .ai-suggestion:hover {
+            background: var(--gray-50);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .financial-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .automation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .financial-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .alert-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .alert-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .quick-actions {
+                bottom: 1rem;
+                right: 1rem;
+            }
+
+            .ai-assistant {
+                left: 1rem;
+                right: 1rem;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Command Center Header -->
+        <div class="command-header">
+            <h1 class="command-title">D&D Command Center</h1>
+            <p class="command-subtitle">Real-time detention & demurrage prevention and management</p>
+        </div>
+
+        <!-- Alert Banner -->
+        <div class="alert-banner">
+            <div class="alert-icon">🚨</div>
+            <div class="alert-content">
+                <div class="alert-title">Critical Alert: 12 containers need immediate action</div>
+                <div>Potential exposure: $47,200 in D&D charges within next 24 hours</div>
+            </div>
+            <div class="alert-actions">
+                <button class="alert-btn">View All</button>
+                <button class="alert-btn">Take Action</button>
+            </div>
+        </div>
+
+        <!-- Financial Overview -->
+        <div class="financial-grid">
+            <div class="financial-card saved">
+                <div class="financial-header">
+                    <div>
+                        <div class="financial-value">$14.2M</div>
+                        <div class="financial-label">Total Saved YTD</div>
+                        <div class="financial-trend trend-positive">
+                            <span>↑</span>
+                            <span>23% vs last year</span>
+                        </div>
+                    </div>
+                    <div class="financial-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">💰</div>
+                </div>
+            </div>
+
+            <div class="financial-card at-risk">
+                <div class="financial-header">
+                    <div>
+                        <div class="financial-value">$287K</div>
+                        <div class="financial-label">Currently At Risk</div>
+                        <div class="financial-trend trend-negative">
+                            <span>↑</span>
+                            <span>$47K since yesterday</span>
+                        </div>
+                    </div>
+                    <div class="financial-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">⚠️</div>
+                </div>
+            </div>
+
+            <div class="financial-card lost">
+                <div class="financial-header">
+                    <div>
+                        <div class="financial-value">$134K</div>
+                        <div class="financial-label">Incurred This Month</div>
+                        <div class="financial-trend trend-positive">
+                            <span>↓</span>
+                            <span>15% improvement</span>
+                        </div>
+                    </div>
+                    <div class="financial-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--danger);">📉</div>
+                </div>
+            </div>
+
+            <div class="financial-card recovered">
+                <div class="financial-header">
+                    <div>
+                        <div class="financial-value">$89K</div>
+                        <div class="financial-label">Recovered via Disputes</div>
+                        <div class="financial-trend trend-positive">
+                            <span>↑</span>
+                            <span>94% win rate</span>
+                        </div>
+                    </div>
+                    <div class="financial-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--info);">🏆</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prevention Workflow -->
+        <div class="workflow-section">
+            <div class="section-header">
+                <h2 class="section-title">Prevention Workflow</h2>
+                <button class="action-btn primary">
+                    <span>⚡</span>
+                    <span>Process All</span>
+                </button>
+            </div>
+
+            <div class="workflow-tabs">
+                <button class="workflow-tab active" onclick="switchTab('critical')">
+                    Critical Actions
+                    <span class="tab-badge danger">12</span>
+                </button>
+                <button class="workflow-tab" onclick="switchTab('pending')">
+                    Pending Review
+                    <span class="tab-badge warning">28</span>
+                </button>
+                <button class="workflow-tab" onclick="switchTab('automated')">
+                    Automated Actions
+                    <span class="tab-badge">156</span>
+                </button>
+                <button class="workflow-tab" onclick="switchTab('completed')">
+                    Completed Today
+                    <span class="tab-badge">89</span>
+                </button>
+            </div>
+
+            <div class="action-list" id="actionList">
+                <div class="action-item">
+                    <div class="action-priority priority-critical"></div>
+                    <div class="action-checkbox" onclick="toggleCheck(this)"></div>
+                    <div class="action-content">
+                        <div class="action-title">MSKU7483926 - Free time expires in 4 hours</div>
+                        <div class="action-details">
+                            <div class="action-detail">
+                                <span>📦</span>
+                                <span>Port of LA</span>
+                            </div>
+                            <div class="action-detail">
+                                <span>🚢</span>
+                                <span>Maersk</span>
+                            </div>
+                            <div class="action-detail">
+                                <span>💰</span>
+                                <span>$2,400/day exposure</span>
+                            </div>
+                            <div class="action-detail">
+                                <span>⏱️</span>
+                                <span>4h remaining</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">View Details</button>
+                        <button class="action-btn primary">Schedule Pickup</button>
+                    </div>
+                </div>
+
+                <div class="action-item">
+                    <div class="action-priority priority-critical"></div>
+                    <div class="action-checkbox" onclick="toggleCheck(this)"></div>
+                    <div class="action-content">
+                        <div class="action-title">TCLU9284756 - Customs hold preventing release</div>
+                        <div class="action-details">
+                            <div class="action-detail">
+                                <span>📦</span>
+                                <span>Port of Hamburg</span>
+                            </div>
+                            <div class="action-detail">
+                                <span>🚢</span>
+                                <span>Hapag-Lloyd</span>
+                            </div>
+                            <div class="action-detail">
+                                <span>💰</span>
+                                <span>$1,800/day exposure</span>
+                            </div>
+                            <div class="action-detail">
+                                <span>⏱️</span>
+                                <span>Already 2 days</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Contact Customs</button>
+                        <button class="action-btn primary">File Appeal</button>
+                    </div>
+                </div>
+
+                <div class="action-item">
+                    <div class="action-priority priority-high"></div>
+                    <div class="action-checkbox" onclick="toggleCheck(this)"></div>
+                    <div class="action-content">
+                        <div class="action-title">CMAU8374625 - Appointment needed by midnight</div>
+                        <div class="action-details">
+                            <div class="action-detail">
+                                <span>📦</span>
+                                <span>Port of Shanghai</span>
+                            </div>
+                            <div class="action-detail">
+                                <span>🚢</span>
+                                <span>CMA CGM</span>
+                            </div>
+                            <div class="action-detail">
+                                <span>💰</span>
+                                <span>$3,200/day exposure</span>
+                            </div>
+                            <div class="action-detail">
+                                <span>⏱️</span>
+                                <span>8h remaining</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn">Check Availability</button>
+                        <button class="action-btn primary">Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Automated Actions -->
+        <div class="workflow-section">
+            <div class="section-header">
+                <h2 class="section-title">Automated Prevention Systems</h2>
+                <button class="action-btn">Configure Rules</button>
+            </div>
+
+            <div class="automation-grid">
+                <div class="automation-card">
+                    <div class="automation-header">
+                        <div class="automation-icon">📅</div>
+                        <div class="automation-toggle active" onclick="toggleAutomation(this)"></div>
+                    </div>
+                    <h3 class="automation-name">Auto-Schedule Pickups</h3>
+                    <p style="font-size: 0.875rem; color: var(--gray-600); margin-bottom: 1rem;">
+                        Automatically books pickup appointments 48h before free time expires
+                    </p>
+                    <div class="automation-stats">
+                        <div class="automation-stat">
+                            <div class="stat-value">1,247</div>
+                            <div class="stat-label">Scheduled</div>
+                        </div>
+                        <div class="automation-stat">
+                            <div class="stat-value">$4.8M</div>
+                            <div class="stat-label">Saved</div>
+                        </div>
+                        <div class="automation-stat">
+                            <div class="stat-value">98%</div>
+                            <div class="stat-label">Success</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="automation-card">
+                    <div class="automation-header">
+                        <div class="automation-icon">📧</div>
+                        <div class="automation-toggle active" onclick="toggleAutomation(this)"></div>
+                    </div>
+                    <h3 class="automation-name">Smart Notifications</h3>
+                    <p style="font-size: 0.875rem; color: var(--gray-600); margin-bottom: 1rem;">
+                        Sends alerts to stakeholders based on urgency and responsibility matrix
+                    </p>
+                    <div class="automation-stats">
+                        <div class="automation-stat">
+                            <div class="stat-value">3,892</div>
+                            <div class="stat-label">Sent</div>
+                        </div>
+                        <div class="automation-stat">
+                            <div class="stat-value">89%</div>
+                            <div class="stat-label">Acted On</div>
+                        </div>
+                        <div class="automation-stat">
+                            <div class="stat-value">4.2h</div>
+                            <div class="stat-label">Avg Response</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="automation-card">
+                    <div class="automation-header">
+                        <div class="automation-icon">🤖</div>
+                        <div class="automation-toggle active" onclick="toggleAutomation(this)"></div>
+                    </div>
+                    <h3 class="automation-name">AI Dispute Filing</h3>
+                    <p style="font-size: 0.875rem; color: var(--gray-600); margin-bottom: 1rem;">
+                        Automatically files disputes for invalid charges with supporting docs
+                    </p>
+                    <div class="automation-stats">
+                        <div class="automation-stat">
+                            <div class="stat-value">156</div>
+                            <div class="stat-label">Filed</div>
+                        </div>
+                        <div class="automation-stat">
+                            <div class="stat-value">94%</div>
+                            <div class="stat-label">Win Rate</div>
+                        </div>
+                        <div class="automation-stat">
+                            <div class="stat-value">$892K</div>
+                            <div class="stat-label">Recovered</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dispute Management -->
+        <div class="workflow-section">
+            <div class="section-header">
+                <h2 class="section-title">Active Disputes</h2>
+                <button class="action-btn primary">
+                    <span>📝</span>
+                    <span>New Dispute</span>
+                </button>
+            </div>
+
+            <table class="dispute-table">
+                <thead>
+                    <tr>
+                        <th>Dispute ID</th>
+                        <th>Container</th>
+                        <th>Carrier</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Filed</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight: 600;">#D-2024-4829</td>
+                        <td>MSKU7362819</td>
+                        <td>Maersk</td>
+                        <td style="font-weight: 600; color: var(--gray-900);">$5,200</td>
+                        <td>
+                            <span class="dispute-status status-approved">Approved</span>
+                        </td>
+                        <td>Mar 8, 2024</td>
+                        <td>
+                            <button class="action-btn" style="padding: 0.375rem 0.75rem; font-size: 0.8125rem;">View</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">#D-2024-4830</td>
+                        <td>TCLU8273645</td>
+                        <td>Hapag-Lloyd</td>
+                        <td style="font-weight: 600; color: var(--gray-900);">$3,800</td>
+                        <td>
+                            <span class="dispute-status status-processing">Processing</span>
+                        </td>
+                        <td>Mar 10, 2024</td>
+                        <td>
+                            <button class="action-btn" style="padding: 0.375rem 0.75rem; font-size: 0.8125rem;">Track</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">#D-2024-4831</td>
+                        <td>CMAU9384756</td>
+                        <td>CMA CGM</td>
+                        <td style="font-weight: 600; color: var(--gray-900);">$7,400</td>
+                        <td>
+                            <span class="dispute-status status-pending">Pending</span>
+                        </td>
+                        <td>Mar 12, 2024</td>
+                        <td>
+                            <button class="action-btn" style="padding: 0.375rem 0.75rem; font-size: 0.8125rem;">Submit</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Quick Actions FAB -->
+    <div class="quick-actions">
+        <div class="fab-menu" id="fabMenu">
+            <div class="fab-item" onclick="quickAction('dispute')">
+                <span>📝</span>
+                <span>File Dispute</span>
+            </div>
+            <div class="fab-item" onclick="quickAction('schedule')">
+                <span>📅</span>
+                <span>Schedule Pickup</span>
+            </div>
+            <div class="fab-item" onclick="quickAction('notify')">
+                <span>📧</span>
+                <span>Send Alert</span>
+            </div>
+            <div class="fab-item" onclick="quickAction('report')">
+                <span>📊</span>
+                <span>Generate Report</span>
+            </div>
+        </div>
+        <button class="fab" onclick="toggleFAB()">+</button>
+    </div>
+
+    <!-- AI Assistant -->
+    <div class="ai-assistant" id="aiAssistant">
+        <div class="ai-header">
+            <div class="ai-title">
+                <span>🤖</span>
+                <span>D&D Prevention Assistant</span>
+            </div>
+            <button class="ai-close" onclick="closeAI()">×</button>
+        </div>
+        <div class="ai-body">
+            <div class="ai-message">
+                <div class="ai-avatar bot">AI</div>
+                <div class="ai-content">
+                    <p>I've analyzed your current situation. You have 12 critical containers that need immediate attention to prevent $47,200 in D&D charges.</p>
+                    <p style="margin-top: 0.5rem;">Would you like me to:</p>
+                    <div class="ai-suggestions">
+                        <button class="ai-suggestion">Process all critical actions</button>
+                        <button class="ai-suggestion">Show optimization plan</button>
+                        <button class="ai-suggestion">Schedule bulk pickups</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.workflow-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update content based on tab
+            console.log('Switching to tab:', tab);
+        }
+
+        // Checkbox toggle
+        function toggleCheck(checkbox) {
+            checkbox.classList.toggle('checked');
+            if (checkbox.classList.contains('checked')) {
+                checkbox.innerHTML = '✓';
+            } else {
+                checkbox.innerHTML = '';
+            }
+        }
+
+        // Automation toggle
+        function toggleAutomation(toggle) {
+            toggle.classList.toggle('active');
+        }
+
+        // FAB menu
+        function toggleFAB() {
+            const menu = document.getElementById('fabMenu');
+            menu.classList.toggle('active');
+            
+            // Rotate FAB icon
+            const fab = event.target;
+            if (menu.classList.contains('active')) {
+                fab.style.transform = 'rotate(45deg)';
+            } else {
+                fab.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Quick actions
+        function quickAction(action) {
+            console.log('Quick action:', action);
+            toggleFAB();
+        }
+
+        // AI Assistant
+        function showAI() {
+            document.getElementById('aiAssistant').classList.add('active');
+        }
+
+        function closeAI() {
+            document.getElementById('aiAssistant').classList.remove('active');
+        }
+
+        // Show AI assistant after 3 seconds
+        setTimeout(showAI, 3000);
+
+        // Simulate real-time updates
+        setInterval(() => {
+            // Update critical count
+            const criticalBadge = document.querySelector('.tab-badge.danger');
+            const currentCount = parseInt(criticalBadge.textContent);
+            if (Math.random() > 0.7) {
+                criticalBadge.textContent = currentCount + 1;
+            }
+        }, 30000);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'k') {
+                e.preventDefault();
+                toggleFAB();
+            }
+            if (e.key === 'Escape') {
+                closeAI();
+                document.getElementById('fabMenu').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

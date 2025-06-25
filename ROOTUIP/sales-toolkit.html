@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Sales Enablement Toolkit | Close Deals Faster</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="brand/brand-colors.css">
+    <link rel="stylesheet" href="brand/typography.css">
+    <link rel="stylesheet" href="css/sales-toolkit.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="brand/logo-icon.svg">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="toolkit-nav">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="/" class="logo-link">
+                    <img src="brand/logo.svg" alt="UIP Logo" class="nav-logo">
+                </a>
+                <h1 class="toolkit-title">Sales Enablement Toolkit</h1>
+                <div class="nav-actions">
+                    <button class="btn btn-secondary" id="downloadAll">Download All Materials</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="toolkit-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Everything You Need to Close Deals</h1>
+                <p>Battle-tested sales materials that help you qualify opportunities and win enterprise accounts</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-value">67%</span>
+                        <span class="stat-label">Faster Sales Cycle</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">94%</span>
+                        <span class="stat-label">Close Rate</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">$2.4M</span>
+                        <span class="stat-label">Average Deal Size</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Toolkit Categories -->
+    <section class="toolkit-categories">
+        <div class="container">
+            <!-- Sales Collateral -->
+            <div class="category-section" id="sales-collateral">
+                <h2 class="category-title">Sales Collateral</h2>
+                <div class="materials-grid">
+                    <!-- One-Page Solution Overview -->
+                    <div class="material-card">
+                        <div class="card-icon">📄</div>
+                        <h3>One-Page Solution Overview</h3>
+                        <p>Executive summary with key benefits and ROI metrics</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('solution-overview')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('solution-overview')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Technical Specifications -->
+                    <div class="material-card">
+                        <div class="card-icon">🔧</div>
+                        <h3>Technical Specifications</h3>
+                        <p>Detailed technical architecture and requirements</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('tech-specs')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('tech-specs')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- ROI Worksheets -->
+                    <div class="material-card">
+                        <div class="card-icon">💰</div>
+                        <h3>ROI Calculation Worksheets</h3>
+                        <p>Interactive Excel templates for customer savings</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('roi-worksheet')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('roi-worksheet')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Battle Cards -->
+                    <div class="material-card">
+                        <div class="card-icon">⚔️</div>
+                        <h3>Competitive Battle Cards</h3>
+                        <p>Win against competition with proven objection handling</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('battle-cards')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('battle-cards')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Implementation Timeline -->
+                    <div class="material-card">
+                        <div class="card-icon">📅</div>
+                        <h3>Implementation Timeline</h3>
+                        <p>14-day deployment plan with milestones</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('implementation-timeline')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('implementation-timeline')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Security Fact Sheet -->
+                    <div class="material-card">
+                        <div class="card-icon">🔒</div>
+                        <h3>Security & Compliance</h3>
+                        <p>SOC 2, ISO 27001, and enterprise security details</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('security-compliance')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('security-compliance')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Integration Matrix -->
+                    <div class="material-card">
+                        <div class="card-icon">🔌</div>
+                        <h3>Integration Capability Matrix</h3>
+                        <p>200+ carrier connections and API capabilities</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('integration-matrix')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('integration-matrix')">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Case Study Templates -->
+            <div class="category-section" id="case-studies">
+                <h2 class="category-title">Case Study Templates</h2>
+                <div class="materials-grid">
+                    <!-- Success Story Format -->
+                    <div class="material-card">
+                        <div class="card-icon">🏆</div>
+                        <h3>Customer Success Story Format</h3>
+                        <p>Template for creating compelling case studies</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('success-story-template')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('success-story-template')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Templates -->
+                    <div class="material-card">
+                        <div class="card-icon">📊</div>
+                        <h3>Before/After Metrics</h3>
+                        <p>Templates for capturing transformation metrics</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('metrics-template')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('metrics-template')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Video Scripts -->
+                    <div class="material-card">
+                        <div class="card-icon">🎥</div>
+                        <h3>Video Testimonial Scripts</h3>
+                        <p>Interview questions and production guidelines</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('video-scripts')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('video-scripts')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Reference Program -->
+                    <div class="material-card">
+                        <div class="card-icon">🤝</div>
+                        <h3>Reference Customer Program</h3>
+                        <p>Materials for building customer advocacy</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('reference-program')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('reference-program')">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Qualification Tools -->
+            <div class="category-section" id="qualification">
+                <h2 class="category-title">Qualification Tools</h2>
+                <div class="materials-grid">
+                    <!-- Discovery Questions -->
+                    <div class="material-card">
+                        <div class="card-icon">🔍</div>
+                        <h3>Discovery Question Framework</h3>
+                        <p>MEDDIC-based qualification questions</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('discovery-questions')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('discovery-questions')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Buyer Personas -->
+                    <div class="material-card">
+                        <div class="card-icon">👥</div>
+                        <h3>Buyer Persona Guides</h3>
+                        <p>CFO, VP Ops, IT Director personas and messaging</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('buyer-personas')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('buyer-personas')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Decision Mapping -->
+                    <div class="material-card">
+                        <div class="card-icon">🗺️</div>
+                        <h3>Decision-Maker Mapping</h3>
+                        <p>Templates for stakeholder analysis</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('decision-mapping')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('decision-mapping')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Budget Scripts -->
+                    <div class="material-card">
+                        <div class="card-icon">💸</div>
+                        <h3>Budget Qualification Scripts</h3>
+                        <p>Scripts for uncovering budget and authority</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('budget-scripts')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('budget-scripts')">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proposal Templates -->
+            <div class="category-section" id="proposals">
+                <h2 class="category-title">Proposal Templates</h2>
+                <div class="materials-grid">
+                    <!-- MSA Template -->
+                    <div class="material-card">
+                        <div class="card-icon">📑</div>
+                        <h3>Master Services Agreement</h3>
+                        <p>Legal-approved MSA template</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('msa-template')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('msa-template')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Pricing Proposal -->
+                    <div class="material-card">
+                        <div class="card-icon">💵</div>
+                        <h3>Pricing Proposal Format</h3>
+                        <p>Customizable pricing templates with ROI</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('pricing-proposal')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('pricing-proposal')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- SOW Template -->
+                    <div class="material-card">
+                        <div class="card-icon">📋</div>
+                        <h3>Statement of Work</h3>
+                        <p>Implementation SOW with deliverables</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('sow-template')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('sow-template')">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- Implementation Plan -->
+                    <div class="material-card">
+                        <div class="card-icon">🚀</div>
+                        <h3>Implementation Planning</h3>
+                        <p>Detailed project plans and RACI matrix</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="viewDocument('implementation-plan')">View</button>
+                            <button class="btn btn-secondary" onclick="downloadDocument('implementation-plan')">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Document Viewer Modal -->
+    <div class="document-viewer" id="documentViewer">
+        <div class="viewer-header">
+            <h2 id="documentTitle">Document Title</h2>
+            <button class="close-viewer" onclick="closeViewer()">×</button>
+        </div>
+        <div class="viewer-content" id="viewerContent">
+            <!-- Document content will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/sales-toolkit.js"></script>
+</body>
+</html>

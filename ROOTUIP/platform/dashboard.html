@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Platform - Executive Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00D4AA;
+            --primary-dark: #00B894;
+            --secondary: #0A1628;
+            --gray-50: #F8FAFB;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.5;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100vh;
+            background: var(--secondary);
+            color: white;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.25rem;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .nav-menu {
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--danger);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--gray-200);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+        }
+
+        .header-button:hover {
+            border-color: var(--gray-300);
+            background: var(--gray-50);
+        }
+
+        .notification-button {
+            position: relative;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .user-menu:hover {
+            border-color: var(--gray-300);
+            background: var(--gray-50);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 2rem;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .kpi-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .kpi-title {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .kpi-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gray-100);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-change {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .kpi-change.positive {
+            color: var(--success);
+        }
+
+        .kpi-change.negative {
+            color: var(--danger);
+        }
+
+        .kpi-sparkline {
+            height: 40px;
+            margin-top: 1rem;
+            background: var(--gray-50);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Charts Section */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .chart-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-button {
+            padding: 0.375rem 0.75rem;
+            border: 1px solid var(--gray-200);
+            background: white;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .chart-button:hover {
+            background: var(--gray-50);
+        }
+
+        .chart-button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Activity Feed */
+        .activity-feed {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .activity-icon.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .activity-icon.danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-description {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .quick-actions-header {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .quick-action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .quick-action-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .quick-action-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .quick-action-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-action-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-700);
+        }
+
+        @media (max-width: 1024px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .header {
+                padding: 1rem;
+            }
+
+            .dashboard-content {
+                padding: 1rem;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-action-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Loading skeleton */
+        @keyframes skeleton {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+            background-size: 200% 100%;
+            animation: skeleton 1.5s infinite;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="logo">
+                <div class="logo-icon">UIP</div>
+                <div class="logo-text">Platform</div>
+            </a>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📦</span>
+                <span>Containers</span>
+                <span class="nav-badge">12</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">💰</span>
+                <span>D&D Center</span>
+                <span class="nav-badge">3</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">🔌</span>
+                <span>Integrations</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📄</span>
+                <span>Documents</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">🤖</span>
+                <span>Analytics</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h1 class="page-title">Executive Dashboard</h1>
+            </div>
+            
+            <div class="header-right">
+                <button class="header-button">
+                    <span>🗓️</span>
+                    <span>Last 30 Days</span>
+                </button>
+                
+                <button class="header-button notification-button">
+                    <span>🔔</span>
+                    <span class="notification-dot"></span>
+                </button>
+                
+                <div class="user-menu">
+                    <div class="user-avatar">JD</div>
+                    <div>
+                        <div style="font-weight: 600; font-size: 0.875rem;">John Doe</div>
+                        <div style="font-size: 0.75rem; color: var(--gray-500);">Admin</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <div class="quick-actions-header">Quick Actions</div>
+                <div class="quick-action-grid">
+                    <button class="quick-action-button">
+                        <div class="quick-action-icon">📦</div>
+                        <div class="quick-action-label">Track Container</div>
+                    </button>
+                    <button class="quick-action-button">
+                        <div class="quick-action-icon">🚨</div>
+                        <div class="quick-action-label">File Dispute</div>
+                    </button>
+                    <button class="quick-action-button">
+                        <div class="quick-action-icon">📊</div>
+                        <div class="quick-action-label">Generate Report</div>
+                    </button>
+                    <button class="quick-action-button">
+                        <div class="quick-action-icon">🔌</div>
+                        <div class="quick-action-label">Add Integration</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div>
+                            <div class="kpi-title">Total Savings</div>
+                            <div class="kpi-value">$14.2M</div>
+                            <div class="kpi-change positive">
+                                <span>↑</span>
+                                <span>12.5%</span>
+                                <span>vs last month</span>
+                            </div>
+                        </div>
+                        <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">💰</div>
+                    </div>
+                    <div class="kpi-sparkline"></div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div>
+                            <div class="kpi-title">D&D Prevention Rate</div>
+                            <div class="kpi-value">94.3%</div>
+                            <div class="kpi-change positive">
+                                <span>↑</span>
+                                <span>2.1%</span>
+                                <span>improvement</span>
+                            </div>
+                        </div>
+                        <div class="kpi-icon" style="background: rgba(0, 212, 170, 0.1); color: var(--primary);">🛡️</div>
+                    </div>
+                    <div class="kpi-sparkline"></div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div>
+                            <div class="kpi-title">Active Containers</div>
+                            <div class="kpi-value">2,847</div>
+                            <div class="kpi-change positive">
+                                <span>↑</span>
+                                <span>156</span>
+                                <span>new this week</span>
+                            </div>
+                        </div>
+                        <div class="kpi-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--info);">📦</div>
+                    </div>
+                    <div class="kpi-sparkline"></div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div>
+                            <div class="kpi-title">At-Risk Containers</div>
+                            <div class="kpi-value">23</div>
+                            <div class="kpi-change negative">
+                                <span>↑</span>
+                                <span>3</span>
+                                <span>need attention</span>
+                            </div>
+                        </div>
+                        <div class="kpi-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--danger);">⚠️</div>
+                    </div>
+                    <div class="kpi-sparkline"></div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">D&D Savings Trend</h3>
+                        <div class="chart-actions">
+                            <button class="chart-button active">Daily</button>
+                            <button class="chart-button">Weekly</button>
+                            <button class="chart-button">Monthly</button>
+                        </div>
+                    </div>
+                    <div style="height: 300px; background: var(--gray-50); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--gray-400);">
+                        Chart Placeholder
+                    </div>
+                </div>
+
+                <div class="activity-feed">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Recent Activity</h3>
+                        <button class="chart-button">View All</button>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon success">✓</div>
+                        <div class="activity-content">
+                            <div class="activity-title">D&D Charge Prevented</div>
+                            <div class="activity-description">Container MSKU8374625 - Saved $2,400</div>
+                            <div class="activity-time">5 minutes ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon warning">!</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Container At Risk</div>
+                            <div class="activity-description">TCLU9283746 - Action required within 24h</div>
+                            <div class="activity-time">23 minutes ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon success">📄</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Dispute Won</div>
+                            <div class="activity-description">MSC dispute #4829 - $5,200 recovered</div>
+                            <div class="activity-time">1 hour ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon danger">🔌</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Integration Alert</div>
+                            <div class="activity-description">Maersk API connection failed</div>
+                            <div class="activity-time">2 hours ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Charts Row -->
+            <div class="chart-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Container Distribution</h3>
+                    </div>
+                    <div style="height: 200px; background: var(--gray-50); border-radius: 8px;"></div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Carrier Performance</h3>
+                    </div>
+                    <div style="height: 200px; background: var(--gray-50); border-radius: 8px;"></div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Port Analytics</h3>
+                    </div>
+                    <div style="height: 200px; background: var(--gray-50); border-radius: 8px;"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Simulate real-time updates
+        function updateMetrics() {
+            // Update random KPI
+            const kpiValues = document.querySelectorAll('.kpi-value');
+            const randomKpi = kpiValues[Math.floor(Math.random() * kpiValues.length)];
+            
+            // Animate value change
+            randomKpi.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                randomKpi.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        // Update metrics every 5 seconds
+        setInterval(updateMetrics, 5000);
+
+        // Initialize WebSocket for real-time updates
+        function initWebSocket() {
+            // In production, connect to actual WebSocket server
+            console.log('WebSocket connection initialized');
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            initWebSocket();
+            
+            // Add sparkline animations
+            const sparklines = document.querySelectorAll('.kpi-sparkline');
+            sparklines.forEach(sparkline => {
+                sparkline.innerHTML = '<div class="skeleton" style="height: 100%; width: 100%;"></div>';
+            });
+        });
+    </script>
+</body>
+</html>

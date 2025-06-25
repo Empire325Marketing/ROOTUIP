@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UIP Unit Economics & Cohort Analysis | Series A Metrics</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #F8FAFB;
+            color: #0A1628;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #0A1628;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #64748B;
+            font-size: 1.125rem;
+        }
+        
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0A1628;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #00D4AA;
+            padding-left: 1rem;
+        }
+        
+        .metrics-highlight {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .metric-box {
+            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .metric-box h3 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 900;
+        }
+        
+        .metric-box p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
+        }
+        
+        .unit-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        
+        .unit-table th,
+        .unit-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        
+        .unit-table th {
+            background: #F8FAFB;
+            font-weight: 700;
+            color: #0A1628;
+        }
+        
+        .unit-table tr:hover {
+            background: #F8FAFB;
+        }
+        
+        .cohort-chart {
+            height: 400px;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #F8FAFB;
+            border-radius: 12px;
+        }
+        
+        .cohort-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+        
+        .cohort-table th,
+        .cohort-table td {
+            padding: 0.75rem;
+            text-align: center;
+            border: 1px solid #E2E8F0;
+        }
+        
+        .cohort-table th {
+            background: #0A1628;
+            color: white;
+        }
+        
+        .cohort-table .cohort-name {
+            background: #F8FAFB;
+            font-weight: 700;
+            text-align: left;
+        }
+        
+        .retention-high {
+            background: #00D4AA;
+            color: white;
+        }
+        
+        .retention-medium {
+            background: #FFC107;
+            color: #0A1628;
+        }
+        
+        .retention-low {
+            background: #EF4444;
+            color: white;
+        }
+        
+        .economics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .economics-card {
+            padding: 1.5rem;
+            background: #F8FAFB;
+            border-radius: 12px;
+            border: 2px solid #E2E8F0;
+        }
+        
+        .economics-card h4 {
+            color: #0A1628;
+            margin-bottom: 1rem;
+        }
+        
+        .formula {
+            background: #0A1628;
+            color: #00D4AA;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 1rem 0;
+        }
+        
+        .warning-box {
+            background: #FFF8E1;
+            border: 2px solid #FFC107;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .success-box {
+            background: #E6FCF5;
+            border: 2px solid #00D4AA;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <h1>Unit Economics & Cohort Analysis</h1>
+        <p class="subtitle">Deep Dive into UIP's Business Model Health</p>
+    </div>
+
+    <!-- Key Metrics Summary -->
+    <div class="section">
+        <h2 class="section-title">Core Unit Economics</h2>
+        
+        <div class="metrics-highlight">
+            <div class="metric-box">
+                <h3>3.2x</h3>
+                <p>LTV/CAC Ratio</p>
+            </div>
+            <div class="metric-box">
+                <h3>94.7x</h3>
+                <p>Vessel LTV/CAC</p>
+            </div>
+            <div class="metric-box">
+                <h3>14 mo</h3>
+                <p>Payback Period</p>
+            </div>
+            <div class="metric-box">
+                <h3>127%</h3>
+                <p>Net Revenue Retention</p>
+            </div>
+            <div class="metric-box">
+                <h3>95%</h3>
+                <p>Gross Margin</p>
+            </div>
+            <div class="metric-box">
+                <h3>90%</h3>
+                <p>Logo Retention</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Acquisition Cost Analysis -->
+    <div class="section">
+        <h2 class="section-title">Customer Acquisition Cost (CAC) Breakdown</h2>
+        
+        <table class="unit-table">
+            <thead>
+                <tr>
+                    <th>CAC Component</th>
+                    <th>Enterprise</th>
+                    <th>Mid-Market</th>
+                    <th>SMB</th>
+                    <th>Blended</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Marketing Spend per Opp</td>
+                    <td>$45,000</td>
+                    <td>$15,000</td>
+                    <td>$5,000</td>
+                    <td>$21,667</td>
+                </tr>
+                <tr>
+                    <td>Sales Cost per Deal</td>
+                    <td>$350,000</td>
+                    <td>$85,000</td>
+                    <td>$45,000</td>
+                    <td>$160,000</td>
+                </tr>
+                <tr>
+                    <td>Implementation Cost</td>
+                    <td>$55,000</td>
+                    <td>$25,000</td>
+                    <td>$25,000</td>
+                    <td>$35,000</td>
+                </tr>
+                <tr style="background: #F8FAFB; font-weight: 700;">
+                    <td>Total CAC</td>
+                    <td>$450,000</td>
+                    <td>$125,000</td>
+                    <td>$75,000</td>
+                    <td>$216,667</td>
+                </tr>
+                <tr>
+                    <td>Average Deal Size</td>
+                    <td>$50M (100 vessels)</td>
+                    <td>$10M (20 vessels)</td>
+                    <td>$5M (10 vessels)</td>
+                    <td>$21.7M (43 vessels)</td>
+                </tr>
+                <tr style="background: #E6FCF5; font-weight: 700;">
+                    <td>CAC Ratio</td>
+                    <td>0.9%</td>
+                    <td>1.3%</td>
+                    <td>1.5%</td>
+                    <td>1.0%</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="formula">
+            CAC = (Sales & Marketing Costs + Implementation Costs) / New Customers Acquired
+        </div>
+    </div>
+
+    <!-- LTV Analysis -->
+    <div class="section">
+        <h2 class="section-title">Customer Lifetime Value (LTV) Analysis</h2>
+        
+        <div class="economics-grid">
+            <div class="economics-card">
+                <h4>LTV Calculation by Segment</h4>
+                <table class="unit-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Enterprise</th>
+                            <th>Mid-Market</th>
+                            <th>SMB</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Annual Revenue</td>
+                            <td>$50M</td>
+                            <td>$10M</td>
+                            <td>$5M</td>
+                        </tr>
+                        <tr>
+                            <td>Gross Margin</td>
+                            <td>95%</td>
+                            <td>94%</td>
+                            <td>92%</td>
+                        </tr>
+                        <tr>
+                            <td>Net Retention</td>
+                            <td>135%</td>
+                            <td>125%</td>
+                            <td>115%</td>
+                        </tr>
+                        <tr>
+                            <td>Churn Rate</td>
+                            <td>5%</td>
+                            <td>8%</td>
+                            <td>12%</td>
+                        </tr>
+                        <tr>
+                            <td>Avg Lifetime</td>
+                            <td>20 years</td>
+                            <td>12.5 years</td>
+                            <td>8.3 years</td>
+                        </tr>
+                        <tr style="background: #E6FCF5; font-weight: 700;">
+                            <td>LTV</td>
+                            <td>$950M</td>
+                            <td>$117.5M</td>
+                            <td>$38.2M</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="economics-card">
+                <h4>LTV/CAC Ratios</h4>
+                <div class="cohort-chart">
+                    <canvas id="ltvCacChart"></canvas>
+                </div>
+                <p style="margin-top: 1rem; color: #64748B; font-size: 0.875rem;">
+                    Industry benchmark: 3:1 minimum for healthy SaaS
+                </p>
+            </div>
+        </div>
+        
+        <div class="formula">
+            LTV = (Annual Revenue × Gross Margin × Net Retention) / Churn Rate
+        </div>
+    </div>
+
+    <!-- Cohort Retention Analysis -->
+    <div class="section">
+        <h2 class="section-title">Cohort Retention Analysis</h2>
+        
+        <table class="cohort-table">
+            <thead>
+                <tr>
+                    <th>Cohort</th>
+                    <th>Month 0</th>
+                    <th>Month 3</th>
+                    <th>Month 6</th>
+                    <th>Month 9</th>
+                    <th>Month 12</th>
+                    <th>Month 18</th>
+                    <th>Month 24</th>
+                    <th>Month 36</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="cohort-name">Q1 2023</td>
+                    <td class="retention-high">100%</td>
+                    <td class="retention-high">98%</td>
+                    <td class="retention-high">95%</td>
+                    <td class="retention-high">93%</td>
+                    <td class="retention-high">90%</td>
+                    <td class="retention-high">88%</td>
+                    <td class="retention-high">85%</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td class="cohort-name">Q2 2023</td>
+                    <td class="retention-high">100%</td>
+                    <td class="retention-high">97%</td>
+                    <td class="retention-high">94%</td>
+                    <td class="retention-high">92%</td>
+                    <td class="retention-high">89%</td>
+                    <td class="retention-high">87%</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td class="cohort-name">Q3 2023</td>
+                    <td class="retention-high">100%</td>
+                    <td class="retention-high">98%</td>
+                    <td class="retention-high">96%</td>
+                    <td class="retention-high">94%</td>
+                    <td class="retention-high">91%</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td class="cohort-name">Q4 2023</td>
+                    <td class="retention-high">100%</td>
+                    <td class="retention-high">99%</td>
+                    <td class="retention-high">97%</td>
+                    <td class="retention-high">95%</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td class="cohort-name">Q1 2024</td>
+                    <td class="retention-high">100%</td>
+                    <td class="retention-high">98%</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="success-box">
+            <h4>✅ Key Insights</h4>
+            <ul>
+                <li>90%+ logo retention after 12 months (industry best-in-class)</li>
+                <li>Cohort quality improving over time as product matures</li>
+                <li>Enterprise segments showing 95%+ retention</li>
+                <li>Strong indicator of product-market fit</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Net Revenue Retention -->
+    <div class="section">
+        <h2 class="section-title">Net Revenue Retention (NRR) Analysis</h2>
+        
+        <div class="cohort-chart">
+            <canvas id="nrrChart"></canvas>
+        </div>
+        
+        <table class="unit-table">
+            <thead>
+                <tr>
+                    <th>Cohort</th>
+                    <th>Starting ARR</th>
+                    <th>Expansion</th>
+                    <th>Contraction</th>
+                    <th>Churn</th>
+                    <th>Ending ARR</th>
+                    <th>NRR %</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Q1 2023</td>
+                    <td>$2.0M</td>
+                    <td>+$0.8M</td>
+                    <td>-$0.1M</td>
+                    <td>-$0.2M</td>
+                    <td>$2.5M</td>
+                    <td style="color: #00D4AA; font-weight: 700;">125%</td>
+                </tr>
+                <tr>
+                    <td>Q2 2023</td>
+                    <td>$3.5M</td>
+                    <td>+$1.5M</td>
+                    <td>-$0.2M</td>
+                    <td>-$0.3M</td>
+                    <td>$4.5M</td>
+                    <td style="color: #00D4AA; font-weight: 700;">129%</td>
+                </tr>
+                <tr>
+                    <td>Q3 2023</td>
+                    <td>$5.2M</td>
+                    <td>+$2.1M</td>
+                    <td>-$0.2M</td>
+                    <td>-$0.4M</td>
+                    <td>$6.7M</td>
+                    <td style="color: #00D4AA; font-weight: 700;">129%</td>
+                </tr>
+                <tr>
+                    <td>Q4 2023</td>
+                    <td>$7.8M</td>
+                    <td>+$3.0M</td>
+                    <td>-$0.3M</td>
+                    <td>-$0.5M</td>
+                    <td>$10.0M</td>
+                    <td style="color: #00D4AA; font-weight: 700;">128%</td>
+                </tr>
+                <tr style="background: #E6FCF5; font-weight: 700;">
+                    <td>Average</td>
+                    <td>$18.5M</td>
+                    <td>+$7.4M</td>
+                    <td>-$0.8M</td>
+                    <td>-$1.4M</td>
+                    <td>$23.7M</td>
+                    <td style="color: #00D4AA;">127%</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="economics-grid">
+            <div class="economics-card">
+                <h4>Expansion Revenue Drivers</h4>
+                <ul>
+                    <li><strong>Vessel additions:</strong> 65% of expansion</li>
+                    <li><strong>Price increases:</strong> 15% of expansion</li>
+                    <li><strong>New modules:</strong> 20% of expansion</li>
+                </ul>
+            </div>
+            <div class="economics-card">
+                <h4>NRR by Segment</h4>
+                <ul>
+                    <li><strong>Enterprise:</strong> 135% NRR</li>
+                    <li><strong>Mid-Market:</strong> 125% NRR</li>
+                    <li><strong>SMB:</strong> 115% NRR</li>
+                    <li><strong>Blended:</strong> 127% NRR</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sales Efficiency Metrics -->
+    <div class="section">
+        <h2 class="section-title">Sales Efficiency & Productivity</h2>
+        
+        <div class="metrics-highlight">
+            <div class="metric-box">
+                <h3>$2.4M</h3>
+                <p>Avg Deal Size</p>
+            </div>
+            <div class="metric-box">
+                <h3>127 days</h3>
+                <p>Sales Cycle</p>
+            </div>
+            <div class="metric-box">
+                <h3>67%</h3>
+                <p>Win Rate</p>
+            </div>
+            <div class="metric-box">
+                <h3>1.8x</h3>
+                <p>Magic Number</p>
+            </div>
+        </div>
+        
+        <table class="unit-table">
+            <thead>
+                <tr>
+                    <th>Sales Metric</th>
+                    <th>Q1 2023</th>
+                    <th>Q2 2023</th>
+                    <th>Q3 2023</th>
+                    <th>Q4 2023</th>
+                    <th>Q1 2024</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>New ARR</td>
+                    <td>$1.5M</td>
+                    <td>$2.8M</td>
+                    <td>$4.2M</td>
+                    <td>$5.8M</td>
+                    <td>$7.3M</td>
+                </tr>
+                <tr>
+                    <td>S&M Spend</td>
+                    <td>$1.2M</td>
+                    <td>$1.8M</td>
+                    <td>$2.4M</td>
+                    <td>$3.2M</td>
+                    <td>$4.0M</td>
+                </tr>
+                <tr>
+                    <td>CAC Payback (mo)</td>
+                    <td>20</td>
+                    <td>18</td>
+                    <td>16</td>
+                    <td>15</td>
+                    <td>14</td>
+                </tr>
+                <tr>
+                    <td>Sales Productivity</td>
+                    <td>$450K</td>
+                    <td>$520K</td>
+                    <td>$680K</td>
+                    <td>$750K</td>
+                    <td>$820K</td>
+                </tr>
+                <tr style="background: #E6FCF5; font-weight: 700;">
+                    <td>Sales Efficiency</td>
+                    <td>1.3x</td>
+                    <td>1.6x</td>
+                    <td>1.8x</td>
+                    <td>1.8x</td>
+                    <td>1.8x</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="warning-box">
+            <h4>⚠️ Key Assumptions</h4>
+            <ul>
+                <li>Sales productivity improves with scale and brand recognition</li>
+                <li>CAC payback includes fully loaded sales and implementation costs</li>
+                <li>Win rates improve as product matures and references grow</li>
+                <li>Enterprise segment requires 6-9 month sales cycles</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // LTV/CAC Chart
+        const ltvCacCtx = document.getElementById('ltvCacChart').getContext('2d');
+        new Chart(ltvCacCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Enterprise', 'Mid-Market', 'SMB', 'Blended'],
+                datasets: [{
+                    label: 'LTV/CAC Ratio',
+                    data: [2111, 940, 509, 948],
+                    backgroundColor: ['#00D4AA', '#00B894', '#64748B', '#0A1628'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'LTV/CAC Ratio'
+                        }
+                    }
+                }
+            }
+        });
+
+        // NRR Chart
+        const nrrCtx = document.getElementById('nrrChart').getContext('2d');
+        new Chart(nrrCtx, {
+            type: 'line',
+            data: {
+                labels: ['Month 0', 'Month 3', 'Month 6', 'Month 9', 'Month 12', 'Month 18', 'Month 24'],
+                datasets: [{
+                    label: 'Q1 2023 Cohort',
+                    data: [100, 108, 115, 120, 125, 132, 140],
+                    borderColor: '#00D4AA',
+                    borderWidth: 3,
+                    fill: false
+                }, {
+                    label: 'Q2 2023 Cohort',
+                    data: [100, 110, 118, 123, 129, 135, null],
+                    borderColor: '#00B894',
+                    borderWidth: 3,
+                    fill: false
+                }, {
+                    label: 'Q3 2023 Cohort',
+                    data: [100, 112, 120, 125, 129, null, null],
+                    borderColor: '#64748B',
+                    borderWidth: 3,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Net Revenue Retention by Cohort',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 90,
+                        title: {
+                            display: true,
+                            text: 'NRR %'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
