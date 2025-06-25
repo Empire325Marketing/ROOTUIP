@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Portal - UIP Platform</title>
+    <link rel="icon" type="image/svg+xml" href="/ROOTUIP/js/logo-component.js">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .training-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .page-subtitle {
+            color: #718096;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .progress-overview {
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .progress-stats {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #718096;
+            text-transform: uppercase;
+        }
+
+        .learning-paths {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .path-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #e2e8f0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .path-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .path-card.beginner {
+            border-left-color: #48bb78;
+        }
+
+        .path-card.intermediate {
+            border-left-color: #ed8936;
+        }
+
+        .path-card.advanced {
+            border-left-color: #9f7aea;
+        }
+
+        .path-card.certification {
+            border-left-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+        }
+
+        .path-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .path-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .path-icon.beginner {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+        }
+
+        .path-icon.intermediate {
+            background: linear-gradient(135deg, #ed8936, #dd6b20);
+        }
+
+        .path-icon.advanced {
+            background: linear-gradient(135deg, #9f7aea, #805ad5);
+        }
+
+        .path-icon.certification {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .path-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .path-description {
+            color: #718096;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .path-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+
+        .path-progress {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-bar {
+            width: 60px;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .modules-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            background: #f7fafc;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .module-card {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .module-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .module-card.completed {
+            background: rgba(72, 187, 120, 0.05);
+            border-color: #48bb78;
+        }
+
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .module-info {
+            flex: 1;
+        }
+
+        .module-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .module-type {
+            font-size: 0.8rem;
+            color: #667eea;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .module-status {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .module-status.completed {
+            background: #48bb78;
+            color: white;
+        }
+
+        .module-status.in-progress {
+            background: #ed8936;
+            color: white;
+        }
+
+        .module-status.not-started {
+            background: #e2e8f0;
+            color: #a0aec0;
+        }
+
+        .module-description {
+            color: #718096;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .module-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+
+        .module-duration {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .module-difficulty {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .module-difficulty.beginner {
+            background: rgba(72, 187, 120, 0.1);
+            color: #48bb78;
+        }
+
+        .module-difficulty.intermediate {
+            background: rgba(237, 137, 54, 0.1);
+            color: #ed8936;
+        }
+
+        .module-difficulty.advanced {
+            background: rgba(159, 122, 234, 0.1);
+            color: #9f7aea;
+        }
+
+        .certification-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .certification-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .cert-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cert-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .cert-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .cert-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .cert-description {
+            color: #718096;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .cert-requirements {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 0.8rem;
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .achievements-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .achievement-badge {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px 15px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .achievement-badge.earned {
+            background: linear-gradient(135deg, rgba(72, 187, 120, 0.1), rgba(56, 161, 105, 0.05));
+            border-color: #48bb78;
+        }
+
+        .achievement-badge.locked {
+            opacity: 0.5;
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .badge-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+
+        .badge-description {
+            font-size: 0.7rem;
+            color: #718096;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #a0aec0;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .training-container {
+                padding: 15px;
+            }
+
+            .learning-paths {
+                grid-template-columns: 1fr;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-tabs {
+                flex-wrap: wrap;
+            }
+
+            .progress-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="training-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div id="logo-container"></div>
+                    <div>
+                        <h1 class="page-title">Training Portal</h1>
+                        <p class="page-subtitle">Master the UIP platform with interactive learning</p>
+                    </div>
+                </div>
+                <div class="progress-overview">
+                    <div class="progress-stats">
+                        <div class="stat-item">
+                            <div class="stat-number" id="completedModules">12</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="totalModules">24</div>
+                            <div class="stat-label">Total Modules</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="certifications">2</div>
+                            <div class="stat-label">Certifications</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="trainingHours">18</div>
+                            <div class="stat-label">Hours Trained</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learning Paths -->
+        <div class="learning-paths">
+            <div class="path-card beginner" onclick="openLearningPath('beginner')">
+                <div class="path-header">
+                    <div class="path-icon beginner">🌟</div>
+                    <div>
+                        <div class="path-title">Getting Started</div>
+                        <div class="path-description">Perfect for new users. Learn UIP basics and core features.</div>
+                    </div>
+                </div>
+                <div class="path-meta">
+                    <span>8 modules • 4-6 hours</span>
+                    <div class="path-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%;"></div>
+                        </div>
+                        <span>75%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="path-card intermediate" onclick="openLearningPath('intermediate')">
+                <div class="path-header">
+                    <div class="path-icon intermediate">⚡</div>
+                    <div>
+                        <div class="path-title">Advanced Operations</div>
+                        <div class="path-description">Deep dive into advanced features and optimization techniques.</div>
+                    </div>
+                </div>
+                <div class="path-meta">
+                    <span>12 modules • 8-10 hours</span>
+                    <div class="path-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 35%;"></div>
+                        </div>
+                        <span>35%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="path-card advanced" onclick="openLearningPath('advanced')">
+                <div class="path-header">
+                    <div class="path-icon advanced">🚀</div>
+                    <div>
+                        <div class="path-title">Expert Mastery</div>
+                        <div class="path-description">Master AI features, analytics, and enterprise integration.</div>
+                    </div>
+                </div>
+                <div class="path-meta">
+                    <span>16 modules • 12-15 hours</span>
+                    <div class="path-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%;"></div>
+                        </div>
+                        <span>0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="path-card certification" onclick="openLearningPath('certification')">
+                <div class="path-header">
+                    <div class="path-icon certification">🏆</div>
+                    <div>
+                        <div class="path-title">Certification Programs</div>
+                        <div class="path-description">Earn official UIP certifications and badges.</div>
+                    </div>
+                </div>
+                <div class="path-meta">
+                    <span>4 programs • Variable</span>
+                    <div class="path-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 50%;"></div>
+                        </div>
+                        <span>2/4</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Training Modules -->
+        <div class="modules-section">
+            <div class="section-header">
+                <h2 class="section-title">Training Modules</h2>
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="filterModules('all')">All</button>
+                    <button class="filter-tab" onclick="filterModules('video')">Videos</button>
+                    <button class="filter-tab" onclick="filterModules('interactive')">Interactive</button>
+                    <button class="filter-tab" onclick="filterModules('workshop')">Workshops</button>
+                    <button class="filter-tab" onclick="filterModules('assessment')">Assessments</button>
+                </div>
+            </div>
+
+            <div class="modules-grid" id="modulesGrid">
+                <!-- Modules will be populated here -->
+            </div>
+        </div>
+
+        <!-- Certifications -->
+        <div class="certification-section">
+            <div class="section-header">
+                <h2 class="section-title">🏆 Professional Certifications</h2>
+                <button class="btn btn-outline" onclick="showCertificationGuide()">
+                    📖 Certification Guide
+                </button>
+            </div>
+
+            <div class="certification-grid">
+                <div class="cert-card" onclick="openCertification('operations')">
+                    <div class="cert-icon">📋</div>
+                    <div class="cert-title">UIP Operations Specialist</div>
+                    <div class="cert-description">Master container tracking, D&D prevention, and operational workflows</div>
+                    <div class="cert-requirements">
+                        Prerequisites: Complete Getting Started path<br>
+                        Duration: 2-3 weeks • Exam: 90 minutes
+                    </div>
+                    <button class="btn btn-primary">
+                        🎯 Start Certification
+                    </button>
+                </div>
+
+                <div class="cert-card" onclick="openCertification('analytics')">
+                    <div class="cert-icon">📊</div>
+                    <div class="cert-title">UIP Analytics Expert</div>
+                    <div class="cert-description">Advanced analytics, predictive modeling, and business intelligence</div>
+                    <div class="cert-requirements">
+                        Prerequisites: Advanced Operations path<br>
+                        Duration: 3-4 weeks • Exam: 120 minutes
+                    </div>
+                    <button class="btn btn-secondary">
+                        🔒 Prerequisites Required
+                    </button>
+                </div>
+
+                <div class="cert-card" onclick="openCertification('integration')">
+                    <div class="cert-icon">🔗</div>
+                    <div class="cert-title">UIP Integration Architect</div>
+                    <div class="cert-description">Enterprise integrations, API management, and system architecture</div>
+                    <div class="cert-requirements">
+                        Prerequisites: Expert Mastery path<br>
+                        Duration: 4-6 weeks • Exam: 150 minutes
+                    </div>
+                    <button class="btn btn-secondary">
+                        🔒 Prerequisites Required
+                    </button>
+                </div>
+
+                <div class="cert-card" onclick="openCertification('trainer')">
+                    <div class="cert-icon">🎓</div>
+                    <div class="cert-title">UIP Certified Trainer</div>
+                    <div class="cert-description">Train others on UIP platform and become an internal champion</div>
+                    <div class="cert-requirements">
+                        Prerequisites: Any 2 certifications<br>
+                        Duration: 2-3 weeks • Practical exam
+                    </div>
+                    <button class="btn btn-primary">
+                        ⭐ Available
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="achievements-section">
+            <div class="section-header">
+                <h2 class="section-title">🎖️ Achievements & Badges</h2>
+                <button class="btn btn-outline" onclick="viewAllAchievements()">
+                    View All
+                </button>
+            </div>
+
+            <div class="achievements-grid">
+                <div class="achievement-badge earned">
+                    <span class="badge-icon">🏁</span>
+                    <div class="badge-title">First Steps</div>
+                    <div class="badge-description">Complete first module</div>
+                </div>
+
+                <div class="achievement-badge earned">
+                    <span class="badge-icon">📈</span>
+                    <div class="badge-title">Quick Learner</div>
+                    <div class="badge-description">5 modules in a week</div>
+                </div>
+
+                <div class="achievement-badge earned">
+                    <span class="badge-icon">🎯</span>
+                    <div class="badge-title">Perfect Score</div>
+                    <div class="badge-description">100% on assessment</div>
+                </div>
+
+                <div class="achievement-badge locked">
+                    <span class="badge-icon">🔥</span>
+                    <div class="badge-title">On Fire</div>
+                    <div class="badge-description">7-day learning streak</div>
+                </div>
+
+                <div class="achievement-badge locked">
+                    <span class="badge-icon">🧠</span>
+                    <div class="badge-title">Knowledge Master</div>
+                    <div class="badge-description">Complete all modules</div>
+                </div>
+
+                <div class="achievement-badge locked">
+                    <span class="badge-icon">👑</span>
+                    <div class="badge-title">UIP Champion</div>
+                    <div class="badge-description">Earn all certifications</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Module Modal -->
+    <div class="modal" id="moduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Module Title</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalContent">
+                <!-- Modal content will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/ROOTUIP/js/logo-component.js"></script>
+    <script>
+        // Initialize logo
+        document.getElementById('logo-container').innerHTML = UIPLogo.getLogo({
+            size: 'medium',
+            type: 'full',
+            theme: 'color'
+        });
+
+        // Training modules data
+        const trainingModules = [
+            {
+                id: 'intro-platform',
+                title: 'Introduction to UIP Platform',
+                type: 'video',
+                difficulty: 'beginner',
+                duration: '15 min',
+                description: 'Get familiar with the UIP interface and core concepts',
+                status: 'completed',
+                category: 'basics'
+            },
+            {
+                id: 'container-tracking',
+                title: 'Container Tracking Essentials',
+                type: 'interactive',
+                difficulty: 'beginner',
+                duration: '25 min',
+                description: 'Learn to track containers across multiple carriers',
+                status: 'completed',
+                category: 'tracking'
+            },
+            {
+                id: 'document-upload',
+                title: 'Document Processing & OCR',
+                type: 'video',
+                difficulty: 'beginner',
+                duration: '20 min',
+                description: 'Upload documents and extract data with AI',
+                status: 'completed',
+                category: 'documents'
+            },
+            {
+                id: 'dd-prevention',
+                title: 'D&D Risk Assessment',
+                type: 'workshop',
+                difficulty: 'intermediate',
+                duration: '45 min',
+                description: 'Prevent demurrage and detention charges',
+                status: 'in-progress',
+                category: 'optimization'
+            },
+            {
+                id: 'predictive-analytics',
+                title: 'Predictive Analytics Deep Dive',
+                type: 'interactive',
+                difficulty: 'advanced',
+                duration: '60 min',
+                description: 'Master AI-powered predictive insights',
+                status: 'not-started',
+                category: 'analytics'
+            },
+            {
+                id: 'api-integration',
+                title: 'API Integration Workshop',
+                type: 'workshop',
+                difficulty: 'advanced',
+                duration: '90 min',
+                description: 'Connect external systems via API',
+                status: 'not-started',
+                category: 'integration'
+            },
+            {
+                id: 'cost-optimization',
+                title: 'Cost Optimization Strategies',
+                type: 'video',
+                difficulty: 'intermediate',
+                duration: '35 min',
+                description: 'Reduce freight costs with smart analytics',
+                status: 'not-started',
+                category: 'optimization'
+            },
+            {
+                id: 'dashboard-customization',
+                title: 'Dashboard Customization',
+                type: 'interactive',
+                difficulty: 'beginner',
+                duration: '20 min',
+                description: 'Personalize your workspace and views',
+                status: 'completed',
+                category: 'basics'
+            },
+            {
+                id: 'carrier-integration',
+                title: 'Carrier Integration Setup',
+                type: 'workshop',
+                difficulty: 'intermediate',
+                duration: '50 min',
+                description: 'Connect with major shipping carriers',
+                status: 'in-progress',
+                category: 'integration'
+            },
+            {
+                id: 'advanced-search',
+                title: 'Advanced Search & Filtering',
+                type: 'interactive',
+                difficulty: 'intermediate',
+                duration: '30 min',
+                description: 'Master complex search queries and filters',
+                status: 'not-started',
+                category: 'search'
+            },
+            {
+                id: 'reporting-dashboards',
+                title: 'Custom Reporting & Dashboards',
+                type: 'video',
+                difficulty: 'intermediate',
+                duration: '40 min',
+                description: 'Create custom reports and visualizations',
+                status: 'not-started',
+                category: 'reporting'
+            },
+            {
+                id: 'assessment-basics',
+                title: 'Platform Basics Assessment',
+                type: 'assessment',
+                difficulty: 'beginner',
+                duration: '30 min',
+                description: 'Test your knowledge of UIP fundamentals',
+                status: 'completed',
+                category: 'assessment'
+            }
+        ];
+
+        let currentFilter = 'all';
+
+        function renderModules() {
+            const grid = document.getElementById('modulesGrid');
+            const filteredModules = currentFilter === 'all' 
+                ? trainingModules 
+                : trainingModules.filter(module => module.type === currentFilter);
+
+            grid.innerHTML = filteredModules.map(module => `
+                <div class="module-card ${module.status}" onclick="openModule('${module.id}')">
+                    <div class="module-header">
+                        <div class="module-info">
+                            <div class="module-title">${module.title}</div>
+                            <div class="module-type">${module.type}</div>
+                        </div>
+                        <div class="module-status ${module.status}">
+                            ${module.status === 'completed' ? '✓' : 
+                              module.status === 'in-progress' ? '◐' : '○'}
+                        </div>
+                    </div>
+                    <div class="module-description">${module.description}</div>
+                    <div class="module-meta">
+                        <div class="module-duration">
+                            ⏱️ ${module.duration}
+                        </div>
+                        <div class="module-difficulty ${module.difficulty}">
+                            ${module.difficulty}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterModules(filter) {
+            currentFilter = filter;
+            
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderModules();
+        }
+
+        function openModule(moduleId) {
+            const module = trainingModules.find(m => m.id === moduleId);
+            if (!module) return;
+
+            document.getElementById('modalTitle').textContent = module.title;
+            
+            let content = `
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                        <span style="background: #f7fafc; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; color: #4a5568;">
+                            ${module.type.toUpperCase()}
+                        </span>
+                        <span style="background: rgba(102, 126, 234, 0.1); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; color: #667eea;">
+                            ${module.duration}
+                        </span>
+                        <span style="background: rgba(237, 137, 54, 0.1); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; color: #ed8936;">
+                            ${module.difficulty.toUpperCase()}
+                        </span>
+                    </div>
+                    <p style="color: #718096; line-height: 1.5; margin-bottom: 20px;">${module.description}</p>
+                </div>
+            `;
+
+            if (module.type === 'video') {
+                content += `
+                    <div style="background: #f7fafc; border-radius: 10px; padding: 40px; text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">🎬</div>
+                        <h4 style="color: #2d3748; margin-bottom: 10px;">Video Training Module</h4>
+                        <p style="color: #718096; margin-bottom: 20px;">Interactive video with embedded quizzes and exercises</p>
+                        <button class="btn btn-primary" onclick="startVideo('${moduleId}')">▶️ Start Video</button>
+                    </div>
+                `;
+            } else if (module.type === 'interactive') {
+                content += `
+                    <div style="background: #f7fafc; border-radius: 10px; padding: 40px; text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">🖥️</div>
+                        <h4 style="color: #2d3748; margin-bottom: 10px;">Interactive Tutorial</h4>
+                        <p style="color: #718096; margin-bottom: 20px;">Hands-on practice with guided exercises</p>
+                        <button class="btn btn-primary" onclick="startInteractive('${moduleId}')">🚀 Start Tutorial</button>
+                    </div>
+                `;
+            } else if (module.type === 'workshop') {
+                content += `
+                    <div style="background: #f7fafc; border-radius: 10px; padding: 40px; text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">👥</div>
+                        <h4 style="color: #2d3748; margin-bottom: 10px;">Live Workshop</h4>
+                        <p style="color: #718096; margin-bottom: 20px;">Join scheduled sessions with expert instructors</p>
+                        <button class="btn btn-primary" onclick="scheduleWorkshop('${moduleId}')">📅 Schedule Session</button>
+                    </div>
+                `;
+            } else if (module.type === 'assessment') {
+                content += `
+                    <div style="background: #f7fafc; border-radius: 10px; padding: 40px; text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">📝</div>
+                        <h4 style="color: #2d3748; margin-bottom: 10px;">Knowledge Assessment</h4>
+                        <p style="color: #718096; margin-bottom: 20px;">Test your understanding with interactive questions</p>
+                        <button class="btn btn-primary" onclick="startAssessment('${moduleId}')">📊 Start Assessment</button>
+                    </div>
+                `;
+            }
+
+            content += `
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+                    ${module.status !== 'completed' ? 
+                        '<button class="btn btn-outline" onclick="markComplete(\'' + moduleId + '\')">Mark Complete</button>' : 
+                        '<button class="btn btn-outline" onclick="reviewModule(\'' + moduleId + '\')">Review Module</button>'
+                    }
+                </div>
+            `;
+
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('moduleModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('moduleModal').style.display = 'none';
+        }
+
+        function startVideo(moduleId) {
+            alert(`Starting video module: ${moduleId}. Video player would launch here.`);
+            closeModal();
+        }
+
+        function startInteractive(moduleId) {
+            alert(`Starting interactive tutorial: ${moduleId}. Tutorial interface would launch here.`);
+            closeModal();
+        }
+
+        function scheduleWorkshop(moduleId) {
+            alert(`Scheduling workshop: ${moduleId}. Calendar integration would show available sessions.`);
+            closeModal();
+        }
+
+        function startAssessment(moduleId) {
+            alert(`Starting assessment: ${moduleId}. Assessment interface would launch here.`);
+            closeModal();
+        }
+
+        function markComplete(moduleId) {
+            const module = trainingModules.find(m => m.id === moduleId);
+            if (module) {
+                module.status = 'completed';
+                renderModules();
+                updateStats();
+                showAchievementNotification('Module Completed!', `You've completed "${module.title}"`);
+            }
+            closeModal();
+        }
+
+        function reviewModule(moduleId) {
+            alert(`Reviewing completed module: ${moduleId}`);
+            closeModal();
+        }
+
+        function openLearningPath(pathType) {
+            const pathModules = trainingModules.filter(module => {
+                switch(pathType) {
+                    case 'beginner':
+                        return module.difficulty === 'beginner';
+                    case 'intermediate':
+                        return module.difficulty === 'intermediate';
+                    case 'advanced':
+                        return module.difficulty === 'advanced';
+                    case 'certification':
+                        return module.type === 'assessment';
+                    default:
+                        return true;
+                }
+            });
+
+            alert(`Opening ${pathType} learning path with ${pathModules.length} modules.`);
+        }
+
+        function openCertification(certType) {
+            const certInfo = {
+                operations: 'UIP Operations Specialist Certification - Master container tracking and operational workflows',
+                analytics: 'UIP Analytics Expert Certification - Advanced analytics and predictive modeling',
+                integration: 'UIP Integration Architect Certification - Enterprise integrations and API management',
+                trainer: 'UIP Certified Trainer Program - Become an internal UIP champion'
+            };
+
+            alert(`Opening certification: ${certInfo[certType]}`);
+        }
+
+        function showCertificationGuide() {
+            alert('Certification Guide would show requirements, study materials, and exam information.');
+        }
+
+        function viewAllAchievements() {
+            alert('Full achievements gallery would display all available badges and progress.');
+        }
+
+        function updateStats() {
+            const completed = trainingModules.filter(m => m.status === 'completed').length;
+            document.getElementById('completedModules').textContent = completed;
+            
+            // Update other stats based on progress
+            const hours = Math.floor(completed * 1.5); // Estimated hours
+            document.getElementById('trainingHours').textContent = hours;
+        }
+
+        function showAchievementNotification(title, message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #48bb78, #38a169);
+                color: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                max-width: 300px;
+            `;
+            
+            notification.innerHTML = `
+                <h4 style="margin-bottom: 5px;">🎉 ${title}</h4>
+                <p style="margin: 0; opacity: 0.9;">${message}</p>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        // Initialize
+        function init() {
+            renderModules();
+            updateStats();
+            
+            // Load user progress
+            const progress = localStorage.getItem('uip_training_progress');
+            if (progress) {
+                const savedProgress = JSON.parse(progress);
+                // Apply saved progress to modules
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Auto-save progress
+        function saveProgress() {
+            const progress = {
+                modules: trainingModules.map(m => ({
+                    id: m.id,
+                    status: m.status
+                })),
+                lastActivity: new Date()
+            };
+            localStorage.setItem('uip_training_progress', JSON.stringify(progress));
+        }
+
+        // Initialize training portal
+        init();
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.path-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

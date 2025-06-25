@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integration Setup Wizard - UIP Platform</title>
+    <link rel="icon" type="image/svg+xml" href="/ROOTUIP/js/logo-component.js">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .wizard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .wizard-header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .wizard-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .wizard-subtitle {
+            color: #718096;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .wizard-progress {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .progress-fill {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.5s ease;
+            z-index: 2;
+            width: 20%;
+        }
+
+        .step-indicator {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 3;
+            transition: all 0.3s ease;
+        }
+
+        .step-indicator.completed {
+            background: #48bb78;
+            color: white;
+        }
+
+        .step-indicator.active {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .step-indicator.upcoming {
+            background: #e2e8f0;
+            color: #a0aec0;
+        }
+
+        .step-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            color: #718096;
+            text-align: center;
+            width: 120px;
+        }
+
+        .step-label.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .wizard-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            min-height: 500px;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .step-description {
+            color: #718096;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .carrier-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .carrier-card {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .carrier-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .carrier-card.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .carrier-card.connected {
+            border-color: #48bb78;
+            background: rgba(72, 187, 120, 0.05);
+        }
+
+        .carrier-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .carrier-logo {
+            width: 50px;
+            height: 50px;
+            background: #667eea;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .carrier-info h3 {
+            color: #2d3748;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .carrier-info p {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .carrier-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-connected {
+            background: rgba(72, 187, 120, 0.1);
+            color: #48bb78;
+        }
+
+        .status-selected {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .carrier-features {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .carrier-features li {
+            color: #718096;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .carrier-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #48bb78;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-input.error {
+            border-color: #f56565;
+        }
+
+        .form-help {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-top: 5px;
+        }
+
+        .form-error {
+            font-size: 0.8rem;
+            color: #f56565;
+            margin-top: 5px;
+        }
+
+        .credentials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .test-connection {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .test-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .test-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .test-button:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .test-result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .test-result.success {
+            background: rgba(72, 187, 120, 0.1);
+            color: #48bb78;
+            border: 1px solid #48bb78;
+        }
+
+        .test-result.error {
+            background: rgba(245, 101, 101, 0.1);
+            color: #f56565;
+            border: 1px solid #f56565;
+        }
+
+        .data-mapping {
+            margin-top: 30px;
+        }
+
+        .mapping-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .mapping-table th,
+        .mapping-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .mapping-table th {
+            background: #f7fafc;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .mapping-select {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .wizard-actions {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .btn:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .success-summary {
+            background: rgba(72, 187, 120, 0.1);
+            border: 2px solid #48bb78;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .summary-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .summary-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #48bb78;
+            margin-bottom: 5px;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .wizard-container {
+                padding: 15px;
+            }
+
+            .wizard-content {
+                padding: 25px 20px;
+            }
+
+            .carrier-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-steps {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .step-labels {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .wizard-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wizard-container">
+        <!-- Header -->
+        <div class="wizard-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div id="header-logo"></div>
+                    <div>
+                        <h1 class="wizard-title">Integration Setup Wizard</h1>
+                        <p class="wizard-subtitle">Connect your carrier systems and configure data flows</p>
+                    </div>
+                </div>
+                <a href="/ROOTUIP/customer-onboarding/" class="btn btn-secondary">← Back to Onboarding</a>
+            </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="wizard-progress">
+            <div class="progress-steps">
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="step-indicator active" id="step1">1</div>
+                <div class="step-indicator upcoming" id="step2">2</div>
+                <div class="step-indicator upcoming" id="step3">3</div>
+                <div class="step-indicator upcoming" id="step4">4</div>
+                <div class="step-indicator upcoming" id="step5">5</div>
+            </div>
+            <div class="step-labels">
+                <div class="step-label active">Carrier Selection</div>
+                <div class="step-label">Connection Setup</div>
+                <div class="step-label">Data Mapping</div>
+                <div class="step-label">Testing</div>
+                <div class="step-label">Completion</div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="wizard-content">
+            <!-- Step 1: Carrier Selection -->
+            <div class="step-content active" id="stepContent1">
+                <h2 class="step-title">Select Your Carriers</h2>
+                <p class="step-description">
+                    Choose the shipping carriers you work with. We'll help you connect to their systems for real-time data synchronization.
+                </p>
+
+                <div class="carrier-grid" id="carrierGrid">
+                    <!-- Carriers will be populated here -->
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <p style="color: #718096; font-size: 0.9rem;">
+                        <strong>Selected:</strong> <span id="selectedCount">0</span> carriers
+                        • Need help with carrier not listed? <a href="#" onclick="contactSupport()" style="color: #667eea;">Contact Support</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 2: Connection Setup -->
+            <div class="step-content" id="stepContent2">
+                <h2 class="step-title">Configure Connections</h2>
+                <p class="step-description">
+                    Provide the necessary credentials and API information for each selected carrier.
+                </p>
+
+                <div id="connectionForms">
+                    <!-- Connection forms will be populated here -->
+                </div>
+            </div>
+
+            <!-- Step 3: Data Mapping -->
+            <div class="step-content" id="stepContent3">
+                <h2 class="step-title">Data Field Mapping</h2>
+                <p class="step-description">
+                    Map your carrier data fields to UIP standard fields for consistent data processing.
+                </p>
+
+                <div class="data-mapping">
+                    <h3>Standard Field Mapping</h3>
+                    <table class="mapping-table">
+                        <thead>
+                            <tr>
+                                <th>UIP Field</th>
+                                <th>Carrier Field</th>
+                                <th>Sample Value</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mappingTable">
+                            <!-- Mapping rows will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Step 4: Testing -->
+            <div class="step-content" id="stepContent4">
+                <h2 class="step-title">Test Connections</h2>
+                <p class="step-description">
+                    Validate all integrations and ensure data is flowing correctly before going live.
+                </p>
+
+                <div id="testResults">
+                    <!-- Test results will be populated here -->
+                </div>
+            </div>
+
+            <!-- Step 5: Completion -->
+            <div class="step-content" id="stepContent5">
+                <div class="success-summary">
+                    <div class="success-icon">🎉</div>
+                    <h2 style="text-align: center; color: #48bb78; margin-bottom: 15px;">Integration Complete!</h2>
+                    <p style="text-align: center; color: #718096; margin-bottom: 20px;">
+                        Your carrier integrations are now live and data is flowing into UIP Platform.
+                    </p>
+
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <div class="summary-number" id="connectedCarriers">0</div>
+                            <div class="summary-label">Connected Carriers</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-number" id="dataPoints">0</div>
+                            <div class="summary-label">Data Points Mapped</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-number" id="testsPassed">0</div>
+                            <div class="summary-label">Tests Passed</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-number">24/7</div>
+                            <div class="summary-label">Monitoring</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Next Steps</h3>
+                <div style="margin-top: 20px;">
+                    <div style="background: #f7fafc; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                        <h4 style="color: #2d3748; margin-bottom: 10px;">📊 Data Migration</h4>
+                        <p style="color: #718096; margin-bottom: 10px;">Import your historical data to get complete visibility.</p>
+                        <a href="/ROOTUIP/customer-onboarding/data-migration.html" class="btn btn-primary" style="font-size: 0.9rem; padding: 8px 16px;">Start Data Migration</a>
+                    </div>
+                    <div style="background: #f7fafc; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                        <h4 style="color: #2d3748; margin-bottom: 10px;">🎓 Team Training</h4>
+                        <p style="color: #718096; margin-bottom: 10px;">Get your team up to speed with comprehensive training.</p>
+                        <a href="/ROOTUIP/customer-onboarding/training-portal.html" class="btn btn-primary" style="font-size: 0.9rem; padding: 8px 16px;">Begin Training</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="wizard-actions">
+            <button class="btn btn-secondary" id="prevBtn" onclick="previousStep()" disabled>
+                ← Previous
+            </button>
+            <div>
+                <button class="btn btn-secondary" onclick="saveProgress()">Save Progress</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextStep()" disabled>
+                    Next →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/ROOTUIP/js/logo-component.js"></script>
+    <script>
+        // Initialize logo
+        document.getElementById('header-logo').innerHTML = UIPLogo.getLogo({
+            size: 'medium',
+            type: 'full',
+            theme: 'color'
+        });
+
+        let currentStep = 1;
+        const totalSteps = 5;
+        let selectedCarriers = [];
+        let connectionData = {};
+        let mappingData = {};
+        let testResults = {};
+
+        const carriers = [
+            {
+                id: 'maersk',
+                name: 'Maersk',
+                code: 'MAEU',
+                description: 'A.P. Moller - Maersk',
+                logo: 'MAE',
+                features: ['API Integration', 'Real-time Tracking', 'EDI Support', 'Documentation'],
+                connectionType: 'API',
+                difficulty: 'Easy'
+            },
+            {
+                id: 'msc',
+                name: 'MSC',
+                code: 'MSCU',
+                description: 'Mediterranean Shipping Company',
+                logo: 'MSC',
+                features: ['API Integration', 'Container Tracking', 'Schedule Data', 'Rate Management'],
+                connectionType: 'API',
+                difficulty: 'Easy'
+            },
+            {
+                id: 'cma-cgm',
+                name: 'CMA CGM',
+                code: 'CMAU',
+                description: 'CMA CGM Group',
+                logo: 'CMA',
+                features: ['Web Portal', 'Tracking API', 'Booking Management', 'Document Exchange'],
+                connectionType: 'API',
+                difficulty: 'Medium'
+            },
+            {
+                id: 'hapag-lloyd',
+                name: 'Hapag-Lloyd',
+                code: 'HLCU',
+                description: 'Hapag-Lloyd AG',
+                logo: 'HAP',
+                features: ['API Access', 'Container Events', 'Schedule Updates', 'Rate Quotes'],
+                connectionType: 'API',
+                difficulty: 'Medium'
+            },
+            {
+                id: 'one',
+                name: 'ONE',
+                code: 'ONEY',
+                description: 'Ocean Network Express',
+                logo: 'ONE',
+                features: ['Digital Platform', 'Real-time Data', 'Booking API', 'Track & Trace'],
+                connectionType: 'API',
+                difficulty: 'Easy'
+            },
+            {
+                id: 'evergreen',
+                name: 'Evergreen',
+                code: 'EGLV',
+                description: 'Evergreen Marine Corp',
+                logo: 'EVG',
+                features: ['Web Services', 'Container Tracking', 'Schedule Info', 'Rate Management'],
+                connectionType: 'API',
+                difficulty: 'Hard'
+            },
+            {
+                id: 'cosco',
+                name: 'COSCO',
+                code: 'COSU',
+                description: 'COSCO Shipping Lines',
+                logo: 'COS',
+                features: ['API Integration', 'Tracking System', 'Booking Platform', 'Documentation'],
+                connectionType: 'API',
+                difficulty: 'Medium'
+            },
+            {
+                id: 'zim',
+                name: 'ZIM',
+                code: 'ZIMU',
+                description: 'ZIM Integrated Shipping',
+                logo: 'ZIM',
+                features: ['eCommerce Platform', 'API Access', 'Real-time Updates', 'Digital Services'],
+                connectionType: 'API',
+                difficulty: 'Easy'
+            }
+        ];
+
+        function renderCarriers() {
+            const container = document.getElementById('carrierGrid');
+            
+            container.innerHTML = carriers.map(carrier => `
+                <div class="carrier-card" data-carrier="${carrier.id}" onclick="toggleCarrier('${carrier.id}')">
+                    <div class="carrier-status" id="status-${carrier.id}"></div>
+                    <div class="carrier-header">
+                        <div class="carrier-logo">${carrier.logo}</div>
+                        <div class="carrier-info">
+                            <h3>${carrier.name}</h3>
+                            <p>${carrier.description}</p>
+                        </div>
+                    </div>
+                    <ul class="carrier-features">
+                        ${carrier.features.map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                    <div style="margin-top: 15px; font-size: 0.8rem; color: #a0aec0;">
+                        Integration: ${carrier.difficulty} • Type: ${carrier.connectionType}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleCarrier(carrierId) {
+            const card = document.querySelector(`[data-carrier="${carrierId}"]`);
+            const statusElement = document.getElementById(`status-${carrierId}`);
+            
+            if (selectedCarriers.includes(carrierId)) {
+                selectedCarriers = selectedCarriers.filter(id => id !== carrierId);
+                card.classList.remove('selected');
+                statusElement.textContent = '';
+                statusElement.className = '';
+            } else {
+                selectedCarriers.push(carrierId);
+                card.classList.add('selected');
+                statusElement.textContent = 'Selected';
+                statusElement.className = 'carrier-status status-selected';
+            }
+            
+            updateSelectedCount();
+            updateNextButton();
+        }
+
+        function updateSelectedCount() {
+            document.getElementById('selectedCount').textContent = selectedCarriers.length;
+        }
+
+        function updateNextButton() {
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if (currentStep === 1) {
+                nextBtn.disabled = selectedCarriers.length === 0;
+            } else if (currentStep === 2) {
+                nextBtn.disabled = !validateConnections();
+            } else if (currentStep === 3) {
+                nextBtn.disabled = !validateMappings();
+            } else if (currentStep === 4) {
+                nextBtn.disabled = !validateTests();
+            } else {
+                nextBtn.disabled = false;
+            }
+        }
+
+        function renderConnectionForms() {
+            const container = document.getElementById('connectionForms');
+            
+            container.innerHTML = selectedCarriers.map(carrierId => {
+                const carrier = carriers.find(c => c.id === carrierId);
+                return `
+                    <div style="background: #f7fafc; border-radius: 10px; padding: 25px; margin-bottom: 20px;">
+                        <h3 style="color: #2d3748; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 30px; height: 30px; background: #667eea; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600;">
+                                ${carrier.logo}
+                            </div>
+                            ${carrier.name} Connection
+                        </h3>
+                        
+                        <div class="credentials-grid">
+                            <div class="form-group">
+                                <label class="form-label">API Base URL</label>
+                                <input type="url" class="form-input" id="url-${carrierId}" 
+                                       value="https://api.${carrier.id}.com/v1/" 
+                                       onchange="updateConnection('${carrierId}', 'url', this.value)">
+                                <div class="form-help">The base URL for ${carrier.name}'s API endpoints</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">API Key</label>
+                                <input type="password" class="form-input" id="apikey-${carrierId}" 
+                                       placeholder="Enter your API key"
+                                       onchange="updateConnection('${carrierId}', 'apiKey', this.value)">
+                                <div class="form-help">Your ${carrier.name} API authentication key</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Client ID</label>
+                                <input type="text" class="form-input" id="clientid-${carrierId}" 
+                                       placeholder="Enter client ID"
+                                       onchange="updateConnection('${carrierId}', 'clientId', this.value)">
+                                <div class="form-help">Your application client identifier</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Client Secret</label>
+                                <input type="password" class="form-input" id="secret-${carrierId}" 
+                                       placeholder="Enter client secret"
+                                       onchange="updateConnection('${carrierId}', 'clientSecret', this.value)">
+                                <div class="form-help">Your application secret key</div>
+                            </div>
+                        </div>
+                        
+                        <div class="test-connection">
+                            <button class="test-button" onclick="testConnection('${carrierId}')" id="test-${carrierId}">
+                                Test Connection
+                            </button>
+                            <div id="result-${carrierId}"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateConnection(carrierId, field, value) {
+            if (!connectionData[carrierId]) {
+                connectionData[carrierId] = {};
+            }
+            connectionData[carrierId][field] = value;
+            updateNextButton();
+        }
+
+        function validateConnections() {
+            return selectedCarriers.every(carrierId => {
+                const data = connectionData[carrierId];
+                return data && data.apiKey && data.clientId && data.clientSecret;
+            });
+        }
+
+        async function testConnection(carrierId) {
+            const button = document.getElementById(`test-${carrierId}`);
+            const resultDiv = document.getElementById(`result-${carrierId}`);
+            
+            button.disabled = true;
+            button.innerHTML = '<span class="loading-spinner"></span> Testing...';
+            
+            // Simulate API test
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            const success = Math.random() > 0.3; // 70% success rate for demo
+            
+            if (success) {
+                resultDiv.innerHTML = '<div class="test-result success">✅ Connection successful! API is responding correctly.</div>';
+                testResults[carrierId] = true;
+            } else {
+                resultDiv.innerHTML = '<div class="test-result error">❌ Connection failed. Please check your credentials.</div>';
+                testResults[carrierId] = false;
+            }
+            
+            button.disabled = false;
+            button.textContent = 'Test Connection';
+            updateNextButton();
+        }
+
+        function renderDataMapping() {
+            const container = document.getElementById('mappingTable');
+            
+            const standardFields = [
+                { uip: 'Container Number', carrier: 'container_id', sample: 'MSKU1234567' },
+                { uip: 'Vessel Name', carrier: 'vessel_name', sample: 'Maersk Edinburg' },
+                { uip: 'Voyage Number', carrier: 'voyage_ref', sample: '124E' },
+                { uip: 'Port of Loading', carrier: 'origin_port', sample: 'CNSHA' },
+                { uip: 'Port of Discharge', carrier: 'dest_port', sample: 'USLAX' },
+                { uip: 'ETA', carrier: 'estimated_arrival', sample: '2024-03-25T14:30:00Z' },
+                { uip: 'Status', carrier: 'container_status', sample: 'In Transit' },
+                { uip: 'Last Update', carrier: 'last_modified', sample: '2024-03-20T10:15:00Z' }
+            ];
+            
+            container.innerHTML = standardFields.map((field, index) => `
+                <tr>
+                    <td style="font-weight: 600;">${field.uip}</td>
+                    <td>
+                        <select class="mapping-select" onchange="updateMapping(${index}, this.value)">
+                            <option value="${field.carrier}" selected>${field.carrier}</option>
+                            <option value="${field.carrier}_alt">${field.carrier}_alt</option>
+                            <option value="custom">Custom Field</option>
+                        </select>
+                    </td>
+                    <td style="color: #718096; font-family: monospace; font-size: 0.8rem;">${field.sample}</td>
+                    <td><span style="color: #48bb78; font-size: 0.8rem;">✓ Mapped</span></td>
+                </tr>
+            `).join('');
+            
+            // Initialize mapping data
+            standardFields.forEach((field, index) => {
+                mappingData[index] = field.carrier;
+            });
+        }
+
+        function updateMapping(index, value) {
+            mappingData[index] = value;
+            updateNextButton();
+        }
+
+        function validateMappings() {
+            return Object.keys(mappingData).length >= 6; // At least 6 fields mapped
+        }
+
+        function renderTestResults() {
+            const container = document.getElementById('testResults');
+            
+            const tests = [
+                { name: 'API Connectivity', status: 'running' },
+                { name: 'Data Retrieval', status: 'pending' },
+                { name: 'Field Mapping', status: 'pending' },
+                { name: 'Real-time Updates', status: 'pending' },
+                { name: 'Error Handling', status: 'pending' }
+            ];
+            
+            container.innerHTML = `
+                <div style="margin-bottom: 30px;">
+                    <h3>Running Integration Tests</h3>
+                    <p style="color: #718096; margin-top: 5px;">
+                        Testing all carrier connections and data flows to ensure everything works correctly.
+                    </p>
+                </div>
+                
+                ${tests.map((test, index) => `
+                    <div style="background: #f7fafc; padding: 20px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h4 style="color: #2d3748; margin-bottom: 5px;">${test.name}</h4>
+                            <p style="color: #718096; font-size: 0.9rem;">Validating ${test.name.toLowerCase()} functionality</p>
+                        </div>
+                        <div id="test-status-${index}" class="test-status">
+                            ${test.status === 'running' ? '<span class="loading-spinner"></span>' : 
+                              test.status === 'pending' ? '⏳' : ''}
+                        </div>
+                    </div>
+                `).join('')}
+                
+                <div style="margin-top: 30px;">
+                    <button class="btn btn-primary" onclick="runTests()" id="runTestsBtn">
+                        🚀 Start All Tests
+                    </button>
+                </div>
+            `;
+        }
+
+        async function runTests() {
+            const button = document.getElementById('runTestsBtn');
+            button.disabled = true;
+            button.innerHTML = '<span class="loading-spinner"></span> Running Tests...';
+            
+            // Simulate running tests
+            for (let i = 0; i < 5; i++) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                const statusElement = document.getElementById(`test-status-${i}`);
+                const success = Math.random() > 0.2; // 80% success rate
+                
+                if (success) {
+                    statusElement.innerHTML = '<span style="color: #48bb78; font-size: 1.2rem;">✅</span>';
+                } else {
+                    statusElement.innerHTML = '<span style="color: #f56565; font-size: 1.2rem;">❌</span>';
+                }
+            }
+            
+            button.disabled = false;
+            button.textContent = 'Tests Complete';
+            updateNextButton();
+        }
+
+        function validateTests() {
+            return document.getElementById('runTestsBtn')?.textContent === 'Tests Complete';
+        }
+
+        function updateCompletionSummary() {
+            document.getElementById('connectedCarriers').textContent = selectedCarriers.length;
+            document.getElementById('dataPoints').textContent = Object.keys(mappingData).length;
+            document.getElementById('testsPassed').textContent = '5/5';
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateWizard();
+                
+                // Prepare content for new step
+                if (currentStep === 2) {
+                    renderConnectionForms();
+                } else if (currentStep === 3) {
+                    renderDataMapping();
+                } else if (currentStep === 4) {
+                    renderTestResults();
+                } else if (currentStep === 5) {
+                    updateCompletionSummary();
+                }
+                
+                updateNextButton();
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateWizard();
+                updateNextButton();
+            }
+        }
+
+        function updateWizard() {
+            // Update progress
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = `${(currentStep - 1) / (totalSteps - 1) * 100}%`;
+            
+            // Update step indicators
+            for (let i = 1; i <= totalSteps; i++) {
+                const indicator = document.getElementById(`step${i}`);
+                const label = document.querySelectorAll('.step-label')[i - 1];
+                
+                if (i < currentStep) {
+                    indicator.className = 'step-indicator completed';
+                    indicator.textContent = '✓';
+                    label.classList.remove('active');
+                } else if (i === currentStep) {
+                    indicator.className = 'step-indicator active';
+                    indicator.textContent = i;
+                    label.classList.add('active');
+                } else {
+                    indicator.className = 'step-indicator upcoming';
+                    indicator.textContent = i;
+                    label.classList.remove('active');
+                }
+            }
+            
+            // Update content visibility
+            document.querySelectorAll('.step-content').forEach((content, index) => {
+                if (index + 1 === currentStep) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+            
+            // Update buttons
+            document.getElementById('prevBtn').disabled = currentStep === 1;
+            
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentStep === totalSteps) {
+                nextBtn.textContent = 'Complete Setup';
+                nextBtn.onclick = completeWizard;
+            } else {
+                nextBtn.textContent = 'Next →';
+                nextBtn.onclick = nextStep;
+            }
+        }
+
+        function completeWizard() {
+            // Save integration data
+            localStorage.setItem('uip_integration_data', JSON.stringify({
+                carriers: selectedCarriers,
+                connections: connectionData,
+                mappings: mappingData,
+                completedAt: new Date().toISOString()
+            }));
+            
+            // Navigate to next onboarding step
+            window.location.href = '/ROOTUIP/customer-onboarding/?step=migration';
+        }
+
+        function saveProgress() {
+            localStorage.setItem('uip_integration_progress', JSON.stringify({
+                currentStep,
+                selectedCarriers,
+                connectionData,
+                mappingData,
+                testResults,
+                savedAt: new Date().toISOString()
+            }));
+            
+            alert('Progress saved successfully!');
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('uip_integration_progress');
+            if (saved) {
+                const data = JSON.parse(saved);
+                currentStep = data.currentStep || 1;
+                selectedCarriers = data.selectedCarriers || [];
+                connectionData = data.connectionData || {};
+                mappingData = data.mappingData || {};
+                testResults = data.testResults || {};
+            }
+        }
+
+        function contactSupport() {
+            alert('Opening support chat... Our integration specialists are here to help!');
+        }
+
+        // Initialize
+        function init() {
+            loadProgress();
+            renderCarriers();
+            updateWizard();
+            updateSelectedCount();
+            updateNextButton();
+        }
+
+        init();
+    </script>
+</body>
+</html>

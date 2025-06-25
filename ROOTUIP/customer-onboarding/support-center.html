@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Center - UIP Platform</title>
+    <link rel="icon" type="image/svg+xml" href="/ROOTUIP/js/logo-component.js">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .support-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            color: #718096;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .quick-help {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .help-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .category-card {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .category-description {
+            color: #718096;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .category-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+
+        .knowledge-base {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .kb-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            padding: 8px 16px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tag.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .article-card {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #e2e8f0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            border-left-color: #667eea;
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .article-card.popular {
+            border-left-color: #ed8936;
+        }
+
+        .article-card.featured {
+            border-left-color: #9f7aea;
+        }
+
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .article-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .article-type {
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .article-description {
+            color: #718096;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+
+        .article-stats {
+            display: flex;
+            gap: 15px;
+        }
+
+        .live-chat {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .chat-option {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .chat-option:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .chat-option.priority {
+            background: linear-gradient(135deg, rgba(237, 137, 54, 0.1), rgba(221, 107, 32, 0.05));
+            border-color: #ed8936;
+        }
+
+        .chat-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            margin: 0 auto 15px;
+        }
+
+        .chat-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .chat-description {
+            color: #718096;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .chat-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #48bb78;
+        }
+
+        .community-forum {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .forum-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .forum-category {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #e2e8f0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .forum-category:hover {
+            border-left-color: #667eea;
+            transform: translateX(3px);
+        }
+
+        .forum-category.trending {
+            border-left-color: #ed8936;
+            background: linear-gradient(135deg, rgba(237, 137, 54, 0.05), rgba(221, 107, 32, 0.02));
+        }
+
+        .forum-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .forum-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .forum-badge {
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .forum-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #a0aec0;
+            margin-bottom: 10px;
+        }
+
+        .recent-post {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 0.8rem;
+            color: #4a5568;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .contact-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .contact-card {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+            margin: 0 auto 15px;
+        }
+
+        .contact-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .contact-info {
+            color: #718096;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #a0aec0;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .support-container {
+                padding: 15px;
+            }
+
+            .help-categories {
+                grid-template-columns: 1fr;
+            }
+
+            .kb-filters {
+                justify-content: center;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="support-container">
+        <!-- Header -->
+        <div class="header">
+            <div id="logo-container"></div>
+            <h1 class="page-title">Support Center</h1>
+            <p class="page-subtitle">Get help, find answers, and connect with our community</p>
+            
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search for help articles, tutorials, or ask a question..." id="searchInput">
+                <button class="search-button" onclick="performSearch()">🔍</button>
+            </div>
+        </div>
+
+        <!-- Quick Help Categories -->
+        <div class="quick-help">
+            <h2 class="section-title">🚀 Quick Help</h2>
+            <div class="help-categories">
+                <div class="category-card" onclick="openCategory('getting-started')">
+                    <div class="category-icon">🌟</div>
+                    <div class="category-title">Getting Started</div>
+                    <div class="category-description">New to UIP? Start here for platform basics and setup guides.</div>
+                    <div class="category-stats">
+                        <span>15 articles</span>
+                        <span>Most popular</span>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="openCategory('container-tracking')">
+                    <div class="category-icon">📦</div>
+                    <div class="category-title">Container Tracking</div>
+                    <div class="category-description">Learn to track containers, view shipment status, and get alerts.</div>
+                    <div class="category-stats">
+                        <span>12 articles</span>
+                        <span>Updated daily</span>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="openCategory('document-processing')">
+                    <div class="category-icon">📄</div>
+                    <div class="category-title">Document Processing</div>
+                    <div class="category-description">Upload, process, and extract data from freight documents.</div>
+                    <div class="category-stats">
+                        <span>8 articles</span>
+                        <span>AI-powered</span>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="openCategory('analytics')">
+                    <div class="category-icon">📊</div>
+                    <div class="category-title">Analytics & Insights</div>
+                    <div class="category-description">Master predictive analytics and business intelligence features.</div>
+                    <div class="category-stats">
+                        <span>18 articles</span>
+                        <span>Advanced</span>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="openCategory('integrations')">
+                    <div class="category-icon">🔗</div>
+                    <div class="category-title">Integrations</div>
+                    <div class="category-description">Connect UIP with your existing systems and carriers.</div>
+                    <div class="category-stats">
+                        <span>25 articles</span>
+                        <span>Technical</span>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="openCategory('troubleshooting')">
+                    <div class="category-icon">🔧</div>
+                    <div class="category-title">Troubleshooting</div>
+                    <div class="category-description">Solve common issues and technical problems quickly.</div>
+                    <div class="category-stats">
+                        <span>20 articles</span>
+                        <span>Solutions</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Knowledge Base -->
+        <div class="knowledge-base">
+            <h2 class="section-title">📚 Knowledge Base</h2>
+            
+            <div class="kb-filters">
+                <button class="filter-tag active" onclick="filterArticles('all')">All Articles</button>
+                <button class="filter-tag" onclick="filterArticles('tutorial')">Tutorials</button>
+                <button class="filter-tag" onclick="filterArticles('guide')">Guides</button>
+                <button class="filter-tag" onclick="filterArticles('faq')">FAQ</button>
+                <button class="filter-tag" onclick="filterArticles('video')">Videos</button>
+                <button class="filter-tag" onclick="filterArticles('api')">API Docs</button>
+            </div>
+
+            <div class="articles-grid" id="articlesGrid">
+                <!-- Articles will be populated here -->
+            </div>
+        </div>
+
+        <!-- Live Chat & Support -->
+        <div class="live-chat">
+            <h2 class="section-title">💬 Live Support</h2>
+            <div class="chat-options">
+                <div class="chat-option" onclick="startChat('general')">
+                    <div class="chat-icon">💬</div>
+                    <div class="chat-title">General Support</div>
+                    <div class="chat-description">Get help with platform features, account questions, and general inquiries.</div>
+                    <div class="chat-status">
+                        <div class="status-indicator"></div>
+                        <span>Online • Avg response: 2 min</span>
+                    </div>
+                </div>
+
+                <div class="chat-option" onclick="startChat('technical')">
+                    <div class="chat-icon">🔧</div>
+                    <div class="chat-title">Technical Support</div>
+                    <div class="chat-description">Technical issues, integrations, API questions, and troubleshooting.</div>
+                    <div class="chat-status">
+                        <div class="status-indicator"></div>
+                        <span>Online • Avg response: 5 min</span>
+                    </div>
+                </div>
+
+                <div class="chat-option priority" onclick="startChat('priority')">
+                    <div class="chat-icon">⚡</div>
+                    <div class="chat-title">Priority Support</div>
+                    <div class="chat-description">Urgent issues, system outages, and critical business impacts.</div>
+                    <div class="chat-status">
+                        <div class="status-indicator"></div>
+                        <span>24/7 • Immediate response</span>
+                    </div>
+                </div>
+
+                <div class="chat-option" onclick="scheduleCall()">
+                    <div class="chat-icon">📞</div>
+                    <div class="chat-title">Schedule a Call</div>
+                    <div class="chat-description">Book a video call with our experts for personalized assistance.</div>
+                    <div class="chat-status">
+                        <div class="status-indicator"></div>
+                        <span>Available today</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Community Forum -->
+        <div class="community-forum">
+            <h2 class="section-title">👥 Community Forum</h2>
+            <div class="forum-categories">
+                <div class="forum-category trending" onclick="openForum('general')">
+                    <div class="forum-header">
+                        <div class="forum-title">General Discussion</div>
+                        <div class="forum-badge">Hot</div>
+                    </div>
+                    <div class="forum-stats">
+                        <span>1,247 topics</span>
+                        <span>5,632 posts</span>
+                        <span>Last: 2 min ago</span>
+                    </div>
+                    <div class="recent-post">
+                        Latest: "Best practices for D&D prevention strategies" by @logistics_pro
+                    </div>
+                </div>
+
+                <div class="forum-category" onclick="openForum('features')">
+                    <div class="forum-header">
+                        <div class="forum-title">Feature Requests</div>
+                        <div class="forum-badge">New</div>
+                    </div>
+                    <div class="forum-stats">
+                        <span>342 topics</span>
+                        <span>1,156 posts</span>
+                        <span>Last: 15 min ago</span>
+                    </div>
+                    <div class="recent-post">
+                        Latest: "Request: Bulk container status export feature" by @data_analyst
+                    </div>
+                </div>
+
+                <div class="forum-category" onclick="openForum('integrations')">
+                    <div class="forum-header">
+                        <div class="forum-title">Integrations & API</div>
+                        <div class="forum-badge">Tech</div>
+                    </div>
+                    <div class="forum-stats">
+                        <span>189 topics</span>
+                        <span>734 posts</span>
+                        <span>Last: 1 hour ago</span>
+                    </div>
+                    <div class="recent-post">
+                        Latest: "API rate limiting best practices" by @dev_team
+                    </div>
+                </div>
+
+                <div class="forum-category" onclick="openForum('success')">
+                    <div class="forum-header">
+                        <div class="forum-title">Success Stories</div>
+                        <div class="forum-badge">Win</div>
+                    </div>
+                    <div class="forum-stats">
+                        <span>156 topics</span>
+                        <span>892 posts</span>
+                        <span>Last: 3 hours ago</span>
+                    </div>
+                    <div class="recent-post">
+                        Latest: "Reduced D&D costs by 40% with UIP predictions" by @supply_chain_mgr
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="joinCommunity()">
+                    🚀 Join the Community
+                </button>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="contact-section">
+            <h2 class="section-title">📞 Contact Information</h2>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-title">Email Support</div>
+                    <div class="contact-info">
+                        General: support@uip.com<br>
+                        Technical: tech@uip.com<br>
+                        Sales: sales@uip.com
+                    </div>
+                    <button class="btn btn-outline" onclick="sendEmail()">Send Email</button>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-title">Phone Support</div>
+                    <div class="contact-info">
+                        US: +1 (555) 123-UIP1<br>
+                        UK: +44 20 7123 4567<br>
+                        Available 24/7
+                    </div>
+                    <button class="btn btn-outline" onclick="callSupport()">Call Now</button>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">🌐</div>
+                    <div class="contact-title">Global Offices</div>
+                    <div class="contact-info">
+                        New York • London • Singapore<br>
+                        Tokyo • Hamburg • Sydney<br>
+                        Local support worldwide
+                    </div>
+                    <button class="btn btn-outline" onclick="findOffice()">Find Office</button>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">🎓</div>
+                    <div class="contact-title">Training & Onboarding</div>
+                    <div class="contact-info">
+                        Dedicated training team<br>
+                        Custom workshops available<br>
+                        Certification programs
+                    </div>
+                    <button class="btn btn-outline" onclick="bookTraining()">Book Training</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Modal -->
+    <div class="modal" id="articleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Article Title</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalContent">
+                <!-- Article content will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/ROOTUIP/js/logo-component.js"></script>
+    <script>
+        // Initialize logo
+        document.getElementById('logo-container').innerHTML = UIPLogo.getLogo({
+            size: 'large',
+            type: 'full',
+            theme: 'color'
+        });
+
+        // Knowledge base articles data
+        const articles = [
+            {
+                id: 'getting-started-guide',
+                title: 'Getting Started with UIP Platform',
+                type: 'tutorial',
+                category: 'getting-started',
+                description: 'Complete guide to setting up your UIP account and navigating the platform',
+                readTime: '10 min',
+                views: 2547,
+                helpful: 94,
+                featured: true
+            },
+            {
+                id: 'container-tracking-basics',
+                title: 'Container Tracking Fundamentals',
+                type: 'guide',
+                category: 'container-tracking',
+                description: 'Learn how to track containers across multiple carriers and get real-time updates',
+                readTime: '8 min',
+                views: 1834,
+                helpful: 89,
+                popular: true
+            },
+            {
+                id: 'document-ocr-setup',
+                title: 'Setting Up Document OCR Processing',
+                type: 'tutorial',
+                category: 'document-processing',
+                description: 'Configure AI-powered document processing for bills of lading and invoices',
+                readTime: '15 min',
+                views: 1456,
+                helpful: 92
+            },
+            {
+                id: 'predictive-analytics-intro',
+                title: 'Introduction to Predictive Analytics',
+                type: 'guide',
+                category: 'analytics',
+                description: 'Understand how UIP uses AI to predict delays and optimize operations',
+                readTime: '12 min',
+                views: 1278,
+                helpful: 87
+            },
+            {
+                id: 'carrier-integration-setup',
+                title: 'Carrier Integration Setup Guide',
+                type: 'tutorial',
+                category: 'integrations',
+                description: 'Step-by-step guide to connecting major shipping carriers',
+                readTime: '20 min',
+                views: 1156,
+                helpful: 91
+            },
+            {
+                id: 'dd-prevention-strategies',
+                title: 'D&D Prevention Best Practices',
+                type: 'guide',
+                category: 'analytics',
+                description: 'Strategies to avoid demurrage and detention charges using UIP insights',
+                readTime: '18 min',
+                views: 2134,
+                helpful: 96,
+                popular: true
+            },
+            {
+                id: 'api-authentication',
+                title: 'API Authentication and Security',
+                type: 'api',
+                category: 'integrations',
+                description: 'Complete guide to authenticating with UIP APIs and security best practices',
+                readTime: '25 min',
+                views: 834,
+                helpful: 88
+            },
+            {
+                id: 'dashboard-customization',
+                title: 'Customizing Your Dashboard',
+                type: 'tutorial',
+                category: 'getting-started',
+                description: 'Personalize your dashboard with widgets and custom views',
+                readTime: '12 min',
+                views: 1623,
+                helpful: 85
+            },
+            {
+                id: 'troubleshooting-common-issues',
+                title: 'Troubleshooting Common Issues',
+                type: 'faq',
+                category: 'troubleshooting',
+                description: 'Solutions to frequently encountered problems and error messages',
+                readTime: '15 min',
+                views: 2891,
+                helpful: 93,
+                popular: true
+            },
+            {
+                id: 'advanced-search-filters',
+                title: 'Advanced Search and Filtering',
+                type: 'guide',
+                category: 'getting-started',
+                description: 'Master complex search queries and filtering options',
+                readTime: '14 min',
+                views: 1045,
+                helpful: 86
+            },
+            {
+                id: 'video-platform-tour',
+                title: 'UIP Platform Video Tour',
+                type: 'video',
+                category: 'getting-started',
+                description: '15-minute video walkthrough of key platform features',
+                readTime: '15 min',
+                views: 3456,
+                helpful: 94,
+                featured: true
+            },
+            {
+                id: 'webhook-setup',
+                title: 'Setting Up Webhooks for Real-time Updates',
+                type: 'api',
+                category: 'integrations',
+                description: 'Configure webhooks to receive real-time notifications in your systems',
+                readTime: '22 min',
+                views: 567,
+                helpful: 90
+            }
+        ];
+
+        let currentFilter = 'all';
+
+        function renderArticles() {
+            const grid = document.getElementById('articlesGrid');
+            const filteredArticles = currentFilter === 'all' 
+                ? articles 
+                : articles.filter(article => article.type === currentFilter);
+
+            grid.innerHTML = filteredArticles.map(article => `
+                <div class="article-card ${article.popular ? 'popular' : ''} ${article.featured ? 'featured' : ''}" onclick="openArticle('${article.id}')">
+                    <div class="article-header">
+                        <div>
+                            <div class="article-title">${article.title}</div>
+                        </div>
+                        <div class="article-type">${article.type}</div>
+                    </div>
+                    <div class="article-description">${article.description}</div>
+                    <div class="article-meta">
+                        <div class="article-stats">
+                            <span>👁️ ${article.views.toLocaleString()}</span>
+                            <span>👍 ${article.helpful}% helpful</span>
+                            <span>⏱️ ${article.readTime}</span>
+                        </div>
+                        ${article.popular ? '<span style="color: #ed8936;">🔥 Popular</span>' : ''}
+                        ${article.featured ? '<span style="color: #9f7aea;">⭐ Featured</span>' : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterArticles(filter) {
+            currentFilter = filter;
+            
+            // Update active tag
+            document.querySelectorAll('.filter-tag').forEach(tag => {
+                tag.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderArticles();
+        }
+
+        function openArticle(articleId) {
+            const article = articles.find(a => a.id === articleId);
+            if (!article) return;
+
+            document.getElementById('modalTitle').textContent = article.title;
+            
+            let content = `
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+                        <span style="background: #f7fafc; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; color: #4a5568;">
+                            ${article.type.toUpperCase()}
+                        </span>
+                        <span style="background: rgba(102, 126, 234, 0.1); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; color: #667eea;">
+                            ⏱️ ${article.readTime}
+                        </span>
+                        <span style="background: rgba(72, 187, 120, 0.1); padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; color: #48bb78;">
+                            👍 ${article.helpful}% helpful
+                        </span>
+                    </div>
+                    <p style="color: #718096; line-height: 1.5; margin-bottom: 20px;">${article.description}</p>
+                </div>
+            `;
+
+            if (article.type === 'video') {
+                content += `
+                    <div style="background: #f7fafc; border-radius: 10px; padding: 40px; text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">🎬</div>
+                        <h4 style="color: #2d3748; margin-bottom: 10px;">Video Content</h4>
+                        <p style="color: #718096; margin-bottom: 20px;">Interactive video tutorial with step-by-step instructions</p>
+                        <button class="btn btn-primary" onclick="playVideo('${articleId}')">▶️ Play Video</button>
+                    </div>
+                `;
+            } else {
+                content += `
+                    <div style="background: #f7fafc; border-radius: 10px; padding: 30px; margin-bottom: 20px;">
+                        <h4 style="color: #2d3748; margin-bottom: 15px;">Article Content</h4>
+                        <p style="color: #718096; line-height: 1.6; margin-bottom: 15px;">
+                            This comprehensive guide covers all the essential information you need to know about ${article.title.toLowerCase()}. 
+                            Our expert team has compiled step-by-step instructions, best practices, and troubleshooting tips.
+                        </p>
+                        <p style="color: #718096; line-height: 1.6;">
+                            The article includes screenshots, code examples (where applicable), and links to related resources 
+                            to help you succeed with your UIP implementation.
+                        </p>
+                    </div>
+                `;
+            }
+
+            content += `
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="readFullArticle('${articleId}')">📖 Read Full Article</button>
+                    <button class="btn btn-secondary" onclick="bookmarkArticle('${articleId}')">🔖 Bookmark</button>
+                    <button class="btn btn-outline" onclick="shareArticle('${articleId}')">📤 Share</button>
+                </div>
+            `;
+
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('articleModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('articleModal').style.display = 'none';
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value;
+            if (query.trim()) {
+                alert(`Searching for: "${query}"\n\nSearch results would include:\n- Knowledge base articles\n- Community forum posts\n- Video tutorials\n- API documentation`);
+            }
+        }
+
+        function openCategory(category) {
+            const categoryArticles = articles.filter(a => a.category === category);
+            alert(`Opening ${category} category with ${categoryArticles.length} articles.`);
+        }
+
+        function startChat(type) {
+            const chatTypes = {
+                general: 'General Support Chat - Average response time: 2 minutes',
+                technical: 'Technical Support Chat - Average response time: 5 minutes',
+                priority: 'Priority Support Chat - Immediate response available 24/7'
+            };
+            
+            alert(`Starting ${chatTypes[type] || 'support chat'}.\n\nChat window would open here with:\n- Real-time messaging\n- File sharing\n- Screen sharing option\n- Expert support agents`);
+        }
+
+        function scheduleCall() {
+            alert('Opening calendar booking system.\n\nAvailable options:\n- 30-min consultation\n- 1-hour technical deep dive\n- Custom training session\n- Executive briefing');
+        }
+
+        function openForum(category) {
+            const forumInfo = {
+                general: 'General Discussion Forum - Community Q&A and best practices',
+                features: 'Feature Requests - Suggest and vote on new features',
+                integrations: 'Integrations & API - Technical discussions and code sharing',
+                success: 'Success Stories - Share wins and learn from others'
+            };
+            
+            alert(`Opening ${forumInfo[category] || 'community forum'}.\n\nFeatures include:\n- Real-time discussions\n- Expert moderators\n- Reputation system\n- Advanced search`);
+        }
+
+        function joinCommunity() {
+            alert('Joining UIP Community!\n\nBenefits include:\n- Access to exclusive content\n- Direct connection with experts\n- Early feature previews\n- Networking opportunities');
+        }
+
+        function playVideo(articleId) {
+            alert(`Playing video: ${articleId}\n\nVideo player would launch with:\n- HD quality streaming\n- Closed captions\n- Playback speed controls\n- Chapter navigation`);
+            closeModal();
+        }
+
+        function readFullArticle(articleId) {
+            alert(`Opening full article: ${articleId}\n\nFull article viewer includes:\n- Rich content formatting\n- Interactive elements\n- Related articles\n- Comment system`);
+            closeModal();
+        }
+
+        function bookmarkArticle(articleId) {
+            alert(`Article bookmarked: ${articleId}\n\nBookmarks are saved to your account and synced across devices.`);
+        }
+
+        function shareArticle(articleId) {
+            alert(`Sharing article: ${articleId}\n\nShare options:\n- Direct link\n- Email\n- Slack integration\n- Teams integration`);
+        }
+
+        function sendEmail() {
+            window.location.href = 'mailto:support@uip.com?subject=UIP Support Request';
+        }
+
+        function callSupport() {
+            alert('Calling UIP Support\n\nPhone: +1 (555) 123-UIP1\n\nAlternatively, use the click-to-call feature in our web app for instant connection.');
+        }
+
+        function findOffice() {
+            alert('UIP Global Offices:\n\n🇺🇸 New York: 123 Harbor St, NY 10001\n🇬🇧 London: 45 Thames Wharf, London E1W\n🇸🇬 Singapore: 67 Marina Bay, Singapore\n🇯🇵 Tokyo: 89 Port District, Tokyo\n🇩🇪 Hamburg: 12 Hafenstraße, Hamburg\n🇦🇺 Sydney: 34 Circular Quay, Sydney');
+        }
+
+        function bookTraining() {
+            alert('Booking UIP Training\n\nAvailable programs:\n- Platform basics (2 hours)\n- Advanced analytics (4 hours)\n- API integration (6 hours)\n- Custom enterprise training\n\nContact: training@uip.com');
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Auto-complete search suggestions
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            if (query.length > 2) {
+                // In a real implementation, this would show search suggestions
+                console.log(`Search suggestions for: ${query}`);
+            }
+        });
+
+        // Initialize
+        function init() {
+            renderArticles();
+            
+            // Load user preferences
+            const preferences = localStorage.getItem('uip_support_preferences');
+            if (preferences) {
+                const prefs = JSON.parse(preferences);
+                // Apply user preferences
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            } else if (e.ctrlKey && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+
+        // Initialize support center
+        init();
+
+        // Add hover effects to cards
+        document.querySelectorAll('.category-card, .chat-option, .contact-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-3px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
