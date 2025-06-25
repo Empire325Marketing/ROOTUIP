@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UIP Platform - Secure Login</title>
+    <title>UIP Platform - Enterprise Login</title>
     <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
     <script src="/js/logo-component.js"></script>
     <style>
@@ -13,489 +13,678 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #00D4AA;
+            --primary-dark: #00B894;
+            --secondary: #0A1628;
+            --gray-50: #F8FAFB;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0A1628;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--gray-800) 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            overflow: hidden;
+            padding: 1rem;
         }
 
-        /* Animated background */
-        .bg-animation {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 20% 80%, rgba(0, 212, 170, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(0, 184, 148, 0.15) 0%, transparent 50%);
-            animation: float 20s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(-10%, -10%) rotate(0deg); }
-            50% { transform: translate(10%, 10%) rotate(180deg); }
-        }
-
+        /* Login Container */
         .login-container {
+            width: 100%;
+            max-width: 480px;
             background: white;
             border-radius: 16px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            width: 100%;
-            max-width: 480px;
-            padding: 3rem;
-            position: relative;
-            z-index: 10;
+            overflow: hidden;
         }
 
-        .logo-section {
+        .login-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 2rem;
             text-align: center;
-            margin-bottom: 2rem;
+            color: white;
         }
 
-        .logo {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
-            border-radius: 12px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 1.5rem;
-            color: white;
+        .login-logo {
             margin-bottom: 1rem;
         }
 
-        h1 {
-            font-size: 1.75rem;
-            color: #0A1628;
+        .login-title {
+            font-size: 1.5rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
         }
 
-        .subtitle {
-            color: #64748B;
+        .login-subtitle {
             font-size: 0.875rem;
+            opacity: 0.9;
         }
 
+        .login-body {
+            padding: 2rem;
+        }
+
+        /* Form Styles */
         .form-group {
             margin-bottom: 1.5rem;
         }
 
-        label {
+        .form-label {
             display: block;
             font-size: 0.875rem;
             font-weight: 600;
-            color: #1E293B;
+            color: var(--gray-700);
             margin-bottom: 0.5rem;
         }
 
-        input {
+        .form-input {
             width: 100%;
             padding: 0.75rem 1rem;
-            border: 2px solid #E2E8F0;
+            border: 1px solid var(--gray-300);
             border-radius: 8px;
             font-size: 1rem;
-            transition: all 0.3s ease;
-            background: white;
+            transition: all 0.2s ease;
         }
 
-        input:focus {
+        .form-input:focus {
             outline: none;
-            border-color: #00D4AA;
+            border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
         }
 
-        input.error {
-            border-color: #EF4444;
+        .form-input.error {
+            border-color: var(--danger);
         }
 
-        .error-message {
-            color: #EF4444;
+        .form-error {
+            color: var(--danger);
             font-size: 0.75rem;
             margin-top: 0.25rem;
             display: none;
         }
 
-        .password-wrapper {
+        .form-error.active {
+            display: block;
+        }
+
+        /* Password Input Group */
+        .input-group {
             position: relative;
         }
 
-        .toggle-password {
+        .input-group .form-input {
+            padding-right: 3rem;
+        }
+
+        .input-group-append {
             position: absolute;
             right: 1rem;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            color: #64748B;
-            background: none;
-            border: none;
-            font-size: 1.25rem;
+            color: var(--gray-500);
+            transition: color 0.2s ease;
         }
 
-        .login-button {
+        .input-group-append:hover {
+            color: var(--gray-700);
+        }
+
+        /* Remember Me */
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-checkbox label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .btn {
             width: 100%;
-            padding: 0.875rem;
-            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
-            color: white;
+            padding: 0.875rem 1.5rem;
             border: none;
             border-radius: 8px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
-        .login-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 212, 170, 0.4);
+        .btn-primary {
+            background: var(--primary);
+            color: white;
         }
 
-        .login-button:disabled {
-            opacity: 0.7;
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
         }
 
-        .loading-spinner {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto;
+        .btn-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+            margin-bottom: 1rem;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
         }
 
-        .divider {
+        /* SSO Buttons */
+        .sso-divider {
             text-align: center;
-            margin: 2rem 0;
+            margin: 1.5rem 0;
             position: relative;
         }
 
-        .divider::before {
+        .sso-divider::before {
             content: '';
             position: absolute;
             top: 50%;
             left: 0;
             right: 0;
             height: 1px;
-            background: #E2E8F0;
+            background: var(--gray-300);
         }
 
-        .divider span {
+        .sso-divider span {
             background: white;
             padding: 0 1rem;
-            position: relative;
-            color: #64748B;
+            color: var(--gray-500);
             font-size: 0.875rem;
+            position: relative;
         }
 
         .sso-buttons {
-            display: grid;
+            display: flex;
             gap: 0.75rem;
+            margin-bottom: 1.5rem;
         }
 
-        .sso-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
+        .sso-btn {
+            flex: 1;
             padding: 0.75rem;
-            border: 2px solid #E2E8F0;
+            border: 1px solid var(--gray-300);
             border-radius: 8px;
             background: white;
-            color: #1E293B;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .sso-button:hover {
-            border-color: #CBD5E1;
-            background: #F8FAFB;
-        }
-
-        .sso-icon {
-            width: 20px;
-            height: 20px;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .additional-options {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1.5rem;
+            gap: 0.5rem;
             font-size: 0.875rem;
+            color: var(--gray-700);
         }
 
-        .additional-options a {
-            color: #00D4AA;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
+        .sso-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+            transform: translateY(-1px);
         }
 
-        .additional-options a:hover {
-            color: #00B894;
-        }
-
-        .security-notice {
-            background: #F8FAFB;
-            border: 1px solid #E2E8F0;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1.5rem;
-            font-size: 0.75rem;
-            color: #64748B;
-            text-align: center;
-        }
-
+        /* MFA Section */
         .mfa-section {
             display: none;
         }
 
-        .mfa-input-group {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 0.5rem;
-            margin: 1.5rem 0;
+        .mfa-section.active {
+            display: block;
+        }
+
+        .mfa-inputs {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
         }
 
         .mfa-input {
+            flex: 1;
             text-align: center;
             font-size: 1.5rem;
-            font-weight: 600;
-            padding: 0.5rem;
+            font-weight: 700;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-300);
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
+        .mfa-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+        }
+
+        /* Links */
+        .login-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+
+        .login-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .login-link:hover {
+            color: var(--primary-dark);
+        }
+
+        /* Loading State */
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid white;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Security Info */
+        .security-info {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            text-align: center;
+        }
+
+        .security-info strong {
+            color: var(--gray-700);
+        }
+
+        /* API Key Management */
+        .api-section {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 8px;
+        }
+
+        .api-section.active {
+            display: block;
+        }
+
+        .api-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .api-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .api-key {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .api-key-input {
+            flex: 1;
+            padding: 0.5rem;
+            background: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        .api-key-input:disabled {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .api-copy-btn {
+            padding: 0.5rem;
+            background: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .api-copy-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+
+        /* Responsive */
         @media (max-width: 480px) {
             .login-container {
                 margin: 1rem;
-                padding: 2rem;
             }
 
-            .mfa-input-group {
-                gap: 0.25rem;
+            .login-body {
+                padding: 1.5rem;
+            }
+
+            .sso-buttons {
+                flex-direction: column;
+            }
+
+            .login-links {
+                flex-direction: column;
+                gap: 0.75rem;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
-    
     <div class="login-container">
-        <div class="logo-section">
-            <div class="uip-logo" data-size="large" data-type="icon" data-theme="color" data-link="false"></div>
-            <h1>Welcome Back</h1>
-            <p class="subtitle">Sign in to access your ocean freight command center</p>
+        <div class="login-header">
+            <div class="login-logo">
+                <div class="uip-logo" data-size="large" data-type="icon" data-theme="white" data-link="false"></div>
+            </div>
+            <h1 class="login-title">Welcome to UIP Platform</h1>
+            <p class="login-subtitle">AI-Powered Ocean Freight Intelligence</p>
         </div>
 
-        <!-- Standard Login Form -->
-        <form id="loginForm" class="login-form">
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@company.com">
-                <div class="error-message" id="emailError">Please enter a valid email address</div>
-            </div>
+        <div class="login-body">
+            <!-- Login Form -->
+            <form id="loginForm" class="login-section">
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input type="email" id="email" class="form-input" placeholder="you@company.com" required>
+                    <div class="form-error" id="emailError">Please enter a valid email address</div>
+                </div>
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <div class="password-wrapper">
-                    <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Enter your password">
-                    <button type="button" class="toggle-password" onclick="togglePassword()">
-                        <span id="passwordIcon">👁️</span>
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <div class="input-group">
+                        <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                        <span class="input-group-append" onclick="togglePassword()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="form-error" id="passwordError">Password is required</div>
+                </div>
+
+                <div class="form-checkbox">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Remember me for 30 days</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="loginBtn">
+                    <span>Sign In</span>
+                </button>
+
+                <div class="sso-divider">
+                    <span>or continue with</span>
+                </div>
+
+                <div class="sso-buttons">
+                    <button type="button" class="sso-btn" onclick="ssoLogin('google')">
+                        <svg width="20" height="20" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        <span>Google</span>
+                    </button>
+                    <button type="button" class="sso-btn" onclick="ssoLogin('microsoft')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0078D4">
+                            <path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zm12.6 0H12.6V0H24v11.4z"/>
+                        </svg>
+                        <span>Microsoft</span>
+                    </button>
+                    <button type="button" class="sso-btn" onclick="ssoLogin('okta')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#007DC1">
+                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 18c-3.314 0-6-2.686-6-6s2.686-6 6-6 6 2.686 6 6-2.686 6-6 6z"/>
+                        </svg>
+                        <span>Okta</span>
                     </button>
                 </div>
-                <div class="error-message" id="passwordError">Password is required</div>
+
+                <div class="login-links">
+                    <a href="#" class="login-link" onclick="showAPIKey()">Use API Key</a>
+                    <a href="#" class="login-link">Forgot Password?</a>
+                </div>
+            </form>
+
+            <!-- MFA Section -->
+            <div class="mfa-section" id="mfaSection">
+                <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--gray-900); margin-bottom: 0.5rem;">Two-Factor Authentication</h2>
+                <p style="color: var(--gray-600); margin-bottom: 1.5rem;">Enter the 6-digit code from your authenticator app</p>
+
+                <div class="mfa-inputs">
+                    <input type="text" class="mfa-input" maxlength="1" id="mfa1" onkeyup="mfaKeyup(1, event)">
+                    <input type="text" class="mfa-input" maxlength="1" id="mfa2" onkeyup="mfaKeyup(2, event)">
+                    <input type="text" class="mfa-input" maxlength="1" id="mfa3" onkeyup="mfaKeyup(3, event)">
+                    <input type="text" class="mfa-input" maxlength="1" id="mfa4" onkeyup="mfaKeyup(4, event)">
+                    <input type="text" class="mfa-input" maxlength="1" id="mfa5" onkeyup="mfaKeyup(5, event)">
+                    <input type="text" class="mfa-input" maxlength="1" id="mfa6" onkeyup="mfaKeyup(6, event)">
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="verifyMFA()">
+                    <span>Verify Code</span>
+                </button>
+
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="#" class="login-link" onclick="backToLogin()">← Back to login</a>
+                </div>
             </div>
 
-            <button type="submit" class="login-button" id="loginButton">
-                <span id="buttonText">Sign In</span>
-                <div class="loading-spinner" id="loadingSpinner"></div>
-            </button>
-        </form>
-
-        <!-- MFA Section -->
-        <div id="mfaSection" class="mfa-section">
-            <h2 style="text-align: center; margin-bottom: 1rem;">Two-Factor Authentication</h2>
-            <p style="text-align: center; color: #64748B; margin-bottom: 1.5rem;">
-                Enter the 6-digit code from your authenticator app
-            </p>
-            
-            <div class="mfa-input-group">
-                <input type="text" maxlength="1" class="mfa-input" autofocus>
-                <input type="text" maxlength="1" class="mfa-input">
-                <input type="text" maxlength="1" class="mfa-input">
-                <input type="text" maxlength="1" class="mfa-input">
-                <input type="text" maxlength="1" class="mfa-input">
-                <input type="text" maxlength="1" class="mfa-input">
+            <!-- API Key Section -->
+            <div class="api-section" id="apiSection">
+                <div class="api-header">
+                    <h3 class="api-title">Sign in with API Key</h3>
+                    <a href="#" class="login-link" onclick="hideAPIKey()" style="font-size: 0.75rem;">Use email instead</a>
+                </div>
+                <div class="api-key">
+                    <input type="text" class="api-key-input" id="apiKeyInput" placeholder="Enter your API key">
+                    <button class="api-copy-btn" onclick="pasteAPIKey()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 9V4a2 2 0 012-2h7a2 2 0 012 2v7a2 2 0 01-2 2h-5"></path>
+                            <rect x="4" y="9" width="11" height="11" rx="2"></rect>
+                        </svg>
+                    </button>
+                </div>
             </div>
 
-            <button type="button" class="login-button" onclick="verifyMFA()">
-                Verify Code
-            </button>
-
-            <div style="text-align: center; margin-top: 1rem;">
-                <a href="#" style="color: #64748B; font-size: 0.875rem;">Use backup code instead</a>
+            <!-- Security Info -->
+            <div class="security-info">
+                <strong>Enterprise-Grade Security:</strong> 256-bit encryption • SOC 2 Type II • ISO 27001 • GDPR Compliant
             </div>
-        </div>
-
-        <div class="divider">
-            <span>or continue with</span>
-        </div>
-
-        <div class="sso-buttons">
-            <button class="sso-button" onclick="ssoLogin('google')">
-                <span class="sso-icon">🔷</span>
-                <span>Sign in with Google</span>
-            </button>
-            <button class="sso-button" onclick="ssoLogin('microsoft')">
-                <span class="sso-icon">🟦</span>
-                <span>Sign in with Microsoft</span>
-            </button>
-            <button class="sso-button" onclick="ssoLogin('okta')">
-                <span class="sso-icon">🔵</span>
-                <span>Sign in with Okta</span>
-            </button>
-        </div>
-
-        <div class="additional-options">
-            <a href="#forgot-password">Forgot password?</a>
-            <a href="#request-access">Request access</a>
-        </div>
-
-        <div class="security-notice">
-            🔒 Enterprise-grade security with SOC 2 Type II compliance. All sessions are encrypted and monitored.
         </div>
     </div>
 
     <script>
+        // Initialize UIP logos
+        document.addEventListener('DOMContentLoaded', function() {
+            UIPLogo.init();
+        });
+
         // Toggle password visibility
         function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const passwordIcon = document.getElementById('passwordIcon');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                passwordIcon.textContent = '👁️‍🗨️';
-            } else {
-                passwordInput.type = 'password';
-                passwordIcon.textContent = '👁️';
-            }
+            const input = document.getElementById('password');
+            const type = input.type === 'password' ? 'text' : 'password';
+            input.type = type;
         }
 
-        // Handle login form submission
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        // Form validation
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const loginButton = document.getElementById('loginButton');
-            const buttonText = document.getElementById('buttonText');
-            const loadingSpinner = document.getElementById('loadingSpinner');
+            const loginBtn = document.getElementById('loginBtn');
             
-            // Basic validation
-            if (!email || !password) {
-                if (!email) {
-                    document.getElementById('email').classList.add('error');
-                    document.getElementById('emailError').style.display = 'block';
-                }
-                if (!password) {
-                    document.getElementById('password').classList.add('error');
-                    document.getElementById('passwordError').style.display = 'block';
-                }
-                return;
+            // Reset errors
+            document.querySelectorAll('.form-error').forEach(error => {
+                error.classList.remove('active');
+            });
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.classList.remove('error');
+            });
+            
+            // Validate
+            let valid = true;
+            
+            if (!email || !isValidEmail(email)) {
+                document.getElementById('email').classList.add('error');
+                document.getElementById('emailError').classList.add('active');
+                valid = false;
             }
             
+            if (!password) {
+                document.getElementById('password').classList.add('error');
+                document.getElementById('passwordError').classList.add('active');
+                valid = false;
+            }
+            
+            if (!valid) return;
+            
             // Show loading state
-            loginButton.disabled = true;
-            buttonText.style.display = 'none';
-            loadingSpinner.style.display = 'block';
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span class="loading-spinner"></span><span>Signing in...</span>';
             
             // Simulate authentication
             setTimeout(() => {
                 // Show MFA section
-                document.querySelector('.login-form').style.display = 'none';
-                document.querySelector('.divider').style.display = 'none';
-                document.querySelector('.sso-buttons').style.display = 'none';
-                document.querySelector('.additional-options').style.display = 'none';
-                document.getElementById('mfaSection').style.display = 'block';
+                document.querySelector('.login-section').style.display = 'none';
+                document.getElementById('mfaSection').classList.add('active');
+                document.getElementById('mfa1').focus();
                 
-                // Focus first MFA input
-                document.querySelector('.mfa-input').focus();
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<span>Sign In</span>';
             }, 1500);
         });
 
-        // Handle MFA input
-        document.querySelectorAll('.mfa-input').forEach((input, index) => {
-            input.addEventListener('input', (e) => {
-                if (e.target.value.length === 1) {
-                    // Move to next input
-                    const nextInput = document.querySelectorAll('.mfa-input')[index + 1];
-                    if (nextInput) {
-                        nextInput.focus();
-                    }
-                }
-            });
-            
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Backspace' && !e.target.value) {
-                    // Move to previous input
-                    const prevInput = document.querySelectorAll('.mfa-input')[index - 1];
-                    if (prevInput) {
-                        prevInput.focus();
-                    }
-                }
-            });
-        });
-
-        // Clear errors on input
-        document.getElementById('email').addEventListener('input', (e) => {
-            e.target.classList.remove('error');
-            document.getElementById('emailError').style.display = 'none';
-        });
-        
-        document.getElementById('password').addEventListener('input', (e) => {
-            e.target.classList.remove('error');
-            document.getElementById('passwordError').style.display = 'none';
-        });
-
-        // Handle SSO login
-        function ssoLogin(provider) {
-            console.log(`Initiating SSO login with ${provider}`);
-            // Redirect to SSO provider
-            window.location.href = `/auth/sso/${provider}`;
+        // Email validation
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
 
-        // Verify MFA code
-        function verifyMFA() {
-            const mfaCode = Array.from(document.querySelectorAll('.mfa-input'))
-                .map(input => input.value)
-                .join('');
+        // MFA input handling
+        function mfaKeyup(index, event) {
+            const input = document.getElementById('mfa' + index);
+            const value = input.value;
             
-            if (mfaCode.length === 6) {
+            if (value && index < 6) {
+                document.getElementById('mfa' + (index + 1)).focus();
+            }
+            
+            if (event.key === 'Backspace' && !value && index > 1) {
+                document.getElementById('mfa' + (index - 1)).focus();
+            }
+        }
+
+        // Verify MFA
+        function verifyMFA() {
+            let code = '';
+            for (let i = 1; i <= 6; i++) {
+                code += document.getElementById('mfa' + i).value;
+            }
+            
+            if (code.length === 6) {
                 // Redirect to dashboard
                 window.location.href = '/platform/dashboard.html';
             }
         }
-    </script>
-    <script>
-        // Initialize UIP logos
-        document.addEventListener("DOMContentLoaded", function() {
-            UIPLogo.init();
+
+        // Back to login
+        function backToLogin() {
+            document.getElementById('mfaSection').classList.remove('active');
+            document.querySelector('.login-section').style.display = 'block';
+        }
+
+        // SSO login
+        function ssoLogin(provider) {
+            console.log('SSO login with:', provider);
+            // Implement SSO flow
+            window.location.href = `/auth/sso/${provider}`;
+        }
+
+        // API Key handling
+        function showAPIKey() {
+            document.getElementById('apiSection').classList.add('active');
+            document.getElementById('apiKeyInput').focus();
+        }
+
+        function hideAPIKey() {
+            document.getElementById('apiSection').classList.remove('active');
+        }
+
+        function pasteAPIKey() {
+            navigator.clipboard.readText().then(text => {
+                document.getElementById('apiKeyInput').value = text;
+            });
+        }
+
+        // Auto-paste MFA code if copied
+        document.addEventListener('paste', function(e) {
+            if (document.getElementById('mfaSection').classList.contains('active')) {
+                const paste = e.clipboardData.getData('text');
+                if (/^\d{6}$/.test(paste)) {
+                    e.preventDefault();
+                    for (let i = 0; i < 6; i++) {
+                        document.getElementById('mfa' + (i + 1)).value = paste[i];
+                    }
+                    verifyMFA();
+                }
+            }
         });
     </script>
 </body>

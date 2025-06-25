@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Platform - Integration Health</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00D4AA;
+            --primary-dark: #00B894;
+            --secondary: #0A1628;
+            --gray-50: #F8FAFB;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.5;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+
+        /* Health Overview Cards */
+        .health-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .health-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s ease;
+        }
+
+        .health-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .health-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .health-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .health-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .health-status.healthy {
+            background: var(--success);
+        }
+
+        .health-status.warning {
+            background: var(--warning);
+        }
+
+        .health-status.error {
+            background: var(--danger);
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .health-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .health-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+        }
+
+        .health-trend {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* Integration Cards */
+        .integrations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .integration-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .integration-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .integration-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .integration-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--gray-100);
+        }
+
+        .integration-info {
+            flex: 1;
+        }
+
+        .integration-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .integration-type {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .integration-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .integration-status.connected {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .integration-status.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .integration-status.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .integration-body {
+            padding: 1.5rem;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .metric-value {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .metric-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .metric-badge.good {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .metric-badge.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .metric-badge.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* Performance Chart */
+        .performance-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
+        }
+
+        .performance-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .performance-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .time-range {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .time-btn {
+            padding: 0.375rem 0.75rem;
+            border: 1px solid var(--gray-300);
+            background: white;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .time-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+
+        .time-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        /* Logs Section */
+        .logs-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .logs-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .logs-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .log-filters {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.375rem 0.75rem;
+            border: 1px solid var(--gray-300);
+            background: white;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .filter-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .log-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .log-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-100);
+            transition: background 0.2s ease;
+        }
+
+        .log-item:hover {
+            background: var(--gray-50);
+        }
+
+        .log-item:last-child {
+            border-bottom: none;
+        }
+
+        .log-time {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            white-space: nowrap;
+            font-family: monospace;
+        }
+
+        .log-level {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            width: 50px;
+        }
+
+        .log-level.info {
+            color: var(--info);
+        }
+
+        .log-level.warning {
+            color: var(--warning);
+        }
+
+        .log-level.error {
+            color: var(--danger);
+        }
+
+        .log-message {
+            flex: 1;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+
+        .log-source {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* Action Buttons */
+        .integration-actions {
+            padding: 1rem 1.5rem;
+            background: var(--gray-50);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--gray-300);
+            background: white;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            background: var(--gray-100);
+            border-color: var(--gray-400);
+        }
+
+        /* Loading State */
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .integrations-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .health-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .time-range,
+            .log-filters {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Integration Health</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="refreshAll()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                    </svg>
+                    Refresh All
+                </button>
+                <button class="btn btn-primary" onclick="addIntegration()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14m-7-7h14"/>
+                    </svg>
+                    Add Integration
+                </button>
+            </div>
+        </div>
+
+        <!-- Health Overview -->
+        <div class="health-grid">
+            <div class="health-card">
+                <div class="health-header">
+                    <h3 class="health-title">System Health</h3>
+                    <div class="health-status healthy"></div>
+                </div>
+                <div class="health-value">98.5%</div>
+                <div class="health-label">Overall Uptime</div>
+                <div class="health-trend">↑ 0.3% from last week</div>
+            </div>
+
+            <div class="health-card">
+                <div class="health-header">
+                    <h3 class="health-title">Active Integrations</h3>
+                    <div class="health-status healthy"></div>
+                </div>
+                <div class="health-value">24/26</div>
+                <div class="health-label">Connected</div>
+                <div class="health-trend">2 require attention</div>
+            </div>
+
+            <div class="health-card">
+                <div class="health-header">
+                    <h3 class="health-title">API Calls</h3>
+                    <div class="health-status healthy"></div>
+                </div>
+                <div class="health-value">2.4M</div>
+                <div class="health-label">Last 24 hours</div>
+                <div class="health-trend">Within normal range</div>
+            </div>
+
+            <div class="health-card">
+                <div class="health-header">
+                    <h3 class="health-title">Error Rate</h3>
+                    <div class="health-status warning"></div>
+                </div>
+                <div class="health-value">0.12%</div>
+                <div class="health-label">Last hour</div>
+                <div class="health-trend">↑ 0.08% increase</div>
+            </div>
+
+            <div class="health-card">
+                <div class="health-header">
+                    <h3 class="health-title">Response Time</h3>
+                    <div class="health-status healthy"></div>
+                </div>
+                <div class="health-value">124ms</div>
+                <div class="health-label">Average</div>
+                <div class="health-trend">↓ 12ms improvement</div>
+            </div>
+
+            <div class="health-card">
+                <div class="health-header">
+                    <h3 class="health-title">Data Sync</h3>
+                    <div class="health-status healthy"></div>
+                </div>
+                <div class="health-value">Real-time</div>
+                <div class="health-label">All carriers</div>
+                <div class="health-trend">No delays detected</div>
+            </div>
+        </div>
+
+        <!-- Integrations Grid -->
+        <div class="integrations-grid">
+            <!-- Maersk -->
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-logo" style="background: #42B4E6; color: white;">M</div>
+                    <div class="integration-info">
+                        <div class="integration-name">Maersk</div>
+                        <div class="integration-type">Ocean Carrier • API v2.3</div>
+                    </div>
+                    <div class="integration-status connected">
+                        <div style="width: 6px; height: 6px; background: currentColor; border-radius: 50%;"></div>
+                        Connected
+                    </div>
+                </div>
+                <div class="integration-body">
+                    <div class="metric-row">
+                        <span class="metric-label">Uptime (30d)</span>
+                        <span class="metric-badge good">99.98%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Response Time</span>
+                        <span class="metric-badge good">87ms</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Last Sync</span>
+                        <span class="metric-value">2 min ago</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Rate Limit</span>
+                        <span class="metric-value">8,412 / 10,000</span>
+                    </div>
+                </div>
+                <div class="integration-actions">
+                    <button class="action-btn" onclick="testConnection('maersk')">Test</button>
+                    <button class="action-btn" onclick="viewLogs('maersk')">Logs</button>
+                    <button class="action-btn" onclick="editIntegration('maersk')">Configure</button>
+                </div>
+            </div>
+
+            <!-- MSC -->
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-logo" style="background: #FFD700; color: #1B365D;">MSC</div>
+                    <div class="integration-info">
+                        <div class="integration-name">MSC</div>
+                        <div class="integration-type">Ocean Carrier • API v1.8</div>
+                    </div>
+                    <div class="integration-status warning">
+                        <div style="width: 6px; height: 6px; background: currentColor; border-radius: 50%;"></div>
+                        Degraded
+                    </div>
+                </div>
+                <div class="integration-body">
+                    <div class="metric-row">
+                        <span class="metric-label">Uptime (30d)</span>
+                        <span class="metric-badge warning">98.2%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Response Time</span>
+                        <span class="metric-badge warning">542ms</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Last Sync</span>
+                        <span class="metric-value">12 min ago</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Failed Requests</span>
+                        <span class="metric-badge warning">24</span>
+                    </div>
+                </div>
+                <div class="integration-actions">
+                    <button class="action-btn" onclick="testConnection('msc')">Test</button>
+                    <button class="action-btn" onclick="viewLogs('msc')">Logs</button>
+                    <button class="action-btn" onclick="editIntegration('msc')">Configure</button>
+                </div>
+            </div>
+
+            <!-- CMA CGM -->
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-logo" style="background: #E30613; color: white;">CMA</div>
+                    <div class="integration-info">
+                        <div class="integration-name">CMA CGM</div>
+                        <div class="integration-type">Ocean Carrier • API v3.0</div>
+                    </div>
+                    <div class="integration-status connected">
+                        <div style="width: 6px; height: 6px; background: currentColor; border-radius: 50%;"></div>
+                        Connected
+                    </div>
+                </div>
+                <div class="integration-body">
+                    <div class="metric-row">
+                        <span class="metric-label">Uptime (30d)</span>
+                        <span class="metric-badge good">99.95%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Response Time</span>
+                        <span class="metric-badge good">112ms</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Last Sync</span>
+                        <span class="metric-value">1 min ago</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Data Quality</span>
+                        <span class="metric-badge good">98%</span>
+                    </div>
+                </div>
+                <div class="integration-actions">
+                    <button class="action-btn" onclick="testConnection('cma')">Test</button>
+                    <button class="action-btn" onclick="viewLogs('cma')">Logs</button>
+                    <button class="action-btn" onclick="editIntegration('cma')">Configure</button>
+                </div>
+            </div>
+
+            <!-- Port of LA -->
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-logo" style="background: #003087; color: white;">LA</div>
+                    <div class="integration-info">
+                        <div class="integration-name">Port of Los Angeles</div>
+                        <div class="integration-type">Terminal • EDI</div>
+                    </div>
+                    <div class="integration-status error">
+                        <div style="width: 6px; height: 6px; background: currentColor; border-radius: 50%;"></div>
+                        Disconnected
+                    </div>
+                </div>
+                <div class="integration-body">
+                    <div class="metric-row">
+                        <span class="metric-label">Uptime (30d)</span>
+                        <span class="metric-badge error">94.1%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Last Connection</span>
+                        <span class="metric-badge error">2 hours ago</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Error</span>
+                        <span class="metric-value" style="color: var(--danger);">Auth Failed</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Retry In</span>
+                        <span class="metric-value">12 min</span>
+                    </div>
+                </div>
+                <div class="integration-actions">
+                    <button class="action-btn" onclick="reconnect('port-la')">Reconnect</button>
+                    <button class="action-btn" onclick="viewLogs('port-la')">Logs</button>
+                    <button class="action-btn" onclick="editIntegration('port-la')">Configure</button>
+                </div>
+            </div>
+
+            <!-- OpenAI -->
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-logo" style="background: #000; color: white;">AI</div>
+                    <div class="integration-info">
+                        <div class="integration-name">OpenAI</div>
+                        <div class="integration-type">AI Service • GPT-4</div>
+                    </div>
+                    <div class="integration-status connected">
+                        <div style="width: 6px; height: 6px; background: currentColor; border-radius: 50%;"></div>
+                        Connected
+                    </div>
+                </div>
+                <div class="integration-body">
+                    <div class="metric-row">
+                        <span class="metric-label">Requests Today</span>
+                        <span class="metric-value">1,247</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Avg Response</span>
+                        <span class="metric-badge good">1.2s</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Tokens Used</span>
+                        <span class="metric-value">487K / 1M</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Cost MTD</span>
+                        <span class="metric-value">$342.18</span>
+                    </div>
+                </div>
+                <div class="integration-actions">
+                    <button class="action-btn" onclick="testConnection('openai')">Test</button>
+                    <button class="action-btn" onclick="viewUsage('openai')">Usage</button>
+                    <button class="action-btn" onclick="editIntegration('openai')">Configure</button>
+                </div>
+            </div>
+
+            <!-- AWS S3 -->
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-logo" style="background: #FF9900; color: white;">S3</div>
+                    <div class="integration-info">
+                        <div class="integration-name">AWS S3</div>
+                        <div class="integration-type">Storage • Documents</div>
+                    </div>
+                    <div class="integration-status connected">
+                        <div style="width: 6px; height: 6px; background: currentColor; border-radius: 50%;"></div>
+                        Connected
+                    </div>
+                </div>
+                <div class="integration-body">
+                    <div class="metric-row">
+                        <span class="metric-label">Storage Used</span>
+                        <span class="metric-value">124.5 GB</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Documents</span>
+                        <span class="metric-value">48,291</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Bandwidth (30d)</span>
+                        <span class="metric-value">2.1 TB</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Cost MTD</span>
+                        <span class="metric-value">$127.42</span>
+                    </div>
+                </div>
+                <div class="integration-actions">
+                    <button class="action-btn" onclick="testConnection('aws-s3')">Test</button>
+                    <button class="action-btn" onclick="viewStorage('aws-s3')">Browse</button>
+                    <button class="action-btn" onclick="editIntegration('aws-s3')">Configure</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Chart -->
+        <div class="performance-section">
+            <div class="performance-header">
+                <h2 class="performance-title">API Performance</h2>
+                <div class="time-range">
+                    <button class="time-btn" onclick="updateTimeRange('1h')">1H</button>
+                    <button class="time-btn active" onclick="updateTimeRange('24h')">24H</button>
+                    <button class="time-btn" onclick="updateTimeRange('7d')">7D</button>
+                    <button class="time-btn" onclick="updateTimeRange('30d')">30D</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+
+        <!-- System Logs -->
+        <div class="logs-section">
+            <div class="logs-header">
+                <h2 class="logs-title">System Logs</h2>
+                <div class="log-filters">
+                    <button class="filter-btn active" onclick="filterLogs('all')">
+                        All
+                        <span style="background: var(--gray-300); color: var(--gray-700); padding: 0 0.25rem; border-radius: 10px; font-size: 0.625rem;">142</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterLogs('error')">
+                        Errors
+                        <span style="background: rgba(239, 68, 68, 0.2); color: var(--danger); padding: 0 0.25rem; border-radius: 10px; font-size: 0.625rem;">8</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterLogs('warning')">
+                        Warnings
+                        <span style="background: rgba(245, 158, 11, 0.2); color: var(--warning); padding: 0 0.25rem; border-radius: 10px; font-size: 0.625rem;">24</span>
+                    </button>
+                </div>
+            </div>
+            <div class="log-list" id="logList">
+                <div class="log-item">
+                    <span class="log-time">14:32:18</span>
+                    <span class="log-level error">ERROR</span>
+                    <span class="log-message">Authentication failed for Port of LA integration. Invalid credentials.</span>
+                    <span class="log-source">port-la</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-time">14:28:45</span>
+                    <span class="log-level warning">WARN</span>
+                    <span class="log-message">MSC API response time exceeded threshold (542ms > 500ms)</span>
+                    <span class="log-source">msc</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-time">14:25:12</span>
+                    <span class="log-level info">INFO</span>
+                    <span class="log-message">Successfully synchronized 847 container updates from Maersk</span>
+                    <span class="log-source">maersk</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-time">14:22:34</span>
+                    <span class="log-level info">INFO</span>
+                    <span class="log-message">OpenAI GPT-4 prediction completed for 12 at-risk containers</span>
+                    <span class="log-source">openai</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-time">14:18:56</span>
+                    <span class="log-level warning">WARN</span>
+                    <span class="log-message">Rate limit approaching for CMA CGM API (9,200/10,000 requests)</span>
+                    <span class="log-source">cma-cgm</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-time">14:15:23</span>
+                    <span class="log-level info">INFO</span>
+                    <span class="log-message">Document OCR processing completed. 24 bills of lading processed.</span>
+                    <span class="log-source">aws-s3</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-time">14:12:47</span>
+                    <span class="log-level error">ERROR</span>
+                    <span class="log-message">Failed to parse container status update. Invalid JSON format.</span>
+                    <span class="log-source">msc</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-time">14:09:15</span>
+                    <span class="log-level info">INFO</span>
+                    <span class="log-message">System backup completed successfully. 124.5GB backed up.</span>
+                    <span class="log-source">system</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize UIP logos
+        document.addEventListener('DOMContentLoaded', function() {
+            UIPLogo.init();
+            initializePerformanceChart();
+            startRealTimeUpdates();
+        });
+
+        // Initialize performance chart
+        function initializePerformanceChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            
+            // Generate time labels for last 24 hours
+            const labels = [];
+            for (let i = 23; i >= 0; i--) {
+                const hour = new Date();
+                hour.setHours(hour.getHours() - i);
+                labels.push(hour.getHours() + ':00');
+            }
+
+            window.performanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Response Time (ms)',
+                            data: generateRandomData(24, 80, 200),
+                            borderColor: '#00D4AA',
+                            backgroundColor: 'rgba(0, 212, 170, 0.1)',
+                            tension: 0.4,
+                            yAxisID: 'y-response'
+                        },
+                        {
+                            label: 'Error Rate (%)',
+                            data: generateRandomData(24, 0, 0.5),
+                            borderColor: '#EF4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            tension: 0.4,
+                            yAxisID: 'y-error'
+                        },
+                        {
+                            label: 'Requests',
+                            data: generateRandomData(24, 8000, 12000),
+                            borderColor: '#3B82F6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4,
+                            yAxisID: 'y-requests',
+                            hidden: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        if (label.includes('Error')) {
+                                            label += context.parsed.y.toFixed(2) + '%';
+                                        } else if (label.includes('Response')) {
+                                            label += Math.round(context.parsed.y) + 'ms';
+                                        } else {
+                                            label += context.parsed.y.toLocaleString();
+                                        }
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        'y-response': {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Response Time (ms)'
+                            }
+                        },
+                        'y-error': {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Error Rate (%)'
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        },
+                        'y-requests': {
+                            type: 'linear',
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Generate random data for charts
+        function generateRandomData(count, min, max) {
+            const data = [];
+            for (let i = 0; i < count; i++) {
+                data.push(Math.random() * (max - min) + min);
+            }
+            return data;
+        }
+
+        // Real-time updates
+        function startRealTimeUpdates() {
+            // Update health metrics every 30 seconds
+            setInterval(() => {
+                updateHealthMetrics();
+            }, 30000);
+
+            // Add new log entries every 15 seconds
+            setInterval(() => {
+                addNewLogEntry();
+            }, 15000);
+
+            // Update integration statuses every minute
+            setInterval(() => {
+                updateIntegrationStatuses();
+            }, 60000);
+        }
+
+        function updateHealthMetrics() {
+            // Simulate metric updates
+            const metrics = document.querySelectorAll('.health-value');
+            metrics.forEach(metric => {
+                if (metric.textContent.includes('%')) {
+                    const current = parseFloat(metric.textContent);
+                    const change = (Math.random() - 0.5) * 0.5;
+                    metric.textContent = (current + change).toFixed(1) + '%';
+                }
+            });
+        }
+
+        function addNewLogEntry() {
+            const logTypes = [
+                { level: 'info', messages: [
+                    'Container status update received from {source}',
+                    'Successfully synchronized {count} records from {source}',
+                    'API health check passed for {source}',
+                    'Document processing completed for {source}'
+                ]},
+                { level: 'warning', messages: [
+                    'High response time detected for {source} API',
+                    'Rate limit approaching for {source}',
+                    'Connection timeout warning for {source}'
+                ]},
+                { level: 'error', messages: [
+                    'Failed to connect to {source}',
+                    'Invalid response format from {source}',
+                    'Authentication error for {source}'
+                ]}
+            ];
+
+            const sources = ['maersk', 'msc', 'cma-cgm', 'port-la', 'openai', 'aws-s3'];
+            const logType = logTypes[Math.floor(Math.random() * logTypes.length)];
+            const message = logType.messages[Math.floor(Math.random() * logType.messages.length)];
+            const source = sources[Math.floor(Math.random() * sources.length)];
+
+            const logList = document.getElementById('logList');
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0];
+
+            const logItem = document.createElement('div');
+            logItem.className = 'log-item';
+            logItem.style.background = 'rgba(0, 212, 170, 0.1)';
+            logItem.innerHTML = `
+                <span class="log-time">${timeStr}</span>
+                <span class="log-level ${logType.level}">${logType.level.toUpperCase()}</span>
+                <span class="log-message">${message.replace('{source}', source.toUpperCase()).replace('{count}', Math.floor(Math.random() * 1000))}</span>
+                <span class="log-source">${source}</span>
+            `;
+
+            logList.insertBefore(logItem, logList.firstChild);
+
+            // Remove animation after 2 seconds
+            setTimeout(() => {
+                logItem.style.background = '';
+            }, 2000);
+
+            // Keep only last 20 entries
+            while (logList.children.length > 20) {
+                logList.removeChild(logList.lastChild);
+            }
+        }
+
+        function updateIntegrationStatuses() {
+            // Randomly update an integration's metrics
+            const cards = document.querySelectorAll('.integration-card');
+            const randomCard = cards[Math.floor(Math.random() * cards.length)];
+            const metrics = randomCard.querySelectorAll('.metric-value');
+            
+            metrics.forEach(metric => {
+                if (metric.textContent.includes('min ago')) {
+                    metric.textContent = '1 min ago';
+                }
+            });
+        }
+
+        // Action handlers
+        function refreshAll() {
+            console.log('Refreshing all integrations...');
+            // Show loading state on all cards
+            document.querySelectorAll('.integration-status').forEach(status => {
+                status.innerHTML = '<span class="loading-spinner"></span> Refreshing...';
+            });
+
+            // Restore after 2 seconds
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        }
+
+        function addIntegration() {
+            console.log('Opening add integration modal...');
+            alert('Add Integration modal would open here');
+        }
+
+        function testConnection(integration) {
+            console.log('Testing connection for:', integration);
+            alert(`Testing connection for ${integration}...`);
+        }
+
+        function viewLogs(integration) {
+            console.log('Viewing logs for:', integration);
+            // Filter logs by integration
+            document.querySelectorAll('.log-item').forEach(log => {
+                const source = log.querySelector('.log-source').textContent;
+                log.style.display = source === integration ? 'flex' : 'none';
+            });
+        }
+
+        function editIntegration(integration) {
+            console.log('Editing integration:', integration);
+            alert(`Edit configuration for ${integration}`);
+        }
+
+        function reconnect(integration) {
+            console.log('Reconnecting:', integration);
+            alert(`Attempting to reconnect ${integration}...`);
+        }
+
+        function viewUsage(integration) {
+            console.log('Viewing usage for:', integration);
+            alert(`Usage details for ${integration}`);
+        }
+
+        function viewStorage(integration) {
+            console.log('Viewing storage for:', integration);
+            alert(`Browse storage for ${integration}`);
+        }
+
+        // Time range update
+        function updateTimeRange(range) {
+            document.querySelectorAll('.time-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            console.log('Updating chart to range:', range);
+            // Update chart data based on range
+        }
+
+        // Log filtering
+        function filterLogs(type) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            const logItems = document.querySelectorAll('.log-item');
+            logItems.forEach(item => {
+                const level = item.querySelector('.log-level').textContent.toLowerCase();
+                if (type === 'all' || level === type) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

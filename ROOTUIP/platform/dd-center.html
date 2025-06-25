@@ -1190,6 +1190,11 @@
     </div>
 
     <script>
+        // Initialize UIP logos
+        document.addEventListener('DOMContentLoaded', function() {
+            UIPLogo.init();
+        });
+
         // Tab switching
         function switchTab(tab) {
             document.querySelectorAll('.workflow-tab').forEach(t => t.classList.remove('active'));
@@ -1266,12 +1271,6 @@
                 closeAI();
                 document.getElementById('fabMenu').classList.remove('active');
             }
-        });
-    </script>
-    <script>
-        // Initialize UIP logos
-        document.addEventListener("DOMContentLoaded", function() {
-            UIPLogo.init();
         });
     </script>
 </body>
