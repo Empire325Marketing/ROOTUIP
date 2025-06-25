@@ -1,0 +1,74 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.1"/>
+      <feComposite in2="offsetblur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Dashboard Background -->
+  <rect width="1200" height="600" fill="#F8FAFB"/>
+  
+  <!-- Header -->
+  <rect width="1200" height="60" fill="#0A1628"/>
+  <text x="30" y="38" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="white">UIP Dashboard</text>
+  <rect x="1050" y="15" width="120" height="30" rx="4" fill="#00D4AA"/>
+  <text x="1110" y="35" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="white" text-anchor="middle">Export Report</text>
+  
+  <!-- Sidebar -->
+  <rect width="240" y="60" height="540" fill="#162844"/>
+  
+  <!-- Main Content Area -->
+  <g transform="translate(260, 80)">
+    <!-- KPI Cards -->
+    <g>
+      <!-- Card 1 -->
+      <rect x="0" y="0" width="220" height="120" rx="8" fill="white" stroke="#E2E8F0" stroke-width="1" filter="url(#shadow)"/>
+      <text x="20" y="30" font-family="Inter, sans-serif" font-size="14" fill="#5E6B7C">Active Vessels</text>
+      <text x="20" y="65" font-family="IBM Plex Mono, monospace" font-size="36" font-weight="700" fill="#0A1628">127</text>
+      <text x="20" y="95" font-family="Inter, sans-serif" font-size="12" fill="#00D4AA">+12% from last month</text>
+      
+      <!-- Card 2 -->
+      <rect x="240" y="0" width="220" height="120" rx="8" fill="white" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="260" y="30" font-family="Inter, sans-serif" font-size="14" fill="#5E6B7C">D&D Prevented</text>
+      <text x="260" y="65" font-family="IBM Plex Mono, monospace" font-size="36" font-weight="700" fill="#00D4AA">$14.2M</text>
+      <text x="260" y="95" font-family="Inter, sans-serif" font-size="12" fill="#00D4AA">94% reduction rate</text>
+      
+      <!-- Card 3 -->
+      <rect x="480" y="0" width="220" height="120" rx="8" fill="white" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="500" y="30" font-family="Inter, sans-serif" font-size="14" fill="#5E6B7C">Disputes Won</text>
+      <text x="500" y="65" font-family="IBM Plex Mono, monospace" font-size="36" font-weight="700" fill="#0066FF">94%</text>
+      <text x="500" y="95" font-family="Inter, sans-serif" font-size="12" fill="#0066FF">vs 67% industry avg</text>
+      
+      <!-- Card 4 -->
+      <rect x="720" y="0" width="200" height="120" rx="8" fill="white" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="740" y="30" font-family="Inter, sans-serif" font-size="14" fill="#5E6B7C">Processing Time</text>
+      <text x="740" y="65" font-family="IBM Plex Mono, monospace" font-size="36" font-weight="700" fill="#0A1628">2.1s</text>
+      <text x="740" y="95" font-family="Inter, sans-serif" font-size="12" fill="#718096">Avg per container</text>
+    </g>
+    
+    <!-- Chart Area -->
+    <g transform="translate(0, 140)">
+      <rect x="0" y="0" width="920" height="300" rx="8" fill="white" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="20" y="30" font-family="Inter, sans-serif" font-size="16" font-weight="600" fill="#0A1628">D&D Risk Analysis - Next 14 Days</text>
+      
+      <!-- Chart lines -->
+      <line x1="60" y1="250" x2="860" y2="250" stroke="#E2E8F0" stroke-width="1"/>
+      <line x1="60" y1="60" x2="60" y2="250" stroke="#E2E8F0" stroke-width="1"/>
+      
+      <!-- Risk visualization bars -->
+      <rect x="100" y="180" width="40" height="70" fill="#00D4AA" opacity="0.8"/>
+      <rect x="160" y="150" width="40" height="100" fill="#00D4AA" opacity="0.8"/>
+      <rect x="220" y="120" width="40" height="130" fill="#0066FF" opacity="0.8"/>
+      <rect x="280" y="100" width="40" height="150" fill="#FF6B35" opacity="0.8"/>
+      <rect x="340" y="140" width="40" height="110" fill="#0066FF" opacity="0.8"/>
+      <rect x="400" y="160" width="40" height="90" fill="#00D4AA" opacity="0.8"/>
+      <rect x="460" y="170" width="40" height="80" fill="#00D4AA" opacity="0.8"/>
+    </g>
+  </g>
+</svg>
