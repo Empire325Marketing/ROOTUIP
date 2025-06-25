@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Platform - Complete Sitemap & Component Index</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0A1628;
+            color: white;
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #0A1628 0%, #1E293B 100%);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #94A3B8;
+            font-size: 1.125rem;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            color: #00D4AA;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .component-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+
+        .component-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 212, 170, 0.2);
+            border-color: #00D4AA;
+        }
+
+        .component-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .component-description {
+            font-size: 0.875rem;
+            color: #94A3B8;
+            margin-bottom: 1rem;
+        }
+
+        .component-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(0, 212, 170, 0.2);
+            color: #00D4AA;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-live {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10B981;
+        }
+
+        .status-beta {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3B82F6;
+        }
+
+        .status-dev {
+            background: rgba(245, 158, 11, 0.2);
+            color: #F59E0B;
+        }
+
+        .quick-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .quick-link {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .quick-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 212, 170, 0.4);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00D4AA;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #94A3B8;
+        }
+
+        @media (max-width: 768px) {
+            .component-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>UIP Complete Platform Index</h1>
+            <p class="subtitle">All Components, Tools, and Resources</p>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-value">58+</span>
+                    <span class="stat-label">Total Files</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">8</span>
+                    <span class="stat-label">Major Modules</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">15+</span>
+                    <span class="stat-label">Interactive Tools</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">100%</span>
+                    <span class="stat-label">Mobile Ready</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase 1: Brand & Website -->
+        <div class="section">
+            <h2 class="section-title">🎨 Phase 1: Brand Identity & Website</h2>
+            <div class="component-grid">
+                <a href="/" class="component-card">
+                    <h3 class="component-title">Main Website</h3>
+                    <p class="component-description">Responsive homepage with hero, features, testimonials</p>
+                    <span class="component-tag">Live</span>
+                    <span class="component-tag">Responsive</span>
+                </a>
+                
+                <a href="/brand/logo.svg" class="component-card">
+                    <h3 class="component-title">Brand Assets</h3>
+                    <p class="component-description">Logo, colors, typography, and brand guidelines</p>
+                    <span class="component-tag">SVG</span>
+                    <span class="component-tag">Guidelines</span>
+                </a>
+                
+                <a href="/docs/wireframes.html" class="component-card">
+                    <h3 class="component-title">Documentation</h3>
+                    <p class="component-description">Wireframes, user journeys, content strategy</p>
+                    <span class="component-tag">Strategy</span>
+                    <span class="component-tag">UX</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Phase 2: Sales Tools -->
+        <div class="section">
+            <h2 class="section-title">💼 Phase 2: Sales & Marketing Tools</h2>
+            <div class="component-grid">
+                <a href="/roi-calculator.html" class="component-card">
+                    <h3 class="component-title">ROI Calculator</h3>
+                    <p class="component-description">Interactive tool to calculate D&D savings potential</p>
+                    <span class="component-tag">Interactive</span>
+                    <span class="component-tag">Lead Gen</span>
+                </a>
+                
+                <a href="/interactive-demo.html" class="component-card">
+                    <h3 class="component-title">Interactive Demo</h3>
+                    <p class="component-description">Live platform demonstration with sample data</p>
+                    <span class="component-tag">Demo</span>
+                    <span class="component-tag">Interactive</span>
+                </a>
+                
+                <a href="/presentation-deck.html" class="component-card">
+                    <h3 class="component-title">Presentation Deck</h3>
+                    <p class="component-description">Full-featured sales presentation system</p>
+                    <span class="component-tag">Slides</span>
+                    <span class="component-tag">Export</span>
+                </a>
+                
+                <a href="/sales-toolkit.html" class="component-card">
+                    <h3 class="component-title">Sales Toolkit Hub</h3>
+                    <p class="component-description">Central hub for all sales resources</p>
+                    <span class="component-tag">Resources</span>
+                    <span class="component-tag">Templates</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Phase 3: Sales Enablement -->
+        <div class="section">
+            <h2 class="section-title">📋 Phase 3: Sales Enablement Materials</h2>
+            <div class="component-grid">
+                <a href="/sales-toolkit/case-study-template.html" class="component-card">
+                    <h3 class="component-title">Case Study Template</h3>
+                    <p class="component-description">Customer success story format</p>
+                    <span class="component-tag">Template</span>
+                </a>
+                
+                <a href="/sales-toolkit/competitive-battle-cards.html" class="component-card">
+                    <h3 class="component-title">Battle Cards</h3>
+                    <p class="component-description">Competitive comparison tools</p>
+                    <span class="component-tag">Competition</span>
+                </a>
+                
+                <a href="/sales-toolkit/discovery-questions.html" class="component-card">
+                    <h3 class="component-title">Discovery Questions</h3>
+                    <p class="component-description">Sales qualification framework</p>
+                    <span class="component-tag">Sales Process</span>
+                </a>
+                
+                <a href="/sales-toolkit/pricing-proposal-template.html" class="component-card">
+                    <h3 class="component-title">Pricing Proposals</h3>
+                    <p class="component-description">Customizable pricing templates</p>
+                    <span class="component-tag">Pricing</span>
+                </a>
+                
+                <a href="/sales-toolkit/implementation-timeline.html" class="component-card">
+                    <h3 class="component-title">Implementation Timeline</h3>
+                    <p class="component-description">14-day deployment roadmap</p>
+                    <span class="component-tag">Onboarding</span>
+                </a>
+                
+                <a href="/sales-toolkit/technical-specifications.html" class="component-card">
+                    <h3 class="component-title">Technical Specs</h3>
+                    <p class="component-description">Platform requirements and architecture</p>
+                    <span class="component-tag">Technical</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Phase 4: Investor Relations -->
+        <div class="section">
+            <h2 class="section-title">💰 Phase 4: Investor Relations Package</h2>
+            <div class="component-grid">
+                <a href="/investor-relations/" class="component-card">
+                    <h3 class="component-title">IR Hub</h3>
+                    <p class="component-description">Central investor relations portal</p>
+                    <span class="component-tag">Series A</span>
+                    <span class="component-tag">$15-20M</span>
+                </a>
+                
+                <a href="/investor-relations/executive-summary.html" class="component-card">
+                    <h3 class="component-title">Executive Summary</h3>
+                    <p class="component-description">Investment thesis and key metrics</p>
+                    <span class="component-tag">Overview</span>
+                </a>
+                
+                <a href="/investor-relations/financial-model.html" class="component-card">
+                    <h3 class="component-title">Financial Model</h3>
+                    <p class="component-description">10-year projections with scenarios</p>
+                    <span class="component-tag">Interactive</span>
+                    <span class="component-tag">Charts</span>
+                </a>
+                
+                <a href="/investor-relations/unit-economics.html" class="component-card">
+                    <h3 class="component-title">Unit Economics</h3>
+                    <p class="component-description">CAC, LTV, cohort analysis</p>
+                    <span class="component-tag">Metrics</span>
+                </a>
+                
+                <a href="/investor-relations/market-analysis.html" class="component-card">
+                    <h3 class="component-title">Market Analysis</h3>
+                    <p class="component-description">TAM, SAM, SOM calculations</p>
+                    <span class="component-tag">Market Size</span>
+                </a>
+                
+                <a href="/investor-relations/competitive-analysis.html" class="component-card">
+                    <h3 class="component-title">Competitive Analysis</h3>
+                    <p class="component-description">Positioning matrix and moats</p>
+                    <span class="component-tag">Competition</span>
+                </a>
+                
+                <a href="/investor-relations/product-roadmap.html" class="component-card">
+                    <h3 class="component-title">Product Roadmap</h3>
+                    <p class="component-description">2024-2027 vision and GTM</p>
+                    <span class="component-tag">Strategy</span>
+                </a>
+                
+                <a href="/investor-relations/management-team.html" class="component-card">
+                    <h3 class="component-title">Team & Advisors</h3>
+                    <p class="component-description">Leadership profiles and org structure</p>
+                    <span class="component-tag">Team</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Phase 5: Platform -->
+        <div class="section">
+            <h2 class="section-title">🚀 Phase 5: Enterprise Platform</h2>
+            <div class="component-grid">
+                <a href="/platform/auth/login.html" class="component-card">
+                    <h3 class="component-title">Authentication</h3>
+                    <p class="component-description">MFA login with SSO support</p>
+                    <span class="component-tag">Security</span>
+                    <span class="component-tag">SSO</span>
+                </a>
+                
+                <a href="/platform/dashboard.html" class="component-card">
+                    <h3 class="component-title">Executive Dashboard</h3>
+                    <p class="component-description">Real-time KPIs and analytics</p>
+                    <span class="component-tag">Dashboard</span>
+                    <span class="component-tag">Real-time</span>
+                </a>
+                
+                <a href="/platform/containers.html" class="component-card">
+                    <h3 class="component-title">Container Tracking</h3>
+                    <p class="component-description">Live container status and management</p>
+                    <span class="component-tag">Tracking</span>
+                    <span class="component-tag">Search</span>
+                </a>
+                
+                <a href="/platform/dd-center.html" class="component-card">
+                    <h3 class="component-title">D&D Command Center</h3>
+                    <p class="component-description">Prevention workflows and automation</p>
+                    <span class="component-tag">Automation</span>
+                    <span class="component-tag">AI</span>
+                </a>
+                
+                <a href="/platform/auth/rbac-config.js" class="component-card">
+                    <h3 class="component-title">RBAC System</h3>
+                    <p class="component-description">Role-based access control config</p>
+                    <span class="component-tag">Security</span>
+                    <span class="component-tag">Config</span>
+                </a>
+                
+                <a href="/platform/api/api-config.js" class="component-card">
+                    <h3 class="component-title">API Configuration</h3>
+                    <p class="component-description">REST endpoints and webhooks</p>
+                    <span class="component-tag">API</span>
+                    <span class="component-tag">WebSocket</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Access -->
+        <div class="section" style="text-align: center;">
+            <h2 class="section-title" style="justify-content: center;">⚡ Quick Access Links</h2>
+            <div class="quick-links">
+                <a href="/" class="quick-link">Main Website</a>
+                <a href="/platform/auth/login.html" class="quick-link">Platform Login</a>
+                <a href="/roi-calculator.html" class="quick-link">ROI Calculator</a>
+                <a href="/investor-relations/" class="quick-link">Investor Relations</a>
+                <a href="/sales-toolkit.html" class="quick-link">Sales Toolkit</a>
+                <a href="/interactive-demo.html" class="quick-link">Live Demo</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; margin-top: 3rem; padding: 2rem; color: #64748B;">
+            <p>UIP Platform - Complete as of June 2024</p>
+            <p>All components are production-ready and mobile-responsive</p>
+        </div>
+    </div>
+</body>
+</html>
