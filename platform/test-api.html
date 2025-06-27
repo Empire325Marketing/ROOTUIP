@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+        .success { background: #d4edda; }
+        .error { background: #f8d7da; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        pre { white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>ROOTUIP API Test</h1>
+    
+    <div class="test">
+        <h3>Test Health Endpoint</h3>
+        <button onclick="testHealth()">Test GET /api/health</button>
+        <pre id="health-result"></pre>
+    </div>
+    
+    <div class="test">
+        <h3>Test Metrics Endpoint</h3>
+        <button onclick="testMetrics()">Test GET /api/metrics</button>
+        <pre id="metrics-result"></pre>
+    </div>
+    
+    <div class="test">
+        <h3>Test ROI Calculator</h3>
+        <button onclick="testROI()">Test POST /api/roi-calculator/submit</button>
+        <pre id="roi-result"></pre>
+    </div>
+
+    <script>
+        async function testHealth() {
+            try {
+                const response = await fetch("/api/health");
+                const data = await response.json();
+                document.getElementById("health-result").textContent = 
+                    "Status: " + response.status + "\n" + JSON.stringify(data, null, 2);
+                document.getElementById("health-result").parentElement.classList.add("success");
+            } catch (error) {
+                document.getElementById("health-result").textContent = "Error: " + error;
+                document.getElementById("health-result").parentElement.classList.add("error");
+            }
+        }
+        
+        async function testMetrics() {
+            try {
+                const response = await fetch("/api/metrics");
+                const data = await response.json();
+                document.getElementById("metrics-result").textContent = 
+                    "Status: " + response.status + "\n" + JSON.stringify(data, null, 2);
+                document.getElementById("metrics-result").parentElement.classList.add("success");
+            } catch (error) {
+                document.getElementById("metrics-result").textContent = "Error: " + error;
+                document.getElementById("metrics-result").parentElement.classList.add("error");
+            }
+        }
+        
+        async function testROI() {
+            try {
+                const response = await fetch("/api/roi-calculator/submit", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: "test@example.com",
+                        company: "Test Company",
+                        vesselCount: 10,
+                        savings: 1000000
+                    })
+                });
+                const data = await response.json();
+                document.getElementById("roi-result").textContent = 
+                    "Status: " + response.status + "\n" + JSON.stringify(data, null, 2);
+                document.getElementById("roi-result").parentElement.classList.add("success");
+            } catch (error) {
+                document.getElementById("roi-result").textContent = "Error: " + error;
+                document.getElementById("roi-result").parentElement.classList.add("error");
+            }
+        }
+    </script>
+</body>
+</html>

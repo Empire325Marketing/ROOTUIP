@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demo Login - ROOTUIP</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0;
+            background: #f0f0f0;
+        }
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        button {
+            background: #00D4AA;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background: #00B894;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>ROOTUIP Demo Access</h2>
+        <p>Click below to access the platform demos:</p>
+        
+        <button onclick="loginAsAdmin()">Login as Admin</button>
+        <button onclick="loginAsUser()">Login as Customer</button>
+        
+        <script>
+            function loginAsAdmin() {
+                const user = {
+                    name: "John Admin",
+                    email: "admin@rootuip.com",
+                    company: "ROOTUIP Corp",
+                    companyId: "ROOTUIP001",
+                    role: "admin"
+                };
+                localStorage.setItem("user", JSON.stringify(user));
+                localStorage.setItem("isAuthenticated", "true");
+                window.location.href = "/platform/dashboard.html";
+            }
+            
+            function loginAsUser() {
+                const user = {
+                    name: "Sarah Johnson",
+                    email: "sarah@acmecorp.com",
+                    company: "Acme Corporation",
+                    companyId: "ACME001",
+                    role: "user"
+                };
+                localStorage.setItem("user", JSON.stringify(user));
+                localStorage.setItem("isAuthenticated", "true");
+                window.location.href = "/platform/customer/dashboard.html";
+            }
+        </script>
+    </div>
+</body>
+</html>
