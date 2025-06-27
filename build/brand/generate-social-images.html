@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Social Media Image Generator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1e40af;
+            margin-bottom: 30px;
+        }
+        .image-grid {
+            display: grid;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        .image-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .image-item canvas {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .image-info {
+            padding: 15px;
+            background: #f8fafc;
+        }
+        .download-btn {
+            background: #1e40af;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .download-btn:hover {
+            background: #1e3a8a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>UIP Social Media Image Generator</h1>
+        <p>Generate optimized images for social media platforms and meta tags.</p>
+        
+        <div class="image-grid" id="imageGrid">
+            <!-- Images will be inserted here -->
+        </div>
+    </div>
+    
+    <script>
+        const images = [
+            {
+                name: 'og-image.png',
+                width: 1200,
+                height: 630,
+                description: 'Open Graph (Facebook, LinkedIn)',
+                draw: function(ctx, w, h) {
+                    // Background gradient
+                    const gradient = ctx.createLinearGradient(0, 0, w, h);
+                    gradient.addColorStop(0, '#1e40af');
+                    gradient.addColorStop(1, '#1e3a8a');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, w, h);
+                    
+                    // Pattern overlay
+                    ctx.globalAlpha = 0.1;
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 1;
+                    for (let i = 0; i < w; i += 40) {
+                        ctx.beginPath();
+                        ctx.moveTo(i, 0);
+                        ctx.lineTo(i + h, h);
+                        ctx.stroke();
+                    }
+                    ctx.globalAlpha = 1;
+                    
+                    // Logo
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 80px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('UIP', w/2, 200);
+                    
+                    // Tagline
+                    ctx.font = '600 36px Inter';
+                    ctx.fillText('Unified Intelligence Platform', w/2, 280);
+                    
+                    // Value prop
+                    ctx.font = '400 28px Inter';
+                    ctx.fillText('Stop Losing $14M Per Vessel to', w/2, 380);
+                    ctx.fillText('Ocean Freight Inefficiencies', w/2, 420);
+                    
+                    // Stats
+                    ctx.fillStyle = '#10b981';
+                    ctx.font = 'bold 48px Inter';
+                    ctx.fillText('67% Cost Reduction • 91% Automation', w/2, 520);
+                    
+                    // URL
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = '400 20px Inter';
+                    ctx.globalAlpha = 0.8;
+                    ctx.fillText('unified-intelligence.com', w/2, 580);
+                }
+            },
+            {
+                name: 'twitter-card.png',
+                width: 1200,
+                height: 675,
+                description: 'Twitter Card (X)',
+                draw: function(ctx, w, h) {
+                    // Similar design with adjusted dimensions
+                    const gradient = ctx.createLinearGradient(0, 0, w, h);
+                    gradient.addColorStop(0, '#1e40af');
+                    gradient.addColorStop(1, '#1e3a8a');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, w, h);
+                    
+                    // Content
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 90px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('UIP', w/2, 220);
+                    
+                    ctx.font = '600 40px Inter';
+                    ctx.fillText('Unified Intelligence Platform', w/2, 310);
+                    
+                    ctx.font = '400 32px Inter';
+                    ctx.fillText('Enterprise Ocean Freight Automation', w/2, 420);
+                    
+                    ctx.fillStyle = '#10b981';
+                    ctx.font = 'bold 56px Inter';
+                    ctx.fillText('Save $14M Per Vessel', w/2, 540);
+                }
+            },
+            {
+                name: 'linkedin-banner.png',
+                width: 1128,
+                height: 191,
+                description: 'LinkedIn Company Banner',
+                draw: function(ctx, w, h) {
+                    // Horizontal banner design
+                    const gradient = ctx.createLinearGradient(0, 0, w, 0);
+                    gradient.addColorStop(0, '#1e40af');
+                    gradient.addColorStop(0.5, '#1e3a8a');
+                    gradient.addColorStop(1, '#1e40af');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, w, h);
+                    
+                    // Left: Logo
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 72px Inter';
+                    ctx.textAlign = 'left';
+                    ctx.fillText('UIP', 60, 120);
+                    
+                    // Center: Tagline
+                    ctx.font = '600 32px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Stop Losing $14M Per Vessel to Ocean Freight Inefficiencies', w/2, 100);
+                    
+                    // Right: CTA
+                    ctx.fillStyle = '#10b981';
+                    ctx.font = 'bold 28px Inter';
+                    ctx.textAlign = 'right';
+                    ctx.fillText('67% Cost Reduction', w - 60, 100);
+                }
+            },
+            {
+                name: 'social-square.png',
+                width: 1080,
+                height: 1080,
+                description: 'Instagram/Facebook Square',
+                draw: function(ctx, w, h) {
+                    // Square design
+                    const gradient = ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, w/2);
+                    gradient.addColorStop(0, '#3b82f6');
+                    gradient.addColorStop(1, '#1e40af');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, w, h);
+                    
+                    // Logo
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 160px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('UIP', w/2, 380);
+                    
+                    ctx.font = '600 48px Inter';
+                    ctx.fillText('Unified Intelligence Platform', w/2, 480);
+                    
+                    // Stats in corners
+                    ctx.font = 'bold 72px Inter';
+                    ctx.fillStyle = '#10b981';
+                    ctx.fillText('67%', w/2, 650);
+                    ctx.font = '400 36px Inter';
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillText('Cost Reduction', w/2, 700);
+                    
+                    ctx.font = 'bold 72px Inter';
+                    ctx.fillStyle = '#10b981';
+                    ctx.fillText('91%', w/2, 820);
+                    ctx.font = '400 36px Inter';
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillText('Automation Rate', w/2, 870);
+                }
+            }
+        ];
+        
+        function generateImages() {
+            const grid = document.getElementById('imageGrid');
+            grid.innerHTML = '';
+            
+            images.forEach((imgConfig, index) => {
+                const canvas = document.createElement('canvas');
+                canvas.width = imgConfig.width;
+                canvas.height = imgConfig.height;
+                const ctx = canvas.getContext('2d');
+                
+                // Draw the image
+                imgConfig.draw(ctx, imgConfig.width, imgConfig.height);
+                
+                // Create container
+                const item = document.createElement('div');
+                item.className = 'image-item';
+                
+                // Add canvas
+                item.appendChild(canvas);
+                
+                // Add info
+                const info = document.createElement('div');
+                info.className = 'image-info';
+                info.innerHTML = `
+                    <h3>${imgConfig.name}</h3>
+                    <p>${imgConfig.description} (${imgConfig.width}×${imgConfig.height})</p>
+                    <button class="download-btn" onclick="downloadImage('${imgConfig.name}', ${index})">
+                        Download ${imgConfig.name}
+                    </button>
+                `;
+                item.appendChild(info);
+                
+                grid.appendChild(item);
+            });
+        }
+        
+        function downloadImage(filename, index) {
+            const canvas = document.querySelectorAll('canvas')[index];
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+            }, 'image/png');
+        }
+        
+        // Generate on load
+        window.onload = () => generateImages();
+    </script>
+</body>
+</html>

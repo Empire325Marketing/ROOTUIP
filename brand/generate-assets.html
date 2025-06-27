@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate UIP Brand Assets</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            padding: 40px;
+            background: #f8fafc;
+        }
+        .canvas-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .asset-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #e2e8f0;
+            margin: 10px 0;
+        }
+        button {
+            background: #1e40af;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1e3a8a;
+        }
+    </style>
+</head>
+<body>
+    <h1>UIP Brand Asset Generator</h1>
+    <p>Generate PNG versions of the logo for various uses</p>
+    
+    <div class="canvas-container">
+        <!-- Favicon 32x32 -->
+        <div class="asset-box">
+            <h3>Favicon 32x32</h3>
+            <canvas id="favicon32" width="32" height="32"></canvas>
+            <br>
+            <button onclick="downloadCanvas('favicon32', 'favicon-32x32.png')">Download PNG</button>
+        </div>
+        
+        <!-- Favicon 16x16 -->
+        <div class="asset-box">
+            <h3>Favicon 16x16</h3>
+            <canvas id="favicon16" width="16" height="16"></canvas>
+            <br>
+            <button onclick="downloadCanvas('favicon16', 'favicon-16x16.png')">Download PNG</button>
+        </div>
+        
+        <!-- Logo 192x192 (PWA) -->
+        <div class="asset-box">
+            <h3>PWA Icon 192x192</h3>
+            <canvas id="pwa192" width="192" height="192"></canvas>
+            <br>
+            <button onclick="downloadCanvas('pwa192', 'logo-192x192.png')">Download PNG</button>
+        </div>
+        
+        <!-- Logo 512x512 (PWA) -->
+        <div class="asset-box">
+            <h3>PWA Icon 512x512</h3>
+            <canvas id="pwa512" width="512" height="512"></canvas>
+            <br>
+            <button onclick="downloadCanvas('pwa512', 'logo-512x512.png')">Download PNG</button>
+        </div>
+        
+        <!-- Social Media OG Image -->
+        <div class="asset-box">
+            <h3>OG Image 1200x630</h3>
+            <canvas id="ogimage" width="1200" height="630" style="width: 300px; height: auto;"></canvas>
+            <br>
+            <button onclick="downloadCanvas('ogimage', 'og-image.png')">Download PNG</button>
+        </div>
+    </div>
+
+    <script>
+        // Draw logo icon at various sizes
+        function drawLogo(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const scale = size / 32;
+            
+            // Background
+            ctx.fillStyle = '#1e40af';
+            roundRect(ctx, 0, 0, size, size, 6 * scale);
+            ctx.fill();
+            
+            // U shape
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2.5 * scale;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(6 * scale, 8 * scale);
+            ctx.lineTo(6 * scale, 20 * scale);
+            ctx.arc(16 * scale, 20 * scale, 10 * scale, Math.PI, 0, true);
+            ctx.lineTo(26 * scale, 8 * scale);
+            ctx.stroke();
+            
+            // I dot
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(16 * scale, 4 * scale, 2 * scale, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Network nodes
+            ctx.beginPath();
+            ctx.arc(6 * scale, 8 * scale, 1.5 * scale, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(26 * scale, 8 * scale, 1.5 * scale, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(16 * scale, 20 * scale, 1.5 * scale, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Draw OG image
+        function drawOGImage() {
+            const canvas = document.getElementById('ogimage');
+            const ctx = canvas.getContext('2d');
+            
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, 1200, 630);
+            gradient.addColorStop(0, '#1e40af');
+            gradient.addColorStop(1, '#3b82f6');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1200, 630);
+            
+            // Logo
+            ctx.save();
+            ctx.translate(100, 100);
+            drawLogo('ogimage', 120);
+            ctx.restore();
+            
+            // Text
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 72px Inter, sans-serif';
+            ctx.fillText('UIP', 250, 160);
+            
+            ctx.font = '36px Inter, sans-serif';
+            ctx.fillText('Unified Integration Intelligence Platform', 100, 350);
+            
+            ctx.font = 'bold 48px Inter, sans-serif';
+            ctx.fillText('Stop Losing $14M Per Vessel', 100, 450);
+            
+            ctx.font = '32px Inter, sans-serif';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fillText('to Ocean Freight Inefficiencies', 100, 510);
+        }
+        
+        // Utility function for rounded rectangles
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+        
+        // Download canvas as PNG
+        function downloadCanvas(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // Initialize all canvases
+        drawLogo('favicon32', 32);
+        drawLogo('favicon16', 16);
+        drawLogo('pwa192', 192);
+        drawLogo('pwa512', 512);
+        drawOGImage();
+    </script>
+</body>
+</html>

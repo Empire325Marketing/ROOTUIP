@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow Monitoring - ROOTUIP Enterprise</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header-content {
+            max-width: 1800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Metrics Overview */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+        }
+
+        .metric-card.success::before {
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+        }
+
+        .metric-card.warning::before {
+            background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+        }
+
+        .metric-card.danger::before {
+            background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+        }
+
+        .metric-label {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .metric-trend {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .metric-trend.up {
+            color: #10b981;
+        }
+
+        .metric-trend.down {
+            color: #ef4444;
+        }
+
+        /* Live Executions */
+        .executions-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .live-executions {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .live-badge {
+            background: #ef4444;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .execution-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .execution-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .execution-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .execution-meta {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+
+        .execution-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-running {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+
+        .status-failed {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(100px); }
+        }
+
+        /* Node Status */
+        .node-status-list {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .node-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .node-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #64748b;
+        }
+
+        .node-indicator.active {
+            background: #3b82f6;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+            animation: pulse 1s infinite;
+        }
+
+        .node-indicator.completed {
+            background: #10b981;
+        }
+
+        .node-indicator.failed {
+            background: #ef4444;
+        }
+
+        /* Performance Chart */
+        .performance-chart {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            height: 400px;
+            position: relative;
+        }
+
+        /* Activity Feed */
+        .activity-feed {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+
+        .activity-icon.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+        }
+
+        .activity-icon.warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+        }
+
+        .activity-icon.info {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        /* System Health */
+        .system-health {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .health-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .health-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .health-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        .health-status.warning {
+            background: #f59e0b;
+        }
+
+        .health-status.error {
+            background: #ef4444;
+        }
+
+        .health-metrics {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .health-metric {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+        }
+
+        .health-metric-label {
+            color: #94a3b8;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-1px);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .executions-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <h1 style="font-size: 1.5rem; font-weight: 700;">Workflow Monitoring Center</h1>
+                <p style="color: #94a3b8; font-size: 0.875rem;">Real-time enterprise workflow performance</p>
+            </div>
+            <div>
+                <button class="btn" onclick="window.location.href='/platform/enterprise/workflow-manager.html'">
+                    Workflow Manager →
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Metrics Overview -->
+        <div class="metrics-grid">
+            <div class="metric-card success">
+                <div class="metric-label">Active Workflows</div>
+                <div class="metric-value">12</div>
+                <div class="metric-trend up">
+                    <span>↑</span> 2 from yesterday
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Today's Savings</div>
+                <div class="metric-value">$2.4M</div>
+                <div class="metric-trend up">
+                    <span>↑</span> 18% above target
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Success Rate</div>
+                <div class="metric-value">98.5%</div>
+                <div class="metric-trend">
+                    <span>—</span> Stable
+                </div>
+            </div>
+            <div class="metric-card warning">
+                <div class="metric-label">Avg Processing Time</div>
+                <div class="metric-value">4.2h</div>
+                <div class="metric-trend down">
+                    <span>↓</span> 12 min faster
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Executions -->
+        <div class="executions-container">
+            <div class="live-executions">
+                <h2 class="section-title">
+                    Live Executions
+                    <span class="live-badge">LIVE</span>
+                </h2>
+
+                <div class="execution-item">
+                    <div class="execution-header">
+                        <div>
+                            <div class="execution-title">MSC GULSUN - Mega Vessel Optimization</div>
+                            <div class="execution-meta">Started 45 minutes ago • Est. 3.5 hours remaining</div>
+                        </div>
+                        <span class="execution-status status-running">Running</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 35%;"></div>
+                    </div>
+                    <div class="execution-meta">Step 3 of 6: Risk Assessment</div>
+                    <div class="node-status-list" style="margin-top: 1rem;">
+                        <div class="node-item">
+                            <div class="node-indicator completed"></div>
+                            <span>Vessel Arrival Alert</span>
+                        </div>
+                        <div class="node-item">
+                            <div class="node-indicator completed"></div>
+                            <span>Port Analysis</span>
+                        </div>
+                        <div class="node-item">
+                            <div class="node-indicator active"></div>
+                            <span>Risk Assessment</span>
+                        </div>
+                        <div class="node-item">
+                            <div class="node-indicator"></div>
+                            <span>Strategy Approval</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="execution-item">
+                    <div class="execution-header">
+                        <div>
+                            <div class="execution-title">EVER ACE - Time-Critical Cargo</div>
+                            <div class="execution-meta">Started 2 hours ago</div>
+                        </div>
+                        <span class="execution-status status-completed">Completed</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%; background: linear-gradient(90deg, #10b981 0%, #34d399 100%);"></div>
+                    </div>
+                    <div class="execution-meta" style="color: #10b981;">✓ Saved $512,000 • Completed in 2.1 hours</div>
+                </div>
+
+                <div class="execution-item">
+                    <div class="execution-header">
+                        <div>
+                            <div class="execution-title">CMA CGM JACQUES - Multi-Port Coordination</div>
+                            <div class="execution-meta">Started 12 minutes ago</div>
+                        </div>
+                        <span class="execution-status status-running">Running</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 15%;"></div>
+                    </div>
+                    <div class="execution-meta">Step 1 of 8: Initial Assessment</div>
+                </div>
+            </div>
+
+            <div class="activity-feed">
+                <h3 class="section-title">Activity Feed</h3>
+                
+                <div class="activity-item">
+                    <div class="activity-icon success">✓</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Workflow completed successfully</div>
+                        <div style="font-size: 0.875rem; color: #94a3b8;">EVER ACE optimization saved $512,000</div>
+                        <div class="activity-time">5 minutes ago</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon warning">!</div>
+                    <div class="activity-content">
+                        <div class="activity-title">High D&D risk detected</div>
+                        <div style="font-size: 0.875rem; color: #94a3b8;">MSC GULSUN - Rotterdam port congestion 78%</div>
+                        <div class="activity-time">15 minutes ago</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon info">→</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Strategy approved</div>
+                        <div style="font-size: 0.875rem; color: #94a3b8;">Reroute to Antwerp approved by John Doe</div>
+                        <div class="activity-time">22 minutes ago</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon success">+</div>
+                    <div class="activity-content">
+                        <div class="activity-title">New workflow triggered</div>
+                        <div style="font-size: 0.875rem; color: #94a3b8;">CMA CGM JACQUES detected - 24,000 TEU</div>
+                        <div class="activity-time">35 minutes ago</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon info">📊</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Daily report generated</div>
+                        <div style="font-size: 0.875rem; color: #94a3b8;">June 26 - Total savings: $2.1M</div>
+                        <div class="activity-time">1 hour ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Chart -->
+        <div class="performance-chart">
+            <h3 class="section-title">7-Day Performance Trend</h3>
+            <canvas id="performanceChart" style="width: 100%; height: 300px;"></canvas>
+        </div>
+
+        <!-- System Health -->
+        <div class="system-health">
+            <div class="health-card">
+                <div class="health-header">
+                    <h3>Workflow Engine</h3>
+                    <div class="health-status"></div>
+                </div>
+                <div class="health-metrics">
+                    <div class="health-metric">
+                        <span class="health-metric-label">CPU Usage</span>
+                        <span>42%</span>
+                    </div>
+                    <div class="health-metric">
+                        <span class="health-metric-label">Memory</span>
+                        <span>3.2 GB / 8 GB</span>
+                    </div>
+                    <div class="health-metric">
+                        <span class="health-metric-label">Queue Length</span>
+                        <span>3 workflows</span>
+                    </div>
+                    <div class="health-metric">
+                        <span class="health-metric-label">Response Time</span>
+                        <span>245ms</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="health-card">
+                <div class="health-header">
+                    <h3>Integration APIs</h3>
+                    <div class="health-status"></div>
+                </div>
+                <div class="health-metrics">
+                    <div class="health-metric">
+                        <span class="health-metric-label">Carrier APIs</span>
+                        <span style="color: #10b981;">All operational</span>
+                    </div>
+                    <div class="health-metric">
+                        <span class="health-metric-label">Terminal Systems</span>
+                        <span style="color: #10b981;">Connected</span>
+                    </div>
+                    <div class="health-metric">
+                        <span class="health-metric-label">Customs</span>
+                        <span style="color: #10b981;">Online</span>
+                    </div>
+                    <div class="health-metric">
+                        <span class="health-metric-label">API Calls/min</span>
+                        <span>847</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="health-card">
+                <div class="health-header">
+                    <h3>ML Models</h3>
+                    <div class="health-status warning"></div>
+                </div>
+                <div class="health-metrics">
+                    <div class="health-metric">
+                        <span class="health-metric-label">Risk Predictor</span>
+                        <span style="color: #10b981;">v3.2 Active</span>
+                    </div>
+                    <div class="health-metric">
+                        <span class="health-metric-label">Port Optimizer</span>
+                        <span style="color: #f59e0b;">Updating...</span>
+                    </div>
+                    <div class="health-metric">
+                        <span class="health-metric-label">Accuracy</span>
+                        <span>94.7%</span>
+                    </div>
+                    <div class="health-metric">
+                        <span class="health-metric-label">Last Training</span>
+                        <span>2 days ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js for performance chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize performance chart
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Today'],
+                datasets: [{
+                    label: 'Savings ($M)',
+                    data: [1.8, 2.1, 1.9, 2.3, 2.2, 1.7, 2.4],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Executions',
+                    data: [8, 10, 9, 11, 10, 7, 12],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#94a3b8'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: 'rgba(255,255,255,0.05)'
+                        },
+                        ticks: {
+                            color: '#94a3b8'
+                        }
+                    },
+                    y: {
+                        position: 'left',
+                        grid: {
+                            color: 'rgba(255,255,255,0.05)'
+                        },
+                        ticks: {
+                            color: '#94a3b8',
+                            callback: function(value) {
+                                return '$' + value + 'M';
+                            }
+                        }
+                    },
+                    y1: {
+                        position: 'right',
+                        grid: {
+                            drawOnChartArea: false
+                        },
+                        ticks: {
+                            color: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Simulate real-time updates
+        function updateMetrics() {
+            // Update random metrics
+            const savingsElement = document.querySelector('.metric-value');
+            const currentSavings = parseFloat(savingsElement.textContent.replace('$', '').replace('M', ''));
+            const newSavings = (currentSavings + Math.random() * 0.1).toFixed(1);
+            savingsElement.textContent = '$' + newSavings + 'M';
+
+            // Update progress bars
+            const progressBars = document.querySelectorAll('.execution-item:first-child .progress-fill');
+            progressBars.forEach(bar => {
+                const currentWidth = parseInt(bar.style.width);
+                if (currentWidth < 100) {
+                    bar.style.width = Math.min(currentWidth + Math.random() * 5, 100) + '%';
+                }
+            });
+        }
+
+        // Update every 5 seconds
+        setInterval(updateMetrics, 5000);
+
+        // WebSocket connection for real-time updates
+        function connectWebSocket() {
+            const ws = new WebSocket('wss://app.rootuip.com/api/workflow/subscribe');
+            
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                console.log('Workflow update:', data);
+                // Handle real-time updates
+            };
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // connectWebSocket(); // Enable in production
+        });
+    </script>
+</body>
+</html>

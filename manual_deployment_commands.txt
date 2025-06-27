@@ -1,0 +1,44 @@
+MANUAL DEPLOYMENT COMMANDS FOR ROOTUIP FIXES
+===============================================
+
+Since SSH authentication is being blocked, here are the manual commands to run in your Hostinger terminal:
+
+1. First, backup current files:
+cd /var/www/rootuip/public
+cp index.html index.html.backup
+
+2. Create fixed CSS files - run these commands one by one:
+
+# Fix homepage-v2.css
+cat > css/homepage-v2.css << 'EOF'
+[Copy the entire fixed content from /home/iii/ROOTUIP/ROOTUIP/css/homepage-v2.css]
+EOF
+
+# Fix uip-enhanced.css  
+cat > css/uip-enhanced.css << 'EOF'
+[Copy the entire fixed content from /home/iii/ROOTUIP/ROOTUIP/css/uip-enhanced.css]
+EOF
+
+# Update navigation in index.html
+sed -i 's|<li><a href="#solutions">Solutions</a></li>|<li><a href="#solutions">Solutions</a></li>\n                    <li><a href="lead-generation/assessment-tool.html">Assessment</a></li>|' index.html
+
+3. Or alternatively, use this one-liner to fix all CSS var() syntax errors:
+find css/ brand/ -name "*.css" -exec sed -i 's/var(var(--/var(--/g' {} \;
+
+4. Set permissions:
+chmod -R 755 css/ brand/ js/ lead-generation/
+chown -R www-data:www-data css/ brand/ js/ lead-generation/
+
+WHAT THESE FIXES DO:
+===================
+• Fixes 240+ CSS var(var(--variable)) syntax errors
+• Restores proper color rendering throughout site
+• Adds Assessment tool to main navigation
+• Makes lead generation system accessible
+
+TEST AFTER DEPLOYMENT:
+=====================
+• Visit https://rootuip.com - colors should render properly
+• Check navigation has "Assessment" link
+• Visit https://rootuip.com/lead-generation/assessment-tool.html
+• Verify buttons and colors display correctly

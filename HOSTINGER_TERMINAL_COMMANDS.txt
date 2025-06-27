@@ -1,0 +1,63 @@
+HOSTINGER TERMINAL COMMANDS - Copy & Paste These
+==================================================
+
+Run these commands in your Hostinger web terminal to:
+1. Fix all CSS color rendering issues 
+2. Add assessment tool to navigation
+3. Deploy all visual fixes
+
+# 1. Navigate to website directory
+cd /var/www/rootuip/public
+
+# 2. Backup current index.html
+cp index.html index.html.backup
+
+# 3. Fix ALL CSS syntax errors in one command
+find css/ brand/ -name "*.css" -exec sed -i 's/var(var(--/var(--/g' {} \;
+
+# 4. Add Assessment tool to navigation
+sed -i 's|<li><a href="#solutions">Solutions</a></li>|<li><a href="#solutions">Solutions</a></li>\n                    <li><a href="lead-generation/assessment-tool.html">Assessment</a></li>|' index.html
+
+# 5. Set correct permissions
+chmod -R 755 css/ brand/ js/ lead-generation/
+chown -R www-data:www-data .
+
+# 6. Verify fixes applied
+echo "Checking for remaining CSS errors..."
+grep -r "var(var(" css/ brand/ || echo "✅ All CSS syntax errors fixed!"
+
+echo "Checking navigation..."
+grep "assessment-tool.html" index.html && echo "✅ Assessment tool added to navigation!"
+
+echo "🎉 All fixes deployed! Visit https://rootuip.com to see results"
+
+WHAT THESE COMMANDS DO:
+======================
+✅ Fixes 240+ CSS var(var(--variable)) syntax errors
+✅ Restores proper color rendering throughout site  
+✅ Adds Assessment tool to main navigation menu
+✅ Sets correct file permissions
+✅ Makes lead generation system accessible
+
+ALTERNATIVE: Manual SSH Key Setup
+=================================
+If you want to fix SSH for future deployments:
+
+# Install our SSH key
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+cat >> ~/.ssh/authorized_keys << 'EOF'
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIArarWwV+cBnj0onLXbC0y1tyEZfHbszAxBQzYZPIlAH claude-code-deployment
+EOF
+chmod 600 ~/.ssh/authorized_keys
+
+# Test from our side afterward with:
+# ssh -i ~/.ssh/rootuip_deploy root@145.223.73.4 "echo SSH working"
+
+VERIFY DEPLOYMENT:
+==================
+After running these commands, check:
+• https://rootuip.com - colors should render properly
+• Navigation should show "Assessment" link  
+• https://rootuip.com/lead-generation/assessment-tool.html should work
+• All buttons and elements should have proper colors

@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Center | UIP Sales Platform</title>
+    <meta name="description" content="Customizable demo environments and presentation tools for UIP sales teams with analytics and follow-up automation.">
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #333;
+        }
+
+        .demo-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Reuse sidebar from CRM */
+        .sidebar {
+            width: 250px;
+            background: #1a202c;
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            padding: 0 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .nav-section {
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .nav-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #a0aec0;
+            margin-bottom: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            margin: 5px -15px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #edf2f7;
+        }
+
+        /* Demo Stats */
+        .demo-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-info h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .stat-info p {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        /* Demo Environments */
+        .demo-environments {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .environment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .environment-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .environment-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .env-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .env-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .env-status {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .env-status.active {
+            background: #f0fff4;
+            color: #48bb78;
+        }
+
+        .env-status.inactive {
+            background: #f7fafc;
+            color: #718096;
+        }
+
+        .env-description {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .env-features {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .env-feature {
+            padding: 5px 10px;
+            background: #f7fafc;
+            color: #4a5568;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+
+        .env-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Presentation Library */
+        .presentation-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .presentation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .presentation-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .presentation-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .presentation-preview {
+            height: 150px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+        }
+
+        .presentation-info {
+            padding: 15px;
+        }
+
+        .presentation-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .presentation-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #718096;
+            margin-top: 10px;
+        }
+
+        /* Recording Studio */
+        .recording-studio {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .studio-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-btn.record {
+            background: #f56565;
+            color: white;
+        }
+
+        .control-btn.pause {
+            background: #ffd93d;
+            color: #744210;
+        }
+
+        .control-btn.stop {
+            background: #718096;
+            color: white;
+        }
+
+        .recordings-list {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+        }
+
+        .recording-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .recording-info h4 {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .recording-info p {
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .recording-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* ROI Modeling Tool */
+        .roi-modeling {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .roi-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .roi-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .roi-label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        .roi-input {
+            padding: 10px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .roi-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .roi-results {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .roi-metric {
+            text-align: center;
+        }
+
+        .roi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .roi-label-result {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 25px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .close {
+            font-size: 24px;
+            color: #a0aec0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            color: #4a5568;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .demo-screen {
+            background: #1a202c;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .demo-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .environment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .roi-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="demo-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>UIP Sales CRM</h2>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Pipeline</div>
+                <a href="/sales/crm/index.html" class="nav-item">
+                    <span>📊</span> Dashboard
+                </a>
+                <a href="#" class="nav-item">
+                    <span>🎯</span> Opportunities
+                </a>
+                <a href="#" class="nav-item">
+                    <span>👥</span> Accounts
+                </a>
+                <a href="#" class="nav-item">
+                    <span>📧</span> Leads
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Sales Tools</div>
+                <a href="/sales/enablement/index.html" class="nav-item">
+                    <span>📚</span> Content Library
+                </a>
+                <a href="/sales/proposals/index.html" class="nav-item">
+                    <span>📄</span> Proposals
+                </a>
+                <a href="/sales/demo/index.html" class="nav-item active">
+                    <span>🖥️</span> Demo Center
+                </a>
+                <a href="/sales/territory/index.html" class="nav-item">
+                    <span>🗺️</span> Territory
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Analytics</div>
+                <a href="/sales/analytics/index.html" class="nav-item">
+                    <span>📈</span> Sales Analytics
+                </a>
+                <a href="#" class="nav-item">
+                    <span>🎯</span> Forecasting
+                </a>
+                <a href="#" class="nav-item">
+                    <span>💰</span> Commissions
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-top">
+                    <h1 class="page-title">Demo Center</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" onclick="openScheduleDemo()">
+                            📅 Schedule Demo
+                        </button>
+                        <button class="btn btn-primary" onclick="startLiveDemo()">
+                            🎬 Start Live Demo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Stats -->
+            <div class="demo-stats">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #f0fff4; color: #48bb78;">🎯</div>
+                    <div class="stat-info">
+                        <h3>234</h3>
+                        <p>Demos This Month</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e6fffa; color: #319795;">📈</div>
+                    <div class="stat-info">
+                        <h3>78%</h3>
+                        <p>Conversion Rate</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fef5e7; color: #f6ad55;">⏱️</div>
+                    <div class="stat-info">
+                        <h3>42 min</h3>
+                        <p>Avg Demo Length</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #ebf8ff; color: #4299e1;">⭐</div>
+                    <div class="stat-info">
+                        <h3>4.9</h3>
+                        <p>Customer Rating</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Environments -->
+            <div class="demo-environments">
+                <div class="section-header">
+                    <h2 class="section-title">Demo Environments</h2>
+                    <button class="btn btn-secondary">
+                        + Create Environment
+                    </button>
+                </div>
+
+                <div class="environment-grid">
+                    <!-- Standard Demo -->
+                    <div class="environment-card" onclick="launchDemo('standard')">
+                        <div class="env-header">
+                            <h3 class="env-title">Standard Platform Demo</h3>
+                            <span class="env-status active">Active</span>
+                        </div>
+                        <p class="env-description">
+                            Full platform overview with sample data showcasing core features and ROI dashboard.
+                        </p>
+                        <div class="env-features">
+                            <span class="env-feature">Live Data</span>
+                            <span class="env-feature">AI Features</span>
+                            <span class="env-feature">Analytics</span>
+                            <span class="env-feature">Integrations</span>
+                        </div>
+                        <div class="env-actions">
+                            <button class="btn btn-primary" onclick="event.stopPropagation(); launchDemo('standard')">
+                                🚀 Launch Demo
+                            </button>
+                            <button class="btn btn-secondary" onclick="event.stopPropagation(); customizeDemo('standard')">
+                                ⚙️ Customize
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Retail Industry Demo -->
+                    <div class="environment-card" onclick="launchDemo('retail')">
+                        <div class="env-header">
+                            <h3 class="env-title">Retail Industry Demo</h3>
+                            <span class="env-status active">Active</span>
+                        </div>
+                        <p class="env-description">
+                            Customized for retail with e-commerce integrations, omnichannel tracking, and inventory optimization.
+                        </p>
+                        <div class="env-features">
+                            <span class="env-feature">E-commerce</span>
+                            <span class="env-feature">Inventory</span>
+                            <span class="env-feature">Last Mile</span>
+                            <span class="env-feature">Returns</span>
+                        </div>
+                        <div class="env-actions">
+                            <button class="btn btn-primary" onclick="event.stopPropagation(); launchDemo('retail')">
+                                🚀 Launch Demo
+                            </button>
+                            <button class="btn btn-secondary" onclick="event.stopPropagation(); customizeDemo('retail')">
+                                ⚙️ Customize
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Manufacturing Demo -->
+                    <div class="environment-card" onclick="launchDemo('manufacturing')">
+                        <div class="env-header">
+                            <h3 class="env-title">Manufacturing Demo</h3>
+                            <span class="env-status active">Active</span>
+                        </div>
+                        <p class="env-description">
+                            Focused on supply chain visibility, JIT delivery, and production planning integration.
+                        </p>
+                        <div class="env-features">
+                            <span class="env-feature">Supply Chain</span>
+                            <span class="env-feature">JIT Delivery</span>
+                            <span class="env-feature">Production</span>
+                            <span class="env-feature">Quality</span>
+                        </div>
+                        <div class="env-actions">
+                            <button class="btn btn-primary" onclick="event.stopPropagation(); launchDemo('manufacturing')">
+                                🚀 Launch Demo
+                            </button>
+                            <button class="btn btn-secondary" onclick="event.stopPropagation(); customizeDemo('manufacturing')">
+                                ⚙️ Customize
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Custom Sandbox -->
+                    <div class="environment-card" onclick="launchDemo('sandbox')">
+                        <div class="env-header">
+                            <h3 class="env-title">Custom Sandbox</h3>
+                            <span class="env-status inactive">Setup Required</span>
+                        </div>
+                        <p class="env-description">
+                            Blank environment for creating custom demos with specific customer data and scenarios.
+                        </p>
+                        <div class="env-features">
+                            <span class="env-feature">Custom Data</span>
+                            <span class="env-feature">Configurable</span>
+                            <span class="env-feature">White Label</span>
+                        </div>
+                        <div class="env-actions">
+                            <button class="btn btn-primary" onclick="event.stopPropagation(); setupSandbox()">
+                                🛠️ Setup Sandbox
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROI Modeling Tool -->
+            <div class="roi-modeling">
+                <div class="section-header">
+                    <h2 class="section-title">ROI Modeling Calculator</h2>
+                    <button class="btn btn-secondary" onclick="resetRoiCalculator()">
+                        🔄 Reset
+                    </button>
+                </div>
+
+                <div class="roi-inputs">
+                    <div class="roi-input-group">
+                        <label class="roi-label">Annual Freight Spend</label>
+                        <input type="number" class="roi-input" id="freightSpend" value="5000000" onchange="calculateRoi()">
+                    </div>
+                    <div class="roi-input-group">
+                        <label class="roi-label">Monthly Shipments</label>
+                        <input type="number" class="roi-input" id="monthlyShipments" value="500" onchange="calculateRoi()">
+                    </div>
+                    <div class="roi-input-group">
+                        <label class="roi-label">Manual Processing Hours/Day</label>
+                        <input type="number" class="roi-input" id="manualHours" value="4" onchange="calculateRoi()">
+                    </div>
+                    <div class="roi-input-group">
+                        <label class="roi-label">Average Delay Issues/Month</label>
+                        <input type="number" class="roi-input" id="delayIssues" value="15" onchange="calculateRoi()">
+                    </div>
+                </div>
+
+                <div class="roi-results">
+                    <div class="roi-metric">
+                        <div class="roi-value" id="totalSavings">$847,000</div>
+                        <div class="roi-label-result">Annual Savings</div>
+                    </div>
+                    <div class="roi-metric">
+                        <div class="roi-value" id="roiPercent">340%</div>
+                        <div class="roi-label-result">ROI</div>
+                    </div>
+                    <div class="roi-metric">
+                        <div class="roi-value" id="paybackMonths">3.5</div>
+                        <div class="roi-label-result">Payback (months)</div>
+                    </div>
+                    <div class="roi-metric">
+                        <div class="roi-value" id="efficiency">75%</div>
+                        <div class="roi-label-result">Efficiency Gain</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Presentation Library -->
+            <div class="presentation-section">
+                <div class="section-header">
+                    <h2 class="section-title">Presentation Library</h2>
+                    <button class="btn btn-secondary">
+                        + Upload Presentation
+                    </button>
+                </div>
+
+                <div class="presentation-grid">
+                    <div class="presentation-card" onclick="openPresentation('platform-overview')">
+                        <div class="presentation-preview">🎯</div>
+                        <div class="presentation-info">
+                            <h4 class="presentation-title">Platform Overview</h4>
+                            <div class="presentation-meta">
+                                <span>30 slides</span>
+                                <span>Updated 2 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="presentation-card" onclick="openPresentation('roi-analysis')">
+                        <div class="presentation-preview">💰</div>
+                        <div class="presentation-info">
+                            <h4 class="presentation-title">ROI Analysis</h4>
+                            <div class="presentation-meta">
+                                <span>15 slides</span>
+                                <span>Updated 1 week ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="presentation-card" onclick="openPresentation('technical-deep-dive')">
+                        <div class="presentation-preview">⚙️</div>
+                        <div class="presentation-info">
+                            <h4 class="presentation-title">Technical Deep Dive</h4>
+                            <div class="presentation-meta">
+                                <span>45 slides</span>
+                                <span>Updated 3 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="presentation-card" onclick="openPresentation('executive-summary')">
+                        <div class="presentation-preview">📊</div>
+                        <div class="presentation-info">
+                            <h4 class="presentation-title">Executive Summary</h4>
+                            <div class="presentation-meta">
+                                <span>10 slides</span>
+                                <span>Updated 5 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recording Studio -->
+            <div class="recording-studio">
+                <div class="section-header">
+                    <h2 class="section-title">Demo Recording Studio</h2>
+                </div>
+
+                <div class="studio-controls">
+                    <button class="control-btn record" onclick="startRecording()">
+                        🔴 Start Recording
+                    </button>
+                    <button class="control-btn pause" onclick="pauseRecording()" disabled>
+                        ⏸️ Pause
+                    </button>
+                    <button class="control-btn stop" onclick="stopRecording()" disabled>
+                        ⏹️ Stop
+                    </button>
+                    <button class="btn btn-secondary" onclick="openScreenShare()">
+                        🖥️ Share Screen
+                    </button>
+                </div>
+
+                <div class="recordings-list">
+                    <h3 style="margin-bottom: 15px; color: #2d3748;">Recent Recordings</h3>
+                    
+                    <div class="recording-item">
+                        <div class="recording-info">
+                            <h4>GlobalTech Demo - Dec 20</h4>
+                            <p>Duration: 38:42 | Size: 124 MB</p>
+                        </div>
+                        <div class="recording-actions">
+                            <button class="btn btn-secondary" onclick="playRecording('globaltech-demo')">
+                                ▶️ Play
+                            </button>
+                            <button class="btn btn-secondary" onclick="shareRecording('globaltech-demo')">
+                                📤 Share
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="recording-item">
+                        <div class="recording-info">
+                            <h4>Retail Industry Walkthrough - Dec 18</h4>
+                            <p>Duration: 42:15 | Size: 138 MB</p>
+                        </div>
+                        <div class="recording-actions">
+                            <button class="btn btn-secondary" onclick="playRecording('retail-walkthrough')">
+                                ▶️ Play
+                            </button>
+                            <button class="btn btn-secondary" onclick="shareRecording('retail-walkthrough')">
+                                📤 Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Demo Modal -->
+    <div id="demoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="demoTitle">Live Demo Environment</h3>
+                <span class="close" onclick="closeDemoModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="demo-screen" id="demoScreen">
+                    🖥️ Demo Environment Loading...
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-secondary" onclick="toggleDemoFullscreen()">
+                            🔳 Fullscreen
+                        </button>
+                        <button class="btn btn-secondary" onclick="startDemoRecording()">
+                            🔴 Record
+                        </button>
+                        <button class="btn btn-secondary" onclick="shareDemoScreen()">
+                            📤 Share Screen
+                        </button>
+                    </div>
+                    <button class="btn btn-primary" onclick="endDemo()">
+                        End Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Demo Center functionality
+        let demoData = {
+            currentDemo: null,
+            recording: false,
+            analytics: {
+                demosToday: 8,
+                totalDuration: 0,
+                conversionRate: 0.78
+            }
+        };
+
+        function launchDemo(type) {
+            demoData.currentDemo = type;
+            document.getElementById('demoTitle').textContent = getDemoTitle(type);
+            document.getElementById('demoModal').style.display = 'block';
+            
+            // Simulate demo loading
+            setTimeout(() => {
+                document.getElementById('demoScreen').innerHTML = `
+                    <div style="text-align: center;">
+                        <h2>UIP ${type.charAt(0).toUpperCase() + type.slice(1)} Demo</h2>
+                        <p>Interactive demo environment ready</p>
+                        <div style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                            Demo controls and interactive elements would appear here
+                        </div>
+                    </div>
+                `;
+            }, 1000);
+            
+            trackEvent('Demo Launched', { type: type });
+        }
+
+        function getDemoTitle(type) {
+            const titles = {
+                'standard': 'Standard Platform Demo',
+                'retail': 'Retail Industry Demo',
+                'manufacturing': 'Manufacturing Demo',
+                'sandbox': 'Custom Sandbox Demo'
+            };
+            return titles[type] || 'Live Demo';
+        }
+
+        function closeDemoModal() {
+            document.getElementById('demoModal').style.display = 'none';
+            if (demoData.currentDemo) {
+                trackEvent('Demo Ended', { 
+                    type: demoData.currentDemo,
+                    duration: Date.now() - demoData.demoStartTime
+                });
+            }
+            demoData.currentDemo = null;
+        }
+
+        function startLiveDemo() {
+            // Quick start with standard demo
+            launchDemo('standard');
+        }
+
+        function customizeDemo(type) {
+            trackEvent('Demo Customization Started', { type: type });
+            console.log('Opening customization for:', type);
+            // In production, this would open customization interface
+        }
+
+        function setupSandbox() {
+            trackEvent('Sandbox Setup Started');
+            console.log('Setting up custom sandbox');
+            // In production, this would open sandbox configuration
+        }
+
+        function calculateRoi() {
+            const freightSpend = parseFloat(document.getElementById('freightSpend').value) || 0;
+            const monthlyShipments = parseInt(document.getElementById('monthlyShipments').value) || 0;
+            const manualHours = parseFloat(document.getElementById('manualHours').value) || 0;
+            const delayIssues = parseInt(document.getElementById('delayIssues').value) || 0;
+            
+            // Calculate savings
+            const manualSavings = manualHours * 50 * 250; // $50/hour, 250 working days
+            const freightSavings = freightSpend * 0.08; // 8% optimization
+            const issueSavings = delayIssues * 12 * 700; // $700 per issue annually
+            const totalSavings = manualSavings + freightSavings + issueSavings;
+            
+            // Calculate ROI
+            const implementationCost = 250000;
+            const roi = ((totalSavings - implementationCost) / implementationCost) * 100;
+            const payback = implementationCost / (totalSavings / 12);
+            const efficiency = Math.min(95, 50 + (monthlyShipments / 20));
+            
+            // Update display
+            document.getElementById('totalSavings').textContent = '$' + totalSavings.toLocaleString();
+            document.getElementById('roiPercent').textContent = Math.round(roi) + '%';
+            document.getElementById('paybackMonths').textContent = payback.toFixed(1);
+            document.getElementById('efficiency').textContent = Math.round(efficiency) + '%';
+            
+            trackEvent('ROI Calculated', {
+                totalSavings: totalSavings,
+                roi: roi,
+                inputs: { freightSpend, monthlyShipments, manualHours, delayIssues }
+            });
+        }
+
+        function resetRoiCalculator() {
+            document.getElementById('freightSpend').value = 5000000;
+            document.getElementById('monthlyShipments').value = 500;
+            document.getElementById('manualHours').value = 4;
+            document.getElementById('delayIssues').value = 15;
+            calculateRoi();
+        }
+
+        function startRecording() {
+            demoData.recording = true;
+            document.querySelector('.control-btn.record').disabled = true;
+            document.querySelector('.control-btn.pause').disabled = false;
+            document.querySelector('.control-btn.stop').disabled = false;
+            
+            trackEvent('Recording Started');
+            console.log('Demo recording started');
+        }
+
+        function pauseRecording() {
+            trackEvent('Recording Paused');
+            console.log('Demo recording paused');
+        }
+
+        function stopRecording() {
+            demoData.recording = false;
+            document.querySelector('.control-btn.record').disabled = false;
+            document.querySelector('.control-btn.pause').disabled = true;
+            document.querySelector('.control-btn.stop').disabled = true;
+            
+            trackEvent('Recording Stopped');
+            console.log('Demo recording stopped');
+            
+            // Simulate saving recording
+            setTimeout(() => {
+                alert('Recording saved successfully!');
+            }, 1000);
+        }
+
+        function openPresentation(id) {
+            trackEvent('Presentation Opened', { id: id });
+            console.log('Opening presentation:', id);
+            // In production, this would open the presentation viewer
+        }
+
+        function playRecording(id) {
+            trackEvent('Recording Played', { id: id });
+            console.log('Playing recording:', id);
+        }
+
+        function shareRecording(id) {
+            trackEvent('Recording Shared', { id: id });
+            console.log('Sharing recording:', id);
+            
+            // Simulate generating share link
+            const shareLink = `https://demo.uip.com/recordings/${id}`;
+            alert(`Share link generated: ${shareLink}`);
+        }
+
+        function openScheduleDemo() {
+            window.location.href = '/marketing/leads/demo-booking.html';
+        }
+
+        function openScreenShare() {
+            trackEvent('Screen Share Started');
+            console.log('Starting screen share');
+            // In production, this would initiate screen sharing
+        }
+
+        function toggleDemoFullscreen() {
+            // Fullscreen logic
+            console.log('Toggling fullscreen');
+        }
+
+        function startDemoRecording() {
+            startRecording();
+        }
+
+        function shareDemoScreen() {
+            openScreenShare();
+        }
+
+        function endDemo() {
+            closeDemoModal();
+        }
+
+        function trackEvent(eventName, properties = {}) {
+            console.log('Demo Center Event:', eventName, properties);
+            
+            // Integration with analytics
+            if (typeof analytics !== 'undefined') {
+                analytics.track(eventName, {
+                    ...properties,
+                    timestamp: new Date().toISOString()
+                });
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateRoi(); // Initialize ROI calculator
+            trackEvent('Demo Center Loaded');
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('demoModal');
+            if (event.target === modal) {
+                closeDemoModal();
+            }
+        }
+    </script>
+</body>
+</html>

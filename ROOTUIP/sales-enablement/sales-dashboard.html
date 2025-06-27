@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Sales Enablement Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-right: 24px;
+        }
+        
+        .header-nav {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-item {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .icon-blue {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .icon-green {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        
+        .icon-purple {
+            background: #f3e8ff;
+            color: #9333ea;
+        }
+        
+        .icon-orange {
+            background: #fed7aa;
+            color: #ea580c;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .metric-label {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+        
+        .metric-change {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .change-positive {
+            color: #16a34a;
+        }
+        
+        .change-negative {
+            color: #dc2626;
+        }
+        
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        
+        .material-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .material-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+        }
+        
+        .material-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .material-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        .material-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .material-description {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        
+        .material-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+        
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+        
+        .training-section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 32px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .training-modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .training-module {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .module-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .module-duration {
+            background: #3b82f6;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .module-description {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 16px;
+        }
+        
+        .module-progress {
+            background: #e2e8f0;
+            border-radius: 4px;
+            height: 6px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: #10b981;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-align: center;
+        }
+        
+        .quick-actions {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;  
+        }
+        
+        .quick-actions-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 16px;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .quick-action {
+            padding: 16px;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #64748b;
+        }
+        
+        .quick-action:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+            color: #1e40af;
+        }
+        
+        .quick-action-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .quick-action-text {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .header-nav {
+                flex-wrap: wrap;
+            }
+            
+            .dashboard-container {
+                padding: 20px 10px;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .materials-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .training-modules {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <div class="header-left">
+            <div class="header-title">Sales Enablement Dashboard</div>
+            <nav class="header-nav">
+                <a href="#" class="nav-item active">Dashboard</a>
+                <a href="master-pitch-deck.html" class="nav-item">Pitch Deck</a>
+                <a href="sales-battle-cards.html" class="nav-item">Battle Cards</a>
+                <a href="demo-scripts.html" class="nav-item">Demo Scripts</a>
+                <a href="proposal-templates.html" class="nav-item">Proposals</a>
+                <a href="customization-system.html" class="nav-item">Customize</a>
+                <a href="case-studies.html" class="nav-item">Case Studies</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <div class="user-info">
+                <div class="user-avatar">JS</div>
+                <span>John Smith</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Key Metrics -->
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-title">Pipeline Value</div>
+                    <div class="card-icon icon-blue">💰</div>
+                </div>
+                <div class="metric-value">$2.4M</div>
+                <div class="metric-label">Active opportunities</div>
+                <div class="metric-change change-positive">↗ +18% from last month</div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-title">Win Rate</div>
+                    <div class="card-icon icon-green">🎯</div>
+                </div>
+                <div class="metric-value">47%</div>
+                <div class="metric-label">Closed won deals</div>
+                <div class="metric-change change-positive">↗ +12% from last quarter</div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-title">Avg Deal Size</div>
+                    <div class="card-icon icon-purple">📊</div>
+                </div>
+                <div class="metric-value">$580K</div>
+                <div class="metric-label">Enterprise average</div>
+                <div class="metric-change change-positive">↗ +23% from last quarter</div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-title">Sales Cycle</div>
+                    <div class="card-icon icon-orange">⏱️</div>
+                </div>
+                <div class="metric-value">87</div>
+                <div class="metric-label">Average days</div>
+                <div class="metric-change change-negative">↘ -15 days improvement</div>
+            </div>
+        </div>
+
+        <!-- Sales Materials -->
+        <div class="materials-grid">
+            <div class="material-card">
+                <div class="material-header">
+                    <div class="material-icon icon-blue">🎤</div>
+                    <div class="material-title">Master Pitch Deck</div>
+                </div>
+                <div class="material-description">
+                    Professional 20-slide presentation with market analysis, competitive advantages, and ROI projections for enterprise deals.
+                </div>
+                <div class="material-actions">
+                    <a href="master-pitch-deck.html" class="action-btn btn-primary">Present</a>
+                    <button class="action-btn btn-secondary" onclick="customizeMaterial('pitch')">Customize</button>
+                </div>
+            </div>
+
+            <div class="material-card">
+                <div class="material-header">
+                    <div class="material-icon icon-green">⚔️</div>
+                    <div class="material-title">Sales Battle Cards</div>
+                </div>
+                <div class="material-description">
+                    Comprehensive competitive intelligence against top 5 competitors with objection handling and positioning strategies.
+                </div>
+                <div class="material-actions">
+                    <a href="sales-battle-cards.html" class="action-btn btn-primary">View Cards</a>
+                    <button class="action-btn btn-secondary" onclick="customizeMaterial('battle')">Customize</button>
+                </div>
+            </div>
+
+            <div class="material-card">
+                <div class="material-header">
+                    <div class="material-icon icon-purple">🎬</div>
+                    <div class="material-title">Demo Scripts</div>
+                </div>
+                <div class="material-description">
+                    Tailored demo scripts for executive (15min), technical (30min), and operations (45min) audiences with discovery questions.
+                </div>
+                <div class="material-actions">
+                    <a href="demo-scripts.html" class="action-btn btn-primary">View Scripts</a>
+                    <button class="action-btn btn-secondary" onclick="customizeMaterial('demo')">Customize</button>
+                </div>
+            </div>
+
+            <div class="material-card">
+                <div class="material-header">
+                    <div class="material-icon icon-orange">📋</div>
+                    <div class="material-title">Proposal Templates</div>
+                </div>
+                <div class="material-description">
+                    Complete proposal templates including MSA, SOW, pricing frameworks, and implementation timelines for enterprise deals.
+                </div>
+                <div class="material-actions">
+                    <a href="proposal-templates.html" class="action-btn btn-primary">Generate</a>
+                    <button class="action-btn btn-secondary" onclick="customizeMaterial('proposal')">Customize</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Training Section -->
+        <div class="training-section">
+            <div class="section-title">Sales Training & Certification</div>
+            <div class="training-modules">
+                <div class="training-module">
+                    <div class="module-header">
+                        <div class="module-title">Ocean Freight Fundamentals</div>
+                        <div class="module-duration">45 min</div>
+                    </div>
+                    <div class="module-description">
+                        Master ocean freight basics, industry terminology, and key pain points affecting enterprise customers.
+                    </div>
+                    <div class="module-progress">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                    <div class="progress-text">Completed</div>
+                </div>
+
+                <div class="training-module">
+                    <div class="module-header">
+                        <div class="module-title">UIP Platform Deep Dive</div>
+                        <div class="module-duration">60 min</div>
+                    </div>
+                    <div class="module-description">
+                        Comprehensive platform overview, features, integrations, and technical capabilities for effective demos.
+                    </div>
+                    <div class="module-progress">
+                        <div class="progress-fill" style="width: 75%;"></div>
+                    </div>
+                    <div class="progress-text">75% Complete</div>
+                </div>
+
+                <div class="training-module">
+                    <div class="module-header">
+                        <div class="module-title">Competitive Positioning</div>
+                        <div class="module-duration">40 min</div>
+                    </div>
+                    <div class="module-description">
+                        Learn how to position UIP against CargoSmart, Shippeo, SAP TM, Oracle TM, and Project44 effectively.
+                    </div>
+                    <div class="module-progress">
+                        <div class="progress-fill" style="width: 30%;"></div>
+                    </div>
+                    <div class="progress-text">30% Complete</div>
+                </div>
+
+                <div class="training-module">
+                    <div class="module-header">
+                        <div class="module-title">ROI Calculation Mastery</div>
+                        <div class="module-duration">30 min</div>
+                    </div>
+                    <div class="module-description">
+                        Master ROI calculations, value proposition articulation, and financial justification techniques.
+                    </div>
+                    <div class="module-progress">
+                        <div class="progress-fill" style="width: 0%;"></div>
+                    </div>
+                    <div class="progress-text">Not Started</div>
+                </div>
+
+                <div class="training-module">
+                    <div class="module-header">
+                        <div class="module-title">Enterprise Sales Process</div>
+                        <div class="module-duration">50 min</div>
+                    </div>
+                    <div class="module-description">
+                        Learn enterprise sales methodologies, stakeholder management, and deal progression strategies.
+                    </div>
+                    <div class="module-progress">
+                        <div class="progress-fill" style="width: 0%;"></div>
+                    </div>
+                    <div class="progress-text">Not Started</div>
+                </div>
+
+                <div class="training-module">
+                    <div class="module-header">
+                        <div class="module-title">Objection Handling</div>
+                        <div class="module-duration">35 min</div>
+                    </div>
+                    <div class="module-description">
+                        Master common objections around price, integration complexity, vendor credibility, and timing.
+                    </div>
+                    <div class="module-progress">
+                        <div class="progress-fill" style="width: 0%;"></div>
+                    </div>
+                    <div class="progress-text">Not Started</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="quick-actions-title">Quick Actions</div>
+            <div class="actions-grid">
+                <a href="customization-system.html" class="quick-action">
+                    <span class="quick-action-icon">🎯</span>
+                    <span class="quick-action-text">Customize for Prospect</span>
+                </a>
+                
+                <a href="#" class="quick-action" onclick="generateROI()">
+                    <span class="quick-action-icon">📊</span>
+                    <span class="quick-action-text">Calculate ROI</span>
+                </a>
+                
+                <a href="#" class="quick-action" onclick="scheduleDemo()">
+                    <span class="quick-action-icon">📅</span>
+                    <span class="quick-action-text">Schedule Demo</span>
+                </a>
+                
+                <a href="#" class="quick-action" onclick="accessBattleCards()">
+                    <span class="quick-action-icon">⚔️</span>
+                    <span class="quick-action-text">Competitive Intel</span>
+                </a>
+                
+                <a href="#" class="quick-action" onclick="generateProposal()">
+                    <span class="quick-action-icon">📝</span>
+                    <span class="quick-action-text">Generate Proposal</span>
+                </a>
+                
+                <a href="#" class="quick-action" onclick="trackDeal()">
+                    <span class="quick-action-icon">📈</span>
+                    <span class="quick-action-text">Track Deal Progress</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function customizeMaterial(type) {
+            window.location.href = 'customization-system.html';
+        }
+
+        function generateROI() {
+            const volume = prompt('Enter annual freight volume (TEU):', '10000');
+            const ddCost = prompt('Enter current annual D&D charges ($):', '7500000');
+            
+            if (volume && ddCost) {
+                const savings = parseFloat(ddCost) * 0.94;
+                const roi = 347; // Simplified calculation
+                
+                alert(`ROI Calculation Results:\n\n` +
+                      `Annual Savings: $${savings.toLocaleString()}\n` +
+                      `12-Month ROI: ${roi}%\n` +
+                      `Payback Period: 3.5 months\n\n` +
+                      `Opening detailed ROI calculator...`);
+                
+                // Open ROI calculator or redirect to proposal templates
+                window.open('proposal-templates.html#pricing', '_blank');
+            }
+        }
+
+        function scheduleDemo() {
+            alert('Demo Scheduling:\n\n' +
+                  '• Executive Demo (15 min) - C-Level focus on ROI\n' +
+                  '• Technical Demo (30 min) - IT/Operations focus\n' +
+                  '• Operations Demo (45 min) - Day-to-day workflows\n\n' +
+                  'Opening calendar integration...');
+        }
+
+        function accessBattleCards() {
+            window.open('sales-battle-cards.html', '_blank');
+        }
+
+        function generateProposal() {
+            alert('Proposal Generation:\n\n' +
+                  'Select proposal type:\n' +
+                  '• Master Service Agreement\n' +
+                  '• Statement of Work\n' +
+                  '• Pricing Proposal\n' +
+                  '• Implementation Plan\n\n' +
+                  'Opening proposal templates...');
+            
+            window.open('proposal-templates.html', '_blank');
+        }
+
+        function trackDeal() {
+            alert('Deal Tracking Features:\n\n' +
+                  '• Pipeline stage progression\n' +
+                  '• Stakeholder engagement tracking\n' +
+                  '• Document activity monitoring\n' +
+                  '• Next action reminders\n' +
+                  '• Competitive intelligence updates\n\n' +
+                  'Feature coming soon in CRM integration!');
+        }
+
+        // Simulate real-time updates
+        setInterval(() => {
+            const metrics = document.querySelectorAll('.metric-value');
+            metrics.forEach(metric => {
+                // Add subtle animation to suggest live data
+                metric.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    metric.style.transform = 'scale(1)';
+                }, 200);
+            });
+        }, 30000); // Every 30 seconds
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('UIP Sales Enablement Dashboard loaded');
+            
+            // Check for URL parameters to show specific sections
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('customize') === 'true') {
+                setTimeout(() => {
+                    window.location.href = 'customization-system.html';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Platform - Integration Manager</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js?v=1750888019"></script>
+    <script src="/platform/js/integration-engine.js?v=1750888019"></script>
+    <script src="/platform/js/carrier-adapters.js?v=1750888019"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00D4AA;
+            --primary-dark: #00B894;
+            --secondary: #0A1628;
+            --gray-50: #F8FAFB;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.5;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+
+        /* Main Grid Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Left Column - Connections */
+        .connections-section {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .connection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .connection-card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .connection-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .connection-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .carrier-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .connection-info {
+            flex: 1;
+        }
+
+        .connection-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .connection-type {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            text-transform: uppercase;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .connection-status.connected {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .connection-status.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .connection-status.testing {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .connection-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .connection-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--gray-300);
+            background: white;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            background: var(--gray-100);
+            border-color: var(--gray-400);
+        }
+
+        .action-btn.primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .action-btn.primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Right Column - Setup */
+        .setup-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .setup-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+
+        /* New Connection Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .credentials-section {
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+
+        .credentials-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+        }
+
+        /* Test Results */
+        .test-result {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .test-result.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .test-result.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        /* Activity Log */
+        .activity-log {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .log-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .log-item:last-child {
+            border-bottom: none;
+        }
+
+        .log-time {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            white-space: nowrap;
+            font-family: monospace;
+        }
+
+        .log-message {
+            flex: 1;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+
+        .log-status {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .log-status.success {
+            color: var(--success);
+        }
+
+        .log-status.error {
+            color: var(--danger);
+        }
+
+        .log-status.info {
+            color: var(--info);
+        }
+
+        /* Statistics */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            padding: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            margin-top: 0.25rem;
+        }
+
+        /* Loading State */
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .connection-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Integration Manager</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="syncAllConnections()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                    </svg>
+                    Sync All
+                </button>
+                <button class="btn btn-primary" onclick="showNewConnectionForm()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14m-7-7h14"/>
+                    </svg>
+                    New Connection
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Left Column - Active Connections -->
+            <div class="connections-section">
+                <div class="section-header">
+                    <h2 class="section-title">Active Connections</h2>
+                    <span id="connectionCount" class="badge">0 connections</span>
+                </div>
+                
+                <div class="connection-grid" id="connectionGrid">
+                    <!-- Connection cards will be dynamically generated -->
+                </div>
+            </div>
+
+            <!-- Right Column - Setup & Monitoring -->
+            <div class="setup-section">
+                <!-- New Connection Form -->
+                <div class="setup-card" id="newConnectionCard" style="display: none;">
+                    <div class="section-header">
+                        <h3 class="section-title">New Connection</h3>
+                        <button class="btn btn-secondary" onclick="hideNewConnectionForm()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 6L6 18M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div style="padding: 1.5rem;">
+                        <form id="newConnectionForm">
+                            <div class="form-group">
+                                <label class="form-label" for="carrierId">Carrier</label>
+                                <select class="form-select" id="carrierId" onchange="updateConnectionForm()">
+                                    <option value="">Select a carrier...</option>
+                                    <option value="maersk">Maersk</option>
+                                    <option value="msc">MSC</option>
+                                    <option value="cma-cgm">CMA CGM</option>
+                                    <option value="hapag-lloyd">Hapag-Lloyd</option>
+                                    <option value="one">ONE</option>
+                                    <option value="evergreen">Evergreen</option>
+                                    <option value="cosco">COSCO</option>
+                                    <option value="yang-ming">Yang Ming</option>
+                                    <option value="zim">ZIM</option>
+                                    <option value="hmm">HMM</option>
+                                </select>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="connectionType">Integration Type</label>
+                                    <select class="form-select" id="connectionType" onchange="updateCredentialsForm()">
+                                        <option value="api">REST API</option>
+                                        <option value="edi">EDI</option>
+                                        <option value="email">Email Monitoring</option>
+                                        <option value="web">Web Scraping</option>
+                                        <option value="manual">Manual Upload</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="connectionName">Connection Name</label>
+                                    <input type="text" class="form-input" id="connectionName" placeholder="My Maersk API">
+                                </div>
+                            </div>
+
+                            <div class="credentials-section" id="credentialsSection">
+                                <div class="credentials-title">Authentication Credentials</div>
+                                <!-- Credentials fields will be dynamically generated -->
+                            </div>
+
+                            <div class="test-result" id="testResult">
+                                <!-- Test results will appear here -->
+                            </div>
+
+                            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                                <button type="button" class="btn btn-secondary" onclick="testConnection()" style="flex: 1;">
+                                    Test Connection
+                                </button>
+                                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                                    Create Connection
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Statistics -->
+                <div class="setup-card">
+                    <div class="section-header">
+                        <h3 class="section-title">Statistics</h3>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalConnections">0</div>
+                            <div class="stat-label">Total Connections</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="activeConnections">0</div>
+                            <div class="stat-label">Active</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalRequests">0</div>
+                            <div class="stat-label">Requests Today</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="avgResponseTime">0ms</div>
+                            <div class="stat-label">Avg Response</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Log -->
+                <div class="setup-card">
+                    <div class="section-header">
+                        <h3 class="section-title">Recent Activity</h3>
+                    </div>
+                    
+                    <div class="activity-log" id="activityLog">
+                        <!-- Activity items will be dynamically generated -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Integration Engine
+        let integrationEngine;
+        let connections = [];
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            UIPLogo.init();
+            initializeIntegrationManager();
+        });
+
+        async function initializeIntegrationManager() {
+            try {
+                // Initialize the integration engine
+                integrationEngine = new IntegrationEngine();
+                
+                // Load existing connections
+                await loadConnections();
+                
+                // Update UI
+                updateConnectionGrid();
+                updateStatistics();
+                
+                // Start periodic updates
+                startPeriodicUpdates();
+                
+                addActivityLog('System initialized successfully', 'success');
+            } catch (error) {
+                console.error('Failed to initialize integration manager:', error);
+                addActivityLog('System initialization failed: ' + error.message, 'error');
+            }
+        }
+
+        async function loadConnections() {
+            connections = integrationEngine.getActiveConnections();
+            console.log('Loaded connections:', connections.length);
+        }
+
+        function updateConnectionGrid() {
+            const grid = document.getElementById('connectionGrid');
+            const count = document.getElementById('connectionCount');
+            
+            count.textContent = `${connections.length} connection${connections.length !== 1 ? 's' : ''}`;
+            
+            if (connections.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--gray-500);">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="margin-bottom: 1rem;">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                        </svg>
+                        <div style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">No connections yet</div>
+                        <div style="font-size: 0.875rem;">Create your first carrier integration to get started</div>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = connections.map(connection => createConnectionCard(connection)).join('');
+        }
+
+        function createConnectionCard(connection) {
+            const statusClass = connection.status === 'connected' ? 'connected' : 
+                               connection.status === 'error' ? 'error' : 'testing';
+            
+            const logoColor = getCarrierColor(connection.carrierId);
+            const carrierName = getCarrierName(connection.carrierId);
+            
+            return `
+                <div class="connection-card" data-connection-id="${connection.id}">
+                    <div class="connection-header">
+                        <div class="carrier-logo" style="background: ${logoColor};">
+                            ${carrierName.charAt(0).toUpperCase()}
+                        </div>
+                        <div class="connection-info">
+                            <div class="connection-name">${carrierName}</div>
+                            <div class="connection-type">${connection.type} Integration</div>
+                        </div>
+                        <div class="connection-status ${statusClass}">
+                            <div class="status-dot"></div>
+                            ${connection.status}
+                        </div>
+                    </div>
+                    
+                    <div class="connection-metrics">
+                        <div class="metric">
+                            <div class="metric-value">${connection.metrics.uptime}%</div>
+                            <div class="metric-label">Uptime</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${connection.metrics.avgResponseTime}ms</div>
+                            <div class="metric-label">Response Time</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${connection.metrics.totalRequests}</div>
+                            <div class="metric-label">Requests</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${(connection.metrics.errorRate * 100).toFixed(1)}%</div>
+                            <div class="metric-label">Error Rate</div>
+                        </div>
+                    </div>
+                    
+                    <div class="connection-actions">
+                        <button class="action-btn primary" onclick="fetchData('${connection.id}')">Sync Now</button>
+                        <button class="action-btn" onclick="testConnectionHealth('${connection.id}')">Test</button>
+                        <button class="action-btn" onclick="editConnection('${connection.id}')">Edit</button>
+                        <button class="action-btn" onclick="deleteConnection('${connection.id}')">Delete</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getCarrierColor(carrierId) {
+            const colors = {
+                'maersk': '#42B4E6',
+                'msc': '#FFD700',
+                'cma-cgm': '#E30613',
+                'hapag-lloyd': '#F47C00',
+                'one': '#E60012',
+                'evergreen': '#00A651',
+                'cosco': '#0066CC',
+                'yang-ming': '#FF6600',
+                'zim': '#003087',
+                'hmm': '#E31E24'
+            };
+            return colors[carrierId] || '#6B7280';
+        }
+
+        function getCarrierName(carrierId) {
+            const names = {
+                'maersk': 'Maersk',
+                'msc': 'MSC',
+                'cma-cgm': 'CMA CGM',
+                'hapag-lloyd': 'Hapag-Lloyd',
+                'one': 'ONE',
+                'evergreen': 'Evergreen',
+                'cosco': 'COSCO',
+                'yang-ming': 'Yang Ming',
+                'zim': 'ZIM',
+                'hmm': 'HMM'
+            };
+            return names[carrierId] || carrierId.toUpperCase();
+        }
+
+        function updateStatistics() {
+            const stats = {
+                total: connections.length,
+                active: connections.filter(c => c.status === 'connected').length,
+                totalRequests: connections.reduce((sum, c) => sum + c.metrics.totalRequests, 0),
+                avgResponseTime: connections.length > 0 ? 
+                    Math.round(connections.reduce((sum, c) => sum + c.metrics.avgResponseTime, 0) / connections.length) : 0
+            };
+
+            document.getElementById('totalConnections').textContent = stats.total;
+            document.getElementById('activeConnections').textContent = stats.active;
+            document.getElementById('totalRequests').textContent = stats.totalRequests.toLocaleString();
+            document.getElementById('avgResponseTime').textContent = stats.avgResponseTime + 'ms';
+        }
+
+        function showNewConnectionForm() {
+            document.getElementById('newConnectionCard').style.display = 'block';
+            document.getElementById('carrierId').focus();
+        }
+
+        function hideNewConnectionForm() {
+            document.getElementById('newConnectionCard').style.display = 'none';
+            document.getElementById('newConnectionForm').reset();
+            document.getElementById('testResult').style.display = 'none';
+        }
+
+        function updateConnectionForm() {
+            const carrierId = document.getElementById('carrierId').value;
+            const connectionName = document.getElementById('connectionName');
+            
+            if (carrierId) {
+                connectionName.value = `${getCarrierName(carrierId)} Connection`;
+                updateCredentialsForm();
+            }
+        }
+
+        function updateCredentialsForm() {
+            const carrierId = document.getElementById('carrierId').value;
+            const type = document.getElementById('connectionType').value;
+            const section = document.getElementById('credentialsSection');
+            
+            if (!carrierId || !type) return;
+
+            let credentialsHTML = '<div class="credentials-title">Authentication Credentials</div>';
+
+            // Generate credential fields based on carrier and type
+            switch (type) {
+                case 'api':
+                    if (carrierId === 'maersk') {
+                        credentialsHTML += `
+                            <div class="form-group">
+                                <label class="form-label">API Key</label>
+                                <input type="password" class="form-input" name="apiKey" placeholder="Enter Maersk API key">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Consumer Key</label>
+                                <input type="text" class="form-input" name="consumerKey" placeholder="Enter consumer key">
+                            </div>
+                        `;
+                    } else if (carrierId === 'msc') {
+                        credentialsHTML += `
+                            <div class="form-group">
+                                <label class="form-label">Username</label>
+                                <input type="text" class="form-input" name="username" placeholder="MSC username">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-input" name="password" placeholder="MSC password">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">API Key</label>
+                                <input type="password" class="form-input" name="apiKey" placeholder="API key">
+                            </div>
+                        `;
+                    } else {
+                        credentialsHTML += `
+                            <div class="form-group">
+                                <label class="form-label">API Key</label>
+                                <input type="password" class="form-input" name="apiKey" placeholder="Enter API key">
+                            </div>
+                        `;
+                    }
+                    break;
+                
+                case 'edi':
+                    credentialsHTML += `
+                        <div class="form-group">
+                            <label class="form-label">EDI Host</label>
+                            <input type="text" class="form-input" name="ediHost" placeholder="EDI server hostname">
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Port</label>
+                                <input type="number" class="form-input" name="ediPort" placeholder="21">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Protocol</label>
+                                <select class="form-select" name="ediProtocol">
+                                    <option value="ftp">FTP</option>
+                                    <option value="sftp">SFTP</option>
+                                    <option value="as2">AS2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Username</label>
+                                <input type="text" class="form-input" name="ediUsername" placeholder="EDI username">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-input" name="ediPassword" placeholder="EDI password">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                
+                case 'email':
+                    credentialsHTML += `
+                        <div class="form-group">
+                            <label class="form-label">Email Host</label>
+                            <input type="text" class="form-input" name="emailHost" placeholder="imap.carrier.com">
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Port</label>
+                                <input type="number" class="form-input" name="emailPort" placeholder="993">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Security</label>
+                                <select class="form-select" name="emailSecurity">
+                                    <option value="ssl">SSL/TLS</option>
+                                    <option value="starttls">STARTTLS</option>
+                                    <option value="none">None</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-input" name="email" placeholder="notifications@carrier.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-input" name="emailPassword" placeholder="Email password">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                
+                case 'web':
+                    credentialsHTML += `
+                        <div class="form-group">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-input" name="username" placeholder="Portal username">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-input" name="password" placeholder="Portal password">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Portal URL</label>
+                            <input type="url" class="form-input" name="portalUrl" placeholder="https://portal.carrier.com">
+                        </div>
+                    `;
+                    break;
+                
+                case 'manual':
+                    credentialsHTML += `
+                        <div style="padding: 1rem; background: var(--info); color: white; border-radius: 6px; font-size: 0.875rem;">
+                            Manual upload integration requires no credentials. Documents will be processed using OCR technology.
+                        </div>
+                    `;
+                    break;
+            }
+
+            section.innerHTML = credentialsHTML;
+        }
+
+        async function testConnection() {
+            const form = document.getElementById('newConnectionForm');
+            const formData = new FormData(form);
+            const testResult = document.getElementById('testResult');
+            
+            const config = {
+                carrierId: formData.get('carrierId'),
+                type: formData.get('connectionType'),
+                credentials: {},
+                settings: {}
+            };
+
+            // Collect credentials
+            const inputs = form.querySelectorAll('input[name], select[name]');
+            inputs.forEach(input => {
+                if (input.name && input.value) {
+                    config.credentials[input.name] = input.value;
+                }
+            });
+
+            try {
+                testResult.style.display = 'block';
+                testResult.className = 'test-result';
+                testResult.innerHTML = '<span class="loading-spinner"></span> Testing connection...';
+
+                // Test the connection
+                const result = await integrationEngine.createConnection(config);
+                
+                if (result.success) {
+                    testResult.className = 'test-result success';
+                    testResult.innerHTML = '✓ Connection test successful! Ready to create connection.';
+                } else {
+                    testResult.className = 'test-result error';
+                    testResult.innerHTML = '✗ Connection test failed: ' + result.error;
+                }
+            } catch (error) {
+                testResult.className = 'test-result error';
+                testResult.innerHTML = '✗ Connection test failed: ' + error.message;
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('newConnectionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            
+            const config = {
+                carrierId: formData.get('carrierId'),
+                type: formData.get('connectionType'),
+                name: formData.get('connectionName') || `${getCarrierName(formData.get('carrierId'))} Connection`,
+                credentials: {},
+                settings: {}
+            };
+
+            // Collect credentials
+            const inputs = e.target.querySelectorAll('input[name], select[name]');
+            inputs.forEach(input => {
+                if (input.name && input.value) {
+                    config.credentials[input.name] = input.value;
+                }
+            });
+
+            try {
+                const result = await integrationEngine.createConnection(config);
+                
+                if (result.success) {
+                    connections.push(result.connection);
+                    updateConnectionGrid();
+                    updateStatistics();
+                    hideNewConnectionForm();
+                    addActivityLog(`Created new ${config.carrierId} connection`, 'success');
+                } else {
+                    alert('Failed to create connection: ' + result.error);
+                }
+            } catch (error) {
+                alert('Failed to create connection: ' + error.message);
+                addActivityLog(`Failed to create ${config.carrierId} connection: ${error.message}`, 'error');
+            }
+        });
+
+        async function fetchData(connectionId) {
+            try {
+                const connection = connections.find(c => c.id === connectionId);
+                if (!connection) return;
+
+                addActivityLog(`Syncing data from ${connection.carrierId}...`, 'info');
+                
+                const data = await integrationEngine.fetchData(connectionId, 'containers', {});
+                
+                addActivityLog(`Synchronized ${data.length} records from ${connection.carrierId}`, 'success');
+                
+                // Update connection metrics
+                await loadConnections();
+                updateConnectionGrid();
+                updateStatistics();
+            } catch (error) {
+                addActivityLog(`Sync failed for ${connectionId}: ${error.message}`, 'error');
+            }
+        }
+
+        async function testConnectionHealth(connectionId) {
+            try {
+                const health = integrationEngine.getConnectionHealth(connectionId);
+                if (health) {
+                    alert(`Connection Health: ${health.health}%\nStatus: ${health.status}\nUptime: ${health.metrics.uptime}%`);
+                }
+            } catch (error) {
+                alert('Health check failed: ' + error.message);
+            }
+        }
+
+        function editConnection(connectionId) {
+            alert('Edit connection functionality would open here');
+        }
+
+        function deleteConnection(connectionId) {
+            if (confirm('Are you sure you want to delete this connection?')) {
+                connections = connections.filter(c => c.id !== connectionId);
+                updateConnectionGrid();
+                updateStatistics();
+                addActivityLog(`Deleted connection ${connectionId}`, 'info');
+            }
+        }
+
+        async function syncAllConnections() {
+            addActivityLog('Starting sync for all connections...', 'info');
+            
+            const promises = connections.map(async connection => {
+                try {
+                    await fetchData(connection.id);
+                } catch (error) {
+                    console.error(`Sync failed for ${connection.id}:`, error);
+                }
+            });
+
+            await Promise.all(promises);
+            addActivityLog('Completed sync for all connections', 'success');
+        }
+
+        function addActivityLog(message, status) {
+            const log = document.getElementById('activityLog');
+            const time = new Date().toLocaleTimeString();
+            
+            const logItem = document.createElement('div');
+            logItem.className = 'log-item';
+            logItem.innerHTML = `
+                <div class="log-time">${time}</div>
+                <div class="log-message">${message}</div>
+                <div class="log-status ${status}">${status.toUpperCase()}</div>
+            `;
+            
+            log.insertBefore(logItem, log.firstChild);
+            
+            // Keep only last 20 entries
+            while (log.children.length > 20) {
+                log.removeChild(log.lastChild);
+            }
+        }
+
+        function startPeriodicUpdates() {
+            // Update metrics every 30 seconds
+            setInterval(async () => {
+                await loadConnections();
+                updateConnectionGrid();
+                updateStatistics();
+            }, 30000);
+        }
+
+        // Listen for integration alerts
+        window.addEventListener('integration-alert', function(e) {
+            const alert = e.detail;
+            addActivityLog(`Alert: ${alert.message} (${alert.carrierId})`, alert.severity);
+        });
+    </script>
+</body>
+</html>

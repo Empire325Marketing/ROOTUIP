@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="/platform/manifest.json">
+    <link rel="apple-touch-icon" href="/assets/icons/icon-192x192.png">
+    <title>ROOTUIP Mobile - Shipping Operations</title>
+    <link rel="stylesheet" href="/platform/css/mobile-responsive.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            overscroll-behavior: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Mobile App Container */
+        .mobile-app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Mobile Header */
+        .mobile-header {
+            background: #0f172a;
+            color: white;
+            padding: 1rem;
+            padding-top: calc(1rem + env(safe-area-inset-top));
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .icon-btn:active {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Quick Stats Bar */
+        .quick-stats {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 0.5rem 0;
+        }
+
+        .quick-stats::-webkit-scrollbar {
+            display: none;
+        }
+
+        .stat-item {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .stat-value {
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .mobile-content {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: calc(80px + env(safe-area-inset-bottom));
+        }
+
+        /* Quick Actions */
+        .quick-actions-section {
+            padding: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #0f172a;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: #1e293b;
+        }
+
+        .action-bubble {
+            width: 56px;
+            height: 56px;
+            background: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.2s;
+        }
+
+        .action-item:active .action-bubble {
+            transform: scale(0.95);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+        }
+
+        .action-label {
+            font-size: 0.75rem;
+            text-align: center;
+            color: #64748b;
+        }
+
+        /* Shipment Cards */
+        .shipments-section {
+            padding: 0 1rem 1rem;
+        }
+
+        .shipment-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shipment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.75rem;
+        }
+
+        .shipment-id {
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 0.875rem;
+        }
+
+        .shipment-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status-transit {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-port {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-delivered {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .route-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            color: #475569;
+            font-size: 0.875rem;
+        }
+
+        .route-arrow {
+            color: #94a3b8;
+        }
+
+        .shipment-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .detail-item {
+            text-align: center;
+        }
+
+        .detail-label {
+            color: #94a3b8;
+            font-size: 0.75rem;
+        }
+
+        .detail-value {
+            color: #0f172a;
+            font-weight: 500;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            padding: 0.5rem 0;
+            padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+
+        .nav-items {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            color: #64748b;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+        }
+
+        .nav-icon {
+            font-size: 1.25rem;
+        }
+
+        .nav-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: 0;
+            right: 0.5rem;
+            background: #ef4444;
+            color: white;
+            font-size: 0.625rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        /* Pull to Refresh */
+        .pull-indicator {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .pull-indicator.active {
+            transform: translateX(-50%) translateY(80px);
+        }
+
+        .pull-spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Offline Banner */
+        .offline-banner {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.75rem 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        body.offline .offline-banner {
+            display: block;
+        }
+
+        /* Loading States */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-app">
+        <!-- Pull to Refresh Indicator -->
+        <div class="pull-indicator" id="pullIndicator">
+            <div class="pull-spinner"></div>
+        </div>
+
+        <!-- Offline Banner -->
+        <div class="offline-banner">
+            📡 You're offline - showing cached data
+        </div>
+
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <div class="header-top">
+                <div class="logo-section">
+                    <div class="logo">UI</div>
+                    <div>
+                        <div style="font-weight: 600;">ROOTUIP</div>
+                        <div style="font-size: 0.75rem; opacity: 0.8;">Acme Corporation</div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" onclick="showSearch()">
+                        🔍
+                    </button>
+                    <button class="icon-btn" onclick="showNotifications()">
+                        🔔
+                        <span class="nav-badge" style="position: absolute; top: -4px; right: -4px;">3</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="quick-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Active</span>
+                    <span class="stat-value">127</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">On-Time</span>
+                    <span class="stat-value">94.2%</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">At Risk</span>
+                    <span class="stat-value">3</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Delayed</span>
+                    <span class="stat-value">2</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Savings</span>
+                    <span class="stat-value">$142K</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="mobile-content" id="mobileContent">
+            <!-- Quick Actions -->
+            <section class="quick-actions-section">
+                <h2 class="section-title">Quick Actions</h2>
+                <div class="action-grid">
+                    <a href="#" class="action-item" onclick="trackShipment()">
+                        <div class="action-bubble">📦</div>
+                        <span class="action-label">Track</span>
+                    </a>
+                    <a href="#" class="action-item" onclick="newBooking()">
+                        <div class="action-bubble">➕</div>
+                        <span class="action-label">Book</span>
+                    </a>
+                    <a href="#" class="action-item" onclick="scanDocument()">
+                        <div class="action-bubble">📸</div>
+                        <span class="action-label">Scan</span>
+                    </a>
+                    <a href="#" class="action-item" onclick="viewReports()">
+                        <div class="action-bubble">📊</div>
+                        <span class="action-label">Reports</span>
+                    </a>
+                    <a href="#" class="action-item" onclick="viewInvoices()">
+                        <div class="action-bubble">💰</div>
+                        <span class="action-label">Invoice</span>
+                    </a>
+                    <a href="#" class="action-item" onclick="getSupport()">
+                        <div class="action-bubble">💬</div>
+                        <span class="action-label">Support</span>
+                    </a>
+                    <a href="#" class="action-item" onclick="viewAlerts()">
+                        <div class="action-bubble">⚠️</div>
+                        <span class="action-label">Alerts</span>
+                    </a>
+                    <a href="#" class="action-item" onclick="moreOptions()">
+                        <div class="action-bubble">⋯</div>
+                        <span class="action-label">More</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Active Shipments -->
+            <section class="shipments-section">
+                <h2 class="section-title">Recent Shipments</h2>
+                
+                <div id="shipmentsList">
+                    <!-- Shipment cards will be dynamically loaded -->
+                    <div class="shipment-card">
+                        <div class="shipment-header">
+                            <div>
+                                <div class="shipment-id">MAEU1234567</div>
+                                <div style="color: #64748b; font-size: 0.75rem;">BL123456789</div>
+                            </div>
+                            <span class="shipment-status status-transit">In Transit</span>
+                        </div>
+                        <div class="route-info">
+                            <span>Shanghai</span>
+                            <span class="route-arrow">→</span>
+                            <span>Rotterdam</span>
+                        </div>
+                        <div class="shipment-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Carrier</div>
+                                <div class="detail-value">Maersk</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">ETA</div>
+                                <div class="detail-value">Jul 15</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">D&D Risk</div>
+                                <div class="detail-value" style="color: #10b981;">Low</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="shipment-card">
+                        <div class="shipment-header">
+                            <div>
+                                <div class="shipment-id">MSCU7654321</div>
+                                <div style="color: #64748b; font-size: 0.75rem;">BL987654321</div>
+                            </div>
+                            <span class="shipment-status status-port">At Port</span>
+                        </div>
+                        <div class="route-info">
+                            <span>Singapore</span>
+                            <span class="route-arrow">→</span>
+                            <span>Los Angeles</span>
+                        </div>
+                        <div class="shipment-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Carrier</div>
+                                <div class="detail-value">MSC</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">ETA</div>
+                                <div class="detail-value">Jul 10</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">D&D Risk</div>
+                                <div class="detail-value" style="color: #f59e0b;">Medium</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-items">
+                <a href="#" class="nav-item active">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Home</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-label">Shipments</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Analytics</span>
+                    <span class="nav-badge">2</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">📄</span>
+                    <span class="nav-label">Documents</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-label">Account</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <script src="/platform/pwa-install.js"></script>
+    <script>
+        // Mobile-specific functionality
+        let touchStartY = 0;
+        let touchEndY = 0;
+        let isRefreshing = false;
+
+        // Pull to refresh
+        const mobileContent = document.getElementById('mobileContent');
+        const pullIndicator = document.getElementById('pullIndicator');
+
+        mobileContent.addEventListener('touchstart', e => {
+            touchStartY = e.touches[0].clientY;
+        });
+
+        mobileContent.addEventListener('touchmove', e => {
+            if (mobileContent.scrollTop === 0) {
+                touchEndY = e.touches[0].clientY;
+                const pullDistance = touchEndY - touchStartY;
+                
+                if (pullDistance > 0 && pullDistance < 150) {
+                    e.preventDefault();
+                    pullIndicator.style.transform = `translateX(-50%) translateY(${pullDistance}px)`;
+                }
+                
+                if (pullDistance > 100) {
+                    pullIndicator.classList.add('active');
+                }
+            }
+        });
+
+        mobileContent.addEventListener('touchend', e => {
+            const pullDistance = touchEndY - touchStartY;
+            
+            if (pullDistance > 100 && !isRefreshing) {
+                isRefreshing = true;
+                refreshData();
+            } else {
+                pullIndicator.style.transform = 'translateX(-50%) translateY(0)';
+                pullIndicator.classList.remove('active');
+            }
+            
+            touchStartY = 0;
+            touchEndY = 0;
+        });
+
+        // Refresh data
+        async function refreshData() {
+            // Simulate data refresh
+            setTimeout(() => {
+                pullIndicator.style.transform = 'translateX(-50%) translateY(0)';
+                pullIndicator.classList.remove('active');
+                isRefreshing = false;
+                
+                // Update UI
+                showToast('Data refreshed');
+            }, 1500);
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #1e293b;
+                color: white;
+                padding: 0.75rem 1.5rem;
+                border-radius: 8px;
+                font-size: 0.875rem;
+                z-index: 1000;
+                animation: slideUp 0.3s ease-out;
+            `;
+            
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Check offline status
+        function updateOnlineStatus() {
+            if (!navigator.onLine) {
+                document.body.classList.add('offline');
+            } else {
+                document.body.classList.remove('offline');
+            }
+        }
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        updateOnlineStatus();
+
+        // Load metrics on page load
+        async function loadMetrics() {
+            try {
+                const response = await fetch('/api/metrics');
+                if (response.ok) {
+                    const data = await response.json();
+                    // Update quick stats
+                    document.querySelectorAll('.stat-value')[0].textContent = data.activeShipments;
+                    document.querySelectorAll('.stat-value')[1].textContent = data.onTimeDelivery + '%';
+                }
+            } catch (error) {
+                console.log('Using static data');
+            }
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMetrics();
+        });
+
+        // Quick action handlers
+        function trackShipment() {
+            window.location.href = '/platform/track-shipment.html';
+        }
+
+        function newBooking() {
+            window.location.href = '/platform/new-booking.html';
+        }
+
+        function scanDocument() {
+            // Check if camera API is available
+            if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+                window.location.href = '/platform/document-scanner.html';
+            } else {
+                showToast('Camera not available on this device');
+            }
+        }
+
+        function viewReports() {
+            window.location.href = '/platform/reports.html';
+        }
+
+        // Haptic feedback for iOS
+        function hapticFeedback() {
+            if ('vibrate' in navigator) {
+                navigator.vibrate(10);
+            }
+        }
+
+        // Add haptic feedback to buttons
+        document.querySelectorAll('button, a').forEach(element => {
+            element.addEventListener('touchstart', hapticFeedback);
+        });
+
+        // Install prompt
+        if ('serviceWorker' in navigator) {
+            // Check if not already installed
+            if (!window.matchMedia('(display-mode: standalone)').matches) {
+                setTimeout(() => {
+                    if (window.PWAInstall && !window.PWAInstall.checkIfInstalled()) {
+                        showToast('📱 Add to home screen for the best experience');
+                    }
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>

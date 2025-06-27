@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Processing Queue - UIP Platform</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-title {
+            color: #2c3e50;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .upload-section {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .upload-zone {
+            border: 3px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: rgba(102, 126, 234, 0.05);
+            cursor: pointer;
+        }
+
+        .upload-zone:hover {
+            border-color: #5a67d8;
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .upload-zone.dragover {
+            border-color: #4c51bf;
+            background: rgba(102, 126, 234, 0.15);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            font-size: 1.2rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .upload-subtext {
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .queue-controls {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .queue-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .queued { color: #667eea; }
+        .processing { color: #ed8936; }
+        .completed { color: #48bb78; }
+        .failed { color: #f56565; }
+
+        .queue-list {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .queue-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 150px 120px 150px 100px 120px;
+            gap: 15px;
+            font-weight: 600;
+            align-items: center;
+        }
+
+        .queue-item {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: grid;
+            grid-template-columns: 1fr 150px 120px 150px 100px 120px;
+            gap: 15px;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .queue-item:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .queue-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .file-details h4 {
+            margin: 0 0 5px 0;
+            font-size: 1rem;
+            color: #2d3748;
+        }
+
+        .file-details p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #718096;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-queued {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .status-processing {
+            background: rgba(237, 137, 54, 0.1);
+            color: #ed8936;
+        }
+
+        .status-completed {
+            background: rgba(72, 187, 120, 0.1);
+            color: #48bb78;
+        }
+
+        .status-failed {
+            background: rgba(245, 101, 101, 0.1);
+            color: #f56565;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .confidence-score {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .action-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+
+        .action-btn.danger {
+            background: #f56565;
+        }
+
+        .action-btn.danger:hover {
+            background: #e53e3e;
+        }
+
+        .processing-details {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .processing-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .step-card {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            border: 2px solid #e2e8f0;
+        }
+
+        .step-card.active {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .step-card.completed {
+            border-color: #48bb78;
+            background: rgba(72, 187, 120, 0.05);
+        }
+
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .step-queued { background: #a0aec0; }
+        .step-active { background: #667eea; }
+        .step-completed { background: #48bb78; }
+
+        @media (max-width: 768px) {
+            .queue-header,
+            .queue-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .queue-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                min-width: auto;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div id="header-logo"></div>
+                    <h1 class="page-title">Document Processing Queue</h1>
+                </div>
+                <div>
+                    <a href="/ROOTUIP/platform/dashboard.html" class="upload-btn">← Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-icon">📄</div>
+                <div class="upload-text">Drop documents here or click to upload</div>
+                <div class="upload-subtext">Supports PDF, JPG, PNG, TIFF • Max 50MB per file</div>
+                <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                    Choose Files
+                </button>
+                <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.jpg,.jpeg,.png,.tiff,.tif">
+            </div>
+        </div>
+
+        <!-- Queue Controls -->
+        <div class="queue-controls">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="queued">Queued</button>
+            <button class="filter-btn" data-filter="processing">Processing</button>
+            <button class="filter-btn" data-filter="completed">Completed</button>
+            <button class="filter-btn" data-filter="failed">Failed</button>
+            <input type="text" class="search-box" placeholder="Search documents..." id="searchBox">
+            <button class="upload-btn" onclick="clearQueue()">Clear Completed</button>
+        </div>
+
+        <!-- Queue Statistics -->
+        <div class="queue-stats">
+            <div class="stat-card">
+                <div class="stat-number queued" id="queuedCount">0</div>
+                <div class="stat-label">Queued</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number processing" id="processingCount">0</div>
+                <div class="stat-label">Processing</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number completed" id="completedCount">0</div>
+                <div class="stat-label">Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number failed" id="failedCount">0</div>
+                <div class="stat-label">Failed</div>
+            </div>
+        </div>
+
+        <!-- Queue List -->
+        <div class="queue-list">
+            <div class="queue-header">
+                <div>Document</div>
+                <div>Status</div>
+                <div>Progress</div>
+                <div>Confidence</div>
+                <div>Priority</div>
+                <div>Actions</div>
+            </div>
+            <div id="queueItems">
+                <!-- Queue items will be populated here -->
+            </div>
+        </div>
+
+        <!-- Processing Details Modal -->
+        <div class="processing-details" id="processingDetails">
+            <h3>Processing Pipeline</h3>
+            <div class="processing-steps" id="processingSteps">
+                <!-- Processing steps will be shown here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/ROOTUIP/js/logo-component.js?v=1750888019"></script>
+    <script src="/ROOTUIP/platform/js/ai-engine.js?v=1750888019"></script>
+    <script>
+        // Initialize logo
+        document.getElementById('header-logo').innerHTML = UIPLogo.getLogo({
+            size: 'medium',
+            type: 'full',
+            theme: 'color'
+        });
+
+        // Initialize AI Engine
+        let aiEngine;
+        let documentQueue = [];
+
+        async function initializeAI() {
+            try {
+                aiEngine = new AIEngine();
+                await aiEngine.initializeEngine();
+                console.log('AI Engine initialized successfully');
+            } catch (error) {
+                console.error('Failed to initialize AI Engine:', error);
+            }
+        }
+
+        // Initialize on page load
+        initializeAI();
+
+        // File upload handling
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files);
+            handleFileUpload(files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            handleFileUpload(files);
+        });
+
+        async function handleFileUpload(files) {
+            for (const file of files) {
+                if (file.size > 50 * 1024 * 1024) { // 50MB limit
+                    alert(`File ${file.name} is too large. Maximum size is 50MB.`);
+                    continue;
+                }
+
+                const queueItem = {
+                    id: generateId(),
+                    file: file,
+                    fileName: file.name,
+                    fileSize: formatFileSize(file.size),
+                    fileType: getFileType(file.name),
+                    status: 'queued',
+                    progress: 0,
+                    confidence: 0,
+                    priority: 'normal',
+                    timestamp: new Date(),
+                    steps: [
+                        { name: 'Language Detection', status: 'queued' },
+                        { name: 'OCR Processing', status: 'queued' },
+                        { name: 'Classification', status: 'queued' },
+                        { name: 'Entity Extraction', status: 'queued' },
+                        { name: 'Quality Assessment', status: 'queued' }
+                    ]
+                };
+
+                documentQueue.push(queueItem);
+                renderQueue();
+                updateStats();
+
+                // Start processing
+                processDocument(queueItem);
+            }
+        }
+
+        async function processDocument(queueItem) {
+            try {
+                queueItem.status = 'processing';
+                renderQueue();
+                updateStats();
+
+                // Simulate processing steps
+                for (let i = 0; i < queueItem.steps.length; i++) {
+                    queueItem.steps[i].status = 'processing';
+                    queueItem.progress = (i / queueItem.steps.length) * 100;
+                    renderQueue();
+
+                    // Simulate processing time
+                    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+
+                    queueItem.steps[i].status = 'completed';
+                    queueItem.progress = ((i + 1) / queueItem.steps.length) * 100;
+                    renderQueue();
+                }
+
+                // Process with AI Engine if available
+                if (aiEngine) {
+                    const result = await aiEngine.processDocument(queueItem.file, {
+                        accuracy: 'high',
+                        language: 'auto'
+                    });
+
+                    queueItem.processingId = result.processingId;
+                    queueItem.estimatedTime = result.estimatedTime;
+                }
+
+                queueItem.status = 'completed';
+                queueItem.confidence = 85 + Math.random() * 14; // 85-99%
+                
+            } catch (error) {
+                queueItem.status = 'failed';
+                queueItem.error = error.message;
+                console.error('Document processing failed:', error);
+            }
+
+            renderQueue();
+            updateStats();
+        }
+
+        function renderQueue() {
+            const container = document.getElementById('queueItems');
+            const filteredQueue = filterQueue();
+
+            container.innerHTML = filteredQueue.map(item => `
+                <div class="queue-item" data-status="${item.status}">
+                    <div class="file-info">
+                        <div class="file-icon">${getFileIcon(item.fileType)}</div>
+                        <div class="file-details">
+                            <h4>${item.fileName}</h4>
+                            <p>${item.fileSize} • ${item.fileType.toUpperCase()} • ${formatTime(item.timestamp)}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="status-badge status-${item.status}">${item.status}</span>
+                    </div>
+                    <div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${item.progress}%"></div>
+                        </div>
+                        <small>${Math.round(item.progress)}%</small>
+                    </div>
+                    <div class="confidence-score">
+                        ${item.confidence ? Math.round(item.confidence) + '%' : '-'}
+                    </div>
+                    <div>
+                        <span class="priority-badge">${item.priority}</span>
+                    </div>
+                    <div>
+                        ${item.status === 'completed' ? 
+                            `<button class="action-btn" onclick="downloadResult('${item.id}')">Download</button>` :
+                            item.status === 'processing' ?
+                            `<button class="action-btn" onclick="showProcessingDetails('${item.id}')">Details</button>` :
+                            `<button class="action-btn danger" onclick="cancelProcessing('${item.id}')">Cancel</button>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterQueue() {
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+
+            return documentQueue.filter(item => {
+                const matchesFilter = activeFilter === 'all' || item.status === activeFilter;
+                const matchesSearch = item.fileName.toLowerCase().includes(searchTerm);
+                return matchesFilter && matchesSearch;
+            });
+        }
+
+        function updateStats() {
+            const stats = documentQueue.reduce((acc, item) => {
+                acc[item.status] = (acc[item.status] || 0) + 1;
+                return acc;
+            }, {});
+
+            document.getElementById('queuedCount').textContent = stats.queued || 0;
+            document.getElementById('processingCount').textContent = stats.processing || 0;
+            document.getElementById('completedCount').textContent = stats.completed || 0;
+            document.getElementById('failedCount').textContent = stats.failed || 0;
+        }
+
+        function downloadResult(itemId) {
+            const item = documentQueue.find(i => i.id === itemId);
+            if (item) {
+                // Simulate download
+                const data = {
+                    fileName: item.fileName,
+                    confidence: item.confidence,
+                    extractedText: "Sample extracted text...",
+                    entities: ["Entity 1", "Entity 2"],
+                    classification: "Bill of Lading"
+                };
+                
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${item.fileName}_result.js?v=1750888019on`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        function showProcessingDetails(itemId) {
+            const item = documentQueue.find(i => i.id === itemId);
+            if (item) {
+                const detailsContainer = document.getElementById('processingDetails');
+                const stepsContainer = document.getElementById('processingSteps');
+                
+                stepsContainer.innerHTML = item.steps.map(step => `
+                    <div class="step-card ${step.status}">
+                        <div class="step-icon step-${step.status}">
+                            ${step.status === 'completed' ? '✓' : 
+                              step.status === 'processing' ? '⟳' : '○'}
+                        </div>
+                        <h4>${step.name}</h4>
+                        <p>${step.status}</p>
+                    </div>
+                `).join('');
+                
+                detailsContainer.style.display = 'block';
+            }
+        }
+
+        function cancelProcessing(itemId) {
+            const item = documentQueue.find(i => i.id === itemId);
+            if (item && item.status !== 'completed') {
+                item.status = 'failed';
+                item.error = 'Cancelled by user';
+                renderQueue();
+                updateStats();
+            }
+        }
+
+        function clearQueue() {
+            documentQueue = documentQueue.filter(item => item.status !== 'completed');
+            renderQueue();
+            updateStats();
+        }
+
+        // Filter button handlers
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderQueue();
+            });
+        });
+
+        // Search handler
+        document.getElementById('searchBox').addEventListener('input', renderQueue);
+
+        // Utility functions
+        function generateId() {
+            return 'doc_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function getFileType(fileName) {
+            const extension = fileName.split('.').pop().toLowerCase();
+            return extension;
+        }
+
+        function getFileIcon(fileType) {
+            const icons = {
+                pdf: 'PDF',
+                jpg: 'IMG',
+                jpeg: 'IMG',
+                png: 'IMG',
+                tiff: 'IMG',
+                tif: 'IMG'
+            };
+            return icons[fileType] || 'DOC';
+        }
+
+        function formatTime(date) {
+            return date.toLocaleTimeString();
+        }
+
+        // Listen for document processing events
+        if (typeof window !== 'undefined') {
+            window.addEventListener('document-processed', (event) => {
+                const { processingId, result, status } = event.detail;
+                const item = documentQueue.find(i => i.processingId === processingId);
+                
+                if (item) {
+                    item.status = status;
+                    item.result = result;
+                    if (result) {
+                        item.confidence = result.confidence * 100;
+                    }
+                    renderQueue();
+                    updateStats();
+                }
+            });
+        }
+
+        // Initial render
+        renderQueue();
+        updateStats();
+    </script>
+</body>
+</html>

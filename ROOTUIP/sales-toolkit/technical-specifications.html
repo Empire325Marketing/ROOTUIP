@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP Technical Specifications | Enterprise Ocean Freight Platform</title>
-    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <link rel="icon" type="image/svg+xml" href="/brand/brand/logo-icon-new.svg">
     <script src="/js/logo-component.js"></script>
     <style>
         body {
             font-family: 'Inter', -apple-system, sans-serif;
             line-height: 1.6;
-            color: #0A1628;
+            color: var(--uip-primary-800);
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
@@ -19,7 +19,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid #00D4AA;
+            border-bottom: 3px solid var(--uip-success-500);
             padding-bottom: 1rem;
             margin-bottom: 2rem;
         }
@@ -30,7 +30,7 @@
         
         h1 {
             font-size: 2rem;
-            color: #0A1628;
+            color: var(--uip-primary-800);
             margin-bottom: 0.5rem;
         }
         
@@ -47,8 +47,8 @@
         }
         
         .spec-section h2 {
-            color: #0A1628;
-            border-left: 4px solid #00D4AA;
+            color: var(--uip-primary-800);
+            border-left: 4px solid var(--uip-success-500);
             padding-left: 1rem;
             margin-bottom: 1rem;
         }
@@ -103,13 +103,13 @@
         }
         
         .integration-table th {
-            background: #0A1628;
+            background: var(--uip-primary-800);
             color: white;
             font-weight: 600;
         }
         
         .status-active {
-            color: #00D4AA;
+            color: var(--uip-success-500);
             font-weight: 600;
         }
         
@@ -131,7 +131,7 @@
         .metric-value {
             font-size: 1.5rem;
             font-weight: 800;
-            color: #00D4AA;
+            color: var(--uip-success-500);
             display: block;
         }
         
@@ -142,7 +142,7 @@
         
         .api-endpoints {
             background: #1a1a1a;
-            color: #00D4AA;
+            color: var(--uip-success-500);
             padding: 1rem;
             border-radius: 4px;
             font-family: 'IBM Plex Mono', monospace;
@@ -161,11 +161,13 @@
         
         .requirements-list li:before {
             content: "✓";
-            color: #00D4AA;
+            color: var(--uip-success-500);
             font-weight: bold;
             margin-right: 0.5rem;
         }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="header">

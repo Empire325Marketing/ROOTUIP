@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Management Platform | UIP Enterprise Infrastructure</title>
+<style media="print" onload="this.media='all'">*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0f172a;color:#e2e8f0}.sidebar{display:none}@media(min-width:768px){.sidebar{display:block}}</style>
+<meta name="description" content="Enterprise data management platform with data lake architecture, real-time processing, governance controls, and privacy compliance for UIP.">
+<link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+<style media="print" onload="this.media='all'">
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+body {
+font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+background: #0f172a;
+color: #e2e8f0;
+overflow-x: hidden;
+}
+.data-container {
+display: flex;
+min-height: 100vh;
+}
+/* Sidebar */
+.sidebar {
+width: 260px;
+background: #1e293b;
+padding: 20px 0;
+position: fixed;
+height: 100vh;
+overflow-y: auto;
+border-right: 1px solid #334155;
+}
+.logo {
+padding: 0 20px 30px;
+border-bottom: 1px solid #334155;
+margin-bottom: 20px;
+}
+.logo h2 {
+font-size: 1.5rem;
+font-weight: 700;
+color: #38bdf8;
+display: flex;
+align-items: center;
+gap: 10px;
+}
+.nav-section {
+margin-bottom: 30px;
+padding: 0 20px;
+}
+.nav-title {
+font-size: 0.8rem;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+color: #64748b;
+margin-bottom: 10px;
+}
+.nav-item {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 10px 15px;
+margin: 5px -15px;
+border-radius: 8px;
+text-decoration: none;
+color: #cbd5e1;
+transition: all 0.3s ease;
+}
+.nav-item:hover, .nav-item.active {
+background: rgba(56, 189, 248, 0.1);
+color: #38bdf8;
+}
+/* Main Content */
+.main-content {
+flex: 1;
+margin-left: 260px;
+padding: 20px;
+}
+.header {
+background: #1e293b;
+padding: 25px 30px;
+border-radius: 12px;
+border: 1px solid #334155;
+margin-bottom: 30px;
+}
+.header-top {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+}
+.page-title {
+font-size: 1.8rem;
+font-weight: 700;
+color: #e2e8f0;
+}
+.header-actions {
+display: flex;
+gap: 15px;
+}
+.btn {
+padding: 10px 20px;
+border: none;
+border-radius: 8px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+font-size: 0.9rem;
+display: inline-flex;
+align-items: center;
+gap: 8px;
+}
+.btn-primary {
+background: linear-gradient(135deg, #3b82f6, #1e40af);
+color: white;
+}
+.btn-primary:hover {
+transform: translateY(-2px);
+box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+}
+.btn-secondary {
+background: #334155;
+color: #e2e8f0;
+}
+/* Data Architecture Overview */
+.architecture-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+gap: 20px;
+margin-bottom: 30px;
+}
+.architecture-card {
+background: #1e293b;
+padding: 25px;
+border-radius: 12px;
+border: 1px solid #334155;
+}
+.arch-header {
+display: flex;
+align-items: center;
+gap: 15px;
+margin-bottom: 20px;
+}
+.arch-icon {
+width: 50px;
+height: 50px;
+background: linear-gradient(135deg, #3b82f6, #1e40af);
+border-radius: 12px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1.5rem;
+}
+.arch-title {
+font-size: 1.2rem;
+font-weight: 600;
+color: #e2e8f0;
+}
+.arch-stats {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 15px;
+}
+.stat-item {
+background: #0f172a;
+padding: 15px;
+border-radius: 8px;
+border: 1px solid #334155;
+}
+.stat-value {
+font-size: 1.5rem;
+font-weight: 700;
+color: #38bdf8;
+margin-bottom: 5px;
+}
+.stat-label {
+font-size: 0.85rem;
+color: #94a3b8;
+}
+/* Data Pipeline */
+.pipeline-section {
+background: #1e293b;
+padding: 30px;
+border-radius: 12px;
+border: 1px solid #334155;
+margin-bottom: 30px;
+}
+.section-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 25px;
+}
+.section-title {
+font-size: 1.4rem;
+font-weight: 600;
+color: #e2e8f0;
+}
+.pipeline-flow {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 30px;
+padding: 20px;
+background: #0f172a;
+border-radius: 10px;
+overflow-x: auto;
+}
+.pipeline-stage {
+flex: 1;
+text-align: center;
+padding: 20px;
+position: relative;
+}
+.pipeline-stage::after {
+content: '→';
+position: absolute;
+right: -20px;
+top: 50%;
+transform: translateY(-50%);
+font-size: 1.5rem;
+color: #38bdf8;
+}
+.pipeline-stage:last-child::after {
+display: none;
+}
+.stage-icon {
+width: 60px;
+height: 60px;
+background: #334155;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+margin: 0 auto 10px;
+font-size: 1.5rem;
+}
+.stage-name {
+font-weight: 600;
+color: #e2e8f0;
+margin-bottom: 5px;
+}
+.stage-count {
+font-size: 0.85rem;
+color: #94a3b8;
+}
+/* Data Sources */
+.sources-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+gap: 15px;
+margin-bottom: 30px;
+}
+.source-card {
+background: #0f172a;
+padding: 20px;
+border-radius: 8px;
+border: 1px solid #334155;
+text-align: center;
+transition: all 0.3s ease;
+}
+.source-card:hover {
+border-color: #38bdf8;
+transform: translateY(-2px);
+box-shadow: 0 5px 15px rgba(56, 189, 248, 0.1);
+}
+.source-icon {
+font-size: 2rem;
+margin-bottom: 10px;
+}
+.source-name {
+font-weight: 600;
+color: #e2e8f0;
+margin-bottom: 5px;
+}
+.source-status {
+font-size: 0.8rem;
+padding: 3px 8px;
+border-radius: 12px;
+background: rgba(34, 197, 94, 0.1);
+color: #10b981;
+}
+/* Data Governance */
+.governance-section {
+background: #1e293b;
+padding: 30px;
+border-radius: 12px;
+border: 1px solid #334155;
+margin-bottom: 30px;
+}
+.governance-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 20px;
+}
+.governance-item {
+background: #0f172a;
+padding: 20px;
+border-radius: 8px;
+border: 1px solid #334155;
+}
+.governance-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 15px;
+}
+.governance-title {
+font-weight: 600;
+color: #e2e8f0;
+}
+.compliance-badge {
+padding: 4px 10px;
+border-radius: 12px;
+font-size: 0.75rem;
+font-weight: 600;
+text-transform: uppercase;
+}
+.badge-compliant {
+background: rgba(34, 197, 94, 0.1);
+color: #10b981;
+}
+.badge-warning {
+background: rgba(251, 146, 60, 0.1);
+color: #f59e0b;
+}
+.governance-details {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+.detail-item {
+display: flex;
+justify-content: space-between;
+font-size: 0.9rem;
+}
+.detail-label {
+color: #94a3b8;
+}
+.detail-value {
+color: #e2e8f0;
+font-weight: 500;
+}
+/* Data Quality */
+.quality-metrics {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 15px;
+margin-bottom: 20px;
+}
+.quality-card {
+background: #0f172a;
+padding: 20px;
+border-radius: 8px;
+border: 1px solid #334155;
+text-align: center;
+}
+.quality-score {
+font-size: 2.5rem;
+font-weight: 700;
+color: #10b981;
+margin-bottom: 5px;
+}
+.quality-label {
+font-size: 0.9rem;
+color: #94a3b8;
+}
+/* Privacy Controls */
+.privacy-section {
+background: #1e293b;
+padding: 30px;
+border-radius: 12px;
+border: 1px solid #334155;
+}
+.privacy-controls {
+display: grid;
+gap: 20px;
+}
+.privacy-control {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 20px;
+background: #0f172a;
+border-radius: 8px;
+border: 1px solid #334155;
+}
+.control-info {
+flex: 1;
+}
+.control-title {
+font-weight: 600;
+color: #e2e8f0;
+margin-bottom: 5px;
+}
+.control-description {
+font-size: 0.9rem;
+color: #94a3b8;
+}
+.toggle-switch {
+position: relative;
+width: 50px;
+height: 24px;
+}
+.toggle-input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.toggle-slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #334155;
+transition: .4s;
+border-radius: 24px;
+}
+.toggle-slider:before {
+position: absolute;
+content: "";
+height: 16px;
+width: 16px;
+left: 4px;
+bottom: 4px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
+}
+.toggle-input:checked + .toggle-slider {
+background-color: #10b981;
+}
+.toggle-input:checked + .toggle-slider:before {
+transform: translateX(26px);
+}
+/* Retention Policies */
+.retention-table {
+width: 100%;
+border-collapse: collapse;
+}
+.retention-table th {
+text-align: left;
+padding: 12px;
+background: #0f172a;
+font-weight: 600;
+color: #94a3b8;
+font-size: 0.85rem;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+}
+.retention-table td {
+padding: 15px 12px;
+border-bottom: 1px solid #334155;
+color: #e2e8f0;
+}
+.retention-table tr:hover {
+background: rgba(56, 189, 248, 0.05);
+}
+@media (max-width: 768px) {
+.sidebar {
+transform: translateX(-100%);
+}
+.main-content {
+margin-left: 0;
+}
+.architecture-grid {
+grid-template-columns: 1fr;
+}
+.pipeline-flow {
+flex-direction: column;
+}
+.pipeline-stage::after {
+display: none;
+}
+}
+</style>
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="data-container">
+<!-- Sidebar -->
+<nav class="sidebar">
+<div class="logo">
+<h2>🏗️ UIP Infrastructure</h2>
+</div>
+<div class="nav-section">
+<div class="nav-title">Infrastructure</div>
+<a href="/infrastructure/cloud/index.html" class="nav-item">
+<span>☁️</span> Cloud Architecture
+</a>
+<a href="/infrastructure/security/index.html" class="nav-item">
+<span>🔐</span> Security
+</a>
+<a href="/infrastructure/data/index.html" class="nav-item active">
+<span>📊</span> Data Management
+</a>
+<a href="/infrastructure/integration/index.html" class="nav-item">
+<span>🔗</span> Integration
+</a>
+<a href="/infrastructure/monitoring/index.html" class="nav-item">
+<span>📈</span> Monitoring
+</a>
+</div>
+<div class="nav-section">
+<div class="nav-title">Analytics</div>
+<a href="#" class="nav-item">
+<span>📊</span> Performance
+</a>
+<a href="#" class="nav-item">
+<span>💰</span> Cost Analysis
+</a>
+<a href="#" class="nav-item">
+<span>🔍</span> Usage Insights
+</a>
+</div>
+<div class="nav-section">
+<div class="nav-title">Operations</div>
+<a href="#" class="nav-item">
+<span>🚀</span> Deployments
+</a>
+<a href="#" class="nav-item">
+<span>🔧</span> Maintenance
+</a>
+<a href="#" class="nav-item">
+<span>📝</span> Documentation
+</a>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="main-content">
+<!-- Header -->
+<div class="header">
+<div class="header-top">
+<h1 class="page-title">Data Management Platform</h1>
+<div class="header-actions">
+<button class="btn btn-secondary" onclick="viewDataCatalog()">
+📚 Data Catalog
+</button>
+<button class="btn btn-primary" onclick="createDataPipeline()">
++ New Pipeline
+</button>
+</div>
+</div>
+</div>
+<!-- Data Architecture Overview -->
+<div class="architecture-grid">
+<div class="architecture-card">
+<div class="arch-header">
+<div class="arch-icon">🌊</div>
+<div>
+<h3 class="arch-title">Data Lake</h3>
+<p style="color: #94a3b8; font-size: 0.9rem;">Unified data storage</p>
+</div>
+</div>
+<div class="arch-stats">
+<div class="stat-item">
+<div class="stat-value">2.4 PB</div>
+<div class="stat-label">Total Storage</div>
+</div>
+<div class="stat-item">
+<div class="stat-value">847 TB</div>
+<div class="stat-label">Active Data</div>
+</div>
+<div class="stat-item">
+<div class="stat-value">124K</div>
+<div class="stat-label">Datasets</div>
+</div>
+<div class="stat-item">
+<div class="stat-value">99.95%</div>
+<div class="stat-label">Availability</div>
+</div>
+</div>
+</div>
+<div class="architecture-card">
+<div class="arch-header">
+<div class="arch-icon">⚡</div>
+<div>
+<h3 class="arch-title">Stream Processing</h3>
+<p style="color: #94a3b8; font-size: 0.9rem;">Real-time data pipelines</p>
+</div>
+</div>
+<div class="arch-stats">
+<div class="stat-item">
+<div class="stat-value">1.2M</div>
+<div class="stat-label">Events/sec</div>
+</div>
+<div class="stat-item">
+<div class="stat-value">47</div>
+<div class="stat-label">Active Streams</div>
+</div>
+<div class="stat-item">
+<div class="stat-value"><50ms</div>
+<div class="stat-label">Avg Latency</div>
+</div>
+<div class="stat-item">
+<div class="stat-value">99.99%</div>
+<div class="stat-label">Uptime</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Data Pipeline -->
+<div class="pipeline-section">
+<div class="section-header">
+<h2 class="section-title">Data Pipeline Architecture</h2>
+<button class="btn btn-secondary" onclick="viewPipelineMetrics()">
+📈 Pipeline Metrics
+</button>
+</div>
+<div class="pipeline-flow">
+<div class="pipeline-stage">
+<div class="stage-icon">📥</div>
+<div class="stage-name">Ingestion</div>
+<div class="stage-count">247 sources</div>
+</div>
+<div class="pipeline-stage">
+<div class="stage-icon">🔄</div>
+<div class="stage-name">Processing</div>
+<div class="stage-count">89 transforms</div>
+</div>
+<div class="pipeline-stage">
+<div class="stage-icon">✨</div>
+<div class="stage-name">Enrichment</div>
+<div class="stage-count">34 models</div>
+</div>
+<div class="pipeline-stage">
+<div class="stage-icon">💾</div>
+<div class="stage-name">Storage</div>
+<div class="stage-count">12 destinations</div>
+</div>
+<div class="pipeline-stage">
+<div class="stage-icon">📊</div>
+<div class="stage-name">Analytics</div>
+<div class="stage-count">156 consumers</div>
+</div>
+</div>
+<div class="sources-grid">
+<div class="source-card">
+<div class="source-icon">🚛</div>
+<div class="source-name">Logistics API</div>
+<div class="source-status">Connected</div>
+</div>
+<div class="source-card">
+<div class="source-icon">📱</div>
+<div class="source-name">Mobile Apps</div>
+<div class="source-status">Connected</div>
+</div>
+<div class="source-card">
+<div class="source-icon">🌐</div>
+<div class="source-name">Web Platform</div>
+<div class="source-status">Connected</div>
+</div>
+<div class="source-card">
+<div class="source-icon">🏢</div>
+<div class="source-name">ERP Systems</div>
+<div class="source-status">Connected</div>
+</div>
+<div class="source-card">
+<div class="source-icon">📊</div>
+<div class="source-name">Analytics DB</div>
+<div class="source-status">Connected</div>
+</div>
+<div class="source-card">
+<div class="source-icon">🤖</div>
+<div class="source-name">IoT Sensors</div>
+<div class="source-status">Connected</div>
+</div>
+</div>
+</div>
+<!-- Data Governance -->
+<div class="governance-section">
+<div class="section-header">
+<h2 class="section-title">Data Governance & Quality</h2>
+<button class="btn btn-secondary" onclick="viewGovernanceReport()">
+📋 Governance Report
+</button>
+</div>
+<div class="quality-metrics">
+<div class="quality-card">
+<div class="quality-score">98.5%</div>
+<div class="quality-label">Data Quality Score</div>
+</div>
+<div class="quality-card">
+<div class="quality-score">99.2%</div>
+<div class="quality-label">Completeness</div>
+</div>
+<div class="quality-card">
+<div class="quality-score">97.8%</div>
+<div class="quality-label">Accuracy</div>
+</div>
+<div class="quality-card">
+<div class="quality-score">99.9%</div>
+<div class="quality-label">Consistency</div>
+</div>
+<div class="quality-card">
+<div class="quality-score">96.5%</div>
+<div class="quality-label">Timeliness</div>
+</div>
+</div>
+<div class="governance-grid">
+<div class="governance-item">
+<div class="governance-header">
+<span class="governance-title">Data Classification</span>
+<span class="compliance-badge badge-compliant">Compliant</span>
+</div>
+<div class="governance-details">
+<div class="detail-item">
+<span class="detail-label">Public Data</span>
+<span class="detail-value">34%</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">Internal</span>
+<span class="detail-value">45%</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">Confidential</span>
+<span class="detail-value">18%</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">Restricted</span>
+<span class="detail-value">3%</span>
+</div>
+</div>
+</div>
+<div class="governance-item">
+<div class="governance-header">
+<span class="governance-title">Access Control</span>
+<span class="compliance-badge badge-compliant">Compliant</span>
+</div>
+<div class="governance-details">
+<div class="detail-item">
+<span class="detail-label">Active Users</span>
+<span class="detail-value">1,247</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">Service Accounts</span>
+<span class="detail-value">89</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">Access Reviews</span>
+<span class="detail-value">Monthly</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">MFA Enabled</span>
+<span class="detail-value">98%</span>
+</div>
+</div>
+</div>
+<div class="governance-item">
+<div class="governance-header">
+<span class="governance-title">Audit Trail</span>
+<span class="compliance-badge badge-compliant">Compliant</span>
+</div>
+<div class="governance-details">
+<div class="detail-item">
+<span class="detail-label">Events Logged</span>
+<span class="detail-value">24.5M/day</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">Retention</span>
+<span class="detail-value">7 years</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">Immutability</span>
+<span class="detail-value">Enabled</span>
+</div>
+<div class="detail-item">
+<span class="detail-label">Encryption</span>
+<span class="detail-value">AES-256</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Privacy Controls -->
+<div class="privacy-section">
+<div class="section-header">
+<h2 class="section-title">Privacy & Compliance Controls</h2>
+<button class="btn btn-secondary" onclick="viewPrivacyReport()">
+🔒 Privacy Report
+</button>
+</div>
+<div class="privacy-controls">
+<div class="privacy-control">
+<div class="control-info">
+<h4 class="control-title">GDPR Data Subject Rights</h4>
+<p class="control-description">Automated handling of access, rectification, and deletion requests</p>
+</div>
+<label class="toggle-switch">
+<input type="checkbox" class="toggle-input" checked>
+<span class="toggle-slider"></span>
+</label>
+</div>
+<div class="privacy-control">
+<div class="control-info">
+<h4 class="control-title">PII Detection & Masking</h4>
+<p class="control-description">Automatic detection and masking of personally identifiable information</p>
+</div>
+<label class="toggle-switch">
+<input type="checkbox" class="toggle-input" checked>
+<span class="toggle-slider"></span>
+</label>
+</div>
+<div class="privacy-control">
+<div class="control-info">
+<h4 class="control-title">Cross-Border Transfer Controls</h4>
+<p class="control-description">Enforce data residency requirements and transfer restrictions</p>
+</div>
+<label class="toggle-switch">
+<input type="checkbox" class="toggle-input" checked>
+<span class="toggle-slider"></span>
+</label>
+</div>
+<div class="privacy-control">
+<div class="control-info">
+<h4 class="control-title">Consent Management</h4>
+<p class="control-description">Track and enforce user consent preferences across all data processing</p>
+</div>
+<label class="toggle-switch">
+<input type="checkbox" class="toggle-input" checked>
+<span class="toggle-slider"></span>
+</label>
+</div>
+</div>
+<h3 style="margin: 30px 0 20px; color: #e2e8f0;">Data Retention Policies</h3>
+<table class="retention-table">
+<thead>
+<tr>
+<th>Data Type</th>
+<th>Retention Period</th>
+<th>Legal Basis</th>
+<th>Auto-Delete</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transaction Data</td>
+<td>7 years</td>
+<td>Financial Regulations</td>
+<td>Enabled</td>
+<td style="color: #10b981;">Active</td>
+</tr>
+<tr>
+<td>Customer PII</td>
+<td>3 years after last activity</td>
+<td>GDPR / Consent</td>
+<td>Enabled</td>
+<td style="color: #10b981;">Active</td>
+</tr>
+<tr>
+<td>System Logs</td>
+<td>90 days</td>
+<td>Security Policy</td>
+<td>Enabled</td>
+<td style="color: #10b981;">Active</td>
+</tr>
+<tr>
+<td>Analytics Data</td>
+<td>2 years</td>
+<td>Business Need</td>
+<td>Enabled</td>
+<td style="color: #10b981;">Active</td>
+</tr>
+<tr>
+<td>Backup Archives</td>
+<td>1 year</td>
+<td>Disaster Recovery</td>
+<td>Enabled</td>
+<td style="color: #10b981;">Active</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+</div>
+<script defer>
+// Data management functions
+function createDataPipeline() {
+trackEvent('Data Pipeline Creation Started');
+console.log('Opening data pipeline creation wizard');
+// In production, this would open pipeline builder
+}
+function viewDataCatalog() {
+trackEvent('Data Catalog Accessed');
+console.log('Opening data catalog');
+// In production, this would open data catalog interface
+}
+function viewPipelineMetrics() {
+trackEvent('Pipeline Metrics Viewed');
+console.log('Loading pipeline metrics dashboard');
+}
+function viewGovernanceReport() {
+trackEvent('Governance Report Generated');
+console.log('Generating governance compliance report');
+}
+function viewPrivacyReport() {
+trackEvent('Privacy Report Generated');
+console.log('Generating privacy compliance report');
+}
+// Monitor data quality
+function monitorDataQuality() {
+const qualityMetrics = {
+completeness: 99.2,
+accuracy: 97.8,
+consistency: 99.9,
+timeliness: 96.5
+};
+const overallScore = Object.values(qualityMetrics).reduce((a, b) => a + b) / 4;
+if (overallScore < 95) {
+trackEvent('Data Quality Alert', {
+score: overallScore,
+metrics: qualityMetrics
+});
+}
+}
+// Privacy control handlers
+document.querySelectorAll('.toggle-input').forEach(toggle => {
+toggle.addEventListener('change', function() {
+const controlName = this.closest('.privacy-control').querySelector('.control-title').textContent;
+trackEvent('Privacy Control Changed', {
+control: controlName,
+enabled: this.checked
+});
+});
+});
+function trackEvent(eventName, properties = {}) {
+console.log('Data Management Event:', eventName, properties);
+// Integration with analytics
+if (typeof analytics !== 'undefined') {
+analytics.track(eventName, {
+...properties,
+timestamp: new Date().toISOString()
+});
+}
+}
+// Simulate real-time data flow monitoring
+let dataFlowInterval;
+function startDataFlowMonitoring() {
+dataFlowInterval = setInterval(() => {
+const eventsPerSec = Math.floor(1200000 + Math.random() * 100000);
+const latency = Math.floor(30 + Math.random() * 20);
+console.log(`Data flow: ${eventsPerSec.toLocaleString()} events/sec, ${latency}ms latency`);
+// Check for anomalies
+if (latency > 100) {
+trackEvent('High Latency Alert', { latency: latency });
+}
+}, 5000);
+}
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+trackEvent('Data Management Platform Loaded');
+monitorDataQuality();
+startDataFlowMonitoring();
+});
+// Cleanup
+window.addEventListener('beforeunload', function() {
+if (dataFlowInterval) {
+clearInterval(dataFlowInterval);
+}
+});
+</script>
+</body>
+</html>

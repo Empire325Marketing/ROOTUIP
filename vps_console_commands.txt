@@ -1,0 +1,80 @@
+# VPS Console Commands - Copy & Paste These
+
+# 1. First, fix SSH access:
+systemctl stop fail2ban
+fail2ban-client unban --all
+ufw allow 22/tcp
+ufw allow 80/tcp
+ufw allow 443/tcp
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sed -i 's/PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config
+systemctl restart sshd
+echo "SSH fixed!"
+
+# 2. Then verify web server is running:
+systemctl status nginx
+ls -la /var/www/rootuip/public/
+
+# 3. Configure for rootuip.com:
+cat > /etc/nginx/sites-available/rootuip.com << 'EOF'
+server {
+    listen 80 default_server;
+    server_name rootuip.com www.rootuip.com 145.223.73.4;
+    root /var/www/rootuip/public;
+    index index.html;
+    location / {
+        try_files $uri $uri.html $uri/ =404;
+    }
+    gzip on;
+    gzip_types text/plain text/css text/javascript application/json;
+}
+
+server {
+    listen 80;
+    server_name staging.rootuip.com;
+    root /var/www/rootuip/public;
+    auth_basic "Staging";
+    auth_basic_user_file /etc/nginx/.htpasswd;
+    location / {
+        try_files $uri $uri.html $uri/ =404;
+    }
+}
+
+server {
+    listen 80;
+    server_name app.rootuip.com;
+    root /var/www/rootuip/public/platform;
+    location / {
+        try_files $uri $uri.html $uri/ /dashboard.html =404;
+    }
+}
+
+server {
+    listen 80;
+    server_name monitoring.rootuip.com;
+    location / {
+        proxy_pass http://localhost:3000;
+    }
+}
+EOF
+
+ln -sf /etc/nginx/sites-available/rootuip.com /etc/nginx/sites-enabled/
+nginx -t && systemctl reload nginx
+
+# 4. Create fast deployment script:
+cat > /root/deploy.sh << 'EOF'
+#!/bin/bash
+echo "Deploy script ready!"
+echo "To deploy: scp files to /tmp/ then run this script"
+if [ -f /tmp/rootuip.tar.gz ]; then
+    cd /tmp && tar -xzf rootuip.tar.gz
+    rsync -av ROOTUIP/ /var/www/rootuip/public/
+    chown -R www-data:www-data /var/www/rootuip
+    systemctl reload nginx
+    echo "Deployed!"
+fi
+EOF
+chmod +x /root/deploy.sh
+
+echo "All done! SSH should work now."
+echo "Test with: ssh root@145.223.73.4"

@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UIP 10-Year Financial Model | Series A Projections</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js?v=1750888019"></script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #F8FAFB;
+            color: #0A1628;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #0A1628;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #64748B;
+            font-size: 1.125rem;
+        }
+        
+        .scenario-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .scenario-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #E2E8F0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .scenario-btn.active {
+            background: #00D4AA;
+            color: white;
+            border-color: #00D4AA;
+        }
+        
+        .model-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0A1628;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #00D4AA;
+            padding-left: 1rem;
+        }
+        
+        .financial-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            display: block;
+        }
+        
+        .financial-table thead {
+            background: #0A1628;
+            color: white;
+        }
+        
+        .financial-table th,
+        .financial-table td {
+            padding: 0.75rem;
+            text-align: right;
+            border-bottom: 1px solid #E2E8F0;
+            min-width: 100px;
+        }
+        
+        .financial-table th:first-child,
+        .financial-table td:first-child {
+            text-align: left;
+            position: sticky;
+            left: 0;
+            background: white;
+            z-index: 10;
+            min-width: 200px;
+        }
+        
+        .financial-table thead th:first-child {
+            background: #0A1628;
+        }
+        
+        .financial-table .highlight-row {
+            background: #F8FAFB;
+            font-weight: 700;
+        }
+        
+        .financial-table .total-row {
+            background: #E6FCF5;
+            font-weight: 900;
+            font-size: 1rem;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .metric-card {
+            background: #F8FAFB;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #E2E8F0;
+        }
+        
+        .metric-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #00D4AA;
+            display: block;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            color: #64748B;
+            margin-top: 0.5rem;
+        }
+        
+        .chart-container {
+            height: 400px;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #F8FAFB;
+            border-radius: 8px;
+        }
+        
+        .assumptions-box {
+            background: #FFF8E1;
+            border: 2px solid #FFC107;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .assumptions-box h4 {
+            color: #F59E0B;
+            margin-bottom: 0.5rem;
+        }
+        
+        .positive {
+            color: #22C55E;
+        }
+        
+        .negative {
+            color: #EF4444;
+        }
+        
+        @media print {
+            body {
+                padding: 0.5rem;
+            }
+            .scenario-selector {
+                display: none;
+            }
+        }
+    </style>
+    <script src="https://cdn.js?v=1750888019delivr.net/npm/chart.js?v=1750888019@4.4.0/dist/chart.umd.min.js?v=1750888019"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <h1>10-Year Financial Model</h1>
+        <p class="subtitle">UIP Series A Projections | $15M Raise Target</p>
+        
+        <div class="scenario-selector">
+            <button class="scenario-btn" onclick="showScenario('conservative')">Conservative</button>
+            <button class="scenario-btn active" onclick="showScenario('base')">Base Case</button>
+            <button class="scenario-btn" onclick="showScenario('aggressive')">Aggressive</button>
+        </div>
+    </div>
+
+    <!-- Key Metrics Summary -->
+    <div class="model-section">
+        <h2 class="section-title">Key Metrics Summary</h2>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <span class="metric-value" id="year10Revenue">$847M</span>
+                <span class="metric-label">Year 10 Revenue</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value" id="year5Revenue">$156M</span>
+                <span class="metric-label">Year 5 Revenue</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value" id="breakeven">Month 28</span>
+                <span class="metric-label">Cash Flow Breakeven</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value" id="totalVessels">12,450</span>
+                <span class="metric-label">Vessels by Year 10</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value" id="marketShare">4.2%</span>
+                <span class="metric-label">Market Share Year 10</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value" id="valuation">$4.2B</span>
+                <span class="metric-label">Year 10 Valuation (5x)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Projections -->
+    <div class="model-section">
+        <h2 class="section-title">Revenue Projections</h2>
+        
+        <div class="chart-container">
+            <canvas id="revenueChart"></canvas>
+        </div>
+        
+        <table class="financial-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>2024</th>
+                    <th>2025</th>
+                    <th>2026</th>
+                    <th>2027</th>
+                    <th>2028</th>
+                    <th>2029</th>
+                    <th>2030</th>
+                    <th>2031</th>
+                    <th>2032</th>
+                    <th>2033</th>
+                </tr>
+            </thead>
+            <tbody id="revenueTable">
+                <!-- Revenue Metrics -->
+                <tr>
+                    <td>New Vessels Added</td>
+                    <td>145</td>
+                    <td>348</td>
+                    <td>592</td>
+                    <td>888</td>
+                    <td>1,244</td>
+                    <td>1,493</td>
+                    <td>1,642</td>
+                    <td>1,724</td>
+                    <td>1,810</td>
+                    <td>1,901</td>
+                </tr>
+                <tr>
+                    <td>Total Active Vessels</td>
+                    <td>145</td>
+                    <td>493</td>
+                    <td>1,085</td>
+                    <td>1,973</td>
+                    <td>3,217</td>
+                    <td>4,710</td>
+                    <td>6,352</td>
+                    <td>8,076</td>
+                    <td>9,886</td>
+                    <td>11,787</td>
+                </tr>
+                <tr>
+                    <td>Revenue per Vessel</td>
+                    <td>$500K</td>
+                    <td>$500K</td>
+                    <td>$500K</td>
+                    <td>$500K</td>
+                    <td>$500K</td>
+                    <td>$525K</td>
+                    <td>$525K</td>
+                    <td>$525K</td>
+                    <td>$550K</td>
+                    <td>$550K</td>
+                </tr>
+                <tr class="highlight-row">
+                    <td>New ARR</td>
+                    <td>$7.3M</td>
+                    <td>$17.4M</td>
+                    <td>$29.6M</td>
+                    <td>$44.4M</td>
+                    <td>$62.2M</td>
+                    <td>$78.4M</td>
+                    <td>$86.2M</td>
+                    <td>$90.5M</td>
+                    <td>$99.6M</td>
+                    <td>$104.6M</td>
+                </tr>
+                <tr class="total-row">
+                    <td>Total ARR</td>
+                    <td>$7.3M</td>
+                    <td>$24.7M</td>
+                    <td>$54.3M</td>
+                    <td>$98.7M</td>
+                    <td>$160.9M</td>
+                    <td>$247.3M</td>
+                    <td>$333.5M</td>
+                    <td>$424.0M</td>
+                    <td>$543.6M</td>
+                    <td>$648.2M</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Unit Economics -->
+    <div class="model-section">
+        <h2 class="section-title">Unit Economics by Segment</h2>
+        
+        <table class="financial-table">
+            <thead>
+                <tr>
+                    <th>Customer Segment</th>
+                    <th>Vessels</th>
+                    <th>ACV</th>
+                    <th>CAC</th>
+                    <th>Gross Margin</th>
+                    <th>Payback (mo)</th>
+                    <th>LTV</th>
+                    <th>LTV/CAC</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Enterprise (100+ vessels)</td>
+                    <td>100-500</td>
+                    <td>$50M</td>
+                    <td>$450K</td>
+                    <td>95%</td>
+                    <td>3.2</td>
+                    <td>$475M</td>
+                    <td>105.6x</td>
+                </tr>
+                <tr>
+                    <td>Large (50-99 vessels)</td>
+                    <td>50-99</td>
+                    <td>$25M</td>
+                    <td>$250K</td>
+                    <td>95%</td>
+                    <td>3.5</td>
+                    <td>$238M</td>
+                    <td>95.0x</td>
+                </tr>
+                <tr>
+                    <td>Mid-Market (20-49)</td>
+                    <td>20-49</td>
+                    <td>$10M</td>
+                    <td>$125K</td>
+                    <td>94%</td>
+                    <td>4.0</td>
+                    <td>$94M</td>
+                    <td>75.2x</td>
+                </tr>
+                <tr>
+                    <td>Small (10-19)</td>
+                    <td>10-19</td>
+                    <td>$5M</td>
+                    <td>$75K</td>
+                    <td>92%</td>
+                    <td>4.9</td>
+                    <td>$46M</td>
+                    <td>61.3x</td>
+                </tr>
+                <tr class="total-row">
+                    <td>Blended Average</td>
+                    <td>67</td>
+                    <td>$22.5M</td>
+                    <td>$225K</td>
+                    <td>94%</td>
+                    <td>3.9</td>
+                    <td>$213M</td>
+                    <td>94.7x</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="assumptions-box">
+            <h4>Key Assumptions</h4>
+            <ul>
+                <li>Average customer lifetime: 10 years (90% annual retention)</li>
+                <li>Price increases: 5% every 3 years</li>
+                <li>CAC includes sales, marketing, and implementation costs</li>
+                <li>Gross margin improves with scale and automation</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Operating Model -->
+    <div class="model-section">
+        <h2 class="section-title">Operating Model & Cash Flow</h2>
+        
+        <table class="financial-table">
+            <thead>
+                <tr>
+                    <th>P&L ($ millions)</th>
+                    <th>2024</th>
+                    <th>2025</th>
+                    <th>2026</th>
+                    <th>2027</th>
+                    <th>2028</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Revenue</td>
+                    <td>$7.3</td>
+                    <td>$24.7</td>
+                    <td>$54.3</td>
+                    <td>$98.7</td>
+                    <td>$160.9</td>
+                </tr>
+                <tr>
+                    <td>COGS (6%)</td>
+                    <td>($0.4)</td>
+                    <td>($1.5)</td>
+                    <td>($3.3)</td>
+                    <td>($5.9)</td>
+                    <td>($9.7)</td>
+                </tr>
+                <tr class="highlight-row">
+                    <td>Gross Profit</td>
+                    <td>$6.9</td>
+                    <td>$23.2</td>
+                    <td>$51.0</td>
+                    <td>$92.8</td>
+                    <td>$151.2</td>
+                </tr>
+                <tr>
+                    <td>Sales & Marketing (40%)</td>
+                    <td>($2.9)</td>
+                    <td>($9.9)</td>
+                    <td>($21.7)</td>
+                    <td>($39.5)</td>
+                    <td>($64.4)</td>
+                </tr>
+                <tr>
+                    <td>R&D (25%)</td>
+                    <td>($1.8)</td>
+                    <td>($6.2)</td>
+                    <td>($13.6)</td>
+                    <td>($24.7)</td>
+                    <td>($40.2)</td>
+                </tr>
+                <tr>
+                    <td>G&A (15%)</td>
+                    <td>($1.1)</td>
+                    <td>($3.7)</td>
+                    <td>($8.1)</td>
+                    <td>($14.8)</td>
+                    <td>($24.1)</td>
+                </tr>
+                <tr class="highlight-row">
+                    <td>Operating Income</td>
+                    <td>$1.1</td>
+                    <td>$3.4</td>
+                    <td>$7.6</td>
+                    <td>$13.8</td>
+                    <td>$22.5</td>
+                </tr>
+                <tr class="total-row">
+                    <td>EBITDA Margin</td>
+                    <td>15%</td>
+                    <td>14%</td>
+                    <td>14%</td>
+                    <td>14%</td>
+                    <td>14%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Market Penetration -->
+    <div class="model-section">
+        <h2 class="section-title">Market Penetration Analysis</h2>
+        
+        <div class="chart-container">
+            <canvas id="marketChart"></canvas>
+        </div>
+        
+        <table class="financial-table">
+            <thead>
+                <tr>
+                    <th>Geographic Market</th>
+                    <th>TAM (Vessels)</th>
+                    <th>2025</th>
+                    <th>2027</th>
+                    <th>2030</th>
+                    <th>2033</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>North America</td>
+                    <td>75,000</td>
+                    <td>0.5%</td>
+                    <td>2.1%</td>
+                    <td>5.8%</td>
+                    <td>9.7%</td>
+                </tr>
+                <tr>
+                    <td>Europe</td>
+                    <td>85,000</td>
+                    <td>0.0%</td>
+                    <td>0.8%</td>
+                    <td>3.2%</td>
+                    <td>6.4%</td>
+                </tr>
+                <tr>
+                    <td>Asia Pacific</td>
+                    <td>120,000</td>
+                    <td>0.0%</td>
+                    <td>0.3%</td>
+                    <td>1.5%</td>
+                    <td>3.8%</td>
+                </tr>
+                <tr>
+                    <td>Rest of World</td>
+                    <td>20,000</td>
+                    <td>0.0%</td>
+                    <td>0.0%</td>
+                    <td>1.0%</td>
+                    <td>2.5%</td>
+                </tr>
+                <tr class="total-row">
+                    <td>Total Market</td>
+                    <td>300,000</td>
+                    <td>0.2%</td>
+                    <td>0.7%</td>
+                    <td>2.1%</td>
+                    <td>3.9%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Funding & Milestones -->
+    <div class="model-section">
+        <h2 class="section-title">Funding Timeline & Milestones</h2>
+        
+        <table class="financial-table">
+            <thead>
+                <tr>
+                    <th>Funding Round</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Valuation</th>
+                    <th>Key Milestones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pre-Seed</td>
+                    <td>Q2 2023</td>
+                    <td>$2M</td>
+                    <td>$10M</td>
+                    <td>MVP, First 10 customers</td>
+                </tr>
+                <tr class="highlight-row">
+                    <td>Series A (Current)</td>
+                    <td>Q1 2024</td>
+                    <td>$15M</td>
+                    <td>$75M</td>
+                    <td>$25M ARR, 500 vessels</td>
+                </tr>
+                <tr>
+                    <td>Series B</td>
+                    <td>Q3 2025</td>
+                    <td>$40M</td>
+                    <td>$250M</td>
+                    <td>$100M ARR, International expansion</td>
+                </tr>
+                <tr>
+                    <td>Series C</td>
+                    <td>Q2 2027</td>
+                    <td>$80M</td>
+                    <td>$800M</td>
+                    <td>$250M ARR, Category leader</td>
+                </tr>
+                <tr>
+                    <td>IPO/Exit</td>
+                    <td>2029-2030</td>
+                    <td>-</td>
+                    <td>$2.5B+</td>
+                    <td>$500M ARR, Profitability</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <span class="metric-value">280x</span>
+                <span class="metric-label">Seed Return Multiple</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">56x</span>
+                <span class="metric-label">Series A Return Multiple</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">$18M</span>
+                <span class="metric-label">Series A Use: Sales/Marketing</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">36 mo</span>
+                <span class="metric-label">Runway Post-Series A</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Revenue Growth Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['2024', '2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033'],
+                datasets: [{
+                    label: 'ARR ($M)',
+                    data: [7.3, 24.7, 54.3, 98.7, 160.9, 247.3, 333.5, 424.0, 543.6, 648.2],
+                    borderColor: '#00D4AA',
+                    backgroundColor: 'rgba(0, 212, 170, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Annual Recurring Revenue Growth',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value + 'M';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Market Penetration Chart
+        const marketCtx = document.getElementById('marketChart').getContext('2d');
+        const marketChart = new Chart(marketCtx, {
+            type: 'bar',
+            data: {
+                labels: ['North America', 'Europe', 'Asia Pacific', 'Rest of World'],
+                datasets: [
+                    {
+                        label: '2025',
+                        data: [0.5, 0, 0, 0],
+                        backgroundColor: '#E2E8F0'
+                    },
+                    {
+                        label: '2027',
+                        data: [2.1, 0.8, 0.3, 0],
+                        backgroundColor: '#64748B'
+                    },
+                    {
+                        label: '2030',
+                        data: [5.8, 3.2, 1.5, 1.0],
+                        backgroundColor: '#00D4AA'
+                    },
+                    {
+                        label: '2033',
+                        data: [9.7, 6.4, 3.8, 2.5],
+                        backgroundColor: '#00B894'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Market Penetration by Geography (%)',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Scenario switching logic
+        function showScenario(scenario) {
+            // Update active button
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update metrics based on scenario
+            const scenarios = {
+                conservative: {
+                    year10Revenue: '$523M',
+                    year5Revenue: '$98M',
+                    breakeven: 'Month 34',
+                    totalVessels: '9,505',
+                    marketShare: '3.2%',
+                    valuation: '$2.6B'
+                },
+                base: {
+                    year10Revenue: '$847M',
+                    year5Revenue: '$156M',
+                    breakeven: 'Month 28',
+                    totalVessels: '12,450',
+                    marketShare: '4.2%',
+                    valuation: '$4.2B'
+                },
+                aggressive: {
+                    year10Revenue: '$1.27B',
+                    year5Revenue: '$243M',
+                    breakeven: 'Month 22',
+                    totalVessels: '18,320',
+                    marketShare: '6.1%',
+                    valuation: '$6.4B'
+                }
+            };
+
+            const data = scenarios[scenario];
+            Object.keys(data).forEach(key => {
+                document.getElementById(key).textContent = data[key];
+            });
+        }
+    </script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
+</body>
+</html>

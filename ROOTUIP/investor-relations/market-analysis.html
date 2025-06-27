@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP Market Analysis | TAM, SAM, SOM & Growth Drivers</title>
-    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <link rel="icon" type="image/svg+xml" href="/brand/brand/logo-icon-new.svg">
     <script src="/js/logo-component.js"></script>
     <style>
         body {
@@ -11,7 +11,7 @@
             margin: 0;
             padding: 2rem;
             background: #F8FAFB;
-            color: #0A1628;
+            color: var(--uip-primary-800);
         }
         
         .header {
@@ -26,7 +26,7 @@
         h1 {
             font-size: 2.5rem;
             font-weight: 900;
-            color: #0A1628;
+            color: var(--uip-primary-800);
             margin-bottom: 0.5rem;
         }
         
@@ -46,9 +46,9 @@
         .section-title {
             font-size: 1.75rem;
             font-weight: 700;
-            color: #0A1628;
+            color: var(--uip-primary-800);
             margin-bottom: 1.5rem;
-            border-left: 4px solid #00D4AA;
+            border-left: 4px solid var(--uip-success-500);
             padding-left: 1rem;
         }
         
@@ -76,7 +76,7 @@
             width: 400px;
             height: 400px;
             background: rgba(0, 212, 170, 0.1);
-            border: 3px solid #00D4AA;
+            border: 3px solid var(--uip-success-500);
         }
         
         .sam-circle {
@@ -102,7 +102,7 @@
         .market-value {
             font-size: 2rem;
             font-weight: 900;
-            color: #00D4AA;
+            color: var(--uip-success-500);
         }
         
         .market-desc {
@@ -127,7 +127,7 @@
         }
         
         .breakdown-card h4 {
-            color: #0A1628;
+            color: var(--uip-primary-800);
             margin-bottom: 1rem;
         }
         
@@ -151,7 +151,7 @@
         .segment-table th {
             background: #F8FAFB;
             font-weight: 700;
-            color: #0A1628;
+            color: var(--uip-primary-800);
         }
         
         .growth-drivers {
@@ -165,11 +165,11 @@
             padding: 1.5rem;
             background: linear-gradient(135deg, #E6FCF5 0%, #D1FAE5 100%);
             border-radius: 12px;
-            border: 2px solid #00D4AA;
+            border: 2px solid var(--uip-success-500);
         }
         
         .driver-card h4 {
-            color: #00D4AA;
+            color: var(--uip-success-500);
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
@@ -201,7 +201,7 @@
         
         .competitor-box.uip {
             background: #E6FCF5;
-            border-color: #00D4AA;
+            border-color: var(--uip-success-500);
         }
         
         .market-opportunity-grid {
@@ -220,14 +220,14 @@
         }
         
         .opportunity-card:hover {
-            border-color: #00D4AA;
+            border-color: var(--uip-success-500);
             transform: translateY(-4px);
         }
         
         .opportunity-value {
             font-size: 1.75rem;
             font-weight: 900;
-            color: #00D4AA;
+            color: var(--uip-success-500);
             display: block;
             margin-bottom: 0.5rem;
         }
@@ -246,22 +246,24 @@
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="header">
         <h1>Market Analysis & Opportunity</h1>
-        <p class="subtitle">TAM, SAM, SOM Analysis for Ocean Freight Optimization</p>
+        <p class="subtitle">TAM, SAM, SOM Analysis for Enterprise Ocean Freight Intelligence Optimization</p>
     </div>
 
     <!-- Market Size Visualization -->
     <div class="section">
-        <h2 class="section-title">Total Addressable Market</h2>
+        <h2 class="uip-h2 uip-text-center">Total Addressable Market</h2>
         
         <div class="market-visual">
             <div class="market-circle tam-circle">
                 <div class="market-label">TAM</div>
                 <div class="market-value">$2.4T</div>
-                <div class="market-desc">Global Ocean Freight</div>
+                <div class="market-desc">Global Enterprise Ocean Freight Intelligence</div>
             </div>
             <div class="market-circle sam-circle">
                 <div class="market-label">SAM</div>
@@ -278,7 +280,7 @@
         <div class="market-breakdown">
             <div class="breakdown-card">
                 <h4>Total Addressable Market</h4>
-                <div style="font-size: 2rem; font-weight: 900; color: #00D4AA;">$2.4 Trillion</div>
+                <div style="font-size: 2rem; font-weight: 900; color: var(--uip-success-500);">$2.4 Trillion</div>
                 <p>Global ocean freight spend across all shippers and routes</p>
                 <ul style="text-align: left; margin-top: 1rem;">
                     <li>300,000 vessels globally</li>
@@ -313,7 +315,7 @@
 
     <!-- Market Segmentation -->
     <div class="section">
-        <h2 class="section-title">Market Segmentation Analysis</h2>
+        <h2 class="uip-h2 uip-text-center">Market Segmentation Analysis</h2>
         
         <table class="segment-table">
             <thead>
@@ -333,7 +335,7 @@
                     <td>500</td>
                     <td>250</td>
                     <td>$62.5B</td>
-                    <td style="color: #00D4AA; font-weight: 700;">2.4%</td>
+                    <td style="color: var(--uip-success-500); font-weight: 700;">2.4%</td>
                 </tr>
                 <tr>
                     <td><strong>Large</strong></td>
@@ -341,7 +343,7 @@
                     <td>1,500</td>
                     <td>75</td>
                     <td>$56.3B</td>
-                    <td style="color: #00D4AA; font-weight: 700;">0.8%</td>
+                    <td style="color: var(--uip-success-500); font-weight: 700;">0.8%</td>
                 </tr>
                 <tr>
                     <td><strong>Mid-Market</strong></td>
@@ -349,7 +351,7 @@
                     <td>5,000</td>
                     <td>35</td>
                     <td>$87.5B</td>
-                    <td style="color: #00D4AA; font-weight: 700;">0.3%</td>
+                    <td style="color: var(--uip-success-500); font-weight: 700;">0.3%</td>
                 </tr>
                 <tr>
                     <td><strong>Small</strong></td>
@@ -357,7 +359,7 @@
                     <td>23,000</td>
                     <td>15</td>
                     <td>$172.5B</td>
-                    <td style="color: #00D4AA; font-weight: 700;">0.1%</td>
+                    <td style="color: var(--uip-success-500); font-weight: 700;">0.1%</td>
                 </tr>
                 <tr style="background: #F8FAFB; font-weight: 700;">
                     <td>Total Market</td>
@@ -365,7 +367,7 @@
                     <td>30,000</td>
                     <td>50 avg</td>
                     <td>$378.8B</td>
-                    <td style="color: #00D4AA;">0.5%</td>
+                    <td style="color: var(--uip-success-500);">0.5%</td>
                 </tr>
             </tbody>
         </table>
@@ -377,7 +379,7 @@
 
     <!-- Growth Drivers -->
     <div class="section">
-        <h2 class="section-title">Market Growth Drivers</h2>
+        <h2 class="uip-h2 uip-text-center">Market Growth Drivers</h2>
         
         <div class="growth-drivers">
             <div class="driver-card">
@@ -401,7 +403,7 @@
             </div>
             
             <div class="driver-card">
-                <h4>💰 Economic Factors</h4>
+                <h4><span class="uip-savings-icon">$</span> Economic Factors</h4>
                 <ul>
                     <li><strong>ROI pressure:</strong> CFOs demanding measurable returns</li>
                     <li><strong>Cash preservation:</strong> D&D charges impact working capital</li>
@@ -411,7 +413,7 @@
             </div>
             
             <div class="driver-card">
-                <h4>📊 Regulatory Changes</h4>
+                <h4><span class="uip-metric-icon">📊</span> Regulatory Changes</h4>
                 <ul>
                     <li><strong>FMC regulations:</strong> Stricter D&D rules favor automation</li>
                     <li><strong>Data requirements:</strong> Compliance needs digital records</li>
@@ -424,7 +426,7 @@
 
     <!-- Geographic Opportunity -->
     <div class="section">
-        <h2 class="section-title">Geographic Market Opportunity</h2>
+        <h2 class="uip-h2 uip-text-center">Geographic Market Opportunity</h2>
         
         <div class="market-chart">
             <canvas id="geoChart"></canvas>
@@ -483,7 +485,7 @@
 
     <!-- Competitive Landscape -->
     <div class="section">
-        <h2 class="section-title">Competitive Landscape Analysis</h2>
+        <h2 class="uip-h2 uip-text-center">Competitive Landscape Analysis</h2>
         
         <div class="competitive-landscape">
             <div class="competitor-box uip">
@@ -555,7 +557,7 @@
 
     <!-- Market Entry Strategy -->
     <div class="section">
-        <h2 class="section-title">Market Entry & Expansion Strategy</h2>
+        <h2 class="uip-h2 uip-text-center">Market Entry & Expansion Strategy</h2>
         
         <div class="market-chart">
             <canvas id="expansionChart"></canvas>
@@ -626,7 +628,7 @@
                 labels: ['Enterprise', 'Large', 'Mid-Market', 'Small', 'Below Threshold'],
                 datasets: [{
                     data: [62.5, 56.3, 87.5, 172.5, 2021.2],
-                    backgroundColor: ['#0A1628', '#00D4AA', '#00B894', '#64748B', '#E2E8F0'],
+                    backgroundColor: ['var(--uip-primary-800)', 'var(--uip-success-500)', '#00B894', '#64748B', '#E2E8F0'],
                     borderWidth: 0
                 }]
             },
@@ -636,7 +638,7 @@
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Ocean Freight Market by Company Size ($B)',
+                        text: 'Enterprise Ocean Freight Intelligence Market by Company Size ($B)',
                         font: { size: 16, weight: 'bold' }
                     },
                     legend: {
@@ -659,7 +661,7 @@
                 }, {
                     label: 'UIP Target ($B)',
                     data: [4.5, 3.6, 3.6, 0.4],
-                    backgroundColor: '#00D4AA'
+                    backgroundColor: 'var(--uip-success-500)'
                 }]
             },
             options: {
@@ -693,13 +695,13 @@
                 datasets: [{
                     label: 'North America',
                     data: [0.1, 0.5, 2.1, 3.8, 5.2, 6.8, 8.1, 9.5],
-                    borderColor: '#0A1628',
+                    borderColor: 'var(--uip-primary-800)',
                     fill: false,
                     borderWidth: 3
                 }, {
                     label: 'Europe',
                     data: [0, 0, 0.3, 1.2, 2.4, 3.9, 5.2, 6.4],
-                    borderColor: '#00D4AA',
+                    borderColor: 'var(--uip-success-500)',
                     fill: false,
                     borderWidth: 3
                 }, {

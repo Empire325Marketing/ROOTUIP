@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Brand Guidelines | Enterprise Identity System</title>
+    <link rel="icon" type="image/svg+xml" href="logo-icon.svg">
+    <style>
+        /* Brand Colors */
+        :root {
+            /* Primary Colors */
+            --uip-primary: #1e40af;        /* Enterprise Blue */
+            --uip-primary-dark: #1e3a8a;   /* Darker Blue */
+            --uip-primary-light: #3b82f6;  /* Data Blue */
+            
+            /* Success Colors */
+            --uip-success: #10b981;        /* ROI Green */
+            --uip-success-dark: #059669;   /* Dark Green */
+            --uip-success-light: #34d399;  /* Light Green */
+            
+            /* Neutral Colors */
+            --uip-gray-50: #f8fafc;        /* Lightest Gray */
+            --uip-gray-100: #f1f5f9;
+            --uip-gray-200: #e2e8f0;
+            --uip-gray-300: #cbd5e1;
+            --uip-gray-400: #94a3b8;
+            --uip-gray-500: #64748b;       /* Mid Gray */
+            --uip-gray-600: #475569;
+            --uip-gray-700: #334155;
+            --uip-gray-800: #1e293b;
+            --uip-gray-900: #0f172a;       /* Darkest Gray */
+            
+            /* Accent Colors */
+            --uip-warning: #f59e0b;        /* Alert Orange */
+            --uip-error: #ef4444;          /* Error Red */
+            --uip-info: #3b82f6;           /* Info Blue */
+            
+            /* Typography */
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--uip-gray-800);
+            background: var(--uip-gray-50);
+        }
+
+        /* Typography System */
+        h1 { font-size: 3rem; font-weight: 700; line-height: 1.1; margin-bottom: 1rem; }
+        h2 { font-size: 2.25rem; font-weight: 700; line-height: 1.2; margin-bottom: 0.875rem; }
+        h3 { font-size: 1.875rem; font-weight: 600; line-height: 1.3; margin-bottom: 0.75rem; }
+        h4 { font-size: 1.5rem; font-weight: 600; line-height: 1.4; margin-bottom: 0.625rem; }
+        h5 { font-size: 1.25rem; font-weight: 600; line-height: 1.5; margin-bottom: 0.5rem; }
+        h6 { font-size: 1.125rem; font-weight: 600; line-height: 1.5; margin-bottom: 0.5rem; }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--uip-gray-200);
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Logo Display */
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .logo-item {
+            background: var(--uip-gray-50);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--uip-gray-200);
+        }
+
+        .logo-item img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .logo-item h4 {
+            color: var(--uip-gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Color Swatches */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .color-swatch {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-display {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .color-info {
+            background: white;
+            padding: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .color-info h5 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .color-code {
+            font-family: var(--font-mono);
+            font-size: 0.813rem;
+            color: var(--uip-gray-600);
+        }
+
+        /* Typography Samples */
+        .type-sample {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--uip-gray-50);
+            border-radius: 8px;
+        }
+
+        .type-meta {
+            font-size: 0.875rem;
+            color: var(--uip-gray-600);
+            margin-bottom: 0.5rem;
+            font-family: var(--font-mono);
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--uip-gray-900);
+            color: var(--uip-gray-200);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin: 1rem 0;
+        }
+
+        /* Usage Examples */
+        .usage-example {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: var(--uip-gray-50);
+            border-radius: 8px;
+            border: 1px solid var(--uip-gray-200);
+        }
+
+        .do-dont {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .do, .dont {
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .do {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--uip-success);
+        }
+
+        .dont {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--uip-error);
+        }
+
+        /* Spacing Guide */
+        .spacing-demo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .spacing-box {
+            background: var(--uip-primary);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        /* Download Links */
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .download-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: var(--uip-gray-50);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--uip-gray-800);
+            border: 1px solid var(--uip-gray-200);
+            transition: all 0.2s;
+        }
+
+        .download-item:hover {
+            background: white;
+            border-color: var(--uip-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .download-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--uip-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <img src="logo-horizontal.svg" alt="UIP Logo" style="height: 48px; margin-bottom: 1rem;">
+            <h1>Brand Guidelines</h1>
+            <p style="font-size: 1.25rem; color: var(--uip-gray-600);">Enterprise Identity System v1.0</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Logo System -->
+        <section class="section">
+            <h2>Logo System</h2>
+            <p>The UIP logo represents unified integration through connected nodes, forming a container-like "U" shape that symbolizes our ocean freight focus.</p>
+            
+            <div class="logo-grid">
+                <div class="logo-item">
+                    <img src="logo-primary.svg" alt="Primary Logo">
+                    <h4>Primary Logo</h4>
+                    <p>For general use on light backgrounds</p>
+                </div>
+                
+                <div class="logo-item">
+                    <img src="logo-icon.svg" alt="Icon Logo" style="height: 64px;">
+                    <h4>Icon Version</h4>
+                    <p>For favicons, app icons, and social media</p>
+                </div>
+                
+                <div class="logo-item">
+                    <img src="logo-horizontal.svg" alt="Horizontal Logo">
+                    <h4>Horizontal Version</h4>
+                    <p>For headers and wide applications</p>
+                </div>
+                
+                <div class="logo-item" style="background: var(--uip-gray-800);">
+                    <img src="logo-monochrome.svg" alt="Monochrome Logo" style="filter: invert(1);">
+                    <h4 style="color: white;">Monochrome Version</h4>
+                    <p style="color: var(--uip-gray-300);">For single-color applications</p>
+                </div>
+            </div>
+
+            <h3>Clear Space & Minimum Size</h3>
+            <div class="usage-example">
+                <p>Always maintain clear space around the logo equal to the height of the "I" dot. Minimum logo width: 120px for primary, 32px for icon.</p>
+            </div>
+        </section>
+
+        <!-- Color Palette -->
+        <section class="section">
+            <h2>Color Palette</h2>
+            <p>Our color system balances enterprise trust with modern technology aesthetics.</p>
+            
+            <h3>Primary Colors</h3>
+            <div class="color-grid">
+                <div class="color-swatch">
+                    <div class="color-display" style="background: var(--uip-primary);">Primary</div>
+                    <div class="color-info">
+                        <h5>Enterprise Blue</h5>
+                        <div class="color-code">HEX: #1e40af</div>
+                        <div class="color-code">RGB: 30, 64, 175</div>
+                    </div>
+                </div>
+                
+                <div class="color-swatch">
+                    <div class="color-display" style="background: var(--uip-primary-light);">Light</div>
+                    <div class="color-info">
+                        <h5>Data Blue</h5>
+                        <div class="color-code">HEX: #3b82f6</div>
+                        <div class="color-code">RGB: 59, 130, 246</div>
+                    </div>
+                </div>
+                
+                <div class="color-swatch">
+                    <div class="color-display" style="background: var(--uip-success);">Success</div>
+                    <div class="color-info">
+                        <h5>ROI Green</h5>
+                        <div class="color-code">HEX: #10b981</div>
+                        <div class="color-code">RGB: 16, 185, 129</div>
+                    </div>
+                </div>
+                
+                <div class="color-swatch">
+                    <div class="color-display" style="background: var(--uip-warning);">Warning</div>
+                    <div class="color-info">
+                        <h5>Alert Orange</h5>
+                        <div class="color-code">HEX: #f59e0b</div>
+                        <div class="color-code">RGB: 245, 158, 11</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Neutral Colors</h3>
+            <div class="color-grid">
+                <div class="color-swatch">
+                    <div class="color-display" style="background: var(--uip-gray-50); color: var(--uip-gray-800);">50</div>
+                    <div class="color-info">
+                        <h5>Background</h5>
+                        <div class="color-code">HEX: #f8fafc</div>
+                    </div>
+                </div>
+                
+                <div class="color-swatch">
+                    <div class="color-display" style="background: var(--uip-gray-200); color: var(--uip-gray-800);">200</div>
+                    <div class="color-info">
+                        <h5>Borders</h5>
+                        <div class="color-code">HEX: #e2e8f0</div>
+                    </div>
+                </div>
+                
+                <div class="color-swatch">
+                    <div class="color-display" style="background: var(--uip-gray-500);">500</div>
+                    <div class="color-info">
+                        <h5>Secondary Text</h5>
+                        <div class="color-code">HEX: #64748b</div>
+                    </div>
+                </div>
+                
+                <div class="color-swatch">
+                    <div class="color-display" style="background: var(--uip-gray-800);">800</div>
+                    <div class="color-info">
+                        <h5>Primary Text</h5>
+                        <div class="color-code">HEX: #1e293b</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Typography -->
+        <section class="section">
+            <h2>Typography System</h2>
+            <p>Clean, modern typography that scales from marketing materials to data-heavy dashboards.</p>
+            
+            <h3>Type Scale</h3>
+            
+            <div class="type-sample">
+                <div class="type-meta">H1 • 48px/52.8px • Inter Bold (700)</div>
+                <h1>Stop Losing $14M Per Vessel</h1>
+            </div>
+            
+            <div class="type-sample">
+                <div class="type-meta">H2 • 36px/43.2px • Inter Bold (700)</div>
+                <h2>Enterprise Integration Platform</h2>
+            </div>
+            
+            <div class="type-sample">
+                <div class="type-meta">H3 • 30px/39px • Inter SemiBold (600)</div>
+                <h3>Unified Intelligence for Ocean Freight</h3>
+            </div>
+            
+            <div class="type-sample">
+                <div class="type-meta">Body • 16px/25.6px • Inter Regular (400)</div>
+                <p>UIP eliminates $15-20B in annual ocean freight inefficiencies through pure software automation. Our platform unifies 200+ carrier systems into a single source of truth.</p>
+            </div>
+            
+            <div class="type-sample" style="font-family: var(--font-mono);">
+                <div class="type-meta">Code • 14px/21px • JetBrains Mono Regular</div>
+                <code>API Response: {status: 200, containers: 1247, saved: "$14.2M"}</code>
+            </div>
+
+            <h3>Font Stack</h3>
+            <div class="code-block">
+/* Primary Font Stack */
+font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+/* Monospace Font Stack */
+font-family: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, monospace;</div>
+        </section>
+
+        <!-- Voice & Tone -->
+        <section class="section">
+            <h2>Voice & Tone</h2>
+            <p>UIP speaks with authority and confidence while remaining approachable and solution-focused.</p>
+            
+            <div class="do-dont">
+                <div class="do">
+                    <h4>✓ Do</h4>
+                    <ul>
+                        <li>Lead with concrete ROI numbers</li>
+                        <li>Use active, confident language</li>
+                        <li>Focus on business outcomes</li>
+                        <li>Be specific about capabilities</li>
+                        <li>Emphasize speed and efficiency</li>
+                    </ul>
+                </div>
+                
+                <div class="dont">
+                    <h4>✗ Don't</h4>
+                    <ul>
+                        <li>Use vague marketing speak</li>
+                        <li>Over-promise capabilities</li>
+                        <li>Focus on features over benefits</li>
+                        <li>Use overly technical jargon</li>
+                        <li>Sound desperate or salesy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Messaging Examples</h3>
+            <div class="usage-example">
+                <p><strong>Hero Headline:</strong> "Stop Losing $14M Per Vessel to Ocean Freight Inefficiencies"</p>
+                <p><strong>Value Prop:</strong> "Universal integration hub connecting 200+ carriers in 48 hours"</p>
+                <p><strong>CTA:</strong> "Calculate Your D&D Losses" / "See ROI in 30 Days"</p>
+            </div>
+        </section>
+
+        <!-- Visual Style -->
+        <section class="section">
+            <h2>Visual Style Principles</h2>
+            
+            <h3>Design Principles</h3>
+            <div class="usage-example">
+                <ul>
+                    <li><strong>Clean & Professional:</strong> White space, clear hierarchy, no clutter</li>
+                    <li><strong>Data-Forward:</strong> Visualizations and metrics take center stage</li>
+                    <li><strong>Trust Indicators:</strong> Security badges, uptime stats, customer logos</li>
+                    <li><strong>Action-Oriented:</strong> Clear CTAs, obvious next steps</li>
+                    <li><strong>Responsive:</strong> Works perfectly on all enterprise devices</li>
+                </ul>
+            </div>
+
+            <h3>UI Components</h3>
+            <div class="spacing-demo">
+                <div class="spacing-box" style="padding: 0.5rem;">8px</div>
+                <div class="spacing-box" style="padding: 1rem;">16px</div>
+                <div class="spacing-box" style="padding: 1.5rem;">24px</div>
+                <div class="spacing-box" style="padding: 2rem;">32px</div>
+            </div>
+            <p style="margin-top: 1rem;">Use 8px grid system for consistent spacing</p>
+        </section>
+
+        <!-- Downloads -->
+        <section class="section">
+            <h2>Brand Assets</h2>
+            <p>Download official UIP brand assets for your projects.</p>
+            
+            <div class="download-grid">
+                <a href="logo-primary.svg" class="download-item" download>
+                    <div class="download-icon">SVG</div>
+                    <div>
+                        <h5>Primary Logo</h5>
+                        <p style="font-size: 0.875rem; color: var(--uip-gray-600);">SVG format</p>
+                    </div>
+                </a>
+                
+                <a href="logo-icon.svg" class="download-item" download>
+                    <div class="download-icon">ICO</div>
+                    <div>
+                        <h5>Icon Logo</h5>
+                        <p style="font-size: 0.875rem; color: var(--uip-gray-600);">For favicons</p>
+                    </div>
+                </a>
+                
+                <a href="brand-colors.css" class="download-item" download>
+                    <div class="download-icon">CSS</div>
+                    <div>
+                        <h5>Color Variables</h5>
+                        <p style="font-size: 0.875rem; color: var(--uip-gray-600);">CSS custom properties</p>
+                    </div>
+                </a>
+                
+                <a href="brand-guidelines.pdf" class="download-item">
+                    <div class="download-icon">PDF</div>
+                    <div>
+                        <h5>Full Guidelines</h5>
+                        <p style="font-size: 0.875rem; color: var(--uip-gray-600);">Complete PDF</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Implementation -->
+        <section class="section">
+            <h2>Implementation Guide</h2>
+            <p>Quick reference for implementing the UIP brand across digital platforms.</p>
+            
+            <h3>CSS Variables</h3>
+            <div class="code-block">/* Add to your root CSS */
+:root {
+    --uip-primary: #1e40af;
+    --uip-primary-light: #3b82f6;
+    --uip-success: #10b981;
+    --uip-warning: #f59e0b;
+    --uip-gray-50: #f8fafc;
+    --uip-gray-500: #64748b;
+    --uip-gray-800: #1e293b;
+    --font-sans: 'Inter', -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}</div>
+
+            <h3>HTML Meta Tags</h3>
+            <div class="code-block">&lt;!-- Brand Meta Tags --&gt;
+&lt;link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg"&gt;
+&lt;meta name="theme-color" content="#1e40af"&gt;
+
+&lt;!-- Open Graph --&gt;
+&lt;meta property="og:image" content="/brand/og-image.png"&gt;
+&lt;meta property="og:site_name" content="UIP - Unified Integration Intelligence"&gt;
+
+&lt;!-- Fonts --&gt;
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"&gt;</div>
+        </section>
+    </div>
+</body>
+</html>

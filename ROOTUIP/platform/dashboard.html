@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UIP Platform - Dashboard</title>
-    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <title>UIP Platform Dashboard - Enterprise Ocean Freight Intelligence</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/brand/logo-icon-new.svg">
     <script src="/js/logo-component.js"></script>
     <script src="/platform/js/rbac-config.js"></script>
     <style>
@@ -15,9 +15,9 @@
         }
 
         :root {
-            --primary: #00D4AA;
+            --primary: var(--uip-success-500);
             --primary-dark: #00B894;
-            --secondary: #0A1628;
+            --secondary: var(--uip-primary-800);
             --gray-50: #F8FAFB;
             --gray-100: #F1F5F9;
             --gray-200: #E2E8F0;
@@ -35,7 +35,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--gray-50);
             color: var(--gray-900);
             line-height: 1.5;
@@ -497,6 +497,8 @@
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="app-container">
@@ -510,7 +512,7 @@
             
             <nav class="sidebar-nav">
                 <a href="#" class="nav-item active">
-                    <span class="nav-icon">📊</span>
+                    <span class="nav-icon"><span class="uip-metric-icon">📊</span></span>
                     <span>Dashboard</span>
                 </a>
                 <a href="#" class="nav-item">
@@ -519,7 +521,7 @@
                     <span class="nav-badge">12</span>
                 </a>
                 <a href="#" class="nav-item">
-                    <span class="nav-icon">💰</span>
+                    <span class="nav-icon"><span class="uip-savings-icon">$</span></span>
                     <span>D&D Center</span>
                     <span class="nav-badge">3</span>
                 </a>
@@ -613,7 +615,7 @@
                                 </div>
                             </div>
                             <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
-                                💰
+                                <span class="uip-savings-icon">$</span>
                             </div>
                         </div>
                     </div>
@@ -787,7 +789,7 @@
                     datasets: [{
                         label: 'Savings ($)',
                         data: [320000, 380000, 350000, 420000, 390000, 410000, 450000],
-                        borderColor: '#00D4AA',
+                        borderColor: 'var(--uip-success-500)',
                         backgroundColor: 'rgba(0, 212, 170, 0.1)',
                         tension: 0.4,
                         fill: true
@@ -829,7 +831,7 @@
                         data: [1234, 456, 789, 287, 81],
                         backgroundColor: [
                             '#3B82F6',
-                            '#00D4AA',
+                            'var(--uip-success-500)',
                             '#10B981',
                             '#F59E0B',
                             '#EF4444'

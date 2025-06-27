@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UIP Investor Relations Hub | Series A Fundraising Materials</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js?v=1750888019"></script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #0A1628;
+            color: white;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #0A1628 0%, #1E293B 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle at 30% 70%, rgba(0, 212, 170, 0.1) 0%, transparent 50%);
+            animation: float 25s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(-20%, -20%) rotate(0deg); }
+            50% { transform: translate(20%, 20%) rotate(180deg); }
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 10;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: #94A3B8;
+            margin-bottom: 2rem;
+        }
+        
+        .key-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 3rem auto;
+        }
+        
+        .metric {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #00D4AA;
+            display: block;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            color: #94A3B8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .content {
+            background: white;
+            color: #0A1628;
+            padding: 4rem 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .material-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .material-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, #0A1628 0%, #1E293B 100%);
+            color: white;
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-description {
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .card-content {
+            padding: 1.5rem 2rem;
+            background: #F8FAFB;
+        }
+        
+        .content-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+        }
+        
+        .content-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .cta-button {
+            background: #00D4AA;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 1rem;
+            display: block;
+            transition: background 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background: #00B894;
+        }
+        
+        .quick-facts {
+            background: #0A1628;
+            color: white;
+            padding: 3rem 2rem;
+            margin: 0 -2rem;
+        }
+        
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 2rem auto 0;
+        }
+        
+        .fact-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .fact-card h4 {
+            color: #00D4AA;
+            margin-bottom: 0.5rem;
+        }
+        
+        .investment-summary {
+            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 16px;
+            margin: 3rem 0;
+            text-align: center;
+        }
+        
+        .summary-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .summary-point {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .contact-section {
+            background: #F8FAFB;
+            padding: 3rem;
+            border-radius: 16px;
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .section-divider {
+            text-align: center;
+            margin: 4rem 0;
+            position: relative;
+        }
+        
+        .section-divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background: #E2E8F0;
+        }
+        
+        .section-divider h2 {
+            background: white;
+            display: inline-block;
+            padding: 0 2rem;
+            position: relative;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        
+        .footer {
+            background: #0A1628;
+            color: #94A3B8;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: #94A3B8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: #00D4AA;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>UIP Investor Relations</h1>
+            <p class="subtitle">Series A Fundraising Materials | $15M Target</p>
+            
+            <div class="key-metrics">
+                <div class="metric">
+                    <span class="metric-value">$7.3M</span>
+                    <span class="metric-label">Current ARR</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">280%</span>
+                    <span class="metric-label">YoY Growth</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">3.2x</span>
+                    <span class="metric-label">LTV/CAC</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">$127M</span>
+                    <span class="metric-label">Customer Savings</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <!-- Investment Summary -->
+            <div class="investment-summary">
+                <h2 style="font-size: 2rem; margin-bottom: 1rem;">The $15B Ocean Freight Opportunity</h2>
+                <p style="font-size: 1.25rem; margin-bottom: 2rem;">First universal platform preventing billions in detention & demurrage charges</p>
+                
+                <div class="summary-points">
+                    <div class="summary-point">
+                        <h3>🌊 Market</h3>
+                        <p>$120B addressable market growing 8% annually</p>
+                    </div>
+                    <div class="summary-point">
+                        <h3>🚀 Traction</h3>
+                        <p>145 vessels, Fortune 500 logos, 94% prevention rate</p>
+                    </div>
+                    <div class="summary-point">
+                        <h3>💰 Economics</h3>
+                        <p>95% gross margins, 127% NRR, proven scalability</p>
+                    </div>
+                    <div class="summary-point">
+                        <h3>🏆 Leadership</h3>
+                        <p>Team from Maersk, Amazon, Flexport with 3 exits</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Investment Materials -->
+            <div class="section-divider">
+                <h2>Investment Materials</h2>
+            </div>
+            
+            <div class="materials-grid">
+                <a href="executive-summary.html" class="material-card">
+                    <div class="card-header">
+                        <div class="card-icon">📋</div>
+                        <h3 class="card-title">Executive Summary</h3>
+                        <p class="card-description">Complete investment thesis and company overview</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="content-item">✓ Investment highlights</div>
+                        <div class="content-item">✓ Problem & solution overview</div>
+                        <div class="content-item">✓ Key metrics & traction</div>
+                        <div class="content-item">✓ Use of funds</div>
+                        <div class="cta-button">View Summary</div>
+                    </div>
+                </a>
+
+                <a href="financial-model.html" class="material-card">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <h3 class="card-title">Financial Model</h3>
+                        <p class="card-description">10-year projections with scenario analysis</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="content-item">✓ Revenue projections to $648M</div>
+                        <div class="content-item">✓ Cost structure analysis</div>
+                        <div class="content-item">✓ Scenario planning</div>
+                        <div class="content-item">✓ Path to profitability</div>
+                        <div class="cta-button">View Financials</div>
+                    </div>
+                </a>
+
+                <a href="unit-economics.html" class="material-card">
+                    <div class="card-header">
+                        <div class="card-icon">💰</div>
+                        <h3 class="card-title">Unit Economics</h3>
+                        <p class="card-description">Deep dive into CAC, LTV, and cohort performance</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="content-item">✓ CAC/LTV analysis by segment</div>
+                        <div class="content-item">✓ Cohort retention data</div>
+                        <div class="content-item">✓ NRR breakdown</div>
+                        <div class="content-item">✓ Sales efficiency metrics</div>
+                        <div class="cta-button">View Unit Economics</div>
+                    </div>
+                </a>
+
+                <a href="market-analysis.html" class="material-card">
+                    <div class="card-header">
+                        <div class="card-icon">🌍</div>
+                        <h3 class="card-title">Market Analysis</h3>
+                        <p class="card-description">TAM, SAM, SOM with growth drivers</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="content-item">✓ $2.4T total market size</div>
+                        <div class="content-item">✓ Market segmentation</div>
+                        <div class="content-item">✓ Growth drivers analysis</div>
+                        <div class="content-item">✓ Geographic expansion plan</div>
+                        <div class="cta-button">View Market Analysis</div>
+                    </div>
+                </a>
+
+                <a href="competitive-analysis.html" class="material-card">
+                    <div class="card-header">
+                        <div class="card-icon">🎯</div>
+                        <h3 class="card-title">Competitive Analysis</h3>
+                        <p class="card-description">Positioning matrix and competitive advantages</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="content-item">✓ Market positioning</div>
+                        <div class="content-item">✓ Feature comparison</div>
+                        <div class="content-item">✓ Sustainable moats</div>
+                        <div class="content-item">✓ Competitive strategy</div>
+                        <div class="cta-button">View Competition</div>
+                    </div>
+                </a>
+
+                <a href="product-roadmap.html" class="material-card">
+                    <div class="card-header">
+                        <div class="card-icon">🚀</div>
+                        <h3 class="card-title">Product & GTM</h3>
+                        <p class="card-description">Product roadmap and go-to-market strategy</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="content-item">✓ 2024-2027 product vision</div>
+                        <div class="content-item">✓ Go-to-market strategy</div>
+                        <div class="content-item">✓ Customer acquisition plan</div>
+                        <div class="content-item">✓ Partnership ecosystem</div>
+                        <div class="cta-button">View Product Strategy</div>
+                    </div>
+                </a>
+
+                <a href="management-team.html" class="material-card">
+                    <div class="card-header">
+                        <div class="card-icon">👥</div>
+                        <h3 class="card-title">Management Team</h3>
+                        <p class="card-description">Leadership profiles and organizational structure</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="content-item">✓ Executive team bios</div>
+                        <div class="content-item">✓ Advisory board</div>
+                        <div class="content-item">✓ Organizational chart</div>
+                        <div class="content-item">✓ Hiring plan</div>
+                        <div class="cta-button">View Team</div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Quick Facts -->
+            <div class="quick-facts">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Investment Quick Facts</h2>
+                
+                <div class="facts-grid">
+                    <div class="fact-card">
+                        <h4>📈 Financial Highlights</h4>
+                        <ul style="margin: 0; padding-left: 1.5rem;">
+                            <li>$7.3M ARR growing 280% YoY</li>
+                            <li>95% gross margins</li>
+                            <li>127% net revenue retention</li>
+                            <li>14-month CAC payback</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fact-card">
+                        <h4>🏆 Market Position</h4>
+                        <ul style="margin: 0; padding-left: 1.5rem;">
+                            <li>First universal connector (200+ carriers)</li>
+                            <li>94% D&D prevention rate</li>
+                            <li>10x better than alternatives</li>
+                            <li>3-5 year competitive advantage</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fact-card">
+                        <h4>🎯 Use of Funds</h4>
+                        <ul style="margin: 0; padding-left: 1.5rem;">
+                            <li>$8M - Sales & Marketing</li>
+                            <li>$4M - Product Development</li>
+                            <li>$2M - International Expansion</li>
+                            <li>$1M - Working Capital</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="fact-card">
+                        <h4>🚀 Growth Targets</h4>
+                        <ul style="margin: 0; padding-left: 1.5rem;">
+                            <li>$50M ARR by end of 2025</li>
+                            <li>1,000 vessels under management</li>
+                            <li>European market entry</li>
+                            <li>Path to $100M ARR in 2027</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="contact-section">
+                <h2 style="margin-bottom: 1rem;">Ready to Join Our Journey?</h2>
+                <p style="font-size: 1.125rem; color: #64748B; margin-bottom: 2rem;">
+                    We're seeking a lead investor for our $15M Series A round
+                </p>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span>📧</span>
+                        <span>investors@uip.ai</span>
+                    </div>
+                    <div class="contact-item">
+                        <span>📞</span>
+                        <span>(555) 123-4567</span>
+                    </div>
+                    <div class="contact-item">
+                        <span>📍</span>
+                        <span>San Francisco, CA</span>
+                    </div>
+                </div>
+                
+                <p style="margin-top: 2rem; color: #64748B;">
+                    Full data room available upon request • NDA required for detailed financials
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-links">
+            <a href="https://uip.ai">Company Website</a>
+            <a href="https://uip.ai/about">About UIP</a>
+            <a href="https://uip.ai/blog">Blog</a>
+            <a href="https://uip.ai/careers">Careers</a>
+        </div>
+        <p>&copy; 2024 Universal Integration Intelligence Platform. All rights reserved.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.875rem;">Confidential and Proprietary</p>
+    </div>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
+</body>
+</html>

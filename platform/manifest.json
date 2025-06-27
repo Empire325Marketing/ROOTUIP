@@ -1,0 +1,56 @@
+{
+  "name": "ROOTUIP Platform",
+  "short_name": "ROOTUIP",
+  "description": "Enterprise Shipping Operations Platform",
+  "start_url": "/platform/customer/dashboard.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#3b82f6",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/assets/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Track Shipment",
+      "url": "/platform/track-shipment.html",
+      "icons": [{ "src": "/assets/icons/track-icon.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "New Booking",
+      "url": "/platform/new-booking.html",
+      "icons": [{ "src": "/assets/icons/booking-icon.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Reports",
+      "url": "/platform/reports.html",
+      "icons": [{ "src": "/assets/icons/reports-icon.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/assets/screenshots/dashboard.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/assets/screenshots/mobile-dashboard.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}

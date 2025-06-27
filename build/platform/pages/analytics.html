@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Analytics - UIP Platform</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-title {
+            color: #2c3e50;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .model-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .model-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .model-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin: 0;
+        }
+
+        .model-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: rgba(72, 187, 120, 0.1);
+            color: #48bb78;
+        }
+
+        .status-training {
+            background: rgba(237, 137, 54, 0.1);
+            color: #ed8936;
+        }
+
+        .status-idle {
+            background: rgba(160, 174, 192, 0.1);
+            color: #a0aec0;
+        }
+
+        .model-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .prediction-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .prediction-input {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        .input-field {
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .predict-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .predict-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .predict-btn:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .prediction-results {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .result-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .confidence-badge {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .result-card {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-card.warning {
+            border-left-color: #ed8936;
+        }
+
+        .result-card.danger {
+            border-left-color: #f56565;
+        }
+
+        .result-card.success {
+            border-left-color: #48bb78;
+        }
+
+        .result-card h4 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .result-description {
+            color: #718096;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .recommendations {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .recommendation-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .recommendation-item {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .recommendation-item.high {
+            border-left-color: #f56565;
+        }
+
+        .recommendation-item.medium {
+            border-left-color: #ed8936;
+        }
+
+        .recommendation-item.low {
+            border-left-color: #48bb78;
+        }
+
+        .recommendation-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .recommendation-content h4 {
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .recommendation-content p {
+            color: #718096;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .savings-badge {
+            background: #48bb78;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 300px;
+            background: #f7fafc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0aec0;
+            font-size: 1.1rem;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .controls {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .prediction-input {
+                grid-template-columns: 1fr;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div id="header-logo"></div>
+                    <h1 class="page-title">Predictive Analytics</h1>
+                </div>
+                <div class="controls">
+                    <button class="control-btn" onclick="refreshModels()">
+                        <span id="refreshIcon">🔄</span> Refresh Models
+                    </button>
+                    <a href="/ROOTUIP/platform/dashboard.html" class="control-btn">← Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Model Status Grid -->
+        <div class="model-grid" id="modelGrid">
+            <!-- Models will be populated here -->
+        </div>
+
+        <!-- Prediction Input Section -->
+        <div class="prediction-section">
+            <h3>Make Prediction</h3>
+            <div class="prediction-input">
+                <div class="input-group">
+                    <label class="input-label">Prediction Type</label>
+                    <select class="input-field" id="predictionType">
+                        <option value="dd_risk">D&D Risk Assessment</option>
+                        <option value="port_congestion">Port Congestion Forecast</option>
+                        <option value="container_delay">Container Delay Prediction</option>
+                        <option value="cost_optimization">Cost Optimization</option>
+                        <option value="route_efficiency">Route Efficiency</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Container Number</label>
+                    <input type="text" class="input-field" id="containerNumber" placeholder="MSKU1234567">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Port Code</label>
+                    <input type="text" class="input-field" id="portCode" placeholder="USLAX">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Carrier</label>
+                    <select class="input-field" id="carrier">
+                        <option value="MAERSK">Maersk</option>
+                        <option value="MSC">MSC</option>
+                        <option value="CMA-CGM">CMA CGM</option>
+                        <option value="HAPAG">Hapag-Lloyd</option>
+                        <option value="ONE">ONE</option>
+                    </select>
+                </div>
+            </div>
+            <button class="predict-btn" onclick="makePrediction()">
+                <span id="predictText">Generate Prediction</span>
+                <span id="predictSpinner" class="loading-spinner" style="display: none;"></span>
+            </button>
+        </div>
+
+        <!-- Prediction Results -->
+        <div class="prediction-results" id="predictionResults">
+            <div class="result-header">
+                <h3 class="result-title" id="resultTitle">Prediction Results</h3>
+                <div class="confidence-badge" id="confidenceBadge">95% Confidence</div>
+            </div>
+            <div class="result-grid" id="resultGrid">
+                <!-- Results will be populated here -->
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="recommendations" id="recommendations">
+            <h3>AI Recommendations</h3>
+            <div class="recommendation-list" id="recommendationList">
+                <!-- Recommendations will be populated here -->
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3 class="chart-title">Model Performance Trends</h3>
+            </div>
+            <div class="chart-canvas" id="performanceChart">
+                📊 Performance charts will be displayed here
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3 class="chart-title">Prediction Accuracy Over Time</h3>
+            </div>
+            <div class="chart-canvas" id="accuracyChart">
+                📈 Accuracy trends will be displayed here
+            </div>
+        </div>
+    </div>
+
+    <script src="/ROOTUIP/js/logo-component.js?v=1750888019"></script>
+    <script src="/ROOTUIP/platform/js/predictive-analytics.js?v=1750888019"></script>
+    <script>
+        // Initialize logo
+        document.getElementById('header-logo').innerHTML = UIPLogo.getLogo({
+            size: 'medium',
+            type: 'full',
+            theme: 'color'
+        });
+
+        // Initialize Predictive Analytics
+        let predictiveAnalytics;
+        let currentPrediction = null;
+
+        async function initializeAnalytics() {
+            try {
+                predictiveAnalytics = new PredictiveAnalytics();
+                await predictiveAnalytics.initialize();
+                console.log('Predictive Analytics initialized successfully');
+                renderModels();
+            } catch (error) {
+                console.error('Failed to initialize Predictive Analytics:', error);
+            }
+        }
+
+        function renderModels() {
+            const modelGrid = document.getElementById('modelGrid');
+            
+            const models = [
+                {
+                    name: 'D&D Risk Predictor',
+                    type: 'dd_risk',
+                    status: 'active',
+                    accuracy: '94.2%',
+                    lastTrained: '2 days ago',
+                    predictions: '1,247',
+                    description: 'Predicts demurrage and detention risk with 94% accuracy'
+                },
+                {
+                    name: 'Port Congestion Forecaster',
+                    type: 'port_congestion',
+                    status: 'active',
+                    accuracy: '89.1%',
+                    lastTrained: '1 day ago',
+                    predictions: '892',
+                    description: 'Forecasts port congestion levels up to 7 days ahead'
+                },
+                {
+                    name: 'Container Delay Predictor',
+                    type: 'container_delay',
+                    status: 'training',
+                    accuracy: '92.4%',
+                    lastTrained: 'Training...',
+                    predictions: '1,556',
+                    description: 'Predicts container arrival delays and transit disruptions'
+                },
+                {
+                    name: 'Cost Optimizer',
+                    type: 'cost_optimization',
+                    status: 'active',
+                    accuracy: '87.8%',
+                    lastTrained: '3 days ago',
+                    predictions: '674',
+                    description: 'Identifies cost saving opportunities and route optimization'
+                },
+                {
+                    name: 'Route Efficiency Analyzer',
+                    type: 'route_efficiency',
+                    status: 'idle',
+                    accuracy: '91.2%',
+                    lastTrained: '5 days ago',
+                    predictions: '423',
+                    description: 'Analyzes route efficiency and suggests improvements'
+                },
+                {
+                    name: 'Demand Forecaster',
+                    type: 'demand_forecast',
+                    status: 'active',
+                    accuracy: '88.5%',
+                    lastTrained: '1 day ago',
+                    predictions: '789',
+                    description: 'Forecasts shipping demand and capacity requirements'
+                }
+            ];
+
+            modelGrid.innerHTML = models.map(model => `
+                <div class="model-card">
+                    <div class="model-header">
+                        <h3 class="model-title">${model.name}</h3>
+                        <span class="model-status status-${model.status}">${model.status}</span>
+                    </div>
+                    <div class="model-metrics">
+                        <div class="metric">
+                            <div class="metric-value">${model.accuracy}</div>
+                            <div class="metric-label">Accuracy</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${model.predictions}</div>
+                            <div class="metric-label">Predictions</div>
+                        </div>
+                    </div>
+                    <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${model.description}</p>
+                    <p style="color: #a0aec0; font-size: 0.8rem;">Last trained: ${model.lastTrained}</p>
+                </div>
+            `).join('');
+        }
+
+        async function makePrediction() {
+            const predictBtn = document.querySelector('.predict-btn');
+            const predictText = document.getElementById('predictText');
+            const predictSpinner = document.getElementById('predictSpinner');
+            
+            // Show loading state
+            predictBtn.disabled = true;
+            predictText.style.display = 'none';
+            predictSpinner.style.display = 'inline-block';
+
+            try {
+                const predictionType = document.getElementById('predictionType').value;
+                const containerNumber = document.getElementById('containerNumber').value;
+                const portCode = document.getElementById('portCode').value;
+                const carrier = document.getElementById('carrier').value;
+
+                const inputData = {
+                    containerNumber: containerNumber || 'MSKU1234567',
+                    portCode: portCode || 'USLAX',
+                    carrier: carrier || 'MAERSK',
+                    arrivalDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+                    estimatedCost: 5000 + Math.random() * 3000
+                };
+
+                let prediction;
+                
+                if (predictiveAnalytics) {
+                    prediction = await predictiveAnalytics.predict(predictionType, inputData);
+                } else {
+                    // Fallback simulation
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    prediction = generateMockPrediction(predictionType, inputData);
+                }
+
+                currentPrediction = {
+                    type: predictionType,
+                    data: inputData,
+                    result: prediction
+                };
+
+                displayPredictionResults(predictionType, prediction);
+                
+            } catch (error) {
+                console.error('Prediction failed:', error);
+                alert('Prediction failed. Please try again.');
+            } finally {
+                // Reset button state
+                predictBtn.disabled = false;
+                predictText.style.display = 'inline';
+                predictSpinner.style.display = 'none';
+            }
+        }
+
+        function generateMockPrediction(type, inputData) {
+            const predictions = {
+                dd_risk: {
+                    riskScore: 0.65 + Math.random() * 0.3,
+                    riskLevel: 'HIGH',
+                    confidence: 0.94,
+                    factors: [
+                        { factor: 'Limited free time', impact: 'HIGH' },
+                        { factor: 'Port congestion', impact: 'MEDIUM' }
+                    ],
+                    recommendations: [
+                        {
+                            action: 'Schedule immediate pickup',
+                            priority: 'HIGH',
+                            description: 'Container is at high risk of D&D charges',
+                            estimatedSavings: '$2,500'
+                        }
+                    ]
+                },
+                port_congestion: {
+                    congestionLevel: 0.7 + Math.random() * 0.2,
+                    trend: 'increasing',
+                    confidence: 0.89,
+                    forecast: Array.from({length: 7}, (_, i) => ({
+                        date: new Date(Date.now() + i * 24 * 60 * 60 * 1000),
+                        level: 0.6 + Math.random() * 0.3
+                    })),
+                    recommendations: [
+                        {
+                            action: 'Consider alternate ports',
+                            priority: 'MEDIUM',
+                            description: 'High congestion expected at destination port'
+                        }
+                    ]
+                },
+                container_delay: {
+                    delayProbability: 0.3 + Math.random() * 0.4,
+                    expectedDelay: Math.floor(Math.random() * 4) + 1,
+                    confidence: 0.92,
+                    delayReasons: [
+                        { type: 'port_congestion', description: 'Port congestion at destination' }
+                    ],
+                    mitigation: [
+                        {
+                            factor: 'Port congestion',
+                            action: 'Consider alternate discharge ports',
+                            timeframe: '2-3 days'
+                        }
+                    ]
+                },
+                cost_optimization: {
+                    currentCost: inputData.estimatedCost,
+                    optimizedCost: inputData.estimatedCost * (0.85 + Math.random() * 0.1),
+                    savings: inputData.estimatedCost * (0.05 + Math.random() * 0.1),
+                    confidence: 0.87,
+                    optimizations: [
+                        {
+                            category: 'Carrier Selection',
+                            description: 'Switch to more cost-effective carrier',
+                            savings: 400,
+                            priority: 'HIGH'
+                        }
+                    ]
+                }
+            };
+
+            return predictions[type] || predictions.dd_risk;
+        }
+
+        function displayPredictionResults(type, prediction) {
+            const resultsContainer = document.getElementById('predictionResults');
+            const resultTitle = document.getElementById('resultTitle');
+            const confidenceBadge = document.getElementById('confidenceBadge');
+            const resultGrid = document.getElementById('resultGrid');
+
+            // Update title and confidence
+            const titles = {
+                dd_risk: 'D&D Risk Assessment',
+                port_congestion: 'Port Congestion Forecast',
+                container_delay: 'Container Delay Prediction',
+                cost_optimization: 'Cost Optimization Analysis'
+            };
+
+            resultTitle.textContent = titles[type] || 'Prediction Results';
+            confidenceBadge.textContent = `${Math.round((prediction.confidence || 0.9) * 100)}% Confidence`;
+
+            // Generate result cards based on prediction type
+            let resultCards = [];
+
+            switch (type) {
+                case 'dd_risk':
+                    resultCards = [
+                        {
+                            title: 'Risk Level',
+                            value: prediction.riskLevel || 'MEDIUM',
+                            description: `${Math.round((prediction.riskScore || 0.5) * 100)}% probability of D&D charges`,
+                            type: prediction.riskLevel === 'HIGH' ? 'danger' : prediction.riskLevel === 'MEDIUM' ? 'warning' : 'success'
+                        },
+                        {
+                            title: 'Risk Score',
+                            value: `${Math.round((prediction.riskScore || 0.5) * 100)}%`,
+                            description: 'Calculated based on current conditions',
+                            type: 'default'
+                        }
+                    ];
+                    break;
+
+                case 'port_congestion':
+                    resultCards = [
+                        {
+                            title: 'Congestion Level',
+                            value: `${Math.round((prediction.congestionLevel || 0.6) * 100)}%`,
+                            description: `Trend: ${prediction.trend || 'stable'}`,
+                            type: prediction.congestionLevel > 0.8 ? 'danger' : prediction.congestionLevel > 0.6 ? 'warning' : 'success'
+                        },
+                        {
+                            title: '7-Day Forecast',
+                            value: `${prediction.forecast ? 'Available' : 'Processing'}`,
+                            description: 'Detailed forecast available',
+                            type: 'default'
+                        }
+                    ];
+                    break;
+
+                case 'container_delay':
+                    resultCards = [
+                        {
+                            title: 'Delay Probability',
+                            value: `${Math.round((prediction.delayProbability || 0.3) * 100)}%`,
+                            description: 'Chance of significant delay',
+                            type: prediction.delayProbability > 0.6 ? 'danger' : prediction.delayProbability > 0.3 ? 'warning' : 'success'
+                        },
+                        {
+                            title: 'Expected Delay',
+                            value: `${prediction.expectedDelay || 1} days`,
+                            description: 'If delay occurs',
+                            type: 'default'
+                        }
+                    ];
+                    break;
+
+                case 'cost_optimization':
+                    const savings = prediction.savings || 0;
+                    const savingsPercent = ((savings / (prediction.currentCost || 5000)) * 100).toFixed(1);
+                    
+                    resultCards = [
+                        {
+                            title: 'Potential Savings',
+                            value: `$${Math.round(savings).toLocaleString()}`,
+                            description: `${savingsPercent}% cost reduction possible`,
+                            type: 'success'
+                        },
+                        {
+                            title: 'Optimized Cost',
+                            value: `$${Math.round(prediction.optimizedCost || prediction.currentCost || 5000).toLocaleString()}`,
+                            description: `vs. current $${Math.round(prediction.currentCost || 5000).toLocaleString()}`,
+                            type: 'default'
+                        }
+                    ];
+                    break;
+            }
+
+            resultGrid.innerHTML = resultCards.map(card => `
+                <div class="result-card ${card.type}">
+                    <h4>${card.title}</h4>
+                    <div class="result-value" style="color: ${getCardColor(card.type)}">${card.value}</div>
+                    <div class="result-description">${card.description}</div>
+                </div>
+            `).join('');
+
+            resultsContainer.style.display = 'block';
+
+            // Show recommendations if available
+            if (prediction.recommendations) {
+                displayRecommendations(prediction.recommendations);
+            }
+        }
+
+        function displayRecommendations(recommendations) {
+            const recommendationsContainer = document.getElementById('recommendations');
+            const recommendationList = document.getElementById('recommendationList');
+
+            recommendationList.innerHTML = recommendations.map(rec => `
+                <div class="recommendation-item ${rec.priority.toLowerCase()}">
+                    <div class="recommendation-icon" style="background: ${getPriorityColor(rec.priority)}">
+                        ${getPriorityIcon(rec.priority)}
+                    </div>
+                    <div class="recommendation-content">
+                        <h4>${rec.action}</h4>
+                        <p>${rec.description}</p>
+                        ${rec.estimatedSavings ? `<span class="savings-badge">Save ${rec.estimatedSavings}</span>` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            recommendationsContainer.style.display = 'block';
+        }
+
+        function getCardColor(type) {
+            const colors = {
+                danger: '#f56565',
+                warning: '#ed8936',
+                success: '#48bb78',
+                default: '#667eea'
+            };
+            return colors[type] || colors.default;
+        }
+
+        function getPriorityColor(priority) {
+            const colors = {
+                HIGH: '#f56565',
+                MEDIUM: '#ed8936',
+                LOW: '#48bb78'
+            };
+            return colors[priority] || colors.MEDIUM;
+        }
+
+        function getPriorityIcon(priority) {
+            const icons = {
+                HIGH: '!',
+                MEDIUM: '⚠',
+                LOW: 'ℹ'
+            };
+            return icons[priority] || icons.MEDIUM;
+        }
+
+        async function refreshModels() {
+            const refreshIcon = document.getElementById('refreshIcon');
+            refreshIcon.style.transform = 'rotate(360deg)';
+            refreshIcon.style.transition = 'transform 0.5s ease';
+            
+            // Simulate refresh
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            renderModels();
+            
+            setTimeout(() => {
+                refreshIcon.style.transform = 'rotate(0deg)';
+            }, 500);
+        }
+
+        // Initialize on page load
+        initializeAnalytics();
+
+        // Sample data population
+        setTimeout(() => {
+            document.getElementById('containerNumber').value = 'MSKU1234567';
+            document.getElementById('portCode').value = 'USLAX';
+        }, 1000);
+    </script>
+</body>
+</html>

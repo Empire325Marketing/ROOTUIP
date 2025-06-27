@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Email Automation Sequences - Enterprise Lead Nurturing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .automation-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 48px 32px;
+            text-align: center;
+        }
+        
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        
+        .header-subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+        
+        .header-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+        
+        .header-stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        .automation-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 48px 20px;
+        }
+        
+        .sequence-nav {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .nav-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1e40af;
+            text-align: center;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-button {
+            background: #eff6ff;
+            border: 2px solid #3b82f6;
+            color: #1e40af;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+        
+        .nav-button:hover,
+        .nav-button.active {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .email-sequence {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 40px;
+        }
+        
+        .email-sequence.active {
+            display: block;
+        }
+        
+        .sequence-header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .sequence-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .sequence-description {
+            color: #64748b;
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+        
+        .sequence-stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        
+        .sequence-stat {
+            text-align: center;
+            background: #f8fafc;
+            padding: 12px 20px;
+            border-radius: 8px;
+        }
+        
+        .sequence-stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            display: block;
+        }
+        
+        .sequence-stat-label {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .email-timeline {
+            position: relative;
+            margin: 32px 0;
+        }
+        
+        .email-timeline::before {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
+        }
+        
+        .email-item {
+            position: relative;
+            margin-bottom: 32px;
+            padding-left: 64px;
+        }
+        
+        .email-item::before {
+            content: attr(data-day);
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 48px;
+            height: 48px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+        
+        .email-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            border-left: 4px solid #3b82f6;
+            transition: transform 0.3s ease;
+        }
+        
+        .email-card:hover {
+            transform: translateX(4px);
+        }
+        
+        .email-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .email-subject {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .email-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .email-meta-item {
+            font-size: 0.875rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .email-preview {
+            color: #374151;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+        
+        .email-cta {
+            background: #10b981;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-block;
+            text-decoration: none;
+            margin-bottom: 12px;
+        }
+        
+        .email-goals {
+            background: #ecfdf5;
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 12px;
+        }
+        
+        .email-goals-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #065f46;
+            margin-bottom: 4px;
+        }
+        
+        .email-goals-list {
+            font-size: 0.75rem;
+            color: #047857;
+            list-style: none;
+        }
+        
+        .email-goals-list li::before {
+            content: "→ ";
+            font-weight: 600;
+        }
+        
+        .sequence-automation {
+            background: #fffbeb;
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 32px;
+        }
+        
+        .automation-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .automation-triggers {
+            margin-bottom: 16px;
+        }
+        
+        .automation-triggers h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+        
+        .trigger-list {
+            list-style: none;
+            font-size: 0.875rem;
+            color: #a16207;
+        }
+        
+        .trigger-list li {
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .trigger-list li::before {
+            content: "⚡";
+        }
+        
+        .personalization-tokens {
+            background: #f0f9ff;
+            border: 1px solid #0284c7;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 24px;
+        }
+        
+        .personalization-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #0c4a6e;
+            margin-bottom: 12px;
+        }
+        
+        .token-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        
+        .token-item {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: #0369a1;
+            font-family: monospace;
+        }
+        
+        .performance-metrics {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            margin-top: 32px;
+        }
+        
+        .metrics-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .metric-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1e293b;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .metric-trend {
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+        
+        .trend-positive {
+            color: #10b981;
+        }
+        
+        .trend-negative {
+            color: #ef4444;
+        }
+        
+        .email-template-preview {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        .template-header {
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .template-from {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+        
+        .template-subject {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .template-body {
+            color: #374151;
+            line-height: 1.6;
+        }
+        
+        .template-signature {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+        
+        .btn-secondary:hover {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .automation-container {
+                padding: 20px 10px;
+            }
+            
+            .header-title {
+                font-size: 2rem;
+            }
+            
+            .email-item {
+                padding-left: 48px;
+            }
+            
+            .email-item::before {
+                width: 32px;
+                height: 32px;
+                font-size: 0.75rem;
+            }
+            
+            .automation-container::before {
+                left: 16px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="automation-header">
+        <div class="header-title">Email Automation Sequences</div>
+        <div class="header-subtitle">6-Month Enterprise Lead Nurturing for $500K+ Deals</div>
+        <div class="header-stats">
+            <div class="header-stat">
+                <span class="stat-value">47%</span>
+                <span class="stat-label">Open Rate</span>
+            </div>
+            <div class="header-stat">
+                <span class="stat-value">12%</span>
+                <span class="stat-label">Click Rate</span>
+            </div>
+            <div class="header-stat">
+                <span class="stat-value">23%</span>
+                <span class="stat-label">Lead to Demo</span>
+            </div>
+            <div class="header-stat">
+                <span class="stat-value">8.5%</span>
+                <span class="stat-label">Demo to Close</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="automation-container">
+        <div class="sequence-nav">
+            <div class="nav-title">Select Email Automation Sequence</div>
+            <div class="nav-buttons">
+                <button class="nav-button active" onclick="showSequence('roi-followup')">ROI Calculator Follow-up</button>
+                <button class="nav-button" onclick="showSequence('demo-noshow')">Demo No-Show Recovery</button>
+                <button class="nav-button" onclick="showSequence('technical-evaluation')">Technical Evaluation</button>
+                <button class="nav-button" onclick="showSequence('executive-decision')">Executive Decision-Maker</button>
+                <button class="nav-button" onclick="showSequence('post-demo')">Post-Demo Follow-up</button>
+            </div>
+        </div>
+
+        <!-- ROI Calculator Follow-up Sequence -->
+        <div id="roi-followup" class="email-sequence active">
+            <div class="sequence-header">
+                <div class="sequence-title">ROI Calculator Follow-up Sequence</div>
+                <div class="sequence-description">7 emails over 14 days for prospects who completed the ROI calculator</div>
+                <div class="sequence-stats">
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">7 emails</span>
+                        <span class="sequence-stat-label">Total Emails</span>
+                    </div>
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">14 days</span>
+                        <span class="sequence-stat-label">Duration</span>
+                    </div>
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">34%</span>
+                        <span class="sequence-stat-label">Demo Conversion</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="email-timeline">
+                <div class="email-item" data-day="D1">
+                    <div class="email-card">
+                        <div class="email-subject">Your ${{calculated_savings}} Savings Analysis is Ready</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: Immediately after calculation</div>
+                            <div class="email-meta-item">⏰ Best time: Business hours</div>
+                        </div>
+                        <div class="email-preview">
+                            Hi {{first_name}},<br><br>
+                            Thank you for using our ROI calculator. Based on your inputs, UIP could save {{company_name}} approximately <strong>${{calculated_savings}} annually</strong> through our ocean freight optimization platform.<br><br>
+                            I've attached a detailed breakdown showing:<br>
+                            • How we calculated your ${{calculated_savings}} savings<br>
+                            • 18-month ROI projection ({{calculated_roi}}%)<br>
+                            • Implementation timeline for {{company_name}}<br>
+                            • Similar customer success stories in {{industry}}
+                        </div>
+                        <a href="#" class="email-cta">Download Detailed ROI Report</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Deliver on calculator promise</li>
+                                <li>Provide immediate value</li>
+                                <li>Start trust building process</li>
+                                <li>Establish credibility with data</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D2">
+                    <div class="email-card">
+                        <div class="email-subject">How {{similar_company}} Saved $47M in 18 Months</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 24 hours after email 1</div>
+                            <div class="email-meta-item">⏰ Best time: 10 AM Tuesday-Thursday</div>
+                        </div>
+                        <div class="email-preview">
+                            {{first_name}},<br><br>
+                            Yesterday I shared your ${{calculated_savings}} savings potential. Today, let me show you a real example.<br><br>
+                            {{similar_company}}, a {{industry}} company similar to {{company_name}}, was facing the same challenges:<br>
+                            • $80M annual D&D exposure<br>
+                            • 15 fragmented carrier systems<br>
+                            • 320 hours/week manual processing<br><br>
+                            After implementing UIP, they achieved:<br>
+                            • $47M saved in 18 months<br>
+                            • 94% D&D reduction<br>
+                            • 85% process automation
+                        </div>
+                        <a href="#" class="email-cta">Read Full Case Study</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Provide social proof</li>
+                                <li>Show real results</li>
+                                <li>Address credibility concerns</li>
+                                <li>Build confidence in solution</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D4">
+                    <div class="email-card">
+                        <div class="email-subject">The Hidden Costs Killing Your Freight Budget</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 72 hours after email 2</div>
+                            <div class="email-meta-item">⏰ Best time: 2 PM Tuesday-Thursday</div>
+                        </div>
+                        <div class="email-preview">
+                            Hi {{first_name}},<br><br>
+                            Most {{industry}} companies like {{company_name}} are losing money on ocean freight in ways they don't even realize:<br><br>
+                            <strong>Hidden Cost #1: Manual Processing Tax</strong><br>
+                            • Average cost: $156,000 annually per FTE<br>
+                            • Your estimated impact: ${{manual_cost_calculation}}<br><br>
+                            <strong>Hidden Cost #2: Reactive D&D Penalties</strong><br>
+                            • Industry average: 6.2% of freight spend<br>
+                            • Your exposure: ${{dd_exposure_calculation}}<br><br>
+                            <strong>Hidden Cost #3: Visibility Blindness</strong><br>
+                            • Missed optimization opportunities<br>
+                            • Customer service inefficiencies<br>
+                            • Inventory carrying costs
+                        </div>
+                        <a href="#" class="email-cta">Calculate Your Hidden Costs</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Educate about pain points</li>
+                                <li>Quantify hidden costs</li>
+                                <li>Create urgency</li>
+                                <li>Position as expert advisor</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D7">
+                    <div class="email-card">
+                        <div class="email-subject">Your 48-Hour Implementation Plan</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 1 week after calculation</div>
+                            <div class="email-meta-item">⏰ Best time: 9 AM Tuesday-Wednesday</div>
+                        </div>
+                        <div class="email-preview">
+                            {{first_name}},<br><br>
+                            I know implementing new freight technology can seem daunting. That's why we've perfected a 48-hour implementation process that gets you saving money immediately.<br><br>
+                            <strong>Hour 1-8: Platform Setup</strong><br>
+                            • Carrier integration configuration<br>
+                            • Data migration from existing systems<br>
+                            • User account creation<br><br>
+                            <strong>Hour 9-24: Testing & Validation</strong><br>
+                            • Real shipment data validation<br>
+                            • Alert system configuration<br>
+                            • Team training sessions<br><br>
+                            <strong>Hour 25-48: Go-Live & Optimization</strong><br>
+                            • Production deployment<br>
+                            • Performance monitoring<br>
+                            • Success metrics baseline
+                        </div>
+                        <a href="#" class="email-cta">See Implementation Timeline</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Address implementation concerns</li>
+                                <li>Reduce perceived risk</li>
+                                <li>Show expertise</li>
+                                <li>Build confidence</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D10">
+                    <div class="email-card">
+                        <div class="email-subject">Ready to See UIP in Action? (15-minute demo)</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 10 days after calculation</div>
+                            <div class="email-meta-item">⏰ Best time: 11 AM Monday-Wednesday</div>
+                        </div>
+                        <div class="email-preview">
+                            Hi {{first_name}},<br><br>
+                            Over the past week, I've shared how UIP can save {{company_name}} ${{calculated_savings}} annually. Now let me show you exactly how it works.<br><br>
+                            I'd like to offer you a personalized 15-minute demo focused specifically on {{industry}} use cases. You'll see:<br><br>
+                            • Live platform demonstration with your data<br>
+                            • Real-time D&D prevention in action<br>
+                            • ROI calculation validation<br>
+                            • Q&A about your specific needs<br><br>
+                            The demo is designed for {{title}}s like yourself who need to see concrete proof before making decisions.
+                        </div>
+                        <a href="#" class="email-cta">Schedule My 15-Minute Demo</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Direct demo request</li>
+                                <li>Low-commitment offer</li>
+                                <li>Role-specific positioning</li>
+                                <li>Create next step</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D12">
+                    <div class="email-card">
+                        <div class="email-subject">Quick Question About Your Freight Challenges</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 12 days after calculation</div>
+                            <div class="email-meta-item">⏰ Best time: 3 PM Tuesday-Thursday</div>
+                        </div>
+                        <div class="email-preview">
+                            {{first_name}},<br><br>
+                            I've been thinking about {{company_name}}'s freight operations and your ${{calculated_savings}} savings potential.<br><br>
+                            Quick question: What's your biggest frustration with ocean freight right now?<br><br>
+                            Is it:<br>
+                            • Unpredictable D&D charges hitting your budget?<br>
+                            • Manual processes consuming your team's time?<br>
+                            • Lack of visibility causing customer service issues?<br>
+                            • Something else entirely?<br><br>
+                            Understanding your top priority helps me show you the most relevant solution for {{company_name}}.
+                        </div>
+                        <a href="#" class="email-cta">Reply with Your Top Challenge</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Start conversation</li>
+                                <li>Gather qualification data</li>
+                                <li>Personalize follow-up</li>
+                                <li>Show individual attention</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D14">
+                    <div class="email-card">
+                        <div class="email-subject">[Final] Is Ocean Freight Optimization a Priority for 2024?</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 14 days after calculation</div>
+                            <div class="email-meta-item">⏰ Best time: 10 AM Tuesday-Wednesday</div>
+                        </div>
+                        <div class="email-preview">
+                            Hi {{first_name}},<br><br>
+                            This is my final email in this sequence. I've shared how UIP could save {{company_name}} ${{calculated_savings}} annually, but I understand you're busy evaluating many priorities.<br><br>
+                            If ocean freight optimization isn't a focus for 2024, no worries. I'll add you to our quarterly newsletter so you stay informed about industry trends.<br><br>
+                            However, if you're still interested in exploring how to:<br>
+                            • Eliminate 94% of D&D charges<br>
+                            • Automate 85% of manual processes<br>
+                            • Achieve 347% ROI in 18 months<br><br>
+                            Just reply "INTERESTED" and I'll send you our implementation calendar for Q1 2024.
+                        </div>
+                        <a href="#" class="email-cta">Yes, I'm Still Interested</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Final qualification attempt</li>
+                                <li>Respect their time</li>
+                                <li>Clear next steps</li>
+                                <li>Graceful exit option</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sequence-automation">
+                <div class="automation-title">
+                    🤖 Automation Logic
+                </div>
+                <div class="automation-triggers">
+                    <h4>Sequence Triggers:</h4>
+                    <ul class="trigger-list">
+                        <li>ROI calculator completion</li>
+                        <li>Lead capture form submission</li>
+                        <li>Minimum company size: 500+ employees</li>
+                        <li>Valid business email domain</li>
+                    </ul>
+                </div>
+                <div class="automation-triggers">
+                    <h4>Exit Conditions:</h4>
+                    <ul class="trigger-list">
+                        <li>Demo scheduled</li>
+                        <li>Reply to any email</li>
+                        <li>Unsubscribe request</li>
+                        <li>Moved to different sequence</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo No-Show Recovery Sequence -->
+        <div id="demo-noshow" class="email-sequence">
+            <div class="sequence-header">
+                <div class="sequence-title">Demo No-Show Recovery Sequence</div>
+                <div class="sequence-description">3 emails to re-engage prospects who missed their scheduled demo</div>
+                <div class="sequence-stats">
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">3 emails</span>
+                        <span class="sequence-stat-label">Total Emails</span>
+                    </div>
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">7 days</span>
+                        <span class="sequence-stat-label">Duration</span>
+                    </div>
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">28%</span>
+                        <span class="sequence-stat-label">Recovery Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="email-timeline">
+                <div class="email-item" data-day="D1">
+                    <div class="email-card">
+                        <div class="email-subject">We Missed You Today - Here's What You Would Have Seen</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 2 hours after missed demo</div>
+                            <div class="email-meta-item">⏰ Best time: Same day</div>
+                        </div>
+                        <div class="email-preview">
+                            Hi {{first_name}},<br><br>
+                            I noticed you weren't able to join our demo today. No problem - things come up!<br><br>
+                            Since I had prepared a personalized demo for {{company_name}}, I recorded the key highlights you would have seen:<br><br>
+                            • Your ${{calculated_savings}} savings breakdown<br>
+                            • Live D&D prevention demonstration<br>
+                            • Integration with systems like {{current_systems}}<br>
+                            • Implementation timeline for {{industry}} companies<br><br>
+                            The recording is only 12 minutes and available for 48 hours.
+                        </div>
+                        <a href="#" class="email-cta">Watch Personalized Demo Recording</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Immediate recovery attempt</li>
+                                <li>Provide missed value</li>
+                                <li>No guilt or pressure</li>
+                                <li>Create urgency with expiration</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D3">
+                    <div class="email-card">
+                        <div class="email-subject">Still Interested in Saving {{company_name}} ${{calculated_savings}}?</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 3 days after no-show</div>
+                            <div class="email-meta-item">⏰ Best time: 10 AM Tuesday-Thursday</div>
+                        </div>
+                        <div class="email-preview">
+                            {{first_name}},<br><br>
+                            I understand priorities shift quickly in {{industry}}. But I didn't want the ${{calculated_savings}} annual savings opportunity for {{company_name}} to get lost in the shuffle.<br><br>
+                            Instead of scheduling another demo, let me send you something more convenient:<br><br>
+                            <strong>A 5-minute video specifically for {{title}}s</strong> showing:<br>
+                            • Instant ROI visibility (first week results)<br>
+                            • Risk-free 30-day trial process<br>
+                            • Reference customer contact for {{industry}}<br><br>
+                            No scheduling required - watch when convenient.
+                        </div>
+                        <a href="#" class="email-cta">Watch 5-Minute Executive Overview</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Lower commitment option</li>
+                                <li>Role-specific content</li>
+                                <li>Convenience focus</li>
+                                <li>Alternative engagement path</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D7">
+                    <div class="email-card">
+                        <div class="email-subject">One Last Resource Before I Move On</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 1 week after no-show</div>
+                            <div class="email-meta-item">⏰ Best time: 2 PM Tuesday-Wednesday</div>
+                        </div>
+                        <div class="email-preview">
+                            Hi {{first_name}},<br><br>
+                            I'll stop reaching out after this email, but wanted to leave you with one final resource that might be valuable later.<br><br>
+                            Our "Ocean Freight Optimization Blueprint" covers:<br>
+                            • 7 immediate cost reduction strategies<br>
+                            • Technology evaluation checklist<br>
+                            • Implementation best practices<br>
+                            • ROI measurement framework<br><br>
+                            It's designed for {{industry}} executives evaluating freight solutions. No strings attached - keep it for reference whenever you're ready to tackle this initiative.<br><br>
+                            Best of luck with your freight operations!
+                        </div>
+                        <a href="#" class="email-cta">Download Free Blueprint</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Final value-add</li>
+                                <li>No pressure close</li>
+                                <li>Leave door open</li>
+                                <li>Professional exit</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sequence-automation">
+                <div class="automation-title">
+                    🤖 Automation Logic
+                </div>
+                <div class="automation-triggers">
+                    <h4>Sequence Triggers:</h4>
+                    <ul class="trigger-list">
+                        <li>Scheduled demo missed (no attendance)</li>
+                        <li>No last-minute cancellation</li>
+                        <li>Lead previously qualified</li>
+                    </ul>
+                </div>
+                <div class="automation-triggers">
+                    <h4>Exit Conditions:</h4>
+                    <ul class="trigger-list">
+                        <li>New demo scheduled</li>
+                        <li>Reply to any email</li>
+                        <li>Video content engagement</li>
+                        <li>Sequence completion</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Evaluation Sequence -->
+        <div id="technical-evaluation" class="email-sequence">
+            <div class="sequence-header">
+                <div class="sequence-title">Technical Evaluation Sequence</div>
+                <div class="sequence-description">10 emails over 60 days for prospects in technical evaluation phase</div>
+                <div class="sequence-stats">
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">10 emails</span>
+                        <span class="sequence-stat-label">Total Emails</span>
+                    </div>
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">60 days</span>
+                        <span class="sequence-stat-label">Duration</span>
+                    </div>
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">41%</span>
+                        <span class="sequence-stat-label">Advancement Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="email-timeline">
+                <div class="email-item" data-day="D1">
+                    <div class="email-card">
+                        <div class="email-subject">Technical Documentation Package for {{company_name}}</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: After demo completion</div>
+                            <div class="email-meta-item">⏰ Best time: Same day as demo</div>
+                        </div>
+                        <div class="email-preview">
+                            Hi {{first_name}},<br><br>
+                            Thank you for the productive demo session today. As promised, here's the technical documentation package for {{company_name}}'s evaluation:<br><br>
+                            <strong>Architecture & Security:</strong><br>
+                            • System architecture diagrams<br>
+                            • SOC2 Type II compliance documentation<br>
+                            • Data encryption and privacy controls<br><br>
+                            <strong>Integration Documentation:</strong><br>
+                            • API documentation and samples<br>
+                            • {{current_erp}} integration guide<br>
+                            • Data migration procedures<br><br>
+                            <strong>Performance & Scalability:</strong><br>
+                            • Performance benchmarks<br>
+                            • Scalability testing results<br>
+                            • SLA guarantees and service credits
+                        </div>
+                        <a href="#" class="email-cta">Access Technical Documentation</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Fulfill demo promises</li>
+                                <li>Support technical evaluation</li>
+                                <li>Demonstrate thoroughness</li>
+                                <li>Address technical concerns</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D3">
+                    <div class="email-card">
+                        <div class="email-subject">{{similar_company}} Integration Deep-Dive (Technical Case Study)</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 3 days after demo</div>
+                            <div class="email-meta-item">⏰ Best time: 10 AM Tuesday-Thursday</div>
+                        </div>
+                        <div class="email-preview">
+                            {{first_name}},<br><br>
+                            Following up on your questions about ERP integration complexity, I wanted to share a detailed technical case study from {{similar_company}}, a {{industry}} company with similar infrastructure to {{company_name}}.<br><br>
+                            <strong>Their Technical Challenge:</strong><br>
+                            • Legacy {{current_erp}} system with custom workflows<br>
+                            • 15+ carrier API connections needed<br>
+                            • Real-time data synchronization requirements<br>
+                            • Zero downtime implementation requirement<br><br>
+                            <strong>Our Solution Architecture:</strong><br>
+                            • Microservices-based integration layer<br>
+                            • Event-driven data synchronization<br>
+                            • Phased rollout with fallback procedures<br>
+                            • 48-hour complete implementation
+                        </div>
+                        <a href="#" class="email-cta">Download Technical Case Study</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Address integration concerns</li>
+                                <li>Provide technical proof</li>
+                                <li>Show similar company success</li>
+                                <li>Build implementation confidence</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D7">
+                    <div class="email-card">
+                        <div class="email-subject">API Testing Environment Ready for {{company_name}}</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 1 week after demo</div>
+                            <div class="email-meta-item">⏰ Best time: 9 AM Tuesday-Wednesday</div>
+                        </div>
+                        <div class="email-preview">
+                            Hi {{first_name}},<br><br>
+                            I've set up a dedicated API testing environment for {{company_name}} to evaluate UIP's integration capabilities firsthand.<br><br>
+                            <strong>What's Included:</strong><br>
+                            • Full API access with your data structure<br>
+                            • Pre-configured {{current_erp}} endpoints<br>
+                            • Sample carrier data feeds<br>
+                            • Real-time webhook testing<br>
+                            • Performance monitoring dashboard<br><br>
+                            Your development team can test:<br>
+                            • Data flow validation<br>
+                            • Error handling procedures<br>
+                            • Performance under load<br>
+                            • Security compliance verification<br><br>
+                            Environment access expires in 14 days.
+                        </div>
+                        <a href="#" class="email-cta">Access Testing Environment</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Hands-on evaluation</li>
+                                <li>Remove technical barriers</li>
+                                <li>Accelerate evaluation</li>
+                                <li>Demonstrate confidence</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D14">
+                    <div class="email-card">
+                        <div class="email-subject">Security & Compliance Deep Dive</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 2 weeks after demo</div>
+                            <div class="email-meta-item">⏰ Best time: 11 AM Tuesday-Thursday</div>
+                        </div>
+                        <div class="email-preview">
+                            {{first_name}},<br><br>
+                            Security is paramount in ocean freight operations. Here's comprehensive documentation addressing {{company_name}}'s security requirements:<br><br>
+                            <strong>Data Protection:</strong><br>
+                            • AES-256 encryption at rest and in transit<br>
+                            • Zero-trust network architecture<br>
+                            • Regular penetration testing results<br>
+                            • GDPR and CCPA compliance frameworks<br><br>
+                            <strong>Access Controls:</strong><br>
+                            • Role-based access control (RBAC)<br>
+                            • Multi-factor authentication (MFA)<br>
+                            • Single sign-on (SSO) integration<br>
+                            • Audit logging and monitoring<br><br>
+                            <strong>Compliance Certifications:</strong><br>
+                            • SOC2 Type II (current report attached)<br>
+                            • ISO 27001 certification<br>
+                            • ISAE 3402 Type II compliance<br>
+                            • Annual third-party security assessments
+                        </div>
+                        <a href="#" class="email-cta">Download Security Documentation</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Address security concerns</li>
+                                <li>Provide compliance proof</li>
+                                <li>Support security review</li>
+                                <li>Demonstrate enterprise readiness</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D21">
+                    <div class="email-card">
+                        <div class="email-subject">Performance Benchmarks vs. {{current_solution}}</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 3 weeks after demo</div>
+                            <div class="email-meta-item">⏰ Best time: 2 PM Tuesday-Wednesday</div>
+                        </div>
+                        <div class="email-preview">
+                            Hi {{first_name}},<br><br>
+                            You mentioned comparing UIP's performance against {{current_solution}}. I've prepared a detailed benchmark analysis:<br><br>
+                            <strong>Response Time Comparison:</strong><br>
+                            • UIP API responses: <200ms (95th percentile)<br>
+                            • {{current_solution}}: 1.2s average<br>
+                            • Performance improvement: 6x faster<br><br>
+                            <strong>Data Accuracy:</strong><br>
+                            • UIP carrier data accuracy: 99.7%<br>
+                            • {{current_solution}}: 94.2%<br>
+                            • Error reduction: 92% fewer data discrepancies<br><br>
+                            <strong>Scalability Testing:</strong><br>
+                            • UIP: Linear scaling to 1M+ containers<br>
+                            • Load testing results under peak conditions<br>
+                            • Auto-scaling capabilities demonstration
+                        </div>
+                        <a href="#" class="email-cta">View Benchmark Report</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Competitive differentiation</li>
+                                <li>Performance validation</li>
+                                <li>Data-driven comparison</li>
+                                <li>Support evaluation criteria</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D30">
+                    <div class="email-card">
+                        <div class="email-subject">Reference Customer Call with {{industry}} CTO</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 1 month after demo</div>
+                            <div class="email-meta-item">⏰ Best time: 10 AM Tuesday-Thursday</div>
+                        </div>
+                        <div class="email-preview">
+                            {{first_name}},<br><br>
+                            I'd like to arrange a reference call with {{reference_company}}'s CTO, who led their UIP implementation last year.<br><br>
+                            <strong>{{reference_cto_name}} can discuss:</strong><br>
+                            • Technical implementation challenges and solutions<br>
+                            • Integration experience with {{similar_erp}}<br>
+                            • Performance results and optimization<br>
+                            • Team adoption and change management<br>
+                            • Lessons learned and best practices<br><br>
+                            {{reference_company}} achieved similar results to your projections:<br>
+                            • $23M annual savings<br>
+                            • 91% D&D reduction<br>
+                            • 6-week implementation<br><br>
+                            Would a 30-minute call next week work for your team?
+                        </div>
+                        <a href="#" class="email-cta">Schedule Reference Call</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Peer validation</li>
+                                <li>Technical credibility</li>
+                                <li>Implementation confidence</li>
+                                <li>Similar company proof</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D37">
+                    <div class="email-card">
+                        <div class="email-subject">{{company_name}} Implementation Roadmap Draft</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 5 weeks after demo</div>
+                            <div class="email-meta-item">⏰ Best time: 9 AM Tuesday-Wednesday</div>
+                        </div>
+                        <div class="email-preview">
+                            Hi {{first_name}},<br><br>
+                            Based on our technical discussions, I've drafted a specific implementation roadmap for {{company_name}}:<br><br>
+                            <strong>Phase 1: Foundation (Week 1)</strong><br>
+                            • {{current_erp}} integration setup<br>
+                            • Primary carrier connections ({{primary_carriers}})<br>
+                            • User account provisioning<br>
+                            • Security configuration<br><br>
+                            <strong>Phase 2: Core Features (Week 2)</strong><br>
+                            • Predictive analytics deployment<br>
+                            • Alert system configuration<br>
+                            • Dashboard customization<br>
+                            • Team training sessions<br><br>
+                            <strong>Phase 3: Optimization (Weeks 3-4)</strong><br>
+                            • Workflow automation setup<br>
+                            • Advanced reporting configuration<br>
+                            • Performance tuning<br>
+                            • Success metrics validation
+                        </div>
+                        <a href="#" class="email-cta">Review Implementation Plan</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Demonstrate preparation</li>
+                                <li>Show implementation clarity</li>
+                                <li>Reduce uncertainty</li>
+                                <li>Move toward commitment</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D45">
+                    <div class="email-card">
+                        <div class="email-subject">Technical Evaluation Checklist Status</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 6-7 weeks after demo</div>
+                            <div class="email-meta-item">⏰ Best time: 11 AM Tuesday-Thursday</div>
+                        </div>
+                        <div class="email-preview">
+                            {{first_name}},<br><br>
+                            I wanted to check on {{company_name}}'s technical evaluation progress. Here's what we've covered:<br><br>
+                            ✅ Architecture and security documentation<br>
+                            ✅ Integration testing environment<br>
+                            ✅ Performance benchmarks<br>
+                            ✅ Reference customer call<br>
+                            ✅ Implementation roadmap<br><br>
+                            <strong>Still pending:</strong><br>
+                            • Final security approval<br>
+                            • Budget allocation confirmation<br>
+                            • Implementation timeline approval<br><br>
+                            What additional information does your team need to complete the technical evaluation?
+                        </div>
+                        <a href="#" class="email-cta">Schedule Evaluation Review</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Progress assessment</li>
+                                <li>Identify blockers</li>
+                                <li>Show completion progress</li>
+                                <li>Request next steps</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D52">
+                    <div class="email-card">
+                        <div class="email-subject">Pilot Program Proposal for {{company_name}}</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 7-8 weeks after demo</div>
+                            <div class="email-meta-item">⏰ Best time: 2 PM Tuesday-Wednesday</div>
+                        </div>
+                        <div class="email-preview">
+                            Hi {{first_name}},<br><br>
+                            Understanding the complexity of enterprise decisions, I'd like to propose a risk-free pilot program for {{company_name}}:<br><br>
+                            <strong>30-Day Pilot Scope:</strong><br>
+                            • 1,000 container subset of your volume<br>
+                            • {{primary_trade_lane}} trade lane focus<br>
+                            • Full platform functionality<br>
+                            • Dedicated implementation support<br><br>
+                            <strong>Success Metrics:</strong><br>
+                            • D&D reduction >85%<br>
+                            • Process automation >75%<br>
+                            • Cost savings validation<br>
+                            • User adoption >90%<br><br>
+                            <strong>Pilot Investment:</strong><br>
+                            • No upfront costs<br>
+                            • Success-based pricing<br>
+                            • Full refund if metrics not met
+                        </div>
+                        <a href="#" class="email-cta">Review Pilot Proposal</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Reduce risk perception</li>
+                                <li>Enable limited commitment</li>
+                                <li>Prove value quickly</li>
+                                <li>Create momentum</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D60">
+                    <div class="email-card">
+                        <div class="email-subject">Executive Summary: Technical Evaluation Results</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 8-9 weeks after demo</div>
+                            <div class="email-meta-item">⏰ Best time: 10 AM Monday-Wednesday</div>
+                        </div>
+                        <div class="email-preview">
+                            {{first_name}},<br><br>
+                            I've prepared an executive summary of {{company_name}}'s technical evaluation for your leadership team:<br><br>
+                            <strong>Technical Assessment Results:</strong><br>
+                            • Security: Exceeds enterprise requirements<br>
+                            • Performance: 6x faster than current solution<br>
+                            • Integration: Seamless {{current_erp}} compatibility<br>
+                            • Scalability: Proven at enterprise scale<br><br>
+                            <strong>Business Impact Validation:</strong><br>
+                            • ${{calculated_savings}} annual savings confirmed<br>
+                            • 48-hour implementation timeline verified<br>
+                            • {{industry}} reference customers validated<br>
+                            • Risk mitigation through pilot program<br><br>
+                            <strong>Recommended Next Steps:</strong><br>
+                            • Executive decision maker meeting<br>
+                            • Contract terms discussion<br>
+                            • Implementation timeline finalization
+                        </div>
+                        <a href="#" class="email-cta">Schedule Executive Meeting</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Summarize evaluation</li>
+                                <li>Support executive decision</li>
+                                <li>Clear next steps</li>
+                                <li>Move to closing phase</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sequence-automation">
+                <div class="automation-title">
+                    🤖 Automation Logic
+                </div>
+                <div class="automation-triggers">
+                    <h4>Sequence Triggers:</h4>
+                    <ul class="trigger-list">
+                        <li>Demo completed successfully</li>
+                        <li>Technical evaluation phase identified</li>
+                        <li>Enterprise-size company (1000+ employees)</li>
+                        <li>Decision maker or influencer role</li>
+                    </ul>
+                </div>
+                <div class="automation-triggers">
+                    <h4>Exit Conditions:</h4>
+                    <ul class="trigger-list">
+                        <li>Pilot program started</li>
+                        <li>Executive meeting scheduled</li>
+                        <li>Technical evaluation completed</li>
+                        <li>Moved to executive sequence</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Executive Decision-Maker Sequence -->
+        <div id="executive-decision" class="email-sequence">
+            <div class="sequence-header">
+                <div class="sequence-title">Executive Decision-Maker Sequence</div>
+                <div class="sequence-description">5 emails focused on C-level executives and final decision makers</div>
+                <div class="sequence-stats">
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">5 emails</span>
+                        <span class="sequence-stat-label">Total Emails</span>
+                    </div>
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">21 days</span>
+                        <span class="sequence-stat-label">Duration</span>
+                    </div>
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">67%</span>
+                        <span class="sequence-stat-label">Close Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="email-timeline">
+                <div class="email-item" data-day="D1">
+                    <div class="email-card">
+                        <div class="email-subject">Board-Ready Business Case: ${{calculated_savings}} Annual Impact</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: When executive identified</div>
+                            <div class="email-meta-item">⏰ Best time: 8 AM Monday-Tuesday</div>
+                        </div>
+                        <div class="email-preview">
+                            {{executive_name}},<br><br>
+                            Your team has completed technical evaluation of UIP's ocean freight optimization platform. I've prepared a board-ready business case showing {{company_name}}'s ${{calculated_savings}} annual impact opportunity:<br><br>
+                            <strong>Financial Impact Summary:</strong><br>
+                            • Annual savings: ${{calculated_savings}}<br>
+                            • 18-month ROI: {{calculated_roi}}%<br>
+                            • Payback period: {{payback_months}} months<br>
+                            • Implementation investment: ${{implementation_cost}}<br><br>
+                            <strong>Strategic Benefits:</strong><br>
+                            • Competitive advantage through operational efficiency<br>
+                            • Risk mitigation from supply chain disruptions<br>
+                            • Scalability for future growth<br>
+                            • Industry leadership positioning<br><br>
+                            The business case includes peer company comparisons and implementation timeline.
+                        </div>
+                        <a href="#" class="email-cta">Download Business Case</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Executive-level positioning</li>
+                                <li>Board-ready materials</li>
+                                <li>Strategic value focus</li>
+                                <li>Financial impact clarity</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D5">
+                    <div class="email-card">
+                        <div class="email-subject">CEO Peer Perspective: {{peer_ceo}} on Ocean Freight ROI</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 5 days after business case</div>
+                            <div class="email-meta-item">⏰ Best time: 7 AM Monday-Wednesday</div>
+                        </div>
+                        <div class="email-preview">
+                            {{executive_name}},<br><br>
+                            {{peer_ceo}}, CEO of {{peer_company}} ({{industry}}, ${{peer_revenue}}B revenue), shared insights about their UIP implementation:<br><br>
+                            <em>"Ocean freight was our biggest operational blind spot. UIP gave us visibility and control we never had. The $34M annual savings was just the beginning - the strategic advantage of predictable supply chains during COVID was invaluable."</em><br><br>
+                            <strong>{{peer_company}}'s Results:</strong><br>
+                            • $34M annual freight savings<br>
+                            • 89% reduction in supply chain surprises<br>
+                            • 2.3x faster inventory turns<br>
+                            • Maintained operations during port congestion<br><br>
+                            {{peer_ceo}} is available for a brief CEO-to-CEO conversation if helpful.
+                        </div>
+                        <a href="#" class="email-cta">Schedule CEO Peer Call</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Peer social proof</li>
+                                <li>CEO-level validation</li>
+                                <li>Strategic perspective</li>
+                                <li>Risk mitigation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D10">
+                    <div class="email-card">
+                        <div class="email-subject">Market Timing: Ocean Freight Transformation Window</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 10 days after business case</div>
+                            <div class="email-meta-item">⏰ Best time: 9 AM Tuesday-Thursday</div>
+                        </div>
+                        <div class="email-preview">
+                            {{executive_name}},<br><br>
+                            Market dynamics are creating a unique opportunity for ocean freight transformation leadership:<br><br>
+                            <strong>Industry Transformation Trends:</strong><br>
+                            • 73% of {{industry}} companies planning freight digitization<br>
+                            • Average 18-month evaluation-to-implementation cycle<br>
+                            • Early adopters gaining 3-5 year competitive advantage<br>
+                            • Supply chain resilience becoming board priority<br><br>
+                            <strong>{{company_name}}'s Timing Advantage:</strong><br>
+                            • Q1 2024 implementation = competitive leadership<br>
+                            • Peak season preparation advantage<br>
+                            • First-mover benefits in {{geography}} region<br>
+                            • Strategic positioning before competitors<br><br>
+                            McKinsey's latest supply chain report (attached) highlights this transformation imperative.
+                        </div>
+                        <a href="#" class="email-cta">Download McKinsey Report</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Create strategic urgency</li>
+                                <li>Market timing awareness</li>
+                                <li>Competitive advantage focus</li>
+                                <li>External validation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D15">
+                    <div class="email-card">
+                        <div class="email-subject">Implementation Guarantee & Success Framework</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 15 days after business case</div>
+                            <div class="email-meta-item">⏰ Best time: 10 AM Monday-Wednesday</div>
+                        </div>
+                        <div class="email-preview">
+                            {{executive_name}},<br><br>
+                            Understanding the importance of execution certainty, UIP provides comprehensive guarantees for {{company_name}}'s implementation:<br><br>
+                            <strong>Performance Guarantees:</strong><br>
+                            • Minimum 85% D&D reduction within 6 months<br>
+                            • 48-hour implementation or extended support<br>
+                            • 99.9% platform uptime with service credits<br>
+                            • ROI achievement or fee adjustment<br><br>
+                            <strong>Success Framework:</strong><br>
+                            • Dedicated Customer Success Manager<br>
+                            • Quarterly Business Reviews with metrics<br>
+                            • Executive escalation protocols<br>
+                            • Continuous optimization program<br><br>
+                            <strong>Risk Mitigation:</strong><br>
+                            • 30-day pilot program option<br>
+                            • Phased implementation approach<br>
+                            • Full data portability guarantee<br>
+                            • Reference customer advisory board
+                        </div>
+                        <a href="#" class="email-cta">Review Success Framework</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Address execution risk</li>
+                                <li>Provide confidence</li>
+                                <li>Demonstrate commitment</li>
+                                <li>Remove final barriers</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="D21">
+                    <div class="email-card">
+                        <div class="email-subject">Ready to Transform {{company_name}}'s Ocean Freight Operations?</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Send: 21 days after business case</div>
+                            <div class="email-meta-item">⏰ Best time: 8 AM Monday-Tuesday</div>
+                        </div>
+                        <div class="email-preview">
+                            {{executive_name}},<br><br>
+                            {{company_name}} has everything needed to capture ${{calculated_savings}} in annual freight savings:<br><br>
+                            ✅ Technical evaluation completed successfully<br>
+                            ✅ Business case validated with {{calculated_roi}}% ROI<br>
+                            ✅ Peer company validation from {{peer_ceo}}<br>
+                            ✅ Implementation plan and guarantees defined<br>
+                            ✅ Market timing optimal for competitive advantage<br><br>
+                            <strong>Recommended Next Steps:</strong><br>
+                            1. Executive approval and budget allocation<br>
+                            2. Contract execution and implementation scheduling<br>
+                            3. Q1 2024 go-live for peak season readiness<br><br>
+                            I can arrange a final 15-minute executive summary call to address any remaining questions and finalize next steps.<br><br>
+                            Are you ready to lead {{industry}} in ocean freight optimization?
+                        </div>
+                        <a href="#" class="email-cta">Schedule Final Executive Call</a>
+                        <div class="email-goals">
+                            <div class="email-goals-title">Email Goals:</div>
+                            <ul class="email-goals-list">
+                                <li>Direct close attempt</li>
+                                <li>Summarize value proof</li>
+                                <li>Clear next steps</li>
+                                <li>Executive commitment</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sequence-automation">
+                <div class="automation-title">
+                    🤖 Automation Logic
+                </div>
+                <div class="automation-triggers">
+                    <h4>Sequence Triggers:</h4>
+                    <ul class="trigger-list">
+                        <li>Executive role identified (C-level, VP+)</li>
+                        <li>Technical evaluation completed</li>
+                        <li>High lead score (>150 points)</li>
+                        <li>Large company size (1000+ employees)</li>
+                    </ul>
+                </div>
+                <div class="automation-triggers">
+                    <h4>Exit Conditions:</h4>
+                    <ul class="trigger-list">
+                        <li>Deal closed/won</li>
+                        <li>Executive meeting scheduled</li>
+                        <li>Contract negotiations started</li>
+                        <li>Pilot program initiated</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Post-Demo Follow-up Sequence -->
+        <div id="post-demo" class="email-sequence">
+            <div class="sequence-header">
+                <div class="sequence-title">Post-Demo Follow-up Sequence</div>
+                <div class="sequence-description">Customized by role: Executive, Technical, Operations, Procurement</div>
+                <div class="sequence-stats">
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">Variable</span>
+                        <span class="sequence-stat-label">Email Count</span>
+                    </div>
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">Role-based</span>
+                        <span class="sequence-stat-label">Customization</span>
+                    </div>
+                    <div class="sequence-stat">
+                        <span class="sequence-stat-value">52%</span>
+                        <span class="sequence-stat-label">Advancement Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="email-timeline">
+                <div class="email-item" data-day="EX">
+                    <div class="email-card">
+                        <div class="email-subject">[Executive] Board-Ready ROI Summary for {{company_name}}</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Role: C-Level, VP</div>
+                            <div class="email-meta-item">⏰ Send: 2 hours after demo</div>
+                        </div>
+                        <div class="email-preview">
+                            {{executive_name}},<br><br>
+                            Thank you for joining today's UIP demonstration. As requested, here's a board-ready summary of {{company_name}}'s opportunity:<br><br>
+                            <strong>Executive Summary:</strong><br>
+                            • Annual savings opportunity: ${{calculated_savings}}<br>
+                            • 18-month ROI: {{calculated_roi}}%<br>
+                            • Implementation timeline: 48 hours<br>
+                            • Risk mitigation: Comprehensive guarantees<br><br>
+                            <strong>Strategic Benefits:</strong><br>
+                            • Competitive advantage through operational excellence<br>
+                            • Supply chain resilience and predictability<br>
+                            • Platform for future growth and expansion<br>
+                            • Industry leadership positioning<br><br>
+                            The attached business case includes peer comparisons and implementation roadmap.
+                        </div>
+                        <a href="#" class="email-cta">Download Executive Business Case</a>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="TE">
+                    <div class="email-card">
+                        <div class="email-subject">[Technical] Integration Documentation & Testing Environment</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Role: CTO, IT Director, Technical</div>
+                            <div class="email-meta-item">⏰ Send: 2 hours after demo</div>
+                        </div>
+                        <div class="email-preview">
+                            {{first_name}},<br><br>
+                            Following our technical discussion, here's the comprehensive documentation package for {{company_name}}'s evaluation:<br><br>
+                            <strong>Technical Documentation:</strong><br>
+                            • API documentation and integration guides<br>
+                            • {{current_erp}} integration specifications<br>
+                            • Security and compliance documentation<br>
+                            • Architecture diagrams and data flows<br><br>
+                            <strong>Testing Environment:</strong><br>
+                            • Dedicated sandbox environment access<br>
+                            • Sample data and test scenarios<br>
+                            • Performance monitoring tools<br>
+                            • Direct technical support channel<br><br>
+                            Your development team can begin testing immediately. Environment expires in 14 days.
+                        </div>
+                        <a href="#" class="email-cta">Access Technical Resources</a>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="OP">
+                    <div class="email-card">
+                        <div class="email-subject">[Operations] Workflow Optimization & Training Resources</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Role: Operations Manager, Supply Chain</div>
+                            <div class="email-meta-item">⏰ Send: 2 hours after demo</div>
+                        </div>
+                        <div class="email-preview">
+                            {{first_name}},<br><br>
+                            Great questions during today's demo about operational workflows. Here are resources specifically for {{company_name}}'s operations team:<br><br>
+                            <strong>Workflow Optimization:</strong><br>
+                            • Current state vs. future state workflows<br>
+                            • Process automation opportunities<br>
+                            • Team productivity improvements<br>
+                            • Change management best practices<br><br>
+                            <strong>Training & Adoption:</strong><br>
+                            • User training curriculum<br>
+                            • Role-based access setup<br>
+                            • Daily operation procedures<br>
+                            • Success metrics and KPIs<br><br>
+                            Similar {{industry}} companies see 85% manual process reduction within 30 days.
+                        </div>
+                        <a href="#" class="email-cta">Download Operations Guide</a>
+                    </div>
+                </div>
+
+                <div class="email-item" data-day="PR">
+                    <div class="email-card">
+                        <div class="email-subject">[Procurement] Cost Analysis & Contract Framework</div>
+                        <div class="email-meta">
+                            <div class="email-meta-item">📧 Role: Procurement, Finance</div>
+                            <div class="email-meta-item">⏰ Send: 2 hours after demo</div>
+                        </div>
+                        <div class="email-preview">
+                            {{first_name}},<br><br>
+                            Following our cost-benefit discussion, here's detailed financial analysis for {{company_name}}'s procurement evaluation:<br><br>
+                            <strong>Cost Analysis:</strong><br>
+                            • Total Cost of Ownership (TCO) calculation<br>
+                            • ROI breakdown by cost category<br>
+                            • Implementation cost details<br>
+                            • Ongoing operational costs<br><br>
+                            <strong>Contract Framework:</strong><br>
+                            • Flexible pricing models<br>
+                            • Performance-based guarantees<br>
+                            • Service level agreements<br>
+                            • Volume discount structures<br><br>
+                            <strong>Risk Mitigation:</strong><br>
+                            • Pilot program option<br>
+                            • Success metrics guarantee<br>
+                            • Data portability rights<br>
+                            • Termination protections
+                        </div>
+                        <a href="#" class="email-cta">Review Financial Analysis</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sequence-automation">
+                <div class="automation-title">
+                    🤖 Role-Based Automation
+                </div>
+                <div class="automation-triggers">
+                    <h4>Role Detection Logic:</h4>
+                    <ul class="trigger-list">
+                        <li>Job title analysis and classification</li>
+                        <li>Demo interaction and question patterns</li>
+                        <li>Content engagement preferences</li>
+                        <li>Decision influence level assessment</li>
+                    </ul>
+                </div>
+                <div class="automation-triggers">
+                    <h4>Content Customization:</h4>
+                    <ul class="trigger-list">
+                        <li>Executive: Strategic focus, board materials</li>
+                        <li>Technical: Integration docs, testing environments</li>
+                        <li>Operations: Workflow optimization, training</li>
+                        <li>Procurement: Cost analysis, contract terms</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Metrics Dashboard -->
+    <div class="performance-metrics">
+        <div class="metrics-title">Email Automation Performance Metrics</div>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <span class="metric-value">47.3%</span>
+                <span class="metric-label">Average Open Rate</span>
+                <div class="metric-trend trend-positive">↗ +12% vs industry</div>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">12.7%</span>
+                <span class="metric-label">Average Click Rate</span>
+                <div class="metric-trend trend-positive">↗ +8% vs industry</div>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">23.4%</span>
+                <span class="metric-label">Lead to Demo Rate</span>
+                <div class="metric-trend trend-positive">↗ +15% vs benchmark</div>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">8.5%</span>
+                <span class="metric-label">Demo to Close Rate</span>
+                <div class="metric-trend trend-positive">↗ +3.2% improvement</div>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">187 days</span>
+                <span class="metric-label">Average Sales Cycle</span>
+                <div class="metric-trend trend-positive">↗ -23 days shorter</div>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">$580K</span>
+                <span class="metric-label">Average Deal Size</span>
+                <div class="metric-trend trend-positive">↗ +23% vs baseline</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Personalization Tokens Reference -->
+    <div class="personalization-tokens">
+        <div class="personalization-title">Available Personalization Tokens</div>
+        <div class="token-grid">
+            <div class="token-item">{{first_name}}</div>
+            <div class="token-item">{{last_name}}</div>
+            <div class="token-item">{{company_name}}</div>
+            <div class="token-item">{{title}}</div>
+            <div class="token-item">{{industry}}</div>
+            <div class="token-item">{{company_size}}</div>
+            <div class="token-item">{{calculated_savings}}</div>
+            <div class="token-item">{{calculated_roi}}</div>
+            <div class="token-item">{{current_erp}}</div>
+            <div class="token-item">{{current_solution}}</div>
+            <div class="token-item">{{annual_volume}}</div>
+            <div class="token-item">{{geographic_region}}</div>
+            <div class="token-item">{{similar_company}}</div>
+            <div class="token-item">{{peer_ceo}}</div>
+            <div class="token-item">{{reference_company}}</div>
+            <div class="token-item">{{primary_carriers}}</div>
+        </div>
+    </div>
+
+    <script>
+        function showSequence(sequenceId) {
+            // Hide all sequences
+            document.querySelectorAll('.email-sequence').forEach(sequence => {
+                sequence.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected sequence
+            document.getElementById(sequenceId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Track sequence interactions
+        function trackSequenceView(sequenceId) {
+            // Analytics tracking
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'sequence_viewed', {
+                    sequence_type: sequenceId,
+                    page: 'email_automation'
+                });
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Email Automation Sequences loaded');
+            
+            // Track initial sequence view
+            trackSequenceView('roi-followup');
+        });
+    </script>
+</body>
+</html>

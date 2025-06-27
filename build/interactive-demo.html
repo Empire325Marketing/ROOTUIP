@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Experience UIP's ocean freight automation platform. See how we save $14M per vessel through real-time tracking and D&D prevention.">
+    <title>Interactive Demo - UIP Platform | Save $14M Per Vessel</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js?v=1750888019"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="brand/brand-colors.css?v=1750888019">
+    <link rel="stylesheet" href="brand/typography.css?v=1750888019">
+    <link rel="stylesheet" href="css/interactive-demo.css?v=1750888019">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Mapbox for container tracking -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js?v=1750888019'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css?v=1750888019' rel='stylesheet' />
+    
+    <!-- Chart.js?v=1750888019 for visualizations -->
+    <script src="https://cdn.js?v=1750888019delivr.net/npm/chart.js?v=1750888019@4.4.0/dist/chart.umd.min.js?v=1750888019"></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+</head>
+<body>
+    <!-- Demo Wrapper -->
+    <div class="demo-wrapper" id="demoWrapper">
+        
+        <!-- Role Selection Screen -->
+        <section class="role-selection active" id="roleSelection">
+            <div class="role-container">
+                <div class="logo-header">
+                    <img src="brand/logo.svg" alt="UIP Logo" class="demo-logo">
+                </div>
+                
+                <h1 class="role-title">Experience UIP for Your Role</h1>
+                <p class="role-subtitle">Choose your perspective to see how UIP transforms your daily operations</p>
+                
+                <div class="role-cards">
+                    <div class="role-card" data-role="executive">
+                        <div class="role-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+                                <path d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm0 6c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6 2.69-6 6-6zm0 28.4c-5.01 0-9.41-2.56-12-6.44.05-3.97 8.01-6.16 12-6.16s11.94 2.19 12 6.16c-2.59 3.88-6.99 6.44-12 6.44z"/>
+                            </svg>
+                        </div>
+                        <h3>Executive</h3>
+                        <p>CFO, VP Operations, Director</p>
+                        <ul class="role-focus">
+                            <li>ROI & cost savings</li>
+                            <li>Risk mitigation</li>
+                            <li>Strategic insights</li>
+                        </ul>
+                        <button class="role-select-btn" data-role="executive">
+                            Start Executive Tour
+                        </button>
+                    </div>
+                    
+                    <div class="role-card" data-role="operations">
+                        <div class="role-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+                                <path d="M40 8H8c-2.21 0-3.98 1.79-3.98 4L4 36c0 2.21 1.79 4 4 4h32c2.21 0 4-1.79 4-4V12c0-2.21-1.79-4-4-4zm-16 6c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6 2.69-6 6-6zm12 20H12v-2c0-4 8-6.2 12-6.2S36 28 36 32v2z"/>
+                            </svg>
+                        </div>
+                        <h3>Operations</h3>
+                        <p>Operations Manager, Logistics Team</p>
+                        <ul class="role-focus">
+                            <li>Daily workflows</li>
+                            <li>Exception handling</li>
+                            <li>Team efficiency</li>
+                        </ul>
+                        <button class="role-select-btn" data-role="operations">
+                            Start Operations Tour
+                        </button>
+                    </div>
+                    
+                    <div class="role-card" data-role="it">
+                        <div class="role-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+                                <path d="M40 12H24l-4-4H8c-2.2 0-4 1.8-4 4v24c0 2.2 1.8 4 4 4h32c2.2 0 4-1.8 4-4V16c0-2.2-1.8-4-4-4zm-2 16h-8v8h-4v-8h-8v-4h8v-8h4v8h8v4z"/>
+                            </svg>
+                        </div>
+                        <h3>IT/Technical</h3>
+                        <p>IT Director, Systems Administrator</p>
+                        <ul class="role-focus">
+                            <li>Integration options</li>
+                            <li>Security & compliance</li>
+                            <li>Technical architecture</li>
+                        </ul>
+                        <button class="role-select-btn" data-role="it">
+                            Start Technical Tour
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="skip-tour">
+                    <button class="skip-btn" id="skipTour">Skip tour and explore freely</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Main Demo Interface -->
+        <section class="demo-interface" id="demoInterface">
+            <!-- Top Navigation Bar -->
+            <nav class="demo-nav">
+                <div class="nav-left">
+            <div class="uip-logo" data-size="medium" data-type="horizontal" data-theme="white" data-link="true"></div>
+                    <span class="nav-divider">|</span>
+                    <span class="nav-role" id="userRole">Executive View</span>
+                </div>
+                
+                <div class="nav-center">
+                    <div class="demo-tabs">
+                        <button class="demo-tab active" data-view="dashboard">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M3 3h6v6H3V3zm8 0h6v6h-6V3zM3 11h6v6H3v-6zm8 0h6v6h-6v-6z"/>
+                            </svg>
+                            Dashboard
+                        </button>
+                        <button class="demo-tab" data-view="tracking">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10 2C5.58 2 2 5.58 2 10s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm.5-9H9v5l4.25 2.52.77-1.28-3.52-2.09V7z"/>
+                            </svg>
+                            Live Tracking
+                        </button>
+                        <button class="demo-tab" data-view="prevention">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10 1L3 5v6c0 4.55 3.07 8.78 7 9.79 3.93-1.01 7-5.24 7-9.79V5l-7-4zm-2 15l-4-4 1.41-1.41L8 13.17l6.59-6.59L16 8l-8 8z"/>
+                            </svg>
+                            D&D Prevention
+                        </button>
+                        <button class="demo-tab" data-view="documents">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M14 2H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h8v12H6V4zm2 3h4v2H8V7zm0 3h4v2H8v-2zm0 3h3v2H8v-2z"/>
+                            </svg>
+                            Documents
+                        </button>
+                        <button class="demo-tab" data-view="integrations">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M8 13h2v-2h2v-2h-2V7H8v2H6v2h2v2zm2-11C4.48 2 0 6.48 0 12s4.48 10 10 10 10-4.48 10-10S15.52 2 10 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                            </svg>
+                            Integrations
+                        </button>
+                        <button class="demo-tab" data-view="disputes">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 11H7v2h2v-2zm0-4H7v2h2V7zm0-6C3.48 1 0 4.48 0 9s3.48 8 8 8 8-3.48 8-8-3.48-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+                            </svg>
+                            Disputes
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="nav-right">
+                    <button class="demo-help" id="demoHelp">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 2C5.58 2 2 5.58 2 10s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 13h-2v-2h2v2zm0-4h-2c0-3 3-2.75 3-5 0-1.1-.9-2-2-2s-2 .9-2 2H6c0-2.21 1.79-4 4-4s4 1.79 4 4c0 2.5-3 2.75-3 5z"/>
+                        </svg>
+                        Help
+                    </button>
+                    <button class="demo-exit" id="demoExit">
+                        Exit Demo
+                    </button>
+                </div>
+            </nav>
+            
+            <!-- Demo Content Area -->
+            <main class="demo-content" id="demoContent">
+                
+                <!-- Dashboard View -->
+                <div class="demo-view active" id="dashboardView">
+                    <div class="dashboard-header">
+                        <h1 class="dashboard-title">Ocean Freight Command Center</h1>
+                        <div class="dashboard-actions">
+                            <div class="date-range">
+                                <span>Last 30 Days</span>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M4 5l4 4 4-4H4z"/>
+                                </svg>
+                            </div>
+                            <button class="export-btn">
+                                Export Report
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- KPI Cards -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card" data-tooltip="Total savings from prevented D&D charges this month">
+                            <div class="kpi-header">
+                                <span class="kpi-label">D&D Prevented</span>
+                                <span class="kpi-trend positive">+12%</span>
+                            </div>
+                            <div class="kpi-value">$1.4M</div>
+                            <div class="kpi-detail">94% prevention rate</div>
+                            <div class="kpi-spark">
+                                <canvas id="ddSparkline"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="kpi-card" data-tooltip="Active vessels being monitored in real-time">
+                            <div class="kpi-header">
+                                <span class="kpi-label">Active Vessels</span>
+                                <span class="kpi-badge">LIVE</span>
+                            </div>
+                            <div class="kpi-value">127</div>
+                            <div class="kpi-detail">23,847 containers</div>
+                            <div class="kpi-mini-chart">
+                                <div class="vessel-status">
+                                    <div class="status-bar on-time" style="width: 78%"></div>
+                                    <div class="status-bar at-risk" style="width: 18%"></div>
+                                    <div class="status-bar delayed" style="width: 4%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="kpi-card" data-tooltip="Automated hours saved through UIP platform">
+                            <div class="kpi-header">
+                                <span class="kpi-label">Hours Saved</span>
+                                <span class="kpi-trend positive">+27%</span>
+                            </div>
+                            <div class="kpi-value">3,241</div>
+                            <div class="kpi-detail">This month</div>
+                            <div class="kpi-comparison">
+                                <span class="before">Before: 180 hrs/week</span>
+                                <span class="after">Now: 27 hrs/week</span>
+                            </div>
+                        </div>
+                        
+                        <div class="kpi-card" data-tooltip="Success rate for automated dispute filing">
+                            <div class="kpi-header">
+                                <span class="kpi-label">Dispute Success</span>
+                                <span class="kpi-industry">Industry: 67%</span>
+                            </div>
+                            <div class="kpi-value">94%</div>
+                            <div class="kpi-detail">$892K recovered</div>
+                            <div class="kpi-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 94%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Dashboard Content -->
+                    <div class="dashboard-main">
+                        <!-- Risk Analysis -->
+                        <div class="dashboard-card risk-analysis">
+                            <div class="card-header">
+                                <h2>D&D Risk Analysis - Next 14 Days</h2>
+                                <div class="card-actions">
+                                    <button class="action-btn">View Details</button>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <canvas id="riskChart"></canvas>
+                                <div class="risk-summary">
+                                    <div class="risk-item">
+                                        <span class="risk-indicator high"></span>
+                                        <span>High Risk: 12 containers ($342K exposure)</span>
+                                    </div>
+                                    <div class="risk-item">
+                                        <span class="risk-indicator medium"></span>
+                                        <span>Medium Risk: 47 containers ($521K exposure)</span>
+                                    </div>
+                                    <div class="risk-item">
+                                        <span class="risk-indicator low"></span>
+                                        <span>Low Risk: 189 containers ($142K exposure)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Recent Alerts -->
+                        <div class="dashboard-card alerts-panel">
+                            <div class="card-header">
+                                <h2>Real-Time Alerts</h2>
+                                <span class="alert-count">5 new</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="alert-list">
+                                    <div class="alert-item high-priority">
+                                        <div class="alert-icon">⚠️</div>
+                                        <div class="alert-content">
+                                            <div class="alert-title">MSC GENEVA - Port Congestion Alert</div>
+                                            <div class="alert-detail">ETA delayed by 48 hours at Port of LA. 127 containers at risk.</div>
+                                            <div class="alert-meta">
+                                                <span class="alert-time">2 min ago</span>
+                                                <button class="alert-action">Take Action</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="alert-item medium-priority">
+                                        <div class="alert-icon">📄</div>
+                                        <div class="alert-content">
+                                            <div class="alert-title">Missing Documentation - EVER GIVEN</div>
+                                            <div class="alert-detail">B/L for 12 containers missing. Auto-requested from Evergreen.</div>
+                                            <div class="alert-meta">
+                                                <span class="alert-time">15 min ago</span>
+                                                <span class="alert-status">Processing</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="alert-item success">
+                                        <div class="alert-icon">✅</div>
+                                        <div class="alert-content">
+                                            <div class="alert-title">D&D Charges Prevented</div>
+                                            <div class="alert-detail">$47,200 in charges avoided for COSCO SHIPPING ARIES</div>
+                                            <div class="alert-meta">
+                                                <span class="alert-time">1 hour ago</span>
+                                                <button class="alert-view">View Details</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Performance Metrics -->
+                    <div class="performance-grid">
+                        <div class="performance-card">
+                            <h3>Carrier Performance</h3>
+                            <div class="carrier-list">
+                                <div class="carrier-item">
+                                    <div class="carrier-info">
+                                        <span class="carrier-name">Maersk</span>
+                                        <span class="carrier-vessels">32 vessels</span>
+                                    </div>
+                                    <div class="carrier-metrics">
+                                        <span class="metric-value">96%</span>
+                                        <span class="metric-label">On-time</span>
+                                    </div>
+                                </div>
+                                <div class="carrier-item">
+                                    <div class="carrier-info">
+                                        <span class="carrier-name">MSC</span>
+                                        <span class="carrier-vessels">28 vessels</span>
+                                    </div>
+                                    <div class="carrier-metrics">
+                                        <span class="metric-value">89%</span>
+                                        <span class="metric-label">On-time</span>
+                                    </div>
+                                </div>
+                                <div class="carrier-item">
+                                    <div class="carrier-info">
+                                        <span class="carrier-name">CMA CGM</span>
+                                        <span class="carrier-vessels">24 vessels</span>
+                                    </div>
+                                    <div class="carrier-metrics">
+                                        <span class="metric-value">92%</span>
+                                        <span class="metric-label">On-time</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="performance-card">
+                            <h3>Port Performance</h3>
+                            <div class="port-heatmap" id="portHeatmap"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Container Tracking View -->
+                <div class="demo-view" id="trackingView">
+                    <div class="tracking-header">
+                        <h1>Live Container Tracking</h1>
+                        <div class="tracking-stats">
+                            <span class="stat-item">
+                                <span class="stat-value">23,847</span>
+                                <span class="stat-label">Containers</span>
+                            </span>
+                            <span class="stat-item">
+                                <span class="stat-value">127</span>
+                                <span class="stat-label">Vessels</span>
+                            </span>
+                            <span class="stat-item">
+                                <span class="stat-value">42</span>
+                                <span class="stat-label">Ports</span>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="tracking-container">
+                        <!-- Map Container -->
+                        <div class="map-container">
+                            <div id="trackingMap" class="tracking-map"></div>
+                            <div class="map-overlay">
+                                <div class="vessel-popup" id="vesselPopup">
+                                    <h4>MSC GENEVA</h4>
+                                    <div class="popup-details">
+                                        <div class="detail-row">
+                                            <span>Containers:</span>
+                                            <span>342</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span>ETA:</span>
+                                            <span>Dec 15, 14:30</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span>Status:</span>
+                                            <span class="status-badge delayed">Delayed 48hrs</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span>D&D Risk:</span>
+                                            <span class="risk-value high">$127,000</span>
+                                        </div>
+                                    </div>
+                                    <button class="popup-action">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Vessel List -->
+                        <div class="vessel-list-panel">
+                            <div class="panel-header">
+                                <h3>Active Vessels</h3>
+                                <input type="search" placeholder="Search vessels..." class="vessel-search">
+                            </div>
+                            <div class="vessel-list">
+                                <div class="vessel-item active" data-vessel="msc-geneva">
+                                    <div class="vessel-status-indicator delayed"></div>
+                                    <div class="vessel-info">
+                                        <div class="vessel-name">MSC GENEVA</div>
+                                        <div class="vessel-route">Shanghai → Los Angeles</div>
+                                        <div class="vessel-meta">
+                                            <span class="containers">342 containers</span>
+                                            <span class="eta">ETA: Dec 15</span>
+                                        </div>
+                                    </div>
+                                    <div class="vessel-risk">
+                                        <span class="risk-label">At Risk</span>
+                                        <span class="risk-amount">$127K</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="vessel-item" data-vessel="ever-given">
+                                    <div class="vessel-status-indicator on-time"></div>
+                                    <div class="vessel-info">
+                                        <div class="vessel-name">EVER GIVEN</div>
+                                        <div class="vessel-route">Rotterdam → New York</div>
+                                        <div class="vessel-meta">
+                                            <span class="containers">287 containers</span>
+                                            <span class="eta">ETA: Dec 12</span>
+                                        </div>
+                                    </div>
+                                    <div class="vessel-risk">
+                                        <span class="risk-label">Low Risk</span>
+                                        <span class="risk-amount">$12K</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="vessel-item" data-vessel="cosco-shipping">
+                                    <div class="vessel-status-indicator at-risk"></div>
+                                    <div class="vessel-info">
+                                        <div class="vessel-name">COSCO SHIPPING ARIES</div>
+                                        <div class="vessel-route">Singapore → Hamburg</div>
+                                        <div class="vessel-meta">
+                                            <span class="containers">198 containers</span>
+                                            <span class="eta">ETA: Dec 18</span>
+                                        </div>
+                                    </div>
+                                    <div class="vessel-risk">
+                                        <span class="risk-label">Medium Risk</span>
+                                        <span class="risk-amount">$47K</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- D&D Prevention View -->
+                <div class="demo-view" id="preventionView">
+                    <div class="prevention-header">
+                        <h1>D&D Prevention Workflow</h1>
+                        <div class="prevention-stats">
+                            <div class="stat-card">
+                                <span class="stat-icon">🛡️</span>
+                                <div class="stat-content">
+                                    <span class="stat-value">$14.2M</span>
+                                    <span class="stat-label">Prevented This Year</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-icon">⚡</span>
+                                <div class="stat-content">
+                                    <span class="stat-value">2.1 days</span>
+                                    <span class="stat-label">Avg Early Warning</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="prevention-workflow">
+                        <!-- Workflow Steps -->
+                        <div class="workflow-timeline">
+                            <div class="workflow-step active" data-step="1">
+                                <div class="step-indicator">1</div>
+                                <div class="step-content">
+                                    <h3>Risk Detection</h3>
+                                    <p>AI analyzes vessel schedules, port congestion, and historical patterns</p>
+                                    <div class="step-demo">
+                                        <div class="risk-detection-demo">
+                                            <div class="detection-item detecting">
+                                                <span class="detection-icon">📊</span>
+                                                <span>Analyzing MSC GENEVA route...</span>
+                                            </div>
+                                            <div class="detection-item detected">
+                                                <span class="detection-icon">⚠️</span>
+                                                <span>Port congestion detected at LA</span>
+                                            </div>
+                                            <div class="detection-item calculating">
+                                                <span class="detection-icon">🔢</span>
+                                                <span>Calculating D&D exposure...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="workflow-step" data-step="2">
+                                <div class="step-indicator">2</div>
+                                <div class="step-content">
+                                    <h3>Automated Actions</h3>
+                                    <p>System automatically initiates preventive measures</p>
+                                    <div class="step-demo">
+                                        <div class="actions-list">
+                                            <div class="action-item">
+                                                <span class="action-icon">📧</span>
+                                                <span>Free time extension requested</span>
+                                            </div>
+                                            <div class="action-item">
+                                                <span class="action-icon">🚚</span>
+                                                <span>Drayage capacity secured</span>
+                                            </div>
+                                            <div class="action-item">
+                                                <span class="action-icon">📄</span>
+                                                <span>Documentation prepared</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="workflow-step" data-step="3">
+                                <div class="step-indicator">3</div>
+                                <div class="step-content">
+                                    <h3>Team Notification</h3>
+                                    <p>Right people notified at the right time</p>
+                                    <div class="step-demo">
+                                        <div class="notification-demo">
+                                            <div class="notif-item">
+                                                <img src="images/avatar-1.svg" alt="User">
+                                                <span>Operations Manager notified</span>
+                                            </div>
+                                            <div class="notif-item">
+                                                <img src="images/avatar-2.svg" alt="User">
+                                                <span>Warehouse team alerted</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="workflow-step" data-step="4">
+                                <div class="step-indicator">✓</div>
+                                <div class="step-content">
+                                    <h3>Charges Prevented</h3>
+                                    <p>D&D charges avoided, savings tracked</p>
+                                    <div class="step-demo">
+                                        <div class="savings-animation">
+                                            <span class="savings-amount">$47,200</span>
+                                            <span class="savings-label">Saved!</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Live Prevention Example -->
+                        <div class="prevention-example">
+                            <h2>Live Example: MSC GENEVA</h2>
+                            <div class="example-timeline">
+                                <div class="timeline-event">
+                                    <div class="event-time">Dec 10, 09:15</div>
+                                    <div class="event-content">
+                                        <div class="event-title">Risk Detected</div>
+                                        <div class="event-detail">Port congestion at LA detected. 48-hour delay predicted.</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-event">
+                                    <div class="event-time">Dec 10, 09:18</div>
+                                    <div class="event-content">
+                                        <div class="event-title">Actions Initiated</div>
+                                        <div class="event-detail">Free time extension requested. Alternative pickup slots secured.</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-event">
+                                    <div class="event-time">Dec 10, 09:45</div>
+                                    <div class="event-content">
+                                        <div class="event-title">Extension Approved</div>
+                                        <div class="event-detail">MSC approved 3-day free time extension. $127K in charges prevented.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Document Processing View -->
+                <div class="demo-view" id="documentsView">
+                    <div class="documents-header">
+                        <h1>Intelligent Document Processing</h1>
+                        <div class="processing-stats">
+                            <span>12,847 documents processed today</span>
+                            <span>99.2% accuracy</span>
+                        </div>
+                    </div>
+                    
+                    <div class="documents-comparison">
+                        <div class="comparison-container">
+                            <!-- Before -->
+                            <div class="comparison-side before">
+                                <h2>Before UIP</h2>
+                                <div class="document-demo">
+                                    <div class="manual-process">
+                                        <div class="process-step">
+                                            <span class="step-icon">📧</span>
+                                            <span>Email arrives with B/L</span>
+                                            <span class="time-label">0 min</span>
+                                        </div>
+                                        <div class="process-step">
+                                            <span class="step-icon">👤</span>
+                                            <span>Staff opens attachment</span>
+                                            <span class="time-label">15 min</span>
+                                        </div>
+                                        <div class="process-step">
+                                            <span class="step-icon">⌨️</span>
+                                            <span>Manual data entry</span>
+                                            <span class="time-label">45 min</span>
+                                        </div>
+                                        <div class="process-step">
+                                            <span class="step-icon">🔍</span>
+                                            <span>Verification & corrections</span>
+                                            <span class="time-label">60 min</span>
+                                        </div>
+                                        <div class="process-step">
+                                            <span class="step-icon">💾</span>
+                                            <span>Update systems</span>
+                                            <span class="time-label">75 min</span>
+                                        </div>
+                                    </div>
+                                    <div class="process-summary error">
+                                        <span class="summary-time">75 minutes</span>
+                                        <span class="summary-accuracy">4% error rate</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- After -->
+                            <div class="comparison-side after">
+                                <h2>With UIP</h2>
+                                <div class="document-demo">
+                                    <div class="automated-process">
+                                        <div class="process-step completed">
+                                            <span class="step-icon">🤖</span>
+                                            <span>AI captures document</span>
+                                            <span class="time-label">0 sec</span>
+                                        </div>
+                                        <div class="process-step completed">
+                                            <span class="step-icon">📊</span>
+                                            <span>Data extraction</span>
+                                            <span class="time-label">2 sec</span>
+                                        </div>
+                                        <div class="process-step completed">
+                                            <span class="step-icon">✅</span>
+                                            <span>Validation complete</span>
+                                            <span class="time-label">3 sec</span>
+                                        </div>
+                                        <div class="process-step completed">
+                                            <span class="step-icon">🔄</span>
+                                            <span>Systems updated</span>
+                                            <span class="time-label">5 sec</span>
+                                        </div>
+                                    </div>
+                                    <div class="process-summary success">
+                                        <span class="summary-time">5 seconds</span>
+                                        <span class="summary-accuracy">99.2% accuracy</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Live Document Processing -->
+                        <div class="live-processing">
+                            <h3>Live Document Stream</h3>
+                            <div class="document-stream">
+                                <div class="doc-item processing">
+                                    <div class="doc-icon">📄</div>
+                                    <div class="doc-info">
+                                        <div class="doc-name">MSC_BL_2024_127842.pdf</div>
+                                        <div class="doc-status">Processing...</div>
+                                    </div>
+                                    <div class="doc-progress">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="doc-item completed">
+                                    <div class="doc-icon">✅</div>
+                                    <div class="doc-info">
+                                        <div class="doc-name">MAERSK_INVOICE_94782.pdf</div>
+                                        <div class="doc-status">Completed - 2.1s</div>
+                                    </div>
+                                    <div class="doc-result">
+                                        <span>42 fields extracted</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="doc-item completed">
+                                    <div class="doc-icon">✅</div>
+                                    <div class="doc-info">
+                                        <div class="doc-name">CMA_CGM_ARRIVAL_NOTICE.pdf</div>
+                                        <div class="doc-status">Completed - 1.8s</div>
+                                    </div>
+                                    <div class="doc-result">
+                                        <span>38 fields extracted</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Integration Status View -->
+                <div class="demo-view" id="integrationsView">
+                    <div class="integrations-header">
+                        <h1>Live Integration Status</h1>
+                        <div class="integration-summary">
+                            <span class="summary-item">42 Active Connections</span>
+                            <span class="summary-item">2.5M Messages/Day</span>
+                            <span class="summary-item">99.9% Uptime</span>
+                        </div>
+                    </div>
+                    
+                    <div class="integrations-grid">
+                        <!-- Carrier Integrations -->
+                        <div class="integration-section">
+                            <h2>Ocean Carriers</h2>
+                            <div class="integration-list">
+                                <div class="integration-card active">
+                                    <div class="integration-logo">
+                                        <img src="images/maersk-logo.svg" alt="Maersk">
+                                    </div>
+                                    <div class="integration-info">
+                                        <h4>Maersk</h4>
+                                        <div class="integration-status">
+                                            <span class="status-indicator active"></span>
+                                            <span>Active</span>
+                                        </div>
+                                        <div class="integration-metrics">
+                                            <div class="metric">
+                                                <span class="metric-value">247K</span>
+                                                <span class="metric-label">Messages today</span>
+                                            </div>
+                                            <div class="metric">
+                                                <span class="metric-value">1.2ms</span>
+                                                <span class="metric-label">Avg response</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="integration-health">
+                                        <div class="health-bar">
+                                            <div class="health-fill" style="width: 98%"></div>
+                                        </div>
+                                        <span class="health-label">98% healthy</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="integration-card active">
+                                    <div class="integration-logo">
+                                        <img src="images/msc-logo.svg" alt="MSC">
+                                    </div>
+                                    <div class="integration-info">
+                                        <h4>MSC</h4>
+                                        <div class="integration-status">
+                                            <span class="status-indicator active"></span>
+                                            <span>Active</span>
+                                        </div>
+                                        <div class="integration-metrics">
+                                            <div class="metric">
+                                                <span class="metric-value">198K</span>
+                                                <span class="metric-label">Messages today</span>
+                                            </div>
+                                            <div class="metric">
+                                                <span class="metric-value">0.9ms</span>
+                                                <span class="metric-label">Avg response</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="integration-health">
+                                        <div class="health-bar">
+                                            <div class="health-fill" style="width: 99%"></div>
+                                        </div>
+                                        <span class="health-label">99% healthy</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Port Integrations -->
+                        <div class="integration-section">
+                            <h2>Port Systems</h2>
+                            <div class="integration-list">
+                                <div class="integration-card active">
+                                    <div class="integration-logo">
+                                        <span class="port-icon"><img src="/brand/logo-icon.svg" alt="UIP" style="height: 24px; width: 24px; vertical-align: middle;"></span>
+                                    </div>
+                                    <div class="integration-info">
+                                        <h4>Port of Los Angeles</h4>
+                                        <div class="integration-status">
+                                            <span class="status-indicator active"></span>
+                                            <span>Active</span>
+                                        </div>
+                                        <div class="integration-features">
+                                            <span class="feature">Real-time vessel tracking</span>
+                                            <span class="feature">Gate appointments</span>
+                                            <span class="feature">Terminal updates</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- ERP Integrations -->
+                        <div class="integration-section">
+                            <h2>Enterprise Systems</h2>
+                            <div class="integration-list">
+                                <div class="integration-card active">
+                                    <div class="integration-logo">
+                                        <img src="images/sap-logo.svg" alt="SAP">
+                                    </div>
+                                    <div class="integration-info">
+                                        <h4>SAP S/4HANA</h4>
+                                        <div class="integration-status">
+                                            <span class="status-indicator active"></span>
+                                            <span>Active</span>
+                                        </div>
+                                        <div class="integration-sync">
+                                            <span>Last sync: 2 min ago</span>
+                                            <button class="sync-btn">Sync Now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Automated Disputes View -->
+                <div class="demo-view" id="disputesView">
+                    <div class="disputes-header">
+                        <h1>Automated Dispute Management</h1>
+                        <div class="dispute-stats">
+                            <div class="stat">
+                                <span class="stat-value">$892K</span>
+                                <span class="stat-label">Recovered This Month</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">94%</span>
+                                <span class="stat-label">Success Rate</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">2.4 days</span>
+                                <span class="stat-label">Avg Resolution</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dispute-workflow">
+                        <div class="workflow-header">
+                            <h2>Automated Dispute Filing in Action</h2>
+                            <button class="demo-trigger" id="startDisputeDemo">
+                                Watch Live Demo
+                            </button>
+                        </div>
+                        
+                        <div class="dispute-demo" id="disputeDemo">
+                            <div class="dispute-stage" data-stage="detection">
+                                <div class="stage-header">
+                                    <span class="stage-icon">🔍</span>
+                                    <h3>Charge Detection</h3>
+                                </div>
+                                <div class="stage-content">
+                                    <div class="charge-detected">
+                                        <div class="charge-alert">
+                                            <span class="alert-badge">NEW</span>
+                                            <span>Invalid D&D charge detected</span>
+                                        </div>
+                                        <div class="charge-details">
+                                            <div class="detail">
+                                                <span>Carrier:</span>
+                                                <span>MSC</span>
+                                            </div>
+                                            <div class="detail">
+                                                <span>Amount:</span>
+                                                <span class="amount">$12,400</span>
+                                            </div>
+                                            <div class="detail">
+                                                <span>Container:</span>
+                                                <span>MSCU1234567</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="dispute-stage" data-stage="analysis">
+                                <div class="stage-header">
+                                    <span class="stage-icon">🤖</span>
+                                    <h3>AI Analysis</h3>
+                                </div>
+                                <div class="stage-content">
+                                    <div class="analysis-progress">
+                                        <div class="analysis-item complete">
+                                            <span>✓</span>
+                                            <span>Free time calculation verified</span>
+                                        </div>
+                                        <div class="analysis-item complete">
+                                            <span>✓</span>
+                                            <span>Gate activity logs analyzed</span>
+                                        </div>
+                                        <div class="analysis-item complete">
+                                            <span>✓</span>
+                                            <span>Supporting documents gathered</span>
+                                        </div>
+                                        <div class="analysis-result">
+                                            <span class="result-label">Dispute Validity:</span>
+                                            <span class="result-value">98% Valid</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="dispute-stage" data-stage="filing">
+                                <div class="stage-header">
+                                    <span class="stage-icon">📨</span>
+                                    <h3>Automatic Filing</h3>
+                                </div>
+                                <div class="stage-content">
+                                    <div class="filing-preview">
+                                        <div class="email-preview">
+                                            <div class="email-header">
+                                                <span>To: disputes@msc.com</span>
+                                                <span>Subject: D&D Dispute - MSCU1234567</span>
+                                            </div>
+                                            <div class="email-body">
+                                                <p>Dear MSC Disputes Team,</p>
+                                                <p>We are disputing D&D charges of $12,400 for container MSCU1234567...</p>
+                                                <div class="attachments">
+                                                    <span class="attachment">📎 Gate_Activity_Log.pdf</span>
+                                                    <span class="attachment">📎 Free_Time_Calculation.xlsx</span>
+                                                    <span class="attachment">📎 Supporting_Documentation.pdf</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="file-dispute-btn">File Dispute</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="dispute-stage" data-stage="resolution">
+                                <div class="stage-header">
+                                    <span class="stage-icon">✅</span>
+                                    <h3>Resolution</h3>
+                                </div>
+                                <div class="stage-content">
+                                    <div class="resolution-success">
+                                        <div class="success-icon">🎉</div>
+                                        <h4>Dispute Approved!</h4>
+                                        <div class="resolution-details">
+                                            <div class="detail">
+                                                <span>Amount Recovered:</span>
+                                                <span class="recovered">$12,400</span>
+                                            </div>
+                                            <div class="detail">
+                                                <span>Resolution Time:</span>
+                                                <span>2.1 days</span>
+                                            </div>
+                                            <div class="detail">
+                                                <span>Credit Applied:</span>
+                                                <span>Dec 15, 2024</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Active Disputes List -->
+                        <div class="active-disputes">
+                            <h3>Active Disputes</h3>
+                            <div class="dispute-list">
+                                <div class="dispute-item">
+                                    <div class="dispute-carrier">
+                                        <img src="images/maersk-logo.svg" alt="Maersk">
+                                    </div>
+                                    <div class="dispute-info">
+                                        <div class="dispute-id">DISP-2024-1247</div>
+                                        <div class="dispute-amount">$8,900</div>
+                                    </div>
+                                    <div class="dispute-status">
+                                        <span class="status pending">Pending Review</span>
+                                        <span class="days">2 days</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="dispute-item">
+                                    <div class="dispute-carrier">
+                                        <img src="images/cma-logo.svg" alt="CMA CGM">
+                                    </div>
+                                    <div class="dispute-info">
+                                        <div class="dispute-id">DISP-2024-1246</div>
+                                        <div class="dispute-amount">$15,200</div>
+                                    </div>
+                                    <div class="dispute-status">
+                                        <span class="status approved">Approved</span>
+                                        <span class="days">Credit pending</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            
+            <!-- Guided Tour Overlay -->
+            <div class="tour-overlay" id="tourOverlay">
+                <div class="tour-highlight" id="tourHighlight"></div>
+                <div class="tour-tooltip" id="tourTooltip">
+                    <div class="tooltip-content">
+                        <h4 id="tooltipTitle">Welcome to UIP</h4>
+                        <p id="tooltipText">Let's take a quick tour of how UIP can transform your ocean freight operations.</p>
+                    </div>
+                    <div class="tooltip-actions">
+                        <button class="tooltip-skip" id="skipTourBtn">Skip Tour</button>
+                        <button class="tooltip-next" id="nextStepBtn">Next</button>
+                    </div>
+                    <div class="tour-progress">
+                        <span id="tourStep">1</span> / <span id="tourTotal">7</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CTA Sidebar -->
+            <div class="demo-cta-sidebar" id="ctaSidebar">
+                <button class="cta-toggle" id="ctaToggle">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </button>
+                <div class="cta-content">
+                    <h3>Ready to see real results?</h3>
+                    <p>Get a personalized demo with your actual data</p>
+                    <button class="cta-primary" id="bookLiveDemo">
+                        Book Live Demo
+                    </button>
+                    <button class="cta-secondary" id="downloadBrochure">
+                        Download Brochure
+                    </button>
+                    <div class="cta-metrics">
+                        <div class="metric">
+                            <span class="value">14 days</span>
+                            <span class="label">Implementation</span>
+                        </div>
+                        <div class="metric">
+                            <span class="value">$14M</span>
+                            <span class="label">Avg Savings</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Exit Demo Modal -->
+        <div class="exit-modal" id="exitModal">
+            <div class="modal-content">
+                <h2>Before you go...</h2>
+                <p>See how much you could save with UIP</p>
+                <div class="exit-options">
+                    <a href="/roi-calculator.html" class="exit-option">
+                        <span class="option-icon">🧮</span>
+                        <span>Calculate My Savings</span>
+                    </a>
+                    <button class="exit-option" id="scheduleDemoExit">
+                        <span class="option-icon">📅</span>
+                        <span>Schedule a Demo</span>
+                    </button>
+                    <button class="exit-option" id="downloadGuideExit">
+                        <span class="option-icon">📚</span>
+                        <span>Download Guide</span>
+                    </button>
+                </div>
+                <button class="modal-close" id="closeExitModal">Continue Exploring</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/interactive-demo.js?v=1750888019"></script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
+</body>

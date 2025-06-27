@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Brand Guidelines - Enterprise Identity System</title>
+    <link rel="stylesheet" href="enterprise-colors.css">
+    <link rel="stylesheet" href="enterprise-typography.css">
+    <style>
+        body {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--uip-space-8);
+            background: var(--uip-background);
+        }
+        
+        .brand-header {
+            background: var(--uip-gradient-primary);
+            color: var(--uip-text-inverse);
+            padding: var(--uip-space-12);
+            border-radius: 16px;
+            margin-bottom: var(--uip-space-12);
+            text-align: center;
+        }
+        
+        .section {
+            margin-bottom: var(--uip-space-12);
+            background: var(--uip-surface);
+            padding: var(--uip-space-8);
+            border-radius: 12px;
+            box-shadow: var(--uip-shadow-lg);
+            border: 1px solid var(--uip-border);
+        }
+        
+        .logo-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--uip-space-6);
+            margin: var(--uip-space-6) 0;
+        }
+        
+        .logo-item {
+            background: var(--uip-surface-2);
+            padding: var(--uip-space-6);
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--uip-border);
+        }
+        
+        .logo-item img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: var(--uip-space-4);
+        }
+        
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--uip-space-4);
+            margin: var(--uip-space-6) 0;
+        }
+        
+        .color-group {
+            background: var(--uip-surface-2);
+            padding: var(--uip-space-4);
+            border-radius: 8px;
+            border: 1px solid var(--uip-border);
+        }
+        
+        .color-swatch {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--uip-space-2);
+        }
+        
+        .color-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: var(--uip-space-3);
+            border: 2px solid var(--uip-border);
+        }
+        
+        .color-info {
+            font-family: var(--uip-font-mono);
+            font-size: var(--uip-text-sm);
+        }
+        
+        .typography-demo {
+            margin: var(--uip-space-6) 0;
+        }
+        
+        .spacing-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--uip-space-4);
+            margin: var(--uip-space-6) 0;
+        }
+        
+        .spacing-item {
+            background: var(--uip-surface-2);
+            padding: var(--uip-space-4);
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--uip-border);
+        }
+        
+        .spacing-visual {
+            background: var(--uip-primary-600);
+            margin: var(--uip-space-2) auto;
+            border-radius: 4px;
+        }
+        
+        .usage-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--uip-space-6);
+            margin: var(--uip-space-6) 0;
+        }
+        
+        .usage-example {
+            padding: var(--uip-space-6);
+            border-radius: 8px;
+            border: 2px solid;
+        }
+        
+        .do {
+            border-color: var(--uip-success-300);
+            background: var(--uip-success-50);
+        }
+        
+        .dont {
+            border-color: var(--uip-error-300);
+            background: var(--uip-error-50);
+        }
+        
+        .code-block {
+            background: var(--uip-gray-50);
+            padding: var(--uip-space-4);
+            border-radius: 8px;
+            border-left: 4px solid var(--uip-tech-600);
+            margin: var(--uip-space-4) 0;
+            overflow-x: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .usage-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo-showcase {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="brand-header">
+        <h1 class="uip-hero-title">UIP Brand Guidelines</h1>
+        <p class="uip-lead">Enterprise Identity System for $500K+ Platform Credibility</p>
+        <p class="uip-body-lg">Unified Integration Intelligence Platform - Professional Brand Standards</p>
+    </div>
+
+    <!-- Logo System -->
+    <section class="section">
+        <h2 class="uip-h2">Logo System</h2>
+        <p class="uip-body-lg">Our logo system represents trust, innovation, and enterprise-grade reliability. Each version is optimized for specific use cases.</p>
+        
+        <div class="logo-showcase">
+            <div class="logo-item">
+                <img src="logo-primary.svg" alt="UIP Primary Logo" style="height: 80px;">
+                <h4 class="uip-h4">Primary Logo</h4>
+                <p class="uip-body-sm">Main logo for headers, presentations, and marketing materials. Use on light backgrounds.</p>
+                <div class="code-block">
+                    <code>logo-primary.svg</code><br>
+                    <code>320×80px</code><br>
+                    <code>Min width: 160px</code>
+                </div>
+            </div>
+            
+            <div class="logo-item">
+                <img src="logo-icon-new.svg" alt="UIP Icon" style="height: 64px;">
+                <h4 class="uip-h4">Icon Mark</h4>
+                <p class="uip-body-sm">Standalone icon for favicons, social media, and compact spaces.</p>
+                <div class="code-block">
+                    <code>brand/logo-icon-new.svg</code><br>
+                    <code>64×64px</code><br>
+                    <code>Min size: 24px</code>
+                </div>
+            </div>
+            
+            <div class="logo-item">
+                <img src="logo-horizontal.svg" alt="UIP Horizontal Logo" style="height: 60px;">
+                <h4 class="uip-h4">Horizontal Logo</h4>
+                <p class="uip-body-sm">Compact version for business cards, email signatures, and narrow layouts.</p>
+                <div class="code-block">
+                    <code>logo-horizontal.svg</code><br>
+                    <code>280×60px</code><br>
+                    <code>Min width: 140px</code>
+                </div>
+            </div>
+            
+            <div class="logo-item" style="background: #1e293b;">
+                <img src="logo-monochrome.svg" alt="UIP Monochrome Logo" style="height: 80px; filter: invert(1);">
+                <h4 class="uip-h4" style="color: white;">Monochrome Logo</h4>
+                <p class="uip-body-sm" style="color: rgba(255,255,255,0.8);">Single-color version for print, embossing, and dark backgrounds.</p>
+                <div class="code-block">
+                    <code>logo-monochrome.svg</code><br>
+                    <code>Any single color</code><br>
+                    <code>Scalable vector</code>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="uip-h3">Logo Usage Rules</h3>
+        <div class="usage-grid">
+            <div class="usage-example do">
+                <h4 class="uip-h4" style="color: var(--uip-success-700);">✓ DO</h4>
+                <ul class="uip-list">
+                    <li>Maintain clear space equal to logo height</li>
+                    <li>Use primary logo on light backgrounds</li>
+                    <li>Scale proportionally</li>
+                    <li>Use monochrome on dark backgrounds</li>
+                    <li>Respect minimum sizes</li>
+                </ul>
+            </div>
+            
+            <div class="usage-example dont">
+                <h4 class="uip-h4" style="color: var(--uip-error-700);">✗ DON'T</h4>
+                <ul class="uip-list">
+                    <li>Stretch or distort logo</li>
+                    <li>Use on busy backgrounds</li>
+                    <li>Change colors or gradients</li>
+                    <li>Add effects or shadows</li>
+                    <li>Use below minimum sizes</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Color System -->
+    <section class="section">
+        <h2 class="uip-h2">Enterprise Color Palette</h2>
+        <p class="uip-body-lg">Our color system conveys trust, intelligence, and success. Each color has specific semantic meaning and usage guidelines.</p>
+        
+        <div class="color-palette">
+            <div class="color-group">
+                <h4 class="uip-h4">Primary - Trust & Reliability</h4>
+                <div class="color-swatch">
+                    <div class="color-circle" style="background: #1e40af;"></div>
+                    <div class="color-info">
+                        <div><strong>#1e40af</strong></div>
+                        <div>RGB(30, 64, 175)</div>
+                        <div>Enterprise Blue</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-circle" style="background: #3b82f6;"></div>
+                    <div class="color-info">
+                        <div><strong>#3b82f6</strong></div>
+                        <div>RGB(59, 130, 246)</div>
+                        <div>Primary Blue</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="color-group">
+                <h4 class="uip-h4">Technology - Intelligence</h4>
+                <div class="color-swatch">
+                    <div class="color-circle" style="background: #0ea5e9;"></div>
+                    <div class="color-info">
+                        <div><strong>#0ea5e9</strong></div>
+                        <div>RGB(14, 165, 233)</div>
+                        <div>Tech Blue</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-circle" style="background: #0284c7;"></div>
+                    <div class="color-info">
+                        <div><strong>#0284c7</strong></div>
+                        <div>RGB(2, 132, 199)</div>
+                        <div>Data Blue</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="color-group">
+                <h4 class="uip-h4">Success - Savings & ROI</h4>
+                <div class="color-swatch">
+                    <div class="color-circle" style="background: #10b981;"></div>
+                    <div class="color-info">
+                        <div><strong>#10b981</strong></div>
+                        <div>RGB(16, 185, 129)</div>
+                        <div>Success Green</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-circle" style="background: #059669;"></div>
+                    <div class="color-info">
+                        <div><strong>#059669</strong></div>
+                        <div>RGB(5, 150, 105)</div>
+                        <div>ROI Green</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="color-group">
+                <h4 class="uip-h4">Warning - Attention</h4>
+                <div class="color-swatch">
+                    <div class="color-circle" style="background: #f59e0b;"></div>
+                    <div class="color-info">
+                        <div><strong>#f59e0b</strong></div>
+                        <div>RGB(245, 158, 11)</div>
+                        <div>Warning Orange</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-circle" style="background: #d97706;"></div>
+                    <div class="color-info">
+                        <div><strong>#d97706</strong></div>
+                        <div>RGB(217, 119, 6)</div>
+                        <div>Alert Orange</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="color-group">
+                <h4 class="uip-h4">Neutral - Professional</h4>
+                <div class="color-swatch">
+                    <div class="color-circle" style="background: #f8fafc;"></div>
+                    <div class="color-info">
+                        <div><strong>#f8fafc</strong></div>
+                        <div>RGB(248, 250, 252)</div>
+                        <div>Background</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-circle" style="background: #64748b;"></div>
+                    <div class="color-info">
+                        <div><strong>#64748b</strong></div>
+                        <div>RGB(100, 116, 139)</div>
+                        <div>Secondary Text</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-circle" style="background: #1e293b;"></div>
+                    <div class="color-info">
+                        <div><strong>#1e293b</strong></div>
+                        <div>RGB(30, 41, 59)</div>
+                        <div>Primary Text</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Typography -->
+    <section class="section">
+        <h2 class="uip-h2">Typography System</h2>
+        <p class="uip-body-lg">Professional typography that conveys authority and expertise. Our type scale ensures perfect hierarchy and readability across all devices.</p>
+        
+        <div class="typography-demo">
+            <h3 class="uip-h3">Font Families</h3>
+            <div class="code-block">
+                <strong>Primary:</strong> Inter (400, 500, 600, 700, 800, 900)<br>
+                <strong>Monospace:</strong> JetBrains Mono (400, 500, 600, 700)<br>
+                <strong>System Fallback:</strong> -apple-system, BlinkMacSystemFont, 'Segoe UI'
+            </div>
+            
+            <h3 class="uip-h3">Hierarchy Examples</h3>
+            <div style="background: var(--uip-surface-2); padding: var(--uip-space-6); border-radius: 8px; margin: var(--uip-space-4) 0;">
+                <h1 class="uip-h1">Hero Title - 60px/Bold</h1>
+                <h2 class="uip-h2">Section Title - 48px/Bold</h2>
+                <h3 class="uip-h3">Subsection - 36px/Bold</h3>
+                <h4 class="uip-h4">Component Title - 30px/Semibold</h4>
+                <p class="uip-body-lg">Large body text for important content - 18px/Normal</p>
+                <p class="uip-body">Regular body text for content - 16px/Normal</p>
+                <p class="uip-body-sm">Small text for captions - 14px/Normal</p>
+                <div class="uip-metric">$142M</div>
+                <p class="uip-caption">Metric example - JetBrains Mono</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Spacing System -->
+    <section class="section">
+        <h2 class="uip-h2">Spacing System</h2>
+        <p class="uip-body-lg">Consistent spacing creates visual rhythm and professional polish. Our 8-point grid system ensures perfect alignment.</p>
+        
+        <div class="spacing-demo">
+            <div class="spacing-item">
+                <div class="spacing-visual" style="width: 8px; height: 8px;"></div>
+                <div class="uip-label">2 (8px)</div>
+                <div class="uip-body-sm">Tight spacing</div>
+            </div>
+            <div class="spacing-item">
+                <div class="spacing-visual" style="width: 16px; height: 16px;"></div>
+                <div class="uip-label">4 (16px)</div>
+                <div class="uip-body-sm">Component padding</div>
+            </div>
+            <div class="spacing-item">
+                <div class="spacing-visual" style="width: 24px; height: 24px;"></div>
+                <div class="uip-label">6 (24px)</div>
+                <div class="uip-body-sm">Element spacing</div>
+            </div>
+            <div class="spacing-item">
+                <div class="spacing-visual" style="width: 32px; height: 32px;"></div>
+                <div class="uip-label">8 (32px)</div>
+                <div class="uip-body-sm">Section spacing</div>
+            </div>
+            <div class="spacing-item">
+                <div class="spacing-visual" style="width: 48px; height: 48px;"></div>
+                <div class="uip-label">12 (48px)</div>
+                <div class="uip-body-sm">Large spacing</div>
+            </div>
+            <div class="spacing-item">
+                <div class="spacing-visual" style="width: 64px; height: 64px;"></div>
+                <div class="uip-label">16 (64px)</div>
+                <div class="uip-body-sm">Page sections</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Voice & Tone -->
+    <section class="section">
+        <h2 class="uip-h2">Voice & Tone Guidelines</h2>
+        <p class="uip-body-lg">Our voice reflects enterprise expertise while remaining approachable. We speak with authority about complex logistics challenges.</p>
+        
+        <div class="usage-grid">
+            <div class="usage-example do">
+                <h4 class="uip-h4" style="color: var(--uip-success-700);">✓ Our Voice</h4>
+                <ul class="uip-list">
+                    <li><strong>Authoritative:</strong> We know ocean freight</li>
+                    <li><strong>Results-focused:</strong> Measurable ROI</li>
+                    <li><strong>Technical:</strong> Precise terminology</li>
+                    <li><strong>Confident:</strong> Proven solutions</li>
+                    <li><strong>Professional:</strong> Enterprise-grade</li>
+                </ul>
+                
+                <h5 class="uip-h5" style="color: var(--uip-success-700);">Example:</h5>
+                <p class="uip-body-sm" style="font-style: italic;">"Stop losing $14M per vessel to preventable D&D charges. Our AI platform integrates with ALL carrier systems to eliminate inefficiencies in 48 hours."</p>
+            </div>
+            
+            <div class="usage-example dont">
+                <h4 class="uip-h4" style="color: var(--uip-error-700);">✗ Not Our Voice</h4>
+                <ul class="uip-list">
+                    <li><strong>Casual:</strong> Avoid slang or jokes</li>
+                    <li><strong>Vague:</strong> No generic promises</li>
+                    <li><strong>Timid:</strong> Don't hedge claims</li>
+                    <li><strong>Jargon-heavy:</strong> Stay accessible</li>
+                    <li><strong>Overselling:</strong> Let results speak</li>
+                </ul>
+                
+                <h5 class="uip-h5" style="color: var(--uip-error-700);">Avoid:</h5>
+                <p class="uip-body-sm" style="font-style: italic;">"We might be able to help you save some money on shipping costs with our cool new platform."</p>
+            </div>
+        </div>
+        
+        <h3 class="uip-h3">Key Messaging</h3>
+        <div class="code-block">
+            <strong>Primary Value Prop:</strong> "Stop Losing $14M Per Vessel to Ocean Freight Inefficiencies"<br>
+            <strong>Differentiation:</strong> "The ONLY platform that connects ALL carrier systems"<br>
+            <strong>Proof Point:</strong> "94% D&D reduction in 48 hours"<br>
+            <strong>Target Audience:</strong> "Enterprise importers with 10+ vessels"
+        </div>
+    </section>
+
+    <!-- Implementation -->
+    <section class="section">
+        <h2 class="uip-h2">Implementation Guidelines</h2>
+        <p class="uip-body-lg">Technical specifications for developers and designers implementing the UIP brand system.</p>
+        
+        <h3 class="uip-h3">CSS Implementation</h3>
+        <div class="code-block">
+            <code>/* Include brand system files */</code><br>
+            <code>@import 'brand/enterprise-colors.css';</code><br>
+            <code>@import 'brand/enterprise-typography.css';</code><br><br>
+            
+            <code>/* Use CSS custom properties */</code><br>
+            <code>color: var(--uip-primary-600);</code><br>
+            <code>font-family: var(--uip-font-primary);</code><br>
+            <code>font-size: var(--uip-text-lg);</code>
+        </div>
+        
+        <h3 class="uip-h3">Asset Requirements</h3>
+        <ul class="uip-list">
+            <li><strong>Logos:</strong> SVG format for scalability, PNG fallbacks for legacy support</li>
+            <li><strong>Icons:</strong> 16px, 24px, 32px, 48px, 64px sizes minimum</li>
+            <li><strong>Images:</strong> WebP with JPEG fallbacks, optimized for performance</li>
+            <li><strong>Favicons:</strong> ICO, PNG, SVG formats for cross-browser compatibility</li>
+        </ul>
+        
+        <h3 class="uip-h3">Performance Standards</h3>
+        <ul class="uip-list">
+            <li><strong>Load Time:</strong> <2 seconds first contentful paint</li>
+            <li><strong>Font Loading:</strong> System font fallbacks, font-display: swap</li>
+            <li><strong>Color Contrast:</strong> WCAG AA compliant (4.5:1 minimum)</li>
+            <li><strong>Responsive:</strong> Mobile-first, tested on all devices</li>
+        </ul>
+    </section>
+
+    <!-- Footer -->
+    <section class="section">
+        <h2 class="uip-h2">Brand Resources</h2>
+        <p class="uip-body-lg">Download complete brand assets and implementation files.</p>
+        
+        <div class="usage-grid">
+            <div style="background: var(--uip-surface-2); padding: var(--uip-space-6); border-radius: 8px;">
+                <h4 class="uip-h4">Logo Package</h4>
+                <ul class="uip-list">
+                    <li>logo-primary.svg</li>
+                    <li>brand/logo-icon-new.svg</li>
+                    <li>logo-horizontal.svg</li>
+                    <li>logo-monochrome.svg</li>
+                    <li>PNG versions (multiple sizes)</li>
+                    <li>favicon.ico</li>
+                </ul>
+            </div>
+            
+            <div style="background: var(--uip-surface-2); padding: var(--uip-space-6); border-radius: 8px;">
+                <h4 class="uip-h4">CSS Framework</h4>
+                <ul class="uip-list">
+                    <li>enterprise-colors.css</li>
+                    <li>enterprise-typography.css</li>
+                    <li>Component styles</li>
+                    <li>Utility classes</li>
+                    <li>Responsive breakpoints</li>
+                    <li>Print styles</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="background: var(--uip-primary-900); color: var(--uip-text-inverse); padding: var(--uip-space-8); border-radius: 12px; margin-top: var(--uip-space-8); text-align: center;">
+            <h3 class="uip-h3" style="color: var(--uip-text-inverse);">Ready for Enterprise</h3>
+            <p class="uip-body-lg">This brand system transforms UIP into a $500K+ per year platform that enterprise customers trust.</p>
+            <p class="uip-body">Professional • Credible • Results-Driven</p>
+        </div>
+    </section>
+</body>
+</html>

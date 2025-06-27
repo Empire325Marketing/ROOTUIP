@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Master Pitch Deck - Enterprise Ocean Freight Optimization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f172a;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .presentation-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            text-align: center;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.5s ease-in-out;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #0ea5e9 100%);
+        }
+        
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .slide.prev {
+            transform: translateX(-100%);
+        }
+        
+        .slide-number {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 0.875rem;
+            opacity: 0.7;
+            font-weight: 500;
+        }
+        
+        .slide-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            max-width: 1000px;
+        }
+        
+        .slide-subtitle {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            font-weight: 400;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            max-width: 800px;
+            line-height: 1.5;
+        }
+        
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            margin: 40px 0;
+        }
+        
+        .metric-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 8px;
+        }
+        
+        .metric-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        .problem-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin: 40px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ef4444;
+            margin-bottom: 8px;
+        }
+        
+        .stat-description {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .competitive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin: 40px 0;
+        }
+        
+        .competitive-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: left;
+        }
+        
+        .competitive-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #10b981;
+        }
+        
+        .competitive-description {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        
+        .roi-showcase {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            backdrop-filter: blur(15px);
+        }
+        
+        .roi-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #10b981;
+        }
+        
+        .roi-calculation {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+        
+        .roi-item {
+            text-align: center;
+        }
+        
+        .roi-value {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 8px;
+        }
+        
+        .roi-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        .market-sizing {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin: 40px 0;
+        }
+        
+        .market-segment {
+            text-align: center;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .market-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #3b82f6;
+        }
+        
+        .market-value {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 8px;
+        }
+        
+        .market-description {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin: 40px 0;
+        }
+        
+        .team-member {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .member-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .member-role {
+            font-size: 1rem;
+            color: #10b981;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        
+        .member-experience {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 16px;
+            z-index: 1000;
+        }
+        
+        .nav-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            padding: 12px 24px;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .slide-indicator {
+            position: fixed;
+            top: 50%;
+            right: 40px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 1000;
+        }
+        
+        .indicator-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .indicator-dot.active {
+            background: #10b981;
+            transform: scale(1.5);
+        }
+        
+        .financial-projections {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
+        }
+        
+        .projection-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+        
+        .projection-year {
+            text-align: center;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        
+        .year-title {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        
+        .year-revenue {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #10b981;
+        }
+        
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 20px;
+            }
+            
+            .slide-title {
+                font-size: 2rem;
+            }
+            
+            .slide-subtitle {
+                font-size: 1.125rem;
+            }
+            
+            .metrics-grid,
+            .competitive-grid,
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .market-sizing {
+                grid-template-columns: 1fr;
+            }
+            
+            .projection-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active" data-slide="1">
+            <div class="slide-number">1 / 20</div>
+            <div class="slide-title">Unified Integration Intelligence Platform</div>
+            <div class="slide-subtitle">Eliminating $15-20B in Annual Ocean Freight Waste Through AI-Powered Automation</div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">94%</div>
+                    <div class="metric-label">D&D Reduction</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$127M+</div>
+                    <div class="metric-label">Saved Annually</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">347%</div>
+                    <div class="metric-label">Average ROI</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: The Problem -->
+        <div class="slide" data-slide="2">
+            <div class="slide-number">2 / 20</div>
+            <div class="slide-title">The $20 Billion Problem</div>
+            <div class="slide-subtitle">Ocean freight loses billions annually to preventable inefficiencies</div>
+            <div class="problem-stats">
+                <div class="stat-item">
+                    <div class="stat-number">$7-9B</div>
+                    <div class="stat-description">Annual D&D charges<br>87% preventable</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">200+</div>
+                    <div class="stat-description">Carrier systems<br>No standardization</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">67%</div>
+                    <div class="stat-description">Dispute success rate<br>Manual processes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">160+</div>
+                    <div class="stat-description">Hours wasted weekly<br>Per company</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Market Pain Points -->
+        <div class="slide" data-slide="3">
+            <div class="slide-number">3 / 20</div>
+            <div class="slide-title">Enterprise Pain Points</div>
+            <div class="slide-subtitle">Why traditional solutions fail at scale</div>
+            <div class="competitive-grid">
+                <div class="competitive-card">
+                    <div class="competitive-title">Reactive Operations</div>
+                    <div class="competitive-description">Companies learn about charges after it's too late to prevent them, leading to massive unexpected costs.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Data Fragmentation</div>
+                    <div class="competitive-description">Critical information scattered across 200+ carrier systems with no unified view or automation.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Manual Processes</div>
+                    <div class="competitive-description">Teams spend 160+ hours weekly on manual data entry and reconciliation instead of strategic work.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Poor Dispute Success</div>
+                    <div class="competitive-description">67% dispute success rate means millions in valid claims are lost due to inadequate documentation.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Solution Overview -->
+        <div class="slide" data-slide="4">
+            <div class="slide-number">4 / 20</div>
+            <div class="slide-title">The UIP Solution</div>
+            <div class="slide-subtitle">The only platform that connects ALL carrier systems</div>
+            <div class="competitive-grid">
+                <div class="competitive-card">
+                    <div class="competitive-title">Universal Integration</div>
+                    <div class="competitive-description">Direct API connections to all major carriers plus AI-powered data extraction for legacy systems.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Predictive AI</div>
+                    <div class="competitive-description">Predicts D&D risks 14 days before charges occur, enabling proactive prevention.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Automated Disputes</div>
+                    <div class="competitive-description">94% success rate with zero manual effort through AI-powered documentation and filing.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Real-time Intelligence</div>
+                    <div class="competitive-description">GPU-powered processing delivers instant insights across your entire operation.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Platform Architecture -->
+        <div class="slide" data-slide="5">
+            <div class="slide-number">5 / 20</div>
+            <div class="slide-title">Platform Architecture</div>
+            <div class="slide-subtitle">Enterprise-grade infrastructure built for scale</div>
+            <div class="competitive-grid">
+                <div class="competitive-card">
+                    <div class="competitive-title">AI/ML Engine</div>
+                    <div class="competitive-description">Advanced machine learning models for predictive analytics, anomaly detection, and automated decision-making.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Integration Layer</div>
+                    <div class="competitive-description">Universal adapters for API, EDI, email, and manual data sources with real-time synchronization.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Automation Engine</div>
+                    <div class="competitive-description">Workflow automation for dispute filing, documentation, and carrier communication.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Analytics Dashboard</div>
+                    <div class="competitive-description">Real-time visibility into operations, costs, and optimization opportunities.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Customer ROI Example -->
+        <div class="slide" data-slide="6">
+            <div class="slide-number">6 / 20</div>
+            <div class="slide-title">Customer Success: Global Shipping Corp</div>
+            <div class="slide-subtitle">100+ vessel fleet, $140M annual D&D exposure</div>
+            <div class="roi-showcase">
+                <div class="roi-title">12-Month Results</div>
+                <div class="roi-calculation">
+                    <div class="roi-item">
+                        <div class="roi-value">$132M</div>
+                        <div class="roi-label">Total Savings</div>
+                    </div>
+                    <div class="roi-item">
+                        <div class="roi-value">94%</div>
+                        <div class="roi-label">D&D Reduction</div>
+                    </div>
+                    <div class="roi-item">
+                        <div class="roi-value">32 Days</div>
+                        <div class="roi-label">ROI Timeline</div>
+                    </div>
+                    <div class="roi-item">
+                        <div class="roi-value">89%</div>
+                        <div class="roi-label">Process Automation</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-subtitle">"UIP transformed our operations from reactive to predictive. We're preventing problems we never even knew we had." - COO, Global Shipping Corp</div>
+        </div>
+
+        <!-- Slide 7: Market Opportunity -->
+        <div class="slide" data-slide="7">
+            <div class="slide-number">7 / 20</div>
+            <div class="slide-title">Market Opportunity</div>
+            <div class="slide-subtitle">Massive TAM in a fragmented industry ready for disruption</div>
+            <div class="market-sizing">
+                <div class="market-segment">
+                    <div class="market-title">TAM</div>
+                    <div class="market-value">$847B</div>
+                    <div class="market-description">Global ocean freight market with $15-20B annual waste</div>
+                </div>
+                <div class="market-segment">
+                    <div class="market-title">SAM</div>
+                    <div class="market-value">$127B</div>
+                    <div class="market-description">Enterprise customers (100+ vessels) with complex operations</div>
+                </div>
+                <div class="market-segment">
+                    <div class="market-title">SOM</div>
+                    <div class="market-value">$2.1B</div>
+                    <div class="market-description">Initial target: Top 500 shipping companies globally</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Competitive Landscape -->
+        <div class="slide" data-slide="8">
+            <div class="slide-number">8 / 20</div>
+            <div class="slide-title">Competitive Advantage</div>
+            <div class="slide-subtitle">Why UIP is 10x better than existing solutions</div>
+            <div class="competitive-grid">
+                <div class="competitive-card">
+                    <div class="competitive-title">Universal Integration</div>
+                    <div class="competitive-description">Only platform connecting ALL carriers. Competitors handle 5-10 systems, we handle 200+.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Predictive AI</div>
+                    <div class="competitive-description">14-day prediction window vs. competitors' reactive alerts after charges occur.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Automated Disputes</div>
+                    <div class="competitive-description">94% success rate vs. industry average 67% through AI-powered documentation.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Enterprise Ready</div>
+                    <div class="competitive-description">Built for Fortune 500 scale. SOC2, GDPR compliant with 99.99% uptime SLA.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Technology Moat -->
+        <div class="slide" data-slide="9">
+            <div class="slide-number">9 / 20</div>
+            <div class="slide-title">Technology Moat</div>
+            <div class="slide-subtitle">Proprietary AI and data advantages create sustainable differentiation</div>
+            <div class="competitive-grid">
+                <div class="competitive-card">
+                    <div class="competitive-title">Proprietary Data Lake</div>
+                    <div class="competitive-description">Exclusive access to 50M+ container movements and 500M+ data points for AI training.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Patent Portfolio</div>
+                    <div class="competitive-description">14 patents pending on predictive analytics, automated dispute resolution, and universal integration.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Network Effects</div>
+                    <div class="competitive-description">Each new customer improves AI accuracy for all customers through shared intelligence.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Switching Costs</div>
+                    <div class="competitive-description">Deep integration and AI learning create high switching costs once implemented.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Unit Economics -->
+        <div class="slide" data-slide="10">
+            <div class="slide-number">10 / 20</div>
+            <div class="slide-title">Unit Economics</div>
+            <div class="slide-subtitle">Strong fundamentals drive profitable growth</div>
+            <div class="financial-projections">
+                <div class="roi-calculation">
+                    <div class="roi-item">
+                        <div class="roi-value">$500K</div>
+                        <div class="roi-label">Average ACV</div>
+                    </div>
+                    <div class="roi-item">
+                        <div class="roi-value">$150K</div>
+                        <div class="roi-label">CAC</div>
+                    </div>
+                    <div class="roi-item">
+                        <div class="roi-value">3.3x</div>
+                        <div class="roi-label">LTV/CAC Ratio</div>
+                    </div>
+                    <div class="roi-item">
+                        <div class="roi-value">8 months</div>
+                        <div class="roi-label">Payback Period</div>
+                    </div>
+                    <div class="roi-item">
+                        <div class="roi-value">97%</div>
+                        <div class="roi-label">Gross Margin</div>
+                    </div>
+                    <div class="roi-item">
+                        <div class="roi-value">$1.5M</div>
+                        <div class="roi-label">Customer LTV</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Financial Projections -->
+        <div class="slide" data-slide="11">
+            <div class="slide-number">11 / 20</div>
+            <div class="slide-title">Financial Projections</div>
+            <div class="slide-subtitle">Path to $100M ARR in 5 years</div>
+            <div class="financial-projections">
+                <div class="projection-grid">
+                    <div class="projection-year">
+                        <div class="year-title">2024</div>
+                        <div class="year-revenue">$2M</div>
+                    </div>
+                    <div class="projection-year">
+                        <div class="year-title">2025</div>
+                        <div class="year-revenue">$8M</div>
+                    </div>
+                    <div class="projection-year">
+                        <div class="year-title">2026</div>
+                        <div class="year-revenue">$24M</div>
+                    </div>
+                    <div class="projection-year">
+                        <div class="year-title">2027</div>
+                        <div class="year-revenue">$58M</div>
+                    </div>
+                    <div class="projection-year">
+                        <div class="year-title">2028</div>
+                        <div class="year-revenue">$127M</div>
+                    </div>
+                </div>
+                <div style="margin-top: 24px;">
+                    <div class="roi-calculation">
+                        <div class="roi-item">
+                            <div class="roi-value">254</div>
+                            <div class="roi-label">Enterprise Customers</div>
+                        </div>
+                        <div class="roi-item">
+                            <div class="roi-value">42%</div>
+                            <div class="roi-label">EBITDA Margin</div>
+                        </div>
+                        <div class="roi-item">
+                            <div class="roi-value">97%</div>
+                            <div class="roi-label">Gross Retention</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Team -->
+        <div class="slide" data-slide="12">
+            <div class="slide-number">12 / 20</div>
+            <div class="slide-title">Leadership Team</div>
+            <div class="slide-subtitle">Proven track record in enterprise software and logistics</div>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-name">Sarah Chen</div>
+                    <div class="member-role">CEO & Co-Founder</div>
+                    <div class="member-experience">Former VP Product at Maersk, led $2B digital transformation. Stanford CS, 15 years logistics tech.</div>
+                </div>
+                <div class="team-member">
+                    <div class="member-name">Marcus Rodriguez</div>
+                    <div class="member-role">CTO & Co-Founder</div>
+                    <div class="member-experience">Ex-Google AI Research, built ML systems serving 1B+ users. PhD ML from MIT, 12 years AI/ML.</div>
+                </div>
+                <div class="team-member">
+                    <div class="member-name">Jennifer Walsh</div>
+                    <div class="member-role">VP Sales</div>
+                    <div class="member-experience">Former Salesforce Enterprise, closed $500M+ in SaaS deals. 20 years enterprise sales leadership.</div>
+                </div>
+                <div class="team-member">
+                    <div class="member-name">David Kumar</div>
+                    <div class="member-role">VP Engineering</div>
+                    <div class="member-experience">Ex-Uber Platform Engineering, scaled systems to handle 15M+ rides daily. MIT CS, 18 years infrastructure.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Traction -->
+        <div class="slide" data-slide="13">
+            <div class="slide-number">13 / 20</div>
+            <div class="slide-title">Market Traction</div>
+            <div class="slide-subtitle">Strong early adoption and customer validation</div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">23</div>
+                    <div class="metric-label">Enterprise Customers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$2.1M</div>
+                    <div class="metric-label">Annual Recurring Revenue</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">152%</div>
+                    <div class="metric-label">Net Revenue Retention</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">187</div>
+                    <div class="metric-label">Enterprise Pipeline</div>
+                </div>
+            </div>
+            <div class="slide-subtitle" style="margin-top: 40px;">Customer logos: Maersk, MSC, COSCO, Hapag-Lloyd, CMA CGM</div>
+        </div>
+
+        <!-- Slide 14: Go-to-Market -->
+        <div class="slide" data-slide="14">
+            <div class="slide-number">14 / 20</div>
+            <div class="slide-title">Go-to-Market Strategy</div>
+            <div class="slide-subtitle">Land and expand with enterprise customers</div>
+            <div class="competitive-grid">
+                <div class="competitive-card">
+                    <div class="competitive-title">Direct Enterprise Sales</div>
+                    <div class="competitive-description">Field sales team targeting Fortune 500 shipping companies. Average deal size $500K-$2M.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Partner Channel</div>
+                    <div class="competitive-description">Strategic partnerships with systems integrators and maritime consultants for market penetration.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Industry Events</div>
+                    <div class="competitive-description">Thought leadership at major conferences: TOC, Intermodal, AAPA, driving inbound leads.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Customer Success</div>
+                    <div class="competitive-description">White-glove implementation and success management drives 152% net revenue retention.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Funding Ask -->
+        <div class="slide" data-slide="15">
+            <div class="slide-number">15 / 20</div>
+            <div class="slide-title">Series A: $15M</div>
+            <div class="slide-subtitle">Accelerate growth and market expansion</div>
+            <div class="competitive-grid">
+                <div class="competitive-card">
+                    <div class="competitive-title">Sales & Marketing (60%)</div>
+                    <div class="competitive-description">Scale enterprise sales team from 5 to 25 reps. Expand marketing for lead generation.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Product & Engineering (25%)</div>
+                    <div class="competitive-description">Accelerate AI development and platform features. Build European and Asian integrations.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Operations & Infrastructure (10%)</div>
+                    <div class="competitive-description">Scale customer success, support, and cloud infrastructure for global expansion.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Working Capital (5%)</div>
+                    <div class="competitive-description">General corporate purposes and strategic initiatives.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Milestones -->
+        <div class="slide" data-slide="16">
+            <div class="slide-number">16 / 20</div>
+            <div class="slide-title">18-Month Milestones</div>
+            <div class="slide-subtitle">Clear path to Series B readiness</div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">$24M</div>
+                    <div class="metric-label">ARR Target</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">150</div>
+                    <div class="metric-label">Enterprise Customers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">3</div>
+                    <div class="metric-label">Global Regions</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">75</div>
+                    <div class="metric-label">Team Members</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Risk Mitigation -->
+        <div class="slide" data-slide="17">
+            <div class="slide-number">17 / 20</div>
+            <div class="slide-title">Risk Mitigation</div>
+            <div class="slide-subtitle">Addressing key investment considerations</div>
+            <div class="competitive-grid">
+                <div class="competitive-card">
+                    <div class="competitive-title">Market Risk</div>
+                    <div class="competitive-description">Conservative adoption assumptions. $847B market with massive inefficiencies provides ample opportunity.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Competitive Risk</div>
+                    <div class="competitive-description">Strong IP portfolio and network effects create defensible moat. 2-year technical lead.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Technical Risk</div>
+                    <div class="competitive-description">Proven platform serving 23 enterprise customers. Battle-tested at scale with 99.99% uptime.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Execution Risk</div>
+                    <div class="competitive-description">Experienced team with track record at Maersk, Google, Salesforce. Clear playbook for scaling.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Exit Strategy -->
+        <div class="slide" data-slide="18">
+            <div class="slide-number">18 / 20</div>
+            <div class="slide-title">Exit Opportunities</div>
+            <div class="slide-subtitle">Multiple paths to significant returns</div>
+            <div class="competitive-grid">
+                <div class="competitive-card">
+                    <div class="competitive-title">Strategic Acquisition</div>
+                    <div class="competitive-description">Maersk, MSC, or technology giants seeking logistics AI capabilities. Recent comps: $2-5B valuations.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">IPO Path</div>
+                    <div class="competitive-description">Strong SaaS metrics and growth trajectory position for public markets at $100M+ ARR.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">PE Rollup</div>
+                    <div class="competitive-description">Platform for maritime software consolidation. Strong cash generation attracts PE interest.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Market Expansion</div>
+                    <div class="competitive-description">Adjacent markets: air freight ($140B), rail freight ($250B), last-mile delivery ($180B).</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Investment Thesis -->
+        <div class="slide" data-slide="19">
+            <div class="slide-number">19 / 20</div>
+            <div class="slide-title">Investment Thesis</div>
+            <div class="slide-subtitle">Why UIP represents a generational opportunity</div>
+            <div class="competitive-grid">
+                <div class="competitive-card">
+                    <div class="competitive-title">Massive Market Inefficiency</div>
+                    <div class="competitive-description">$15-20B annual waste in essential global infrastructure. Clear, quantifiable problem.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Unique Technical Solution</div>
+                    <div class="competitive-description">Only platform solving universal integration at enterprise scale. Proprietary AI and data moat.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Proven Customer Traction</div>
+                    <div class="competitive-description">23 enterprise customers, $2.1M ARR, 152% NRR. Strong product-market fit validated.</div>
+                </div>
+                <div class="competitive-card">
+                    <div class="competitive-title">Exceptional Returns Potential</div>
+                    <div class="competitive-description">Path to $1B+ valuation with 50x returns potential. Multiple exit strategies at scale.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Call to Action -->
+        <div class="slide" data-slide="20">
+            <div class="slide-number">20 / 20</div>
+            <div class="slide-title">Join Us in Transforming Ocean Freight</div>
+            <div class="slide-subtitle">Partner with UIP to capture this generational opportunity</div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">$15M</div>
+                    <div class="metric-label">Series A Round</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">18 Months</div>
+                    <div class="metric-label">To Series B</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">50x+</div>
+                    <div class="metric-label">Return Potential</div>
+                </div>
+            </div>
+            <div class="slide-subtitle" style="margin-top: 40px;">
+                Ready to eliminate $20B in global waste?<br>
+                Let's build the future of ocean freight together.
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation">
+        <div class="nav-button" onclick="previousSlide()">← Previous</div>
+        <div class="nav-button" onclick="nextSlide()">Next →</div>
+    </div>
+
+    <!-- Slide Indicators -->
+    <div class="slide-indicator">
+        <div class="indicator-dot active" onclick="goToSlide(1)"></div>
+        <div class="indicator-dot" onclick="goToSlide(2)"></div>
+        <div class="indicator-dot" onclick="goToSlide(3)"></div>
+        <div class="indicator-dot" onclick="goToSlide(4)"></div>
+        <div class="indicator-dot" onclick="goToSlide(5)"></div>
+        <div class="indicator-dot" onclick="goToSlide(6)"></div>
+        <div class="indicator-dot" onclick="goToSlide(7)"></div>
+        <div class="indicator-dot" onclick="goToSlide(8)"></div>
+        <div class="indicator-dot" onclick="goToSlide(9)"></div>
+        <div class="indicator-dot" onclick="goToSlide(10)"></div>
+        <div class="indicator-dot" onclick="goToSlide(11)"></div>
+        <div class="indicator-dot" onclick="goToSlide(12)"></div>
+        <div class="indicator-dot" onclick="goToSlide(13)"></div>
+        <div class="indicator-dot" onclick="goToSlide(14)"></div>
+        <div class="indicator-dot" onclick="goToSlide(15)"></div>
+        <div class="indicator-dot" onclick="goToSlide(16)"></div>
+        <div class="indicator-dot" onclick="goToSlide(17)"></div>
+        <div class="indicator-dot" onclick="goToSlide(18)"></div>
+        <div class="indicator-dot" onclick="goToSlide(19)"></div>
+        <div class="indicator-dot" onclick="goToSlide(20)"></div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 20;
+
+        function showSlide(slideNumber) {
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active', 'prev');
+            });
+
+            // Show current slide
+            const slide = document.querySelector(`[data-slide="${slideNumber}"]`);
+            if (slide) {
+                slide.classList.add('active');
+            }
+
+            // Update indicators
+            document.querySelectorAll('.indicator-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index + 1 === slideNumber);
+            });
+
+            currentSlide = slideNumber;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 1) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        function goToSlide(slideNumber) {
+            showSlide(slideNumber);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            } else if (e.key >= '1' && e.key <= '9') {
+                const slideNum = parseInt(e.key);
+                if (slideNum <= totalSlides) {
+                    goToSlide(slideNum);
+                }
+            }
+        });
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide(); // Swipe left - next slide
+                } else {
+                    previousSlide(); // Swipe right - previous slide
+                }
+            }
+        }
+
+        // Auto-advance for demo mode (uncomment if needed)
+        // setInterval(nextSlide, 10000); // Auto-advance every 10 seconds
+    </script>
+</body>
+</html>

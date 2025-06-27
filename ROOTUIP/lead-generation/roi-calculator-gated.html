@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROI Calculator - See Your Savings | ROOTUIP</title>
+    <link rel="stylesheet" href="/brand/enterprise-colors.css">
+    <link rel="stylesheet" href="/brand/typography.css">
+    <link rel="stylesheet" href="/css/lead-capture.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">ROOTUIP</a>
+            <a href="/demo" class="cta-button">Book Demo</a>
+        </div>
+    </nav>
+
+    <section class="roi-hero">
+        <div class="container">
+            <h1>Calculate Your ROI with ROOTUIP</h1>
+            <p class="subtitle">See how much you could save on ocean freight operations</p>
+        </div>
+    </section>
+
+    <section class="roi-calculator-section">
+        <div class="container">
+            <div class="calculator-wrapper">
+                <!-- Step 1: Input Data -->
+                <div id="calculator-inputs" class="calculator-step active">
+                    <h2>Tell us about your operations</h2>
+                    
+                    <div class="input-group">
+                        <label>Number of vessels in your fleet</label>
+                        <input type="number" id="vessel-count" min="1" max="1000" value="10">
+                        <span class="help-text">Include owned and chartered vessels</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Annual shipping volume (TEUs)</label>
+                        <input type="number" id="teu-volume" min="1000" value="50000">
+                        <span class="help-text">Twenty-foot Equivalent Units per year</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Average documentation hours per shipment</label>
+                        <input type="number" id="doc-hours" min="1" max="100" value="8">
+                        <span class="help-text">Current manual processing time</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Annual D&D charges ($)</label>
+                        <input type="number" id="dd-charges" min="0" value="500000">
+                        <span class="help-text">Detention and demurrage costs</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Number of carrier integrations needed</label>
+                        <select id="carrier-count">
+                            <option value="5">1-5 carriers</option>
+                            <option value="10" selected>6-10 carriers</option>
+                            <option value="20">11-20 carriers</option>
+                            <option value="50">20+ carriers</option>
+                        </select>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateROI()">Calculate My Savings</button>
+                </div>
+
+                <!-- Step 2: Lead Capture -->
+                <div id="lead-capture" class="calculator-step">
+                    <div class="results-preview">
+                        <h2>Your Potential Annual Savings</h2>
+                        <div class="savings-preview">
+                            <div class="metric">
+                                <span class="value" id="preview-savings">$0</span>
+                                <span class="label">Total Savings</span>
+                            </div>
+                            <div class="metric">
+                                <span class="value" id="preview-roi">0%</span>
+                                <span class="label">ROI</span>
+                            </div>
+                            <div class="metric">
+                                <span class="value" id="preview-payback">0</span>
+                                <span class="label">Months Payback</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="capture-form">
+                        <h3>Get Your Detailed ROI Report</h3>
+                        <p>See your complete savings breakdown, implementation timeline, and custom recommendations</p>
+                        
+                        <form id="roi-lead-form" onsubmit="submitROILead(event)">
+                            <input type="hidden" id="lead-score" name="lead_score" value="">
+                            <input type="hidden" id="roi-data" name="roi_data" value="">
+                            
+                            <div class="form-group">
+                                <label>Business Email*</label>
+                                <input type="email" name="email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Full Name*</label>
+                                <input type="text" name="full_name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Company*</label>
+                                <input type="text" name="company" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Job Title*</label>
+                                <input type="text" name="job_title" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" name="phone">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Primary Challenge</label>
+                                <select name="primary_challenge">
+                                    <option value="">Select your biggest pain point</option>
+                                    <option value="manual_processes">Manual documentation processes</option>
+                                    <option value="dd_costs">High D&D charges</option>
+                                    <option value="visibility">Lack of shipment visibility</option>
+                                    <option value="carrier_integration">Multiple carrier integrations</option>
+                                    <option value="compliance">Compliance and audit trails</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group checkbox">
+                                <label>
+                                    <input type="checkbox" name="newsletter" value="yes">
+                                    Send me industry insights and best practices
+                                </label>
+                            </div>
+
+                            <button type="submit" class="submit-btn">Get My ROI Report</button>
+                            
+                            <p class="privacy">We respect your privacy. Your information will never be shared.</p>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Step 3: Results -->
+                <div id="roi-results" class="calculator-step">
+                    <h2>Your Personalized ROI Report</h2>
+                    
+                    <div class="results-summary">
+                        <div class="savings-card total">
+                            <h3>Total Annual Savings</h3>
+                            <div class="amount" id="total-savings">$0</div>
+                            <div class="roi-metric">
+                                <span id="roi-percentage">0%</span> ROI
+                                <span class="separator">•</span>
+                                <span id="payback-period">0</span> months payback
+                            </div>
+                        </div>
+
+                        <div class="savings-breakdown">
+                            <h3>Savings Breakdown</h3>
+                            <div class="breakdown-item">
+                                <span class="label">Documentation Automation</span>
+                                <span class="value" id="doc-savings">$0</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="label">D&D Reduction (30%)</span>
+                                <span class="value" id="dd-savings">$0</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="label">Integration Efficiency</span>
+                                <span class="value" id="integration-savings">$0</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="label">Error Reduction</span>
+                                <span class="value" id="error-savings">$0</span>
+                            </div>
+                        </div>
+
+                        <div class="efficiency-metrics">
+                            <h3>Efficiency Gains</h3>
+                            <div class="metric-grid">
+                                <div class="metric">
+                                    <span class="value" id="hours-saved">0</span>
+                                    <span class="label">Hours Saved Annually</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="value" id="processing-speed">0%</span>
+                                    <span class="label">Faster Processing</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="value" id="accuracy-improvement">0%</span>
+                                    <span class="label">Accuracy Improvement</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="next-steps">
+                        <h3>Your Next Steps</h3>
+                        <div class="steps-grid">
+                            <div class="step">
+                                <span class="number">1</span>
+                                <h4>Review detailed report</h4>
+                                <p>Check your email for the complete ROI analysis</p>
+                            </div>
+                            <div class="step">
+                                <span class="number">2</span>
+                                <h4>Schedule demo</h4>
+                                <p>See ROOTUIP in action with your use cases</p>
+                            </div>
+                            <div class="step">
+                                <span class="number">3</span>
+                                <h4>Start pilot program</h4>
+                                <p>Begin with a subset of your operations</p>
+                            </div>
+                        </div>
+                        
+                        <div class="cta-buttons">
+                            <a href="/demo" class="primary-btn">Schedule Your Demo</a>
+                            <a href="/whitepaper/implementation-guide" class="secondary-btn">Download Implementation Guide</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="/js/roi-calculator-gated.js"></script>
+    <script src="/js/lead-tracking.js"></script>
+</body>
+</html>

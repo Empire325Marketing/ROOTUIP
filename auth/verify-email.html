@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email - ROOTUIP Platform</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .verify-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            width: 100%;
+            max-width: 480px;
+            padding: 48px;
+            text-align: center;
+        }
+
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon.loading {
+            background: #e0e7ff;
+        }
+
+        .icon.success {
+            background: #d1fae5;
+        }
+
+        .icon.error {
+            background: #fee2e2;
+        }
+
+        .icon svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e5e7eb;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+
+        .message {
+            color: #6b7280;
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 32px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #3b82f6;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn.secondary {
+            background: #6b7280;
+            margin-left: 12px;
+        }
+
+        .btn.secondary:hover {
+            background: #4b5563;
+        }
+
+        .error-details {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .error-details strong {
+            color: #92400e;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .error-details p {
+            color: #92400e;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .countdown {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 24px;
+        }
+
+        .countdown strong {
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="verify-container">
+        <!-- Loading State -->
+        <div id="loadingState">
+            <div class="icon loading">
+                <div class="spinner"></div>
+            </div>
+            <h1>Verifying your email...</h1>
+            <p class="message">Please wait while we verify your email address.</p>
+        </div>
+
+        <!-- Success State -->
+        <div id="successState" style="display: none;">
+            <div class="icon success">
+                <svg fill="none" stroke="#10b981" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h1>Email verified successfully!</h1>
+            <p class="message">Your email has been verified. You can now sign in to your account.</p>
+            <a href="/auth/login.html" class="btn">Sign in to your account</a>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" style="display: none;">
+            <div class="icon error">
+                <svg fill="none" stroke="#ef4444" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </div>
+            <h1>Verification failed</h1>
+            <div class="error-details" id="errorDetails" style="display: none;">
+                <strong>Error details:</strong>
+                <p id="errorMessage"></p>
+            </div>
+            <p class="message" id="errorDescription">
+                The verification link is invalid or has expired. Please request a new verification email.
+            </p>
+            <a href="/auth/resend-verification" class="btn">Resend verification email</a>
+            <a href="/auth/login.html" class="btn secondary">Back to login</a>
+        </div>
+
+        <!-- Already Verified State -->
+        <div id="alreadyVerifiedState" style="display: none;">
+            <div class="icon success">
+                <svg fill="none" stroke="#10b981" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <h1>Already verified</h1>
+            <p class="message">Your email is already verified. You can sign in to your account.</p>
+            <a href="/auth/login.html" class="btn">Sign in to your account</a>
+        </div>
+
+        <!-- Redirect Countdown -->
+        <p class="countdown" id="countdown" style="display: none;">
+            Redirecting to login in <strong id="countdownSeconds">5</strong> seconds...
+        </p>
+    </div>
+
+    <script>
+        // Get token from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        async function verifyEmail() {
+            if (!token) {
+                showError('No verification token provided', 'Please check your email for the verification link.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/verify-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ token })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showSuccess();
+                } else {
+                    if (data.error === 'Email already verified') {
+                        showAlreadyVerified();
+                    } else if (data.error === 'Verification token expired') {
+                        showError('Verification link expired', 'This link has expired. Please request a new verification email.');
+                    } else {
+                        showError(data.error || 'Verification failed', 'The verification link is invalid or has expired.');
+                    }
+                }
+
+            } catch (error) {
+                console.error('Verification error:', error);
+                showError('Network error', 'Unable to verify email. Please check your connection and try again.');
+            }
+        }
+
+        function showSuccess() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('successState').style.display = 'block';
+            document.getElementById('countdown').style.display = 'block';
+            
+            // Auto redirect after 5 seconds
+            let seconds = 5;
+            const countdownInterval = setInterval(() => {
+                seconds--;
+                document.getElementById('countdownSeconds').textContent = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = '/auth/login.html';
+                }
+            }, 1000);
+        }
+
+        function showError(error, description) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            
+            if (error !== description) {
+                document.getElementById('errorDetails').style.display = 'block';
+                document.getElementById('errorMessage').textContent = error;
+            }
+            
+            document.getElementById('errorDescription').textContent = description;
+        }
+
+        function showAlreadyVerified() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('alreadyVerifiedState').style.display = 'block';
+        }
+
+        // Verify email on page load
+        verifyEmail();
+    </script>
+</body>
+</html>

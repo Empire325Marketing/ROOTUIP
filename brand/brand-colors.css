@@ -1,0 +1,118 @@
+/* UIP Brand Colors - Enterprise Identity System v1.0 */
+
+:root {
+    /* Primary Colors */
+    --uip-primary: #1e40af;        /* Enterprise Blue - Main brand color */
+    --uip-primary-dark: #1e3a8a;   /* Darker Blue - Hover states */
+    --uip-primary-light: #3b82f6;  /* Data Blue - Secondary actions */
+    
+    /* Success Colors */
+    --uip-success: #10b981;        /* ROI Green - Positive metrics */
+    --uip-success-dark: #059669;   /* Dark Green - Hover states */
+    --uip-success-light: #34d399;  /* Light Green - Backgrounds */
+    
+    /* Neutral Colors */
+    --uip-gray-50: #f8fafc;        /* Lightest - Page backgrounds */
+    --uip-gray-100: #f1f5f9;       /* Light backgrounds */
+    --uip-gray-200: #e2e8f0;       /* Borders, dividers */
+    --uip-gray-300: #cbd5e1;       /* Disabled states */
+    --uip-gray-400: #94a3b8;       /* Placeholder text */
+    --uip-gray-500: #64748b;       /* Secondary text */
+    --uip-gray-600: #475569;       /* Icon colors */
+    --uip-gray-700: #334155;       /* Subheadings */
+    --uip-gray-800: #1e293b;       /* Primary text */
+    --uip-gray-900: #0f172a;       /* Darkest - High contrast */
+    
+    /* Status Colors */
+    --uip-warning: #f59e0b;        /* Alert Orange - Warnings */
+    --uip-error: #ef4444;          /* Error Red - Errors */
+    --uip-info: #3b82f6;           /* Info Blue - Information */
+    
+    /* Gradients */
+    --uip-gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    --uip-gradient-success: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    --uip-gradient-dark: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    
+    /* Typography */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    
+    /* Font Weights */
+    --font-normal: 400;
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold: 700;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    
+    /* Border Radius */
+    --radius-sm: 0.25rem;  /* 4px */
+    --radius-md: 0.5rem;   /* 8px */
+    --radius-lg: 0.75rem;  /* 12px */
+    --radius-xl: 1rem;     /* 16px */
+    
+    /* Spacing */
+    --space-xs: 0.5rem;    /* 8px */
+    --space-sm: 1rem;      /* 16px */
+    --space-md: 1.5rem;    /* 24px */
+    --space-lg: 2rem;      /* 32px */
+    --space-xl: 3rem;      /* 48px */
+    
+    /* Z-index Scale */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+}
+
+/* Dark Mode Variables */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --uip-bg-primary: #0f172a;
+        --uip-bg-secondary: #1e293b;
+        --uip-text-primary: #f1f5f9;
+        --uip-text-secondary: #cbd5e1;
+        --uip-border: #334155;
+    }
+}
+
+/* Utility Classes */
+.uip-text-primary { color: var(--uip-primary); }
+.uip-text-success { color: var(--uip-success); }
+.uip-text-warning { color: var(--uip-warning); }
+.uip-text-error { color: var(--uip-error); }
+
+.uip-bg-primary { background-color: var(--uip-primary); }
+.uip-bg-success { background-color: var(--uip-success); }
+.uip-bg-gray-50 { background-color: var(--uip-gray-50); }
+.uip-bg-gray-800 { background-color: var(--uip-gray-800); }
+
+.uip-gradient-primary { background: var(--uip-gradient-primary); }
+.uip-gradient-success { background: var(--uip-gradient-success); }
+
+/* Typography Classes */
+.uip-font-sans { font-family: var(--font-sans); }
+.uip-font-mono { font-family: var(--font-mono); }
+
+.uip-text-xs { font-size: 0.75rem; line-height: 1rem; }
+.uip-text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.uip-text-base { font-size: 1rem; line-height: 1.5rem; }
+.uip-text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+.uip-text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+.uip-text-2xl { font-size: 1.5rem; line-height: 2rem; }
+.uip-text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+.uip-text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+.uip-text-5xl { font-size: 3rem; line-height: 1; }
+
+/* Shadow Classes */
+.uip-shadow-sm { box-shadow: var(--shadow-sm); }
+.uip-shadow-md { box-shadow: var(--shadow-md); }
+.uip-shadow-lg { box-shadow: var(--shadow-lg); }
+.uip-shadow-xl { box-shadow: var(--shadow-xl); }

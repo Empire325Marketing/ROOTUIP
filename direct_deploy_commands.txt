@@ -1,0 +1,103 @@
+# Copy and paste these commands into your Hostinger terminal:
+
+# 1. First, let's check what's already there:
+ls -la /var/www/
+systemctl status nginx
+
+# 2. Create directories and prepare for deployment:
+mkdir -p /var/www/rootuip/public
+mkdir -p /var/www/staging-rootuip/public
+mkdir -p /var/www/app-rootuip/public
+
+# 3. Install nginx if not already installed:
+apt-get update && apt-get install -y nginx
+
+# 4. Configure Nginx for rootuip.com:
+cat > /etc/nginx/sites-available/rootuip << 'EOF'
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name rootuip.com www.rootuip.com 145.223.73.4;
+    root /var/www/rootuip/public;
+    index index.html;
+    
+    location / {
+        try_files $uri $uri.html $uri/ =404;
+    }
+    
+    location ~* \.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2)$ {
+        expires 30d;
+        add_header Cache-Control "public";
+    }
+    
+    gzip on;
+    gzip_vary on;
+    gzip_types text/plain text/css text/javascript application/javascript application/json;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name staging.rootuip.com;
+    root /var/www/staging-rootuip/public;
+    index index.html;
+    
+    auth_basic "Staging Area";
+    auth_basic_user_file /etc/nginx/.htpasswd;
+    
+    location / {
+        try_files $uri $uri.html $uri/ =404;
+    }
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name app.rootuip.com;
+    root /var/www/app-rootuip/public;
+    index index.html dashboard.html;
+    
+    location / {
+        try_files $uri $uri.html $uri/ /dashboard.html =404;
+    }
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name monitoring.rootuip.com;
+    
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+    }
+}
+EOF
+
+# 5. Enable the site:
+ln -sf /etc/nginx/sites-available/rootuip /etc/nginx/sites-enabled/
+rm -f /etc/nginx/sites-enabled/default
+
+# 6. Create staging password:
+apt-get install -y apache2-utils
+echo 'staging:$apr1$8K4Ak0gF$L5LmzXLfDdPmY6WR8nxXE1' > /etc/nginx/.htpasswd
+
+# 7. Test and reload nginx:
+nginx -t && systemctl reload nginx
+
+# 8. Create a test page to verify:
+echo '<h1>ROOTUIP is ready for deployment!</h1>' > /var/www/rootuip/public/index.html
+
+# 9. Set permissions:
+chown -R www-data:www-data /var/www/
+chmod -R 755 /var/www/
+
+# 10. Check status:
+echo "=== Deployment Status ==="
+echo "Nginx: $(systemctl is-active nginx)"
+echo "Website directory: $(ls -la /var/www/rootuip/public/)"
+echo "Access test: $(curl -s -o /dev/null -w "%{http_code}" http://localhost/)"
+echo ""
+echo "✅ Server is ready for ROOTUIP files!"
+echo "You can now access: http://145.223.73.4/"

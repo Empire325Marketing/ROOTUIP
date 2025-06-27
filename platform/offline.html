@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - ROOTUIP Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .offline-container {
+            text-align: center;
+            max-width: 500px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .offline-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #f8fafc;
+        }
+
+        p {
+            font-size: 1.125rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .offline-features {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .offline-features h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #e2e8f0;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #cbd5e1;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: #3b82f6;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .connection-status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ef4444;
+            animation: blink 1s infinite;
+        }
+
+        .status-indicator.online {
+            background: #10b981;
+            animation: none;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .cached-data {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: #93bbfc;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">📡</div>
+        
+        <h1>You're Offline</h1>
+        <p>Don't worry! ROOTUIP Platform works offline. You can continue working with cached data.</p>
+        
+        <div class="offline-features">
+            <h2>Available Offline Features:</h2>
+            <ul class="feature-list">
+                <li>View cached shipment data</li>
+                <li>Access recent reports and analytics</li>
+                <li>Review saved documents</li>
+                <li>Browse knowledge base articles</li>
+                <li>Create draft bookings (will sync when online)</li>
+            </ul>
+        </div>
+        
+        <button class="btn" onclick="tryReconnect()">Try to Reconnect</button>
+        
+        <div class="connection-status">
+            <div class="status-indicator" id="statusIndicator"></div>
+            <span id="statusText">Checking connection...</span>
+        </div>
+        
+        <div class="cached-data" id="cachedInfo" style="display: none;">
+            <strong>Cached Data Available:</strong>
+            <div id="cacheStats"></div>
+        </div>
+    </div>
+
+    <script>
+        // Check connection status
+        function checkConnection() {
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            
+            if (navigator.onLine) {
+                statusIndicator.classList.add('online');
+                statusText.textContent = 'Connection restored!';
+                
+                // Redirect to dashboard after 2 seconds
+                setTimeout(() => {
+                    window.location.href = '/platform/customer/dashboard.html';
+                }, 2000);
+            } else {
+                statusIndicator.classList.remove('online');
+                statusText.textContent = 'No internet connection';
+            }
+        }
+
+        // Try to reconnect
+        function tryReconnect() {
+            checkConnection();
+            
+            // Also try to fetch a small resource
+            fetch('/api/ping', { method: 'HEAD' })
+                .then(() => {
+                    window.location.href = '/platform/customer/dashboard.html';
+                })
+                .catch(() => {
+                    console.log('Still offline');
+                });
+        }
+
+        // Show cached data info
+        async function showCachedInfo() {
+            if ('caches' in window) {
+                try {
+                    const cacheNames = await caches.keys();
+                    const cacheStats = document.getElementById('cacheStats');
+                    const cachedInfo = document.getElementById('cachedInfo');
+                    
+                    let totalSize = 0;
+                    let fileCount = 0;
+                    
+                    for (const cacheName of cacheNames) {
+                        const cache = await caches.open(cacheName);
+                        const keys = await cache.keys();
+                        fileCount += keys.length;
+                    }
+                    
+                    cacheStats.innerHTML = `
+                        <p>📦 ${fileCount} files cached</p>
+                        <p>📅 Last sync: ${new Date().toLocaleString()}</p>
+                    `;
+                    
+                    cachedInfo.style.display = 'block';
+                } catch (error) {
+                    console.error('Error checking cache:', error);
+                }
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkConnection();
+            showCachedInfo();
+            
+            // Check connection every 5 seconds
+            setInterval(checkConnection, 5000);
+            
+            // Listen for online/offline events
+            window.addEventListener('online', checkConnection);
+            window.addEventListener('offline', checkConnection);
+        });
+
+        // Service Worker communication
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener('message', event => {
+                if (event.data.type === 'sync-complete') {
+                    console.log('Data synced:', event.data.data);
+                    checkConnection();
+                }
+            });
+        }
+    </script>
+</body>
+</html>

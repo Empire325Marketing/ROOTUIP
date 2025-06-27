@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Shipment - ROOTUIP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: #0f172a;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+        }
+
+        .search-form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #475569;
+        }
+
+        .form-input, .form-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+        }
+
+        .shipment-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .shipment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 2rem;
+        }
+
+        .shipment-info h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .shipment-meta {
+            display: flex;
+            gap: 1rem;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-in-transit {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -23px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #e2e8f0;
+        }
+
+        .timeline-item.completed .timeline-marker {
+            background: #10b981;
+            border-color: #10b981;
+        }
+
+        .timeline-item.current .timeline-marker {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+
+        .timeline-content {
+            padding-left: 1rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #0f172a;
+        }
+
+        .timeline-desc {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-time {
+            color: #94a3b8;
+            font-size: 0.75rem;
+        }
+
+        /* Map Container */
+        .map-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .map-placeholder {
+            background: #e2e8f0;
+            height: 400px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 1.125rem;
+        }
+
+        /* Details Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .detail-section {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .detail-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #0f172a;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            color: #0f172a;
+        }
+
+        /* Loading State */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error State */
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .search-section {
+                padding: 1.5rem;
+            }
+
+            .shipment-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/platform/customer/dashboard.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+                Back to Dashboard
+            </a>
+            <h1>Track Shipment</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Search Section -->
+        <div class="search-section">
+            <h2 class="search-title">Enter Tracking Information</h2>
+            <form class="search-form" id="trackingForm">
+                <div class="form-group">
+                    <label class="form-label" for="trackingNumber">Container or B/L Number</label>
+                    <input 
+                        type="text" 
+                        id="trackingNumber" 
+                        class="form-input" 
+                        placeholder="e.g., MAEU1234567 or BL123456789"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="carrier">Carrier (Optional)</label>
+                    <select id="carrier" class="form-select">
+                        <option value="">Auto-detect</option>
+                        <option value="MAEU">Maersk</option>
+                        <option value="MSCU">MSC</option>
+                        <option value="CMDU">CMA CGM</option>
+                        <option value="HLCU">Hapag-Lloyd</option>
+                        <option value="ONEY">ONE</option>
+                        <option value="COSU">COSCO</option>
+                        <option value="EGLV">Evergreen</option>
+                    </select>
+                </div>
+
+                <div class="search-actions">
+                    <button type="submit" class="btn btn-primary">Track Shipment</button>
+                    <button type="button" class="btn btn-secondary" onclick="bulkTrack()">Bulk Track</button>
+                </div>
+            </form>
+
+            <div class="error-message" id="errorMessage"></div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading" id="loadingSection">
+            <div class="spinner"></div>
+            <p>Searching for your shipment...</p>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection">
+            <!-- Shipment Overview -->
+            <div class="shipment-card">
+                <div class="shipment-header">
+                    <div class="shipment-info">
+                        <h2 id="containerNumber">MAEU1234567</h2>
+                        <div class="shipment-meta">
+                            <span>B/L: <strong id="blNumber">BL123456789</strong></span>
+                            <span>Carrier: <strong id="carrierName">Maersk</strong></span>
+                            <span>Vessel: <strong id="vesselName">Maersk Elba</strong></span>
+                        </div>
+                    </div>
+                    <span class="status-badge status-in-transit" id="statusBadge">In Transit</span>
+                </div>
+
+                <!-- Route Summary -->
+                <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <div style="color: #64748b; font-size: 0.875rem;">Origin</div>
+                            <div style="font-weight: 600;" id="originPort">Shanghai, China</div>
+                            <div style="color: #94a3b8; font-size: 0.75rem;" id="departureDate">Departed: Jun 1, 2025</div>
+                        </div>
+                        <svg width="40" height="20" fill="none" stroke="#cbd5e1" stroke-width="2">
+                            <path d="M5 10h30m0 0l-6-6m6 6l-6 6"/>
+                        </svg>
+                        <div style="text-align: right;">
+                            <div style="color: #64748b; font-size: 0.875rem;">Destination</div>
+                            <div style="font-weight: 600;" id="destinationPort">Rotterdam, Netherlands</div>
+                            <div style="color: #94a3b8; font-size: 0.75rem;" id="arrivalDate">ETA: Jul 15, 2025</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline -->
+                <h3 style="margin-bottom: 1.5rem; color: #0f172a;">Shipment Timeline</h3>
+                <div class="timeline" id="timeline">
+                    <!-- Dynamic timeline items -->
+                </div>
+            </div>
+
+            <!-- Map -->
+            <div class="map-container">
+                <h3 style="margin-bottom: 1rem; color: #0f172a;">Current Location</h3>
+                <div class="map-placeholder" id="mapContainer">
+                    Interactive map will be displayed here
+                </div>
+            </div>
+
+            <!-- Detailed Information -->
+            <div class="shipment-card">
+                <h3 style="margin-bottom: 1.5rem; color: #0f172a;">Shipment Details</h3>
+                
+                <div class="details-grid">
+                    <div class="detail-section">
+                        <h4 class="detail-title">Cargo Information</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Description</span>
+                            <span class="detail-value" id="cargoDesc">Electronics</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Weight</span>
+                            <span class="detail-value" id="cargoWeight">24,500 kg</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Volume</span>
+                            <span class="detail-value" id="cargoVolume">58 CBM</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Container Type</span>
+                            <span class="detail-value" id="containerType">40' HC</span>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4 class="detail-title">D&D Risk Analysis</h4>
+                        <div class="detail-row">
+                            <span class="detail-label">Risk Score</span>
+                            <span class="detail-value" id="riskScore" style="color: #10b981;">Low (2.5%)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Port Congestion</span>
+                            <span class="detail-value" id="portCongestion">Moderate</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Weather Impact</span>
+                            <span class="detail-value" id="weatherImpact">None</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Last Updated</span>
+                            <span class="detail-value" id="lastUpdated">2 hours ago</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e2e8f0; display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="downloadReport()">Download Report</button>
+                    <button class="btn btn-secondary" onclick="subscribeToUpdates()">Subscribe to Updates</button>
+                    <button class="btn btn-secondary" onclick="viewDocuments()">View Documents</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form submission
+        document.getElementById('trackingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const trackingNumber = document.getElementById('trackingNumber').value.trim();
+            const carrier = document.getElementById('carrier').value;
+            
+            if (!trackingNumber) {
+                showError('Please enter a tracking number');
+                return;
+            }
+            
+            await trackShipment(trackingNumber, carrier);
+        });
+
+        // Track shipment
+        async function trackShipment(trackingNumber, carrier) {
+            // Show loading
+            document.getElementById('loadingSection').style.display = 'block';
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // For demo, show mock data
+                const shipmentData = generateMockShipmentData(trackingNumber, carrier);
+                
+                // Display results
+                displayShipmentData(shipmentData);
+                
+                // Hide loading, show results
+                document.getElementById('loadingSection').style.display = 'none';
+                document.getElementById('resultsSection').style.display = 'block';
+                
+                // Scroll to results
+                document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                showError('Failed to track shipment. Please try again.');
+                document.getElementById('loadingSection').style.display = 'none';
+            }
+        }
+
+        // Generate mock shipment data
+        function generateMockShipmentData(trackingNumber, carrier) {
+            const carriers = {
+                'MAEU': 'Maersk',
+                'MSCU': 'MSC',
+                'CMDU': 'CMA CGM',
+                'HLCU': 'Hapag-Lloyd',
+                'ONEY': 'ONE',
+                'COSU': 'COSCO',
+                'EGLV': 'Evergreen'
+            };
+            
+            const routes = [
+                { origin: 'Shanghai, China', destination: 'Rotterdam, Netherlands', vessel: 'Maersk Elba' },
+                { origin: 'Singapore', destination: 'Los Angeles, USA', vessel: 'MSC Oscar' },
+                { origin: 'Hamburg, Germany', destination: 'New York, USA', vessel: 'CMA CGM Marco Polo' }
+            ];
+            
+            const route = routes[Math.floor(Math.random() * routes.length)];
+            const departureDate = new Date(Date.now() - 15 * 24 * 60 * 60 * 1000);
+            const eta = new Date(Date.now() + 20 * 24 * 60 * 60 * 1000);
+            
+            return {
+                containerNumber: trackingNumber,
+                blNumber: 'BL' + Math.random().toString().substr(2, 9),
+                carrier: carrier || 'MAEU',
+                carrierName: carriers[carrier] || carriers['MAEU'],
+                origin: route.origin,
+                destination: route.destination,
+                vessel: route.vessel,
+                voyage: 'V123W',
+                status: 'in-transit',
+                departureDate,
+                eta,
+                timeline: generateTimeline(departureDate, eta),
+                cargo: {
+                    description: 'Electronics',
+                    weight: '24,500 kg',
+                    volume: '58 CBM',
+                    containerType: '40\' HC'
+                },
+                risk: {
+                    score: 2.5,
+                    level: 'Low',
+                    portCongestion: 'Moderate',
+                    weatherImpact: 'None'
+                }
+            };
+        }
+
+        // Generate timeline events
+        function generateTimeline(departure, eta) {
+            const now = new Date();
+            const events = [
+                {
+                    title: 'Container Received',
+                    description: 'Container received at origin terminal',
+                    timestamp: new Date(departure.getTime() - 2 * 24 * 60 * 60 * 1000),
+                    status: 'completed'
+                },
+                {
+                    title: 'Loaded on Vessel',
+                    description: 'Container loaded onto vessel',
+                    timestamp: departure,
+                    status: 'completed'
+                },
+                {
+                    title: 'Vessel Departed',
+                    description: 'Vessel departed from origin port',
+                    timestamp: new Date(departure.getTime() + 6 * 60 * 60 * 1000),
+                    status: 'completed'
+                },
+                {
+                    title: 'In Transit',
+                    description: 'Currently sailing - Pacific Ocean',
+                    timestamp: now,
+                    status: 'current'
+                },
+                {
+                    title: 'Expected Arrival',
+                    description: 'Vessel arrival at destination port',
+                    timestamp: eta,
+                    status: 'pending'
+                },
+                {
+                    title: 'Container Discharge',
+                    description: 'Container to be discharged from vessel',
+                    timestamp: new Date(eta.getTime() + 12 * 60 * 60 * 1000),
+                    status: 'pending'
+                }
+            ];
+            
+            return events;
+        }
+
+        // Display shipment data
+        function displayShipmentData(data) {
+            // Update header info
+            document.getElementById('containerNumber').textContent = data.containerNumber;
+            document.getElementById('blNumber').textContent = data.blNumber;
+            document.getElementById('carrierName').textContent = data.carrierName;
+            document.getElementById('vesselName').textContent = data.vessel;
+            
+            // Update status
+            const statusBadge = document.getElementById('statusBadge');
+            statusBadge.textContent = data.status.replace('-', ' ').toUpperCase();
+            statusBadge.className = `status-badge status-${data.status}`;
+            
+            // Update route
+            document.getElementById('originPort').textContent = data.origin;
+            document.getElementById('destinationPort').textContent = data.destination;
+            document.getElementById('departureDate').textContent = 'Departed: ' + data.departureDate.toLocaleDateString();
+            document.getElementById('arrivalDate').textContent = 'ETA: ' + data.eta.toLocaleDateString();
+            
+            // Update timeline
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = data.timeline.map(event => `
+                <div class="timeline-item ${event.status}">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">${event.title}</div>
+                        <div class="timeline-desc">${event.description}</div>
+                        <div class="timeline-time">${event.timestamp.toLocaleString()}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Update cargo details
+            document.getElementById('cargoDesc').textContent = data.cargo.description;
+            document.getElementById('cargoWeight').textContent = data.cargo.weight;
+            document.getElementById('cargoVolume').textContent = data.cargo.volume;
+            document.getElementById('containerType').textContent = data.cargo.containerType;
+            
+            // Update risk analysis
+            const riskScore = document.getElementById('riskScore');
+            riskScore.textContent = `${data.risk.level} (${data.risk.score}%)`;
+            riskScore.style.color = data.risk.score < 5 ? '#10b981' : data.risk.score < 10 ? '#f59e0b' : '#ef4444';
+            document.getElementById('portCongestion').textContent = data.risk.portCongestion;
+            document.getElementById('weatherImpact').textContent = data.risk.weatherImpact;
+            document.getElementById('lastUpdated').textContent = '2 hours ago';
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+        }
+
+        // Action handlers
+        function bulkTrack() {
+            alert('Bulk tracking feature coming soon!');
+        }
+
+        function downloadReport() {
+            alert('Generating shipment report...');
+        }
+
+        function subscribeToUpdates() {
+            alert('Email notifications enabled for this shipment');
+        }
+
+        function viewDocuments() {
+            alert('Document viewer coming soon!');
+        }
+    </script>
+</body>
+</html>

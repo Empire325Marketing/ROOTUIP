@@ -1,0 +1,37 @@
+ROOTUIP DEPLOYMENT CHECKLIST
+============================
+
+[ ] Server Access
+    [ ] Check Contabo control panel
+    [ ] Verify server is running
+    [ ] Check firewall settings
+    [ ] Try VNC/Console access
+    [ ] Check for rescue mode
+
+[ ] File Upload Methods
+    [ ] Web-based file manager
+    [ ] FTP (port 21)
+    [ ] SFTP (port 22)
+    [ ] HTTP POST to upload endpoint
+    [ ] Control panel file upload
+
+[ ] Deployment Steps
+    [ ] Upload rootuip-complete-deploy.tar.gz
+    [ ] Upload nginx-api-fix.conf
+    [ ] Upload fix-on-server.sh
+    [ ] Extract tar file to web root
+    [ ] Configure nginx
+    [ ] Restart nginx service
+    [ ] Test deployment
+
+[ ] Troubleshooting
+    [ ] Check server logs
+    [ ] Verify file permissions
+    [ ] Check nginx configuration
+    [ ] Test API endpoints
+    [ ] Verify PWA functionality
+
+[ ] Alternative Options
+    [ ] Contact Contabo support
+    [ ] Use different server/provider
+    [ ] Deploy to cloud service

@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud Infrastructure | UIP Enterprise Platform</title>
+<style media="print" onload="this.media='all'">*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0f172a;color:#e2e8f0}.sidebar{display:none}@media(min-width:768px){.sidebar{display:block}}</style>
+<meta name="description" content="Enterprise-grade cloud infrastructure management for UIP with multi-region deployment, auto-scaling, and 99.99% uptime SLA.">
+<link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+<style media="print" onload="this.media='all'">
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+body {
+font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+background: #0f172a;
+color: #e2e8f0;
+overflow-x: hidden;
+}
+.infrastructure-container {
+display: flex;
+min-height: 100vh;
+}
+/* Sidebar */
+.sidebar {
+width: 260px;
+background: #1e293b;
+padding: 20px 0;
+position: fixed;
+height: 100vh;
+overflow-y: auto;
+border-right: 1px solid #334155;
+}
+.logo {
+padding: 0 20px 30px;
+border-bottom: 1px solid #334155;
+margin-bottom: 20px;
+}
+.logo h2 {
+font-size: 1.5rem;
+font-weight: 700;
+color: #38bdf8;
+display: flex;
+align-items: center;
+gap: 10px;
+}
+.nav-section {
+margin-bottom: 30px;
+padding: 0 20px;
+}
+.nav-title {
+font-size: 0.8rem;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+color: #64748b;
+margin-bottom: 10px;
+}
+.nav-item {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 10px 15px;
+margin: 5px -15px;
+border-radius: 8px;
+text-decoration: none;
+color: #cbd5e1;
+transition: all 0.3s ease;
+}
+.nav-item:hover, .nav-item.active {
+background: rgba(56, 189, 248, 0.1);
+color: #38bdf8;
+}
+/* Main Content */
+.main-content {
+flex: 1;
+margin-left: 260px;
+padding: 20px;
+}
+.header {
+background: #1e293b;
+padding: 25px 30px;
+border-radius: 12px;
+border: 1px solid #334155;
+margin-bottom: 30px;
+}
+.header-top {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.page-title {
+font-size: 1.8rem;
+font-weight: 700;
+color: #f1f5f9;
+}
+.status-indicator {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 8px 16px;
+background: rgba(34, 197, 94, 0.1);
+border: 1px solid #10b981;
+border-radius: 20px;
+color: #10b981;
+font-weight: 600;
+font-size: 0.9rem;
+}
+.status-dot {
+width: 8px;
+height: 8px;
+background: #10b981;
+border-radius: 50%;
+animation: pulse 2s infinite;
+}
+@keyframes pulse {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.5; }
+}
+/* Global Infrastructure Map */
+.infrastructure-map {
+background: #1e293b;
+padding: 30px;
+border-radius: 12px;
+border: 1px solid #334155;
+margin-bottom: 30px;
+position: relative;
+overflow: hidden;
+}
+.map-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 25px;
+}
+.map-title {
+font-size: 1.4rem;
+font-weight: 600;
+color: #f1f5f9;
+}
+.region-selector {
+display: flex;
+gap: 10px;
+}
+.region-btn {
+padding: 8px 16px;
+background: #334155;
+border: 1px solid #475569;
+border-radius: 6px;
+color: #cbd5e1;
+font-size: 0.9rem;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+.region-btn:hover, .region-btn.active {
+background: #38bdf8;
+border-color: #38bdf8;
+color: #0f172a;
+}
+.world-map {
+height: 400px;
+background: #0f172a;
+border-radius: 8px;
+position: relative;
+background-image: radial-gradient(circle at 20% 50%, #1e293b 0%, transparent 50%),
+radial-gradient(circle at 80% 30%, #1e293b 0%, transparent 50%),
+radial-gradient(circle at 60% 70%, #1e293b 0%, transparent 50%);
+}
+.region-marker {
+position: absolute;
+width: 40px;
+height: 40px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+font-size: 0.8rem;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+.region-marker.primary {
+background: #38bdf8;
+color: #0f172a;
+box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.3);
+}
+.region-marker.secondary {
+background: #10b981;
+color: white;
+box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.3);
+}
+.region-marker:hover {
+transform: scale(1.2);
+}
+/* Region Stats */
+.region-stats {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 20px;
+margin-bottom: 30px;
+}
+.region-card {
+background: #1e293b;
+padding: 25px;
+border-radius: 12px;
+border: 1px solid #334155;
+position: relative;
+overflow: hidden;
+}
+.region-card::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+width: 4px;
+height: 100%;
+background: #38bdf8;
+}
+.region-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+}
+.region-name {
+font-size: 1.2rem;
+font-weight: 600;
+color: #f1f5f9;
+}
+.region-status {
+padding: 4px 10px;
+border-radius: 12px;
+font-size: 0.75rem;
+font-weight: 600;
+text-transform: uppercase;
+}
+.status-active {
+background: rgba(34, 197, 94, 0.1);
+color: #10b981;
+}
+.status-standby {
+background: rgba(251, 191, 36, 0.1);
+color: #fbbf24;
+}
+.region-metrics {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 15px;
+}
+.metric-item {
+padding: 10px;
+background: #0f172a;
+border-radius: 8px;
+}
+.metric-label {
+font-size: 0.8rem;
+color: #64748b;
+margin-bottom: 5px;
+}
+.metric-value {
+font-size: 1.3rem;
+font-weight: 700;
+color: #f1f5f9;
+}
+/* Auto-scaling Dashboard */
+.scaling-section {
+background: #1e293b;
+padding: 30px;
+border-radius: 12px;
+border: 1px solid #334155;
+margin-bottom: 30px;
+}
+.scaling-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 20px;
+}
+.scaling-chart {
+height: 200px;
+background: #0f172a;
+border-radius: 8px;
+display: flex;
+align-items: flex-end;
+padding: 20px;
+gap: 4px;
+}
+.chart-bar {
+flex: 1;
+background: #38bdf8;
+border-radius: 4px 4px 0 0;
+min-height: 20px;
+transition: height 0.3s ease;
+}
+.scaling-controls {
+display: flex;
+gap: 10px;
+margin-top: 20px;
+}
+.control-btn {
+flex: 1;
+padding: 10px;
+background: #334155;
+border: 1px solid #475569;
+border-radius: 6px;
+color: #cbd5e1;
+cursor: pointer;
+transition: all 0.3s ease;
+text-align: center;
+}
+.control-btn:hover {
+background: #475569;
+}
+/* Load Balancer Status */
+.load-balancer-section {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+gap: 20px;
+margin-bottom: 30px;
+}
+.lb-card {
+background: #1e293b;
+padding: 25px;
+border-radius: 12px;
+border: 1px solid #334155;
+}
+.lb-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+}
+.lb-title {
+font-weight: 600;
+color: #f1f5f9;
+}
+.lb-health {
+padding: 4px 10px;
+border-radius: 12px;
+font-size: 0.75rem;
+font-weight: 600;
+background: rgba(34, 197, 94, 0.1);
+color: #10b981;
+}
+.server-list {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+.server-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 10px;
+background: #0f172a;
+border-radius: 6px;
+}
+.server-info {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+.server-icon {
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: #10b981;
+}
+.server-load {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+.load-bar {
+width: 60px;
+height: 6px;
+background: #334155;
+border-radius: 3px;
+overflow: hidden;
+}
+.load-fill {
+height: 100%;
+background: #38bdf8;
+transition: width 0.3s ease;
+}
+/* CDN Performance */
+.cdn-section {
+background: #1e293b;
+padding: 30px;
+border-radius: 12px;
+border: 1px solid #334155;
+margin-bottom: 30px;
+}
+.cdn-stats {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 20px;
+margin-bottom: 25px;
+}
+.cdn-stat {
+text-align: center;
+padding: 20px;
+background: #0f172a;
+border-radius: 8px;
+}
+.cdn-value {
+font-size: 2rem;
+font-weight: 700;
+color: #38bdf8;
+margin-bottom: 5px;
+}
+.cdn-label {
+color: #64748b;
+font-size: 0.9rem;
+}
+/* Disaster Recovery */
+.dr-section {
+background: #1e293b;
+padding: 30px;
+border-radius: 12px;
+border: 1px solid #334155;
+}
+.dr-status {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 20px;
+}
+.dr-item {
+padding: 20px;
+background: #0f172a;
+border-radius: 8px;
+border: 1px solid #334155;
+}
+.dr-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 15px;
+}
+.dr-title {
+font-weight: 600;
+color: #f1f5f9;
+}
+.dr-last-backup {
+font-size: 0.85rem;
+color: #64748b;
+}
+.dr-progress {
+margin-bottom: 10px;
+}
+.progress-bar {
+width: 100%;
+height: 8px;
+background: #334155;
+border-radius: 4px;
+overflow: hidden;
+}
+.progress-fill {
+height: 100%;
+background: linear-gradient(90deg, #38bdf8, #3b82f6);
+transition: width 0.3s ease;
+}
+.dr-actions {
+display: flex;
+gap: 10px;
+margin-top: 15px;
+}
+.action-btn {
+padding: 8px 16px;
+background: #334155;
+border: 1px solid #475569;
+border-radius: 6px;
+color: #cbd5e1;
+font-size: 0.85rem;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+.action-btn:hover {
+background: #475569;
+}
+.action-btn.primary {
+background: #38bdf8;
+border-color: #38bdf8;
+color: #0f172a;
+}
+.action-btn.primary:hover {
+background: #0284c7;
+border-color: #0284c7;
+}
+@media (max-width: 768px) {
+.sidebar {
+transform: translateX(-100%);
+}
+.main-content {
+margin-left: 0;
+}
+.region-stats {
+grid-template-columns: 1fr;
+}
+.load-balancer-section {
+grid-template-columns: 1fr;
+}
+}
+</style>
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="infrastructure-container">
+<!-- Sidebar -->
+<nav class="sidebar">
+<div class="logo">
+<h2>🌐 UIP Infrastructure</h2>
+</div>
+<div class="nav-section">
+<div class="nav-title">Infrastructure</div>
+<a href="/infrastructure/cloud/index.html" class="nav-item active">
+<span>☁️</span> Cloud Architecture
+</a>
+<a href="/infrastructure/security/index.html" class="nav-item">
+<span>🔐</span> Security Center
+</a>
+<a href="/infrastructure/data/index.html" class="nav-item">
+<span>💾</span> Data Management
+</a>
+<a href="/infrastructure/integration/index.html" class="nav-item">
+<span>🔗</span> Integration Hub
+</a>
+<a href="/infrastructure/monitoring/index.html" class="nav-item">
+<span>📊</span> Monitoring
+</a>
+</div>
+<div class="nav-section">
+<div class="nav-title">Operations</div>
+<a href="#" class="nav-item">
+<span>🚨</span> Incident Management
+</a>
+<a href="#" class="nav-item">
+<span>📈</span> Performance
+</a>
+<a href="#" class="nav-item">
+<span>💰</span> Cost Optimization
+</a>
+</div>
+<div class="nav-section">
+<div class="nav-title">Compliance</div>
+<a href="#" class="nav-item">
+<span>✅</span> SOC 2
+</a>
+<a href="#" class="nav-item">
+<span>🛡️</span> GDPR
+</a>
+<a href="#" class="nav-item">
+<span>📋</span> Audit Logs
+</a>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="main-content">
+<!-- Header -->
+<div class="header">
+<div class="header-top">
+<h1 class="page-title">Cloud Infrastructure</h1>
+<div class="status-indicator">
+<div class="status-dot"></div>
+<span>All Systems Operational - 99.99% Uptime</span>
+</div>
+</div>
+</div>
+<!-- Global Infrastructure Map -->
+<div class="infrastructure-map">
+<div class="map-header">
+<h2 class="map-title">Global Infrastructure</h2>
+<div class="region-selector">
+<button class="region-btn active" onclick="selectRegion('all')">All Regions</button>
+<button class="region-btn" onclick="selectRegion('americas')">Americas</button>
+<button class="region-btn" onclick="selectRegion('europe')">Europe</button>
+<button class="region-btn" onclick="selectRegion('asia')">Asia Pacific</button>
+</div>
+</div>
+<div class="world-map" id="worldMap">
+<!-- US East -->
+<div class="region-marker primary" style="left: 25%; top: 40%;" onclick="showRegionDetails('us-east')">
+USE1
+</div>
+<!-- US West -->
+<div class="region-marker secondary" style="left: 15%; top: 35%;" onclick="showRegionDetails('us-west')">
+USW2
+</div>
+<!-- Europe -->
+<div class="region-marker primary" style="left: 48%; top: 30%;" onclick="showRegionDetails('eu-west')">
+EU1
+</div>
+<!-- Asia -->
+<div class="region-marker secondary" style="left: 75%; top: 45%;" onclick="showRegionDetails('ap-south')">
+APS1
+</div>
+</div>
+</div>
+<!-- Region Stats -->
+<div class="region-stats">
+<div class="region-card">
+<div class="region-header">
+<h3 class="region-name">US East (Primary)</h3>
+<span class="region-status status-active">Active</span>
+</div>
+<div class="region-metrics">
+<div class="metric-item">
+<div class="metric-label">Availability</div>
+<div class="metric-value">99.99%</div>
+</div>
+<div class="metric-item">
+<div class="metric-label">Response Time</div>
+<div class="metric-value">12ms</div>
+</div>
+<div class="metric-item">
+<div class="metric-label">Active Instances</div>
+<div class="metric-value">247</div>
+</div>
+<div class="metric-item">
+<div class="metric-label">Traffic</div>
+<div class="metric-value">2.4TB/h</div>
+</div>
+</div>
+</div>
+<div class="region-card">
+<div class="region-header">
+<h3 class="region-name">Europe West</h3>
+<span class="region-status status-active">Active</span>
+</div>
+<div class="region-metrics">
+<div class="metric-item">
+<div class="metric-label">Availability</div>
+<div class="metric-value">99.98%</div>
+</div>
+<div class="metric-item">
+<div class="metric-label">Response Time</div>
+<div class="metric-value">18ms</div>
+</div>
+<div class="metric-item">
+<div class="metric-label">Active Instances</div>
+<div class="metric-value">189</div>
+</div>
+<div class="metric-item">
+<div class="metric-label">Traffic</div>
+<div class="metric-value">1.8TB/h</div>
+</div>
+</div>
+</div>
+<div class="region-card">
+<div class="region-header">
+<h3 class="region-name">Asia Pacific</h3>
+<span class="region-status status-standby">Standby</span>
+</div>
+<div class="region-metrics">
+<div class="metric-item">
+<div class="metric-label">Availability</div>
+<div class="metric-value">99.95%</div>
+</div>
+<div class="metric-item">
+<div class="metric-label">Response Time</div>
+<div class="metric-value">32ms</div>
+</div>
+<div class="metric-item">
+<div class="metric-label">Active Instances</div>
+<div class="metric-value">124</div>
+</div>
+<div class="metric-item">
+<div class="metric-label">Traffic</div>
+<div class="metric-value">980GB/h</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Auto-scaling Dashboard -->
+<div class="scaling-section">
+<div class="map-header">
+<h2 class="map-title">Auto-Scaling Status</h2>
+<span style="color: #64748b; font-size: 0.9rem;">Real-time instance scaling based on demand</span>
+</div>
+<div class="scaling-grid">
+<div>
+<h4 style="color: #cbd5e1; margin-bottom: 10px;">Web Tier Scaling</h4>
+<div class="scaling-chart" id="webScaling">
+<div class="chart-bar" style="height: 60%;"></div>
+<div class="chart-bar" style="height: 75%;"></div>
+<div class="chart-bar" style="height: 85%;"></div>
+<div class="chart-bar" style="height: 70%;"></div>
+<div class="chart-bar" style="height: 65%;"></div>
+<div class="chart-bar" style="height: 80%;"></div>
+<div class="chart-bar" style="height: 90%;"></div>
+<div class="chart-bar" style="height: 85%;"></div>
+</div>
+<div class="scaling-controls">
+<div class="control-btn">Min: 10</div>
+<div class="control-btn">Current: 85</div>
+<div class="control-btn">Max: 200</div>
+</div>
+</div>
+<div>
+<h4 style="color: #cbd5e1; margin-bottom: 10px;">API Tier Scaling</h4>
+<div class="scaling-chart" id="apiScaling">
+<div class="chart-bar" style="height: 40%;"></div>
+<div class="chart-bar" style="height: 45%;"></div>
+<div class="chart-bar" style="height: 55%;"></div>
+<div class="chart-bar" style="height: 65%;"></div>
+<div class="chart-bar" style="height: 70%;"></div>
+<div class="chart-bar" style="height: 60%;"></div>
+<div class="chart-bar" style="height: 55%;"></div>
+<div class="chart-bar" style="height: 50%;"></div>
+</div>
+<div class="scaling-controls">
+<div class="control-btn">Min: 20</div>
+<div class="control-btn">Current: 124</div>
+<div class="control-btn">Max: 500</div>
+</div>
+</div>
+<div>
+<h4 style="color: #cbd5e1; margin-bottom: 10px;">Worker Tier Scaling</h4>
+<div class="scaling-chart" id="workerScaling">
+<div class="chart-bar" style="height: 30%;"></div>
+<div class="chart-bar" style="height: 35%;"></div>
+<div class="chart-bar" style="height: 40%;"></div>
+<div class="chart-bar" style="height: 45%;"></div>
+<div class="chart-bar" style="height: 50%;"></div>
+<div class="chart-bar" style="height: 45%;"></div>
+<div class="chart-bar" style="height: 40%;"></div>
+<div class="chart-bar" style="height: 35%;"></div>
+</div>
+<div class="scaling-controls">
+<div class="control-btn">Min: 5</div>
+<div class="control-btn">Current: 38</div>
+<div class="control-btn">Max: 100</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Load Balancer Status -->
+<div class="load-balancer-section">
+<div class="lb-card">
+<div class="lb-header">
+<h3 class="lb-title">Application Load Balancer - US East</h3>
+<span class="lb-health">Healthy</span>
+</div>
+<div class="server-list">
+<div class="server-item">
+<div class="server-info">
+<div class="server-icon"></div>
+<span>web-use1-001</span>
+</div>
+<div class="server-load">
+<div class="load-bar">
+<div class="load-fill" style="width: 65%;"></div>
+</div>
+<span style="font-size: 0.85rem; color: #64748b;">65%</span>
+</div>
+</div>
+<div class="server-item">
+<div class="server-info">
+<div class="server-icon"></div>
+<span>web-use1-002</span>
+</div>
+<div class="server-load">
+<div class="load-bar">
+<div class="load-fill" style="width: 72%;"></div>
+</div>
+<span style="font-size: 0.85rem; color: #64748b;">72%</span>
+</div>
+</div>
+<div class="server-item">
+<div class="server-info">
+<div class="server-icon"></div>
+<span>web-use1-003</span>
+</div>
+<div class="server-load">
+<div class="load-bar">
+<div class="load-fill" style="width: 58%;"></div>
+</div>
+<span style="font-size: 0.85rem; color: #64748b;">58%</span>
+</div>
+</div>
+</div>
+</div>
+<div class="lb-card">
+<div class="lb-header">
+<h3 class="lb-title">Network Load Balancer - Europe</h3>
+<span class="lb-health">Healthy</span>
+</div>
+<div class="server-list">
+<div class="server-item">
+<div class="server-info">
+<div class="server-icon"></div>
+<span>api-eu1-001</span>
+</div>
+<div class="server-load">
+<div class="load-bar">
+<div class="load-fill" style="width: 45%;"></div>
+</div>
+<span style="font-size: 0.85rem; color: #64748b;">45%</span>
+</div>
+</div>
+<div class="server-item">
+<div class="server-info">
+<div class="server-icon"></div>
+<span>api-eu1-002</span>
+</div>
+<div class="server-load">
+<div class="load-bar">
+<div class="load-fill" style="width: 52%;"></div>
+</div>
+<span style="font-size: 0.85rem; color: #64748b;">52%</span>
+</div>
+</div>
+<div class="server-item">
+<div class="server-info">
+<div class="server-icon"></div>
+<span>api-eu1-003</span>
+</div>
+<div class="server-load">
+<div class="load-bar">
+<div class="load-fill" style="width: 48%;"></div>
+</div>
+<span style="font-size: 0.85rem; color: #64748b;">48%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- CDN Performance -->
+<div class="cdn-section">
+<div class="map-header">
+<h2 class="map-title">CDN Performance</h2>
+<span style="color: #64748b; font-size: 0.9rem;">Global content delivery network statistics</span>
+</div>
+<div class="cdn-stats">
+<div class="cdn-stat">
+<div class="cdn-value">147</div>
+<div class="cdn-label">Edge Locations</div>
+</div>
+<div class="cdn-stat">
+<div class="cdn-value">98.7%</div>
+<div class="cdn-label">Cache Hit Ratio</div>
+</div>
+<div class="cdn-stat">
+<div class="cdn-value">8.2ms</div>
+<div class="cdn-label">Avg Latency</div>
+</div>
+<div class="cdn-stat">
+<div class="cdn-value">342TB</div>
+<div class="cdn-label">Daily Transfer</div>
+</div>
+<div class="cdn-stat">
+<div class="cdn-value">$2,847</div>
+<div class="cdn-label">Daily Savings</div>
+</div>
+</div>
+</div>
+<!-- Disaster Recovery -->
+<div class="dr-section">
+<div class="map-header">
+<h2 class="map-title">Disaster Recovery & Backup</h2>
+<span style="color: #64748b; font-size: 0.9rem;">Automated backup and recovery systems</span>
+</div>
+<div class="dr-status">
+<div class="dr-item">
+<div class="dr-header">
+<h4 class="dr-title">Database Backups</h4>
+<span class="dr-last-backup">Last: 15 min ago</span>
+</div>
+<div class="dr-progress">
+<div class="progress-bar">
+<div class="progress-fill" style="width: 100%;"></div>
+</div>
+</div>
+<div style="display: flex; justify-content: space-between; margin-top: 10px;">
+<span style="font-size: 0.85rem; color: #64748b;">RPO: 15 min</span>
+<span style="font-size: 0.85rem; color: #64748b;">RTO: 30 min</span>
+</div>
+<div class="dr-actions">
+<button class="action-btn">Test Restore</button>
+<button class="action-btn primary">Manual Backup</button>
+</div>
+</div>
+<div class="dr-item">
+<div class="dr-header">
+<h4 class="dr-title">Application State</h4>
+<span class="dr-last-backup">Last: 5 min ago</span>
+</div>
+<div class="dr-progress">
+<div class="progress-bar">
+<div class="progress-fill" style="width: 100%;"></div>
+</div>
+</div>
+<div style="display: flex; justify-content: space-between; margin-top: 10px;">
+<span style="font-size: 0.85rem; color: #64748b;">RPO: 5 min</span>
+<span style="font-size: 0.85rem; color: #64748b;">RTO: 15 min</span>
+</div>
+<div class="dr-actions">
+<button class="action-btn">View Snapshots</button>
+<button class="action-btn primary">Create Snapshot</button>
+</div>
+</div>
+<div class="dr-item">
+<div class="dr-header">
+<h4 class="dr-title">File Storage</h4>
+<span class="dr-last-backup">Continuous</span>
+</div>
+<div class="dr-progress">
+<div class="progress-bar">
+<div class="progress-fill" style="width: 100%;"></div>
+</div>
+</div>
+<div style="display: flex; justify-content: space-between; margin-top: 10px;">
+<span style="font-size: 0.85rem; color: #64748b;">RPO: Real-time</span>
+<span style="font-size: 0.85rem; color: #64748b;">RTO: 5 min</span>
+</div>
+<div class="dr-actions">
+<button class="action-btn">Sync Status</button>
+<button class="action-btn primary">Force Sync</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script defer>
+// Infrastructure monitoring data
+let infrastructureData = {
+regions: {
+'us-east': {
+name: 'US East (Virginia)',
+status: 'active',
+availability: 99.99,
+instances: 247,
+traffic: '2.4TB/h'
+},
+'us-west': {
+name: 'US West (Oregon)',
+status: 'standby',
+availability: 99.98,
+instances: 124,
+traffic: '980GB/h'
+},
+'eu-west': {
+name: 'Europe (Frankfurt)',
+status: 'active',
+availability: 99.98,
+instances: 189,
+traffic: '1.8TB/h'
+},
+'ap-south': {
+name: 'Asia Pacific (Singapore)',
+status: 'standby',
+availability: 99.95,
+instances: 98,
+traffic: '650GB/h'
+}
+},
+scaling: {
+web: { min: 10, current: 85, max: 200 },
+api: { min: 20, current: 124, max: 500 },
+worker: { min: 5, current: 38, max: 100 }
+}
+};
+function selectRegion(region) {
+const buttons = document.querySelectorAll('.region-btn');
+buttons.forEach(btn => btn.classList.remove('active'));
+event.target.classList.add('active');
+console.log('Selected region:', region);
+trackEvent('Region Selected', { region: region });
+}
+function showRegionDetails(regionId) {
+const region = infrastructureData.regions[regionId];
+if (!region) return;
+trackEvent('Region Details Viewed', { 
+region: regionId,
+status: region.status,
+availability: region.availability
+});
+console.log('Region details:', region);
+// In production, this would show detailed region dashboard
+}
+function updateScalingCharts() {
+// Simulate real-time scaling updates
+const webBars = document.querySelectorAll('#webScaling .chart-bar');
+const apiBars = document.querySelectorAll('#apiScaling .chart-bar');
+const workerBars = document.querySelectorAll('#workerScaling .chart-bar');
+webBars.forEach(bar => {
+const height = 40 + Math.random() * 50;
+bar.style.height = height + '%';
+});
+apiBars.forEach(bar => {
+const height = 30 + Math.random() * 40;
+bar.style.height = height + '%';
+});
+workerBars.forEach(bar => {
+const height = 20 + Math.random() * 30;
+bar.style.height = height + '%';
+});
+}
+function simulateFailover(fromRegion, toRegion) {
+trackEvent('Failover Initiated', {
+from: fromRegion,
+to: toRegion,
+timestamp: new Date().toISOString()
+});
+console.log(`Initiating failover from ${fromRegion} to ${toRegion}`);
+// In production, this would trigger actual failover procedures
+}
+function testDisasterRecovery(component) {
+trackEvent('DR Test Started', { component: component });
+console.log('Starting disaster recovery test for:', component);
+// In production, this would initiate DR testing
+}
+function trackEvent(eventName, properties = {}) {
+console.log('Infrastructure Event:', eventName, properties);
+// Integration with monitoring systems
+if (typeof monitoring !== 'undefined') {
+monitoring.track(eventName, {
+...properties,
+timestamp: new Date().toISOString()
+});
+}
+}
+// Initialize real-time updates
+document.addEventListener('DOMContentLoaded', function() {
+// Update scaling charts every 5 seconds
+setInterval(updateScalingCharts, 5000);
+// Simulate load balancer updates
+setInterval(() => {
+const loadBars = document.querySelectorAll('.load-fill');
+loadBars.forEach(bar => {
+const currentLoad = parseInt(bar.style.width);
+const newLoad = Math.max(20, Math.min(90, currentLoad + (Math.random() - 0.5) * 20));
+bar.style.width = newLoad + '%';
+bar.parentElement.nextElementSibling.textContent = newLoad + '%';
+});
+}, 3000);
+trackEvent('Infrastructure Dashboard Loaded');
+});
+// Simulate infrastructure alerts
+function checkInfrastructureHealth() {
+Object.entries(infrastructureData.regions).forEach(([regionId, region]) => {
+if (region.availability < 99.9) {
+trackEvent('Availability Alert', {
+region: regionId,
+availability: region.availability,
+severity: 'warning'
+});
+}
+});
+}
+// Check health every minute
+setInterval(checkInfrastructureHealth, 60000);
+</script>
+</body>
+</html>

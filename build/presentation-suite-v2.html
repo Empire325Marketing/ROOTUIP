@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Presentation Suite | Transform Ocean Freight</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js?v=1750888019"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="brand/brand-colors.css?v=1750888019">
+    <link rel="stylesheet" href="brand/typography.css?v=1750888019">
+    <link rel="stylesheet" href="css/presentation-suite-v2.css?v=1750888019">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.js?v=1750888019delivr.net/npm/chart.js?v=1750888019@4.4.0/dist/chart.umd.min.js?v=1750888019"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js?v=1750888019"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js?v=1750888019/2.6.2/countUp.umd.min.js?v=1750888019"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js?v=1750888019/4.3.1/reveal.min.js?v=1750888019"></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+</head>
+<body>
+    <!-- Presentation Hub -->
+    <div class="presentation-hub" id="presentationHub">
+        <div class="hub-header">
+            <img src="brand/logo.svg" alt="UIP" class="hub-logo">
+            <h1>UIP Presentation Suite</h1>
+            <p>Professional presentations for every audience and situation</p>
+        </div>
+
+        <!-- Audience Selector -->
+        <div class="audience-selector">
+            <h2>Select Your Audience</h2>
+            <div class="audience-grid">
+                <!-- Investors -->
+                <div class="audience-card" data-audience="investors">
+                    <div class="card-icon">💼</div>
+                    <h3>Investors</h3>
+                    <p>Pitch deck for fundraising and investor meetings</p>
+                    <div class="card-features">
+                        <span>20 slides</span>
+                        <span>25-30 min</span>
+                        <span>Financial focus</span>
+                    </div>
+                </div>
+
+                <!-- Executives -->
+                <div class="audience-card" data-audience="executives">
+                    <div class="card-icon">👔</div>
+                    <h3>Executives</h3>
+                    <p>High-level overview for C-suite decision makers</p>
+                    <div class="card-features">
+                        <span>8 slides</span>
+                        <span>15 min</span>
+                        <span>ROI focused</span>
+                    </div>
+                </div>
+
+                <!-- Technical -->
+                <div class="audience-card" data-audience="technical">
+                    <div class="card-icon">⚙️</div>
+                    <h3>Technical Teams</h3>
+                    <p>Deep-dive for IT directors and technical evaluators</p>
+                    <div class="card-features">
+                        <span>15 slides</span>
+                        <span>30 min</span>
+                        <span>Architecture focus</span>
+                    </div>
+                </div>
+
+                <!-- Operations -->
+                <div class="audience-card" data-audience="operations">
+                    <div class="card-icon"><img src="/brand/logo-icon.svg" alt="UIP" style="height: 24px; width: 24px; vertical-align: middle;"></div>
+                    <h3>Operations</h3>
+                    <p>Live demo for logistics and operations teams</p>
+                    <div class="card-features">
+                        <span>12 slides</span>
+                        <span>45 min</span>
+                        <span>Demo heavy</span>
+                    </div>
+                </div>
+
+                <!-- Industry Specific -->
+                <div class="audience-card" data-audience="retail">
+                    <div class="card-icon">🏪</div>
+                    <h3>Retail</h3>
+                    <p>Customized for retail and e-commerce companies</p>
+                    <div class="card-features">
+                        <span>10 slides</span>
+                        <span>20 min</span>
+                        <span>Peak season focus</span>
+                    </div>
+                </div>
+
+                <!-- CFO Specific -->
+                <div class="audience-card" data-audience="cfo">
+                    <div class="card-icon">📊</div>
+                    <h3>CFO/Finance</h3>
+                    <p>Financial analysis and ROI deep-dive</p>
+                    <div class="card-features">
+                        <span>12 slides</span>
+                        <span>25 min</span>
+                        <span>Numbers focused</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customization Panel -->
+        <div class="customization-panel">
+            <h2>Customize Your Presentation</h2>
+            <div class="custom-grid">
+                <div class="custom-field">
+                    <label>Company Name</label>
+                    <input type="text" id="companyName" placeholder="Enter prospect company name">
+                </div>
+                <div class="custom-field">
+                    <label>Number of Vessels</label>
+                    <input type="number" id="vesselCount" value="50" min="1">
+                </div>
+                <div class="custom-field">
+                    <label>Industry</label>
+                    <select id="industryType">
+                        <option value="general">General</option>
+                        <option value="retail">Retail & E-commerce</option>
+                        <option value="manufacturing">Manufacturing</option>
+                        <option value="food">Food & Beverage</option>
+                        <option value="automotive">Automotive</option>
+                        <option value="chemicals">Chemicals</option>
+                    </select>
+                </div>
+                <div class="custom-field">
+                    <label>Annual Revenue</label>
+                    <input type="text" id="annualRevenue" placeholder="e.g., $5B">
+                </div>
+                <div class="custom-field">
+                    <label>Meeting Duration</label>
+                    <select id="meetingDuration">
+                        <option value="15">15 minutes</option>
+                        <option value="30">30 minutes</option>
+                        <option value="45">45 minutes</option>
+                        <option value="60">60 minutes</option>
+                    </select>
+                </div>
+                <div class="custom-field">
+                    <label>Presenter Name</label>
+                    <input type="text" id="presenterName" placeholder="Your name">
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="hub-actions">
+            <button class="btn btn-primary" id="startPresentation">Start Presentation</button>
+            <button class="btn btn-secondary" id="previewSlides">Preview Slides</button>
+            <button class="btn btn-outline" id="downloadPDF">Download PDF</button>
+        </div>
+    </div>
+
+    <!-- Presentation Viewer -->
+    <div class="presentation-viewer" id="presentationViewer" style="display: none;">
+        <!-- Navigation Bar -->
+        <nav class="presentation-nav">
+            <div class="nav-left">
+                <button class="nav-btn" id="backToHub">← Back to Hub</button>
+                <span class="presentation-title" id="currentTitle">UIP Presentation</span>
+            </div>
+            <div class="nav-center">
+                <div class="slide-progress">
+                    <span class="current-slide">1</span> / <span class="total-slides">20</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+            <div class="nav-right">
+                <button class="nav-btn" id="toggleNotes">Notes</button>
+                <button class="nav-btn" id="toggleFullscreen">Fullscreen</button>
+                <div class="timer" id="presentationTimer">00:00</div>
+            </div>
+        </nav>
+
+        <!-- Reveal.js?v=1750888019 Container -->
+        <div class="reveal" id="revealContainer">
+            <div class="slides" id="dynamicSlides">
+                <!-- Slides will be generated dynamically -->
+            </div>
+        </div>
+
+        <!-- Presenter Notes Panel -->
+        <div class="notes-panel" id="notesPanel">
+            <h3>Presenter Notes</h3>
+            <div class="notes-content" id="notesContent">
+                Select a slide to view presenter notes
+            </div>
+        </div>
+
+        <!-- Slide Navigator -->
+        <div class="slide-navigator" id="slideNavigator">
+            <div class="navigator-header">
+                <h3>Slide Navigator</h3>
+                <button class="close-navigator">×</button>
+            </div>
+            <div class="navigator-grid" id="navigatorGrid">
+                <!-- Thumbnails will be generated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/presentation-data.js?v=1750888019"></script>
+    <script src="js/presentation-suite-v2.js?v=1750888019"></script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
+</body>

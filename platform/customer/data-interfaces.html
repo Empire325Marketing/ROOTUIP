@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Interfaces - ROOTUIP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: #0f172a;
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .stat-trend {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-trend.up {
+            color: #10b981;
+        }
+
+        .stat-trend.down {
+            color: #ef4444;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: #64748b;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            color: #1e293b;
+        }
+
+        .tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Content Card */
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .card-description {
+            color: #64748b;
+            margin-top: 0.5rem;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            background: #f8fafc;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #3b82f6;
+            background: #dbeafe;
+        }
+
+        .upload-icon {
+            width: 64px;
+            height: 64px;
+            background: #e0e7ff;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+        }
+
+        .upload-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .upload-subtitle {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+
+        /* File List */
+        .file-list {
+            margin-top: 2rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            background: #e0e7ff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .file-meta {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .file-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-processing {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Export Options */
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .export-option {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .export-option:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+        }
+
+        .export-option.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .export-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .export-icon {
+            width: 48px;
+            height: 48px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .export-title {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .export-description {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .date-range {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3b82f6;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        /* API Configuration */
+        .api-config {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .api-endpoint {
+            font-family: monospace;
+            background: #1e293b;
+            color: #94a3b8;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .api-method {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        /* Schedule Table */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .schedule-table th {
+            background: #f8fafc;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .schedule-table td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .schedule-frequency {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #e0e7ff;
+            color: #4338ca;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Alert Box */
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .tabs {
+                overflow-x: scroll;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .export-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .date-range {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/customer/dashboard.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+                Back to Dashboard
+            </a>
+            <h1>Data Interfaces</h1>
+        </div>
+    </header>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Documents Processed</div>
+                <div class="stat-value">1,248</div>
+                <div class="stat-trend up">
+                    <svg width="16" height="16" fill="currentColor">
+                        <path d="M8 4l4 4H4l4-4z"/>
+                    </svg>
+                    +12% this month
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Active Integrations</div>
+                <div class="stat-value">5</div>
+                <div class="stat-trend">API, FTP, Email</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Data Exports</div>
+                <div class="stat-value">342</div>
+                <div class="stat-trend up">
+                    <svg width="16" height="16" fill="currentColor">
+                        <path d="M8 4l4 4H4l4-4z"/>
+                    </svg>
+                    +8% this month
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Processing Time</div>
+                <div class="stat-value">1.2s</div>
+                <div class="stat-trend">Average per document</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('import')">Import Data</button>
+            <button class="tab" onclick="showTab('export')">Export Data</button>
+            <button class="tab" onclick="showTab('api')">API Integration</button>
+            <button class="tab" onclick="showTab('schedules')">Scheduled Tasks</button>
+            <button class="tab" onclick="showTab('templates')">Templates</button>
+        </div>
+
+        <!-- Import Tab -->
+        <div id="import" class="tab-content active">
+            <div class="content-card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Import Documents</h2>
+                        <p class="card-description">Upload shipping documents for automatic processing</p>
+                    </div>
+                </div>
+
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-icon">📄</div>
+                    <div class="upload-title">Drop files here or click to upload</div>
+                    <div class="upload-subtitle">
+                        Supports PDF, Excel, CSV, XML • Max 50MB per file
+                    </div>
+                    <button class="btn btn-primary">Select Files</button>
+                    <input type="file" id="fileInput" multiple accept=".pdf,.xlsx,.xls,.csv,.xml" style="display: none;">
+                </div>
+
+                <div class="file-list" id="fileList" style="display: none;">
+                    <h3 style="margin-bottom: 1rem;">Processing Queue</h3>
+                    <!-- Dynamic file items will be added here -->
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Bulk Import</h2>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Import Type</label>
+                    <select class="form-select" id="importType">
+                        <option value="">Select import type</option>
+                        <option value="bookings">Booking Confirmations</option>
+                        <option value="bl">Bills of Lading</option>
+                        <option value="invoices">Commercial Invoices</option>
+                        <option value="packing">Packing Lists</option>
+                        <option value="tracking">Tracking Updates</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Mapping Template</label>
+                    <select class="form-select" id="mappingTemplate">
+                        <option value="">Use automatic detection</option>
+                        <option value="maersk">Maersk Format</option>
+                        <option value="msc">MSC Format</option>
+                        <option value="custom">Custom Template</option>
+                    </select>
+                </div>
+
+                <div class="alert alert-info">
+                    <svg width="20" height="20" fill="currentColor">
+                        <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 7h2v5H9V7zm0 6h2v2H9v-2z"/>
+                    </svg>
+                    <div>
+                        Our AI will automatically detect and extract data from your documents. 
+                        Manual mapping is only needed for custom formats.
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="startBulkImport()">
+                    Start Import
+                </button>
+            </div>
+        </div>
+
+        <!-- Export Tab -->
+        <div id="export" class="tab-content">
+            <div class="content-card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Export Data</h2>
+                        <p class="card-description">Download your shipment data in various formats</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Date Range</label>
+                    <div class="date-range">
+                        <input type="date" class="form-input" id="startDate" value="2025-06-01">
+                        <span style="color: #64748b;">to</span>
+                        <input type="date" class="form-input" id="endDate" value="2025-06-30">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Data to Export</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="export-shipments" checked>
+                        <label for="export-shipments">Shipment Details</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="export-tracking" checked>
+                        <label for="export-tracking">Tracking History</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="export-documents">
+                        <label for="export-documents">Document References</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="export-costs">
+                        <label for="export-costs">Cost Analysis</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="export-performance">
+                        <label for="export-performance">Performance Metrics</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Export Format</label>
+                    <div class="export-grid">
+                        <div class="export-option selected" onclick="selectExportFormat(this, 'excel')">
+                            <div class="export-header">
+                                <div class="export-icon">📊</div>
+                                <div>
+                                    <div class="export-title">Excel</div>
+                                    <div class="export-description">
+                                        Formatted spreadsheet with multiple sheets
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="export-option" onclick="selectExportFormat(this, 'csv')">
+                            <div class="export-header">
+                                <div class="export-icon">📄</div>
+                                <div>
+                                    <div class="export-title">CSV</div>
+                                    <div class="export-description">
+                                        Simple comma-separated values
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="export-option" onclick="selectExportFormat(this, 'pdf')">
+                            <div class="export-header">
+                                <div class="export-icon">📑</div>
+                                <div>
+                                    <div class="export-title">PDF Report</div>
+                                    <div class="export-description">
+                                        Formatted report with charts
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="export-option" onclick="selectExportFormat(this, 'json')">
+                            <div class="export-header">
+                                <div class="export-icon">{ }</div>
+                                <div>
+                                    <div class="export-title">JSON</div>
+                                    <div class="export-description">
+                                        Structured data for APIs
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="generateExport()">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v12m0 0l-4-4m4 4l4-4"/>
+                    </svg>
+                    Generate Export
+                </button>
+
+                <div class="progress-container" id="exportProgress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text">Preparing export...</div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Recent Exports</h2>
+                </div>
+
+                <div class="file-list">
+                    <div class="file-item">
+                        <div class="file-icon">📊</div>
+                        <div class="file-info">
+                            <div class="file-name">June_2025_Shipments.xlsx</div>
+                            <div class="file-meta">2.4 MB • Exported 2 hours ago</div>
+                        </div>
+                        <div class="file-status">
+                            <button class="btn btn-secondary btn-sm">Download</button>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-icon">📑</div>
+                        <div class="file-info">
+                            <div class="file-name">Monthly_Performance_Report.pdf</div>
+                            <div class="file-meta">1.8 MB • Exported yesterday</div>
+                        </div>
+                        <div class="file-status">
+                            <button class="btn btn-secondary btn-sm">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Tab -->
+        <div id="api" class="tab-content">
+            <div class="content-card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">API Integration</h2>
+                        <p class="card-description">Connect your systems to ROOTUIP via API</p>
+                    </div>
+                </div>
+
+                <div class="api-config">
+                    <h3 style="margin-bottom: 1rem;">Your API Credentials</h3>
+                    <div class="form-group">
+                        <label class="form-label">API Key</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="password" class="form-input" value="sk_live_4242424242424242" id="apiKey" readonly>
+                            <button class="btn btn-secondary" onclick="toggleApiKey()">Show</button>
+                            <button class="btn btn-secondary" onclick="copyApiKey()">Copy</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Webhook URL (Optional)</label>
+                        <input type="url" class="form-input" placeholder="https://your-system.com/webhook">
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 1rem;">Available Endpoints</h3>
+
+                <div class="api-endpoint">
+                    <div><span class="api-method">POST</span> /api/v1/shipments/import</div>
+                    <div style="color: #64748b; margin-top: 0.5rem;">Import shipment data</div>
+                </div>
+
+                <div class="api-endpoint">
+                    <div><span class="api-method">GET</span> /api/v1/shipments/export</div>
+                    <div style="color: #64748b; margin-top: 0.5rem;">Export shipment data with filters</div>
+                </div>
+
+                <div class="api-endpoint">
+                    <div><span class="api-method">POST</span> /api/v1/documents/upload</div>
+                    <div style="color: #64748b; margin-top: 0.5rem;">Upload documents for processing</div>
+                </div>
+
+                <div class="api-endpoint">
+                    <div><span class="api-method">GET</span> /api/v1/tracking/{containerNumber}</div>
+                    <div style="color: #64748b; margin-top: 0.5rem;">Get real-time tracking information</div>
+                </div>
+
+                <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                    <button class="btn btn-primary">View API Documentation</button>
+                    <button class="btn btn-secondary">Download Postman Collection</button>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Integration Status</h2>
+                </div>
+
+                <div class="alert alert-success">
+                    <svg width="20" height="20" fill="currentColor">
+                        <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm3.707 6.293l-4 4a1 1 0 01-1.414 0l-2-2a1 1 0 111.414-1.414L9 10.586l3.293-3.293a1 1 0 111.414 1.414z"/>
+                    </svg>
+                    <div>
+                        <strong>API is active and healthy</strong><br>
+                        Last request: 5 minutes ago • Response time: 124ms
+                    </div>
+                </div>
+
+                <h3 style="margin: 1.5rem 0 1rem;">Recent API Activity</h3>
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Method</th>
+                            <th>Status</th>
+                            <th>Response Time</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>/api/v1/shipments/import</td>
+                            <td>POST</td>
+                            <td><span class="status-badge status-completed">200 OK</span></td>
+                            <td>142ms</td>
+                            <td>5 minutes ago</td>
+                        </tr>
+                        <tr>
+                            <td>/api/v1/tracking/MAEU1234567</td>
+                            <td>GET</td>
+                            <td><span class="status-badge status-completed">200 OK</span></td>
+                            <td>89ms</td>
+                            <td>15 minutes ago</td>
+                        </tr>
+                        <tr>
+                            <td>/api/v1/documents/upload</td>
+                            <td>POST</td>
+                            <td><span class="status-badge status-completed">201 Created</span></td>
+                            <td>523ms</td>
+                            <td>1 hour ago</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Schedules Tab -->
+        <div id="schedules" class="tab-content">
+            <div class="content-card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Scheduled Tasks</h2>
+                        <p class="card-description">Automate your data imports and exports</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="createSchedule()">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Create Schedule
+                    </button>
+                </div>
+
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Task Name</th>
+                            <th>Type</th>
+                            <th>Frequency</th>
+                            <th>Next Run</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600;">Daily Shipment Export</div>
+                                <div style="font-size: 0.875rem; color: #64748b;">
+                                    Export all shipments to Excel
+                                </div>
+                            </td>
+                            <td>Export</td>
+                            <td><span class="schedule-frequency">Daily</span></td>
+                            <td>Tomorrow 6:00 AM</td>
+                            <td><span class="status-badge status-completed">Active</span></td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600;">Weekly Performance Report</div>
+                                <div style="font-size: 0.875rem; color: #64748b;">
+                                    Generate PDF report with analytics
+                                </div>
+                            </td>
+                            <td>Report</td>
+                            <td><span class="schedule-frequency">Weekly</span></td>
+                            <td>Monday 9:00 AM</td>
+                            <td><span class="status-badge status-completed">Active</span></td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="font-weight: 600;">Carrier Invoice Import</div>
+                                <div style="font-size: 0.875rem; color: #64748b;">
+                                    Import from FTP server
+                                </div>
+                            </td>
+                            <td>Import</td>
+                            <td><span class="schedule-frequency">Daily</span></td>
+                            <td>Today 11:00 PM</td>
+                            <td><span class="status-badge status-processing">Running</span></td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm">View Log</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Templates Tab -->
+        <div id="templates" class="tab-content">
+            <div class="content-card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Import/Export Templates</h2>
+                        <p class="card-description">Manage data mapping templates for different formats</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="createTemplate()">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Create Template
+                    </button>
+                </div>
+
+                <div style="display: grid; gap: 1rem;">
+                    <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                            <div>
+                                <h3 style="margin-bottom: 0.5rem;">Maersk Booking Confirmation</h3>
+                                <p style="color: #64748b; font-size: 0.875rem;">
+                                    Maps Maersk booking format to ROOTUIP fields
+                                </p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-secondary btn-sm">Edit</button>
+                                <button class="btn btn-secondary btn-sm">Test</button>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 2rem; font-size: 0.875rem; color: #64748b;">
+                            <span>Format: Excel</span>
+                            <span>Fields: 24 mapped</span>
+                            <span>Last used: 2 days ago</span>
+                        </div>
+                    </div>
+
+                    <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                            <div>
+                                <h3 style="margin-bottom: 0.5rem;">Monthly Export Template</h3>
+                                <p style="color: #64748b; font-size: 0.875rem;">
+                                    Standard monthly report format with KPIs
+                                </p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-secondary btn-sm">Edit</button>
+                                <button class="btn btn-secondary btn-sm">Preview</button>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 2rem; font-size: 0.875rem; color: #64748b;">
+                            <span>Format: Excel + PDF</span>
+                            <span>Sections: 8</span>
+                            <span>Last used: 5 days ago</span>
+                        </div>
+                    </div>
+
+                    <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                            <div>
+                                <h3 style="margin-bottom: 0.5rem;">Generic CSV Import</h3>
+                                <p style="color: #64748b; font-size: 0.875rem;">
+                                    Flexible template for CSV imports with custom mapping
+                                </p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-secondary btn-sm">Edit</button>
+                                <button class="btn btn-secondary btn-sm">Duplicate</button>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 2rem; font-size: 0.875rem; color: #64748b;">
+                            <span>Format: CSV</span>
+                            <span>Fields: Customizable</span>
+                            <span>Last used: 1 week ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // File upload handling
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            if (files.length === 0) return;
+            
+            fileList.style.display = 'block';
+            
+            Array.from(files).forEach(file => {
+                addFileToList(file);
+                // Simulate processing
+                setTimeout(() => processFile(file.name), Math.random() * 2000 + 1000);
+            });
+        }
+
+        function addFileToList(file) {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.id = `file-${file.name.replace(/\s/g, '-')}`;
+            
+            fileItem.innerHTML = `
+                <div class="file-icon">📄</div>
+                <div class="file-info">
+                    <div class="file-name">${file.name}</div>
+                    <div class="file-meta">${formatFileSize(file.size)} • Processing...</div>
+                </div>
+                <div class="file-status">
+                    <span class="status-badge status-processing">Processing</span>
+                </div>
+            `;
+            
+            fileList.appendChild(fileItem);
+        }
+
+        function processFile(fileName) {
+            const fileItem = document.getElementById(`file-${fileName.replace(/\s/g, '-')}`);
+            if (!fileItem) return;
+            
+            const statusBadge = fileItem.querySelector('.status-badge');
+            const fileMeta = fileItem.querySelector('.file-meta');
+            
+            // Simulate successful processing
+            statusBadge.className = 'status-badge status-completed';
+            statusBadge.textContent = 'Completed';
+            fileMeta.textContent = fileMeta.textContent.replace('Processing...', 'Processed successfully');
+            
+            // Add view button
+            const fileStatus = fileItem.querySelector('.file-status');
+            fileStatus.innerHTML += ' <button class="btn btn-secondary btn-sm" style="margin-left: 0.5rem;">View</button>';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Export format selection
+        function selectExportFormat(element, format) {
+            document.querySelectorAll('.export-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+
+        // Generate export
+        function generateExport() {
+            const progressContainer = document.getElementById('exportProgress');
+            const progressFill = progressContainer.querySelector('.progress-fill');
+            const progressText = progressContainer.querySelector('.progress-text');
+            
+            progressContainer.style.display = 'block';
+            let progress = 0;
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 20;
+                if (progress > 100) progress = 100;
+                
+                progressFill.style.width = progress + '%';
+                
+                if (progress < 30) {
+                    progressText.textContent = 'Gathering data...';
+                } else if (progress < 70) {
+                    progressText.textContent = 'Processing shipments...';
+                } else if (progress < 100) {
+                    progressText.textContent = 'Generating file...';
+                } else {
+                    progressText.textContent = 'Export complete!';
+                    clearInterval(interval);
+                    
+                    setTimeout(() => {
+                        alert('Your export is ready for download!');
+                        progressContainer.style.display = 'none';
+                        progressFill.style.width = '0%';
+                    }, 1000);
+                }
+            }, 300);
+        }
+
+        // API key functions
+        function toggleApiKey() {
+            const apiKeyInput = document.getElementById('apiKey');
+            const button = event.target;
+            
+            if (apiKeyInput.type === 'password') {
+                apiKeyInput.type = 'text';
+                button.textContent = 'Hide';
+            } else {
+                apiKeyInput.type = 'password';
+                button.textContent = 'Show';
+            }
+        }
+
+        function copyApiKey() {
+            const apiKeyInput = document.getElementById('apiKey');
+            apiKeyInput.select();
+            document.execCommand('copy');
+            alert('API key copied to clipboard!');
+        }
+
+        // Placeholder functions
+        function startBulkImport() {
+            alert('Bulk import started!');
+        }
+
+        function createSchedule() {
+            alert('Schedule creation dialog would open here');
+        }
+
+        function createTemplate() {
+            alert('Template creation dialog would open here');
+        }
+    </script>
+</body>
+</html>

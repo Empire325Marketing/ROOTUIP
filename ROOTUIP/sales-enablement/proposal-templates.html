@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Proposal Templates - Enterprise Sales Enablement</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .proposals-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 32px;
+            text-align: center;
+        }
+        
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        
+        .header-subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+        }
+        
+        .proposals-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .template-nav {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .nav-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1e40af;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-button {
+            background: #eff6ff;
+            border: 2px solid #3b82f6;
+            color: #1e40af;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-button:hover,
+        .nav-button.active {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .proposal-template {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 32px;
+        }
+        
+        .proposal-template.active {
+            display: block;
+        }
+        
+        .template-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .template-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+        
+        .template-description {
+            color: #64748b;
+            font-size: 1rem;
+        }
+        
+        .template-section {
+            margin-bottom: 32px;
+        }
+        
+        .section-title {
+            font-size: 1.375rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 16px;
+            border-left: 4px solid #3b82f6;
+            padding-left: 12px;
+        }
+        
+        .section-content {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 24px 0;
+        }
+        
+        .pricing-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .pricing-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+        }
+        
+        .pricing-card.featured {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            transform: scale(1.05);
+        }
+        
+        .pricing-tier {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+        
+        .pricing-amount {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .pricing-period {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 16px;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+        }
+        
+        .pricing-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-check {
+            color: #10b981;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        
+        .roi-calculator {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+        
+        .roi-title {
+            font-size: 1.375rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .roi-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .roi-input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .roi-input-group label {
+            font-weight: 500;
+            margin-bottom: 4px;
+            font-size: 0.875rem;
+        }
+        
+        .roi-input-group input {
+            padding: 8px 12px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .roi-input-group input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .roi-results {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .roi-metric {
+            display: inline-block;
+            margin: 0 16px;
+        }
+        
+        .roi-metric-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: block;
+        }
+        
+        .roi-metric-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        .timeline-container {
+            margin: 24px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .timeline-marker {
+            width: 32px;
+            height: 32px;
+            background: #3b82f6;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 16px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .timeline-description {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+        
+        .download-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        
+        .download-btn {
+            background: #3b82f6;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .download-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+        
+        .download-btn-secondary {
+            background: #64748b;
+        }
+        
+        .download-btn-secondary:hover {
+            background: #475569;
+        }
+        
+        .contract-terms {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .contract-terms h4 {
+            color: #92400e;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .contract-terms ul {
+            color: #92400e;
+            margin-left: 20px;
+        }
+        
+        .success-metrics {
+            background: #ecfdf5;
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+        
+        .success-metrics h4 {
+            color: #065f46;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .metric-item {
+            text-align: center;
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+        }
+        
+        .metric-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #065f46;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            color: #047857;
+        }
+        
+        @media (max-width: 768px) {
+            .proposals-container {
+                padding: 20px 10px;
+            }
+            
+            .header-title {
+                font-size: 2rem;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .roi-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="proposals-header">
+        <div class="header-title">UIP Proposal Templates</div>
+        <div class="header-subtitle">Professional Templates for $500K+ Enterprise Deals</div>
+    </div>
+
+    <div class="proposals-container">
+        <div class="template-nav">
+            <div class="nav-title">Choose Proposal Template</div>
+            <div class="nav-buttons">
+                <button class="nav-button active" onclick="showTemplate('msa')">Master Service Agreement</button>
+                <button class="nav-button" onclick="showTemplate('sow')">Statement of Work</button>
+                <button class="nav-button" onclick="showTemplate('pricing')">Pricing Proposal</button>
+                <button class="nav-button" onclick="showTemplate('implementation')">Implementation Plan</button>
+                <button class="nav-button" onclick="showTemplate('success')">Success Framework</button>
+            </div>
+        </div>
+
+        <!-- Master Service Agreement Template -->
+        <div id="msa" class="proposal-template active">
+            <div class="template-header">
+                <div class="template-title">Master Service Agreement Template</div>
+                <div class="template-description">Comprehensive legal framework for enterprise ocean freight automation services</div>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Executive Summary</div>
+                <div class="section-content">
+                    <p><strong>Agreement Overview:</strong> This Master Service Agreement establishes the legal framework for [CLIENT NAME] to implement UIP's ocean freight automation platform, targeting 94% reduction in demurrage and detention charges through AI-powered predictive analytics.</p>
+                    
+                    <p><strong>Business Objectives:</strong></p>
+                    <ul>
+                        <li>Eliminate $[ANNUAL_DD_COST] in annual D&D charges</li>
+                        <li>Reduce manual freight coordination by 85%</li>
+                        <li>Achieve 347% ROI within 12 months</li>
+                        <li>Integrate with existing ERP/TMS systems in 48 hours</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Scope of Services</div>
+                <div class="section-content">
+                    <p><strong>Core Platform Services:</strong></p>
+                    <ul>
+                        <li>Universal Carrier Integration (200+ carriers including Maersk, MSC, COSCO, CMA CGM)</li>
+                        <li>AI-Powered Predictive Analytics (14-day prediction window)</li>
+                        <li>Real-time Container Tracking and ETA Updates</li>
+                        <li>Automated Demurrage and Detention Monitoring</li>
+                        <li>Dynamic Logistics Optimization Engine</li>
+                        <li>Enterprise API and Webhook Infrastructure</li>
+                    </ul>
+
+                    <p><strong>Professional Services:</strong></p>
+                    <ul>
+                        <li>System Integration and Data Migration</li>
+                        <li>Custom API Development and Configuration</li>
+                        <li>User Training and Change Management</li>
+                        <li>24/7 Technical Support and Monitoring</li>
+                        <li>Quarterly Business Reviews and Optimization</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="contract-terms">
+                <h4>Key Contract Terms</h4>
+                <ul>
+                    <li><strong>Term:</strong> Initial 3-year agreement with auto-renewal</li>
+                    <li><strong>SLA:</strong> 99.9% uptime guarantee with service credits</li>
+                    <li><strong>Data Security:</strong> SOC2 Type II, ISO 27001 compliance</li>
+                    <li><strong>Liability:</strong> Limitation of liability to 12 months of fees</li>
+                    <li><strong>Termination:</strong> 90-day notice for convenience</li>
+                    <li><strong>IP Rights:</strong> Client retains all data and configuration rights</li>
+                </ul>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Performance Guarantees</div>
+                <div class="section-content">
+                    <p><strong>Guaranteed Outcomes:</strong></p>
+                    <ul>
+                        <li>Minimum 85% reduction in D&D charges within 6 months</li>
+                        <li>Platform availability of 99.9% measured monthly</li>
+                        <li>API response times under 200ms for 95% of requests</li>
+                        <li>Data accuracy of 99.5% for all carrier integrations</li>
+                        <li>Implementation completion within 48 hours</li>
+                    </ul>
+
+                    <p><strong>Remedies for Non-Performance:</strong></p>
+                    <ul>
+                        <li>Service credits for availability below 99.9%</li>
+                        <li>Fee reduction if D&D reduction targets not met</li>
+                        <li>Free additional implementation support if timeline exceeded</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="download-buttons">
+                <button class="download-btn" onclick="downloadTemplate('msa')">Download MSA Template</button>
+                <button class="download-btn download-btn-secondary" onclick="customizeTemplate('msa')">Customize for Client</button>
+            </div>
+        </div>
+
+        <!-- Statement of Work Template -->
+        <div id="sow" class="proposal-template">
+            <div class="template-header">
+                <div class="template-title">Statement of Work Template</div>
+                <div class="template-description">Detailed project scope and deliverables for UIP platform implementation</div>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Project Overview</div>
+                <div class="section-content">
+                    <p><strong>Project Name:</strong> [CLIENT NAME] Ocean Freight Automation Implementation</p>
+                    <p><strong>Project Duration:</strong> 4 weeks (Implementation) + Ongoing Operations</p>
+                    <p><strong>Project Value:</strong> $[TOTAL_CONTRACT_VALUE]</p>
+                    <p><strong>Expected ROI:</strong> 347% within 12 months</p>
+                </div>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Implementation Timeline</div>
+                <div class="timeline-container">
+                    <div class="timeline-item">
+                        <div class="timeline-marker">1</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Discovery & Planning (Week 1)</div>
+                            <div class="timeline-description">System assessment, data mapping, integration planning, and stakeholder alignment</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker">2</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Platform Configuration (Week 2)</div>
+                            <div class="timeline-description">Carrier integrations setup, API configuration, and custom rule engine deployment</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker">3</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Testing & Validation (Week 3)</div>
+                            <div class="timeline-description">End-to-end testing, data validation, performance optimization, and UAT</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker">4</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Go-Live & Training (Week 4)</div>
+                            <div class="timeline-description">Production deployment, user training, support documentation, and success metrics baseline</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Deliverables</div>
+                <div class="section-content">
+                    <p><strong>Technical Deliverables:</strong></p>
+                    <ul>
+                        <li>Fully configured UIP platform instance</li>
+                        <li>200+ carrier integrations activated</li>
+                        <li>Custom API endpoints and webhooks</li>
+                        <li>Real-time dashboard and reporting suite</li>
+                        <li>Mobile application access</li>
+                        <li>Data migration and historical import</li>
+                    </ul>
+
+                    <p><strong>Documentation Deliverables:</strong></p>
+                    <ul>
+                        <li>Technical integration guide</li>
+                        <li>User training materials and videos</li>
+                        <li>API documentation and samples</li>
+                        <li>System administration guide</li>
+                        <li>Troubleshooting and support procedures</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Client Responsibilities</div>
+                <div class="section-content">
+                    <ul>
+                        <li>Provide system access and credentials within 2 business days</li>
+                        <li>Assign dedicated project manager and technical contact</li>
+                        <li>Complete data export and sharing requirements</li>
+                        <li>Participate in scheduled training sessions</li>
+                        <li>Conduct user acceptance testing within agreed timeframes</li>
+                        <li>Provide feedback and approvals within 48 hours</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="download-buttons">
+                <button class="download-btn" onclick="downloadTemplate('sow')">Download SOW Template</button>
+                <button class="download-btn download-btn-secondary" onclick="customizeTemplate('sow')">Customize for Client</button>
+            </div>
+        </div>
+
+        <!-- Pricing Proposal Template -->
+        <div id="pricing" class="proposal-template">
+            <div class="template-header">
+                <div class="template-title">Pricing Proposal Template</div>
+                <div class="template-description">Comprehensive pricing framework for enterprise ocean freight automation</div>
+            </div>
+
+            <div class="roi-calculator">
+                <div class="roi-title">ROI Calculator - Custom for [CLIENT NAME]</div>
+                <div class="roi-inputs">
+                    <div class="roi-input-group">
+                        <label>Annual Freight Volume (TEU)</label>
+                        <input type="number" id="freight-volume" placeholder="10000" onchange="calculateROI()">
+                    </div>
+                    <div class="roi-input-group">
+                        <label>Current D&D Charges per TEU</label>
+                        <input type="number" id="dd-charges" placeholder="750" onchange="calculateROI()">
+                    </div>
+                    <div class="roi-input-group">
+                        <label>Manual Processing Hours/Month</label>
+                        <input type="number" id="manual-hours" placeholder="200" onchange="calculateROI()">
+                    </div>
+                    <div class="roi-input-group">
+                        <label>Average Hourly Labor Cost</label>
+                        <input type="number" id="labor-cost" placeholder="35" onchange="calculateROI()">
+                    </div>
+                </div>
+                <div class="roi-results">
+                    <div class="roi-metric">
+                        <span class="roi-metric-value" id="annual-savings">$7,050,000</span>
+                        <span class="roi-metric-label">Annual Savings</span>
+                    </div>
+                    <div class="roi-metric">
+                        <span class="roi-metric-value" id="monthly-roi">347%</span>
+                        <span class="roi-metric-label">12-Month ROI</span>
+                    </div>
+                    <div class="roi-metric">
+                        <span class="roi-metric-value" id="payback-period">3.5</span>
+                        <span class="roi-metric-label">Payback (Months)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Pricing Tiers</div>
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <div class="pricing-tier">Growth</div>
+                        <div class="pricing-amount">$15,000</div>
+                        <div class="pricing-period">per month</div>
+                        <ul class="pricing-features">
+                            <li><span class="feature-check">✓</span> Up to 5,000 TEU/month</li>
+                            <li><span class="feature-check">✓</span> 50+ carrier integrations</li>
+                            <li><span class="feature-check">✓</span> Basic analytics dashboard</li>
+                            <li><span class="feature-check">✓</span> Email support</li>
+                            <li><span class="feature-check">✓</span> Standard API access</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="pricing-card featured">
+                        <div class="pricing-tier">Enterprise</div>
+                        <div class="pricing-amount">$35,000</div>
+                        <div class="pricing-period">per month</div>
+                        <ul class="pricing-features">
+                            <li><span class="feature-check">✓</span> Up to 25,000 TEU/month</li>
+                            <li><span class="feature-check">✓</span> 200+ carrier integrations</li>
+                            <li><span class="feature-check">✓</span> Advanced analytics & AI</li>
+                            <li><span class="feature-check">✓</span> 24/7 phone support</li>
+                            <li><span class="feature-check">✓</span> Priority API access</li>
+                            <li><span class="feature-check">✓</span> Custom integrations</li>
+                            <li><span class="feature-check">✓</span> Dedicated CSM</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="pricing-card">
+                        <div class="pricing-tier">Global</div>
+                        <div class="pricing-amount">$75,000</div>
+                        <div class="pricing-period">per month</div>
+                        <ul class="pricing-features">
+                            <li><span class="feature-check">✓</span> Unlimited TEU volume</li>
+                            <li><span class="feature-check">✓</span> All carrier integrations</li>
+                            <li><span class="feature-check">✓</span> Real-time AI optimization</li>
+                            <li><span class="feature-check">✓</span> White-glove support</li>
+                            <li><span class="feature-check">✓</span> Unlimited API calls</li>
+                            <li><span class="feature-check">✓</span> Custom development</li>
+                            <li><span class="feature-check">✓</span> Executive QBRs</li>
+                            <li><span class="feature-check">✓</span> SLA guarantees</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Implementation Investment</div>
+                <div class="section-content">
+                    <p><strong>One-Time Setup Fees:</strong></p>
+                    <ul>
+                        <li>Platform Configuration: $25,000</li>
+                        <li>Data Migration: $15,000</li>
+                        <li>Custom Integrations: $35,000</li>
+                        <li>Training & Documentation: $10,000</li>
+                        <li>Go-Live Support: $5,000</li>
+                    </ul>
+                    <p><strong>Total Implementation Investment: $90,000</strong></p>
+
+                    <p><strong>Payment Terms:</strong></p>
+                    <ul>
+                        <li>50% due upon contract signing</li>
+                        <li>25% due at go-live</li>
+                        <li>25% due 30 days post go-live</li>
+                        <li>Monthly platform fees commence at go-live</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="download-buttons">
+                <button class="download-btn" onclick="downloadTemplate('pricing')">Download Pricing Template</button>
+                <button class="download-btn download-btn-secondary" onclick="customizeTemplate('pricing')">Customize for Client</button>
+            </div>
+        </div>
+
+        <!-- Implementation Plan Template -->
+        <div id="implementation" class="proposal-template">
+            <div class="template-header">
+                <div class="template-title">Implementation Plan Template</div>
+                <div class="template-description">Detailed 4-week implementation roadmap with 48-hour go-live guarantee</div>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Implementation Phases</div>
+                <div class="timeline-container">
+                    <div class="timeline-item">
+                        <div class="timeline-marker">W1</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Week 1: Discovery & Architecture</div>
+                            <div class="timeline-description">
+                                <strong>Days 1-2:</strong> System assessment, data architecture review, integration mapping<br>
+                                <strong>Days 3-4:</strong> Carrier prioritization, API endpoint design, security configuration<br>
+                                <strong>Days 5-7:</strong> Development environment setup, initial testing framework
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker">W2</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Week 2: Platform Configuration</div>
+                            <div class="timeline-description">
+                                <strong>Days 8-10:</strong> Core carrier integrations (Maersk, MSC, COSCO, CMA CGM)<br>
+                                <strong>Days 11-12:</strong> Regional carrier connections, data validation rules<br>
+                                <strong>Days 13-14:</strong> AI model training, predictive analytics calibration
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker">W3</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Week 3: Integration & Testing</div>
+                            <div class="timeline-description">
+                                <strong>Days 15-17:</strong> ERP/TMS integration, real-time data sync validation<br>
+                                <strong>Days 18-19:</strong> User acceptance testing, performance optimization<br>
+                                <strong>Days 20-21:</strong> Security testing, load testing, failover procedures
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker">W4</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Week 4: Go-Live & Support</div>
+                            <div class="timeline-description">
+                                <strong>Days 22-24:</strong> Production deployment, user training, documentation delivery<br>
+                                <strong>Days 25-26:</strong> Go-live monitoring, immediate support<br>
+                                <strong>Days 27-28:</strong> Success metrics validation, optimization recommendations
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Risk Mitigation</div>
+                <div class="section-content">
+                    <p><strong>Technical Risks:</strong></p>
+                    <ul>
+                        <li><strong>Carrier API Changes:</strong> Real-time monitoring and automatic failover to backup connections</li>
+                        <li><strong>Data Quality Issues:</strong> Multi-source validation and intelligent data cleansing</li>
+                        <li><strong>Integration Complexity:</strong> Pre-built connectors for 200+ carriers and major ERP systems</li>
+                        <li><strong>Performance Degradation:</strong> Auto-scaling infrastructure and caching optimization</li>
+                    </ul>
+
+                    <p><strong>Business Risks:</strong></p>
+                    <ul>
+                        <li><strong>User Adoption:</strong> Comprehensive training program and change management support</li>
+                        <li><strong>ROI Timeline:</strong> Guaranteed 85% D&D reduction within 6 months or fee adjustment</li>
+                        <li><strong>Scope Creep:</strong> Clear deliverables with change control procedures</li>
+                        <li><strong>Resource Availability:</strong> Dedicated implementation team with backup resources</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Success Criteria</div>
+                <div class="section-content">
+                    <p><strong>Technical Success Metrics:</strong></p>
+                    <ul>
+                        <li>Platform uptime >99.9% during go-live month</li>
+                        <li>API response times <200ms for 95% of requests</li>
+                        <li>Data accuracy >99.5% across all carrier integrations</li>
+                        <li>Zero critical security vulnerabilities</li>
+                    </ul>
+
+                    <p><strong>Business Success Metrics:</strong></p>
+                    <ul>
+                        <li>85% reduction in D&D charges within 6 months</li>
+                        <li>75% reduction in manual processing time</li>
+                        <li>100% user adoption within 30 days</li>
+                        <li>Positive ROI within 12 months</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="download-buttons">
+                <button class="download-btn" onclick="downloadTemplate('implementation')">Download Implementation Plan</button>
+                <button class="download-btn download-btn-secondary" onclick="customizeTemplate('implementation')">Customize for Client</button>
+            </div>
+        </div>
+
+        <!-- Success Framework Template -->
+        <div id="success" class="proposal-template">
+            <div class="template-header">
+                <div class="template-title">Success Framework Template</div>
+                <div class="template-description">KPIs, metrics, and success measurement framework for ongoing optimization</div>
+            </div>
+
+            <div class="success-metrics">
+                <h4>Core Success Metrics</h4>
+                <div class="metrics-grid">
+                    <div class="metric-item">
+                        <div class="metric-value">94%</div>
+                        <div class="metric-label">D&D Reduction Target</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">347%</div>
+                        <div class="metric-label">12-Month ROI</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">85%</div>
+                        <div class="metric-label">Manual Reduction</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">99.9%</div>
+                        <div class="metric-label">Platform Uptime</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">48hrs</div>
+                        <div class="metric-label">Implementation</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">200+</div>
+                        <div class="metric-label">Carrier Integrations</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Monthly KPI Tracking</div>
+                <div class="section-content">
+                    <p><strong>Operational Metrics:</strong></p>
+                    <ul>
+                        <li><strong>Demurrage Charges:</strong> Month-over-month reduction percentage</li>
+                        <li><strong>Detention Fees:</strong> Total avoided costs and trend analysis</li>
+                        <li><strong>Container Dwell Time:</strong> Average reduction in port dwell time</li>
+                        <li><strong>Prediction Accuracy:</strong> ETA prediction accuracy vs actual arrivals</li>
+                        <li><strong>Exception Handling:</strong> Automated vs manual intervention ratio</li>
+                    </ul>
+
+                    <p><strong>Financial Metrics:</strong></p>
+                    <ul>
+                        <li><strong>Cost Savings:</strong> Total monthly savings vs baseline</li>
+                        <li><strong>ROI Progress:</strong> Cumulative return on investment</li>
+                        <li><strong>Processing Efficiency:</strong> Cost per container processed</li>
+                        <li><strong>Resource Optimization:</strong> Labor hours saved per month</li>
+                    </ul>
+
+                    <p><strong>Technical Metrics:</strong></p>
+                    <ul>
+                        <li><strong>System Performance:</strong> API response times and throughput</li>
+                        <li><strong>Data Quality:</strong> Accuracy and completeness scores</li>
+                        <li><strong>Integration Health:</strong> Carrier connection reliability</li>
+                        <li><strong>User Adoption:</strong> Active users and feature utilization</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Quarterly Business Reviews</div>
+                <div class="section-content">
+                    <p><strong>QBR Agenda Framework:</strong></p>
+                    <ul>
+                        <li><strong>Performance Review:</strong> KPI analysis and trend identification</li>
+                        <li><strong>ROI Assessment:</strong> Financial impact and value realization</li>
+                        <li><strong>Optimization Opportunities:</strong> Process improvements and new features</li>
+                        <li><strong>Strategic Alignment:</strong> Business goals and platform roadmap</li>
+                        <li><strong>Success Stories:</strong> Case studies and best practices</li>
+                        <li><strong>Action Planning:</strong> Next quarter priorities and initiatives</li>
+                    </ul>
+
+                    <p><strong>QBR Deliverables:</strong></p>
+                    <ul>
+                        <li>Executive dashboard with key metrics</li>
+                        <li>ROI analysis and projections</li>
+                        <li>Performance benchmarking report</li>
+                        <li>Optimization recommendations</li>
+                        <li>Strategic roadmap updates</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="template-section">
+                <div class="section-title">Continuous Improvement Process</div>
+                <div class="section-content">
+                    <p><strong>Monthly Optimization Cycle:</strong></p>
+                    <ul>
+                        <li><strong>Week 1:</strong> Data collection and performance analysis</li>
+                        <li><strong>Week 2:</strong> Opportunity identification and prioritization</li>
+                        <li><strong>Week 3:</strong> Implementation planning and resource allocation</li>
+                        <li><strong>Week 4:</strong> Deployment and impact measurement</li>
+                    </ul>
+
+                    <p><strong>Feedback Mechanisms:</strong></p>
+                    <ul>
+                        <li>Weekly user feedback sessions</li>
+                        <li>Monthly stakeholder surveys</li>
+                        <li>Quarterly executive reviews</li>
+                        <li>Annual strategic planning sessions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="download-buttons">
+                <button class="download-btn" onclick="downloadTemplate('success')">Download Success Framework</button>
+                <button class="download-btn download-btn-secondary" onclick="customizeTemplate('success')">Customize for Client</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTemplate(templateId) {
+            // Hide all templates
+            document.querySelectorAll('.proposal-template').forEach(template => {
+                template.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected template
+            document.getElementById(templateId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function calculateROI() {
+            const freightVolume = parseFloat(document.getElementById('freight-volume').value) || 10000;
+            const ddCharges = parseFloat(document.getElementById('dd-charges').value) || 750;
+            const manualHours = parseFloat(document.getElementById('manual-hours').value) || 200;
+            const laborCost = parseFloat(document.getElementById('labor-cost').value) || 35;
+
+            // Calculate savings
+            const annualDDCost = freightVolume * ddCharges;
+            const ddSavings = annualDDCost * 0.94; // 94% reduction
+            const laborSavings = manualHours * 12 * laborCost * 0.85; // 85% reduction
+            const totalSavings = ddSavings + laborSavings;
+
+            // Assume platform cost (Enterprise tier)
+            const platformCost = 35000 * 12 + 90000; // Monthly fee + implementation
+
+            const roi = ((totalSavings - platformCost) / platformCost) * 100;
+            const paybackPeriod = platformCost / (totalSavings / 12);
+
+            // Update display
+            document.getElementById('annual-savings').textContent = '$' + totalSavings.toLocaleString();
+            document.getElementById('monthly-roi').textContent = Math.round(roi) + '%';
+            document.getElementById('payback-period').textContent = paybackPeriod.toFixed(1);
+        }
+
+        function downloadTemplate(templateType) {
+            // Simulate template download
+            alert(`Downloading ${templateType.toUpperCase()} template...`);
+        }
+
+        function customizeTemplate(templateType) {
+            // Simulate template customization
+            alert(`Opening customization wizard for ${templateType.toUpperCase()} template...`);
+        }
+
+        // Initialize ROI calculator
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateROI();
+        });
+    </script>
+</body>
+</html>

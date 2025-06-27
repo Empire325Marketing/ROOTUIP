@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Lead Scoring & Qualification System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .scoring-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 48px 32px;
+            text-align: center;
+        }
+        
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        
+        .header-subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+        
+        .header-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+        
+        .header-stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        .scoring-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 48px 20px;
+        }
+        
+        .scoring-nav {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .nav-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1e40af;
+            text-align: center;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-button {
+            background: #eff6ff;
+            border: 2px solid #3b82f6;
+            color: #1e40af;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+        
+        .nav-button:hover,
+        .nav-button.active {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .scoring-section {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 40px;
+        }
+        
+        .scoring-section.active {
+            display: block;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .section-description {
+            color: #64748b;
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+        
+        .section-stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        
+        .section-stat {
+            text-align: center;
+            background: #f8fafc;
+            padding: 12px 20px;
+            border-radius: 8px;
+        }
+        
+        .section-stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            display: block;
+        }
+        
+        .section-stat-label {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .scoring-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+        
+        .scoring-category {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+        
+        .scoring-category:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+            margin-right: 12px;
+        }
+        
+        .category-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .category-weight {
+            margin-left: auto;
+            background: #10b981;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .scoring-items {
+            list-style: none;
+        }
+        
+        .scoring-item {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .scoring-item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-description {
+            color: #374151;
+            font-size: 0.875rem;
+            flex: 1;
+        }
+        
+        .item-points {
+            background: #eff6ff;
+            color: #1e40af;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 12px;
+        }
+        
+        .qualification-matrix {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            margin: 32px 0;
+        }
+        
+        .matrix-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .qualification-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .qualification-level {
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid;
+            transition: transform 0.3s ease;
+        }
+        
+        .qualification-level:hover {
+            transform: translateY(-2px);
+        }
+        
+        .level-cold {
+            border-color: #64748b;
+            background: #f8fafc;
+        }
+        
+        .level-warm {
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+        
+        .level-hot {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+        
+        .level-qualified {
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+        
+        .level-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .level-cold .level-title { color: #64748b; }
+        .level-warm .level-title { color: #d97706; }
+        .level-hot .level-title { color: #dc2626; }
+        .level-qualified .level-title { color: #059669; }
+        
+        .level-range {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            display: block;
+        }
+        
+        .level-cold .level-range { color: #64748b; }
+        .level-warm .level-range { color: #d97706; }
+        .level-hot .level-range { color: #dc2626; }
+        .level-qualified .level-range { color: #059669; }
+        
+        .level-description {
+            font-size: 0.875rem;
+            margin-bottom: 16px;
+        }
+        
+        .level-cold .level-description { color: #64748b; }
+        .level-warm .level-description { color: #92400e; }
+        .level-hot .level-description { color: #991b1b; }
+        .level-qualified .level-description { color: #065f46; }
+        
+        .level-actions {
+            list-style: none;
+            font-size: 0.75rem;
+        }
+        
+        .level-actions li {
+            padding: 2px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .level-actions li::before {
+            content: "→";
+            font-weight: 600;
+        }
+        
+        .automation-triggers {
+            background: #fffbeb;
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 32px 0;
+        }
+        
+        .triggers-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .trigger-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        
+        .trigger-item {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            border-left: 3px solid #f59e0b;
+        }
+        
+        .trigger-score {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 4px;
+        }
+        
+        .trigger-action {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .trigger-description {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .lead-examples {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            margin: 32px 0;
+        }
+        
+        .examples-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .example-profiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        
+        .example-profile {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .profile-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .profile-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .profile-score {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .score-cold { background: #f1f5f9; color: #64748b; }
+        .score-warm { background: #fffbeb; color: #d97706; }
+        .score-hot { background: #fef2f2; color: #dc2626; }
+        .score-qualified { background: #ecfdf5; color: #059669; }
+        
+        .profile-details {
+            margin-bottom: 16px;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: between;
+            padding: 4px 0;
+            font-size: 0.875rem;
+        }
+        
+        .detail-label {
+            color: #64748b;
+        }
+        
+        .detail-value {
+            color: #1e293b;
+            font-weight: 500;
+        }
+        
+        .profile-reasoning {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .reasoning-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .reasoning-text {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .scoring-simulator {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin: 32px 0;
+        }
+        
+        .simulator-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .simulator-description {
+            text-align: center;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+        
+        .simulator-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .simulator-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .simulator-group label {
+            font-weight: 500;
+            margin-bottom: 6px;
+            font-size: 0.875rem;
+        }
+        
+        .simulator-group select {
+            padding: 10px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+        
+        .simulator-group select option {
+            background: #1e293b;
+            color: white;
+        }
+        
+        .simulator-result {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .result-score {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        
+        .result-level {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .result-actions {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        @media (max-width: 768px) {
+            .scoring-container {
+                padding: 20px 10px;
+            }
+            
+            .header-title {
+                font-size: 2rem;
+            }
+            
+            .scoring-categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .qualification-levels {
+                grid-template-columns: 1fr;
+            }
+            
+            .trigger-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .example-profiles {
+                grid-template-columns: 1fr;
+            }
+            
+            .simulator-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scoring-header">
+        <div class="header-title">Lead Scoring & Qualification System</div>
+        <div class="header-subtitle">AI-powered scoring for 6-month enterprise sales cycles</div>
+        <div class="header-stats">
+            <div class="header-stat">
+                <span class="stat-value">200</span>
+                <span class="stat-label">Max Score</span>
+            </div>
+            <div class="header-stat">
+                <span class="stat-value">47%</span>
+                <span class="stat-label">Qualification Rate</span>
+            </div>
+            <div class="header-stat">
+                <span class="stat-value">3.2x</span>
+                <span class="stat-label">Conversion Lift</span>
+            </div>
+            <div class="header-stat">
+                <span class="stat-value">89%</span>
+                <span class="stat-label">Score Accuracy</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="scoring-container">
+        <div class="scoring-nav">
+            <div class="nav-title">Lead Scoring Components</div>
+            <div class="nav-buttons">
+                <button class="nav-button active" onclick="showSection('company-scoring')">Company Size Scoring</button>
+                <button class="nav-button" onclick="showSection('engagement-scoring')">Engagement Scoring</button>
+                <button class="nav-button" onclick="showSection('intent-scoring')">Intent Scoring</button>
+                <button class="nav-button" onclick="showSection('industry-fit')">Industry Fit</button>
+                <button class="nav-button" onclick="showSection('qualification-matrix')">Qualification Matrix</button>
+            </div>
+        </div>
+
+        <!-- Company Size Scoring -->
+        <div id="company-scoring" class="scoring-section active">
+            <div class="section-header">
+                <div class="section-title">Company Size Scoring</div>
+                <div class="section-description">Scoring based on company size, revenue, and vessel fleet indicators</div>
+                <div class="section-stats">
+                    <div class="section-stat">
+                        <span class="section-stat-value">40%</span>
+                        <span class="section-stat-label">Weight in Total Score</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">80 points</span>
+                        <span class="section-stat-label">Maximum Points</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">92%</span>
+                        <span class="section-stat-label">Accuracy Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scoring-categories">
+                <div class="scoring-category">
+                    <div class="category-header">
+                        <div class="category-icon">🏢</div>
+                        <div class="category-title">Company Size</div>
+                        <div class="category-weight">30 pts max</div>
+                    </div>
+                    <ul class="scoring-items">
+                        <li class="scoring-item">
+                            <span class="item-description">Enterprise (5,000+ employees)</span>
+                            <span class="item-points">30 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Large (1,000-4,999 employees)</span>
+                            <span class="item-points">25 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Mid-Market (500-999 employees)</span>
+                            <span class="item-points">20 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Small Business (50-499 employees)</span>
+                            <span class="item-points">10 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Startup (1-49 employees)</span>
+                            <span class="item-points">5 pts</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="scoring-category">
+                    <div class="category-header">
+                        <div class="category-icon">💰</div>
+                        <div class="category-title">Annual Revenue</div>
+                        <div class="category-weight">25 pts max</div>
+                    </div>
+                    <ul class="scoring-items">
+                        <li class="scoring-item">
+                            <span class="item-description">$1B+ revenue</span>
+                            <span class="item-points">25 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">$500M-$1B revenue</span>
+                            <span class="item-points">20 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">$100M-$500M revenue</span>
+                            <span class="item-points">15 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">$50M-$100M revenue</span>
+                            <span class="item-points">10 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">$10M-$50M revenue</span>
+                            <span class="item-points">5 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description"><$10M revenue</span>
+                            <span class="item-points">0 pts</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="scoring-category">
+                    <div class="category-header">
+                        <div class="category-icon">🚢</div>
+                        <div class="category-title">Fleet Size & Volume</div>
+                        <div class="category-weight">25 pts max</div>
+                    </div>
+                    <ul class="scoring-items">
+                        <li class="scoring-item">
+                            <span class="item-description">50+ vessels or 100K+ TEU/year</span>
+                            <span class="item-points">25 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">25-49 vessels or 50K-100K TEU/year</span>
+                            <span class="item-points">20 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">10-24 vessels or 25K-50K TEU/year</span>
+                            <span class="item-points">15 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">5-9 vessels or 10K-25K TEU/year</span>
+                            <span class="item-points">10 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">1-4 vessels or 5K-10K TEU/year</span>
+                            <span class="item-points">5 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description"><5K TEU/year</span>
+                            <span class="item-points">0 pts</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Engagement Scoring -->
+        <div id="engagement-scoring" class="scoring-section">
+            <div class="section-header">
+                <div class="section-title">Engagement Scoring</div>
+                <div class="section-description">Scoring based on email engagement, content downloads, and website behavior</div>
+                <div class="section-stats">
+                    <div class="section-stat">
+                        <span class="section-stat-value">30%</span>
+                        <span class="section-stat-label">Weight in Total Score</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">60 points</span>
+                        <span class="section-stat-label">Maximum Points</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">85%</span>
+                        <span class="section-stat-label">Predictive Accuracy</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scoring-categories">
+                <div class="scoring-category">
+                    <div class="category-header">
+                        <div class="category-icon">📧</div>
+                        <div class="category-title">Email Engagement</div>
+                        <div class="category-weight">20 pts max</div>
+                    </div>
+                    <ul class="scoring-items">
+                        <li class="scoring-item">
+                            <span class="item-description">Email reply or forward</span>
+                            <span class="item-points">10 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Multiple email clicks (3+)</span>
+                            <span class="item-points">8 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Email click-through</span>
+                            <span class="item-points">5 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Email open (multiple)</span>
+                            <span class="item-points">3 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Email open (single)</span>
+                            <span class="item-points">1 pt</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Email unsubscribe</span>
+                            <span class="item-points">-5 pts</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="scoring-category">
+                    <div class="category-header">
+                        <div class="category-icon">📄</div>
+                        <div class="category-title">Content Downloads</div>
+                        <div class="category-weight">20 pts max</div>
+                    </div>
+                    <ul class="scoring-items">
+                        <li class="scoring-item">
+                            <span class="item-description">Case study download</span>
+                            <span class="item-points">8 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Whitepaper download</span>
+                            <span class="item-points">6 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">ROI calculator completion</span>
+                            <span class="item-points">10 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Assessment tool completion</span>
+                            <span class="item-points">8 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Technical documentation</span>
+                            <span class="item-points">5 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Multiple content downloads (3+)</span>
+                            <span class="item-points">15 pts</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="scoring-category">
+                    <div class="category-header">
+                        <div class="category-icon">🌐</div>
+                        <div class="category-title">Website Behavior</div>
+                        <div class="category-weight">20 pts max</div>
+                    </div>
+                    <ul class="scoring-items">
+                        <li class="scoring-item">
+                            <span class="item-description">Multiple page visits (5+ pages)</span>
+                            <span class="item-points">8 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Time on site >5 minutes</span>
+                            <span class="item-points">6 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Return visitor (multiple sessions)</span>
+                            <span class="item-points">5 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Form submission (contact)</span>
+                            <span class="item-points">10 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Video/demo interaction</span>
+                            <span class="item-points">7 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Social sharing</span>
+                            <span class="item-points">4 pts</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Intent Scoring -->
+        <div id="intent-scoring" class="scoring-section">
+            <div class="section-header">
+                <div class="section-title">Intent Scoring</div>
+                <div class="section-description">High-intent signals indicating readiness to buy</div>
+                <div class="section-stats">
+                    <div class="section-stat">
+                        <span class="section-stat-value">20%</span>
+                        <span class="section-stat-label">Weight in Total Score</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">40 points</span>
+                        <span class="section-stat-label">Maximum Points</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">94%</span>
+                        <span class="section-stat-label">Conversion Predictor</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scoring-categories">
+                <div class="scoring-category">
+                    <div class="category-header">
+                        <div class="category-icon">🎯</div>
+                        <div class="category-title">High-Intent Actions</div>
+                        <div class="category-weight">25 pts max</div>
+                    </div>
+                    <ul class="scoring-items">
+                        <li class="scoring-item">
+                            <span class="item-description">Demo request</span>
+                            <span class="item-points">15 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Pricing page visit</span>
+                            <span class="item-points">10 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Contact sales inquiry</span>
+                            <span class="item-points">12 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Reference customer request</span>
+                            <span class="item-points">8 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Implementation timeline inquiry</span>
+                            <span class="item-points">7 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Technical documentation request</span>
+                            <span class="item-points">6 pts</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="scoring-category">
+                    <div class="category-header">
+                        <div class="category-icon">🔍</div>
+                        <div class="category-title">Research Behavior</div>
+                        <div class="category-weight">15 pts max</div>
+                    </div>
+                    <ul class="scoring-items">
+                        <li class="scoring-item">
+                            <span class="item-description">Competitor comparison research</span>
+                            <span class="item-points">8 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Integration requirements research</span>
+                            <span class="item-points">6 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Case study detailed review</span>
+                            <span class="item-points">5 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">ROI calculation multiple times</span>
+                            <span class="item-points">7 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Implementation guide download</span>
+                            <span class="item-points">4 pts</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Industry Fit Scoring -->
+        <div id="industry-fit" class="scoring-section">
+            <div class="section-header">
+                <div class="section-title">Industry Fit Scoring</div>
+                <div class="section-description">Industry-specific scoring based on UIP solution fit</div>
+                <div class="section-stats">
+                    <div class="section-stat">
+                        <span class="section-stat-value">10%</span>
+                        <span class="section-stat-label">Weight in Total Score</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">20 points</span>
+                        <span class="section-stat-label">Maximum Points</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">78%</span>
+                        <span class="section-stat-label">Industry Success Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scoring-categories">
+                <div class="scoring-category">
+                    <div class="category-header">
+                        <div class="category-icon">🎯</div>
+                        <div class="category-title">Perfect Fit Industries</div>
+                        <div class="category-weight">20 pts</div>
+                    </div>
+                    <ul class="scoring-items">
+                        <li class="scoring-item">
+                            <span class="item-description">Ocean Freight Carriers</span>
+                            <span class="item-points">20 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Large Retail Chains</span>
+                            <span class="item-points">20 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Automotive Manufacturing</span>
+                            <span class="item-points">20 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">3PL/Freight Forwarders</span>
+                            <span class="item-points">20 pts</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="scoring-category">
+                    <div class="category-header">
+                        <div class="category-icon">✅</div>
+                        <div class="category-title">Good Fit Industries</div>
+                        <div class="category-weight">15 pts</div>
+                    </div>
+                    <ul class="scoring-items">
+                        <li class="scoring-item">
+                            <span class="item-description">General Manufacturing</span>
+                            <span class="item-points">15 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Chemicals & Materials</span>
+                            <span class="item-points">15 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Technology Hardware</span>
+                            <span class="item-points">15 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Food & Beverage</span>
+                            <span class="item-points">15 pts</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="scoring-category">
+                    <div class="category-header">
+                        <div class="category-icon">⚠️</div>
+                        <div class="category-title">Challenging Fit</div>
+                        <div class="category-weight">5-10 pts</div>
+                    </div>
+                    <ul class="scoring-items">
+                        <li class="scoring-item">
+                            <span class="item-description">Software/SaaS Companies</span>
+                            <span class="item-points">5 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Professional Services</span>
+                            <span class="item-points">5 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Financial Services</span>
+                            <span class="item-points">5 pts</span>
+                        </li>
+                        <li class="scoring-item">
+                            <span class="item-description">Real Estate</span>
+                            <span class="item-points">0 pts</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Qualification Matrix -->
+        <div id="qualification-matrix" class="scoring-section">
+            <div class="section-header">
+                <div class="section-title">Lead Qualification Matrix</div>
+                <div class="section-description">Automated qualification levels and corresponding actions</div>
+                <div class="section-stats">
+                    <div class="section-stat">
+                        <span class="section-stat-value">4 levels</span>
+                        <span class="section-stat-label">Qualification Tiers</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">150+</span>
+                        <span class="section-stat-label">Sales Ready Score</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">87%</span>
+                        <span class="section-stat-label">Handoff Success</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qualification-levels">
+                <div class="qualification-level level-cold">
+                    <div class="level-title">Cold Lead</div>
+                    <span class="level-range">0-50 Points</span>
+                    <div class="level-description">Early awareness stage with minimal engagement or poor fit</div>
+                    <ul class="level-actions">
+                        <li>Nurture with educational content</li>
+                        <li>Weekly email automation</li>
+                        <li>Industry-specific resources</li>
+                        <li>Monitor engagement patterns</li>
+                    </ul>
+                </div>
+
+                <div class="qualification-level level-warm">
+                    <div class="level-title">Warm Lead</div>
+                    <span class="level-range">51-100 Points</span>
+                    <div class="level-description">Moderate engagement with some company fit indicators</div>
+                    <ul class="level-actions">
+                        <li>Accelerated content delivery</li>
+                        <li>Webinar invitations</li>
+                        <li>Case study targeting</li>
+                        <li>SDR outreach sequence</li>
+                    </ul>
+                </div>
+
+                <div class="qualification-level level-hot">
+                    <div class="level-title">Hot Lead</div>
+                    <span class="level-range">101-150 Points</span>
+                    <div class="level-description">High engagement with strong company fit and some intent signals</div>
+                    <ul class="level-actions">
+                        <li>Direct sales outreach</li>
+                        <li>Demo invitation</li>
+                        <li>Executive involvement</li>
+                        <li>Reference customer matching</li>
+                    </ul>
+                </div>
+
+                <div class="qualification-level level-qualified">
+                    <div class="level-title">Sales Qualified</div>
+                    <span class="level-range">150+ Points</span>
+                    <div class="level-description">Enterprise fit with strong intent signals and high engagement</div>
+                    <ul class="level-actions">
+                        <li>Immediate sales assignment</li>
+                        <li>Executive demo scheduling</li>
+                        <li>Custom proposal development</li>
+                        <li>Priority support queue</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="automation-triggers">
+                <div class="triggers-title">
+                    🤖 Automated Trigger Actions
+                </div>
+                <div class="trigger-grid">
+                    <div class="trigger-item">
+                        <div class="trigger-score">Score: 75+ Points</div>
+                        <div class="trigger-action">SDR Assignment</div>
+                        <div class="trigger-description">Automatically assign to Sales Development Representative for outreach</div>
+                    </div>
+                    <div class="trigger-item">
+                        <div class="trigger-score">Score: 100+ Points</div>
+                        <div class="trigger-action">Demo Invitation</div>
+                        <div class="trigger-description">Send personalized demo invitation with calendar booking link</div>
+                    </div>
+                    <div class="trigger-item">
+                        <div class="trigger-score">Score: 125+ Points</div>
+                        <div class="trigger-action">Executive Alert</div>
+                        <div class="trigger-description">Notify VP of Sales of high-value prospect with context</div>
+                    </div>
+                    <div class="trigger-item">
+                        <div class="trigger-score">Score: 150+ Points</div>
+                        <div class="trigger-action">Sales Assignment</div>
+                        <div class="trigger-description">Assign to senior Account Executive with full lead context</div>
+                    </div>
+                    <div class="trigger-item">
+                        <div class="trigger-score">Demo Request</div>
+                        <div class="trigger-action">Immediate +25 Points</div>
+                        <div class="trigger-description">Boost score significantly for high-intent action</div>
+                    </div>
+                    <div class="trigger-item">
+                        <div class="trigger-score">Pricing Page Visit</div>
+                        <div class="trigger-action">Real-time Alert</div>
+                        <div class="trigger-description">Instant notification to sales team with visitor context</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lead Examples -->
+    <div class="lead-examples">
+        <div class="examples-title">Example Lead Profiles</div>
+        <div class="example-profiles">
+            <div class="example-profile">
+                <div class="profile-header">
+                    <div class="profile-name">Sarah Chen, COO at MegaShipper Corp</div>
+                    <div class="profile-score score-qualified">187 pts</div>
+                </div>
+                <div class="profile-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Company Size:</span>
+                        <span class="detail-value">Enterprise (2,800 employees)</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Industry:</span>
+                        <span class="detail-value">Ocean Freight Carrier</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Fleet:</span>
+                        <span class="detail-value">50 vessels, 125K TEU/year</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Engagement:</span>
+                        <span class="detail-value">ROI calc + 3 downloads + demo request</span>
+                    </div>
+                </div>
+                <div class="profile-reasoning">
+                    <div class="reasoning-title">Scoring Breakdown:</div>
+                    <div class="reasoning-text">
+                        Company (30) + Revenue (25) + Fleet (25) + Industry (20) + Engagement (52) + Demo Request (15) + Multiple Downloads (15) + Executive Role (5) = 187 points
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-profile">
+                <div class="profile-header">
+                    <div class="profile-name">Michael Rodriguez, VP Operations</div>
+                    <div class="profile-score score-hot">134 pts</div>
+                </div>
+                <div class="profile-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Company Size:</span>
+                        <span class="detail-value">Large (1,200 employees)</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Industry:</span>
+                        <span class="detail-value">Automotive Manufacturing</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Volume:</span>
+                        <span class="detail-value">8,500 TEU/month</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Engagement:</span>
+                        <span class="detail-value">High email engagement + content downloads</span>
+                    </div>
+                </div>
+                <div class="profile-reasoning">
+                    <div class="reasoning-title">Scoring Breakdown:</div>
+                    <div class="reasoning-text">
+                        Company (25) + Revenue (15) + Volume (20) + Industry (20) + Email Engagement (18) + Content Downloads (24) + Multiple Visits (8) + Research Behavior (4) = 134 points
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-profile">
+                <div class="profile-header">
+                    <div class="profile-name">Jessica Park, Chief Supply Chain Officer</div>
+                    <div class="profile-score score-warm">89 pts</div>
+                </div>
+                <div class="profile-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Company Size:</span>
+                        <span class="detail-value">Mid-Market (750 employees)</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Industry:</span>
+                        <span class="detail-value">Retail Chain</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Volume:</span>
+                        <span class="detail-value">15K TEU/year</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Engagement:</span>
+                        <span class="detail-value">Basic engagement, one whitepaper</span>
+                    </div>
+                </div>
+                <div class="profile-reasoning">
+                    <div class="reasoning-title">Scoring Breakdown:</div>
+                    <div class="reasoning-text">
+                        Company (20) + Revenue (10) + Volume (10) + Industry (20) + Email Opens (3) + Whitepaper (6) + Website Visits (5) + Executive Role (15) = 89 points
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-profile">
+                <div class="profile-header">
+                    <div class="profile-name">David Kim, IT Manager</div>
+                    <div class="profile-score score-cold">34 pts</div>
+                </div>
+                <div class="profile-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Company Size:</span>
+                        <span class="detail-value">Small Business (120 employees)</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Industry:</span>
+                        <span class="detail-value">Software Company</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Volume:</span>
+                        <span class="detail-value">Minimal freight volume</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Engagement:</span>
+                        <span class="detail-value">Newsletter signup only</span>
+                    </div>
+                </div>
+                <div class="profile-reasoning">
+                    <div class="reasoning-title">Scoring Breakdown:</div>
+                    <div class="reasoning-text">
+                        Company (10) + Revenue (5) + Volume (0) + Industry (5) + Email Signup (3) + Single Visit (1) + Non-decision Maker (-5) + Poor Fit (15) = 34 points
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scoring Simulator -->
+    <div class="scoring-simulator">
+        <div class="simulator-title">Lead Scoring Simulator</div>
+        <div class="simulator-description">
+            Test different prospect profiles to see their lead scores and qualification levels
+        </div>
+        
+        <div class="simulator-form">
+            <div class="simulator-group">
+                <label for="sim-company-size">Company Size</label>
+                <select id="sim-company-size" onchange="calculateSimulatorScore()">
+                    <option value="0">Select size</option>
+                    <option value="30">Enterprise (5,000+ employees)</option>
+                    <option value="25">Large (1,000-4,999 employees)</option>
+                    <option value="20">Mid-Market (500-999 employees)</option>
+                    <option value="10">Small Business (50-499 employees)</option>
+                    <option value="5">Startup (1-49 employees)</option>
+                </select>
+            </div>
+            
+            <div class="simulator-group">
+                <label for="sim-industry">Industry</label>
+                <select id="sim-industry" onchange="calculateSimulatorScore()">
+                    <option value="0">Select industry</option>
+                    <option value="20">Ocean Freight Carrier</option>
+                    <option value="20">Large Retail Chain</option>
+                    <option value="20">Automotive Manufacturing</option>
+                    <option value="20">3PL/Freight Forwarder</option>
+                    <option value="15">General Manufacturing</option>
+                    <option value="15">Chemicals & Materials</option>
+                    <option value="15">Technology Hardware</option>
+                    <option value="15">Food & Beverage</option>
+                    <option value="5">Software/SaaS</option>
+                    <option value="5">Professional Services</option>
+                </select>
+            </div>
+            
+            <div class="simulator-group">
+                <label for="sim-volume">Annual Volume</label>
+                <select id="sim-volume" onchange="calculateSimulatorScore()">
+                    <option value="0">Select volume</option>
+                    <option value="25">100K+ TEU/year</option>
+                    <option value="20">50K-100K TEU/year</option>
+                    <option value="15">25K-50K TEU/year</option>
+                    <option value="10">10K-25K TEU/year</option>
+                    <option value="5">5K-10K TEU/year</option>
+                    <option value="0"><5K TEU/year</option>
+                </select>
+            </div>
+            
+            <div class="simulator-group">
+                <label for="sim-engagement">Engagement Level</label>
+                <select id="sim-engagement" onchange="calculateSimulatorScore()">
+                    <option value="0">Select engagement</option>
+                    <option value="40">High (multiple downloads, demo request)</option>
+                    <option value="25">Medium (content downloads, email clicks)</option>
+                    <option value="10">Low (email opens, basic visits)</option>
+                    <option value="0">Minimal (newsletter signup only)</option>
+                </select>
+            </div>
+            
+            <div class="simulator-group">
+                <label for="sim-intent">Intent Signals</label>
+                <select id="sim-intent" onchange="calculateSimulatorScore()">
+                    <option value="0">Select intent</option>
+                    <option value="25">Very High (demo + pricing + contact)</option>
+                    <option value="15">High (pricing page + multiple research)</option>
+                    <option value="8">Medium (competitor research)</option>
+                    <option value="3">Low (basic content consumption)</option>
+                    <option value="0">None</option>
+                </select>
+            </div>
+            
+            <div class="simulator-group">
+                <label for="sim-role">Contact Role</label>
+                <select id="sim-role" onchange="calculateSimulatorScore()">
+                    <option value="0">Select role</option>
+                    <option value="15">C-Level Executive</option>
+                    <option value="10">VP/Director</option>
+                    <option value="5">Manager</option>
+                    <option value="0">Individual Contributor</option>
+                    <option value="-5">Non-decision maker</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="simulator-result" id="simulator-result">
+            <div class="result-score" id="sim-score">0</div>
+            <div class="result-level" id="sim-level">Cold Lead</div>
+            <div class="result-actions" id="sim-actions">Complete the form above to see qualification level and recommended actions</div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.scoring-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function calculateSimulatorScore() {
+            const companySize = parseInt(document.getElementById('sim-company-size').value) || 0;
+            const industry = parseInt(document.getElementById('sim-industry').value) || 0;
+            const volume = parseInt(document.getElementById('sim-volume').value) || 0;
+            const engagement = parseInt(document.getElementById('sim-engagement').value) || 0;
+            const intent = parseInt(document.getElementById('sim-intent').value) || 0;
+            const role = parseInt(document.getElementById('sim-role').value) || 0;
+            
+            const totalScore = companySize + industry + volume + engagement + intent + role;
+            
+            // Determine qualification level
+            let level, actions;
+            if (totalScore >= 150) {
+                level = "Sales Qualified Lead";
+                actions = "🚀 Immediate sales assignment, executive demo scheduling, custom proposal development";
+            } else if (totalScore >= 101) {
+                level = "Hot Lead";
+                actions = "🔥 Direct sales outreach, demo invitation, executive involvement, reference matching";
+            } else if (totalScore >= 51) {
+                level = "Warm Lead";
+                actions = "🌡️ Accelerated content delivery, webinar invitations, SDR outreach sequence";
+            } else {
+                level = "Cold Lead";
+                actions = "❄️ Educational content nurturing, weekly emails, monitor engagement patterns";
+            }
+            
+            // Update display
+            document.getElementById('sim-score').textContent = totalScore;
+            document.getElementById('sim-level').textContent = level;
+            document.getElementById('sim-actions').textContent = actions;
+            document.getElementById('simulator-result').style.display = 'block';
+        }
+
+        // Track scoring system interactions
+        function trackScoringView(sectionId) {
+            // Analytics tracking
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'scoring_section_viewed', {
+                    section_type: sectionId,
+                    page: 'lead_scoring'
+                });
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Lead Scoring System loaded');
+            
+            // Track initial section view
+            trackScoringView('company-scoring');
+        });
+    </script>
+</body>
+</html>

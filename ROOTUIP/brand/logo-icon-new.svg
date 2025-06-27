@@ -1,0 +1,60 @@
+<!-- UIP Icon Logo - Standalone Mark -->
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Enterprise Gradient -->
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Success Accent -->
+    <linearGradient id="iconAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Subtle Shadow -->
+    <filter id="iconShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#1e293b" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  
+  <!-- Icon Container -->
+  <g filter="url(#iconShadow)">
+    <!-- Outer Frame -->
+    <rect x="4" y="4" width="56" height="56" rx="14" fill="none" stroke="url(#iconGradient)" stroke-width="2" opacity="0.3"/>
+    
+    <!-- Central Hub -->
+    <circle cx="32" cy="32" r="12" fill="url(#iconGradient)"/>
+    
+    <!-- Integration Points -->
+    <g stroke="url(#iconAccent)" stroke-width="2.5" fill="none" opacity="0.9">
+      <!-- Primary Connections -->
+      <line x1="12" y1="32" x2="20" y2="32" stroke-linecap="round"/>
+      <line x1="44" y1="32" x2="52" y2="32" stroke-linecap="round"/>
+      <line x1="32" y1="12" x2="32" y2="20" stroke-linecap="round"/>
+      <line x1="32" y1="44" x2="32" y2="52" stroke-linecap="round"/>
+      
+      <!-- Diagonal Connections -->
+      <line x1="18.5" y1="18.5" x2="24.5" y2="24.5" stroke-linecap="round"/>
+      <line x1="45.5" y1="18.5" x2="39.5" y2="24.5" stroke-linecap="round"/>
+      <line x1="18.5" y1="45.5" x2="24.5" y2="39.5" stroke-linecap="round"/>
+      <line x1="45.5" y1="45.5" x2="39.5" y2="39.5" stroke-linecap="round"/>
+    </g>
+    
+    <!-- Connection Nodes -->
+    <g fill="url(#iconAccent)">
+      <circle cx="12" cy="32" r="2.5"/>
+      <circle cx="52" cy="32" r="2.5"/>
+      <circle cx="32" cy="12" r="2.5"/>
+      <circle cx="32" cy="52" r="2.5"/>
+      <circle cx="18.5" cy="18.5" r="2"/>
+      <circle cx="45.5" cy="18.5" r="2"/>
+      <circle cx="18.5" cy="45.5" r="2"/>
+      <circle cx="45.5" cy="45.5" r="2"/>
+    </g>
+    
+    <!-- Central "U" -->
+    <text x="32" y="38" font-family="Inter, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="white">U</text>
+  </g>
+</svg>

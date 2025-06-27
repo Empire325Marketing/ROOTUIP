@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Settings - ROOTUIP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: #0f172a;
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: #64748b;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            color: #1e293b;
+        }
+
+        .tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Content Card */
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: #64748b;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-help {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+
+        /* Two Column Layout */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Toggle Switch */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .toggle-group:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-info {
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .toggle-label {
+            font-weight: 500;
+            color: #0f172a;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .toggle-description {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background: #cbd5e1;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle-switch.active {
+            background: #3b82f6;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(24px);
+        }
+
+        /* API Keys Table */
+        .api-keys-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .api-keys-table th {
+            background: #f8fafc;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 0.875rem;
+        }
+
+        .api-keys-table td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .api-key {
+            font-family: monospace;
+            background: #f1f5f9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+
+        .api-key.hidden {
+            filter: blur(4px);
+            user-select: none;
+        }
+
+        /* Notification Settings */
+        .notification-group {
+            margin-bottom: 2rem;
+        }
+
+        .notification-header {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #0f172a;
+        }
+
+        .notification-item {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 1rem;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Custom Roles */
+        .role-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .role-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .role-name {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .role-users {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-danger:hover {
+            background: #fecaca;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        /* Save Bar */
+        .save-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            padding: 1rem 2rem;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+        }
+
+        .save-bar.show {
+            display: flex;
+        }
+
+        .save-message {
+            color: #64748b;
+        }
+
+        .save-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Alert Box */
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .tabs {
+                overflow-x: scroll;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .notification-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .save-bar {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/platform/customer/dashboard.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+                Back to Dashboard
+            </a>
+            <h1>Team Settings</h1>
+        </div>
+    </header>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('general')">General</button>
+            <button class="tab" onclick="showTab('notifications')">Notifications</button>
+            <button class="tab" onclick="showTab('permissions')">Permissions</button>
+            <button class="tab" onclick="showTab('integrations')">Integrations</button>
+            <button class="tab" onclick="showTab('security')">Security</button>
+            <button class="tab" onclick="showTab('billing')">Billing</button>
+        </div>
+
+        <!-- General Tab -->
+        <div id="general" class="tab-content active">
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Company Information</h2>
+                    <p class="card-description">Basic information about your company</p>
+                </div>
+                
+                <form id="companyForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="companyName">Company Name</label>
+                            <input type="text" id="companyName" class="form-input" value="Acme Corporation">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="companyEmail">Primary Email</label>
+                            <input type="email" id="companyEmail" class="form-input" value="contact@acmecorp.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="companyPhone">Phone Number</label>
+                            <input type="tel" id="companyPhone" class="form-input" value="+1 (555) 123-4567">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="companyWebsite">Website</label>
+                            <input type="url" id="companyWebsite" class="form-input" value="https://acmecorp.com">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="companyAddress">Address</label>
+                        <textarea id="companyAddress" class="form-textarea" rows="3">123 Business Street
+Suite 456
+New York, NY 10001</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="timezone">Default Timezone</label>
+                        <select id="timezone" class="form-select">
+                            <option value="UTC">UTC</option>
+                            <option value="America/New_York" selected>America/New York</option>
+                            <option value="America/Chicago">America/Chicago</option>
+                            <option value="America/Los_Angeles">America/Los Angeles</option>
+                            <option value="Europe/London">Europe/London</option>
+                            <option value="Europe/Paris">Europe/Paris</option>
+                            <option value="Asia/Shanghai">Asia/Shanghai</option>
+                            <option value="Asia/Tokyo">Asia/Tokyo</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Platform Preferences</h2>
+                    <p class="card-description">Customize platform behavior for your team</p>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <div class="toggle-label">Auto-track shipments</div>
+                        <div class="toggle-description">Automatically track new shipments when booking numbers are added</div>
+                    </div>
+                    <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <div class="toggle-label">Smart document processing</div>
+                        <div class="toggle-description">Use AI to automatically extract data from uploaded documents</div>
+                    </div>
+                    <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <div class="toggle-label">Predictive analytics</div>
+                        <div class="toggle-description">Enable D&D risk predictions and cost optimization suggestions</div>
+                    </div>
+                    <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <div class="toggle-label">Two-factor authentication</div>
+                        <div class="toggle-description">Require 2FA for all users in your organization</div>
+                    </div>
+                    <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Tab -->
+        <div id="notifications" class="tab-content">
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Notification Preferences</h2>
+                    <p class="card-description">Configure how your team receives notifications</p>
+                </div>
+
+                <div class="notification-group">
+                    <div class="notification-header">Shipment Updates</div>
+                    
+                    <div class="notification-item">
+                        <div>Vessel departure/arrival</div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="vessel-email" checked>
+                            <label for="vessel-email">Email</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="vessel-sms">
+                            <label for="vessel-sms">SMS</label>
+                        </div>
+                    </div>
+                    
+                    <div class="notification-item">
+                        <div>Container status changes</div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="container-email" checked>
+                            <label for="container-email">Email</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="container-sms">
+                            <label for="container-sms">SMS</label>
+                        </div>
+                    </div>
+                    
+                    <div class="notification-item">
+                        <div>D&D risk alerts</div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="risk-email" checked>
+                            <label for="risk-email">Email</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="risk-sms" checked>
+                            <label for="risk-sms">SMS</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notification-group">
+                    <div class="notification-header">Document Processing</div>
+                    
+                    <div class="notification-item">
+                        <div>Document upload confirmations</div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="doc-upload-email" checked>
+                            <label for="doc-upload-email">Email</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="doc-upload-sms">
+                            <label for="doc-upload-sms">SMS</label>
+                        </div>
+                    </div>
+                    
+                    <div class="notification-item">
+                        <div>Processing errors</div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="doc-error-email" checked>
+                            <label for="doc-error-email">Email</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="doc-error-sms">
+                            <label for="doc-error-sms">SMS</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notification-group">
+                    <div class="notification-header">System Notifications</div>
+                    
+                    <div class="notification-item">
+                        <div>Weekly performance reports</div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="report-email" checked>
+                            <label for="report-email">Email</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="report-sms" disabled>
+                            <label for="report-sms">SMS</label>
+                        </div>
+                    </div>
+                    
+                    <div class="notification-item">
+                        <div>System maintenance</div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="maintenance-email" checked>
+                            <label for="maintenance-email">Email</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="maintenance-sms">
+                            <label for="maintenance-sms">SMS</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Permissions Tab -->
+        <div id="permissions" class="tab-content">
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Custom Roles</h2>
+                    <p class="card-description">Create custom roles with specific permissions for your team</p>
+                </div>
+
+                <div class="alert alert-info">
+                    <svg width="20" height="20" fill="currentColor">
+                        <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 7h2v5H9V7zm0 6h2v2H9v-2z"/>
+                    </svg>
+                    <div>
+                        Your plan includes 4 default roles (Admin, Manager, User, Viewer) and up to 5 custom roles.
+                    </div>
+                </div>
+
+                <div class="role-card">
+                    <div class="role-header">
+                        <div>
+                            <div class="role-name">Operations Specialist</div>
+                            <div class="role-users">3 users assigned</div>
+                        </div>
+                        <button class="btn btn-secondary btn-sm">Edit</button>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <span style="padding: 0.25rem 0.75rem; background: #e0e7ff; color: #4338ca; border-radius: 9999px; font-size: 0.75rem;">Shipment Management</span>
+                        <span style="padding: 0.25rem 0.75rem; background: #e0e7ff; color: #4338ca; border-radius: 9999px; font-size: 0.75rem;">Document Upload</span>
+                        <span style="padding: 0.25rem 0.75rem; background: #e0e7ff; color: #4338ca; border-radius: 9999px; font-size: 0.75rem;">Report Access</span>
+                    </div>
+                </div>
+
+                <div class="role-card">
+                    <div class="role-header">
+                        <div>
+                            <div class="role-name">Finance Analyst</div>
+                            <div class="role-users">2 users assigned</div>
+                        </div>
+                        <button class="btn btn-secondary btn-sm">Edit</button>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <span style="padding: 0.25rem 0.75rem; background: #e0e7ff; color: #4338ca; border-radius: 9999px; font-size: 0.75rem;">View Shipments</span>
+                        <span style="padding: 0.25rem 0.75rem; background: #e0e7ff; color: #4338ca; border-radius: 9999px; font-size: 0.75rem;">Financial Reports</span>
+                        <span style="padding: 0.25rem 0.75rem; background: #e0e7ff; color: #4338ca; border-radius: 9999px; font-size: 0.75rem;">Invoice Management</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" style="margin-top: 1rem;">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Create Custom Role
+                </button>
+            </div>
+
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Default Permissions</h2>
+                    <p class="card-description">Set default permissions for new users</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="defaultRole">Default Role for New Users</label>
+                    <select id="defaultRole" class="form-select">
+                        <option value="viewer">Viewer - Read-only access</option>
+                        <option value="user" selected>User - Create and track shipments</option>
+                        <option value="manager">Manager - Manage shipments and team</option>
+                        <option value="admin">Admin - Full system access</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Require Approval for New Users</label>
+                    <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Integrations Tab -->
+        <div id="integrations" class="tab-content">
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">API Access</h2>
+                    <p class="card-description">Manage API keys for external integrations</p>
+                </div>
+
+                <div class="alert alert-warning">
+                    <svg width="20" height="20" fill="currentColor">
+                        <path d="M10 2L2 7v5c0 3.88 1.7 7.53 4.66 9.82L10 24l3.34-2.18C16.3 19.53 18 15.88 18 12V7l-8-5z"/>
+                    </svg>
+                    <div>
+                        Keep your API keys secure. Never share them publicly or commit them to version control.
+                    </div>
+                </div>
+
+                <table class="api-keys-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Key</th>
+                            <th>Created</th>
+                            <th>Last Used</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Production API</td>
+                            <td>
+                                <span class="api-key hidden" id="api-key-1">sk_live_4242424242424242</span>
+                                <button class="btn btn-sm btn-secondary" onclick="toggleApiKey('api-key-1')" style="margin-left: 0.5rem;">Show</button>
+                            </td>
+                            <td>Jan 15, 2025</td>
+                            <td>2 hours ago</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger">Revoke</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Development API</td>
+                            <td>
+                                <span class="api-key hidden" id="api-key-2">sk_test_1234567890123456</span>
+                                <button class="btn btn-sm btn-secondary" onclick="toggleApiKey('api-key-2')" style="margin-left: 0.5rem;">Show</button>
+                            </td>
+                            <td>Feb 1, 2025</td>
+                            <td>Yesterday</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger">Revoke</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button class="btn btn-primary" style="margin-top: 1rem;">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Generate New API Key
+                </button>
+            </div>
+
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Connected Integrations</h2>
+                    <p class="card-description">Manage third-party integrations</p>
+                </div>
+
+                <div style="display: grid; gap: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 8px;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; background: #e0e7ff; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                📊
+                            </div>
+                            <div>
+                                <div style="font-weight: 600;">Salesforce</div>
+                                <div style="font-size: 0.875rem; color: #64748b;">Sync shipment data with CRM</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary btn-sm">Configure</button>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 1px solid #e2e8f0; border-radius: 8px;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; background: #d1fae5; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                💳
+                            </div>
+                            <div>
+                                <div style="font-weight: 600;">QuickBooks</div>
+                                <div style="font-size: 0.875rem; color: #64748b;">Automated invoice processing</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary btn-sm">Configure</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Tab -->
+        <div id="security" class="tab-content">
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Security Settings</h2>
+                    <p class="card-description">Configure security policies for your organization</p>
+                </div>
+
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <div class="toggle-label">Enforce strong passwords</div>
+                        <div class="toggle-description">Require minimum 12 characters with mixed case, numbers, and symbols</div>
+                    </div>
+                    <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                </div>
+
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <div class="toggle-label">Session timeout</div>
+                        <div class="toggle-description">Automatically log out users after 30 minutes of inactivity</div>
+                    </div>
+                    <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                </div>
+
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <div class="toggle-label">IP whitelisting</div>
+                        <div class="toggle-description">Only allow access from specific IP addresses</div>
+                    </div>
+                    <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                </div>
+
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <div class="toggle-label">Audit logging</div>
+                        <div class="toggle-description">Track all user actions and system changes</div>
+                    </div>
+                    <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Single Sign-On (SSO)</h2>
+                    <p class="card-description">Configure SSO for seamless authentication</p>
+                </div>
+
+                <div class="alert alert-info">
+                    <svg width="20" height="20" fill="currentColor">
+                        <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 7h2v5H9V7zm0 6h2v2H9v-2z"/>
+                    </svg>
+                    <div>
+                        SSO is available on Enterprise plans. Contact sales to upgrade.
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" disabled>Configure SAML</button>
+            </div>
+        </div>
+
+        <!-- Billing Tab -->
+        <div id="billing" class="tab-content">
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Current Plan</h2>
+                </div>
+
+                <div style="padding: 2rem; background: #f8fafc; border-radius: 8px; text-align: center;">
+                    <h3 style="font-size: 2rem; margin-bottom: 0.5rem;">Professional</h3>
+                    <p style="color: #64748b; margin-bottom: 2rem;">$499/month • 50 users • Unlimited shipments</p>
+                    <div style="display: flex; justify-content: center; gap: 1rem;">
+                        <button class="btn btn-primary">Upgrade Plan</button>
+                        <button class="btn btn-secondary">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Usage This Month</h2>
+                </div>
+
+                <div style="display: grid; gap: 1rem;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Active Users</span>
+                            <span style="font-weight: 600;">24 / 50</span>
+                        </div>
+                        <div style="background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div style="background: #3b82f6; height: 100%; width: 48%;"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>API Calls</span>
+                            <span style="font-weight: 600;">45,231 / 100,000</span>
+                        </div>
+                        <div style="background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div style="background: #10b981; height: 100%; width: 45%;"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Document Storage</span>
+                            <span style="font-weight: 600;">12.3 GB / 50 GB</span>
+                        </div>
+                        <div style="background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div style="background: #10b981; height: 100%; width: 25%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Bar -->
+    <div class="save-bar" id="saveBar">
+        <div class="save-message">You have unsaved changes</div>
+        <div class="save-actions">
+            <button class="btn btn-secondary" onclick="discardChanges()">Discard</button>
+            <button class="btn btn-primary" onclick="saveChanges()">Save Changes</button>
+        </div>
+    </div>
+
+    <script>
+        let hasUnsavedChanges = false;
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Toggle switch
+        function toggleSwitch(element) {
+            element.classList.toggle('active');
+            showSaveBar();
+        }
+
+        // Toggle API key visibility
+        function toggleApiKey(keyId) {
+            const keyElement = document.getElementById(keyId);
+            const button = event.target;
+            
+            if (keyElement.classList.contains('hidden')) {
+                keyElement.classList.remove('hidden');
+                button.textContent = 'Hide';
+            } else {
+                keyElement.classList.add('hidden');
+                button.textContent = 'Show';
+            }
+        }
+
+        // Show save bar when changes are made
+        function showSaveBar() {
+            hasUnsavedChanges = true;
+            document.getElementById('saveBar').classList.add('show');
+        }
+
+        // Save changes
+        async function saveChanges() {
+            // Simulate saving
+            console.log('Saving changes...');
+            
+            // Show loading state
+            event.target.disabled = true;
+            event.target.textContent = 'Saving...';
+            
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Hide save bar
+            hasUnsavedChanges = false;
+            document.getElementById('saveBar').classList.remove('show');
+            
+            // Show success message
+            alert('Settings saved successfully!');
+        }
+
+        // Discard changes
+        function discardChanges() {
+            if (confirm('Are you sure you want to discard your changes?')) {
+                hasUnsavedChanges = false;
+                document.getElementById('saveBar').classList.remove('show');
+                location.reload();
+            }
+        }
+
+        // Add change listeners to form elements
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add listeners to all form inputs
+            document.querySelectorAll('input, select, textarea').forEach(element => {
+                element.addEventListener('change', showSaveBar);
+            });
+
+            // Warn before leaving with unsaved changes
+            window.addEventListener('beforeunload', (e) => {
+                if (hasUnsavedChanges) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

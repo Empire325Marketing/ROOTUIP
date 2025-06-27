@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Freight Intelligence Resources | UIP Downloads</title>
+    <meta name="description" content="Download our comprehensive guides, whitepapers, and tools for supply chain optimization. Free resources for logistics professionals.">
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .downloads-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+        }
+
+        .header-description {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .resource-categories {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .category-filter {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .category-filter:hover, .category-filter.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .resource-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .resource-image {
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .resource-type {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .resource-content {
+            padding: 25px;
+        }
+
+        .resource-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .resource-description {
+            color: #718096;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .resource-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .resource-features li {
+            color: #4a5568;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .resource-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #48bb78;
+            font-weight: bold;
+        }
+
+        .resource-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+
+        .download-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            transform: scale(1.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .newsletter-signup {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .newsletter-signup h2 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .newsletter-signup p {
+            color: #718096;
+            margin-bottom: 25px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .newsletter-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .success-message {
+            display: none;
+            background: #f0fff4;
+            border: 2px solid #68d391;
+            color: #22543d;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .downloads-container {
+                padding: 20px 15px;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .resources-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .category-filter {
+                font-size: 0.9rem;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="downloads-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📚 Free Resources</h1>
+            <p class="header-subtitle">Expert Guides & Tools for Supply Chain Excellence</p>
+            <p class="header-description">
+                Download our comprehensive collection of whitepapers, guides, and tools to optimize your 
+                freight operations and supply chain strategy.
+            </p>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="resource-categories">
+            <button class="category-filter active" onclick="filterResources('all')">All Resources</button>
+            <button class="category-filter" onclick="filterResources('guides')">Guides</button>
+            <button class="category-filter" onclick="filterResources('whitepapers')">Whitepapers</button>
+            <button class="category-filter" onclick="filterResources('tools')">Tools</button>
+            <button class="category-filter" onclick="filterResources('case-studies')">Case Studies</button>
+        </div>
+
+        <!-- Resources Grid -->
+        <div class="resources-grid">
+            <!-- Guide: Supply Chain Optimization -->
+            <div class="resource-card" data-category="guides">
+                <div class="resource-image">
+                    <div class="resource-type">Guide</div>
+                    📖
+                </div>
+                <div class="resource-content">
+                    <h3 class="resource-title">Complete Supply Chain Optimization Guide</h3>
+                    <p class="resource-description">
+                        A comprehensive 50-page guide covering strategies, best practices, and technologies for modern supply chain optimization.
+                    </p>
+                    <ul class="resource-features">
+                        <li>Cost reduction strategies</li>
+                        <li>Technology selection framework</li>
+                        <li>Implementation roadmap</li>
+                        <li>ROI calculation templates</li>
+                    </ul>
+                    <div class="resource-meta">
+                        <span>📄 50 pages</span>
+                        <span>⭐ 4.9/5 rating</span>
+                        <span>📥 12,847 downloads</span>
+                    </div>
+                    <button class="download-btn" onclick="openDownloadModal('supply-chain-guide')">
+                        📥 Download Free Guide
+                    </button>
+                </div>
+            </div>
+
+            <!-- Whitepaper: AI in Logistics -->
+            <div class="resource-card" data-category="whitepapers">
+                <div class="resource-image">
+                    <div class="resource-type">Whitepaper</div>
+                    🤖
+                </div>
+                <div class="resource-content">
+                    <h3 class="resource-title">AI-Driven Freight Intelligence: 2024 Industry Report</h3>
+                    <p class="resource-description">
+                        Exclusive research on how artificial intelligence is transforming freight operations and the future of intelligent logistics.
+                    </p>
+                    <ul class="resource-features">
+                        <li>Market analysis & trends</li>
+                        <li>Technology adoption rates</li>
+                        <li>Success metrics & benchmarks</li>
+                        <li>Future predictions</li>
+                    </ul>
+                    <div class="resource-meta">
+                        <span>📄 32 pages</span>
+                        <span>⭐ 4.8/5 rating</span>
+                        <span>📥 8,923 downloads</span>
+                    </div>
+                    <button class="download-btn" onclick="openDownloadModal('ai-whitepaper')">
+                        📥 Download Whitepaper
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tool: ROI Calculator -->
+            <div class="resource-card" data-category="tools">
+                <div class="resource-image">
+                    <div class="resource-type">Tool</div>
+                    🧮
+                </div>
+                <div class="resource-content">
+                    <h3 class="resource-title">Freight Intelligence ROI Calculator Spreadsheet</h3>
+                    <p class="resource-description">
+                        Advanced Excel template with pre-built formulas to calculate your freight intelligence ROI and implementation timeline.
+                    </p>
+                    <ul class="resource-features">
+                        <li>Automated ROI calculations</li>
+                        <li>Scenario planning tools</li>
+                        <li>Cost-benefit analysis</li>
+                        <li>Executive summary generator</li>
+                    </ul>
+                    <div class="resource-meta">
+                        <span>📊 Excel File</span>
+                        <span>⭐ 4.7/5 rating</span>
+                        <span>📥 6,542 downloads</span>
+                    </div>
+                    <button class="download-btn" onclick="openDownloadModal('roi-calculator')">
+                        📥 Download Calculator
+                    </button>
+                </div>
+            </div>
+
+            <!-- Case Study: GlobalTech -->
+            <div class="resource-card" data-category="case-studies">
+                <div class="resource-image">
+                    <div class="resource-type">Case Study</div>
+                    📈
+                </div>
+                <div class="resource-content">
+                    <h3 class="resource-title">GlobalTech Success Story: 40% Transit Time Reduction</h3>
+                    <p class="resource-description">
+                        Detailed case study showing how GlobalTech achieved dramatic improvements in their supply chain performance using freight intelligence.
+                    </p>
+                    <ul class="resource-features">
+                        <li>Implementation timeline</li>
+                        <li>Challenge & solution details</li>
+                        <li>Quantified results</li>
+                        <li>Lessons learned</li>
+                    </ul>
+                    <div class="resource-meta">
+                        <span>📄 24 pages</span>
+                        <span>⭐ 4.9/5 rating</span>
+                        <span>📥 4,789 downloads</span>
+                    </div>
+                    <button class="download-btn" onclick="openDownloadModal('globaltech-case')">
+                        📥 Download Case Study
+                    </button>
+                </div>
+            </div>
+
+            <!-- Guide: Container Tracking -->
+            <div class="resource-card" data-category="guides">
+                <div class="resource-image">
+                    <div class="resource-type">Guide</div>
+                    📦
+                </div>
+                <div class="resource-content">
+                    <h3 class="resource-title">Container Tracking Technology Implementation Guide</h3>
+                    <p class="resource-description">
+                        Step-by-step guide to implementing real-time container tracking with vendor selection and integration best practices.
+                    </p>
+                    <ul class="resource-features">
+                        <li>Technology comparison matrix</li>
+                        <li>Vendor evaluation criteria</li>
+                        <li>Integration checklist</li>
+                        <li>Success metrics framework</li>
+                    </ul>
+                    <div class="resource-meta">
+                        <span>📄 38 pages</span>
+                        <span>⭐ 4.8/5 rating</span>
+                        <span>📥 7,234 downloads</span>
+                    </div>
+                    <button class="download-btn" onclick="openDownloadModal('container-tracking')">
+                        📥 Download Guide
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tool: Freight Cost Analyzer -->
+            <div class="resource-card" data-category="tools">
+                <div class="resource-image">
+                    <div class="resource-type">Tool</div>
+                    💰
+                </div>
+                <div class="resource-content">
+                    <h3 class="resource-title">Freight Cost Analysis Dashboard Template</h3>
+                    <p class="resource-description">
+                        Interactive Excel dashboard template for analyzing freight costs, identifying savings opportunities, and tracking KPIs.
+                    </p>
+                    <ul class="resource-features">
+                        <li>Interactive cost breakdown</li>
+                        <li>Savings opportunity identification</li>
+                        <li>Carrier performance analysis</li>
+                        <li>Automated reporting</li>
+                    </ul>
+                    <div class="resource-meta">
+                        <span>📊 Excel File</span>
+                        <span>⭐ 4.6/5 rating</span>
+                        <span>📥 5,123 downloads</span>
+                    </div>
+                    <button class="download-btn" onclick="openDownloadModal('cost-analyzer')">
+                        📥 Download Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Newsletter Signup -->
+        <div class="newsletter-signup">
+            <h2>📧 Stay Updated</h2>
+            <p>Get notified when we publish new resources and industry insights</p>
+            <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                <input type="email" class="newsletter-input" placeholder="Your email address" required>
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+            <div class="success-message" id="newsletterSuccess">
+                ✅ Thank you! You'll receive an email confirmation shortly.
+            </div>
+        </div>
+    </div>
+
+    <!-- Download Modal -->
+    <div id="downloadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h3>🔓 Unlock Your Free Resource</h3>
+                <p>Enter your details to download instantly</p>
+            </div>
+            <div class="modal-body">
+                <form id="downloadForm" onsubmit="submitDownload(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name *</label>
+                            <input type="text" class="form-input" id="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name *</label>
+                            <input type="text" class="form-input" id="lastName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Business Email *</label>
+                        <input type="email" class="form-input" id="email" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Company Name *</label>
+                            <input type="text" class="form-input" id="companyName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Job Title</label>
+                            <input type="text" class="form-input" id="jobTitle" placeholder="e.g., Supply Chain Manager">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Company Size</label>
+                        <select class="form-select" id="companySize">
+                            <option value="">Select Company Size</option>
+                            <option value="startup">Startup (1-50 employees)</option>
+                            <option value="small">Small (51-200 employees)</option>
+                            <option value="medium">Medium (201-1000 employees)</option>
+                            <option value="large">Large (1000+ employees)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Primary Interest</label>
+                        <select class="form-select" id="primaryInterest">
+                            <option value="">Select Primary Interest</option>
+                            <option value="cost-reduction">Cost Reduction</option>
+                            <option value="visibility">Supply Chain Visibility</option>
+                            <option value="automation">Process Automation</option>
+                            <option value="analytics">Advanced Analytics</option>
+                            <option value="compliance">Compliance & Reporting</option>
+                        </select>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="newsletter" checked>
+                        <label for="newsletter">Subscribe to our weekly newsletter for more insights</label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="updates" checked>
+                        <label for="updates">Get notified about new resources and tools</label>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        📥 Download Now
+                    </button>
+                </form>
+                
+                <div class="success-message" id="downloadSuccess">
+                    ✅ Success! Your download will begin automatically. Check your email for additional resources.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentResource = '';
+
+        function filterResources(category) {
+            const cards = document.querySelectorAll('.resource-card');
+            const filters = document.querySelectorAll('.category-filter');
+            
+            // Update active filter
+            filters.forEach(filter => filter.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter cards
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            trackEvent('Resource Filter', { category: category });
+        }
+
+        function openDownloadModal(resourceId) {
+            currentResource = resourceId;
+            document.getElementById('downloadModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            trackEvent('Download Modal Opened', { resource: resourceId });
+        }
+
+        function closeModal() {
+            document.getElementById('downloadModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('downloadForm').style.display = 'block';
+            document.getElementById('downloadSuccess').style.display = 'none';
+        }
+
+        function submitDownload(event) {
+            event.preventDefault();
+            
+            const leadData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                companyName: document.getElementById('companyName').value,
+                jobTitle: document.getElementById('jobTitle').value,
+                companySize: document.getElementById('companySize').value,
+                primaryInterest: document.getElementById('primaryInterest').value,
+                newsletter: document.getElementById('newsletter').checked,
+                updates: document.getElementById('updates').checked,
+                resource: currentResource,
+                source: 'content_downloads',
+                timestamp: new Date().toISOString()
+            };
+            
+            // Progressive profiling: store additional data for future interactions
+            storeProgressiveProfile(leadData);
+            
+            // Submit to marketing automation
+            submitToMarketing(leadData);
+            
+            // Show success and initiate download
+            document.getElementById('downloadForm').style.display = 'none';
+            document.getElementById('downloadSuccess').style.display = 'block';
+            
+            // Simulate file download
+            setTimeout(() => {
+                initiateDownload(currentResource);
+                closeModal();
+            }, 2000);
+            
+            trackEvent('Resource Downloaded', { 
+                resource: currentResource, 
+                email: leadData.email,
+                company: leadData.companyName 
+            });
+        }
+
+        function subscribeNewsletter(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input[type="email"]').value;
+            
+            const newsletterData = {
+                email: email,
+                source: 'resources_page_newsletter',
+                timestamp: new Date().toISOString()
+            };
+            
+            // Submit to marketing automation
+            submitToMarketing(newsletterData);
+            
+            // Show success
+            event.target.style.display = 'none';
+            document.getElementById('newsletterSuccess').style.display = 'block';
+            
+            trackEvent('Newsletter Signup', { source: 'resources_page' });
+            
+            // Redirect to welcome sequence
+            setTimeout(() => {
+                window.location.href = '/marketing/automation/welcome-sequence.html?email=' + encodeURIComponent(email);
+            }, 2000);
+        }
+
+        function storeProgressiveProfile(leadData) {
+            // Store lead information for progressive profiling
+            let existingProfile = localStorage.getItem('leadProfile');
+            let profile = existingProfile ? JSON.parse(existingProfile) : {};
+            
+            // Merge new data with existing profile
+            profile = { ...profile, ...leadData };
+            profile.lastInteraction = new Date().toISOString();
+            profile.downloadHistory = profile.downloadHistory || [];
+            profile.downloadHistory.push({
+                resource: currentResource,
+                timestamp: new Date().toISOString()
+            });
+            
+            localStorage.setItem('leadProfile', JSON.stringify(profile));
+            
+            // Calculate lead score based on engagement
+            calculateLeadScore(profile);
+        }
+
+        function calculateLeadScore(profile) {
+            let score = 0;
+            
+            // Company size scoring
+            const sizeScoring = {
+                'large': 25,
+                'medium': 20,
+                'small': 15,
+                'startup': 10
+            };
+            score += sizeScoring[profile.companySize] || 0;
+            
+            // Job title scoring (higher for decision makers)
+            const titleKeywords = ['director', 'manager', 'head', 'vp', 'ceo', 'coo', 'chief'];
+            if (profile.jobTitle && titleKeywords.some(keyword => 
+                profile.jobTitle.toLowerCase().includes(keyword))) {
+                score += 20;
+            }
+            
+            // Download history scoring
+            score += (profile.downloadHistory?.length || 0) * 5;
+            
+            // Newsletter subscription
+            if (profile.newsletter) score += 10;
+            
+            // Interest alignment
+            const highValueInterests = ['cost-reduction', 'analytics', 'automation'];
+            if (highValueInterests.includes(profile.primaryInterest)) {
+                score += 15;
+            }
+            
+            profile.leadScore = score;
+            localStorage.setItem('leadProfile', JSON.stringify(profile));
+            
+            trackEvent('Lead Score Calculated', { 
+                score: score, 
+                email: profile.email,
+                factors: {
+                    companySize: profile.companySize,
+                    jobTitle: profile.jobTitle,
+                    downloadCount: profile.downloadHistory?.length || 0
+                }
+            });
+            
+            // Trigger high-value lead alert if score > 50
+            if (score > 50) {
+                trackEvent('High Value Lead Identified', { 
+                    score: score, 
+                    email: profile.email,
+                    company: profile.companyName 
+                });
+            }
+        }
+
+        function initiateDownload(resourceId) {
+            // Simulate file download
+            const downloads = {
+                'supply-chain-guide': 'Supply_Chain_Optimization_Guide_2024.pdf',
+                'ai-whitepaper': 'AI_Freight_Intelligence_Report_2024.pdf',
+                'roi-calculator': 'Freight_Intelligence_ROI_Calculator.xlsx',
+                'globaltech-case': 'GlobalTech_Case_Study_2024.pdf',
+                'container-tracking': 'Container_Tracking_Implementation_Guide.pdf',
+                'cost-analyzer': 'Freight_Cost_Analysis_Dashboard.xlsx'
+            };
+            
+            const filename = downloads[resourceId] || 'Resource_Download.pdf';
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.href = '#'; // In production, this would be the actual file URL
+            link.download = filename;
+            link.click();
+            
+            console.log(`Downloading: ${filename}`);
+        }
+
+        function submitToMarketing(data) {
+            // Simulate API call to marketing automation system
+            console.log('Submitting to marketing automation:', data);
+            
+            // In production, this would call your marketing automation API
+            // fetch('/api/marketing/leads', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(data)
+            // });
+        }
+
+        function trackEvent(eventName, properties = {}) {
+            console.log('Analytics Event:', eventName, properties);
+            
+            // Integration with marketing automation
+            if (typeof marketingAutomation !== 'undefined') {
+                marketingAutomation.track(eventName, properties);
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('downloadModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Track page engagement
+        trackEvent('Resources Page View', {
+            timestamp: new Date().toISOString(),
+            referrer: document.referrer
+        });
+
+        // Track scroll depth
+        let maxScroll = 0;
+        window.addEventListener('scroll', () => {
+            const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+            if (scrollPercent > maxScroll) {
+                maxScroll = scrollPercent;
+                if (maxScroll % 25 === 0) {
+                    trackEvent('Scroll Depth', { depth: maxScroll, page: 'resources' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

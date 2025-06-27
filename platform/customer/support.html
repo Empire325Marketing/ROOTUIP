@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Center - ROOTUIP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: #0f172a;
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Quick Help Section */
+        .quick-help {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .help-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .help-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .help-icon {
+            width: 48px;
+            height: 48px;
+            background: #eff6ff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .help-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .help-description {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: #64748b;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .tab:hover {
+            color: #1e293b;
+        }
+
+        .tab.active {
+            color: #3b82f6;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #3b82f6;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Tickets Section */
+        .tickets-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .tickets-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background: white;
+            color: #1e293b;
+        }
+
+        .tickets-list {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .ticket-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .ticket-item:last-child {
+            border-bottom: none;
+        }
+
+        .ticket-item:hover {
+            background: #f8fafc;
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.5rem;
+        }
+
+        .ticket-number {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .ticket-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-open {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-in-progress {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-resolved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-closed {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .ticket-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .ticket-description {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .ticket-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        /* Knowledge Base */
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .category-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .article-list {
+            list-style: none;
+        }
+
+        .article-item {
+            padding: 0.5rem 0;
+        }
+
+        .article-link {
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .article-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Popular Articles */
+        .popular-articles {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .article-card {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .article-card:last-child {
+            border-bottom: none;
+        }
+
+        /* Contact Options */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .contact-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.75rem;
+        }
+
+        .contact-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-info {
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        /* New Ticket Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .close-btn:hover {
+            color: #1e293b;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        /* Chat Widget */
+        .chat-widget {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.2s;
+        }
+
+        .chat-widget:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .tickets-filters {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/platform/customer/dashboard.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back to Dashboard
+            </a>
+            <h1>Support Center</h1>
+        </div>
+    </header>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Quick Help -->
+        <div class="quick-help">
+            <div class="help-card" onclick="showTab('tickets')">
+                <div class="help-icon">🎫</div>
+                <div class="help-title">Support Tickets</div>
+                <div class="help-description">Track and manage your open support requests</div>
+            </div>
+            <div class="help-card" onclick="showTab('knowledge')">
+                <div class="help-icon">📚</div>
+                <div class="help-title">Knowledge Base</div>
+                <div class="help-description">Search our comprehensive documentation</div>
+            </div>
+            <div class="help-card" onclick="showTab('contact')">
+                <div class="help-icon">💬</div>
+                <div class="help-title">Contact Support</div>
+                <div class="help-description">Get in touch with our support team</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('tickets')">My Tickets</button>
+            <button class="tab" onclick="showTab('knowledge')">Knowledge Base</button>
+            <button class="tab" onclick="showTab('contact')">Contact Us</button>
+        </div>
+
+        <!-- Tickets Tab -->
+        <div id="tickets-tab" class="tab-content active">
+            <div class="tickets-header">
+                <h2>Support Tickets</h2>
+                <button class="btn btn-primary" onclick="openNewTicketModal()">
+                    Create New Ticket
+                </button>
+            </div>
+
+            <div class="tickets-filters">
+                <select class="filter-select" id="statusFilter" onchange="filterTickets()">
+                    <option value="">All Status</option>
+                    <option value="open">Open</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="resolved">Resolved</option>
+                    <option value="closed">Closed</option>
+                </select>
+                <select class="filter-select" id="priorityFilter" onchange="filterTickets()">
+                    <option value="">All Priority</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="critical">Critical</option>
+                </select>
+                <select class="filter-select" id="categoryFilter" onchange="filterTickets()">
+                    <option value="">All Categories</option>
+                    <option value="technical">Technical Issue</option>
+                    <option value="billing">Billing</option>
+                    <option value="tracking">Shipment Tracking</option>
+                    <option value="integration">Integration</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="tickets-list" id="ticketsList">
+                <!-- Dynamic tickets -->
+            </div>
+        </div>
+
+        <!-- Knowledge Base Tab -->
+        <div id="knowledge-tab" class="tab-content">
+            <div class="search-section">
+                <h2 style="margin-bottom: 1rem;">How can we help you?</h2>
+                <input type="text" class="search-input" placeholder="Search for articles..." onkeyup="searchKnowledge(event)">
+            </div>
+
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-title">
+                        <span>🚀</span> Getting Started
+                    </div>
+                    <ul class="article-list">
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('quick-start')">Quick Start Guide</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('first-shipment')">Creating Your First Shipment</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('account-setup')">Account Setup</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('team-management')">Managing Your Team</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-title">
+                        <span>📦</span> Shipment Management
+                    </div>
+                    <ul class="article-list">
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('tracking-guide')">Tracking Your Shipments</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('document-upload')">Document Upload Guide</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('dd-prevention')">D&D Prevention Best Practices</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('carrier-selection')">Choosing the Right Carrier</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-title">
+                        <span>🔌</span> Integrations & API
+                    </div>
+                    <ul class="article-list">
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('api-intro')">API Introduction</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('webhook-setup')">Setting Up Webhooks</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('erp-integration')">ERP Integration Guide</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('data-import')">Bulk Data Import</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-title">
+                        <span>💳</span> Billing & Payments
+                    </div>
+                    <ul class="article-list">
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('billing-overview')">Billing Overview</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('payment-methods')">Payment Methods</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('invoice-management')">Invoice Management</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('cost-allocation')">Cost Allocation</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-title">
+                        <span>📊</span> Reports & Analytics
+                    </div>
+                    <ul class="article-list">
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('report-types')">Understanding Report Types</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('custom-reports')">Creating Custom Reports</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('export-data')">Exporting Your Data</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('kpi-tracking')">KPI Tracking</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-title">
+                        <span>🔧</span> Troubleshooting
+                    </div>
+                    <ul class="article-list">
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('common-issues')">Common Issues</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('login-problems')">Login Problems</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('sync-errors')">Sync Errors</a>
+                        </li>
+                        <li class="article-item">
+                            <a href="#" class="article-link" onclick="viewArticle('performance-tips')">Performance Tips</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="popular-articles">
+                <h3 style="margin-bottom: 1rem;">Popular Articles</h3>
+                <div class="article-card">
+                    <h4 style="margin-bottom: 0.5rem;">How to Track Multiple Shipments</h4>
+                    <p style="color: #64748b; font-size: 0.875rem;">Learn how to efficiently track and manage multiple shipments using our bulk tracking features.</p>
+                </div>
+                <div class="article-card">
+                    <h4 style="margin-bottom: 0.5rem;">Understanding D&D Risk Scores</h4>
+                    <p style="color: #64748b; font-size: 0.875rem;">A comprehensive guide to our AI-powered detention and demurrage risk scoring system.</p>
+                </div>
+                <div class="article-card">
+                    <h4 style="margin-bottom: 0.5rem;">API Rate Limits and Best Practices</h4>
+                    <p style="color: #64748b; font-size: 0.875rem;">Everything you need to know about API usage limits and optimization strategies.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Tab -->
+        <div id="contact-tab" class="tab-content">
+            <h2 style="margin-bottom: 2rem;">Contact Our Support Team</h2>
+            
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-title">Email Support</div>
+                    <div class="contact-info">support@rootuip.com</div>
+                    <p style="color: #64748b; font-size: 0.875rem; margin-bottom: 1rem;">
+                        Average response time: 2-4 hours
+                    </p>
+                    <button class="btn btn-primary" onclick="window.location.href='mailto:support@rootuip.com'">
+                        Send Email
+                    </button>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-title">Phone Support</div>
+                    <div class="contact-info">+1 (800) 555-0123</div>
+                    <p style="color: #64748b; font-size: 0.875rem; margin-bottom: 1rem;">
+                        Available Mon-Fri, 8AM-6PM EST
+                    </p>
+                    <button class="btn btn-primary" onclick="window.location.href='tel:+18005550123'">
+                        Call Now
+                    </button>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">💬</div>
+                    <div class="contact-title">Live Chat</div>
+                    <div class="contact-info">Instant assistance</div>
+                    <p style="color: #64748b; font-size: 0.875rem; margin-bottom: 1rem;">
+                        Available 24/7 for urgent issues
+                    </p>
+                    <button class="btn btn-primary" onclick="startChat()">
+                        Start Chat
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <h3 style="margin-bottom: 1rem;">Emergency Support</h3>
+                <p style="color: #64748b; margin-bottom: 1rem;">
+                    For critical issues affecting your operations, our emergency support team is available 24/7.
+                </p>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">
+                    <strong>Emergency Hotline:</strong> +1 (800) 555-0911
+                </p>
+                <div style="background: #fef3c7; border-radius: 8px; padding: 1rem;">
+                    <p style="color: #92400e; font-size: 0.875rem; margin: 0;">
+                        <strong>Note:</strong> Emergency support is reserved for critical operational issues such as system outages, 
+                        security incidents, or urgent shipment problems. Please use regular support channels for non-critical inquiries.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Ticket Modal -->
+    <div id="newTicketModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Create New Support Ticket</h2>
+                <button class="close-btn" onclick="closeNewTicketModal()">&times;</button>
+            </div>
+            
+            <form id="newTicketForm" onsubmit="createTicket(event)">
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <input type="text" class="form-input" id="ticketSubject" required 
+                           placeholder="Brief description of your issue">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" id="ticketCategory" required>
+                        <option value="">Select category</option>
+                        <option value="technical">Technical Issue</option>
+                        <option value="billing">Billing & Payments</option>
+                        <option value="tracking">Shipment Tracking</option>
+                        <option value="integration">Integration & API</option>
+                        <option value="account">Account Management</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Priority</label>
+                    <select class="form-select" id="ticketPriority" required>
+                        <option value="low">Low - General inquiry</option>
+                        <option value="medium" selected>Medium - Standard issue</option>
+                        <option value="high">High - Urgent issue</option>
+                        <option value="critical">Critical - Operations blocked</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="ticketDescription" required 
+                              placeholder="Please provide detailed information about your issue..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Related Shipment (Optional)</label>
+                    <input type="text" class="form-input" id="ticketShipment" 
+                           placeholder="Container or B/L number">
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeNewTicketModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Create Ticket
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget" onclick="startChat()">
+        💬
+    </div>
+
+    <script>
+        // Initialize
+        let tickets = [];
+        let activeTab = 'tickets';
+
+        // Load initial data
+        function loadTickets() {
+            // Simulated ticket data
+            tickets = [
+                {
+                    id: 'TKT-2024-001',
+                    subject: 'Unable to download tracking report',
+                    category: 'technical',
+                    priority: 'medium',
+                    status: 'open',
+                    created: '2025-06-26T10:30:00',
+                    updated: '2025-06-26T14:45:00',
+                    description: 'Getting error when trying to export tracking data for last month'
+                },
+                {
+                    id: 'TKT-2024-002',
+                    subject: 'Invoice discrepancy for May shipments',
+                    category: 'billing',
+                    priority: 'high',
+                    status: 'in-progress',
+                    created: '2025-06-25T09:15:00',
+                    updated: '2025-06-26T11:20:00',
+                    description: 'Several charges appear to be duplicated on the May invoice'
+                },
+                {
+                    id: 'TKT-2024-003',
+                    subject: 'API rate limit questions',
+                    category: 'integration',
+                    priority: 'low',
+                    status: 'resolved',
+                    created: '2025-06-24T16:00:00',
+                    updated: '2025-06-25T10:30:00',
+                    description: 'Need clarification on API rate limits for our integration'
+                }
+            ];
+            
+            renderTickets();
+        }
+
+        // Render tickets
+        function renderTickets() {
+            const ticketsList = document.getElementById('ticketsList');
+            const statusFilter = document.getElementById('statusFilter').value;
+            const priorityFilter = document.getElementById('priorityFilter').value;
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            
+            let filteredTickets = tickets;
+            
+            if (statusFilter) {
+                filteredTickets = filteredTickets.filter(t => t.status === statusFilter);
+            }
+            if (priorityFilter) {
+                filteredTickets = filteredTickets.filter(t => t.priority === priorityFilter);
+            }
+            if (categoryFilter) {
+                filteredTickets = filteredTickets.filter(t => t.category === categoryFilter);
+            }
+            
+            if (filteredTickets.length === 0) {
+                ticketsList.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #64748b;">
+                        <p>No tickets found matching your filters.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            ticketsList.innerHTML = filteredTickets.map(ticket => `
+                <div class="ticket-item" onclick="viewTicket('${ticket.id}')">
+                    <div class="ticket-header">
+                        <div>
+                            <span class="ticket-number">${ticket.id}</span>
+                            <span class="ticket-status status-${ticket.status}">${ticket.status.replace('-', ' ')}</span>
+                        </div>
+                        <span class="ticket-status" style="background: ${getPriorityColor(ticket.priority)}">
+                            ${ticket.priority}
+                        </span>
+                    </div>
+                    <div class="ticket-title">${ticket.subject}</div>
+                    <div class="ticket-description">${ticket.description}</div>
+                    <div class="ticket-meta">
+                        <span>Category: ${ticket.category}</span>
+                        <span>Created: ${new Date(ticket.created).toLocaleDateString()}</span>
+                        <span>Last updated: ${getRelativeTime(ticket.updated)}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get priority color
+        function getPriorityColor(priority) {
+            switch(priority) {
+                case 'low': return '#e2e8f0';
+                case 'medium': return '#dbeafe';
+                case 'high': return '#fef3c7';
+                case 'critical': return '#fee2e2';
+                default: return '#e2e8f0';
+            }
+        }
+
+        // Get relative time
+        function getRelativeTime(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = now - date;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            
+            if (hours < 1) return 'Just now';
+            if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            
+            const days = Math.floor(hours / 24);
+            if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+            
+            return date.toLocaleDateString();
+        }
+
+        // Show tab
+        function showTab(tabName) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target?.classList.add('active') || 
+            document.querySelector(`.tab:nth-child(${tabName === 'tickets' ? 1 : tabName === 'knowledge' ? 2 : 3})`).classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            activeTab = tabName;
+        }
+
+        // Filter tickets
+        function filterTickets() {
+            renderTickets();
+        }
+
+        // Open new ticket modal
+        function openNewTicketModal() {
+            document.getElementById('newTicketModal').classList.add('active');
+        }
+
+        // Close new ticket modal
+        function closeNewTicketModal() {
+            document.getElementById('newTicketModal').classList.remove('active');
+            document.getElementById('newTicketForm').reset();
+        }
+
+        // Create ticket
+        function createTicket(event) {
+            event.preventDefault();
+            
+            const newTicket = {
+                id: `TKT-2024-${String(tickets.length + 1).padStart(3, '0')}`,
+                subject: document.getElementById('ticketSubject').value,
+                category: document.getElementById('ticketCategory').value,
+                priority: document.getElementById('ticketPriority').value,
+                status: 'open',
+                created: new Date().toISOString(),
+                updated: new Date().toISOString(),
+                description: document.getElementById('ticketDescription').value,
+                shipment: document.getElementById('ticketShipment').value
+            };
+            
+            tickets.unshift(newTicket);
+            renderTickets();
+            closeNewTicketModal();
+            
+            // Show success message
+            alert(`Ticket ${newTicket.id} created successfully! Our support team will respond within 2-4 hours.`);
+        }
+
+        // View ticket details
+        function viewTicket(ticketId) {
+            // In production, this would navigate to ticket details page
+            alert(`View ticket details: ${ticketId}`);
+        }
+
+        // View article
+        function viewArticle(articleId) {
+            // In production, this would navigate to article page
+            alert(`View article: ${articleId}`);
+        }
+
+        // Search knowledge base
+        function searchKnowledge(event) {
+            if (event.key === 'Enter') {
+                const query = event.target.value;
+                alert(`Searching for: ${query}`);
+            }
+        }
+
+        // Start chat
+        function startChat() {
+            alert('Live chat feature coming soon! For now, please create a support ticket or call our support line.');
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', loadTickets);
+    </script>
+</body>
+</html>

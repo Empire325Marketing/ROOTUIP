@@ -1,0 +1,169 @@
+{
+  "sequence_name": "roi_calculator_followup",
+  "description": "7-email sequence over 14 days for ROI calculator leads",
+  "trigger": "roi_calculator_submission",
+  "emails": [
+    {
+      "email_id": "roi_email_1",
+      "delay_hours": 0,
+      "subject": "Your ROOTUIP ROI Report - {{total_savings}} in Annual Savings",
+      "preheader": "Plus 3 quick wins you can implement today",
+      "template": "roi_detailed_report",
+      "personalization": {
+        "merge_tags": ["first_name", "company", "total_savings", "roi_percentage", "payback_months"],
+        "dynamic_content": {
+          "high_value": "savings > 2000000",
+          "quick_roi": "payback_months < 6",
+          "large_fleet": "vessel_count > 20"
+        }
+      },
+      "cta": {
+        "primary": "Schedule Your Demo",
+        "url": "/demo?source=roi_email_1"
+      },
+      "attachments": ["roi_detailed_report.pdf"]
+    },
+    {
+      "email_id": "roi_email_2",
+      "delay_hours": 24,
+      "subject": "{{first_name}}, how {{company_similar}} saved {{case_study_savings}}",
+      "preheader": "Real results from companies like yours",
+      "template": "case_study_relevant",
+      "personalization": {
+        "case_study_selection": "by_industry_and_size",
+        "merge_tags": ["first_name", "company_similar", "case_study_savings", "case_study_roi"]
+      },
+      "cta": {
+        "primary": "Read Full Case Study",
+        "url": "/case-study/{{case_study_id}}?source=roi_email_2"
+      }
+    },
+    {
+      "email_id": "roi_email_3",
+      "delay_hours": 72,
+      "subject": "Quick question about your D&D charges",
+      "preheader": "Most companies don't realize this about detention costs...",
+      "template": "educational_dd_reduction",
+      "personalization": {
+        "dd_savings_highlight": true,
+        "merge_tags": ["first_name", "dd_current_charges", "dd_potential_savings"]
+      },
+      "content_blocks": [
+        "dd_industry_benchmarks",
+        "dd_reduction_strategies",
+        "rootuip_dd_features"
+      ],
+      "cta": {
+        "primary": "Learn Our D&D Strategy",
+        "url": "/whitepaper/dd-reduction-guide?source=roi_email_3"
+      }
+    },
+    {
+      "email_id": "roi_email_4",
+      "delay_hours": 120,
+      "subject": "Your implementation timeline ({{payback_months}} months to ROI)",
+      "preheader": "Step-by-step rollout plan for {{company}}",
+      "template": "implementation_timeline",
+      "personalization": {
+        "timeline_customization": "by_fleet_size_and_complexity",
+        "merge_tags": ["company", "vessel_count", "integration_count", "payback_months"]
+      },
+      "content_blocks": [
+        "phase_1_quick_wins",
+        "phase_2_integration",
+        "phase_3_optimization",
+        "success_metrics"
+      ],
+      "cta": {
+        "primary": "Discuss Your Timeline",
+        "url": "/demo?source=roi_email_4"
+      }
+    },
+    {
+      "email_id": "roi_email_5",
+      "delay_hours": 168,
+      "subject": "{{first_name}}, your CFO will love this",
+      "preheader": "Financial analysis of your ROOTUIP investment",
+      "template": "financial_justification",
+      "personalization": {
+        "financial_metrics": true,
+        "merge_tags": ["first_name", "total_savings", "roi_percentage", "npv_5_year", "irr"]
+      },
+      "content_blocks": [
+        "executive_summary",
+        "financial_breakdown",
+        "risk_mitigation",
+        "competitive_advantage"
+      ],
+      "cta": {
+        "primary": "Get Executive Presentation",
+        "url": "/executive-deck?source=roi_email_5"
+      },
+      "attachments": ["financial_analysis.xlsx"]
+    },
+    {
+      "email_id": "roi_email_6",
+      "delay_hours": 240,
+      "subject": "Last check-in: Ready to save {{total_savings}}?",
+      "preheader": "Your custom implementation plan expires soon",
+      "template": "urgency_reminder",
+      "personalization": {
+        "urgency_elements": true,
+        "merge_tags": ["first_name", "total_savings", "roi_percentage"]
+      },
+      "special_offer": {
+        "type": "implementation_discount",
+        "value": "20%",
+        "expires_days": 7
+      },
+      "cta": {
+        "primary": "Claim Your Savings",
+        "url": "/demo?source=roi_email_6&offer=implementation20"
+      }
+    },
+    {
+      "email_id": "roi_email_7",
+      "delay_hours": 336,
+      "subject": "Should we close your file?",
+      "preheader": "Quick 30-second survey",
+      "template": "feedback_survey",
+      "personalization": {
+        "survey_customization": true,
+        "merge_tags": ["first_name", "company"]
+      },
+      "survey_questions": [
+        "timing_not_right",
+        "different_solution",
+        "need_more_info",
+        "budget_concerns"
+      ],
+      "re_engagement_options": {
+        "quarterly_check_in": true,
+        "industry_insights_only": true,
+        "remove_from_list": true
+      }
+    }
+  ],
+  "branching_logic": {
+    "high_engagement": {
+      "condition": "opens >= 4 AND clicks >= 2",
+      "action": "trigger_sales_alert",
+      "alert_type": "hot_lead"
+    },
+    "low_engagement": {
+      "condition": "opens < 2 AFTER email_3",
+      "action": "pause_sequence",
+      "alternative": "trigger_re_engagement_sequence"
+    },
+    "demo_booked": {
+      "condition": "conversion_event = 'demo_scheduled'",
+      "action": "exit_sequence",
+      "trigger": "demo_preparation_sequence"
+    }
+  },
+  "performance_tracking": {
+    "kpis": ["open_rate", "click_rate", "demo_conversion", "revenue_attribution"],
+    "a_b_tests": ["subject_lines", "send_times", "cta_copy"],
+    "reporting_frequency": "weekly"
+  }
+}

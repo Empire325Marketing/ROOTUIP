@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Sales Battle Cards - Enterprise Ocean Freight Sales Enablement</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+        
+        .battle-cards-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 32px;
+            text-align: center;
+        }
+        
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        
+        .header-subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+        }
+        
+        .battle-cards-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .section {
+            margin-bottom: 48px;
+        }
+        
+        .section-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #1e40af;
+            border-bottom: 3px solid #1e40af;
+            padding-bottom: 8px;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+        }
+        
+        .battle-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .battle-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-right: 12px;
+        }
+        
+        .competitor-icon {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+        
+        .objection-icon {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .roi-icon {
+            background: #ecfdf5;
+            color: #059669;
+        }
+        
+        .tech-icon {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+        
+        .pricing-icon {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .card-content {
+            line-height: 1.6;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .comparison-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+        
+        .advantage {
+            background: #ecfdf5;
+            color: #065f46;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .disadvantage {
+            background: #fef2f2;
+            color: #991b1b;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .neutral {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .talking-points {
+            background: #f8fafc;
+            border-left: 4px solid #1e40af;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .talking-points h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e40af;
+        }
+        
+        .talking-points ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .talking-points li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .talking-points li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #1e40af;
+            font-weight: 600;
+        }
+        
+        .objection-response {
+            background: #fefce8;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+        
+        .objection-title {
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+        
+        .response-title {
+            font-weight: 600;
+            color: #059669;
+            margin-bottom: 8px;
+        }
+        
+        .roi-metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .roi-metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            font-weight: 500;
+            color: #64748b;
+        }
+        
+        .metric-value {
+            font-family: "JetBrains Mono", monospace;
+            font-weight: 600;
+            color: #059669;
+        }
+        
+        .implementation-timeline {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .timeline-phase {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .phase-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #0ea5e9;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-right: 12px;
+        }
+        
+        .phase-content {
+            flex: 1;
+        }
+        
+        .phase-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .phase-duration {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .quick-reference {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+        
+        .quick-reference h3 {
+            color: #065f46;
+            margin-bottom: 12px;
+            font-size: 1.125rem;
+        }
+        
+        .key-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #d1fae5;
+        }
+        
+        .stat-value {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #059669;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #374151;
+        }
+        
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .battle-cards-container {
+                padding: 20px 16px;
+            }
+            
+            .header-title {
+                font-size: 2rem;
+            }
+            
+            .key-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="battle-cards-header">
+        <div class="header-title">UIP Sales Battle Cards</div>
+        <div class="header-subtitle">Complete competitive intelligence and objection handling for enterprise ocean freight sales</div>
+    </div>
+
+    <div class="battle-cards-container">
+        <!-- Quick Reference Section -->
+        <div class="quick-reference">
+            <h3>🎯 Quick Reference: UIP Value Proposition</h3>
+            <div class="key-stats">
+                <div class="stat-item">
+                    <div class="stat-value">94%</div>
+                    <div class="stat-label">D&D Reduction</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">$127M+</div>
+                    <div class="stat-label">Customer Savings</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">347%</div>
+                    <div class="stat-label">Average ROI</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">32 Days</div>
+                    <div class="stat-label">Payback Period</div>
+                </div>
+            </div>
+            <p><strong>Elevator Pitch:</strong> "UIP is the only AI platform that connects ALL carrier systems to eliminate $15-20B in annual ocean freight waste. We help enterprise customers reduce detention & demurrage charges by 94% while automating 89% of manual processes."</p>
+        </div>
+
+        <!-- Competitive Intelligence Section -->
+        <div class="section">
+            <h2 class="section-title">🥊 Competitive Battle Cards</h2>
+            
+            <div class="cards-grid">
+                <!-- Competitor 1: CargoSmart -->
+                <div class="battle-card">
+                    <div class="card-header">
+                        <div class="card-icon competitor-icon">CS</div>
+                        <div class="card-title">CargoSmart (COSCO)</div>
+                    </div>
+                    <div class="card-content">
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Aspect</th>
+                                <th>CargoSmart</th>
+                                <th>UIP</th>
+                            </tr>
+                            <tr>
+                                <td>Carrier Coverage</td>
+                                <td><span class="disadvantage">COSCO focused</span></td>
+                                <td><span class="advantage">All 200+ carriers</span></td>
+                            </tr>
+                            <tr>
+                                <td>AI Capabilities</td>
+                                <td><span class="neutral">Basic analytics</span></td>
+                                <td><span class="advantage">Predictive AI</span></td>
+                            </tr>
+                            <tr>
+                                <td>Implementation</td>
+                                <td><span class="neutral">6-12 months</span></td>
+                                <td><span class="advantage">48 hours</span></td>
+                            </tr>
+                            <tr>
+                                <td>Pricing</td>
+                                <td><span class="advantage">$200K-400K</span></td>
+                                <td><span class="neutral">$500K-2M</span></td>
+                            </tr>
+                        </table>
+                        
+                        <div class="talking-points">
+                            <h4>Key Talking Points</h4>
+                            <ul>
+                                <li>"CargoSmart only covers COSCO shipments - what about your MSC, Maersk, and Hapag-Lloyd cargo?"</li>
+                                <li>"They're reactive - alerting after problems occur. We predict and prevent issues 14 days early."</li>
+                                <li>"Limited to basic tracking. We automate dispute resolution with 94% success rate."</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Competitor 2: Shippeo -->
+                <div class="battle-card">
+                    <div class="card-header">
+                        <div class="card-icon competitor-icon">SH</div>
+                        <div class="card-title">Shippeo</div>
+                    </div>
+                    <div class="card-content">
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Aspect</th>
+                                <th>Shippeo</th>
+                                <th>UIP</th>
+                            </tr>
+                            <tr>
+                                <td>Focus</td>
+                                <td><span class="neutral">Land transport</span></td>
+                                <td><span class="advantage">Ocean freight</span></td>
+                            </tr>
+                            <tr>
+                                <td>Ocean Expertise</td>
+                                <td><span class="disadvantage">Limited</span></td>
+                                <td><span class="advantage">Deep domain</span></td>
+                            </tr>
+                            <tr>
+                                <td>D&D Prevention</td>
+                                <td><span class="disadvantage">None</span></td>
+                                <td><span class="advantage">Core feature</span></td>
+                            </tr>
+                            <tr>
+                                <td>Enterprise Ready</td>
+                                <td><span class="neutral">SMB focused</span></td>
+                                <td><span class="advantage">Fortune 500</span></td>
+                            </tr>
+                        </table>
+                        
+                        <div class="talking-points">
+                            <h4>Key Talking Points</h4>
+                            <ul>
+                                <li>"Shippeo excels at land transport but lacks ocean freight expertise and carrier relationships."</li>
+                                <li>"They don't address your $140M D&D exposure - that's our core competency."</li>
+                                <li>"Built for SMB logistics, not Fortune 500 complexity and compliance requirements."</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Competitor 3: SAP Transportation Management -->
+                <div class="battle-card">
+                    <div class="card-header">
+                        <div class="card-icon competitor-icon">SAP</div>
+                        <div class="card-title">SAP Transportation Management</div>
+                    </div>
+                    <div class="card-content">
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Aspect</th>
+                                <th>SAP TM</th>
+                                <th>UIP</th>
+                            </tr>
+                            <tr>
+                                <td>Implementation</td>
+                                <td><span class="disadvantage">12-24 months</span></td>
+                                <td><span class="advantage">48 hours</span></td>
+                            </tr>
+                            <tr>
+                                <td>Total Cost</td>
+                                <td><span class="disadvantage">$5M-15M</span></td>
+                                <td><span class="advantage">$500K-2M</span></td>
+                            </tr>
+                            <tr>
+                                <td>Ocean Freight</td>
+                                <td><span class="neutral">Module</span></td>
+                                <td><span class="advantage">Core focus</span></td>
+                            </tr>
+                            <tr>
+                                <td>AI/ML</td>
+                                <td><span class="disadvantage">Limited</span></td>
+                                <td><span class="advantage">Advanced</span></td>
+                            </tr>
+                        </table>
+                        
+                        <div class="talking-points">
+                            <h4>Key Talking Points</h4>
+                            <ul>
+                                <li>"SAP is a $10M+ multi-year project. We deliver ROI in 32 days."</li>
+                                <li>"Ocean freight is just one module for SAP. It's our entire focus and expertise."</li>
+                                <li>"SAP requires 50+ consultants. We handle implementation with your existing team."</li>
+                                <li>"They don't have predictive AI for D&D prevention - that's millions in missed savings."</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Competitor 4: Oracle Transportation Management -->
+                <div class="battle-card">
+                    <div class="card-header">
+                        <div class="card-icon competitor-icon">ORA</div>
+                        <div class="card-title">Oracle Transportation Management</div>
+                    </div>
+                    <div class="card-content">
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Aspect</th>
+                                <th>Oracle TM</th>
+                                <th>UIP</th>
+                            </tr>
+                            <tr>
+                                <td>Complexity</td>
+                                <td><span class="disadvantage">Very high</span></td>
+                                <td><span class="advantage">Plug & play</span></td>
+                            </tr>
+                            <tr>
+                                <td>Innovation</td>
+                                <td><span class="disadvantage">Legacy</span></td>
+                                <td><span class="advantage">AI-first</span></td>
+                            </tr>
+                            <tr>
+                                <td>Specialization</td>
+                                <td><span class="neutral">Generalist</span></td>
+                                <td><span class="advantage">Ocean expert</span></td>
+                            </tr>
+                            <tr>
+                                <td>User Experience</td>
+                                <td><span class="disadvantage">Complex</span></td>
+                                <td><span class="advantage">Intuitive</span></td>
+                            </tr>
+                        </table>
+                        
+                        <div class="talking-points">
+                            <h4>Key Talking Points</h4>
+                            <ul>
+                                <li>"Oracle is built for 2010, not 2024. We're AI-native from day one."</li>
+                                <li>"Their ocean module lacks carrier-specific integrations we've spent years building."</li>
+                                <li>"Oracle projects fail 60% of the time. We guarantee 48-hour implementation."</li>
+                                <li>"Users need Oracle certification. Our platform is intuitive enough for any analyst."</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Competitor 5: Project44 -->
+                <div class="battle-card">
+                    <div class="card-header">
+                        <div class="card-icon competitor-icon">P44</div>
+                        <div class="card-title">Project44</div>
+                    </div>
+                    <div class="card-content">
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Aspect</th>
+                                <th>Project44</th>
+                                <th>UIP</th>
+                            </tr>
+                            <tr>
+                                <td>Visibility</td>
+                                <td><span class="advantage">Multi-modal</span></td>
+                                <td><span class="advantage">Ocean-focused</span></td>
+                            </tr>
+                            <tr>
+                                <td>Optimization</td>
+                                <td><span class="disadvantage">Limited</span></td>
+                                <td><span class="advantage">AI-powered</span></td>
+                            </tr>
+                            <tr>
+                                <td>D&D Prevention</td>
+                                <td><span class="disadvantage">None</span></td>
+                                <td><span class="advantage">Core feature</span></td>
+                            </tr>
+                            <tr>
+                                <td>ROI Focus</td>
+                                <td><span class="neutral">Visibility</span></td>
+                                <td><span class="advantage">Cost reduction</span></td>
+                            </tr>
+                        </table>
+                        
+                        <div class="talking-points">
+                            <h4>Key Talking Points</h4>
+                            <ul>
+                                <li>"Project44 shows you what happened. We prevent problems before they occur."</li>
+                                <li>"Visibility is table stakes. ROI comes from our predictive optimization."</li>
+                                <li>"They charge for tracking. We pay for ourselves through D&D prevention."</li>
+                                <li>"Multi-modal breadth vs. ocean freight depth - where's your biggest pain?"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Objections Section -->
+        <div class="section">
+            <h2 class="section-title">💬 Common Objections & Responses</h2>
+            
+            <div class="cards-grid">
+                <div class="battle-card">
+                    <div class="card-header">
+                        <div class="card-icon objection-icon">💰</div>
+                        <div class="card-title">Price Objection</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="objection-response">
+                            <div class="objection-title">Objection: "Your pricing seems high compared to other solutions."</div>
+                            <div class="response-title">Response Strategy:</div>
+                            <ul>
+                                <li><strong>Reframe to ROI:</strong> "You're spending $140M annually on D&D charges. Our $500K investment typically saves $132M in year one."</li>
+                                <li><strong>TCO Analysis:</strong> "SAP costs $10M+ over 3 years. We deliver 10x ROI in the first year alone."</li>
+                                <li><strong>Risk Mitigation:</strong> "What's the cost of doing nothing? Another $140M in preventable charges next year?"</li>
+                                <li><strong>Success Stories:</strong> "Global Shipping Corp recovered our entire fee in 32 days through D&D prevention."</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="talking-points">
+                            <h4>Price Anchoring Statements</h4>
+                            <ul>
+                                <li>"You lose $634 per second to D&D charges. We stop that bleeding."</li>
+                                <li>"Our average customer saves 264x our annual fee."</li>
+                                <li>"This isn't a cost - it's the highest ROI investment your CFO will approve."</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="battle-card">
+                    <div class="card-header">
+                        <div class="card-icon objection-icon">🔧</div>
+                        <div class="card-title">Integration Concerns</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="objection-response">
+                            <div class="objection-title">Objection: "We're concerned about integration complexity and disruption."</div>
+                            <div class="response-title">Response Strategy:</div>
+                            <ul>
+                                <li><strong>Minimal Disruption:</strong> "Our 48-hour implementation is non-disruptive. No system changes required."</li>
+                                <li><strong>API-First Design:</strong> "We connect via APIs and data feeds. Your existing systems remain untouched."</li>
+                                <li><strong>Proven Track Record:</strong> "23 enterprise customers, zero failed implementations, 99.99% uptime."</li>
+                                <li><strong>White-Glove Support:</strong> "Dedicated customer success manager ensures smooth onboarding."</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="implementation-timeline">
+                            <div class="timeline-phase">
+                                <div class="phase-number">1</div>
+                                <div class="phase-content">
+                                    <div class="phase-title">Data Connection (Day 1)</div>
+                                    <div class="phase-duration">API setup and initial data sync</div>
+                                </div>
+                            </div>
+                            <div class="timeline-phase">
+                                <div class="phase-number">2</div>
+                                <div class="phase-content">
+                                    <div class="phase-title">AI Calibration (Day 2)</div>
+                                    <div class="phase-duration">Machine learning model training on your data</div>
+                                </div>
+                            </div>
+                            <div class="timeline-phase">
+                                <div class="phase-number">3</div>
+                                <div class="phase-content">
+                                    <div class="phase-title">Go Live (Day 3)</div>
+                                    <div class="phase-duration">Full platform activation and user training</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="battle-card">
+                    <div class="card-header">
+                        <div class="card-icon objection-icon">🏢</div>
+                        <div class="card-title">Vendor Credibility</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="objection-response">
+                            <div class="objection-title">Objection: "You're a startup. Can you handle enterprise scale?"</div>
+                            <div class="response-title">Response Strategy:</div>
+                            <ul>
+                                <li><strong>Enterprise Customers:</strong> "Maersk, MSC, and COSCO trust us with their operations. Fortune 500 validation."</li>
+                                <li><strong>Proven Scale:</strong> "Processing 50M+ container movements, 500M+ data points. Battle-tested at scale."</li>
+                                <li><strong>Team Credentials:</strong> "Leadership from Maersk, Google, Salesforce. Deep enterprise experience."</li>
+                                <li><strong>Enterprise Infrastructure:</strong> "SOC2 compliant, 99.99% uptime SLA, 24/7 support."</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="talking-points">
+                            <h4>Credibility Statements</h4>
+                            <ul>
+                                <li>"Our CEO built Maersk's $2B digital transformation."</li>
+                                <li>"We're processing more ocean freight data than companies 10x our size."</li>
+                                <li>"Every Fortune 500 started as a startup. Innovation comes from focus."</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="battle-card">
+                    <div class="card-header">
+                        <div class="card-icon objection-icon">⏰</div>
+                        <div class="card-title">Timing Objection</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="objection-response">
+                            <div class="objection-title">Objection: "This isn't the right time. We'll revisit next quarter/year."</div>
+                            <div class="response-title">Response Strategy:</div>
+                            <ul>
+                                <li><strong>Cost of Delay:</strong> "Every month you wait costs $11.7M in preventable D&D charges."</li>
+                                <li><strong>Minimal Resource Required:</strong> "Implementation takes 48 hours. No dedicated resources needed."</li>
+                                <li><strong>Immediate Impact:</strong> "ROI starts day one. Time to break-even is 32 days average."</li>
+                                <li><strong>Create Urgency:</strong> "D&D rates are increasing 15% annually. The problem gets more expensive."</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="talking-points">
+                            <h4>Urgency Builders</h4>
+                            <ul>
+                                <li>"Your competition is already optimizing. Can you afford to fall behind?"</li>
+                                <li>"The best time to plant a tree was 20 years ago. The second best time is now."</li>
+                                <li>"We can start saving you money this month. Why wait?"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROI Calculator Talking Points -->
+        <div class="section">
+            <h2 class="section-title">📊 ROI Calculator Talking Points</h2>
+            
+            <div class="cards-grid">
+                <div class="battle-card">
+                    <div class="card-header">
+                        <div class="card-icon roi-icon">💹</div>
+                        <div class="card-title">ROI Framework</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="roi-metric">
+                            <span class="metric-label">D&D Charge Reduction (94%)</span>
+                            <span class="metric-value">$131.6M annually</span>
+                        </div>
+                        <div class="roi-metric">
+                            <span class="metric-label">Process Automation Savings</span>
+                            <span class="metric-value">$624K annually</span>
+                        </div>
+                        <div class="roi-metric">
+                            <span class="metric-label">Efficiency Improvements</span>
+                            <span class="metric-value">$25M annually</span>
+                        </div>
+                        <div class="roi-metric">
+                            <span class="metric-label">Total Annual Savings</span>
+                            <span class="metric-value">$157.2M</span>
+                        </div>
+                        <div class="roi-metric">
+                            <span class="metric-label">UIP Investment</span>
+                            <span class="metric-value">$500K</span>
+                        </div>
+                        <div class="roi-metric">
+                            <span class="metric-label">Net ROI</span>
+                            <span class="metric-value">31,340%</span>
+                        </div>
+                        
+                        <div class="talking-points">
+                            <h4>ROI Conversation Starters</h4>
+                            <ul>
+                                <li>"Let's build your business case. What's your annual D&D exposure?"</li>
+                                <li>"How many hours does your team spend on manual freight reconciliation?"</li>
+                                <li>"What's your current dispute success rate? We average 94%."</li>
+                                <li>"Show me your worst D&D month. We prevent 87% of those charges."</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="battle-card">
+                    <div class="card-header">
+                        <div class="card-icon roi-icon">📈</div>
+                        <div class="card-title">Value Drivers</div>
+                    </div>
+                    <div class="card-content">
+                        <h4>Primary Value Drivers:</h4>
+                        <ul>
+                            <li><strong>D&D Prevention:</strong> 94% reduction in detention & demurrage charges</li>
+                            <li><strong>Automated Disputes:</strong> 94% success rate vs. 67% industry average</li>
+                            <li><strong>Process Automation:</strong> 89% reduction in manual tasks</li>
+                            <li><strong>Predictive Intelligence:</strong> 14-day early warning system</li>
+                            <li><strong>Universal Integration:</strong> Connect all 200+ carrier systems</li>
+                        </ul>
+                        
+                        <h4>Secondary Benefits:</h4>
+                        <ul>
+                            <li>Improved cash flow from faster dispute resolution</li>
+                            <li>Better carrier relationships through proactive communication</li>
+                            <li>Enhanced operational visibility and control</li>
+                            <li>Reduced manual errors and compliance risks</li>
+                        </ul>
+                        
+                        <div class="talking-points">
+                            <h4>Value Quantification</h4>
+                            <ul>
+                                <li>"For every $1M in D&D charges, we typically save $940K annually."</li>
+                                <li>"Manual processes cost $75/hour. We automate 160+ hours weekly."</li>
+                                <li>"Each prevented container delay saves $2,500 in charges."</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Specifications -->
+        <div class="section">
+            <h2 class="section-title">🔧 Technical Specifications</h2>
+            
+            <div class="battle-card">
+                <div class="card-header">
+                    <div class="card-icon tech-icon">⚙️</div>
+                    <div class="card-title">Platform Comparison</div>
+                </div>
+                <div class="card-content">
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Feature</th>
+                            <th>Legacy Solutions</th>
+                            <th>UIP Platform</th>
+                        </tr>
+                        <tr>
+                            <td>Carrier Integrations</td>
+                            <td><span class="disadvantage">5-10 carriers</span></td>
+                            <td><span class="advantage">200+ carriers</span></td>
+                        </tr>
+                        <tr>
+                            <td>Data Processing</td>
+                            <td><span class="neutral">Batch processing</span></td>
+                            <td><span class="advantage">Real-time streaming</span></td>
+                        </tr>
+                        <tr>
+                            <td>AI/ML Capabilities</td>
+                            <td><span class="disadvantage">Basic rules</span></td>
+                            <td><span class="advantage">Advanced ML models</span></td>
+                        </tr>
+                        <tr>
+                            <td>Implementation Time</td>
+                            <td><span class="disadvantage">6-24 months</span></td>
+                            <td><span class="advantage">48 hours</span></td>
+                        </tr>
+                        <tr>
+                            <td>Scalability</td>
+                            <td><span class="neutral">Limited</span></td>
+                            <td><span class="advantage">Auto-scaling cloud</span></td>
+                        </tr>
+                        <tr>
+                            <td>Security</td>
+                            <td><span class="neutral">Basic compliance</span></td>
+                            <td><span class="advantage">SOC2, GDPR, ISO27001</span></td>
+                        </tr>
+                        <tr>
+                            <td>API Architecture</td>
+                            <td><span class="disadvantage">REST only</span></td>
+                            <td><span class="advantage">REST, GraphQL, WebSocket</span></td>
+                        </tr>
+                        <tr>
+                            <td>Uptime SLA</td>
+                            <td><span class="neutral">99.5%</span></td>
+                            <td><span class="advantage">99.99%</span></td>
+                        </tr>
+                    </table>
+                    
+                    <div class="talking-points">
+                        <h4>Technical Advantages</h4>
+                        <ul>
+                            <li>"Built on modern cloud architecture for unlimited scalability."</li>
+                            <li>"GPU-powered processing handles 50M+ data points in real-time."</li>
+                            <li>"Enterprise-grade security exceeds banking standards."</li>
+                            <li>"API-first design integrates with any existing system."</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing Justification -->
+        <div class="section">
+            <h2 class="section-title">💎 Pricing Justification Framework</h2>
+            
+            <div class="battle-card">
+                <div class="card-header">
+                    <div class="card-icon pricing-icon">💰</div>
+                    <div class="card-title">Value-Based Pricing</div>
+                </div>
+                <div class="card-content">
+                    <h4>Pricing Tiers:</h4>
+                    <div class="roi-metric">
+                        <span class="metric-label">Starter (10-50 vessels)</span>
+                        <span class="metric-value">$500K annually</span>
+                    </div>
+                    <div class="roi-metric">
+                        <span class="metric-label">Growth (50-100 vessels)</span>
+                        <span class="metric-value">$1.2M annually</span>
+                    </div>
+                    <div class="roi-metric">
+                        <span class="metric-label">Enterprise (100+ vessels)</span>
+                        <span class="metric-value">$2M+ annually</span>
+                    </div>
+                    
+                    <div class="talking-points">
+                        <h4>Pricing Justification Statements</h4>
+                        <ul>
+                            <li>"We price based on value delivered, not software licenses."</li>
+                            <li>"Typical customer saves 264x our annual fee in D&D prevention."</li>
+                            <li>"ROI payback in 32 days makes this a no-brainer investment."</li>
+                            <li>"Compare our $500K to your $140M annual D&D exposure."</li>
+                            <li>"We're not selling software - we're selling profit protection."</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="implementation-timeline">
+                        <h4>💡 Pricing Negotiation Tips:</h4>
+                        <div class="timeline-phase">
+                            <div class="phase-number">1</div>
+                            <div class="phase-content">
+                                <div class="phase-title">Anchor on Pain</div>
+                                <div class="phase-duration">Start with their current D&D losses, not our price</div>
+                            </div>
+                        </div>
+                        <div class="timeline-phase">
+                            <div class="phase-number">2</div>
+                            <div class="phase-content">
+                                <div class="phase-title">Show ROI Math</div>
+                                <div class="phase-duration">Demonstrate savings exceed investment by 200-300x</div>
+                            </div>
+                        </div>
+                        <div class="timeline-phase">
+                            <div class="phase-number">3</div>
+                            <div class="phase-content">
+                                <div class="phase-title">Risk vs. Reward</div>
+                                <div class="phase-duration">Position as risk mitigation, not cost</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

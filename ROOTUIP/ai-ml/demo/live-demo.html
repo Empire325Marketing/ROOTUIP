@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP AI/ML Live Demo - See Our Technology in Action</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .demo-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 40px 32px;
+            text-align: center;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .demo-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #9333ea 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .demo-subtitle {
+            font-size: 1.125rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 32px;
+        }
+        
+        .scenario-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        
+        .scenario-card {
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .scenario-card:hover {
+            border-color: #9333ea;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-card.active {
+            border-color: #9333ea;
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+        }
+        
+        .scenario-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #9333ea 0%, #3b82f6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+        
+        .scenario-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #f1f5f9;
+        }
+        
+        .scenario-description {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 16px;
+        }
+        
+        .scenario-metrics {
+            display: flex;
+            gap: 16px;
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .demo-stage {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 32px;
+            min-height: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .stage-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        
+        .stage-controls {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            background: #9333ea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: #a855f7;
+        }
+        
+        .btn-secondary {
+            background: #475569;
+        }
+        
+        .btn-secondary:hover {
+            background: #64748b;
+        }
+        
+        .btn-success {
+            background: #10b981;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .btn:disabled {
+            background: #334155;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .demo-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 32px;
+        }
+        
+        .demo-main {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .demo-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .process-visualization {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 24px;
+            height: 400px;
+            position: relative;
+        }
+        
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+        
+        .process-step {
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .step-circle.active {
+            background: linear-gradient(135deg, #9333ea 0%, #3b82f6 100%);
+            animation: pulse 2s infinite;
+        }
+        
+        .step-circle.completed {
+            background: #10b981;
+        }
+        
+        .step-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+        
+        .step-connector {
+            position: absolute;
+            top: 30px;
+            left: 60px;
+            right: -60px;
+            height: 2px;
+            background: #334155;
+            z-index: -1;
+        }
+        
+        .step-connector.active {
+            background: linear-gradient(90deg, #10b981 0%, #9333ea 100%);
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 20px rgba(147, 51, 234, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(147, 51, 234, 0);
+            }
+        }
+        
+        .results-panel {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        
+        .result-item {
+            padding: 16px;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+        
+        .result-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        
+        .result-value.highlight {
+            color: #9333ea;
+        }
+        
+        .live-feed {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        
+        .feed-header {
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #f1f5f9;
+        }
+        
+        .feed-items {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .feed-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background: rgba(147, 51, 234, 0.05);
+            border: 1px solid rgba(147, 51, 234, 0.1);
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .feed-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .feed-icon.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .feed-icon.process {
+            background: rgba(147, 51, 234, 0.2);
+            color: #9333ea;
+        }
+        
+        .feed-icon.alert {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+        
+        .feed-content {
+            flex: 1;
+        }
+        
+        .feed-message {
+            font-size: 0.875rem;
+            color: #e2e8f0;
+            margin-bottom: 2px;
+        }
+        
+        .feed-time {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .upload-area {
+            border: 2px dashed #334155;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: #9333ea;
+            background: rgba(147, 51, 234, 0.05);
+        }
+        
+        .upload-area.dragging {
+            border-color: #9333ea;
+            background: rgba(147, 51, 234, 0.1);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            color: #9333ea;
+        }
+        
+        .upload-text {
+            font-size: 1rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+        
+        .upload-hint {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .metric-card {
+            background: rgba(147, 51, 234, 0.1);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #9333ea;
+            display: block;
+        }
+        
+        .metric-label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .comparison-view {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        
+        .comparison-panel {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .comparison-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-align: center;
+            padding: 8px;
+            border-radius: 6px;
+        }
+        
+        .before-title {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        .after-title {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #334155;
+            border-top: 4px solid #9333ea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 1200px) {
+            .demo-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-view {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="demo-header">
+        <h1 class="demo-title">Experience UIP AI/ML in Action</h1>
+        <p class="demo-subtitle">Choose a scenario below to see how our AI technology transforms container management</p>
+    </header>
+
+    <div class="demo-container">
+        <!-- Scenario Selection -->
+        <div class="scenario-selector">
+            <div class="scenario-card active" onclick="selectScenario('ocr')">
+                <div class="scenario-icon">📄</div>
+                <div class="scenario-title">Document Intelligence</div>
+                <div class="scenario-description">Watch AI extract data from shipping documents with 95%+ accuracy</div>
+                <div class="scenario-metrics">
+                    <span>⚡ 2 sec processing</span>
+                    <span>🎯 98% accuracy</span>
+                </div>
+            </div>
+            
+            <div class="scenario-card" onclick="selectScenario('risk')">
+                <div class="scenario-icon">🎯</div>
+                <div class="scenario-title">Risk Prediction</div>
+                <div class="scenario-description">See real-time D&D risk scoring and charge predictions</div>
+                <div class="scenario-metrics">
+                    <span>📊 89% accuracy</span>
+                    <span>💰 $2.5M saved</span>
+                </div>
+            </div>
+            
+            <div class="scenario-card" onclick="selectScenario('automation')">
+                <div class="scenario-icon">🤖</div>
+                <div class="scenario-title">Smart Automation</div>
+                <div class="scenario-description">Experience automated workflows that prevent charges</div>
+                <div class="scenario-metrics">
+                    <span>🔄 24/7 operation</span>
+                    <span>⏱️ 85% faster</span>
+                </div>
+            </div>
+            
+            <div class="scenario-card" onclick="selectScenario('optimization')">
+                <div class="scenario-icon">💡</div>
+                <div class="scenario-title">Cost Optimization</div>
+                <div class="scenario-description">Discover AI-powered strategies to minimize costs</div>
+                <div class="scenario-metrics">
+                    <span>📉 45% reduction</span>
+                    <span>🚀 ROI in 3 months</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Stage -->
+        <div class="demo-stage">
+            <div class="stage-header">
+                <h2 class="stage-title" id="stageTitle">Document Intelligence Demo</h2>
+                <div class="stage-controls">
+                    <button class="btn btn-secondary" onclick="resetDemo()">
+                        <span>🔄</span> Reset
+                    </button>
+                    <button class="btn" id="startButton" onclick="startDemo()">
+                        <span>▶️</span> Start Demo
+                    </button>
+                </div>
+            </div>
+
+            <div class="demo-content">
+                <div class="demo-main">
+                    <!-- OCR Demo Content -->
+                    <div id="ocrDemo" class="demo-section">
+                        <div class="upload-area" id="uploadArea" onclick="triggerFileUpload()">
+                            <div class="upload-icon">📤</div>
+                            <div class="upload-text">Drop shipping document here or click to upload</div>
+                            <div class="upload-hint">Supports: Bill of Lading, Arrival Notice, Invoice, Delivery Order</div>
+                        </div>
+                        
+                        <div class="process-visualization" style="display: none;" id="ocrProcess">
+                            <div class="process-steps">
+                                <div class="process-step">
+                                    <div class="step-circle" id="step1">📄</div>
+                                    <div class="step-label">Document Upload</div>
+                                    <div class="step-connector"></div>
+                                </div>
+                                <div class="process-step">
+                                    <div class="step-circle" id="step2">🔍</div>
+                                    <div class="step-label">AI Processing</div>
+                                    <div class="step-connector"></div>
+                                </div>
+                                <div class="process-step">
+                                    <div class="step-circle" id="step3">📊</div>
+                                    <div class="step-label">Data Extraction</div>
+                                    <div class="step-connector"></div>
+                                </div>
+                                <div class="process-step">
+                                    <div class="step-circle" id="step4">✅</div>
+                                    <div class="step-label">Validation</div>
+                                </div>
+                            </div>
+                            
+                            <div class="comparison-view" id="ocrResults" style="display: none;">
+                                <div class="comparison-panel">
+                                    <div class="comparison-title before-title">Before: Manual Entry</div>
+                                    <div class="result-item">
+                                        <div class="result-label">Time Required</div>
+                                        <div class="result-value">15-20 minutes</div>
+                                    </div>
+                                    <div class="result-item">
+                                        <div class="result-label">Error Rate</div>
+                                        <div class="result-value">8-12%</div>
+                                    </div>
+                                    <div class="result-item">
+                                        <div class="result-label">Cost per Document</div>
+                                        <div class="result-value">$4.50</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="comparison-panel">
+                                    <div class="comparison-title after-title">After: AI Processing</div>
+                                    <div class="result-item">
+                                        <div class="result-label">Time Required</div>
+                                        <div class="result-value highlight">2.3 seconds</div>
+                                    </div>
+                                    <div class="result-item">
+                                        <div class="result-label">Error Rate</div>
+                                        <div class="result-value highlight">< 2%</div>
+                                    </div>
+                                    <div class="result-item">
+                                        <div class="result-label">Cost per Document</div>
+                                        <div class="result-value highlight">$0.08</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Risk Prediction Demo Content -->
+                    <div id="riskDemo" class="demo-section" style="display: none;">
+                        <div class="results-panel">
+                            <h3 style="margin-bottom: 20px;">Container Risk Analysis</h3>
+                            <input type="text" class="container-input" placeholder="Enter container number (e.g., MAEU1234567)" id="riskContainerInput">
+                            <button class="btn" style="width: 100%; margin-bottom: 20px;" onclick="analyzeRisk()">Analyze Risk</button>
+                            
+                            <div id="riskResults" style="display: none;">
+                                <div class="result-item">
+                                    <div class="result-label">D&D Risk Score</div>
+                                    <div class="result-value highlight" id="riskScore">72%</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="result-label">Predicted Charges</div>
+                                    <div class="result-value" id="predictedCharges">$3,850</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="result-label">Confidence Level</div>
+                                    <div class="result-value" id="confidenceLevel">87%</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="result-label">Key Risk Factor</div>
+                                    <div class="result-value" id="riskFactor">Port Congestion (45%)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Automation Demo Content -->
+                    <div id="automationDemo" class="demo-section" style="display: none;">
+                        <div class="results-panel">
+                            <h3 style="margin-bottom: 20px;">Automation Workflow</h3>
+                            <select class="container-input">
+                                <option>D&D Prevention Workflow</option>
+                                <option>Dispute Automation</option>
+                                <option>Proactive Monitoring</option>
+                            </select>
+                            <button class="btn" style="width: 100%; margin-bottom: 20px;" onclick="runAutomation()">Run Automation</button>
+                            
+                            <div id="automationSteps" style="display: none;">
+                                <!-- Steps will be added dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="demo-sidebar">
+                    <div class="live-feed">
+                        <div class="feed-header">Live Processing Feed</div>
+                        <div class="feed-items" id="liveFeed">
+                            <div class="feed-item">
+                                <div class="feed-icon success">✓</div>
+                                <div class="feed-content">
+                                    <div class="feed-message">Ready to demonstrate AI capabilities</div>
+                                    <div class="feed-time">Just now</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <span class="metric-value" id="metricSpeed">0ms</span>
+                            <span class="metric-label">Processing Time</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-value" id="metricAccuracy">0%</span>
+                            <span class="metric-label">Accuracy</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-value" id="metricSavings">$0</span>
+                            <span class="metric-label">Potential Savings</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-value" id="metricEfficiency">0x</span>
+                            <span class="metric-label">Efficiency Gain</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = 'ocr';
+        let demoRunning = false;
+
+        // Scenario selection
+        function selectScenario(scenario) {
+            currentScenario = scenario;
+            
+            // Update UI
+            document.querySelectorAll('.scenario-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Hide all demo sections
+            document.querySelectorAll('.demo-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show selected demo
+            document.getElementById(scenario + 'Demo').style.display = 'block';
+            
+            // Update stage title
+            const titles = {
+                'ocr': 'Document Intelligence Demo',
+                'risk': 'Risk Prediction Demo',
+                'automation': 'Smart Automation Demo',
+                'optimization': 'Cost Optimization Demo'
+            };
+            document.getElementById('stageTitle').textContent = titles[scenario];
+            
+            // Reset demo
+            resetDemo();
+        }
+
+        // Start demo
+        function startDemo() {
+            if (demoRunning) return;
+            
+            demoRunning = true;
+            document.getElementById('startButton').disabled = true;
+            
+            switch (currentScenario) {
+                case 'ocr':
+                    startOCRDemo();
+                    break;
+                case 'risk':
+                    addFeedItem('Starting risk analysis demo...', 'process');
+                    break;
+                case 'automation':
+                    addFeedItem('Initializing automation workflow...', 'process');
+                    break;
+                case 'optimization':
+                    addFeedItem('Loading optimization engine...', 'process');
+                    break;
+            }
+        }
+
+        // OCR Demo
+        function startOCRDemo() {
+            addFeedItem('Document processing demo ready', 'success');
+            document.getElementById('uploadArea').style.display = 'block';
+        }
+
+        function triggerFileUpload() {
+            // Simulate file upload
+            document.getElementById('uploadArea').style.display = 'none';
+            document.getElementById('ocrProcess').style.display = 'block';
+            
+            addFeedItem('Document uploaded: Bill_of_Lading_MAEU1234567.pdf', 'process');
+            
+            // Start processing animation
+            processOCRSteps();
+        }
+
+        async function processOCRSteps() {
+            const steps = ['step1', 'step2', 'step3', 'step4'];
+            const messages = [
+                'Document received and validated',
+                'AI/ML models processing document',
+                'Extracting data with 98% confidence',
+                'Validation complete - 42 fields extracted'
+            ];
+            
+            for (let i = 0; i < steps.length; i++) {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                document.getElementById(steps[i]).classList.add('active');
+                if (i > 0) {
+                    document.getElementById(steps[i-1]).classList.remove('active');
+                    document.getElementById(steps[i-1]).classList.add('completed');
+                }
+                
+                addFeedItem(messages[i], i === steps.length - 1 ? 'success' : 'process');
+                
+                // Update metrics
+                updateMetrics({
+                    speed: 500 + (i * 600) + 'ms',
+                    accuracy: 85 + (i * 3) + '%',
+                    savings: '$' + (1000 + (i * 500)),
+                    efficiency: (5 + i * 3) + 'x'
+                });
+            }
+            
+            // Show results
+            document.getElementById('ocrResults').style.display = 'grid';
+            
+            // Final metrics
+            updateMetrics({
+                speed: '2.3s',
+                accuracy: '98%',
+                savings: '$4,420',
+                efficiency: '15x'
+            });
+            
+            addFeedItem('✨ Document processing complete! Saved 17 minutes and prevented 10 potential errors', 'success');
+        }
+
+        // Risk Analysis Demo
+        function analyzeRisk() {
+            const container = document.getElementById('riskContainerInput').value;
+            if (!container) return;
+            
+            addFeedItem(`Analyzing risk for container ${container}`, 'process');
+            
+            // Simulate analysis
+            setTimeout(() => {
+                document.getElementById('riskResults').style.display = 'block';
+                
+                // Random values for demo
+                const riskScore = 65 + Math.floor(Math.random() * 25);
+                const charges = 2000 + Math.floor(Math.random() * 4000);
+                const confidence = 82 + Math.floor(Math.random() * 15);
+                
+                document.getElementById('riskScore').textContent = riskScore + '%';
+                document.getElementById('predictedCharges').textContent = '$' + charges.toLocaleString();
+                document.getElementById('confidenceLevel').textContent = confidence + '%';
+                
+                updateMetrics({
+                    speed: '45ms',
+                    accuracy: confidence + '%',
+                    savings: '$' + Math.floor(charges * 0.8).toLocaleString(),
+                    efficiency: '100x'
+                });
+                
+                addFeedItem(`High risk detected! Recommended immediate action to save $${Math.floor(charges * 0.8).toLocaleString()}`, 'alert');
+            }, 2000);
+        }
+
+        // Automation Demo
+        function runAutomation() {
+            const steps = [
+                { message: '🔍 Monitoring container status...', type: 'process' },
+                { message: '⚠️ Discharge detected at USLAX', type: 'alert' },
+                { message: '🤖 Triggering D&D prevention workflow', type: 'process' },
+                { message: '📧 Customer notification sent', type: 'success' },
+                { message: '🚛 Pickup scheduled for tomorrow 9AM', type: 'success' },
+                { message: '✅ Workflow complete - $2,800 in charges prevented', type: 'success' }
+            ];
+            
+            let index = 0;
+            const interval = setInterval(() => {
+                if (index < steps.length) {
+                    addFeedItem(steps[index].message, steps[index].type);
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    updateMetrics({
+                        speed: '3.2s',
+                        accuracy: '95%',
+                        savings: '$2,800',
+                        efficiency: '24/7'
+                    });
+                }
+            }, 1500);
+        }
+
+        // Helper functions
+        function addFeedItem(message, type = 'process') {
+            const feed = document.getElementById('liveFeed');
+            const item = document.createElement('div');
+            item.className = 'feed-item';
+            
+            const icons = {
+                success: '✓',
+                process: '⚙️',
+                alert: '⚠️'
+            };
+            
+            item.innerHTML = `
+                <div class="feed-icon ${type}">${icons[type]}</div>
+                <div class="feed-content">
+                    <div class="feed-message">${message}</div>
+                    <div class="feed-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+            
+            feed.insertBefore(item, feed.firstChild);
+            
+            // Keep only last 10 items
+            if (feed.children.length > 10) {
+                feed.removeChild(feed.lastChild);
+            }
+        }
+
+        function updateMetrics(metrics) {
+            if (metrics.speed) document.getElementById('metricSpeed').textContent = metrics.speed;
+            if (metrics.accuracy) document.getElementById('metricAccuracy').textContent = metrics.accuracy;
+            if (metrics.savings) document.getElementById('metricSavings').textContent = metrics.savings;
+            if (metrics.efficiency) document.getElementById('metricEfficiency').textContent = metrics.efficiency;
+        }
+
+        function resetDemo() {
+            demoRunning = false;
+            document.getElementById('startButton').disabled = false;
+            
+            // Reset OCR demo
+            document.getElementById('uploadArea').style.display = 'block';
+            document.getElementById('ocrProcess').style.display = 'none';
+            document.getElementById('ocrResults').style.display = 'none';
+            
+            // Reset steps
+            document.querySelectorAll('.step-circle').forEach(step => {
+                step.classList.remove('active', 'completed');
+            });
+            
+            // Reset metrics
+            updateMetrics({
+                speed: '0ms',
+                accuracy: '0%',
+                savings: '$0',
+                efficiency: '0x'
+            });
+            
+            // Clear feed
+            document.getElementById('liveFeed').innerHTML = `
+                <div class="feed-item">
+                    <div class="feed-icon success">✓</div>
+                    <div class="feed-content">
+                        <div class="feed-message">Demo reset - ready to start</div>
+                        <div class="feed-time">Just now</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Add input placeholder for container analysis
+        const containerInput = document.createElement('input');
+        containerInput.type = 'text';
+        containerInput.className = 'container-input';
+        containerInput.id = 'riskContainerInput';
+        containerInput.placeholder = 'Enter container number (e.g., MAEU1234567)';
+
+        // Initialize
+        resetDemo();
+    </script>
+</body>
+</html>

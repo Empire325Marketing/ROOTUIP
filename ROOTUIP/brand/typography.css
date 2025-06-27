@@ -46,7 +46,7 @@
   font-weight: 800;
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
-  color: var(--uip-navy-900);
+  color: var(--uip-primary-800);
 }
 
 .h2 {
@@ -55,7 +55,7 @@
   font-weight: 700;
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
-  color: var(--uip-navy-900);
+  color: var(--uip-primary-800);
 }
 
 .h3 {
@@ -63,7 +63,7 @@
   font-size: var(--text-4xl);
   font-weight: 700;
   line-height: var(--leading-snug);
-  color: var(--uip-navy-900);
+  color: var(--uip-primary-800);
 }
 
 .h4 {
@@ -71,7 +71,7 @@
   font-size: var(--text-3xl);
   font-weight: 600;
   line-height: var(--leading-snug);
-  color: var(--uip-navy-900);
+  color: var(--uip-primary-800);
 }
 
 .h5 {
@@ -79,7 +79,7 @@
   font-size: var(--text-2xl);
   font-weight: 600;
   line-height: var(--leading-normal);
-  color: var(--uip-navy-900);
+  color: var(--uip-primary-800);
 }
 
 .h6 {
@@ -87,7 +87,7 @@
   font-size: var(--text-xl);
   font-weight: 600;
   line-height: var(--leading-normal);
-  color: var(--uip-navy-900);
+  color: var(--uip-primary-800);
 }
 
 /* Body Text */
@@ -121,7 +121,7 @@
   font-size: var(--text-4xl);
   font-weight: 600;
   line-height: var(--leading-none);
-  color: var(--uip-teal-500);
+  color: var(--uip-success-500);
 }
 
 .data {
@@ -129,7 +129,7 @@
   font-size: var(--text-base);
   font-weight: 500;
   line-height: var(--leading-normal);
-  color: var(--uip-navy-900);
+  color: var(--uip-primary-800);
 }
 
 .label {

@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Presentation Deck - Transform Ocean Freight</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js?v=1750888019"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="brand/brand-colors.css?v=1750888019">
+    <link rel="stylesheet" href="brand/typography.css?v=1750888019">
+    <link rel="stylesheet" href="css/presentation-deck.css?v=1750888019">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.js?v=1750888019delivr.net/npm/chart.js?v=1750888019@4.4.0/dist/chart.umd.min.js?v=1750888019"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js?v=1750888019"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js?v=1750888019/2.6.2/countUp.umd.min.js?v=1750888019"></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <img src="brand/logo.svg" alt="UIP" class="loading-logo">
+            <div class="loading-progress">
+                <div class="progress-bar"></div>
+            </div>
+            <p class="loading-text">Preparing your presentation...</p>
+        </div>
+    </div>
+
+    <!-- Presentation Dashboard -->
+    <div class="presentation-dashboard" id="presentationDashboard">
+        <header class="dashboard-header">
+            <img src="brand/logo.svg" alt="UIP" class="dashboard-logo">
+            <h1>UIP Presentation Center</h1>
+            <p class="dashboard-subtitle">Choose your presentation and customize for your audience</p>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- Quick Setup -->
+            <section class="quick-setup">
+                <h2>Quick Setup</h2>
+                <div class="setup-grid">
+                    <div class="setup-field">
+                        <label>Prospect Company Name</label>
+                        <input type="text" id="prospectName" placeholder="Enter company name" value="">
+                    </div>
+                    <div class="setup-field">
+                        <label>Number of Vessels</label>
+                        <input type="number" id="vesselCount" placeholder="50" value="50">
+                    </div>
+                    <div class="setup-field">
+                        <label>Industry</label>
+                        <select id="industryType">
+                            <option value="general">General</option>
+                            <option value="retail">Retail & E-commerce</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="food">Food & Beverage</option>
+                            <option value="automotive">Automotive</option>
+                        </select>
+                    </div>
+                    <div class="setup-field">
+                        <label>Annual Revenue</label>
+                        <input type="text" id="annualRevenue" placeholder="$5B" value="">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Presentation Types -->
+            <section class="presentation-types">
+                <h2>Select Presentation Type</h2>
+                <div class="presentation-grid">
+                    <!-- Master Pitch Deck -->
+                    <div class="presentation-card" data-type="master">
+                        <div class="card-icon">🚀</div>
+                        <h3>Master Pitch Deck</h3>
+                        <p class="card-description">Complete 20-slide investor presentation</p>
+                        <ul class="card-features">
+                            <li>Problem & Solution</li>
+                            <li>Market Analysis</li>
+                            <li>Financial Projections</li>
+                            <li>Investment Ask</li>
+                        </ul>
+                        <div class="card-meta">
+                            <span class="duration">25-30 min</span>
+                            <span class="slides">20 slides</span>
+                        </div>
+                        <button class="select-btn" data-presentation="master">
+                            Launch Presentation
+                        </button>
+                    </div>
+
+                    <!-- Executive Overview -->
+                    <div class="presentation-card" data-type="executive">
+                        <div class="card-icon">⚡</div>
+                        <h3>Executive Overview</h3>
+                        <p class="card-description">High-impact C-suite presentation</p>
+                        <ul class="card-features">
+                            <li>ROI Focus</li>
+                            <li>Quick Wins</li>
+                            <li>Strategic Value</li>
+                            <li>Next Steps</li>
+                        </ul>
+                        <div class="card-meta">
+                            <span class="duration">15 min</span>
+                            <span class="slides">10 slides</span>
+                        </div>
+                        <button class="select-btn" data-presentation="executive">
+                            Launch Presentation
+                        </button>
+                    </div>
+
+                    <!-- Technical Deep-Dive -->
+                    <div class="presentation-card" data-type="technical">
+                        <div class="card-icon">🔧</div>
+                        <h3>Technical Deep-Dive</h3>
+                        <p class="card-description">Detailed technical architecture review</p>
+                        <ul class="card-features">
+                            <li>Platform Architecture</li>
+                            <li>Integration Details</li>
+                            <li>Security & Compliance</li>
+                            <li>Implementation</li>
+                        </ul>
+                        <div class="card-meta">
+                            <span class="duration">30 min</span>
+                            <span class="slides">15 slides</span>
+                        </div>
+                        <button class="select-btn" data-presentation="technical">
+                            Launch Presentation
+                        </button>
+                    </div>
+
+                    <!-- Comprehensive Demo -->
+                    <div class="presentation-card" data-type="demo">
+                        <div class="card-icon">🎯</div>
+                        <h3>Full Platform Demo</h3>
+                        <p class="card-description">Interactive platform demonstration</p>
+                        <ul class="card-features">
+                            <li>Live Platform Tour</li>
+                            <li>Use Case Scenarios</li>
+                            <li>ROI Calculator</li>
+                            <li>Q&A Session</li>
+                        </ul>
+                        <div class="card-meta">
+                            <span class="duration">45 min</span>
+                            <span class="slides">25 slides</span>
+                        </div>
+                        <button class="select-btn" data-presentation="demo">
+                            Launch Presentation
+                        </button>
+                    </div>
+
+                    <!-- CFO Presentation -->
+                    <div class="presentation-card" data-type="cfo">
+                        <div class="card-icon">💰</div>
+                        <h3>CFO Financial Analysis</h3>
+                        <p class="card-description">Detailed financial impact presentation</p>
+                        <ul class="card-features">
+                            <li>ROI Breakdown</li>
+                            <li>Cost Analysis</li>
+                            <li>Risk Mitigation</li>
+                            <li>Budget Impact</li>
+                        </ul>
+                        <div class="card-meta">
+                            <span class="duration">20 min</span>
+                            <span class="slides">12 slides</span>
+                        </div>
+                        <button class="select-btn" data-presentation="cfo">
+                            Launch Presentation
+                        </button>
+                    </div>
+
+                    <!-- Industry-Specific -->
+                    <div class="presentation-card" data-type="vertical">
+                        <div class="card-icon">🏭</div>
+                        <h3>Industry-Specific</h3>
+                        <p class="card-description">Tailored for your vertical</p>
+                        <ul class="card-features">
+                            <li>Industry Pain Points</li>
+                            <li>Relevant Case Studies</li>
+                            <li>Compliance Focus</li>
+                            <li>Peer Benchmarks</li>
+                        </ul>
+                        <div class="card-meta">
+                            <span class="duration">25 min</span>
+                            <span class="slides">15 slides</span>
+                        </div>
+                        <button class="select-btn" data-presentation="vertical">
+                            Launch Presentation
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="quick-actions">
+                <button class="action-btn" id="downloadTemplates">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 15l-5-5h3V3h4v7h3l-5 5z"/>
+                        <path d="M0 17h20v2H0z"/>
+                    </svg>
+                    Download All Templates
+                </button>
+                <button class="action-btn" id="viewGuide">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9 11H7v2h2v-2zm0-4H7v2h2V7zm0-6C3.48 1 0 4.48 0 9s3.48 8 8 8 8-3.48 8-8-3.48-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+                    </svg>
+                    Presentation Guide
+                </button>
+                <button class="action-btn" id="scheduleReview">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M17 2h-2V1a1 1 0 00-2 0v1H7V1a1 1 0 00-2 0v1H3a3 3 0 00-3 3v12a3 3 0 003 3h14a3 3 0 003-3V5a3 3 0 00-3-3zM3 4h14a1 1 0 011 1v3H2V5a1 1 0 011-1z"/>
+                    </svg>
+                    Schedule Review
+                </button>
+            </section>
+        </div>
+    </div>
+
+    <!-- Presentation Viewer -->
+    <div class="presentation-viewer" id="presentationViewer" style="display: none;">
+        <!-- Top Bar -->
+        <div class="viewer-topbar">
+            <div class="topbar-left">
+                <button class="back-btn" id="backToDashboard">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M12.5 15L7.5 10l5-5v10z"/>
+                    </svg>
+                    Back
+                </button>
+                <span class="presentation-title" id="presentationTitle">Master Pitch Deck</span>
+            </div>
+            
+            <div class="topbar-center">
+                <span class="slide-indicator">
+                    <span id="currentSlide">1</span> / <span id="totalSlides">20</span>
+                </span>
+                <div class="progress-indicator">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+            
+            <div class="topbar-right">
+                <button class="control-btn" id="toggleNotes" title="Toggle Notes">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M2 3h16v2H2V3zm0 4h16v2H2V7zm0 4h16v2H2v-2zm0 4h10v2H2v-2z"/>
+                    </svg>
+                </button>
+                <button class="control-btn" id="toggleTimer" title="Start Timer">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12zm.5-9H9v5l4.3 2.5.7-1.2-3.5-2.1V7z"/>
+                    </svg>
+                </button>
+                <button class="control-btn" id="fullscreenBtn" title="Fullscreen">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M3 5V3h2V1H1v4h2zm2 10H3v-2H1v4h4v-2zm10 0v2h-2v2h4v-4h-2zm0-10h2v2h2V3h-4v2z"/>
+                    </svg>
+                </button>
+                <button class="control-btn" id="exportBtn" title="Export">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M15 10h-3V3H8v7H5l5 5 5-5zM0 17h20v2H0z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="viewer-content">
+            <!-- Slides Container -->
+            <div class="slides-container" id="slidesContainer">
+                <!-- Master Pitch Deck Slides -->
+                <div class="presentation-slides master-deck" id="masterDeck">
+                    <!-- Slide 1: Title -->
+                    <div class="slide active" data-slide="1" data-notes="Welcome and establish credibility. Emphasize the $14M per vessel figure immediately.">
+                        <div class="slide-content title-slide">
+                            <img src="brand/logo.svg" alt="UIP" class="slide-logo">
+                            <h1 class="main-title">Stop Losing <span class="highlight">$14M Per Vessel</span> to Ocean Freight Inefficiencies</h1>
+                            <p class="subtitle">Transform your supply chain with the Universal Integration Intelligence Platform</p>
+                            <div class="title-stats">
+                                <div class="stat">
+                                    <span class="stat-value">$20B</span>
+                                    <span class="stat-label">Annual Industry Waste</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">87%</span>
+                                    <span class="stat-label">Preventable Charges</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">14 Days</span>
+                                    <span class="stat-label">To ROI</span>
+                                </div>
+                            </div>
+                            <div class="slide-meta">
+                                <span class="company-name" id="slideCompanyName">For Enterprise Shippers</span>
+                                <span class="date">December 2024</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: The Problem -->
+                    <div class="slide" data-slide="2" data-notes="Paint the pain vividly. Use specific numbers. Make them feel the problem.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">The $20 Billion Problem Hiding in Plain Sight</h2>
+                            <div class="problem-visualization">
+                                <div class="problem-chart">
+                                    <canvas id="problemBreakdown"></canvas>
+                                </div>
+                                <div class="problem-details">
+                                    <div class="problem-item">
+                                        <div class="problem-icon">💸</div>
+                                        <div class="problem-text">
+                                            <h3>$8.7B in D&D Charges</h3>
+                                            <p>87% completely preventable with proper visibility</p>
+                                        </div>
+                                    </div>
+                                    <div class="problem-item">
+                                        <div class="problem-icon">⏰</div>
+                                        <div class="problem-text">
+                                            <h3>180 Hours/Week Wasted</h3>
+                                            <p>Manual data entry across 42 disconnected systems</p>
+                                        </div>
+                                    </div>
+                                    <div class="problem-item">
+                                        <div class="problem-icon">❌</div>
+                                        <div class="problem-text">
+                                            <h3>4% Error Rate</h3>
+                                            <p>Each error costs $3,200 on average</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="problem-quote">
+                                <blockquote>
+                                    "We discovered we were losing $47M annually to preventable charges. It was our biggest hidden cost center."
+                                </blockquote>
+                                <cite>— CFO, Fortune 500 Retailer</cite>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3: Your Specific Problem -->
+                    <div class="slide" data-slide="3" data-notes="Personalize the problem. Show their specific pain.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">What This Means for <span class="prospect-name">Your Company</span></h2>
+                            <div class="personalized-analysis">
+                                <div class="your-metrics">
+                                    <h3>With Your <span class="vessel-count">50</span> Vessels:</h3>
+                                    <div class="metric-grid">
+                                        <div class="metric-card negative">
+                                            <div class="metric-icon">📉</div>
+                                            <div class="metric-value">$<span id="yearlyLoss">710M</span></div>
+                                            <div class="metric-label">Annual Loss to Inefficiency</div>
+                                        </div>
+                                        <div class="metric-card negative">
+                                            <div class="metric-icon">⏱️</div>
+                                            <div class="metric-value"><span id="wastedHours">9,360</span></div>
+                                            <div class="metric-label">Hours Wasted Annually</div>
+                                        </div>
+                                        <div class="metric-card negative">
+                                            <div class="metric-icon">🚨</div>
+                                            <div class="metric-value"><span id="missedSavings">67%</span></div>
+                                            <div class="metric-label">Disputes Lost</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="impact-visualization">
+                                    <canvas id="impactChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 4: Root Causes -->
+                    <div class="slide" data-slide="4" data-notes="Explain why this problem exists. Build urgency.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">Why Ocean Freight Is Broken</h2>
+                            <div class="root-causes">
+                                <div class="cause-timeline">
+                                    <div class="timeline-item" data-animate="fadeInLeft">
+                                        <div class="timeline-icon">1</div>
+                                        <div class="timeline-content">
+                                            <h3>Fragmented Data</h3>
+                                            <p>42 different systems that don't communicate</p>
+                                            <div class="system-logos">
+                                                <span class="system">Carrier APIs</span>
+                                                <span class="system">EDI</span>
+                                                <span class="system">Email</span>
+                                                <span class="system">Spreadsheets</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item" data-animate="fadeInLeft" data-delay="200">
+                                        <div class="timeline-icon">2</div>
+                                        <div class="timeline-content">
+                                            <h3>No Real-Time Visibility</h3>
+                                            <p>By the time you see charges, it's too late</p>
+                                            <div class="visibility-gap">
+                                                <span class="gap-stat">48-72 hour delay</span>
+                                                <span class="gap-stat">$127K per day at risk</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item" data-animate="fadeInLeft" data-delay="400">
+                                        <div class="timeline-icon">3</div>
+                                        <div class="timeline-content">
+                                            <h3>Manual Processes</h3>
+                                            <p>Your team is drowning in data entry</p>
+                                            <div class="manual-stats">
+                                                <span class="manual-stat">85% time on data entry</span>
+                                                <span class="manual-stat">15% on strategy</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 5: The Solution -->
+                    <div class="slide" data-slide="5" data-notes="Introduce UIP as the answer. Keep it simple and powerful.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">Introducing UIP: Your Universal Integration Intelligence Platform</h2>
+                            <div class="solution-overview">
+                                <div class="solution-diagram">
+                                    <div class="inputs-section">
+                                        <h4>All Your Data Sources</h4>
+                                        <div class="input-items">
+                                            <div class="input-item">APIs</div>
+                                            <div class="input-item">EDI</div>
+                                            <div class="input-item">Email</div>
+                                            <div class="input-item">Documents</div>
+                                        </div>
+                                    </div>
+                                    <div class="platform-core">
+                                        <img src="brand/logo-icon.svg" alt="UIP Core" class="core-icon">
+                                        <h3>UIP Intelligence Engine</h3>
+                                        <p>AI-Powered Integration & Automation</p>
+                                    </div>
+                                    <div class="outputs-section">
+                                        <h4>Automated Actions</h4>
+                                        <div class="output-items">
+                                            <div class="output-item">
+                                                <span class="output-icon">🛡️</span>
+                                                <span>D&D Prevention</span>
+                                            </div>
+                                            <div class="output-item">
+                                                <span class="output-icon">🤖</span>
+                                                <span>Dispute Filing</span>
+                                            </div>
+                                            <div class="output-item">
+                                                <span class="output-icon">📊</span>
+                                                <span>Real-Time Visibility</span>
+                                            </div>
+                                            <div class="output-item">
+                                                <span class="output-icon">⚡</span>
+                                                <span>Instant Alerts</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 6: How It Works -->
+                    <div class="slide" data-slide="6" data-notes="Show the simplicity. 14 days to value.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">From Chaos to Control in 14 Days</h2>
+                            <div class="implementation-flow">
+                                <div class="implementation-timeline">
+                                    <div class="impl-phase" data-animate="slideInUp">
+                                        <div class="phase-header">
+                                            <span class="phase-days">Days 1-3</span>
+                                            <h3>Connect</h3>
+                                        </div>
+                                        <div class="phase-content">
+                                            <ul>
+                                                <li>API integration with all carriers</li>
+                                                <li>Connect existing systems</li>
+                                                <li>Historical data import</li>
+                                            </ul>
+                                            <div class="phase-outcome">Zero business disruption</div>
+                                        </div>
+                                    </div>
+                                    <div class="impl-phase" data-animate="slideInUp" data-delay="200">
+                                        <div class="phase-header">
+                                            <span class="phase-days">Days 4-7</span>
+                                            <h3>Analyze</h3>
+                                        </div>
+                                        <div class="phase-content">
+                                            <ul>
+                                                <li>AI learns your patterns</li>
+                                                <li>Identify risk areas</li>
+                                                <li>Configure business rules</li>
+                                            </ul>
+                                            <div class="phase-outcome">$2.4M in savings identified</div>
+                                        </div>
+                                    </div>
+                                    <div class="impl-phase" data-animate="slideInUp" data-delay="400">
+                                        <div class="phase-header">
+                                            <span class="phase-days">Days 8-10</span>
+                                            <h3>Optimize</h3>
+                                        </div>
+                                        <div class="phase-content">
+                                            <ul>
+                                                <li>Workflow automation setup</li>
+                                                <li>Team training (2 hours)</li>
+                                                <li>Alert configuration</li>
+                                            </ul>
+                                            <div class="phase-outcome">85% automation achieved</div>
+                                        </div>
+                                    </div>
+                                    <div class="impl-phase" data-animate="slideInUp" data-delay="600">
+                                        <div class="phase-header">
+                                            <span class="phase-days">Days 11-14</span>
+                                            <h3>Launch</h3>
+                                        </div>
+                                        <div class="phase-content">
+                                            <ul>
+                                                <li>Go live with full support</li>
+                                                <li>Real-time monitoring begins</li>
+                                                <li>First charges prevented</li>
+                                            </ul>
+                                            <div class="phase-outcome">ROI from day 15</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 7: Live Demo Preview -->
+                    <div class="slide" data-slide="7" data-notes="Show the platform in action. Make it tangible.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">See UIP in Action</h2>
+                            <div class="demo-preview">
+                                <div class="demo-screen">
+                                    <div class="screen-header">
+                                        <span class="screen-title">UIP Command Center</span>
+                                        <span class="live-indicator">LIVE</span>
+                                    </div>
+                                    <div class="demo-dashboard">
+                                        <div class="dashboard-kpis">
+                                            <div class="kpi-card">
+                                                <span class="kpi-label">D&D Prevented Today</span>
+                                                <span class="kpi-value">$247,842</span>
+                                                <span class="kpi-trend">+12% vs yesterday</span>
+                                            </div>
+                                            <div class="kpi-card">
+                                                <span class="kpi-label">Active Vessels</span>
+                                                <span class="kpi-value">127</span>
+                                                <span class="kpi-status">All monitored</span>
+                                            </div>
+                                            <div class="kpi-card">
+                                                <span class="kpi-label">Automation Rate</span>
+                                                <span class="kpi-value">94%</span>
+                                                <span class="kpi-benchmark">Industry avg: 12%</span>
+                                            </div>
+                                        </div>
+                                        <div class="demo-chart">
+                                            <canvas id="demoRiskChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="demo-features">
+                                    <div class="feature-highlight">
+                                        <span class="feature-icon">🚨</span>
+                                        <h4>Real-Time Alerts</h4>
+                                        <p>Know about risks 48 hours before charges hit</p>
+                                    </div>
+                                    <div class="feature-highlight">
+                                        <span class="feature-icon">🤖</span>
+                                        <h4>Automated Actions</h4>
+                                        <p>UIP prevents charges without human intervention</p>
+                                    </div>
+                                    <div class="feature-highlight">
+                                        <span class="feature-icon">📈</span>
+                                        <h4>Predictive Analytics</h4>
+                                        <p>AI predicts and prevents future risks</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 8: Market Opportunity -->
+                    <div class="slide" data-slide="8" data-notes="Show the massive market. Position for growth.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">A $72 Billion Market Opportunity</h2>
+                            <div class="market-analysis">
+                                <div class="market-chart">
+                                    <canvas id="marketSizeChart"></canvas>
+                                </div>
+                                <div class="market-breakdown">
+                                    <div class="market-segment">
+                                        <h3>$20B</h3>
+                                        <p>Detention & Demurrage</p>
+                                        <span class="segment-detail">87% preventable = $17.4B opportunity</span>
+                                    </div>
+                                    <div class="market-segment">
+                                        <h3>$32B</h3>
+                                        <p>Manual Processing Costs</p>
+                                        <span class="segment-detail">85% automatable = $27.2B opportunity</span>
+                                    </div>
+                                    <div class="market-segment">
+                                        <h3>$20B</h3>
+                                        <p>Integration Errors</p>
+                                        <span class="segment-detail">94% reducible = $18.8B opportunity</span>
+                                    </div>
+                                </div>
+                                <div class="market-growth">
+                                    <p class="growth-stat">Market growing 23% annually as supply chains digitize</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 9: Traction & Validation -->
+                    <div class="slide" data-slide="9" data-notes="Build credibility with real results.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">Proven Results at Scale</h2>
+                            <div class="traction-showcase">
+                                <div class="traction-metrics">
+                                    <div class="traction-stat">
+                                        <span class="traction-number" data-counter="true">$342M</span>
+                                        <span class="traction-label">Saved for Customers</span>
+                                    </div>
+                                    <div class="traction-stat">
+                                        <span class="traction-number" data-counter="true">2.5M</span>
+                                        <span class="traction-label">Containers Processed</span>
+                                    </div>
+                                    <div class="traction-stat">
+                                        <span class="traction-number" data-counter="true">0%</span>
+                                        <span class="traction-label">Customer Churn</span>
+                                    </div>
+                                    <div class="traction-stat">
+                                        <span class="traction-number" data-counter="true">147%</span>
+                                        <span class="traction-label">Net Revenue Retention</span>
+                                    </div>
+                                </div>
+                                <div class="customer-results">
+                                    <div class="result-card">
+                                        <img src="images/customer-logo-1.svg" alt="Customer" class="customer-logo">
+                                        <div class="result-content">
+                                            <h4>Global Retailer</h4>
+                                            <div class="result-metric">$47M saved Year 1</div>
+                                            <div class="result-detail">500K containers • 12-day payback</div>
+                                        </div>
+                                    </div>
+                                    <div class="result-card">
+                                        <img src="images/customer-logo-2.svg" alt="Customer" class="customer-logo">
+                                        <div class="result-content">
+                                            <h4>Auto Manufacturer</h4>
+                                            <div class="result-metric">92% D&D reduction</div>
+                                            <div class="result-detail">Just-in-time perfection achieved</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 10: Business Model -->
+                    <div class="slide" data-slide="10" data-notes="Simple pricing. Massive ROI.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">Simple Pricing, Extraordinary ROI</h2>
+                            <div class="pricing-model">
+                                <div class="pricing-structure">
+                                    <div class="pricing-card">
+                                        <h3>Per Vessel Pricing</h3>
+                                        <div class="price">$500K</div>
+                                        <div class="price-period">per vessel per year</div>
+                                        <ul class="pricing-features">
+                                            <li>Unlimited containers</li>
+                                            <li>All carrier integrations</li>
+                                            <li>24/7 AI monitoring</li>
+                                            <li>Automated dispute filing</li>
+                                            <li>Dedicated success team</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="roi-illustration">
+                                    <h3>Your ROI with <span class="vessel-count">50</span> Vessels</h3>
+                                    <div class="roi-calc">
+                                        <div class="roi-row">
+                                            <span>Annual Investment</span>
+                                            <span class="roi-value negative">$25M</span>
+                                        </div>
+                                        <div class="roi-row">
+                                            <span>D&D Savings</span>
+                                            <span class="roi-value positive">$618M</span>
+                                        </div>
+                                        <div class="roi-row">
+                                            <span>Labor Savings</span>
+                                            <span class="roi-value positive">$67M</span>
+                                        </div>
+                                        <div class="roi-row">
+                                            <span>Error Reduction</span>
+                                            <span class="roi-value positive">$25M</span>
+                                        </div>
+                                        <div class="roi-row total">
+                                            <span>Net Annual Benefit</span>
+                                            <span class="roi-value highlight">$685M</span>
+                                        </div>
+                                        <div class="roi-summary">
+                                            <span class="roi-metric">27.4x ROI</span>
+                                            <span class="roi-metric">13-day payback</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 11: Competition -->
+                    <div class="slide" data-slide="11" data-notes="Show why we win. Fast implementation is key.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">Why UIP Wins</h2>
+                            <div class="competitive-analysis">
+                                <div class="comparison-matrix">
+                                    <table class="comparison-table">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th class="uip-column">UIP</th>
+                                                <th>Legacy TMS</th>
+                                                <th>In-House</th>
+                                                <th>Consultants</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Implementation Time</td>
+                                                <td class="uip-column"><span class="check">✓</span> 14 days</td>
+                                                <td><span class="cross">✗</span> 6-12 months</td>
+                                                <td><span class="cross">✗</span> 12-18 months</td>
+                                                <td><span class="cross">✗</span> 3-6 months</td>
+                                            </tr>
+                                            <tr>
+                                                <td>D&D Prevention Rate</td>
+                                                <td class="uip-column"><span class="check">✓</span> 87%</td>
+                                                <td><span class="cross">✗</span> 20%</td>
+                                                <td><span class="cross">✗</span> 15%</td>
+                                                <td><span class="cross">✗</span> 40%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Automation Level</td>
+                                                <td class="uip-column"><span class="check">✓</span> 85%</td>
+                                                <td><span class="cross">✗</span> 30%</td>
+                                                <td><span class="cross">✗</span> 25%</td>
+                                                <td><span class="cross">✗</span> 0%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>All Carriers</td>
+                                                <td class="uip-column"><span class="check">✓</span> Yes</td>
+                                                <td><span class="cross">✗</span> Limited</td>
+                                                <td><span class="cross">✗</span> Manual</td>
+                                                <td><span class="cross">✗</span> No</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Predictive AI</td>
+                                                <td class="uip-column"><span class="check">✓</span> Advanced</td>
+                                                <td><span class="cross">✗</span> Basic</td>
+                                                <td><span class="cross">✗</span> None</td>
+                                                <td><span class="cross">✗</span> None</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="competitive-advantages">
+                                    <div class="advantage">
+                                        <span class="advantage-icon">🚀</span>
+                                        <h4>Speed to Value</h4>
+                                        <p>ROI in 14 days vs 6+ months</p>
+                                    </div>
+                                    <div class="advantage">
+                                        <span class="advantage-icon">🧠</span>
+                                        <h4>AI-First Platform</h4>
+                                        <p>Predictive, not just reactive</p>
+                                    </div>
+                                    <div class="advantage">
+                                        <span class="advantage-icon">🔌</span>
+                                        <h4>Universal Integration</h4>
+                                        <p>Every carrier, every system</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 12: Technology -->
+                    <div class="slide" data-slide="12" data-notes="Build confidence in our tech. Show the moat.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">Enterprise-Grade Technology</h2>
+                            <div class="technology-overview">
+                                <div class="tech-architecture">
+                                    <div class="tech-layer security">
+                                        <h4>Security & Compliance</h4>
+                                        <div class="tech-features">
+                                            <span class="tech-badge">SOC 2 Type II</span>
+                                            <span class="tech-badge">ISO 27001</span>
+                                            <span class="tech-badge">GDPR Compliant</span>
+                                            <span class="tech-badge">99.99% Uptime</span>
+                                        </div>
+                                    </div>
+                                    <div class="tech-layer ai">
+                                        <h4>AI Intelligence Layer</h4>
+                                        <div class="tech-details">
+                                            <p>2.5M+ containers training data</p>
+                                            <p>Real-time pattern recognition</p>
+                                            <p>Predictive risk scoring</p>
+                                        </div>
+                                    </div>
+                                    <div class="tech-layer integration">
+                                        <h4>Integration Engine</h4>
+                                        <div class="tech-stats">
+                                            <div class="tech-stat">
+                                                <span class="stat-number">42+</span>
+                                                <span class="stat-label">Carrier APIs</span>
+                                            </div>
+                                            <div class="tech-stat">
+                                                <span class="stat-number">200+</span>
+                                                <span class="stat-label">Data formats</span>
+                                            </div>
+                                            <div class="tech-stat">
+                                                <span class="stat-number">500K</span>
+                                                <span class="stat-label">Messages/min</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tech-differentiators">
+                                    <h4>Our Technical Moat</h4>
+                                    <ul>
+                                        <li>3 patents pending on predictive algorithms</li>
+                                        <li>Proprietary carrier relationship data</li>
+                                        <li>Self-learning system improves daily</li>
+                                        <li>Zero-downtime architecture</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 13: Financial Projections -->
+                    <div class="slide" data-slide="13" data-notes="Show the growth trajectory. Build FOMO.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">Explosive Growth Trajectory</h2>
+                            <div class="financial-overview">
+                                <div class="growth-chart">
+                                    <canvas id="growthProjections"></canvas>
+                                </div>
+                                <div class="financial-highlights">
+                                    <div class="fin-metric">
+                                        <h4>Current ARR</h4>
+                                        <span class="fin-value">$12M</span>
+                                        <span class="fin-growth">+427% YoY</span>
+                                    </div>
+                                    <div class="fin-metric">
+                                        <h4>2025 Projection</h4>
+                                        <span class="fin-value">$48M</span>
+                                        <span class="fin-detail">96 customers</span>
+                                    </div>
+                                    <div class="fin-metric">
+                                        <h4>2027 Target</h4>
+                                        <span class="fin-value">$420M</span>
+                                        <span class="fin-detail">840 customers</span>
+                                    </div>
+                                </div>
+                                <div class="unit-economics">
+                                    <h4>Best-in-Class Unit Economics</h4>
+                                    <div class="unit-grid">
+                                        <div class="unit-metric">
+                                            <span class="unit-label">CAC</span>
+                                            <span class="unit-value">$127K</span>
+                                        </div>
+                                        <div class="unit-metric">
+                                            <span class="unit-label">LTV</span>
+                                            <span class="unit-value">$4.2M</span>
+                                        </div>
+                                        <div class="unit-metric">
+                                            <span class="unit-label">Payback</span>
+                                            <span class="unit-value">3 months</span>
+                                        </div>
+                                        <div class="unit-metric">
+                                            <span class="unit-label">Gross Margin</span>
+                                            <span class="unit-value">87%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 14: Team -->
+                    <div class="slide" data-slide="14" data-notes="Show the expertise. Build trust.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">Built by Industry Veterans</h2>
+                            <div class="team-showcase">
+                                <div class="leadership-team">
+                                    <div class="team-member">
+                                        <div class="member-photo ceo"></div>
+                                        <h4>John Smith</h4>
+                                        <p class="member-role">CEO & Co-Founder</p>
+                                        <p class="member-background">Ex-Flexport VP • 15 years in logistics</p>
+                                    </div>
+                                    <div class="team-member">
+                                        <div class="member-photo cto"></div>
+                                        <h4>Sarah Chen</h4>
+                                        <p class="member-role">CTO & Co-Founder</p>
+                                        <p class="member-background">Ex-Google AI • Stanford PhD</p>
+                                    </div>
+                                    <div class="team-member">
+                                        <div class="member-photo cro"></div>
+                                        <h4>Michael Johnson</h4>
+                                        <p class="member-role">Chief Revenue Officer</p>
+                                        <p class="member-background">Ex-Salesforce • $500M in sales</p>
+                                    </div>
+                                    <div class="team-member">
+                                        <div class="member-photo vpe"></div>
+                                        <h4>Lisa Park</h4>
+                                        <p class="member-role">VP Engineering</p>
+                                        <p class="member-background">Ex-Uber Freight • MIT</p>
+                                    </div>
+                                </div>
+                                <div class="team-stats">
+                                    <div class="team-stat">
+                                        <span class="stat-number">47</span>
+                                        <span class="stat-label">Team Members</span>
+                                    </div>
+                                    <div class="team-stat">
+                                        <span class="stat-number">72%</span>
+                                        <span class="stat-label">Engineers</span>
+                                    </div>
+                                    <div class="team-stat">
+                                        <span class="stat-number">4</span>
+                                        <span class="stat-label">AI PhDs</span>
+                                    </div>
+                                    <div class="team-stat">
+                                        <span class="stat-number">127</span>
+                                        <span class="stat-label">Years Combined Experience</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 15: Investors & Advisors -->
+                    <div class="slide" data-slide="15" data-notes="Show backing and credibility.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">Backed by the Best</h2>
+                            <div class="investor-showcase">
+                                <div class="investor-section">
+                                    <h3>Lead Investors</h3>
+                                    <div class="investor-logos">
+                                        <div class="investor-logo">Bessemer Venture Partners</div>
+                                        <div class="investor-logo">Sequoia Capital</div>
+                                    </div>
+                                </div>
+                                <div class="investor-section">
+                                    <h3>Strategic Investors</h3>
+                                    <div class="investor-logos">
+                                        <div class="investor-logo">Maersk Growth</div>
+                                        <div class="investor-logo">Flexport Ventures</div>
+                                        <div class="investor-logo">Amazon</div>
+                                    </div>
+                                </div>
+                                <div class="advisor-section">
+                                    <h3>Advisory Board</h3>
+                                    <div class="advisor-grid">
+                                        <div class="advisor">
+                                            <strong>Ryan Petersen</strong>
+                                            <span>Founder & CEO, Flexport</span>
+                                        </div>
+                                        <div class="advisor">
+                                            <strong>Diane Greene</strong>
+                                            <span>Former CEO, Google Cloud</span>
+                                        </div>
+                                        <div class="advisor">
+                                            <strong>Marc Lore</strong>
+                                            <span>Founder, Jet.com</span>
+                                        </div>
+                                        <div class="advisor">
+                                            <strong>Anne Wojcicki</strong>
+                                            <span>CEO, 23andMe</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 16: Customer Success Story -->
+                    <div class="slide" data-slide="16" data-notes="Deep dive on one success. Make it real.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">Case Study: Global Retailer Saves $47M</h2>
+                            <div class="case-study">
+                                <div class="case-overview">
+                                    <div class="case-company">
+                                        <img src="images/case-study-1.svg" alt="Global Retailer" class="case-logo">
+                                        <div class="case-details">
+                                            <h3>Fortune 500 Retailer</h3>
+                                            <p>72 vessels • 500K containers/year • 42 carrier relationships</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="case-timeline">
+                                    <h4>Implementation Journey</h4>
+                                    <div class="journey-steps">
+                                        <div class="journey-step">
+                                            <span class="step-time">Day 1</span>
+                                            <p>Connected 42 carrier APIs</p>
+                                        </div>
+                                        <div class="journey-step">
+                                            <span class="step-time">Day 7</span>
+                                            <p>$2.4M in savings identified</p>
+                                        </div>
+                                        <div class="journey-step">
+                                            <span class="step-time">Day 14</span>
+                                            <p>Go live - first charges prevented</p>
+                                        </div>
+                                        <div class="journey-step">
+                                            <span class="step-time">Day 30</span>
+                                            <p>$3.9M saved - ROI achieved</p>
+                                        </div>
+                                        <div class="journey-step">
+                                            <span class="step-time">Year 1</span>
+                                            <p>$47M total savings</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="case-results">
+                                    <div class="result-grid">
+                                        <div class="result-item">
+                                            <span class="result-number">92%</span>
+                                            <span class="result-label">D&D Reduction</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-number">127hrs</span>
+                                            <span class="result-label">Weekly Time Saved</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-number">0.4%</span>
+                                            <span class="result-label">Error Rate (was 4%)</span>
+                                        </div>
+                                        <div class="result-item">
+                                            <span class="result-number">18.8x</span>
+                                            <span class="result-label">ROI</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <blockquote class="case-quote">
+                                    "UIP didn't just save us money - it transformed how we think about ocean freight. It's now a competitive advantage."
+                                    <cite>— CFO</cite>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 17: Product Roadmap -->
+                    <div class="slide" data-slide="17" data-notes="Show the vision. Build excitement for future.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">The Future of Global Trade</h2>
+                            <div class="roadmap-vision">
+                                <div class="roadmap-timeline">
+                                    <div class="roadmap-phase current">
+                                        <h3>Today</h3>
+                                        <h4>Ocean Freight Excellence</h4>
+                                        <ul>
+                                            <li>D&D Prevention</li>
+                                            <li>Dispute Automation</li>
+                                            <li>Real-time Visibility</li>
+                                        </ul>
+                                        <div class="phase-metric">$20B market</div>
+                                    </div>
+                                    <div class="roadmap-phase">
+                                        <h3>Q2 2025</h3>
+                                        <h4>Multi-Modal Expansion</h4>
+                                        <ul>
+                                            <li>Air Freight</li>
+                                            <li>Rail Integration</li>
+                                            <li>Last Mile</li>
+                                        </ul>
+                                        <div class="phase-metric">$45B market</div>
+                                    </div>
+                                    <div class="roadmap-phase">
+                                        <h3>Q4 2025</h3>
+                                        <h4>Supply Chain Finance</h4>
+                                        <ul>
+                                            <li>Working Capital</li>
+                                            <li>Invoice Factoring</li>
+                                            <li>Risk Insurance</li>
+                                        </ul>
+                                        <div class="phase-metric">$127B market</div>
+                                    </div>
+                                    <div class="roadmap-phase">
+                                        <h3>2026+</h3>
+                                        <h4>Global Trade OS</h4>
+                                        <ul>
+                                            <li>End-to-end Platform</li>
+                                            <li>Marketplace</li>
+                                            <li>Carbon Tracking</li>
+                                        </ul>
+                                        <div class="phase-metric">$500B+ market</div>
+                                    </div>
+                                </div>
+                                <div class="vision-statement">
+                                    "Our mission: Eliminate all inefficiency from global trade"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 18: Investment Terms -->
+                    <div class="slide" data-slide="18" data-notes="Clear ask. Show the opportunity.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">Investment Opportunity</h2>
+                            <div class="investment-details">
+                                <div class="raise-overview">
+                                    <div class="raise-card">
+                                        <h3>Series A</h3>
+                                        <div class="raise-amount">$50M</div>
+                                        <div class="raise-terms">
+                                            <p>$300M post-money valuation</p>
+                                            <p>Led by Tier 1 VCs</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="use-of-funds">
+                                    <h3>Use of Funds</h3>
+                                    <div class="funds-chart">
+                                        <canvas id="fundsChart"></canvas>
+                                    </div>
+                                    <div class="funds-breakdown">
+                                        <div class="fund-item">
+                                            <span class="fund-percent">40%</span>
+                                            <span class="fund-category">Sales & Marketing</span>
+                                            <span class="fund-detail">Scale from 24 to 100 customers</span>
+                                        </div>
+                                        <div class="fund-item">
+                                            <span class="fund-percent">35%</span>
+                                            <span class="fund-category">Product & Engineering</span>
+                                            <span class="fund-detail">Multi-modal expansion</span>
+                                        </div>
+                                        <div class="fund-item">
+                                            <span class="fund-percent">15%</span>
+                                            <span class="fund-category">Customer Success</span>
+                                            <span class="fund-detail">White-glove support</span>
+                                        </div>
+                                        <div class="fund-item">
+                                            <span class="fund-percent">10%</span>
+                                            <span class="fund-category">Operations</span>
+                                            <span class="fund-detail">Scale infrastructure</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="investment-highlights">
+                                    <h3>Why Now?</h3>
+                                    <ul>
+                                        <li>Post-COVID supply chain crisis created urgency</li>
+                                        <li>AI/ML finally mature enough for this complexity</li>
+                                        <li>Carriers opening APIs for first time</li>
+                                        <li>CFOs mandating efficiency (recession fears)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 19: The Ask -->
+                    <div class="slide" data-slide="19" data-notes="Specific next steps. Create urgency.">
+                        <div class="slide-content">
+                            <h2 class="slide-title">Let's Transform <span class="prospect-name">Your</span> Ocean Freight</h2>
+                            <div class="closing-ask">
+                                <div class="your-opportunity">
+                                    <h3>Your Opportunity</h3>
+                                    <div class="opp-metrics">
+                                        <div class="opp-item">
+                                            <span class="opp-label">Annual Savings</span>
+                                            <span class="opp-value">$<span id="totalSavings">710M</span></span>
+                                        </div>
+                                        <div class="opp-item">
+                                            <span class="opp-label">ROI</span>
+                                            <span class="opp-value"><span id="roiMultiple">28.4x</span></span>
+                                        </div>
+                                        <div class="opp-item">
+                                            <span class="opp-label">Payback Period</span>
+                                            <span class="opp-value"><span id="paybackDays">13</span> days</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="next-steps">
+                                    <h3>Next Steps</h3>
+                                    <div class="steps-timeline">
+                                        <div class="next-step">
+                                            <span class="step-timing">This Week</span>
+                                            <h4>Technical Assessment</h4>
+                                            <p>2-hour session with your team</p>
+                                        </div>
+                                        <div class="next-step">
+                                            <span class="step-timing">Next Week</span>
+                                            <h4>Custom ROI Analysis</h4>
+                                            <p>Detailed savings projection</p>
+                                        </div>
+                                        <div class="next-step">
+                                            <span class="step-timing">Week 3</span>
+                                            <h4>Pilot Agreement</h4>
+                                            <p>Start with 10 vessels</p>
+                                        </div>
+                                        <div class="next-step">
+                                            <span class="step-timing">Day 30</span>
+                                            <h4>First Savings</h4>
+                                            <p>See real results</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="urgency-drivers">
+                                    <p class="urgency-message">
+                                        Every day you wait costs <span class="daily-loss">$1.9M</span>
+                                    </p>
+                                    <p class="competitor-alert">
+                                        3 of your competitors already use UIP
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 20: Thank You / Contact -->
+                    <div class="slide" data-slide="20" data-notes="Clear CTA. Make it easy to say yes.">
+                        <div class="slide-content contact-slide">
+                            <div class="contact-content">
+                                <img src="brand/logo.svg" alt="UIP" class="contact-logo">
+                                <h1>Ready to Save $<span id="annualSavingsContact">710</span>M?</h1>
+                                <div class="contact-cta">
+                                    <p>Let's schedule your technical assessment this week</p>
+                                    <div class="contact-options">
+                                        <div class="contact-person">
+                                            <div class="person-photo"></div>
+                                            <h4>John Smith</h4>
+                                            <p>CEO & Co-Founder</p>
+                                            <a href="mailto:john@uip.com" class="contact-email">john@uip.com</a>
+                                            <a href="tel:+14155551234" class="contact-phone">+1 (415) 555-1234</a>
+                                        </div>
+                                    </div>
+                                    <div class="meeting-options">
+                                        <button class="schedule-btn primary">
+                                            Schedule Assessment Now
+                                        </button>
+                                        <button class="schedule-btn secondary">
+                                            Download Full ROI Report
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="final-proof">
+                                    <span>Join 24 enterprises already saving with UIP</span>
+                                    <div class="proof-logos">
+                                        <img src="images/customer-logo-1.svg" alt="Customer">
+                                        <img src="images/customer-logo-2.svg" alt="Customer">
+                                        <img src="images/customer-logo-3.svg" alt="Customer">
+                                        <img src="images/customer-logo-4.svg" alt="Customer">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Executive 15-Minute Presentation -->
+                <div class="presentation-slides executive-deck" id="executiveDeck" style="display: none;">
+                    <!-- Executive presentation slides here -->
+                </div>
+
+                <!-- Other presentation types... -->
+            </div>
+
+            <!-- Presenter Notes Panel -->
+            <div class="presenter-notes" id="presenterNotes">
+                <h3>Presenter Notes</h3>
+                <div class="notes-content" id="notesContent">
+                    <p>Welcome to your presentation. Press spacebar or arrow keys to navigate.</p>
+                </div>
+                <div class="notes-timer">
+                    <span class="timer-label">Elapsed Time:</span>
+                    <span class="timer-value" id="elapsedTime">00:00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="navigation-controls">
+            <button class="nav-btn" id="prevSlide" title="Previous (←)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15.5 17.5L10.5 12l5-5.5"/>
+                </svg>
+            </button>
+            <button class="nav-btn" id="nextSlide" title="Next (→)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8.5 6.5L13.5 12l-5 5.5"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Slide Navigator -->
+        <div class="slide-navigator" id="slideNavigator">
+            <div class="navigator-grid" id="navigatorGrid">
+                <!-- Thumbnails generated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <h2>Export Presentation</h2>
+            <div class="export-options">
+                <button class="export-option" data-format="pdf">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+                        <path d="M28 2H12C9.79 2 8 3.79 8 6v36c0 2.21 1.79 4 4 4h24c2.21 0 4-1.79 4-4V14L28 2zm8 40H12V6h13v11h11v25z"/>
+                    </svg>
+                    <span>Export as PDF</span>
+                </button>
+                <button class="export-option" data-format="pptx">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+                        <path d="M38 8H10c-2.21 0-4 1.79-4 4v24c0 2.21 1.79 4 4 4h28c2.21 0 4-1.79 4-4V12c0-2.21-1.79-4-4-4zm0 28H10V12h28v24z"/>
+                    </svg>
+                    <span>Export as PowerPoint</span>
+                </button>
+                <button class="export-option" data-format="link">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+                        <path d="M22 34h4V22h-4v12zm2-30C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm0 36c-8.82 0-16-7.18-16-16S15.18 8 24 8s16 7.18 16 16-7.18 16-16 16zm-2-22h4v-4h-4v4z"/>
+                    </svg>
+                    <span>Share Link</span>
+                </button>
+            </div>
+            <button class="modal-close" id="closeExportModal">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/presentation-templates.js?v=1750888019"></script>
+    <script src="js/workflow-comparison.js?v=1750888019"></script>
+    <script src="js/export-presentation.js?v=1750888019"></script>
+    <script src="js/presentation-deck.js?v=1750888019"></script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
+</body>

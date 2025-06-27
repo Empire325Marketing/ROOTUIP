@@ -1,9 +1,39 @@
-// ROI Calculator JavaScript
+// ROI Calculator JavaScript - Now with Backend API Integration
 // Handles all calculations, visualizations, and interactions
 
 // Initialize variables
 let savingsChart, comparisonChart;
 let calculationData = {};
+
+// API Configuration
+const API_BASE = '/api';
+
+// API Helper Functions
+async function apiCall(endpoint, data = null, method = 'GET') {
+    try {
+        const options = {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        };
+        
+        if (data && method !== 'GET') {
+            options.body = JSON.stringify(data);
+        }
+        
+        const response = await fetch(`${API_BASE}${endpoint}`, options);
+        
+        if (!response.ok) {
+            throw new Error(`API call failed: ${response.status}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('API Error:', error);
+        return { success: false, error: error.message };
+    }
+}
 
 // Industry benchmarks
 const industryBenchmarks = {
@@ -421,44 +451,121 @@ function updateBenchmarks() {
     }
 }
 
-// Handle form submission
-function handleFormSubmission(e) {
+// Handle form submission - Now with Real API Integration
+async function handleFormSubmission(e) {
     e.preventDefault();
     
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData);
     
-    // Add calculation data
-    data.calculationData = calculationData;
-    
-    // Show success message
+    // Show loading state
     const submitButton = e.target.querySelector('button[type="submit"]');
     const originalText = submitButton.textContent;
-    submitButton.textContent = 'Booking Your Call...';
+    submitButton.textContent = 'Processing...';
     submitButton.disabled = true;
     
-    // Simulate API call
-    setTimeout(() => {
-        submitButton.textContent = '✓ Call Booked!';
-        submitButton.style.backgroundColor = '#00D4AA';
+    try {
+        // Prepare data for API
+        const roiData = {
+            monthlyShipments: calculationData.totalContainers,
+            avgDetentionCost: calculationData.monthlyDDCharges / calculationData.totalContainers,
+            manualHours: calculationData.weeklyManualHours,
+            hourlyRate: calculationData.hourlyRate || 65,
+            email: data.email,
+            company: data.company,
+            name: data.name,
+            phone: data.phone
+        };
         
-        // Reset after 3 seconds
-        setTimeout(() => {
-            submitButton.textContent = originalText;
-            submitButton.disabled = false;
-            submitButton.style.backgroundColor = '';
-            e.target.reset();
-        }, 3000);
-    }, 1500);
-    
-    // Track conversion
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'conversion', {
-            'event_category': 'ROI Calculator',
-            'event_label': 'Strategy Call Booked',
-            'value': calculationData.annualSavings
-        });
+        // Submit to API
+        const response = await apiCall('/leads/roi-calculate', roiData, 'POST');
+        
+        if (response.success) {
+            // Success state
+            submitButton.textContent = '✓ ROI Report Sent!';
+            submitButton.style.backgroundColor = '#00D4AA';
+            
+            // Track successful lead capture
+            if (typeof leadTracker !== 'undefined') {
+                leadTracker.identifyLead(data.email, {
+                    source: 'roi_calculator',
+                    leadScore: response.leadScore || 75,
+                    roiData: response.roiData
+                });
+            }
+            
+            // Track conversion
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'conversion', {
+                    'event_category': 'ROI Calculator',
+                    'event_label': 'Lead Captured',
+                    'value': calculationData.annualSavings
+                });
+            }
+            
+            // Show success message
+            showSuccessMessage('Your personalized ROI report has been sent to your email!');
+            
+        } else {
+            throw new Error(response.error || 'Failed to submit');
+        }
+        
+    } catch (error) {
+        console.error('Submission error:', error);
+        submitButton.textContent = 'Try Again';
+        submitButton.style.backgroundColor = '#FF6B35';
+        showErrorMessage('Failed to send report. Please try again.');
     }
+    
+    // Reset button after 3 seconds
+    setTimeout(() => {
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+        submitButton.style.backgroundColor = '';
+        if (submitButton.textContent.includes('✓')) {
+            e.target.reset();
+        }
+    }, 3000);
+}
+
+// Show success message
+function showSuccessMessage(message) {
+    const successDiv = document.createElement('div');
+    successDiv.className = 'alert alert-success';
+    successDiv.style.cssText = `
+        background: #d4edda;
+        color: #155724;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border: 1px solid #c3e6cb;
+    `;
+    successDiv.textContent = message;
+    
+    const form = document.querySelector('#resultsForm');
+    form.parentNode.insertBefore(successDiv, form);
+    
+    setTimeout(() => successDiv.remove(), 5000);
+}
+
+// Show error message
+function showErrorMessage(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'alert alert-error';
+    errorDiv.style.cssText = `
+        background: #f8d7da;
+        color: #721c24;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border: 1px solid #f5c6cb;
+    `;
+    errorDiv.textContent = message;
+    
+    const form = document.querySelector('#resultsForm');
+    form.parentNode.insertBefore(errorDiv, form);
+    
+    setTimeout(() => errorDiv.remove(), 5000);
 }
 
 // Generate PDF report

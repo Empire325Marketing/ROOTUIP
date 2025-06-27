@@ -1,0 +1,26 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="url(#gradient-icon)"/>
+  
+  <!-- U letter forming a container shape -->
+  <path d="M6 8v12c0 3.3 2.7 6 6 6h8c3.3 0 6-2.7 6-6V8" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  
+  <!-- I dot as data point -->
+  <circle cx="16" cy="4" r="2" fill="white"/>
+  
+  <!-- Network nodes representing integration points -->
+  <circle cx="6" cy="8" r="1.5" fill="white"/>
+  <circle cx="26" cy="8" r="1.5" fill="white"/>
+  <circle cx="16" cy="20" r="1.5" fill="white"/>
+  
+  <!-- Connection lines showing data flow -->
+  <path d="M6 8L16 20L26 8" stroke="white" stroke-width="0.5" opacity="0.6"/>
+  
+  <!-- Gradient -->
+  <defs>
+    <linearGradient id="gradient-icon" x1="0" y1="0" x2="32" y2="32">
+      <stop offset="0%" stop-color="#1e40af"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+</svg>

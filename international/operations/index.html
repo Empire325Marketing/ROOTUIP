@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operations Setup | UIP International</title>
+<style media="print" onload="this.media='all'">*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0f172a;color:#e2e8f0}.sidebar{display:none}@media(min-width:768px){.sidebar{display:block}}</style>
+<meta name="description" content="Comprehensive operational setup guides for UIP's international expansion including legal, HR, finance, and infrastructure.">
+<link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+<style media="print" onload="this.media='all'">
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+body {
+font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+background: #0f172a;
+color: #e2e8f0;
+overflow-x: hidden;
+}
+.operations-container {
+display: flex;
+min-height: 100vh;
+}
+/* Sidebar */
+.sidebar {
+width: 280px;
+background: #1e293b;
+padding: 20px 0;
+position: fixed;
+height: 100vh;
+overflow-y: auto;
+border-right: 1px solid #1e293b;
+}
+.logo {
+padding: 0 20px 30px;
+border-bottom: 1px solid #1e293b;
+margin-bottom: 20px;
+}
+.logo h2 {
+font-size: 1.5rem;
+font-weight: 700;
+color: #3b82f6;
+display: flex;
+align-items: center;
+gap: 10px;
+}
+.nav-section {
+margin-bottom: 30px;
+padding: 0 20px;
+}
+.nav-title {
+font-size: 0.8rem;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+color: #64748b;
+margin-bottom: 10px;
+}
+.nav-item {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 10px 15px;
+margin: 5px -15px;
+border-radius: 8px;
+text-decoration: none;
+color: #e2e8f0;
+transition: all 0.3s ease;
+}
+.nav-item:hover, .nav-item.active {
+background: rgba(96, 165, 250, 0.1);
+color: #3b82f6;
+}
+/* Main Content */
+.main-content {
+flex: 1;
+margin-left: 280px;
+padding: 20px;
+}
+.header {
+background: #1e293b;
+padding: 25px 30px;
+border-radius: 12px;
+border: 1px solid #1e293b;
+margin-bottom: 30px;
+}
+.header-top {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+}
+.page-title {
+font-size: 1.8rem;
+font-weight: 700;
+color: #e2e8f0;
+}
+.header-actions {
+display: flex;
+gap: 15px;
+}
+.btn {
+padding: 10px 20px;
+border: none;
+border-radius: 8px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+font-size: 0.9rem;
+display: inline-flex;
+align-items: center;
+gap: 8px;
+}
+.btn-primary {
+background: linear-gradient(135deg, #10b981, #10b981);
+color: white;
+}
+.btn-primary:hover {
+transform: translateY(-2px);
+box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4);
+}
+.btn-secondary {
+background: #1e293b;
+color: #e2e8f0;
+}
+/* Setup Progress */
+.progress-overview {
+background: #1e293b;
+padding: 30px;
+border-radius: 12px;
+border: 1px solid #1e293b;
+margin-bottom: 30px;
+}
+.progress-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 25px;
+}
+.progress-title {
+font-size: 1.4rem;
+font-weight: 600;
+color: #e2e8f0;
+}
+.overall-progress {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+.progress-percentage {
+font-size: 2rem;
+font-weight: 700;
+color: #10b981;
+}
+.progress-bar {
+width: 200px;
+height: 8px;
+background: #1e293b;
+border-radius: 4px;
+overflow: hidden;
+}
+.progress-fill {
+height: 100%;
+background: linear-gradient(90deg, #10b981, #10b981);
+transition: width 0.3s ease;
+}
+.setup-stages {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 20px;
+}
+.stage-card {
+background: #0f172a;
+padding: 20px;
+border-radius: 8px;
+border: 1px solid #1e293b;
+position: relative;
+overflow: hidden;
+}
+.stage-status {
+position: absolute;
+top: 15px;
+right: 15px;
+width: 10px;
+height: 10px;
+border-radius: 50%;
+}
+.status-complete {
+background: #10b981;
+}
+.status-in-progress {
+background: #f59e0b;
+}
+.status-pending {
+background: #64748b;
+}
+.stage-icon {
+font-size: 2rem;
+margin-bottom: 15px;
+}
+.stage-title {
+font-size: 1.1rem;
+font-weight: 600;
+color: #e2e8f0;
+margin-bottom: 10px;
+}
+.stage-tasks {
+font-size: 0.9rem;
+color: #64748b;
+}
+/* Legal Entity Setup */
+.setup-section {
+background: #1e293b;
+padding: 30px;
+border-radius: 12px;
+border: 1px solid #1e293b;
+margin-bottom: 30px;
+}
+.section-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 25px;
+}
+.section-title {
+font-size: 1.4rem;
+font-weight: 600;
+color: #e2e8f0;
+}
+.setup-grid {
+display: grid;
+gap: 20px;
+}
+.setup-item {
+background: #0f172a;
+padding: 25px;
+border-radius: 8px;
+border: 1px solid #1e293b;
+}
+.setup-header {
+display: flex;
+justify-content: space-between;
+align-items: start;
+margin-bottom: 20px;
+}
+.setup-info h4 {
+font-size: 1.1rem;
+font-weight: 600;
+color: #e2e8f0;
+margin-bottom: 5px;
+}
+.setup-info p {
+font-size: 0.9rem;
+color: #64748b;
+}
+.setup-timeline {
+padding: 8px 16px;
+background: rgba(34, 197, 94, 0.1);
+color: #10b981;
+border-radius: 20px;
+font-size: 0.85rem;
+font-weight: 600;
+}
+.setup-checklist {
+list-style: none;
+margin-bottom: 20px;
+}
+.checklist-item {
+padding: 12px 0;
+border-bottom: 1px solid #1e293b;
+display: flex;
+align-items: center;
+gap: 15px;
+}
+.checklist-item:last-child {
+border-bottom: none;
+}
+.checklist-checkbox {
+width: 20px;
+height: 20px;
+border: 2px solid #64748b;
+border-radius: 4px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+.checklist-checkbox.checked {
+background: #10b981;
+border-color: #10b981;
+}
+.checklist-checkbox.checked::after {
+content: "✓";
+color: white;
+font-weight: bold;
+}
+.checklist-text {
+flex: 1;
+color: #e2e8f0;
+}
+.setup-action {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+padding: 10px 20px;
+background: #1e293b;
+border: none;
+border-radius: 6px;
+color: #e2e8f0;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+.setup-action:hover {
+background: #64748b;
+}
+/* Resource Library */
+.resource-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 20px;
+}
+.resource-card {
+background: #0f172a;
+padding: 25px;
+border-radius: 8px;
+border: 1px solid #1e293b;
+transition: all 0.3s ease;
+}
+.resource-card:hover {
+border-color: #3b82f6;
+transform: translateY(-3px);
+}
+.resource-type {
+display: inline-block;
+padding: 5px 12px;
+background: rgba(96, 165, 250, 0.1);
+color: #3b82f6;
+border-radius: 20px;
+font-size: 0.8rem;
+font-weight: 600;
+margin-bottom: 15px;
+}
+.resource-title {
+font-size: 1.1rem;
+font-weight: 600;
+color: #e2e8f0;
+margin-bottom: 10px;
+}
+.resource-description {
+font-size: 0.9rem;
+color: #64748b;
+margin-bottom: 20px;
+line-height: 1.5;
+}
+.resource-meta {
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 0.85rem;
+color: #64748b;
+}
+.resource-download {
+color: #3b82f6;
+text-decoration: none;
+font-weight: 600;
+display: flex;
+align-items: center;
+gap: 5px;
+}
+/* Timeline View */
+.timeline-section {
+background: #1e293b;
+padding: 30px;
+border-radius: 12px;
+border: 1px solid #1e293b;
+}
+.timeline {
+position: relative;
+padding-left: 40px;
+}
+.timeline::before {
+content: '';
+position: absolute;
+left: 20px;
+top: 0;
+bottom: 0;
+width: 2px;
+background: #64748b;
+}
+.timeline-item {
+position: relative;
+padding-bottom: 30px;
+}
+.timeline-marker {
+position: absolute;
+left: -30px;
+top: 5px;
+width: 20px;
+height: 20px;
+background: #1e293b;
+border: 3px solid #64748b;
+border-radius: 50%;
+}
+.timeline-marker.completed {
+background: #10b981;
+border-color: #10b981;
+}
+.timeline-marker.current {
+background: #f59e0b;
+border-color: #f59e0b;
+box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.2);
+}
+.timeline-content {
+background: #0f172a;
+padding: 20px;
+border-radius: 8px;
+border: 1px solid #1e293b;
+}
+.timeline-date {
+font-size: 0.85rem;
+color: #3b82f6;
+margin-bottom: 10px;
+}
+.timeline-title {
+font-size: 1.1rem;
+font-weight: 600;
+color: #e2e8f0;
+margin-bottom: 10px;
+}
+.timeline-description {
+font-size: 0.9rem;
+color: #64748b;
+}
+@media (max-width: 768px) {
+.sidebar {
+transform: translateX(-100%);
+}
+.main-content {
+margin-left: 0;
+}
+.setup-stages {
+grid-template-columns: 1fr;
+}
+.resource-grid {
+grid-template-columns: 1fr;
+}
+}
+</style>
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="operations-container">
+<!-- Sidebar -->
+<nav class="sidebar">
+<div class="logo">
+<h2>🌍 UIP International</h2>
+</div>
+<div class="nav-section">
+<div class="nav-title">Expansion Tools</div>
+<a href="/international/localization/index.html" class="nav-item">
+<span>🌐</span> Localization
+</a>
+<a href="/international/market-entry/index.html" class="nav-item">
+<span>📊</span> Market Entry
+</a>
+<a href="/international/operations/index.html" class="nav-item active">
+<span>🏢</span> Operations Setup
+</a>
+<a href="/international/sales/index.html" class="nav-item">
+<span>💼</span> Regional Sales
+</a>
+<a href="/international/support/index.html" class="nav-item">
+<span>🤝</span> Local Support
+</a>
+</div>
+<div class="nav-section">
+<div class="nav-title">Resources</div>
+<a href="#" class="nav-item">
+<span>📚</span> Documentation
+</a>
+<a href="#" class="nav-item">
+<span>🔧</span> API Reference
+</a>
+<a href="#" class="nav-item">
+<span>📋</span> Compliance
+</a>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="main-content">
+<!-- Header -->
+<div class="header">
+<div class="header-top">
+<h1 class="page-title">Operations Setup Guide</h1>
+<div class="header-actions">
+<button class="btn btn-secondary" onclick="exportChecklist()">
+📥 Export Checklist
+</button>
+<button class="btn btn-primary" onclick="startNewSetup()">
++ New Country Setup
+</button>
+</div>
+</div>
+</div>
+<!-- Setup Progress -->
+<div class="progress-overview">
+<div class="progress-header">
+<h2 class="progress-title">Japan Operations Setup Progress</h2>
+<div class="overall-progress">
+<span class="progress-percentage">67%</span>
+<div class="progress-bar">
+<div class="progress-fill" style="width: 67%;"></div>
+</div>
+</div>
+</div>
+<div class="setup-stages">
+<div class="stage-card">
+<div class="stage-status status-complete"></div>
+<div class="stage-icon">⚖️</div>
+<h3 class="stage-title">Legal Entity</h3>
+<p class="stage-tasks">KK registered • Bank account opened</p>
+</div>
+<div class="stage-card">
+<div class="stage-status status-complete"></div>
+<div class="stage-icon">👥</div>
+<h3 class="stage-title">HR Setup</h3>
+<p class="stage-tasks">Payroll system • Benefits enrolled</p>
+</div>
+<div class="stage-card">
+<div class="stage-status status-in-progress"></div>
+<div class="stage-icon">💰</div>
+<h3 class="stage-title">Finance & Tax</h3>
+<p class="stage-tasks">Tax registration pending</p>
+</div>
+<div class="stage-card">
+<div class="stage-status status-pending"></div>
+<div class="stage-icon">🏢</div>
+<h3 class="stage-title">Office Setup</h3>
+<p class="stage-tasks">Location selection phase</p>
+</div>
+<div class="stage-card">
+<div class="stage-status status-pending"></div>
+<div class="stage-icon">💳</div>
+<h3 class="stage-title">Banking</h3>
+<p class="stage-tasks">Payment processing setup</p>
+</div>
+<div class="stage-card">
+<div class="stage-status status-pending"></div>
+<div class="stage-icon">🔧</div>
+<h3 class="stage-title">Operations</h3>
+<p class="stage-tasks">Systems integration</p>
+</div>
+</div>
+</div>
+<!-- Legal Entity Setup -->
+<div class="setup-section">
+<div class="section-header">
+<h2 class="section-title">Legal Entity Establishment</h2>
+<button class="btn btn-secondary" onclick="viewLegalGuides()">
+📖 View Guides
+</button>
+</div>
+<div class="setup-grid">
+<div class="setup-item">
+<div class="setup-header">
+<div class="setup-info">
+<h4>Company Registration</h4>
+<p>Establish legal presence in target market</p>
+</div>
+<span class="setup-timeline">4-6 weeks</span>
+</div>
+<ul class="setup-checklist">
+<li class="checklist-item">
+<div class="checklist-checkbox checked"></div>
+<span class="checklist-text">Choose entity type (KK, GK, Branch)</span>
+</li>
+<li class="checklist-item">
+<div class="checklist-checkbox checked"></div>
+<span class="checklist-text">Reserve company name</span>
+</li>
+<li class="checklist-item">
+<div class="checklist-checkbox"></div>
+<span class="checklist-text">Prepare articles of incorporation</span>
+</li>
+<li class="checklist-item">
+<div class="checklist-checkbox"></div>
+<span class="checklist-text">Notarize documents</span>
+</li>
+<li class="checklist-item">
+<div class="checklist-checkbox"></div>
+<span class="checklist-text">Register with Legal Affairs Bureau</span>
+</li>
+</ul>
+<button class="setup-action" onclick="viewRegistrationDocs()">
+📄 View Documents
+</button>
+</div>
+<div class="setup-item">
+<div class="setup-header">
+<div class="setup-info">
+<h4>Tax Registration</h4>
+<p>Register for local tax obligations</p>
+</div>
+<span class="setup-timeline">2-3 weeks</span>
+</div>
+<ul class="setup-checklist">
+<li class="checklist-item">
+<div class="checklist-checkbox"></div>
+<span class="checklist-text">Corporate tax registration</span>
+</li>
+<li class="checklist-item">
+<div class="checklist-checkbox"></div>
+<span class="checklist-text">Consumption tax registration</span>
+</li>
+<li class="checklist-item">
+<div class="checklist-checkbox"></div>
+<span class="checklist-text">Local tax notifications</span>
+</li>
+<li class="checklist-item">
+<div class="checklist-checkbox"></div>
+<span class="checklist-text">Withholding tax setup</span>
+</li>
+</ul>
+<button class="setup-action" onclick="viewTaxGuide()">
+💰 Tax Guide
+</button>
+</div>
+</div>
+</div>
+<!-- HR & Hiring -->
+<div class="setup-section">
+<div class="section-header">
+<h2 class="section-title">HR & Hiring Process</h2>
+<button class="btn btn-secondary" onclick="viewHRTools()">
+🛠️ HR Tools
+</button>
+</div>
+<div class="setup-grid">
+<div class="setup-item">
+<div class="setup-header">
+<div class="setup-info">
+<h4>Employment Framework</h4>
+<p>Set up compliant employment practices</p>
+</div>
+<span class="setup-timeline">3-4 weeks</span>
+</div>
+<ul class="setup-checklist">
+<li class="checklist-item">
+<div class="checklist-checkbox checked"></div>
+<span class="checklist-text">Create employment contracts</span>
+</li>
+<li class="checklist-item">
+<div class="checklist-checkbox checked"></div>
+<span class="checklist-text">Define compensation structure</span>
+</li>
+<li class="checklist-item">
+<div class="checklist-checkbox"></div>
+<span class="checklist-text">Set up payroll system</span>
+</li>
+<li class="checklist-item">
+<div class="checklist-checkbox"></div>
+<span class="checklist-text">Enroll in social insurance</span>
+</li>
+<li class="checklist-item">
+<div class="checklist-checkbox"></div>
+<span class="checklist-text">Create employee handbook</span>
+</li>
+</ul>
+<button class="setup-action" onclick="viewHRTemplates()">
+📋 HR Templates
+</button>
+</div>
+</div>
+</div>
+<!-- Resource Library -->
+<div class="setup-section">
+<div class="section-header">
+<h2 class="section-title">Resource Library</h2>
+<button class="btn btn-secondary" onclick="viewAllResources()">
+📚 All Resources
+</button>
+</div>
+<div class="resource-grid">
+<div class="resource-card">
+<span class="resource-type">Legal Guide</span>
+<h3 class="resource-title">Entity Selection Guide</h3>
+<p class="resource-description">Compare different entity types, tax implications, and liability structures for each market.</p>
+<div class="resource-meta">
+<span>Updated: Dec 2024</span>
+<a href="#" class="resource-download" onclick="downloadResource('entity-guide')">
+Download →
+</a>
+</div>
+</div>
+<div class="resource-card">
+<span class="resource-type">Template</span>
+<h3 class="resource-title">Employment Contract Template</h3>
+<p class="resource-description">Localized employment contract templates compliant with local labor laws.</p>
+<div class="resource-meta">
+<span>12 languages</span>
+<a href="#" class="resource-download" onclick="downloadResource('employment-contract')">
+Download →
+</a>
+</div>
+</div>
+<div class="resource-card">
+<span class="resource-type">Checklist</span>
+<h3 class="resource-title">90-Day Setup Checklist</h3>
+<p class="resource-description">Complete operational setup checklist with timelines and dependencies.</p>
+<div class="resource-meta">
+<span>Interactive</span>
+<a href="#" class="resource-download" onclick="downloadResource('setup-checklist')">
+Download →
+</a>
+</div>
+</div>
+<div class="resource-card">
+<span class="resource-type">Guide</span>
+<h3 class="resource-title">Banking Setup Guide</h3>
+<p class="resource-description">Step-by-step guide for corporate banking, payment processing, and forex management.</p>
+<div class="resource-meta">
+<span>15 countries</span>
+<a href="#" class="resource-download" onclick="downloadResource('banking-guide')">
+Download →
+</a>
+</div>
+</div>
+<div class="resource-card">
+<span class="resource-type">Calculator</span>
+<h3 class="resource-title">Setup Cost Calculator</h3>
+<p class="resource-description">Estimate total costs for market entry including legal, HR, office, and operational expenses.</p>
+<div class="resource-meta">
+<span>Excel/Sheets</span>
+<a href="#" class="resource-download" onclick="downloadResource('cost-calculator')">
+Download →
+</a>
+</div>
+</div>
+<div class="resource-card">
+<span class="resource-type">Process</span>
+<h3 class="resource-title">Vendor Selection Process</h3>
+<p class="resource-description">Framework for selecting and onboarding local vendors, partners, and service providers.</p>
+<div class="resource-meta">
+<span>Best practices</span>
+<a href="#" class="resource-download" onclick="downloadResource('vendor-process')">
+Download →
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline View -->
+<div class="timeline-section">
+<div class="section-header">
+<h2 class="section-title">Setup Timeline</h2>
+<button class="btn btn-secondary" onclick="adjustTimeline()">
+📅 Adjust Dates
+</button>
+</div>
+<div class="timeline">
+<div class="timeline-item">
+<div class="timeline-marker completed"></div>
+<div class="timeline-content">
+<div class="timeline-date">Week 1-2</div>
+<h4 class="timeline-title">Initial Planning</h4>
+<p class="timeline-description">Market research, entity selection, legal consultation</p>
+</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-marker completed"></div>
+<div class="timeline-content">
+<div class="timeline-date">Week 3-6</div>
+<h4 class="timeline-title">Legal Registration</h4>
+<p class="timeline-description">Company registration, bank account opening, initial deposits</p>
+</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-marker current"></div>
+<div class="timeline-content">
+<div class="timeline-date">Week 7-8</div>
+<h4 class="timeline-title">Tax & Compliance</h4>
+<p class="timeline-description">Tax registrations, compliance setup, accounting system</p>
+</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-marker"></div>
+<div class="timeline-content">
+<div class="timeline-date">Week 9-10</div>
+<h4 class="timeline-title">HR & Hiring</h4>
+<p class="timeline-description">Payroll setup, benefits enrollment, first hires</p>
+</div>
+</div>
+<div class="timeline-item">
+<div class="timeline-marker"></div>
+<div class="timeline-content">
+<div class="timeline-date">Week 11-12</div>
+<h4 class="timeline-title">Operations Launch</h4>
+<p class="timeline-description">Office setup, systems integration, soft launch</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script defer>
+// Operations setup functions
+function startNewSetup() {
+trackEvent('New Country Setup Started');
+console.log('Opening country setup wizard');
+}
+function exportChecklist() {
+trackEvent('Setup Checklist Exported');
+console.log('Exporting operational setup checklist');
+}
+function viewLegalGuides() {
+trackEvent('Legal Guides Viewed');
+console.log('Loading legal establishment guides');
+}
+function viewRegistrationDocs() {
+trackEvent('Registration Documents Viewed');
+console.log('Opening registration document templates');
+}
+function viewTaxGuide() {
+trackEvent('Tax Guide Viewed');
+console.log('Opening tax registration guide');
+}
+function viewHRTools() {
+trackEvent('HR Tools Viewed');
+console.log('Loading HR management tools');
+}
+function viewHRTemplates() {
+trackEvent('HR Templates Viewed');
+console.log('Opening HR document templates');
+}
+function viewAllResources() {
+trackEvent('All Resources Viewed');
+console.log('Loading complete resource library');
+}
+function downloadResource(resourceType) {
+trackEvent('Resource Downloaded', { resource: resourceType });
+alert(`Downloading ${resourceType}...`);
+}
+function adjustTimeline() {
+trackEvent('Timeline Adjusted');
+console.log('Opening timeline adjustment interface');
+}
+// Checklist functionality
+document.querySelectorAll('.checklist-checkbox').forEach(checkbox => {
+checkbox.addEventListener('click', function() {
+this.classList.toggle('checked');
+updateProgress();
+});
+});
+function updateProgress() {
+const totalItems = document.querySelectorAll('.checklist-checkbox').length;
+const checkedItems = document.querySelectorAll('.checklist-checkbox.checked').length;
+const progress = Math.round((checkedItems / totalItems) * 100);
+document.querySelector('.progress-percentage').textContent = `${progress}%`;
+document.querySelector('.progress-fill').style.width = `${progress}%`;
+trackEvent('Setup Progress Updated', { progress: progress });
+}
+function trackEvent(eventName, properties = {}) {
+console.log('Operations Event:', eventName, properties);
+// Integration with analytics
+if (typeof analytics !== 'undefined') {
+analytics.track(eventName, {
+...properties,
+timestamp: new Date().toISOString()
+});
+}
+}
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+trackEvent('Operations Setup Guide Loaded');
+updateProgress();
+});
+</script>
+</body>
+</html>

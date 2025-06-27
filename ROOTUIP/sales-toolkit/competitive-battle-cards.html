@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP Competitive Battle Cards | Win Against Any Alternative</title>
-    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <link rel="icon" type="image/svg+xml" href="/brand/brand/logo-icon-new.svg">
     <script src="/js/logo-component.js"></script>
     <style>
         body {
             font-family: 'Inter', -apple-system, sans-serif;
             line-height: 1.6;
-            color: #0A1628;
+            color: var(--uip-primary-800);
             background: #F8FAFB;
             margin: 0;
             padding: 0;
         }
         
         .header {
-            background: #0A1628;
+            background: var(--uip-primary-800);
             color: white;
             padding: 2rem;
             text-align: center;
@@ -63,9 +63,9 @@
         }
         
         .nav-tab.active {
-            background: #00D4AA;
+            background: var(--uip-success-500);
             color: white;
-            border-color: #00D4AA;
+            border-color: var(--uip-success-500);
         }
         
         .content-container {
@@ -91,7 +91,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid #00D4AA;
+            border-bottom: 3px solid var(--uip-success-500);
             padding-bottom: 1rem;
             margin-bottom: 2rem;
         }
@@ -99,11 +99,11 @@
         .competitor-name {
             font-size: 1.75rem;
             font-weight: 700;
-            color: #0A1628;
+            color: var(--uip-primary-800);
         }
         
         .win-rate {
-            background: #00D4AA;
+            background: var(--uip-success-500);
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 8px;
@@ -115,7 +115,7 @@
         }
         
         .section h3 {
-            color: #0A1628;
+            color: var(--uip-primary-800);
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
@@ -135,7 +135,7 @@
         
         .uip-column {
             background: #E6FCF5;
-            border: 2px solid #00D4AA;
+            border: 2px solid var(--uip-success-500);
         }
         
         .competitor-column {
@@ -166,14 +166,14 @@
         
         .response-box {
             background: #E6FCF5;
-            border: 2px solid #00D4AA;
+            border: 2px solid var(--uip-success-500);
             border-radius: 8px;
             padding: 1.5rem;
             margin: 1rem 0;
         }
         
         .response-box h4 {
-            color: #00D4AA;
+            color: var(--uip-success-500);
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
@@ -253,7 +253,7 @@
         }
         
         .metric-uip {
-            color: #00D4AA;
+            color: var(--uip-success-500);
             font-weight: 700;
         }
         
@@ -261,6 +261,8 @@
             color: #EF4444;
         }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="header">
@@ -328,7 +330,7 @@
             </div>
 
             <div class="section">
-                <h3>📊 Cost of Inaction Calculator</h3>
+                <h3><span class="uip-metric-icon">📊</span> Cost of Inaction Calculator</h3>
                 <div class="metric-comparison">
                     <div class="metric-header">Metric</div>
                     <div class="metric-header">Monthly Loss</div>
@@ -475,7 +477,7 @@
             </div>
 
             <div class="section">
-                <h3>💰 True Cost Analysis</h3>
+                <h3><span class="uip-savings-icon">$</span> True Cost Analysis</h3>
                 <div class="metric-comparison">
                     <div class="metric-header">Cost Component</div>
                     <div class="metric-header">Build In-House</div>

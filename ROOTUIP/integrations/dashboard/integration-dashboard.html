@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Integration Dashboard - Real-Time Carrier Connections</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 24px 32px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        
+        .header-stats {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .header-stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 32px;
+        }
+        
+        .main-content {
+            display: grid;
+            gap: 32px;
+        }
+        
+        .sidebar {
+            display: grid;
+            gap: 32px;
+        }
+        
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #475569;
+        }
+        
+        .btn-secondary:hover {
+            background: #64748b;
+        }
+        
+        .btn-success {
+            background: #10b981;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .carrier-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .carrier-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .carrier-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        
+        .carrier-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .carrier-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            position: relative;
+        }
+        
+        .status-indicator.connected {
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-indicator.disconnected {
+            background: #6b7280;
+        }
+        
+        .status-indicator.error {
+            background: #ef4444;
+        }
+        
+        .status-indicator.connecting {
+            background: #f59e0b;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+        
+        @keyframes blink {
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        .carrier-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .carrier-stat {
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .carrier-stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #3b82f6;
+            display: block;
+        }
+        
+        .carrier-stat-label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .progress-bar {
+            background: #334155;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        
+        .data-flow-visualization {
+            position: relative;
+            height: 400px;
+            background: #0f172a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .flow-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .activity-feed {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            border-bottom: 1px solid #334155;
+            transition: background 0.3s ease;
+        }
+        
+        .activity-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .activity-icon.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .activity-icon.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .activity-icon.warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 500;
+            color: #f1f5f9;
+            margin-bottom: 4px;
+        }
+        
+        .activity-description {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+        
+        .activity-time {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .metric-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3b82f6;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+        
+        .metric-trend {
+            font-size: 0.75rem;
+            margin-top: 8px;
+        }
+        
+        .trend-up {
+            color: #10b981;
+        }
+        
+        .trend-down {
+            color: #ef4444;
+        }
+        
+        .config-section {
+            margin-bottom: 24px;
+        }
+        
+        .config-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .config-input {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #e2e8f0;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+        
+        .config-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #334155;
+            transition: 0.3s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #3b82f6;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+        
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+        
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fcd34d;
+        }
+        
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6ee7b7;
+        }
+        
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .header-stats {
+                width: 100%;
+                justify-content: space-around;
+            }
+            
+            .carrier-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-content">
+            <h1 class="header-title">Integration Dashboard</h1>
+            <div class="header-stats">
+                <div class="header-stat">
+                    <span class="stat-value" id="totalCarriers">12</span>
+                    <span class="stat-label">Carriers</span>
+                </div>
+                <div class="header-stat">
+                    <span class="stat-value" id="activeConnections">8</span>
+                    <span class="stat-label">Active</span>
+                </div>
+                <div class="header-stat">
+                    <span class="stat-value" id="dataProcessed">1.2M</span>
+                    <span class="stat-label">Records/Day</span>
+                </div>
+                <div class="header-stat">
+                    <span class="stat-value" id="systemHealth">98%</span>
+                    <span class="stat-label">Health</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="main-content">
+            <!-- Carrier Connections -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Carrier Connections</h2>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary" onclick="refreshConnections()">Refresh</button>
+                        <button class="btn" onclick="addCarrier()">Add Carrier</button>
+                    </div>
+                </div>
+                
+                <div class="carrier-grid" id="carrierGrid">
+                    <!-- Maersk -->
+                    <div class="carrier-card">
+                        <div class="carrier-header">
+                            <span class="carrier-name">Maersk Line</span>
+                            <span class="status-indicator connected" title="Connected"></span>
+                        </div>
+                        <div class="carrier-stats">
+                            <div class="carrier-stat">
+                                <span class="carrier-stat-value">245K</span>
+                                <span class="carrier-stat-label">Containers</span>
+                            </div>
+                            <div class="carrier-stat">
+                                <span class="carrier-stat-value">99.8%</span>
+                                <span class="carrier-stat-label">Uptime</span>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%"></div>
+                        </div>
+                        <div style="margin-top: 8px; font-size: 0.75rem; color: #64748b;">
+                            Last sync: 2 minutes ago
+                        </div>
+                    </div>
+
+                    <!-- MSC -->
+                    <div class="carrier-card">
+                        <div class="carrier-header">
+                            <span class="carrier-name">MSC</span>
+                            <span class="status-indicator connected" title="Connected"></span>
+                        </div>
+                        <div class="carrier-stats">
+                            <div class="carrier-stat">
+                                <span class="carrier-stat-value">189K</span>
+                                <span class="carrier-stat-label">Containers</span>
+                            </div>
+                            <div class="carrier-stat">
+                                <span class="carrier-stat-value">97.5%</span>
+                                <span class="carrier-stat-label">Uptime</span>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 78%"></div>
+                        </div>
+                        <div style="margin-top: 8px; font-size: 0.75rem; color: #64748b;">
+                            Last sync: 5 minutes ago
+                        </div>
+                    </div>
+
+                    <!-- CMA CGM -->
+                    <div class="carrier-card">
+                        <div class="carrier-header">
+                            <span class="carrier-name">CMA CGM</span>
+                            <span class="status-indicator connecting" title="Connecting"></span>
+                        </div>
+                        <div class="carrier-stats">
+                            <div class="carrier-stat">
+                                <span class="carrier-stat-value">156K</span>
+                                <span class="carrier-stat-label">Containers</span>
+                            </div>
+                            <div class="carrier-stat">
+                                <span class="carrier-stat-value">95.2%</span>
+                                <span class="carrier-stat-label">Uptime</span>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 45%"></div>
+                        </div>
+                        <div style="margin-top: 8px; font-size: 0.75rem; color: #64748b;">
+                            Reconnecting...
+                        </div>
+                    </div>
+
+                    <!-- Hapag-Lloyd -->
+                    <div class="carrier-card">
+                        <div class="carrier-header">
+                            <span class="carrier-name">Hapag-Lloyd</span>
+                            <span class="status-indicator connected" title="Connected"></span>
+                        </div>
+                        <div class="carrier-stats">
+                            <div class="carrier-stat">
+                                <span class="carrier-stat-value">142K</span>
+                                <span class="carrier-stat-label">Containers</span>
+                            </div>
+                            <div class="carrier-stat">
+                                <span class="carrier-stat-value">98.9%</span>
+                                <span class="carrier-stat-label">Uptime</span>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 92%"></div>
+                        </div>
+                        <div style="margin-top: 8px; font-size: 0.75rem; color: #64748b;">
+                            Last sync: 1 minute ago
+                        </div>
+                    </div>
+
+                    <!-- COSCO -->
+                    <div class="carrier-card">
+                        <div class="carrier-header">
+                            <span class="carrier-name">COSCO</span>
+                            <span class="status-indicator error" title="Error"></span>
+                        </div>
+                        <div class="carrier-stats">
+                            <div class="carrier-stat">
+                                <span class="carrier-stat-value">128K</span>
+                                <span class="carrier-stat-label">Containers</span>
+                            </div>
+                            <div class="carrier-stat">
+                                <span class="carrier-stat-value">89.3%</span>
+                                <span class="carrier-stat-label">Uptime</span>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div style="margin-top: 8px; font-size: 0.75rem; color: #ef4444;">
+                            Authentication failed
+                        </div>
+                    </div>
+
+                    <!-- ONE -->
+                    <div class="carrier-card">
+                        <div class="carrier-header">
+                            <span class="carrier-name">Ocean Network Express</span>
+                            <span class="status-indicator connected" title="Connected"></span>
+                        </div>
+                        <div class="carrier-stats">
+                            <div class="carrier-stat">
+                                <span class="carrier-stat-value">98K</span>
+                                <span class="carrier-stat-label">Containers</span>
+                            </div>
+                            <div class="carrier-stat">
+                                <span class="carrier-stat-value">96.7%</span>
+                                <span class="carrier-stat-label">Uptime</span>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 88%"></div>
+                        </div>
+                        <div style="margin-top: 8px; font-size: 0.75rem; color: #64748b;">
+                            Last sync: 3 minutes ago
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Flow Visualization -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Real-Time Data Flow</h2>
+                    <div class="card-actions">
+                        <select class="config-input" style="width: auto;">
+                            <option>Last Hour</option>
+                            <option>Last 24 Hours</option>
+                            <option>Last 7 Days</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="data-flow-visualization">
+                    <canvas class="flow-canvas" id="dataFlowCanvas"></canvas>
+                </div>
+                
+                <div class="metrics-grid" style="margin-top: 20px;">
+                    <div class="metric-card">
+                        <span class="metric-value">156K</span>
+                        <span class="metric-label">Records/Hour</span>
+                        <div class="metric-trend trend-up">↑ 12.5%</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">94.3%</span>
+                        <span class="metric-label">Quality Score</span>
+                        <div class="metric-trend trend-up">↑ 2.1%</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">2.1ms</span>
+                        <span class="metric-label">Avg Processing</span>
+                        <div class="metric-trend trend-down">↓ 8.3%</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-value">0.02%</span>
+                        <span class="metric-label">Error Rate</span>
+                        <div class="metric-trend trend-down">↓ 15.2%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <!-- System Alerts -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">System Alerts</h2>
+                </div>
+                
+                <div class="alert alert-error">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                    </svg>
+                    <div>
+                        <div style="font-weight: 500;">COSCO Authentication Failed</div>
+                        <div style="font-size: 0.875rem; margin-top: 4px;">API credentials expired. Update required.</div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    <div>
+                        <div style="font-weight: 500;">High Latency Detected</div>
+                        <div style="font-size: 0.875rem; margin-top: 4px;">CMA CGM API responding slowly.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Recent Activity</h2>
+                </div>
+                
+                <div class="activity-feed">
+                    <div class="activity-item">
+                        <div class="activity-icon success">✓</div>
+                        <div class="activity-content">
+                            <div class="activity-title">245 containers updated</div>
+                            <div class="activity-description">Maersk Line tracking sync completed</div>
+                            <div class="activity-time">2 minutes ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon success">📊</div>
+                        <div class="activity-content">
+                            <div class="activity-title">D&D charges processed</div>
+                            <div class="activity-description">$47,280 in new charges detected</div>
+                            <div class="activity-time">5 minutes ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon warning">⚠</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Data quality warning</div>
+                            <div class="activity-description">MSC EDI file missing vessel info</div>
+                            <div class="activity-time">8 minutes ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon success">🔄</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Webhook received</div>
+                            <div class="activity-description">Hapag-Lloyd container event</div>
+                            <div class="activity-time">12 minutes ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon error">❌</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Connection lost</div>
+                            <div class="activity-description">COSCO API authentication failed</div>
+                            <div class="activity-time">15 minutes ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Quick Actions</h2>
+                </div>
+                
+                <div class="config-section">
+                    <button class="btn btn-success" style="width: 100%; margin-bottom: 12px;" onclick="testAllConnections()">
+                        Test All Connections
+                    </button>
+                    <button class="btn btn-secondary" style="width: 100%; margin-bottom: 12px;" onclick="downloadLogs()">
+                        Download Logs
+                    </button>
+                    <button class="btn btn-secondary" style="width: 100%;" onclick="configureWebhooks()">
+                        Configure Webhooks
+                    </button>
+                </div>
+                
+                <div class="config-section" style="margin-top: 24px;">
+                    <label class="config-label">Auto-Retry Failed Connections</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="config-section">
+                    <label class="config-label">Real-Time Notifications</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Real-time data flow visualization
+        const canvas = document.getElementById('dataFlowCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Data flow particles
+        const particles = [];
+        const carriers = [
+            { name: 'Maersk', x: 50, y: 100, color: '#3b82f6' },
+            { name: 'MSC', x: 50, y: 200, color: '#10b981' },
+            { name: 'CMA CGM', x: 50, y: 300, color: '#f59e0b' }
+        ];
+        
+        class DataParticle {
+            constructor(carrier) {
+                this.x = carrier.x;
+                this.y = carrier.y;
+                this.targetX = canvas.width - 50;
+                this.targetY = canvas.height / 2;
+                this.speed = 2 + Math.random() * 2;
+                this.size = 4 + Math.random() * 4;
+                this.color = carrier.color;
+                this.opacity = 1;
+            }
+            
+            update() {
+                const dx = this.targetX - this.x;
+                const dy = this.targetY - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance > 5) {
+                    this.x += (dx / distance) * this.speed;
+                    this.y += (dy / distance) * this.speed;
+                } else {
+                    this.opacity -= 0.05;
+                }
+                
+                return this.opacity > 0;
+            }
+            
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+        
+        // Animation loop
+        function animate() {
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw carrier nodes
+            carriers.forEach(carrier => {
+                ctx.fillStyle = carrier.color;
+                ctx.beginPath();
+                ctx.arc(carrier.x, carrier.y, 20, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#e2e8f0';
+                ctx.font = '12px Inter';
+                ctx.fillText(carrier.name, carrier.x - 30, carrier.y - 30);
+            });
+            
+            // Draw central processing node
+            ctx.fillStyle = '#3b82f6';
+            ctx.beginPath();
+            ctx.arc(canvas.width - 50, canvas.height / 2, 30, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#e2e8f0';
+            ctx.font = '14px Inter';
+            ctx.fillText('Processing', canvas.width - 90, canvas.height / 2 - 40);
+            
+            // Update and draw particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const particle = particles[i];
+                if (!particle.update()) {
+                    particles.splice(i, 1);
+                } else {
+                    particle.draw();
+                }
+            }
+            
+            // Randomly create new particles
+            if (Math.random() < 0.05) {
+                const carrier = carriers[Math.floor(Math.random() * carriers.length)];
+                particles.push(new DataParticle(carrier));
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+        
+        // Mock functions for demo
+        function refreshConnections() {
+            console.log('Refreshing connections...');
+            // Show loading state
+            const cards = document.querySelectorAll('.carrier-card');
+            cards.forEach(card => {
+                const indicator = card.querySelector('.status-indicator');
+                indicator.className = 'status-indicator connecting';
+            });
+            
+            // Simulate refresh
+            setTimeout(() => {
+                cards.forEach((card, index) => {
+                    const indicator = card.querySelector('.status-indicator');
+                    if (index === 4) { // COSCO
+                        indicator.className = 'status-indicator error';
+                    } else {
+                        indicator.className = 'status-indicator connected';
+                    }
+                });
+            }, 2000);
+        }
+        
+        function addCarrier() {
+            console.log('Adding new carrier...');
+            alert('Carrier configuration interface would open here');
+        }
+        
+        function testAllConnections() {
+            console.log('Testing all connections...');
+            refreshConnections();
+        }
+        
+        function downloadLogs() {
+            console.log('Downloading logs...');
+            alert('Integration logs would be downloaded');
+        }
+        
+        function configureWebhooks() {
+            console.log('Configuring webhooks...');
+            alert('Webhook configuration interface would open here');
+        }
+        
+        // Simulate real-time updates
+        setInterval(() => {
+            // Update random metrics
+            const dataProcessed = document.getElementById('dataProcessed');
+            const current = parseFloat(dataProcessed.textContent);
+            dataProcessed.textContent = (current + Math.random() * 0.1).toFixed(1) + 'M';
+            
+            // Update system health
+            const health = document.getElementById('systemHealth');
+            const healthValue = 95 + Math.random() * 4;
+            health.textContent = healthValue.toFixed(0) + '%';
+        }, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UIP Discovery Question Framework | MEDDIC Qualification Guide</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js?v=1750888019"></script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #0A1628;
+            background: #F8FAFB;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .header {
+            background: white;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #0A1628;
+            margin: 0;
+        }
+        
+        .subtitle {
+            color: #64748B;
+            margin-top: 0.5rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .meddic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .meddic-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            border-top: 4px solid #00D4AA;
+        }
+        
+        .meddic-card h3 {
+            font-size: 1.5rem;
+            color: #0A1628;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .meddic-letter {
+            background: #00D4AA;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.25rem;
+        }
+        
+        .meddic-card p {
+            color: #64748B;
+            margin-bottom: 1rem;
+        }
+        
+        .question-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .question-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        
+        .question-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .question-type {
+            display: inline-block;
+            background: #E6FCF5;
+            color: #00D4AA;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        .persona-section {
+            margin: 3rem 0;
+        }
+        
+        .persona-section h2 {
+            font-size: 2rem;
+            color: #0A1628;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #00D4AA;
+            padding-left: 1rem;
+        }
+        
+        .persona-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .persona-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .persona-card h4 {
+            font-size: 1.25rem;
+            color: #0A1628;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .persona-icon {
+            font-size: 1.5rem;
+        }
+        
+        .key-metrics {
+            background: #F8FAFB;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .key-metrics h5 {
+            color: #0A1628;
+            margin-bottom: 0.5rem;
+        }
+        
+        .key-metrics ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .discovery-tools {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .tool-card {
+            background: #F8FAFB;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .tool-card h5 {
+            color: #0A1628;
+            margin-bottom: 0.5rem;
+        }
+        
+        .warning-box {
+            background: #FFF8E1;
+            border: 2px solid #FFC107;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .warning-box h5 {
+            color: #F59E0B;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .success-box {
+            background: #E6FCF5;
+            border: 2px solid #00D4AA;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .success-box h5 {
+            color: #00D4AA;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <h1>Discovery Question Framework</h1>
+        <p class="subtitle">MEDDIC-Based Qualification Guide for Ocean Freight Opportunities</p>
+    </div>
+
+    <div class="container">
+        <div class="meddic-grid">
+            <!-- Metrics -->
+            <div class="meddic-card">
+                <h3><span class="meddic-letter">M</span> Metrics</h3>
+                <p>Quantify the business impact and establish value</p>
+                <ul class="question-list">
+                    <li><span class="question-type">OPENING</span>What's your annual ocean freight spend?</li>
+                    <li><span class="question-type">DRILL DOWN</span>What percentage goes to detention & demurrage charges?</li>
+                    <li><span class="question-type">IMPACT</span>How much could a 1% reduction in D&D save you annually?</li>
+                    <li><span class="question-type">BENCHMARK</span>How do your D&D rates compare to industry averages?</li>
+                    <li><span class="question-type">GROWTH</span>What's your container volume growth projection?</li>
+                </ul>
+                <div class="warning-box">
+                    <h5>⚠️ Red Flag</h5>
+                    <p>If they don't know their D&D spend, they're not feeling enough pain yet.</p>
+                </div>
+            </div>
+
+            <!-- Economic Buyer -->
+            <div class="meddic-card">
+                <h3><span class="meddic-letter">E</span> Economic Buyer</h3>
+                <p>Identify who controls the budget and can sign</p>
+                <ul class="question-list">
+                    <li><span class="question-type">DIRECT</span>Who would sign off on this investment?</li>
+                    <li><span class="question-type">BUDGET</span>What's the approval process for a $[X]M investment?</li>
+                    <li><span class="question-type">PRIORITY</span>Where does ocean freight optimization rank in priorities?</li>
+                    <li><span class="question-type">TIMELINE</span>When does your fiscal year end?</li>
+                    <li><span class="question-type">POLITICS</span>Who else needs to be convinced?</li>
+                </ul>
+                <div class="success-box">
+                    <h5>✅ Good Sign</h5>
+                    <p>CFO is involved early and asking about ROI guarantees.</p>
+                </div>
+            </div>
+
+            <!-- Decision Criteria -->
+            <div class="meddic-card">
+                <h3><span class="meddic-letter">D</span> Decision Criteria</h3>
+                <p>Understand their requirements and evaluation process</p>
+                <ul class="question-list">
+                    <li><span class="question-type">REQUIREMENTS</span>What are your must-have capabilities?</li>
+                    <li><span class="question-type">TECHNICAL</span>Which carrier systems must we integrate with?</li>
+                    <li><span class="question-type">SECURITY</span>What are your security/compliance requirements?</li>
+                    <li><span class="question-type">PROOF</span>How will you measure success?</li>
+                    <li><span class="question-type">COMPARISON</span>What alternatives are you considering?</li>
+                </ul>
+            </div>
+
+            <!-- Decision Process -->
+            <div class="meddic-card">
+                <h3><span class="meddic-letter">D</span> Decision Process</h3>
+                <p>Map out their buying journey and timeline</p>
+                <ul class="question-list">
+                    <li><span class="question-type">TIMELINE</span>When do you need this solved by?</li>
+                    <li><span class="question-type">STEPS</span>What's your typical evaluation process?</li>
+                    <li><span class="question-type">COMMITTEE</span>Who's on the selection committee?</li>
+                    <li><span class="question-type">APPROVAL</span>What happens after technical approval?</li>
+                    <li><span class="question-type">CONTRACTING</span>How long does your legal review take?</li>
+                </ul>
+            </div>
+
+            <!-- Identify Pain -->
+            <div class="meddic-card">
+                <h3><span class="meddic-letter">I</span> Identify Pain</h3>
+                <p>Uncover the real problems they're experiencing</p>
+                <ul class="question-list">
+                    <li><span class="question-type">CURRENT STATE</span>Walk me through your current D&D process?</li>
+                    <li><span class="question-type">PAIN POINT</span>What's most frustrating about it?</li>
+                    <li><span class="question-type">IMPACT</span>How does this affect your team's morale?</li>
+                    <li><span class="question-type">FAILED ATTEMPTS</span>What have you tried that didn't work?</li>
+                    <li><span class="question-type">CONSEQUENCES</span>What happens if nothing changes?</li>
+                </ul>
+            </div>
+
+            <!-- Champion -->
+            <div class="meddic-card">
+                <h3><span class="meddic-letter">C</span> Champion</h3>
+                <p>Build internal support and coaching</p>
+                <ul class="question-list">
+                    <li><span class="question-type">IDENTIFY</span>Who's most passionate about fixing this?</li>
+                    <li><span class="question-type">INFLUENCE</span>How much influence do they have?</li>
+                    <li><span class="question-type">PERSONAL WIN</span>How would solving this help their career?</li>
+                    <li><span class="question-type">SUPPORT</span>What do they need to sell internally?</li>
+                    <li><span class="question-type">OBJECTIONS</span>What pushback might they face?</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="persona-section">
+            <h2>Discovery by Buyer Persona</h2>
+            
+            <div class="persona-grid">
+                <!-- CFO Persona -->
+                <div class="persona-card">
+                    <h4><span class="persona-icon">💼</span> CFO / Finance Leader</h4>
+                    <p>Focus on financial impact and ROI</p>
+                    
+                    <div class="key-metrics">
+                        <h5>Key Questions</h5>
+                        <ul>
+                            <li>What's the impact of D&D on your margins?</li>
+                            <li>How do you currently forecast D&D expenses?</li>
+                            <li>What ROI threshold do investments need to meet?</li>
+                            <li>How quickly do you need to see payback?</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="key-metrics">
+                        <h5>What They Care About</h5>
+                        <ul>
+                            <li>Bottom-line impact</li>
+                            <li>Predictable costs</li>
+                            <li>Quick payback period</li>
+                            <li>Risk mitigation</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- VP Operations -->
+                <div class="persona-card">
+                    <h4><span class="persona-icon"><img src="/brand/logo-icon.svg" alt="UIP" style="height: 24px; width: 24px; vertical-align: middle;"></span> VP Operations</h4>
+                    <p>Focus on efficiency and team productivity</p>
+                    
+                    <div class="key-metrics">
+                        <h5>Key Questions</h5>
+                        <ul>
+                            <li>How many people manage container tracking?</li>
+                            <li>What's your on-time delivery rate?</li>
+                            <li>How do you handle carrier disputes today?</li>
+                            <li>What KPIs are you measured on?</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="key-metrics">
+                        <h5>What They Care About</h5>
+                        <ul>
+                            <li>Operational efficiency</li>
+                            <li>Team productivity</li>
+                            <li>Customer satisfaction</li>
+                            <li>Process automation</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- IT Director -->
+                <div class="persona-card">
+                    <h4><span class="persona-icon">💻</span> IT Director</h4>
+                    <p>Focus on integration and security</p>
+                    
+                    <div class="key-metrics">
+                        <h5>Key Questions</h5>
+                        <ul>
+                            <li>What systems need to integrate?</li>
+                            <li>What are your security requirements?</li>
+                            <li>How much IT support can you provide?</li>
+                            <li>What's your cloud/on-prem strategy?</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="key-metrics">
+                        <h5>What They Care About</h5>
+                        <ul>
+                            <li>Easy integration</li>
+                            <li>Security compliance</li>
+                            <li>Minimal IT burden</li>
+                            <li>Scalability</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Logistics Manager -->
+                <div class="persona-card">
+                    <h4><span class="persona-icon">📦</span> Logistics Manager</h4>
+                    <p>Focus on daily operations and user experience</p>
+                    
+                    <div class="key-metrics">
+                        <h5>Key Questions</h5>
+                        <ul>
+                            <li>What's your daily container tracking process?</li>
+                            <li>Which carriers cause the most issues?</li>
+                            <li>How do you train new team members?</li>
+                            <li>What tools do you use today?</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="key-metrics">
+                        <h5>What They Care About</h5>
+                        <ul>
+                            <li>Ease of use</li>
+                            <li>Time savings</li>
+                            <li>Accurate information</li>
+                            <li>Less manual work</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="discovery-tools">
+            <h2>Discovery Tools & Techniques</h2>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h5>D&D Assessment Tool</h5>
+                    <p>Calculate their specific losses in 5 minutes</p>
+                </div>
+                
+                <div class="tool-card">
+                    <h5>Process Mapping</h5>
+                    <p>Visualize their current workflow pain points</p>
+                </div>
+                
+                <div class="tool-card">
+                    <h5>Carrier Analysis</h5>
+                    <p>Identify which carriers cost them most</p>
+                </div>
+                
+                <div class="tool-card">
+                    <h5>ROI Calculator</h5>
+                    <p>Show personalized savings projections</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="meddic-card" style="margin-top: 2rem;">
+            <h3>🎯 Qualification Scoring Guide</h3>
+            <p>Score each MEDDIC element (0-10) to determine opportunity quality:</p>
+            
+            <table style="width: 100%; margin-top: 1rem;">
+                <tr>
+                    <td><strong>54-60 points:</strong></td>
+                    <td>🟢 Hot opportunity - fast track</td>
+                </tr>
+                <tr>
+                    <td><strong>42-53 points:</strong></td>
+                    <td>🟡 Qualified - normal process</td>
+                </tr>
+                <tr>
+                    <td><strong>30-41 points:</strong></td>
+                    <td>🟠 Develop further - coach champion</td>
+                </tr>
+                <tr>
+                    <td><strong>Below 30:</strong></td>
+                    <td>🔴 Not qualified - nurture only</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
+</body>
+</html>

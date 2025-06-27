@@ -49,14 +49,14 @@ body {
 }
 
 .nav-links a {
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s ease;
 }
 
 .nav-links a:hover {
-    color: var(--uip-blue-500);
+    color: var(--uip-primary-500);
 }
 
 /* Buttons */
@@ -74,7 +74,7 @@ body {
 }
 
 .btn-primary {
-    background: var(--uip-blue-500);
+    background: var(--uip-primary-500);
     color: white;
 }
 
@@ -86,17 +86,17 @@ body {
 
 .btn-secondary {
     background: transparent;
-    color: var(--uip-navy-900);
-    border: 2px solid var(--uip-navy-900);
+    color: var(--uip-primary-800);
+    border: 2px solid var(--uip-primary-800);
 }
 
 .btn-secondary:hover {
-    background: var(--uip-navy-900);
+    background: var(--uip-primary-800);
     color: white;
 }
 
 .btn-success {
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
 }
 
@@ -152,7 +152,7 @@ body {
 }
 
 .text-savings {
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
 }
 
 .hero-subtitle {
@@ -175,7 +175,7 @@ body {
 /* Loss Counter */
 .loss-counter {
     background: rgba(0, 212, 170, 0.15);
-    border: 2px solid var(--uip-teal-500);
+    border: 2px solid var(--uip-success-500);
     border-radius: 12px;
     padding: 32px;
     display: inline-block;
@@ -194,7 +194,7 @@ body {
     font-family: var(--font-mono);
     font-size: var(--text-5xl);
     font-weight: 700;
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
     line-height: 1;
 }
 
@@ -221,7 +221,7 @@ body {
     font-family: var(--font-mono);
     font-size: var(--text-3xl);
     font-weight: 700;
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
     margin-bottom: 8px;
 }
 
@@ -236,7 +236,7 @@ body {
     font-weight: 700;
     text-align: center;
     margin-bottom: 16px;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .section-subtitle {
@@ -283,7 +283,7 @@ body {
 .problem-card h3 {
     font-size: var(--text-2xl);
     margin-bottom: 12px;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .problem-card p {
@@ -353,7 +353,7 @@ body {
 .integration-card h4 {
     font-size: var(--text-lg);
     margin-bottom: 8px;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .integration-card p {
@@ -380,7 +380,7 @@ body {
 .feature-card h3 {
     font-size: var(--text-2xl);
     margin-bottom: 12px;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .feature-card p {
@@ -418,7 +418,7 @@ body {
     display: block;
     font-weight: 600;
     margin-bottom: 8px;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .input-group input {
@@ -433,7 +433,7 @@ body {
 
 .input-group input:focus {
     outline: none;
-    border-color: var(--uip-blue-500);
+    border-color: var(--uip-primary-500);
 }
 
 .calculator-results {
@@ -465,13 +465,13 @@ body {
     font-family: var(--font-mono);
     font-size: var(--text-3xl);
     font-weight: 700;
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
 }
 
 /* Demo Section */
 .demo-section {
     padding: 100px 0;
-    background: linear-gradient(135deg, var(--uip-navy-900) 0%, var(--uip-navy-700) 100%);
+    background: linear-gradient(135deg, var(--uip-primary-800) 0%, var(--uip-navy-700) 100%);
     color: white;
 }
 
@@ -509,12 +509,12 @@ body {
 .form-grid input:focus,
 .form-grid select:focus {
     outline: none;
-    border-color: var(--uip-blue-500);
+    border-color: var(--uip-primary-500);
 }
 
 /* Footer */
 .footer {
-    background: var(--uip-navy-900);
+    background: var(--uip-primary-800);
     color: white;
     padding: 64px 0 32px;
 }

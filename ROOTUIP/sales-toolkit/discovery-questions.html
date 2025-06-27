@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP Discovery Question Framework | MEDDIC Qualification Guide</title>
-    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <link rel="icon" type="image/svg+xml" href="/brand/brand/logo-icon-new.svg">
     <script src="/js/logo-component.js"></script>
     <style>
         body {
             font-family: 'Inter', -apple-system, sans-serif;
             line-height: 1.6;
-            color: #0A1628;
+            color: var(--uip-primary-800);
             background: #F8FAFB;
             margin: 0;
             padding: 0;
@@ -24,7 +24,7 @@
         
         h1 {
             font-size: 2.5rem;
-            color: #0A1628;
+            color: var(--uip-primary-800);
             margin: 0;
         }
         
@@ -51,12 +51,12 @@
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             padding: 1.5rem;
-            border-top: 4px solid #00D4AA;
+            border-top: 4px solid var(--uip-success-500);
         }
         
         .meddic-card h3 {
             font-size: 1.5rem;
-            color: #0A1628;
+            color: var(--uip-primary-800);
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
@@ -64,7 +64,7 @@
         }
         
         .meddic-letter {
-            background: #00D4AA;
+            background: var(--uip-success-500);
             color: white;
             width: 40px;
             height: 40px;
@@ -98,7 +98,7 @@
         .question-type {
             display: inline-block;
             background: #E6FCF5;
-            color: #00D4AA;
+            color: var(--uip-success-500);
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
             font-size: 0.75rem;
@@ -112,9 +112,9 @@
         
         .persona-section h2 {
             font-size: 2rem;
-            color: #0A1628;
+            color: var(--uip-primary-800);
             margin-bottom: 1.5rem;
-            border-left: 4px solid #00D4AA;
+            border-left: 4px solid var(--uip-success-500);
             padding-left: 1rem;
         }
         
@@ -133,7 +133,7 @@
         
         .persona-card h4 {
             font-size: 1.25rem;
-            color: #0A1628;
+            color: var(--uip-primary-800);
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
@@ -152,7 +152,7 @@
         }
         
         .key-metrics h5 {
-            color: #0A1628;
+            color: var(--uip-primary-800);
             margin-bottom: 0.5rem;
         }
         
@@ -184,7 +184,7 @@
         }
         
         .tool-card h5 {
-            color: #0A1628;
+            color: var(--uip-primary-800);
             margin-bottom: 0.5rem;
         }
         
@@ -206,20 +206,22 @@
         
         .success-box {
             background: #E6FCF5;
-            border: 2px solid #00D4AA;
+            border: 2px solid var(--uip-success-500);
             border-radius: 8px;
             padding: 1rem;
             margin: 1rem 0;
         }
         
         .success-box h5 {
-            color: #00D4AA;
+            color: var(--uip-success-500);
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="header">
@@ -348,7 +350,7 @@
 
                 <!-- VP Operations -->
                 <div class="persona-card">
-                    <h4><span class="persona-icon">🚢</span> VP Operations</h4>
+                    <h4><span class="persona-icon"><img src="/brand/brand/logo-icon-new.svg" alt="UIP - Unified Integration Intelligence Platform" style="height: 24px; width: 24px; vertical-align: middle;"></span> VP Operations</h4>
                     <p>Focus on efficiency and team productivity</p>
                     
                     <div class="key-metrics">

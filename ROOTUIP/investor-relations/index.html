@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP Investor Relations Hub | Series A Fundraising Materials</title>
-    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <link rel="icon" type="image/svg+xml" href="/brand/brand/logo-icon-new.svg">
     <script src="/js/logo-component.js"></script>
     <style>
         body {
             font-family: 'Inter', -apple-system, sans-serif;
             margin: 0;
             padding: 0;
-            background: #0A1628;
+            background: var(--uip-primary-800);
             color: white;
         }
         
         .header {
-            background: linear-gradient(135deg, #0A1628 0%, #1E293B 100%);
+            background: linear-gradient(135deg, var(--uip-primary-800) 0%, #1E293B 100%);
             padding: 3rem 2rem;
             text-align: center;
             position: relative;
@@ -45,7 +45,7 @@
             font-size: 3rem;
             font-weight: 900;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+            background: linear-gradient(135deg, var(--uip-success-500) 0%, #00B894 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -76,7 +76,7 @@
         .metric-value {
             font-size: 2rem;
             font-weight: 900;
-            color: #00D4AA;
+            color: var(--uip-success-500);
             display: block;
         }
         
@@ -89,7 +89,7 @@
         
         .content {
             background: white;
-            color: #0A1628;
+            color: var(--uip-primary-800);
             padding: 4rem 2rem;
         }
         
@@ -124,7 +124,7 @@
         
         .card-header {
             padding: 2rem;
-            background: linear-gradient(135deg, #0A1628 0%, #1E293B 100%);
+            background: linear-gradient(135deg, var(--uip-primary-800) 0%, #1E293B 100%);
             color: white;
         }
         
@@ -162,7 +162,7 @@
         }
         
         .cta-button {
-            background: #00D4AA;
+            background: var(--uip-success-500);
             color: white;
             padding: 0.75rem 2rem;
             border-radius: 8px;
@@ -178,7 +178,7 @@
         }
         
         .quick-facts {
-            background: #0A1628;
+            background: var(--uip-primary-800);
             color: white;
             padding: 3rem 2rem;
             margin: 0 -2rem;
@@ -201,12 +201,12 @@
         }
         
         .fact-card h4 {
-            color: #00D4AA;
+            color: var(--uip-success-500);
             margin-bottom: 0.5rem;
         }
         
         .investment-summary {
-            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+            background: linear-gradient(135deg, var(--uip-success-500) 0%, #00B894 100%);
             color: white;
             padding: 3rem;
             border-radius: 16px;
@@ -276,7 +276,7 @@
         }
         
         .footer {
-            background: #0A1628;
+            background: var(--uip-primary-800);
             color: #94A3B8;
             padding: 2rem;
             text-align: center;
@@ -297,9 +297,11 @@
         }
         
         .footer-links a:hover {
-            color: #00D4AA;
+            color: var(--uip-success-500);
         }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="header">
@@ -332,7 +334,7 @@
         <div class="container">
             <!-- Investment Summary -->
             <div class="investment-summary">
-                <h2 style="font-size: 2rem; margin-bottom: 1rem;">The $15B Ocean Freight Opportunity</h2>
+                <h2 style="font-size: 2rem; margin-bottom: 1rem;">The $15B Enterprise Ocean Freight Intelligence Opportunity</h2>
                 <p style="font-size: 1.25rem; margin-bottom: 2rem;">First universal platform preventing billions in detention & demurrage charges</p>
                 
                 <div class="summary-points">
@@ -345,7 +347,7 @@
                         <p>145 vessels, Fortune 500 logos, 94% prevention rate</p>
                     </div>
                     <div class="summary-point">
-                        <h3>💰 Economics</h3>
+                        <h3><span class="uip-savings-icon">$</span> Economics</h3>
                         <p>95% gross margins, 127% NRR, proven scalability</p>
                     </div>
                     <div class="summary-point">
@@ -378,7 +380,7 @@
 
                 <a href="financial-model.html" class="material-card">
                     <div class="card-header">
-                        <div class="card-icon">📊</div>
+                        <div class="card-icon"><span class="uip-metric-icon">📊</span></div>
                         <h3 class="card-title">Financial Model</h3>
                         <p class="card-description">10-year projections with scenario analysis</p>
                     </div>
@@ -393,7 +395,7 @@
 
                 <a href="unit-economics.html" class="material-card">
                     <div class="card-header">
-                        <div class="card-icon">💰</div>
+                        <div class="card-icon"><span class="uip-savings-icon">$</span></div>
                         <h3 class="card-title">Unit Economics</h3>
                         <p class="card-description">Deep dive into CAC, LTV, and cohort performance</p>
                     </div>

@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UIP Market Analysis | TAM, SAM, SOM & Growth Drivers</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js?v=1750888019"></script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #F8FAFB;
+            color: #0A1628;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #0A1628;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #64748B;
+            font-size: 1.125rem;
+        }
+        
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #0A1628;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #00D4AA;
+            padding-left: 1rem;
+        }
+        
+        .market-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 3rem 0;
+            position: relative;
+            height: 400px;
+        }
+        
+        .market-circle {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .tam-circle {
+            width: 400px;
+            height: 400px;
+            background: rgba(0, 212, 170, 0.1);
+            border: 3px solid #00D4AA;
+        }
+        
+        .sam-circle {
+            width: 250px;
+            height: 250px;
+            background: rgba(0, 212, 170, 0.2);
+            border: 3px solid #00B894;
+        }
+        
+        .som-circle {
+            width: 120px;
+            height: 120px;
+            background: rgba(0, 212, 170, 0.4);
+            border: 3px solid #00A383;
+        }
+        
+        .market-label {
+            font-weight: 900;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .market-value {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #00D4AA;
+        }
+        
+        .market-desc {
+            font-size: 0.875rem;
+            color: #64748B;
+            margin-top: 0.5rem;
+        }
+        
+        .market-breakdown {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .breakdown-card {
+            background: #F8FAFB;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #E2E8F0;
+        }
+        
+        .breakdown-card h4 {
+            color: #0A1628;
+            margin-bottom: 1rem;
+        }
+        
+        .segment-analysis {
+            margin: 2rem 0;
+        }
+        
+        .segment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .segment-table th,
+        .segment-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        
+        .segment-table th {
+            background: #F8FAFB;
+            font-weight: 700;
+            color: #0A1628;
+        }
+        
+        .growth-drivers {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .driver-card {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #E6FCF5 0%, #D1FAE5 100%);
+            border-radius: 12px;
+            border: 2px solid #00D4AA;
+        }
+        
+        .driver-card h4 {
+            color: #00D4AA;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .market-chart {
+            height: 400px;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #F8FAFB;
+            border-radius: 12px;
+        }
+        
+        .competitive-landscape {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .competitor-box {
+            padding: 1rem;
+            background: #F8FAFB;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #E2E8F0;
+        }
+        
+        .competitor-box.uip {
+            background: #E6FCF5;
+            border-color: #00D4AA;
+        }
+        
+        .market-opportunity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .opportunity-card {
+            background: white;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .opportunity-card:hover {
+            border-color: #00D4AA;
+            transform: translateY(-4px);
+        }
+        
+        .opportunity-value {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: #00D4AA;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .insight-box {
+            background: #FFF8E1;
+            border: 2px solid #FFC107;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .insight-box h4 {
+            color: #F59E0B;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+    <script src="https://cdn.js?v=1750888019delivr.net/npm/chart.js?v=1750888019@4.4.0/dist/chart.umd.min.js?v=1750888019"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <h1>Market Analysis & Opportunity</h1>
+        <p class="subtitle">TAM, SAM, SOM Analysis for Ocean Freight Optimization</p>
+    </div>
+
+    <!-- Market Size Visualization -->
+    <div class="section">
+        <h2 class="section-title">Total Addressable Market</h2>
+        
+        <div class="market-visual">
+            <div class="market-circle tam-circle">
+                <div class="market-label">TAM</div>
+                <div class="market-value">$2.4T</div>
+                <div class="market-desc">Global Ocean Freight</div>
+            </div>
+            <div class="market-circle sam-circle">
+                <div class="market-label">SAM</div>
+                <div class="market-value">$120B</div>
+                <div class="market-desc">5% Digitization Target</div>
+            </div>
+            <div class="market-circle som-circle">
+                <div class="market-label">SOM</div>
+                <div class="market-value">$12B</div>
+                <div class="market-desc">10% Capture</div>
+            </div>
+        </div>
+        
+        <div class="market-breakdown">
+            <div class="breakdown-card">
+                <h4>Total Addressable Market</h4>
+                <div style="font-size: 2rem; font-weight: 900; color: #00D4AA;">$2.4 Trillion</div>
+                <p>Global ocean freight spend across all shippers and routes</p>
+                <ul style="text-align: left; margin-top: 1rem;">
+                    <li>300,000 vessels globally</li>
+                    <li>$8,000 average per container</li>
+                    <li>Growing 8% annually</li>
+                </ul>
+            </div>
+            
+            <div class="breakdown-card">
+                <h4>Serviceable Available Market</h4>
+                <div style="font-size: 2rem; font-weight: 900; color: #00B894;">$120 Billion</div>
+                <p>Enterprises with 10+ vessels experiencing D&D pain</p>
+                <ul style="text-align: left; margin-top: 1rem;">
+                    <li>30,000 target companies</li>
+                    <li>Average 50 vessels each</li>
+                    <li>$500K annual spend per vessel</li>
+                </ul>
+            </div>
+            
+            <div class="breakdown-card">
+                <h4>Serviceable Obtainable Market</h4>
+                <div style="font-size: 2rem; font-weight: 900; color: #00A383;">$12 Billion</div>
+                <p>Realistic 5-year capture with current growth</p>
+                <ul style="text-align: left; margin-top: 1rem;">
+                    <li>3,000 customers (10%)</li>
+                    <li>24,000 vessels</li>
+                    <li>8% market share by 2028</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Market Segmentation -->
+    <div class="section">
+        <h2 class="section-title">Market Segmentation Analysis</h2>
+        
+        <table class="segment-table">
+            <thead>
+                <tr>
+                    <th>Segment</th>
+                    <th>Company Size</th>
+                    <th># of Companies</th>
+                    <th>Avg Vessels</th>
+                    <th>Market Size</th>
+                    <th>UIP Penetration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Enterprise</strong></td>
+                    <td>100+ vessels</td>
+                    <td>500</td>
+                    <td>250</td>
+                    <td>$62.5B</td>
+                    <td style="color: #00D4AA; font-weight: 700;">2.4%</td>
+                </tr>
+                <tr>
+                    <td><strong>Large</strong></td>
+                    <td>50-99 vessels</td>
+                    <td>1,500</td>
+                    <td>75</td>
+                    <td>$56.3B</td>
+                    <td style="color: #00D4AA; font-weight: 700;">0.8%</td>
+                </tr>
+                <tr>
+                    <td><strong>Mid-Market</strong></td>
+                    <td>20-49 vessels</td>
+                    <td>5,000</td>
+                    <td>35</td>
+                    <td>$87.5B</td>
+                    <td style="color: #00D4AA; font-weight: 700;">0.3%</td>
+                </tr>
+                <tr>
+                    <td><strong>Small</strong></td>
+                    <td>10-19 vessels</td>
+                    <td>23,000</td>
+                    <td>15</td>
+                    <td>$172.5B</td>
+                    <td style="color: #00D4AA; font-weight: 700;">0.1%</td>
+                </tr>
+                <tr style="background: #F8FAFB; font-weight: 700;">
+                    <td>Total Market</td>
+                    <td>10+ vessels</td>
+                    <td>30,000</td>
+                    <td>50 avg</td>
+                    <td>$378.8B</td>
+                    <td style="color: #00D4AA;">0.5%</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="market-chart">
+            <canvas id="segmentChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Growth Drivers -->
+    <div class="section">
+        <h2 class="section-title">Market Growth Drivers</h2>
+        
+        <div class="growth-drivers">
+            <div class="driver-card">
+                <h4>📈 Macro Trends</h4>
+                <ul>
+                    <li><strong>E-commerce explosion:</strong> 15% annual growth driving container demand</li>
+                    <li><strong>Supply chain complexity:</strong> Average shipper uses 8+ carriers</li>
+                    <li><strong>Labor shortages:</strong> Manual tracking becoming unsustainable</li>
+                    <li><strong>Margin pressure:</strong> Ocean freight costs up 300% since 2020</li>
+                </ul>
+            </div>
+            
+            <div class="driver-card">
+                <h4>🚀 Technology Shifts</h4>
+                <ul>
+                    <li><strong>API standardization:</strong> Carriers finally opening data access</li>
+                    <li><strong>AI maturity:</strong> Predictive models now accurate enough</li>
+                    <li><strong>Cloud adoption:</strong> Enterprises ready for SaaS solutions</li>
+                    <li><strong>Digital transformation:</strong> COVID accelerated 10-year shift</li>
+                </ul>
+            </div>
+            
+            <div class="driver-card">
+                <h4>💰 Economic Factors</h4>
+                <ul>
+                    <li><strong>ROI pressure:</strong> CFOs demanding measurable returns</li>
+                    <li><strong>Cash preservation:</strong> D&D charges impact working capital</li>
+                    <li><strong>Competitive pressure:</strong> Leaders adopting creates FOMO</li>
+                    <li><strong>Sustainability:</strong> Efficiency reduces carbon footprint</li>
+                </ul>
+            </div>
+            
+            <div class="driver-card">
+                <h4>📊 Regulatory Changes</h4>
+                <ul>
+                    <li><strong>FMC regulations:</strong> Stricter D&D rules favor automation</li>
+                    <li><strong>Data requirements:</strong> Compliance needs digital records</li>
+                    <li><strong>ESG reporting:</strong> Supply chain visibility mandatory</li>
+                    <li><strong>Trade complexity:</strong> Tariffs require better tracking</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Geographic Opportunity -->
+    <div class="section">
+        <h2 class="section-title">Geographic Market Opportunity</h2>
+        
+        <div class="market-chart">
+            <canvas id="geoChart"></canvas>
+        </div>
+        
+        <div class="market-opportunity-grid">
+            <div class="opportunity-card">
+                <h4>🇺🇸 North America</h4>
+                <span class="opportunity-value">$45B</span>
+                <p>Current focus market</p>
+                <ul>
+                    <li>75,000 vessels</li>
+                    <li>High D&D rates ($2K/day)</li>
+                    <li>0.5% penetration today</li>
+                    <li>Target: 10% by 2028</li>
+                </ul>
+            </div>
+            
+            <div class="opportunity-card">
+                <h4>🇪🇺 Europe</h4>
+                <span class="opportunity-value">$51B</span>
+                <p>2025 expansion target</p>
+                <ul>
+                    <li>85,000 vessels</li>
+                    <li>Complex regulations</li>
+                    <li>0% penetration today</li>
+                    <li>Target: 7% by 2028</li>
+                </ul>
+            </div>
+            
+            <div class="opportunity-card">
+                <h4>🌏 Asia Pacific</h4>
+                <span class="opportunity-value">$72B</span>
+                <p>2026 expansion target</p>
+                <ul>
+                    <li>120,000 vessels</li>
+                    <li>Fastest growing region</li>
+                    <li>0% penetration today</li>
+                    <li>Target: 5% by 2028</li>
+                </ul>
+            </div>
+            
+            <div class="opportunity-card">
+                <h4>🌍 Rest of World</h4>
+                <span class="opportunity-value">$12B</span>
+                <p>2027+ opportunistic</p>
+                <ul>
+                    <li>20,000 vessels</li>
+                    <li>Emerging markets</li>
+                    <li>0% penetration today</li>
+                    <li>Target: 3% by 2028</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Competitive Landscape -->
+    <div class="section">
+        <h2 class="section-title">Competitive Landscape Analysis</h2>
+        
+        <div class="competitive-landscape">
+            <div class="competitor-box uip">
+                <h4>UIP (Us)</h4>
+                <p><strong>Universal Platform</strong></p>
+                <ul style="text-align: left;">
+                    <li>200+ carriers</li>
+                    <li>94% D&D prevention</li>
+                    <li>14-day deployment</li>
+                    <li>AI-powered</li>
+                </ul>
+            </div>
+            
+            <div class="competitor-box">
+                <h4>Legacy TMS</h4>
+                <p><strong>Partial Solutions</strong></p>
+                <ul style="text-align: left;">
+                    <li>30-50 carriers</li>
+                    <li>30% prevention</li>
+                    <li>6-12 months</li>
+                    <li>Rule-based</li>
+                </ul>
+            </div>
+            
+            <div class="competitor-box">
+                <h4>In-House Build</h4>
+                <p><strong>Custom Development</strong></p>
+                <ul style="text-align: left;">
+                    <li>Limited carriers</li>
+                    <li>Unknown results</li>
+                    <li>12-18 months</li>
+                    <li>High risk</li>
+                </ul>
+            </div>
+            
+            <div class="competitor-box">
+                <h4>Manual Process</h4>
+                <p><strong>Status Quo</strong></p>
+                <ul style="text-align: left;">
+                    <li>All carriers</li>
+                    <li>13% prevention</li>
+                    <li>Ongoing</li>
+                    <li>Human-based</li>
+                </ul>
+            </div>
+            
+            <div class="competitor-box">
+                <h4>Freight Forwarders</h4>
+                <p><strong>Service Providers</strong></p>
+                <ul style="text-align: left;">
+                    <li>Their carriers only</li>
+                    <li>20% prevention</li>
+                    <li>Immediate</li>
+                    <li>Manual + fees</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="insight-box">
+            <h4>🎯 Key Market Insights</h4>
+            <ul>
+                <li><strong>95% greenfield:</strong> Most enterprises still using manual processes</li>
+                <li><strong>No true competitor:</strong> Nobody else offers universal carrier connectivity</li>
+                <li><strong>Winner-take-most:</strong> Network effects create natural monopoly dynamics</li>
+                <li><strong>10-year window:</strong> First-mover advantage before large players enter</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Market Entry Strategy -->
+    <div class="section">
+        <h2 class="section-title">Market Entry & Expansion Strategy</h2>
+        
+        <div class="market-chart">
+            <canvas id="expansionChart"></canvas>
+        </div>
+        
+        <table class="segment-table" style="margin-top: 2rem;">
+            <thead>
+                <tr>
+                    <th>Phase</th>
+                    <th>Timeline</th>
+                    <th>Geography</th>
+                    <th>Target Segment</th>
+                    <th>Strategy</th>
+                    <th>Vessels Target</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Phase 1</strong></td>
+                    <td>2023-2024</td>
+                    <td>US East Coast</td>
+                    <td>Enterprise</td>
+                    <td>Direct sales, prove ROI</td>
+                    <td>500</td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 2</strong></td>
+                    <td>2025</td>
+                    <td>North America</td>
+                    <td>Large + Enterprise</td>
+                    <td>Channel partners</td>
+                    <td>2,000</td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 3</strong></td>
+                    <td>2026</td>
+                    <td>Europe</td>
+                    <td>All segments</td>
+                    <td>Local partnerships</td>
+                    <td>5,000</td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 4</strong></td>
+                    <td>2027</td>
+                    <td>Asia Pacific</td>
+                    <td>Enterprise first</td>
+                    <td>Strategic alliances</td>
+                    <td>10,000</td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 5</strong></td>
+                    <td>2028+</td>
+                    <td>Global</td>
+                    <td>All segments</td>
+                    <td>Platform ecosystem</td>
+                    <td>25,000+</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Segment Distribution Chart
+        const segmentCtx = document.getElementById('segmentChart').getContext('2d');
+        new Chart(segmentCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Enterprise', 'Large', 'Mid-Market', 'Small', 'Below Threshold'],
+                datasets: [{
+                    data: [62.5, 56.3, 87.5, 172.5, 2021.2],
+                    backgroundColor: ['#0A1628', '#00D4AA', '#00B894', '#64748B', '#E2E8F0'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Ocean Freight Market by Company Size ($B)',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Geographic Opportunity Chart
+        const geoCtx = document.getElementById('geoChart').getContext('2d');
+        new Chart(geoCtx, {
+            type: 'bar',
+            data: {
+                labels: ['North America', 'Europe', 'Asia Pacific', 'Rest of World'],
+                datasets: [{
+                    label: 'Market Size ($B)',
+                    data: [45, 51, 72, 12],
+                    backgroundColor: '#E2E8F0'
+                }, {
+                    label: 'UIP Target ($B)',
+                    data: [4.5, 3.6, 3.6, 0.4],
+                    backgroundColor: '#00D4AA'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Geographic Market Opportunity',
+                        font: { size: 16, weight: 'bold' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Market Size ($B)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Market Expansion Timeline
+        const expansionCtx = document.getElementById('expansionChart').getContext('2d');
+        new Chart(expansionCtx, {
+            type: 'line',
+            data: {
+                labels: ['2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030'],
+                datasets: [{
+                    label: 'North America',
+                    data: [0.1, 0.5, 2.1, 3.8, 5.2, 6.8, 8.1, 9.5],
+                    borderColor: '#0A1628',
+                    fill: false,
+                    borderWidth: 3
+                }, {
+                    label: 'Europe',
+                    data: [0, 0, 0.3, 1.2, 2.4, 3.9, 5.2, 6.4],
+                    borderColor: '#00D4AA',
+                    fill: false,
+                    borderWidth: 3
+                }, {
+                    label: 'Asia Pacific',
+                    data: [0, 0, 0, 0.5, 1.8, 3.2, 4.8, 6.5],
+                    borderColor: '#00B894',
+                    fill: false,
+                    borderWidth: 3
+                }, {
+                    label: 'Rest of World',
+                    data: [0, 0, 0, 0, 0.2, 0.5, 0.9, 1.4],
+                    borderColor: '#64748B',
+                    fill: false,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Market Penetration by Geography (%)',
+                        font: { size: 16, weight: 'bold' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Market Share %'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
+</body>
+</html>

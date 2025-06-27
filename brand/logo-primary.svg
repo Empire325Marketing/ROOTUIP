@@ -1,0 +1,38 @@
+<svg width="180" height="40" viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- UIP Icon -->
+  <g id="uip-icon">
+    <!-- Background shape -->
+    <rect x="0" y="4" width="32" height="32" rx="6" fill="url(#gradient-primary)"/>
+    
+    <!-- U letter -->
+    <path d="M8 12v12c0 3.3 2.7 6 6 6h4c3.3 0 6-2.7 6-6V12" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    
+    <!-- I dot -->
+    <circle cx="16" cy="8" r="2" fill="white"/>
+    
+    <!-- Network nodes -->
+    <circle cx="8" cy="12" r="1.5" fill="white"/>
+    <circle cx="24" cy="12" r="1.5" fill="white"/>
+    <circle cx="16" cy="24" r="1.5" fill="white"/>
+    
+    <!-- Connection lines -->
+    <path d="M8 12L16 24L24 12" stroke="white" stroke-width="0.5" opacity="0.5"/>
+  </g>
+  
+  <!-- Wordmark -->
+  <g id="wordmark">
+    <!-- UIP -->
+    <text x="44" y="26" font-family="Inter, system-ui, sans-serif" font-size="24" font-weight="700" fill="#1e293b">UIP</text>
+    
+    <!-- Tagline -->
+    <text x="44" y="34" font-family="Inter, system-ui, sans-serif" font-size="7" font-weight="400" fill="#64748b" letter-spacing="0.5">UNIFIED INTEGRATION INTELLIGENCE</text>
+  </g>
+  
+  <!-- Gradient definitions -->
+  <defs>
+    <linearGradient id="gradient-primary" x1="0" y1="0" x2="32" y2="32">
+      <stop offset="0%" stop-color="#1e40af"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+</svg>

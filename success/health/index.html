@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Health Monitoring | UIP Success Platform</title>
+    <meta name="description" content="Real-time customer health monitoring with usage analytics, engagement scoring, and churn risk identification for UIP customers.">
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #333;
+        }
+
+        .health-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar - Reuse from onboarding */
+        .sidebar {
+            width: 260px;
+            background: #1a202c;
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            padding: 0 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #48bb78;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-section {
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .nav-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #a0aec0;
+            margin-bottom: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            margin: 5px -15px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Health Score Overview */
+        .health-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .health-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .health-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .health-card.healthy::before {
+            background: #48bb78;
+        }
+
+        .health-card.at-risk::before {
+            background: #f6ad55;
+        }
+
+        .health-card.critical::before {
+            background: #f56565;
+        }
+
+        .health-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .health-score {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .health-score.healthy {
+            color: #48bb78;
+        }
+
+        .health-score.at-risk {
+            color: #f6ad55;
+        }
+
+        .health-score.critical {
+            color: #f56565;
+        }
+
+        .health-trend {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .trend-up {
+            background: #f0fff4;
+            color: #48bb78;
+        }
+
+        .trend-down {
+            background: #fff5f5;
+            color: #f56565;
+        }
+
+        .trend-stable {
+            background: #f7fafc;
+            color: #718096;
+        }
+
+        .health-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .health-description {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        /* Customer Health Grid */
+        .customer-health-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-select {
+            padding: 8px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background: white;
+        }
+
+        .customer-grid {
+            overflow-x: auto;
+        }
+
+        .customer-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .customer-table th {
+            text-align: left;
+            padding: 12px;
+            background: #f7fafc;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .customer-table td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .customer-table tr:hover {
+            background: #f7fafc;
+            cursor: pointer;
+        }
+
+        .customer-name {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .score-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 30px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .score-badge.healthy {
+            background: #f0fff4;
+            color: #48bb78;
+        }
+
+        .score-badge.at-risk {
+            background: #fffaf0;
+            color: #f6ad55;
+        }
+
+        .score-badge.critical {
+            background: #fff5f5;
+            color: #f56565;
+        }
+
+        .usage-metric {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .usage-bar {
+            width: 60px;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .usage-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .usage-fill.high {
+            background: #48bb78;
+        }
+
+        .usage-fill.medium {
+            background: #f6ad55;
+        }
+
+        .usage-fill.low {
+            background: #f56565;
+        }
+
+        /* Engagement Analytics */
+        .analytics-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .analytics-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .analytics-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            height: 300px;
+            background: #f7fafc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0aec0;
+            font-size: 1.2rem;
+        }
+
+        /* Feature Adoption */
+        .feature-adoption {
+            display: grid;
+            gap: 15px;
+        }
+
+        .feature-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .feature-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: #f7fafc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .feature-details h4 {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 3px;
+        }
+
+        .feature-details p {
+            font-size: 0.85rem;
+            color: #718096;
+        }
+
+        .adoption-rate {
+            text-align: right;
+        }
+
+        .adoption-percentage {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .adoption-label {
+            font-size: 0.8rem;
+            color: #718096;
+        }
+
+        /* Churn Risk */
+        .risk-indicators {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .risk-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .risk-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-left: 4px solid;
+            background: #f7fafc;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .risk-item.high-risk {
+            border-color: #f56565;
+            background: #fff5f5;
+        }
+
+        .risk-item.medium-risk {
+            border-color: #f6ad55;
+            background: #fffaf0;
+        }
+
+        .risk-item.low-risk {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+
+        .risk-info h4 {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .risk-reason {
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .risk-action {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .risk-action.urgent {
+            background: #f56565;
+            color: white;
+        }
+
+        .risk-action.warning {
+            background: #f6ad55;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .health-overview {
+                grid-template-columns: 1fr;
+            }
+
+            .analytics-section {
+                grid-template-columns: 1fr;
+            }
+
+            .customer-table {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="health-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>🌟 UIP Success</h2>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Customer Success</div>
+                <a href="/success/onboarding/index.html" class="nav-item">
+                    <span>🚀</span> Onboarding
+                </a>
+                <a href="/success/health/index.html" class="nav-item active">
+                    <span>❤️</span> Health Monitoring
+                </a>
+                <a href="/success/support/index.html" class="nav-item">
+                    <span>🎯</span> Support Center
+                </a>
+                <a href="/success/programs/index.html" class="nav-item">
+                    <span>🎓</span> Success Programs
+                </a>
+                <a href="/success/expansion/index.html" class="nav-item">
+                    <span>📈</span> Expansion
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Analytics</div>
+                <a href="#" class="nav-item">
+                    <span>📊</span> Success Metrics
+                </a>
+                <a href="#" class="nav-item">
+                    <span>💰</span> Revenue Impact
+                </a>
+                <a href="#" class="nav-item">
+                    <span>🔄</span> Retention Analysis
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Resources</div>
+                <a href="#" class="nav-item">
+                    <span>📚</span> Best Practices
+                </a>
+                <a href="#" class="nav-item">
+                    <span>🏆</span> Success Stories
+                </a>
+                <a href="#" class="nav-item">
+                    <span>🤝</span> Community
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-top">
+                    <h1 class="page-title">Customer Health Dashboard</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" onclick="exportHealthReport()">
+                            📊 Export Report
+                        </button>
+                        <button class="btn btn-primary" onclick="openHealthSettings()">
+                            ⚙️ Health Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Score Overview -->
+            <div class="health-overview">
+                <div class="health-card healthy">
+                    <div class="health-header">
+                        <div class="health-score healthy">82</div>
+                        <div class="health-trend trend-up">
+                            ↑ +5
+                        </div>
+                    </div>
+                    <div class="health-label">Overall Health Score</div>
+                    <div class="health-description">
+                        Strong customer base with 78% of accounts showing healthy engagement
+                    </div>
+                </div>
+
+                <div class="health-card at-risk">
+                    <div class="health-header">
+                        <div class="health-score at-risk">12</div>
+                        <div class="health-trend trend-down">
+                            ↓ +2
+                        </div>
+                    </div>
+                    <div class="health-label">At-Risk Accounts</div>
+                    <div class="health-description">
+                        Accounts showing signs of decreased engagement or usage
+                    </div>
+                </div>
+
+                <div class="health-card critical">
+                    <div class="health-header">
+                        <div class="health-score critical">3</div>
+                        <div class="health-trend trend-stable">
+                            → 0
+                        </div>
+                    </div>
+                    <div class="health-label">Critical Accounts</div>
+                    <div class="health-description">
+                        Immediate intervention required to prevent churn
+                    </div>
+                </div>
+
+                <div class="health-card healthy">
+                    <div class="health-header">
+                        <div class="health-score healthy">94%</div>
+                        <div class="health-trend trend-up">
+                            ↑ 2%
+                        </div>
+                    </div>
+                    <div class="health-label">Retention Rate</div>
+                    <div class="health-description">
+                        12-month rolling customer retention performance
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Health Grid -->
+            <div class="customer-health-section">
+                <div class="section-header">
+                    <h2 class="section-title">Customer Health Matrix</h2>
+                    <div class="filter-group">
+                        <select class="filter-select" id="healthFilter">
+                            <option value="">All Health Status</option>
+                            <option value="healthy">Healthy</option>
+                            <option value="at-risk">At Risk</option>
+                            <option value="critical">Critical</option>
+                        </select>
+                        <select class="filter-select" id="segmentFilter">
+                            <option value="">All Segments</option>
+                            <option value="enterprise">Enterprise</option>
+                            <option value="mid-market">Mid-Market</option>
+                            <option value="smb">SMB</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="customer-grid">
+                    <table class="customer-table">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Health Score</th>
+                                <th>Usage</th>
+                                <th>Engagement</th>
+                                <th>Feature Adoption</th>
+                                <th>Last Activity</th>
+                                <th>CSM</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr onclick="openCustomerDetail('globaltech')">
+                                <td class="customer-name">GlobalTech Industries</td>
+                                <td><span class="score-badge healthy">92</span></td>
+                                <td>
+                                    <div class="usage-metric">
+                                        <div class="usage-bar">
+                                            <div class="usage-fill high" style="width: 85%;"></div>
+                                        </div>
+                                        <span>85%</span>
+                                    </div>
+                                </td>
+                                <td>Daily</td>
+                                <td>18/20 features</td>
+                                <td>2 hours ago</td>
+                                <td>Sarah Chen</td>
+                                <td>
+                                    <button class="btn btn-secondary" onclick="event.stopPropagation(); scheduleEBR('globaltech')">
+                                        📅 Schedule EBR
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr onclick="openCustomerDetail('techcorp')">
+                                <td class="customer-name">TechCorp Solutions</td>
+                                <td><span class="score-badge at-risk">58</span></td>
+                                <td>
+                                    <div class="usage-metric">
+                                        <div class="usage-bar">
+                                            <div class="usage-fill medium" style="width: 45%;"></div>
+                                        </div>
+                                        <span>45%</span>
+                                    </div>
+                                </td>
+                                <td>Weekly</td>
+                                <td>10/20 features</td>
+                                <td>5 days ago</td>
+                                <td>Mike Ross</td>
+                                <td>
+                                    <button class="btn btn-secondary" style="background: #fffaf0; color: #f6ad55;" onclick="event.stopPropagation(); createActionPlan('techcorp')">
+                                        ⚠️ Action Plan
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr onclick="openCustomerDetail('fastship')">
+                                <td class="customer-name">FastShip Express</td>
+                                <td><span class="score-badge healthy">87</span></td>
+                                <td>
+                                    <div class="usage-metric">
+                                        <div class="usage-bar">
+                                            <div class="usage-fill high" style="width: 78%;"></div>
+                                        </div>
+                                        <span>78%</span>
+                                    </div>
+                                </td>
+                                <td>Daily</td>
+                                <td>15/20 features</td>
+                                <td>1 hour ago</td>
+                                <td>Emma Davis</td>
+                                <td>
+                                    <button class="btn btn-secondary" onclick="event.stopPropagation(); identifyUpsell('fastship')">
+                                        📈 Upsell Opp
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr onclick="openCustomerDetail('megacorp')">
+                                <td class="customer-name">MegaCorp Industries</td>
+                                <td><span class="score-badge critical">32</span></td>
+                                <td>
+                                    <div class="usage-metric">
+                                        <div class="usage-bar">
+                                            <div class="usage-fill low" style="width: 20%;"></div>
+                                        </div>
+                                        <span>20%</span>
+                                    </div>
+                                </td>
+                                <td>Monthly</td>
+                                <td>5/20 features</td>
+                                <td>2 weeks ago</td>
+                                <td>John Wilson</td>
+                                <td>
+                                    <button class="btn btn-secondary" style="background: #fff5f5; color: #f56565;" onclick="event.stopPropagation(); escalateAccount('megacorp')">
+                                        🚨 Escalate
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Engagement Analytics -->
+            <div class="analytics-section">
+                <div class="analytics-card">
+                    <h3 class="analytics-title">Usage Trends</h3>
+                    <div class="chart-container">
+                        📊 Usage trend chart would be displayed here
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <h3 class="analytics-title">Engagement Score Distribution</h3>
+                    <div class="chart-container">
+                        📈 Engagement distribution chart would be displayed here
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Adoption -->
+            <div class="customer-health-section">
+                <div class="section-header">
+                    <h2 class="section-title">Feature Adoption Analysis</h2>
+                    <button class="btn btn-secondary">
+                        📊 Detailed Report
+                    </button>
+                </div>
+
+                <div class="feature-adoption">
+                    <div class="feature-item">
+                        <div class="feature-info">
+                            <div class="feature-icon">🚛</div>
+                            <div class="feature-details">
+                                <h4>Real-Time Tracking</h4>
+                                <p>Core tracking and visibility features</p>
+                            </div>
+                        </div>
+                        <div class="adoption-rate">
+                            <div class="adoption-percentage">92%</div>
+                            <div class="adoption-label">Adoption Rate</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-info">
+                            <div class="feature-icon">🤖</div>
+                            <div class="feature-details">
+                                <h4>AI Predictions</h4>
+                                <p>Predictive analytics and ML features</p>
+                            </div>
+                        </div>
+                        <div class="adoption-rate">
+                            <div class="adoption-percentage">67%</div>
+                            <div class="adoption-label">Adoption Rate</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-info">
+                            <div class="feature-icon">📊</div>
+                            <div class="feature-details">
+                                <h4>Analytics Dashboard</h4>
+                                <p>Business intelligence and reporting</p>
+                            </div>
+                        </div>
+                        <div class="adoption-rate">
+                            <div class="adoption-percentage">78%</div>
+                            <div class="adoption-label">Adoption Rate</div>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-info">
+                            <div class="feature-icon">🔗</div>
+                            <div class="feature-details">
+                                <h4>API Integration</h4>
+                                <p>Third-party system connections</p>
+                            </div>
+                        </div>
+                        <div class="adoption-rate">
+                            <div class="adoption-percentage">45%</div>
+                            <div class="adoption-label">Adoption Rate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Churn Risk Indicators -->
+            <div class="risk-indicators">
+                <div class="section-header">
+                    <h2 class="section-title">Churn Risk Indicators</h2>
+                    <button class="btn btn-secondary">
+                        🔔 Alert Settings
+                    </button>
+                </div>
+
+                <div class="risk-list">
+                    <div class="risk-item high-risk">
+                        <div class="risk-info">
+                            <h4>MegaCorp Industries - Critical Risk</h4>
+                            <p class="risk-reason">Usage down 60% over last 30 days, no executive engagement</p>
+                        </div>
+                        <button class="risk-action urgent" onclick="immediateIntervention('megacorp')">
+                            Immediate Action
+                        </button>
+                    </div>
+
+                    <div class="risk-item medium-risk">
+                        <div class="risk-info">
+                            <h4>TechCorp Solutions - Moderate Risk</h4>
+                            <p class="risk-reason">Key champion left company, adoption stalled at 45%</p>
+                        </div>
+                        <button class="risk-action warning" onclick="createRetentionPlan('techcorp')">
+                            Create Plan
+                        </button>
+                    </div>
+
+                    <div class="risk-item medium-risk">
+                        <div class="risk-info">
+                            <h4>Logistics Pro - Moderate Risk</h4>
+                            <p class="risk-reason">Support ticket volume increased 200%, satisfaction declining</p>
+                        </div>
+                        <button class="risk-action warning" onclick="scheduleTraining('logisticspro')">
+                            Schedule Training
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Health monitoring data
+        let healthData = {
+            customers: [
+                {
+                    id: 'globaltech',
+                    name: 'GlobalTech Industries',
+                    healthScore: 92,
+                    usage: 85,
+                    engagement: 'daily',
+                    features: 18,
+                    lastActivity: '2 hours ago',
+                    csm: 'Sarah Chen',
+                    segment: 'enterprise',
+                    mrr: 45000,
+                    trends: {
+                        usage: [80, 82, 85, 87, 85],
+                        engagement: [90, 92, 91, 93, 92],
+                        satisfaction: [85, 87, 88, 90, 89]
+                    }
+                },
+                {
+                    id: 'techcorp',
+                    name: 'TechCorp Solutions',
+                    healthScore: 58,
+                    usage: 45,
+                    engagement: 'weekly',
+                    features: 10,
+                    lastActivity: '5 days ago',
+                    csm: 'Mike Ross',
+                    segment: 'mid-market',
+                    mrr: 25000,
+                    risks: ['champion-left', 'low-adoption']
+                }
+            ],
+            thresholds: {
+                healthy: 70,
+                atRisk: 50,
+                critical: 30
+            }
+        };
+
+        function openCustomerDetail(customerId) {
+            const customer = healthData.customers.find(c => c.id === customerId);
+            if (!customer) return;
+
+            trackEvent('Customer Health Detail Viewed', {
+                customer: customer.name,
+                healthScore: customer.healthScore,
+                segment: customer.segment
+            });
+
+            console.log('Opening customer detail:', customer);
+            // In production, this would open detailed health view
+        }
+
+        function scheduleEBR(customerId) {
+            trackEvent('EBR Scheduled', { customerId: customerId });
+            alert('Executive Business Review scheduling interface would open');
+        }
+
+        function createActionPlan(customerId) {
+            trackEvent('Action Plan Created', { customerId: customerId });
+            console.log('Creating action plan for:', customerId);
+            // In production, this would open action plan creation
+        }
+
+        function identifyUpsell(customerId) {
+            trackEvent('Upsell Opportunity Identified', { customerId: customerId });
+            console.log('Analyzing upsell opportunities for:', customerId);
+            // In production, this would open expansion analysis
+        }
+
+        function escalateAccount(customerId) {
+            trackEvent('Account Escalated', { customerId: customerId });
+            alert('Account escalated to leadership. Emergency intervention team notified.');
+        }
+
+        function immediateIntervention(customerId) {
+            trackEvent('Immediate Intervention Started', { customerId: customerId });
+            alert('Starting immediate intervention protocol. CSM and leadership notified.');
+        }
+
+        function createRetentionPlan(customerId) {
+            trackEvent('Retention Plan Created', { customerId: customerId });
+            console.log('Creating retention plan for:', customerId);
+        }
+
+        function scheduleTraining(customerId) {
+            trackEvent('Training Scheduled', { customerId: customerId });
+            console.log('Scheduling training for:', customerId);
+        }
+
+        function exportHealthReport() {
+            trackEvent('Health Report Exported');
+            alert('Generating comprehensive health report...');
+        }
+
+        function openHealthSettings() {
+            trackEvent('Health Settings Opened');
+            console.log('Opening health score configuration');
+        }
+
+        function calculateHealthScore(customer) {
+            // Complex health score calculation
+            let score = 0;
+            
+            // Usage weight: 30%
+            score += (customer.usage / 100) * 30;
+            
+            // Engagement weight: 25%
+            const engagementScores = { daily: 25, weekly: 15, monthly: 5 };
+            score += engagementScores[customer.engagement] || 0;
+            
+            // Feature adoption weight: 25%
+            score += (customer.features / 20) * 25;
+            
+            // Support satisfaction weight: 20%
+            const satisfaction = customer.satisfaction || 80;
+            score += (satisfaction / 100) * 20;
+            
+            return Math.round(score);
+        }
+
+        function updateHealthScores() {
+            healthData.customers.forEach(customer => {
+                const oldScore = customer.healthScore;
+                customer.healthScore = calculateHealthScore(customer);
+                
+                if (Math.abs(oldScore - customer.healthScore) > 10) {
+                    trackEvent('Significant Health Change', {
+                        customer: customer.name,
+                        oldScore: oldScore,
+                        newScore: customer.healthScore
+                    });
+                }
+            });
+        }
+
+        function trackEvent(eventName, properties = {}) {
+            console.log('Health Monitoring Event:', eventName, properties);
+            
+            // Integration with analytics
+            if (typeof analytics !== 'undefined') {
+                analytics.track(eventName, {
+                    ...properties,
+                    timestamp: new Date().toISOString()
+                });
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add filter listeners
+            document.getElementById('healthFilter').addEventListener('change', filterCustomers);
+            document.getElementById('segmentFilter').addEventListener('change', filterCustomers);
+            
+            // Simulate real-time updates
+            setInterval(updateHealthScores, 30000);
+            
+            trackEvent('Health Dashboard Loaded');
+        });
+
+        function filterCustomers() {
+            const healthFilter = document.getElementById('healthFilter').value;
+            const segmentFilter = document.getElementById('segmentFilter').value;
+            
+            console.log('Filtering customers:', { health: healthFilter, segment: segmentFilter });
+            // In production, this would filter the customer table
+        }
+    </script>
+</body>
+</html>

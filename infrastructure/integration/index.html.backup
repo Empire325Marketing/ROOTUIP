@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integration Platform | UIP Enterprise Infrastructure</title>
+    <meta name="description" content="Enterprise integration platform with API gateway, microservices architecture, developer portal, and webhook management for UIP.">
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .integration-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: #1e293b;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid #334155;
+        }
+
+        .logo {
+            padding: 0 20px 30px;
+            border-bottom: 1px solid #334155;
+            margin-bottom: 20px;
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-section {
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .nav-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            margin: 5px -15px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #cbd5e1;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 20px;
+        }
+
+        .header {
+            background: #1e293b;
+            padding: 25px 30px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            margin-bottom: 30px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        /* API Gateway Stats */
+        .gateway-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+            color: #10b981;
+        }
+
+        /* API Endpoints */
+        .api-section {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .api-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .api-endpoint {
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .api-endpoint:hover {
+            border-color: #8b5cf6;
+            transform: translateX(5px);
+        }
+
+        .endpoint-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .method-badge {
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .method-get {
+            background: rgba(34, 197, 94, 0.1);
+            color: #10b981;
+        }
+
+        .method-post {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .method-put {
+            background: rgba(251, 146, 60, 0.1);
+            color: #f59e0b;
+        }
+
+        .method-delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .endpoint-path {
+            font-family: 'Consolas', 'Monaco', monospace;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+        }
+
+        .endpoint-stats {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        /* Services Architecture */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .service-card {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+        }
+
+        .service-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .service-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .service-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .metric-item {
+            background: #0f172a;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #334155;
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #8b5cf6;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        /* Developer Portal */
+        .developer-section {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            margin-bottom: 30px;
+        }
+
+        .portal-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: #0f172a;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            border-color: #8b5cf6;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 10px;
+        }
+
+        .feature-description {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        /* Webhook Management */
+        .webhook-section {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+        }
+
+        .webhook-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .webhook-item {
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .webhook-info h4 {
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 5px;
+        }
+
+        .webhook-url {
+            font-family: 'Consolas', 'Monaco', monospace;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .webhook-events {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .event-tag {
+            padding: 3px 10px;
+            background: rgba(139, 92, 246, 0.1);
+            color: #a78bfa;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .webhook-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            background: #334155;
+            border: none;
+            border-radius: 6px;
+            color: #e2e8f0;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #475569;
+        }
+
+        /* API Documentation */
+        .docs-preview {
+            background: #0f172a;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            margin-top: 20px;
+        }
+
+        .code-block {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .code-comment {
+            color: #64748b;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .gateway-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="integration-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>🏗️ UIP Infrastructure</h2>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Infrastructure</div>
+                <a href="/infrastructure/cloud/index.html" class="nav-item">
+                    <span>☁️</span> Cloud Architecture
+                </a>
+                <a href="/infrastructure/security/index.html" class="nav-item">
+                    <span>🔐</span> Security
+                </a>
+                <a href="/infrastructure/data/index.html" class="nav-item">
+                    <span>📊</span> Data Management
+                </a>
+                <a href="/infrastructure/integration/index.html" class="nav-item active">
+                    <span>🔗</span> Integration
+                </a>
+                <a href="/infrastructure/monitoring/index.html" class="nav-item">
+                    <span>📈</span> Monitoring
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Developer</div>
+                <a href="#" class="nav-item">
+                    <span>📚</span> API Docs
+                </a>
+                <a href="#" class="nav-item">
+                    <span>🔑</span> API Keys
+                </a>
+                <a href="#" class="nav-item">
+                    <span>🧪</span> Testing
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Operations</div>
+                <a href="#" class="nav-item">
+                    <span>🚀</span> Deployments
+                </a>
+                <a href="#" class="nav-item">
+                    <span>🔧</span> Maintenance
+                </a>
+                <a href="#" class="nav-item">
+                    <span>📝</span> Documentation
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-top">
+                    <h1 class="page-title">Integration Platform</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" onclick="viewAPIDocs()">
+                            📚 API Documentation
+                        </button>
+                        <button class="btn btn-primary" onclick="createNewIntegration()">
+                            + New Integration
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Gateway Stats -->
+            <div class="gateway-stats">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">🚀</div>
+                    </div>
+                    <div class="stat-value">24.7M</div>
+                    <div class="stat-label">API Calls Today</div>
+                    <div class="stat-trend">
+                        ↑ 12% from yesterday
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">⚡</div>
+                    </div>
+                    <div class="stat-value">45ms</div>
+                    <div class="stat-label">Avg Response Time</div>
+                    <div class="stat-trend">
+                        ↓ 8ms improvement
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">✅</div>
+                    </div>
+                    <div class="stat-value">99.98%</div>
+                    <div class="stat-label">Success Rate</div>
+                    <div class="stat-trend">
+                        → Stable
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">🔗</div>
+                    </div>
+                    <div class="stat-value">156</div>
+                    <div class="stat-label">Active Integrations</div>
+                    <div class="stat-trend">
+                        ↑ 3 new this week
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popular API Endpoints -->
+            <div class="api-section">
+                <div class="section-header">
+                    <h2 class="section-title">Popular API Endpoints</h2>
+                    <button class="btn btn-secondary" onclick="viewAllEndpoints()">
+                        View All
+                    </button>
+                </div>
+
+                <div class="api-grid">
+                    <div class="api-endpoint">
+                        <div class="endpoint-info">
+                            <span class="method-badge method-get">GET</span>
+                            <span class="endpoint-path">/api/v1/shipments/{id}</span>
+                        </div>
+                        <div class="endpoint-stats">
+                            <span>2.4M calls</span>
+                            <span>32ms avg</span>
+                            <span>99.9% success</span>
+                        </div>
+                    </div>
+
+                    <div class="api-endpoint">
+                        <div class="endpoint-info">
+                            <span class="method-badge method-post">POST</span>
+                            <span class="endpoint-path">/api/v1/tracking/events</span>
+                        </div>
+                        <div class="endpoint-stats">
+                            <span>1.8M calls</span>
+                            <span>45ms avg</span>
+                            <span>99.8% success</span>
+                        </div>
+                    </div>
+
+                    <div class="api-endpoint">
+                        <div class="endpoint-info">
+                            <span class="method-badge method-get">GET</span>
+                            <span class="endpoint-path">/api/v1/analytics/dashboard</span>
+                        </div>
+                        <div class="endpoint-stats">
+                            <span>856K calls</span>
+                            <span>124ms avg</span>
+                            <span>99.7% success</span>
+                        </div>
+                    </div>
+
+                    <div class="api-endpoint">
+                        <div class="endpoint-info">
+                            <span class="method-badge method-put">PUT</span>
+                            <span class="endpoint-path">/api/v1/routes/optimize</span>
+                        </div>
+                        <div class="endpoint-stats">
+                            <span>623K calls</span>
+                            <span>287ms avg</span>
+                            <span>98.5% success</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Microservices Architecture -->
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-status"></div>
+                    <div class="service-header">
+                        <div class="service-icon">🚛</div>
+                        <div>
+                            <h3 class="service-name">Shipment Service</h3>
+                            <p style="color: #94a3b8; font-size: 0.9rem;">Core logistics operations</p>
+                        </div>
+                    </div>
+                    <div class="service-metrics">
+                        <div class="metric-item">
+                            <div class="metric-value">24</div>
+                            <div class="metric-label">Instances</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">1.2K</div>
+                            <div class="metric-label">Req/sec</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">38ms</div>
+                            <div class="metric-label">Latency</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">0.12%</div>
+                            <div class="metric-label">Error Rate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-status"></div>
+                    <div class="service-header">
+                        <div class="service-icon">📊</div>
+                        <div>
+                            <h3 class="service-name">Analytics Service</h3>
+                            <p style="color: #94a3b8; font-size: 0.9rem;">Business intelligence & reporting</p>
+                        </div>
+                    </div>
+                    <div class="service-metrics">
+                        <div class="metric-item">
+                            <div class="metric-value">12</div>
+                            <div class="metric-label">Instances</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">456</div>
+                            <div class="metric-label">Req/sec</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">142ms</div>
+                            <div class="metric-label">Latency</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">0.08%</div>
+                            <div class="metric-label">Error Rate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-status"></div>
+                    <div class="service-header">
+                        <div class="service-icon">🔔</div>
+                        <div>
+                            <h3 class="service-name">Notification Service</h3>
+                            <p style="color: #94a3b8; font-size: 0.9rem;">Multi-channel notifications</p>
+                        </div>
+                    </div>
+                    <div class="service-metrics">
+                        <div class="metric-item">
+                            <div class="metric-value">8</div>
+                            <div class="metric-label">Instances</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">892</div>
+                            <div class="metric-label">Msg/sec</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">67ms</div>
+                            <div class="metric-label">Latency</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">0.03%</div>
+                            <div class="metric-label">Error Rate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Developer Portal -->
+            <div class="developer-section">
+                <div class="section-header">
+                    <h2 class="section-title">Developer Portal</h2>
+                    <button class="btn btn-secondary" onclick="viewDeveloperDashboard()">
+                        Dashboard
+                    </button>
+                </div>
+
+                <div class="portal-features">
+                    <div class="feature-card" onclick="openAPIDocs()">
+                        <div class="feature-icon">📖</div>
+                        <h3 class="feature-title">API Documentation</h3>
+                        <p class="feature-description">Interactive API documentation with code examples in multiple languages</p>
+                    </div>
+
+                    <div class="feature-card" onclick="openSDKs()">
+                        <div class="feature-icon">📦</div>
+                        <h3 class="feature-title">SDKs & Libraries</h3>
+                        <p class="feature-description">Official SDKs for Python, JavaScript, Java, Go, and more</p>
+                    </div>
+
+                    <div class="feature-card" onclick="openPlayground()">
+                        <div class="feature-icon">🧪</div>
+                        <h3 class="feature-title">API Playground</h3>
+                        <p class="feature-description">Test API endpoints directly in your browser with live responses</p>
+                    </div>
+
+                    <div class="feature-card" onclick="openWebhooks()">
+                        <div class="feature-icon">🪝</div>
+                        <h3 class="feature-title">Webhooks</h3>
+                        <p class="feature-description">Configure real-time event notifications for your applications</p>
+                    </div>
+                </div>
+
+                <div class="docs-preview">
+                    <h4 style="margin-bottom: 15px; color: #e2e8f0;">Quick Start Example</h4>
+                    <div class="code-block">
+                        <span class="code-comment"># Install the UIP Python SDK</span><br>
+                        pip install uip-sdk<br><br>
+                        <span class="code-comment"># Initialize the client</span><br>
+                        from uip import Client<br><br>
+                        client = Client(api_key='your_api_key')<br><br>
+                        <span class="code-comment"># Get shipment details</span><br>
+                        shipment = client.shipments.get('SHIP-12345')<br>
+                        print(f"Status: {shipment.status}")<br>
+                        print(f"ETA: {shipment.estimated_delivery}")
+                    </div>
+                </div>
+            </div>
+
+            <!-- Webhook Management -->
+            <div class="webhook-section">
+                <div class="section-header">
+                    <h2 class="section-title">Active Webhooks</h2>
+                    <button class="btn btn-primary" onclick="createWebhook()">
+                        + Add Webhook
+                    </button>
+                </div>
+
+                <div class="webhook-list">
+                    <div class="webhook-item">
+                        <div class="webhook-info">
+                            <h4>Order Status Updates</h4>
+                            <div class="webhook-url">https://api.customer.com/webhooks/uip/orders</div>
+                            <div class="webhook-events">
+                                <span class="event-tag">order.created</span>
+                                <span class="event-tag">order.updated</span>
+                                <span class="event-tag">order.delivered</span>
+                            </div>
+                        </div>
+                        <div class="webhook-actions">
+                            <button class="action-btn" onclick="testWebhook('order-status')">Test</button>
+                            <button class="action-btn" onclick="editWebhook('order-status')">Edit</button>
+                            <button class="action-btn" onclick="viewWebhookLogs('order-status')">Logs</button>
+                        </div>
+                    </div>
+
+                    <div class="webhook-item">
+                        <div class="webhook-info">
+                            <h4>Tracking Events</h4>
+                            <div class="webhook-url">https://analytics.partner.io/tracking</div>
+                            <div class="webhook-events">
+                                <span class="event-tag">tracking.scan</span>
+                                <span class="event-tag">tracking.exception</span>
+                            </div>
+                        </div>
+                        <div class="webhook-actions">
+                            <button class="action-btn" onclick="testWebhook('tracking')">Test</button>
+                            <button class="action-btn" onclick="editWebhook('tracking')">Edit</button>
+                            <button class="action-btn" onclick="viewWebhookLogs('tracking')">Logs</button>
+                        </div>
+                    </div>
+
+                    <div class="webhook-item">
+                        <div class="webhook-info">
+                            <h4>Inventory Sync</h4>
+                            <div class="webhook-url">https://erp.enterprise.com/api/inventory/sync</div>
+                            <div class="webhook-events">
+                                <span class="event-tag">inventory.low</span>
+                                <span class="event-tag">inventory.updated</span>
+                                <span class="event-tag">inventory.replenished</span>
+                            </div>
+                        </div>
+                        <div class="webhook-actions">
+                            <button class="action-btn" onclick="testWebhook('inventory')">Test</button>
+                            <button class="action-btn" onclick="editWebhook('inventory')">Edit</button>
+                            <button class="action-btn" onclick="viewWebhookLogs('inventory')">Logs</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Integration platform functions
+        function createNewIntegration() {
+            trackEvent('Integration Creation Started');
+            console.log('Opening integration wizard');
+            // In production, this would open integration creation flow
+        }
+
+        function viewAPIDocs() {
+            trackEvent('API Documentation Accessed');
+            console.log('Opening API documentation');
+        }
+
+        function viewAllEndpoints() {
+            trackEvent('All Endpoints Viewed');
+            console.log('Loading complete endpoint list');
+        }
+
+        function viewDeveloperDashboard() {
+            trackEvent('Developer Dashboard Accessed');
+            console.log('Opening developer dashboard');
+        }
+
+        // Developer portal functions
+        function openAPIDocs() {
+            trackEvent('API Docs Opened');
+            console.log('Loading interactive API documentation');
+        }
+
+        function openSDKs() {
+            trackEvent('SDKs Accessed');
+            console.log('Opening SDK download page');
+        }
+
+        function openPlayground() {
+            trackEvent('API Playground Opened');
+            console.log('Loading API playground');
+        }
+
+        function openWebhooks() {
+            trackEvent('Webhook Configuration Opened');
+            console.log('Opening webhook management');
+        }
+
+        // Webhook management
+        function createWebhook() {
+            trackEvent('Webhook Creation Started');
+            console.log('Opening webhook creation form');
+        }
+
+        function testWebhook(webhookId) {
+            trackEvent('Webhook Tested', { webhookId: webhookId });
+            alert(`Sending test event to webhook: ${webhookId}`);
+        }
+
+        function editWebhook(webhookId) {
+            trackEvent('Webhook Edited', { webhookId: webhookId });
+            console.log('Editing webhook:', webhookId);
+        }
+
+        function viewWebhookLogs(webhookId) {
+            trackEvent('Webhook Logs Viewed', { webhookId: webhookId });
+            console.log('Loading webhook logs for:', webhookId);
+        }
+
+        // Monitor API performance
+        function monitorAPIPerformance() {
+            const endpoints = [
+                { path: '/api/v1/shipments/{id}', calls: 2400000, latency: 32 },
+                { path: '/api/v1/tracking/events', calls: 1800000, latency: 45 },
+                { path: '/api/v1/analytics/dashboard', calls: 856000, latency: 124 },
+                { path: '/api/v1/routes/optimize', calls: 623000, latency: 287 }
+            ];
+
+            endpoints.forEach(endpoint => {
+                if (endpoint.latency > 200) {
+                    trackEvent('High Latency Alert', {
+                        endpoint: endpoint.path,
+                        latency: endpoint.latency
+                    });
+                }
+            });
+        }
+
+        // Service health monitoring
+        function checkServiceHealth() {
+            const services = [
+                { name: 'Shipment Service', errorRate: 0.12 },
+                { name: 'Analytics Service', errorRate: 0.08 },
+                { name: 'Notification Service', errorRate: 0.03 }
+            ];
+
+            services.forEach(service => {
+                if (service.errorRate > 1) {
+                    trackEvent('Service Health Alert', {
+                        service: service.name,
+                        errorRate: service.errorRate
+                    });
+                }
+            });
+        }
+
+        function trackEvent(eventName, properties = {}) {
+            console.log('Integration Platform Event:', eventName, properties);
+            
+            // Integration with analytics
+            if (typeof analytics !== 'undefined') {
+                analytics.track(eventName, {
+                    ...properties,
+                    timestamp: new Date().toISOString()
+                });
+            }
+        }
+
+        // Simulate real-time API metrics
+        let metricsInterval;
+        function startMetricsMonitoring() {
+            metricsInterval = setInterval(() => {
+                const apiCalls = Math.floor(24700000 + Math.random() * 100000);
+                const responseTime = Math.floor(40 + Math.random() * 10);
+                
+                console.log(`API Metrics: ${apiCalls.toLocaleString()} calls, ${responseTime}ms avg response`);
+            }, 5000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            trackEvent('Integration Platform Loaded');
+            monitorAPIPerformance();
+            checkServiceHealth();
+            startMetricsMonitoring();
+        });
+
+        // Cleanup
+        window.addEventListener('beforeunload', function() {
+            if (metricsInterval) {
+                clearInterval(metricsInterval);
+            }
+        });
+    </script>
+</body>
+</html>

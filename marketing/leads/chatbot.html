@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Smart Assistant | Freight Intelligence Help</title>
+    <meta name="description" content="Get instant answers about freight intelligence solutions. Our AI assistant helps qualify your needs and connects you with the right resources.">
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 900px;
+            height: 90vh;
+            max-height: 700px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .bot-avatar {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .header-info h2 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .header-info p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .status-indicator {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #48bb78;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .message.bot .message-avatar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .message.user .message-avatar {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .message-content {
+            background: white;
+            padding: 15px 18px;
+            border-radius: 18px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            line-height: 1.5;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #a0aec0;
+            margin-top: 5px;
+        }
+
+        .quick-replies {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .quick-reply {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            color: #4a5568;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-reply:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            max-width: 80%;
+        }
+
+        .typing-dots {
+            background: white;
+            padding: 15px 18px;
+            border-radius: 18px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #a0aec0;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            border-top: 1px solid #e2e8f0;
+            background: white;
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 1rem;
+            resize: none;
+            max-height: 100px;
+            line-height: 1.4;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .send-button {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .send-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .lead-capture-form {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-btn.secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+
+        .cta-btn.secondary:hover {
+            background: #edf2f7;
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                height: 100vh;
+                max-height: none;
+                border-radius: 0;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <div class="bot-avatar">🤖</div>
+            <div class="header-info">
+                <h2>UIP Smart Assistant</h2>
+                <p>Freight Intelligence Expert</p>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>Online</span>
+            </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <!-- Welcome Message -->
+            <div class="message bot">
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    <div>Hi! I'm your UIP Smart Assistant. I help businesses optimize their freight operations and supply chain performance.</div>
+                    <div class="message-time" id="welcomeTime"></div>
+                    <div class="quick-replies">
+                        <div class="quick-reply" onclick="sendQuickReply('I want to reduce freight costs')">💰 Reduce Costs</div>
+                        <div class="quick-reply" onclick="sendQuickReply('I need better visibility')">👁️ Improve Visibility</div>
+                        <div class="quick-reply" onclick="sendQuickReply('Tell me about your platform')">🚀 Learn About UIP</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="message-avatar">🤖</div>
+            <div class="typing-dots">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input-container">
+            <div class="chat-input-wrapper">
+                <textarea class="chat-input" id="chatInput" placeholder="Type your message..." rows="1"></textarea>
+                <button class="send-button" id="sendButton" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let conversationData = {
+            messages: [],
+            leadScore: 0,
+            qualification: {},
+            stage: 'initial',
+            timestamp: new Date().toISOString()
+        };
+
+        let chatFlows = {
+            greeting: {
+                triggers: ['hello', 'hi', 'hey', 'good morning', 'good afternoon'],
+                responses: [
+                    "Hello! Great to meet you. I'm here to help optimize your freight operations. What's your biggest supply chain challenge right now?",
+                    "Hi there! I specialize in freight intelligence solutions. Are you looking to reduce costs, improve visibility, or streamline operations?"
+                ]
+            },
+            costReduction: {
+                triggers: ['cost', 'save', 'money', 'expensive', 'budget', 'reduce'],
+                responses: [
+                    "Cost reduction is our specialty! On average, our clients save 20-30% on freight costs. What's your current annual freight spend?",
+                    "I can help you identify significant cost savings. Most companies waste 15-25% on freight due to poor visibility and manual processes."
+                ],
+                followUp: "Would you like me to calculate your potential ROI? It takes just 2 minutes.",
+                cta: 'roi-calculator'
+            },
+            visibility: {
+                triggers: ['visibility', 'tracking', 'monitor', 'see', 'where', 'status'],
+                responses: [
+                    "Supply chain visibility is crucial! Real-time tracking can reduce delivery issues by 40%. How many shipments do you track monthly?",
+                    "Great question! Our platform provides end-to-end visibility across all modes of transport. What visibility gaps are you experiencing?"
+                ],
+                followUp: "I'd recommend our free supply chain assessment to identify your specific visibility needs.",
+                cta: 'assessment'
+            },
+            platform: {
+                triggers: ['platform', 'solution', 'uip', 'features', 'capabilities'],
+                responses: [
+                    "UIP is an AI-powered freight intelligence platform that optimizes your entire supply chain. We provide real-time visibility, cost optimization, and predictive analytics.",
+                    "Our platform integrates with 500+ carriers and provides complete freight lifecycle management. From booking to delivery, we've got you covered."
+                ],
+                followUp: "Would you like to see a personalized demo of how it would work for your business?",
+                cta: 'demo'
+            }
+        };
+
+        function initializeChat() {
+            document.getElementById('welcomeTime').textContent = getCurrentTime();
+            
+            // Auto-resize textarea
+            const chatInput = document.getElementById('chatInput');
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+
+            // Enter key handler
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            trackEvent('Chatbot Started', { timestamp: new Date().toISOString() });
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addMessage(message, 'user');
+            input.value = '';
+            input.style.height = 'auto';
+            
+            conversationData.messages.push({
+                type: 'user',
+                content: message,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Process message and respond
+            setTimeout(() => {
+                processMessage(message);
+            }, 1000 + Math.random() * 1000); // 1-2 seconds delay
+        }
+
+        function sendQuickReply(message) {
+            addMessage(message, 'user');
+            
+            conversationData.messages.push({
+                type: 'user',
+                content: message,
+                timestamp: new Date().toISOString()
+            });
+            
+            showTypingIndicator();
+            
+            setTimeout(() => {
+                processMessage(message);
+            }, 800);
+        }
+
+        function processMessage(message) {
+            hideTypingIndicator();
+            
+            const lowerMessage = message.toLowerCase();
+            let responseData = null;
+            
+            // Find matching conversation flow
+            for (const [flowKey, flow] of Object.entries(chatFlows)) {
+                if (flow.triggers.some(trigger => lowerMessage.includes(trigger))) {
+                    responseData = flow;
+                    conversationData.stage = flowKey;
+                    break;
+                }
+            }
+            
+            // Default responses for unmatched messages
+            if (!responseData) {
+                responseData = getContextualResponse(lowerMessage);
+            }
+            
+            // Send bot response
+            const response = Array.isArray(responseData.responses) 
+                ? responseData.responses[Math.floor(Math.random() * responseData.responses.length)]
+                : responseData.response || "I understand you're interested in freight optimization. Let me connect you with the right solution.";
+            
+            addMessage(response, 'bot', responseData.followUp, responseData.cta);
+            
+            conversationData.messages.push({
+                type: 'bot',
+                content: response,
+                stage: conversationData.stage,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Update lead score
+            updateLeadScore(message, conversationData.stage);
+            
+            // Check for qualification triggers
+            checkQualification(message);
+            
+            trackEvent('Chatbot Interaction', { 
+                userMessage: message, 
+                botResponse: response, 
+                stage: conversationData.stage,
+                leadScore: conversationData.leadScore 
+            });
+        }
+
+        function getContextualResponse(message) {
+            const qualificationTriggers = {
+                company: ['company', 'business', 'organization', 'corporation'],
+                role: ['manager', 'director', 'ceo', 'coo', 'vp', 'head'],
+                pain: ['problem', 'issue', 'challenge', 'difficult', 'frustrating'],
+                budget: ['budget', 'investment', 'spend', 'cost'],
+                timeline: ['when', 'soon', 'urgent', 'asap', 'timeline']
+            };
+            
+            for (const [category, triggers] of Object.entries(qualificationTriggers)) {
+                if (triggers.some(trigger => message.includes(trigger))) {
+                    return getQualificationResponse(category);
+                }
+            }
+            
+            return {
+                response: "That's a great point! Every business has unique freight challenges. Can you tell me more about your specific situation?",
+                followUp: "I'd love to learn more about your company and how we can help optimize your supply chain."
+            };
+        }
+
+        function getQualificationResponse(category) {
+            const responses = {
+                company: {
+                    response: "That's helpful to know about your company! What industry are you in, and roughly how many shipments do you handle monthly?",
+                    followUp: "This helps me recommend the most relevant solutions for your business size and needs."
+                },
+                role: {
+                    response: "Great! It sounds like you're in a decision-making role. What are your top 3 priorities for improving your freight operations?",
+                    followUp: "Understanding your priorities helps me show you the most impactful features first."
+                },
+                pain: {
+                    response: "I hear you - freight challenges can be really frustrating! What specific issues are causing the biggest headaches for your team?",
+                    followUp: "Once I understand your pain points, I can show you exactly how we solve those problems."
+                },
+                budget: {
+                    response: "Budget is always important! The good news is that most of our clients see ROI within 3-6 months. What's your current annual freight spend?",
+                    followUp: "This helps me calculate your potential savings and show you realistic ROI projections."
+                },
+                timeline: {
+                    response: "I understand timing is important! Our implementation typically takes 4-8 weeks depending on complexity. When would you ideally want to see results?",
+                    followUp: "Knowing your timeline helps me prioritize the right next steps for you."
+                }
+            };
+            
+            return responses[category] || responses.company;
+        }
+
+        function updateLeadScore(message, stage) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Stage-based scoring
+            const stageScores = {
+                'costReduction': 15,
+                'visibility': 12,
+                'platform': 10,
+                'initial': 5
+            };
+            
+            conversationData.leadScore += stageScores[stage] || 5;
+            
+            // Intent-based scoring
+            const intentScores = {
+                'budget': 20,
+                'timeline': 15,
+                'urgent': 15,
+                'decision': 20,
+                'evaluate': 10,
+                'compare': 10
+            };
+            
+            Object.keys(intentScores).forEach(intent => {
+                if (lowerMessage.includes(intent)) {
+                    conversationData.leadScore += intentScores[intent];
+                }
+            });
+            
+            // Company size indicators
+            const sizeIndicators = {
+                'enterprise': 25,
+                'large': 20,
+                'corporation': 20,
+                'startup': 5,
+                'small': 8
+            };
+            
+            Object.keys(sizeIndicators).forEach(size => {
+                if (lowerMessage.includes(size)) {
+                    conversationData.leadScore += sizeIndicators[size];
+                }
+            });
+        }
+
+        function checkQualification(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Check if user is ready for lead capture
+            if (conversationData.leadScore > 50 && conversationData.messages.length > 4) {
+                if (!conversationData.leadCaptureShown) {
+                    setTimeout(() => {
+                        showLeadCapture();
+                    }, 2000);
+                    conversationData.leadCaptureShown = true;
+                }
+            }
+        }
+
+        function showLeadCapture() {
+            const leadCaptureHtml = `
+                <div class="lead-capture-form">
+                    <div style="font-weight: 600; margin-bottom: 10px; color: #2d3748;">
+                        🎯 Let me connect you with a freight intelligence expert
+                    </div>
+                    <div style="color: #718096; margin-bottom: 15px; font-size: 0.9rem;">
+                        Based on our conversation, I think you'd benefit from a personalized consultation. 
+                        It only takes 30 seconds to get connected.
+                    </div>
+                    <form onsubmit="submitLeadCapture(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">First Name *</label>
+                                <input type="text" class="form-input" id="leadFirstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Last Name *</label>
+                                <input type="text" class="form-input" id="leadLastName" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Business Email *</label>
+                            <input type="email" class="form-input" id="leadEmail" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Company</label>
+                                <input type="text" class="form-input" id="leadCompany">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-input" id="leadPhone">
+                            </div>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            🚀 Connect Me With An Expert
+                        </button>
+                    </form>
+                </div>
+            `;
+            
+            addMessage("Perfect! Based on our conversation, I can see you're serious about optimizing your freight operations. Let me connect you with one of our specialists who can provide personalized recommendations.", 'bot', leadCaptureHtml);
+        }
+
+        function submitLeadCapture(event) {
+            event.preventDefault();
+            
+            const leadData = {
+                firstName: document.getElementById('leadFirstName').value,
+                lastName: document.getElementById('leadLastName').value,
+                email: document.getElementById('leadEmail').value,
+                company: document.getElementById('leadCompany').value,
+                phone: document.getElementById('leadPhone').value,
+                leadScore: conversationData.leadScore,
+                conversationSummary: summarizeConversation(),
+                qualification: conversationData.qualification,
+                source: 'chatbot',
+                timestamp: new Date().toISOString()
+            };
+            
+            // Submit to marketing automation
+            submitToMarketing(leadData);
+            
+            // Show success message
+            const successHtml = `
+                <div style="text-align: center; color: #48bb78; font-weight: 600; margin: 15px 0;">
+                    ✅ Great! I've connected you with Sarah Johnson, one of our senior freight intelligence consultants.
+                </div>
+                <div class="cta-buttons">
+                    <a href="/marketing/leads/demo-booking.html" class="cta-btn">
+                        📅 Schedule Demo
+                    </a>
+                    <a href="/marketing/leads/roi-calculator.html" class="cta-btn secondary">
+                        📊 Calculate ROI
+                    </a>
+                </div>
+            `;
+            
+            addMessage("Excellent! You'll receive an email from Sarah within the next hour with some personalized insights and next steps.", 'bot', successHtml);
+            
+            trackEvent('Chatbot Lead Captured', { 
+                email: leadData.email,
+                company: leadData.company,
+                leadScore: leadData.leadScore,
+                messageCount: conversationData.messages.length
+            });
+        }
+
+        function summarizeConversation() {
+            const interests = [];
+            const messages = conversationData.messages;
+            
+            messages.forEach(msg => {
+                if (msg.type === 'user') {
+                    const content = msg.content.toLowerCase();
+                    if (content.includes('cost') || content.includes('save')) interests.push('cost_reduction');
+                    if (content.includes('visibility') || content.includes('track')) interests.push('visibility');
+                    if (content.includes('platform') || content.includes('solution')) interests.push('platform_demo');
+                }
+            });
+            
+            return {
+                messageCount: messages.length,
+                primaryInterests: [...new Set(interests)],
+                conversationLength: Math.round((new Date() - new Date(conversationData.timestamp)) / 1000 / 60), // minutes
+                stage: conversationData.stage
+            };
+        }
+
+        function addMessage(content, sender, followUp = null, cta = null) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const avatar = sender === 'bot' ? '🤖' : 'U';
+            const avatarClass = sender === 'bot' ? 'bot' : 'user';
+            
+            let followUpHtml = '';
+            if (followUp && sender === 'bot') {
+                if (typeof followUp === 'string') {
+                    followUpHtml = `<div style="margin-top: 10px; font-style: italic; opacity: 0.8;">${followUp}</div>`;
+                } else {
+                    followUpHtml = `<div style="margin-top: 10px;">${followUp}</div>`;
+                }
+            }
+            
+            let ctaHtml = '';
+            if (cta && sender === 'bot') {
+                const ctaButtons = {
+                    'roi-calculator': '<a href="/marketing/leads/roi-calculator.html" class="cta-btn">📊 Calculate ROI</a>',
+                    'assessment': '<a href="/marketing/leads/assessment-tool.html" class="cta-btn">🔍 Free Assessment</a>',
+                    'demo': '<a href="/marketing/leads/demo-booking.html" class="cta-btn">📅 Book Demo</a>'
+                };
+                
+                if (ctaButtons[cta]) {
+                    ctaHtml = `<div class="cta-buttons" style="margin-top: 10px;">${ctaButtons[cta]}</div>`;
+                }
+            }
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${avatar}</div>
+                <div class="message-content">
+                    <div>${content}</div>
+                    <div class="message-time">${getCurrentTime()}</div>
+                    ${followUpHtml}
+                    ${ctaHtml}
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'flex';
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'none';
+        }
+
+        function getCurrentTime() {
+            return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function submitToMarketing(data) {
+            console.log('Submitting chatbot lead to marketing automation:', data);
+            
+            // In production, this would call your marketing automation API
+            // fetch('/api/marketing/chatbot-leads', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(data)
+            // });
+        }
+
+        function trackEvent(eventName, properties = {}) {
+            console.log('Analytics Event:', eventName, properties);
+            
+            // Integration with marketing automation
+            if (typeof marketingAutomation !== 'undefined') {
+                marketingAutomation.track(eventName, properties);
+            }
+        }
+
+        // Initialize chat when page loads
+        document.addEventListener('DOMContentLoaded', initializeChat);
+    </script>
+</body>
+</html>

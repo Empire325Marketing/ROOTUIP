@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Stop losing $14M per vessel to ocean freight inefficiencies. UIP's AI platform eliminates detention & demurrage charges with 94% success rate.">
+    <title>UIP - Save $14M Per Vessel | Ocean Freight Automation Platform</title>
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="brand/brand-colors.css?v=1750888019">
+    <link rel="stylesheet" href="brand/typography.css?v=1750888019">
+    <link rel="stylesheet" href="css/homepage-v2.css?v=1750888019">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="brand/logo.svg" as="image">
+    <link rel="preload" href="css/homepage-v2.css?v=1750888019" as="style">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="/" class="logo-link">
+                    <img src="brand/logo.svg" alt="UIP Logo" class="nav-logo" width="120" height="40">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#platform">Platform</a></li>
+                    <li><a href="/interactive-demo.html">Live Demo</a></li>
+                    <li><a href="#solutions">Solutions</a></li>
+                    <li><a href="/roi-calculator.html">ROI Calculator</a></li>
+                    <li><a href="#resources">Resources</a></li>
+                    <li><a href="/presentation-suite-v2.html">Presentations</a></li>
+                </ul>
+                <div class="nav-cta">
+                    <a href="#demo" class="btn btn-primary">Book Demo</a>
+                </div>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <div class="particle particle-1"></div>
+            <div class="particle particle-2"></div>
+            <div class="particle particle-3"></div>
+        </div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title fade-in">
+                    Stop Losing <span class="text-gradient">$14M Per Vessel</span><br>
+                    to Ocean Freight Inefficiencies
+                </h1>
+                <p class="hero-subtitle fade-in-delay-1">
+                    The only AI platform that connects ALL carrier systems to eliminate 
+                    detention & demurrage charges with 94% success rate
+                </p>
+                
+                <div class="hero-cta fade-in-delay-2">
+                    <a href="/roi-calculator.html" class="btn btn-primary btn-lg pulse">
+                        Calculate Your D&D Losses
+                    </a>
+                    <a href="#demo" class="btn btn-secondary btn-lg">
+                        Watch 2-Min Demo
+                    </a>
+                </div>
+                
+                <!-- Live Loss Counter -->
+                <div class="loss-counter fade-in-delay-3">
+                    <div class="counter-label">Industry Losing Right Now</div>
+                    <div class="counter-value" id="lossCounter">$0</div>
+                    <div class="counter-sublabel">$634 wasted every second globally</div>
+                </div>
+            </div>
+            
+            <!-- Container Visualization -->
+            <div class="container-visual">
+                <div class="ship-container inefficient" id="inefficientContainer">
+                    <div class="container-label">Traditional Process</div>
+                    <div class="waste-indicators">
+                        <span class="waste-item">Manual Entry</span>
+                        <span class="waste-item">Missed Deadlines</span>
+                        <span class="waste-item">Failed Disputes</span>
+                    </div>
+                </div>
+                <div class="transformation-arrow">→</div>
+                <div class="ship-container efficient" id="efficientContainer">
+                    <div class="container-label">With UIP</div>
+                    <div class="efficiency-indicators">
+                        <span class="efficiency-item">Automated</span>
+                        <span class="efficiency-item">Predictive</span>
+                        <span class="efficiency-item">94% Success</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trust Indicators -->
+            <div class="trust-indicators">
+                <div class="trust-item">
+                    <div class="trust-value counter" data-target="2500000">0</div>
+                    <div class="trust-label">Containers Processed</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-value">$<span class="counter" data-target="127">0</span>M+</div>
+                    <div class="trust-label">Saved for Clients</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-value"><span class="counter" data-target="99.9" data-decimals="1">0</span>%</div>
+                    <div class="trust-label">Platform Uptime</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-value counter" data-target="48">0</div>
+                    <div class="trust-label">Hour Implementation</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section" id="problem">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">The $15-20 Billion Problem</h2>
+                <p class="section-subtitle">Ocean freight bleeds money through preventable inefficiencies</p>
+            </div>
+            
+            <!-- Industry Waste Visualization -->
+            <div class="waste-visual">
+                <div class="waste-meter">
+                    <div class="waste-fill" style="--waste-amount: 35%">
+                        <span class="waste-category">D&D Charges<br>$7-9B</span>
+                    </div>
+                    <div class="waste-fill" style="--waste-amount: 30%">
+                        <span class="waste-category">Port Congestion<br>$5-7B</span>
+                    </div>
+                    <div class="waste-fill" style="--waste-amount: 20%">
+                        <span class="waste-category">Documentation<br>$2-3B</span>
+                    </div>
+                    <div class="waste-fill" style="--waste-amount: 15%">
+                        <span class="waste-category">Other Inefficiencies<br>$1-2B</span>
+                    </div>
+                </div>
+                <div class="waste-total">
+                    <div class="total-label">Total Annual Waste</div>
+                    <div class="total-amount">$15-20 BILLION</div>
+                </div>
+            </div>
+            
+            <div class="problem-grid">
+                <div class="problem-card" data-aos="fade-up">
+                    <div class="problem-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2"/>
+                            <path d="M24 14V26L32 30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3>87% of D&D Charges Are Preventable</h3>
+                    <p>Yet companies lose millions because they learn about risks too late</p>
+                    <div class="problem-stat">$14M average loss per vessel annually</div>
+                </div>
+                
+                <div class="problem-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="problem-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <rect x="8" y="8" width="32" height="32" stroke="currentColor" stroke-width="2"/>
+                            <line x1="8" y1="18" x2="40" y2="18" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="24" cy="28" r="4" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <h3>200+ Disconnected Carrier Systems</h3>
+                    <p>Your team wastes 160+ hours weekly on manual data entry</p>
+                    <div class="problem-stat">4% error rate costing $50 per mistake</div>
+                </div>
+                
+                <div class="problem-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="problem-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <path d="M24 4L8 14V34L24 44L40 34V14L24 4Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M24 24L8 14M24 24L40 14M24 24V44" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>67% Manual Dispute Success Rate</h3>
+                    <p>Industry average leaves money on the table every day</p>
+                    <div class="problem-stat">vs 94% with automated disputes</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution-section" id="solution">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">One Platform. Every System. Zero Manual Work.</h2>
+                <p class="section-subtitle">The only solution that connects ALL your carrier data sources</p>
+            </div>
+            
+            <!-- Integration Hub Visual -->
+            <div class="integration-hub">
+                <div class="hub-center">
+                    <div class="hub-core">
+                        <img src="brand/logo-icon.svg" alt="UIP Hub" width="80" height="80">
+                        <span>UIP Hub</span>
+                    </div>
+                    <div class="hub-ring ring-1"></div>
+                    <div class="hub-ring ring-2"></div>
+                    <div class="hub-ring ring-3"></div>
+                </div>
+                
+                <div class="integration-types">
+                    <div class="integration-type type-api" data-connection="api">
+                        <div class="type-icon">🔌</div>
+                        <h4>API Integration</h4>
+                        <p>Direct carrier connections</p>
+                        <ul>
+                            <li>Real-time data sync</li>
+                            <li>Bi-directional flow</li>
+                            <li>Modern REST/GraphQL</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="integration-type type-edi" data-connection="edi">
+                        <div class="type-icon">📡</div>
+                        <h4>EDI Processing</h4>
+                        <p>Legacy system compatibility</p>
+                        <ul>
+                            <li>AS2/AS3 protocols</li>
+                            <li>X12/EDIFACT formats</li>
+                            <li>VAN connectivity</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="integration-type type-email" data-connection="email">
+                        <div class="type-icon">📧</div>
+                        <h4>Email Intelligence</h4>
+                        <p>AI-powered parsing</p>
+                        <ul>
+                            <li>Auto-extraction</li>
+                            <li>Smart categorization</li>
+                            <li>99.9% accuracy</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="integration-type type-manual" data-connection="manual">
+                        <div class="type-icon">📄</div>
+                        <h4>Manual Upload</h4>
+                        <p>OCR + verification</p>
+                        <ul>
+                            <li>Any document format</li>
+                            <li>GPU processing</li>
+                            <li>Human validation</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Connection lines drawn with CSS -->
+                <svg class="connection-lines" viewBox="0 0 800 400">
+                    <path class="connection-line api-line" d="M 200 100 Q 400 100 400 200" />
+                    <path class="connection-line edi-line" d="M 600 100 Q 400 100 400 200" />
+                    <path class="connection-line email-line" d="M 200 300 Q 400 300 400 200" />
+                    <path class="connection-line manual-line" d="M 600 300 Q 400 300 400 200" />
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Preview Section -->
+    <section class="demo-section" id="demo-preview">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">See UIP in Action</h2>
+                <p class="section-subtitle">Real dashboard. Real results. Real savings.</p>
+            </div>
+            
+            <div class="demo-container">
+                <div class="browser-mockup">
+                    <div class="browser-bar">
+                        <div class="browser-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="browser-url">app.uip.ai/dashboard</div>
+                    </div>
+                    <div class="dashboard-preview">
+                        <img src="images/dashboard-preview.jpg" alt="UIP Dashboard" loading="lazy">
+                        <div class="dashboard-overlay">
+                            <button class="play-demo-btn" aria-label="Play demo video">
+                                <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                                    <circle cx="40" cy="40" r="40" fill="white" fill-opacity="0.9"/>
+                                    <path d="M32 28L52 40L32 52V28Z" fill="#0066FF"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-features">
+                    <div class="demo-feature">
+                        <span class="feature-badge">Live Now</span>
+                        <h4>D&D Risk Dashboard</h4>
+                        <p>See charges 14 days before they hit</p>
+                    </div>
+                    <div class="demo-feature">
+                        <span class="feature-badge">AI-Powered</span>
+                        <h4>Automated Disputes</h4>
+                        <p>94% win rate, zero manual effort</p>
+                    </div>
+                    <div class="demo-feature">
+                        <span class="feature-badge">Real-Time</span>
+                        <h4>Universal Tracking</h4>
+                        <p>Every container, every carrier, one view</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Logos -->
+    <section class="logos-section">
+        <div class="container">
+            <p class="logos-title">Trusted by Industry Leaders</p>
+            <div class="logos-carousel">
+                <div class="logos-track">
+                    <div class="logo-item">
+                        <img src="images/customer-logo-1.svg" alt="Customer 1" width="120" height="40">
+                    </div>
+                    <div class="logo-item">
+                        <img src="images/customer-logo-2.svg" alt="Customer 2" width="120" height="40">
+                    </div>
+                    <div class="logo-item">
+                        <img src="images/customer-logo-3.svg" alt="Customer 3" width="120" height="40">
+                    </div>
+                    <div class="logo-item">
+                        <img src="images/customer-logo-4.svg" alt="Customer 4" width="120" height="40">
+                    </div>
+                    <div class="logo-item">
+                        <img src="images/customer-logo-5.svg" alt="Customer 5" width="120" height="40">
+                    </div>
+                    <!-- Duplicate for infinite scroll -->
+                    <div class="logo-item">
+                        <img src="images/customer-logo-1.svg" alt="Customer 1" width="120" height="40">
+                    </div>
+                    <div class="logo-item">
+                        <img src="images/customer-logo-2.svg" alt="Customer 2" width="120" height="40">
+                    </div>
+                    <div class="logo-item">
+                        <img src="images/customer-logo-3.svg" alt="Customer 3" width="120" height="40">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI Proof Points -->
+    <section class="roi-proof" id="roi">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Proven ROI. Guaranteed Results.</h2>
+                <p class="section-subtitle">Real companies. Real savings. Real transformation.</p>
+            </div>
+            
+            <div class="roi-grid">
+                <div class="roi-card featured">
+                    <div class="roi-header">
+                        <span class="company-type">Global Importer</span>
+                        <span class="timeframe">18 months</span>
+                    </div>
+                    <div class="roi-metric">
+                        <span class="metric-value">$127M</span>
+                        <span class="metric-label">Total Savings</span>
+                    </div>
+                    <div class="roi-details">
+                        <div class="detail-item">
+                            <span class="detail-value">94%</span>
+                            <span class="detail-label">D&D Reduction</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-value">48hr</span>
+                            <span class="detail-label">Implementation</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-value">347%</span>
+                            <span class="detail-label">ROI</span>
+                        </div>
+                    </div>
+                    <blockquote class="roi-quote">
+                        "UIP paid for itself in 30 days. The D&D savings alone justified the investment."
+                        <cite>- CFO, Fortune 500 Retailer</cite>
+                    </blockquote>
+                </div>
+                
+                <div class="roi-card">
+                    <div class="roi-header">
+                        <span class="company-type">Manufacturer</span>
+                        <span class="timeframe">12 months</span>
+                    </div>
+                    <div class="roi-metric">
+                        <span class="metric-value">$89M</span>
+                        <span class="metric-label">Annual Savings</span>
+                    </div>
+                    <div class="roi-breakdown">
+                        <div class="breakdown-item">
+                            <span class="item-amount">$71M</span>
+                            <span class="item-source">D&D eliminated</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="item-amount">$12M</span>
+                            <span class="item-source">Labor savings</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="item-amount">$6M</span>
+                            <span class="item-source">Efficiency gains</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="roi-card">
+                    <div class="roi-header">
+                        <span class="company-type">3PL Provider</span>
+                        <span class="timeframe">6 months</span>
+                    </div>
+                    <div class="roi-metric">
+                        <span class="metric-value">18%</span>
+                        <span class="metric-label">Margin Increase</span>
+                    </div>
+                    <div class="roi-breakdown">
+                        <div class="breakdown-item">
+                            <span class="item-amount">160hr</span>
+                            <span class="item-source">Weekly time saved</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="item-amount">73%</span>
+                            <span class="item-source">Faster disputes</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="item-amount">5x</span>
+                            <span class="item-source">More visibility</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="roi-cta">
+                <a href="/roi-calculator.html" class="btn btn-primary btn-lg">Calculate Your ROI</a>
+                <p class="roi-guarantee">🛡️ 3x ROI Guaranteed or Your Money Back</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Every Day You Wait Costs You Money</h2>
+                <p>Join industry leaders who've eliminated D&D charges forever</p>
+                <div class="cta-buttons">
+                    <a href="#demo" class="btn btn-primary btn-lg">Book Your Demo</a>
+                    <a href="#calculator" class="btn btn-secondary btn-lg">See Your Savings</a>
+                </div>
+                <div class="cta-stats">
+                    <span><strong>2.5M+</strong> containers optimized</span>
+                    <span><strong>$127M+</strong> saved for clients</span>
+                    <span><strong>48hr</strong> average implementation</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="brand/logo.svg" alt="UIP Logo" class="footer-logo" width="120" height="40">
+                    <p>The future of ocean freight automation</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="LinkedIn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="Twitter">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="/platform/features">Features</a></li>
+                        <li><a href="/platform/integrations">Integrations</a></li>
+                        <li><a href="/platform/security">Security</a></li>
+                        <li><a href="/api">API Docs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Solutions</h4>
+                    <ul>
+                        <li><a href="/solutions/importers">For Importers</a></li>
+                        <li><a href="/solutions/manufacturers">For Manufacturers</a></li>
+                        <li><a href="/solutions/3pl">For 3PLs</a></li>
+                        <li><a href="/solutions/carriers">For Carriers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/roi-calculator">ROI Calculator</a></li>
+                        <li><a href="/resources/case-studies">Case Studies</a></li>
+                        <li><a href="/resources/whitepapers">Whitepapers</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/about">About UIP</a></li>
+                        <li><a href="/careers">Careers</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/press">Press</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 UIP. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/cookies">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Live Chat Widget -->
+    <div class="chat-widget" id="chatWidget">
+        <button class="chat-button" aria-label="Open chat">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 16.42 16.42 20 12 20Z" fill="white"/>
+                <path d="M12 6C9.79 6 8 7.79 8 10C8 12.21 9.79 14 12 14C14.21 14 16 12.21 16 10C16 7.79 14.21 6 12 6ZM12 12C10.9 12 10 11.1 10 10C10 8.9 10.9 8 12 8C13.1 8 14 8.9 14 10C14 11.1 13.1 12 12 12Z" fill="white"/>
+            </svg>
+            <span class="chat-badge">1</span>
+        </button>
+    </div>
+
+    <!-- Exit Intent Popup -->
+    <div class="exit-popup" id="exitPopup">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+            <button class="popup-close" aria-label="Close popup">&times;</button>
+            <h3>Wait! Don't Miss Out on $14M in Savings</h3>
+            <p>Get our exclusive case study showing how a Fortune 500 company eliminated D&D charges</p>
+            <form class="popup-form">
+                <input type="email" placeholder="Your email" required>
+                <button type="submit" class="btn btn-primary">Send Me the Case Study</button>
+            </form>
+            <p class="popup-disclaimer">No spam. Unsubscribe anytime.</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/homepage-v2.js?v=1750888019" defer></script>
+</body>
+</html>

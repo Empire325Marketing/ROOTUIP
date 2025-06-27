@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Supply Chain Assessment | UIP</title>
+    <meta name="description" content="Get a comprehensive assessment of your current supply chain operations. Identify optimization opportunities and benchmark against industry standards.">
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .assessment-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+        }
+
+        .header-features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .feature-item {
+            color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .assessment-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            flex: 1;
+            margin-right: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            font-weight: 600;
+            color: #4a5568;
+            min-width: 80px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .section-description {
+            color: #718096;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+        }
+
+        .question-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: #667eea;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .option-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            background: white;
+        }
+
+        .option-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .option-card.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .option-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .option-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .option-description {
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .rating-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .rating-option {
+            width: 60px;
+            height: 60px;
+            border: 2px solid #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .rating-option:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .rating-option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .rating-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-item:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .checkbox-item.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cbd5e0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox.checked {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .lead-capture {
+            background: #f7fafc;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .lead-capture h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .lead-capture p {
+            color: #718096;
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-input {
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .results-preview {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .results-preview h3 {
+            margin-bottom: 15px;
+        }
+
+        .preview-score {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .results-dashboard {
+            display: none;
+        }
+
+        .results-dashboard.active {
+            display: block;
+        }
+
+        .maturity-chart {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .maturity-level {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 25px;
+            font-weight: 600;
+        }
+
+        .maturity-level.current {
+            background: #667eea;
+            color: white;
+        }
+
+        .maturity-level.target {
+            background: #48bb78;
+            color: white;
+        }
+
+        .maturity-level.other {
+            background: #f7fafc;
+            color: #718096;
+        }
+
+        .recommendations {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .recommendation-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 10px;
+        }
+
+        .recommendation-priority {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .recommendation-priority.high {
+            background: #f56565;
+        }
+
+        .recommendation-priority.medium {
+            background: #ed8936;
+        }
+
+        .recommendation-priority.low {
+            background: #48bb78;
+        }
+
+        .recommendation-content h4 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .recommendation-content p {
+            color: #718096;
+            margin-bottom: 10px;
+        }
+
+        .recommendation-impact {
+            font-size: 0.9rem;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .assessment-container {
+                padding: 20px 15px;
+            }
+
+            .assessment-card {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .header-features {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .rating-group {
+                gap: 5px;
+            }
+
+            .rating-option {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="assessment-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🔍 Supply Chain Assessment</h1>
+            <p class="header-subtitle">Comprehensive analysis of your current operations</p>
+            <div class="header-features">
+                <div class="feature-item">
+                    <span>✅</span> 5-minute assessment
+                </div>
+                <div class="feature-item">
+                    <span>📊</span> Instant scoring
+                </div>
+                <div class="feature-item">
+                    <span>🎯</span> Personalized recommendations
+                </div>
+                <div class="feature-item">
+                    <span>📈</span> Industry benchmarking
+                </div>
+            </div>
+        </div>
+
+        <!-- Assessment Card -->
+        <div class="assessment-card">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">0% Complete</div>
+            </div>
+
+            <!-- Section 1: Visibility & Tracking -->
+            <div class="section active" id="section1">
+                <div class="section-header">
+                    <div class="section-number">1</div>
+                    <h2 class="section-title">Visibility & Tracking</h2>
+                    <p class="section-description">How well can you track and monitor your shipments in real-time?</p>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-title">
+                        <div class="question-number">1</div>
+                        Current shipment visibility level
+                    </div>
+                    <div class="options-grid">
+                        <div class="option-card" onclick="selectOption(this, 'visibility', 1)">
+                            <span class="option-icon">📱</span>
+                            <div class="option-label">Real-time</div>
+                            <div class="option-description">Live tracking with detailed updates</div>
+                        </div>
+                        <div class="option-card" onclick="selectOption(this, 'visibility', 2)">
+                            <span class="option-icon">📊</span>
+                            <div class="option-label">Milestone-based</div>
+                            <div class="option-description">Key checkpoint updates</div>
+                        </div>
+                        <div class="option-card" onclick="selectOption(this, 'visibility', 3)">
+                            <span class="option-icon">📧</span>
+                            <div class="option-label">Email updates</div>
+                            <div class="option-description">Periodic status reports</div>
+                        </div>
+                        <div class="option-card" onclick="selectOption(this, 'visibility', 4)">
+                            <span class="option-icon">📞</span>
+                            <div class="option-label">Manual inquiry</div>
+                            <div class="option-description">Call/email to get updates</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-title">
+                        <div class="question-number">2</div>
+                        Data integration capabilities
+                    </div>
+                    <div class="rating-group">
+                        <div class="rating-option" onclick="selectRating(this, 'integration', 1)">1</div>
+                        <div class="rating-option" onclick="selectRating(this, 'integration', 2)">2</div>
+                        <div class="rating-option" onclick="selectRating(this, 'integration', 3)">3</div>
+                        <div class="rating-option" onclick="selectRating(this, 'integration', 4)">4</div>
+                        <div class="rating-option" onclick="selectRating(this, 'integration', 5)">5</div>
+                    </div>
+                    <div class="rating-labels">
+                        <span>No integration</span>
+                        <span>Fully integrated</span>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <div></div>
+                    <button class="btn btn-primary" onclick="nextSection()">
+                        Next Section →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section 2: Process Automation -->
+            <div class="section" id="section2">
+                <div class="section-header">
+                    <div class="section-number">2</div>
+                    <h2 class="section-title">Process Automation</h2>
+                    <p class="section-description">Evaluate your current level of process automation and efficiency</p>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-title">
+                        <div class="question-number">3</div>
+                        Which processes are currently automated?
+                    </div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item" onclick="toggleCheckbox(this, 'automated', 'booking')">
+                            <div class="checkbox"></div>
+                            <span>Booking & scheduling</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox(this, 'automated', 'documentation')">
+                            <div class="checkbox"></div>
+                            <span>Documentation processing</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox(this, 'automated', 'tracking')">
+                            <div class="checkbox"></div>
+                            <span>Shipment tracking</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox(this, 'automated', 'invoicing')">
+                            <div class="checkbox"></div>
+                            <span>Invoicing & payments</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox(this, 'automated', 'reporting')">
+                            <div class="checkbox"></div>
+                            <span>Performance reporting</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox(this, 'automated', 'alerts')">
+                            <div class="checkbox"></div>
+                            <span>Exception alerts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-title">
+                        <div class="question-number">4</div>
+                        Manual processing time per day
+                    </div>
+                    <div class="options-grid">
+                        <div class="option-card" onclick="selectOption(this, 'manual_time', 1)">
+                            <span class="option-icon">⚡</span>
+                            <div class="option-label">< 1 hour</div>
+                            <div class="option-description">Highly automated</div>
+                        </div>
+                        <div class="option-card" onclick="selectOption(this, 'manual_time', 2)">
+                            <span class="option-icon">⏱️</span>
+                            <div class="option-label">1-3 hours</div>
+                            <div class="option-description">Mostly automated</div>
+                        </div>
+                        <div class="option-card" onclick="selectOption(this, 'manual_time', 3)">
+                            <span class="option-icon">📝</span>
+                            <div class="option-label">3-6 hours</div>
+                            <div class="option-description">Partially automated</div>
+                        </div>
+                        <div class="option-card" onclick="selectOption(this, 'manual_time', 4)">
+                            <span class="option-icon">📋</span>
+                            <div class="option-label">6+ hours</div>
+                            <div class="option-description">Mostly manual</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="prevSection()">
+                        ← Previous
+                    </button>
+                    <button class="btn btn-primary" onclick="nextSection()">
+                        Next Section →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section 3: Performance & Analytics -->
+            <div class="section" id="section3">
+                <div class="section-header">
+                    <div class="section-number">3</div>
+                    <h2 class="section-title">Performance & Analytics</h2>
+                    <p class="section-description">Assess your analytics capabilities and performance measurement</p>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-title">
+                        <div class="question-number">5</div>
+                        Analytics and reporting maturity
+                    </div>
+                    <div class="rating-group">
+                        <div class="rating-option" onclick="selectRating(this, 'analytics', 1)">1</div>
+                        <div class="rating-option" onclick="selectRating(this, 'analytics', 2)">2</div>
+                        <div class="rating-option" onclick="selectRating(this, 'analytics', 3)">3</div>
+                        <div class="rating-option" onclick="selectRating(this, 'analytics', 4)">4</div>
+                        <div class="rating-option" onclick="selectRating(this, 'analytics', 5)">5</div>
+                    </div>
+                    <div class="rating-labels">
+                        <span>Basic reporting</span>
+                        <span>Advanced analytics</span>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-title">
+                        <div class="question-number">6</div>
+                        Key performance indicators tracked
+                    </div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item" onclick="toggleCheckbox(this, 'kpis', 'on_time')">
+                            <div class="checkbox"></div>
+                            <span>On-time delivery rate</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox(this, 'kpis', 'cost_per_shipment')">
+                            <div class="checkbox"></div>
+                            <span>Cost per shipment</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox(this, 'kpis', 'customer_satisfaction')">
+                            <div class="checkbox"></div>
+                            <span>Customer satisfaction</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox(this, 'kpis', 'inventory_turns')">
+                            <div class="checkbox"></div>
+                            <span>Inventory turnover</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox(this, 'kpis', 'exception_rate')">
+                            <div class="checkbox"></div>
+                            <span>Exception rate</span>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox(this, 'kpis', 'capacity_utilization')">
+                            <div class="checkbox"></div>
+                            <span>Capacity utilization</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="prevSection()">
+                        ← Previous
+                    </button>
+                    <button class="btn btn-primary" onclick="nextSection()">
+                        Complete Assessment →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section 4: Lead Capture & Results Preview -->
+            <div class="section" id="section4">
+                <div class="section-header">
+                    <div class="section-number">4</div>
+                    <h2 class="section-title">Your Assessment Results</h2>
+                    <p class="section-description">Get your personalized supply chain maturity report</p>
+                </div>
+
+                <div class="results-preview">
+                    <h3>🎯 Your Supply Chain Maturity Score</h3>
+                    <div class="preview-score" id="previewScore">73</div>
+                    <p>You're performing well but have significant optimization opportunities</p>
+                    
+                    <div class="score-breakdown">
+                        <div class="score-item">
+                            <div class="score-value" id="visibilityScore">85</div>
+                            <div class="score-label">Visibility</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-value" id="automationScore">62</div>
+                            <div class="score-label">Automation</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-value" id="analyticsScore">71</div>
+                            <div class="score-label">Analytics</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lead Capture Form -->
+                <div class="lead-capture">
+                    <h3>🔓 Get Your Complete Assessment Report</h3>
+                    <p>Enter your details to receive a comprehensive analysis with personalized recommendations and industry benchmarking.</p>
+                    
+                    <form onsubmit="submitAssessment(event)">
+                        <div class="form-row">
+                            <input type="text" class="form-input" id="firstName" placeholder="First Name *" required>
+                            <input type="text" class="form-input" id="lastName" placeholder="Last Name *" required>
+                        </div>
+                        <div class="form-row">
+                            <input type="email" class="form-input" id="email" placeholder="Business Email *" required>
+                            <input type="text" class="form-input" id="company" placeholder="Company Name *" required>
+                        </div>
+                        <div class="form-row">
+                            <input type="tel" class="form-input" id="phone" placeholder="Phone Number">
+                            <input type="text" class="form-input" id="jobTitle" placeholder="Job Title">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+                            📊 Get My Complete Assessment Report
+                        </button>
+                    </form>
+                </div>
+
+                <div class="button-group" style="margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="prevSection()">
+                        ← Edit Responses
+                    </button>
+                    <div></div>
+                </div>
+            </div>
+
+            <!-- Results Dashboard -->
+            <div class="results-dashboard" id="resultsDashboard">
+                <div class="section-header">
+                    <h2 class="section-title">Supply Chain Assessment Results</h2>
+                    <p class="section-description" id="resultsCompanyName">Comprehensive analysis for your organization</p>
+                </div>
+
+                <div class="maturity-chart">
+                    <h3 style="margin-bottom: 20px;">Supply Chain Maturity Level</h3>
+                    <div class="maturity-level other">Basic</div>
+                    <div class="maturity-level other">Developing</div>
+                    <div class="maturity-level current">Proficient</div>
+                    <div class="maturity-level target">Advanced</div>
+                    <div class="maturity-level other">Optimized</div>
+                    <p style="margin-top: 15px; color: #718096;">
+                        Current: <strong>Proficient</strong> | Recommended: <strong>Advanced</strong>
+                    </p>
+                </div>
+
+                <div class="recommendations">
+                    <h3 style="margin-bottom: 25px; color: #2d3748;">🎯 Personalized Recommendations</h3>
+                    
+                    <div class="recommendation-item">
+                        <div class="recommendation-priority high">1</div>
+                        <div class="recommendation-content">
+                            <h4>Implement Real-time Tracking</h4>
+                            <p>Upgrade to real-time shipment visibility to reduce customer inquiries by 40% and improve on-time delivery rates.</p>
+                            <div class="recommendation-impact">Potential Impact: $125,000 annual savings</div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-item">
+                        <div class="recommendation-priority medium">2</div>
+                        <div class="recommendation-content">
+                            <h4>Automate Documentation Processing</h4>
+                            <p>Streamline customs and shipping documentation to reduce processing time by 60% and eliminate errors.</p>
+                            <div class="recommendation-impact">Potential Impact: 15 hours/week time savings</div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-item">
+                        <div class="recommendation-priority medium">3</div>
+                        <div class="recommendation-content">
+                            <h4>Advanced Analytics Dashboard</h4>
+                            <p>Deploy predictive analytics to optimize routes and reduce freight costs by 12-18%.</p>
+                            <div class="recommendation-impact">Potential Impact: $89,000 annual cost reduction</div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-item">
+                        <div class="recommendation-priority low">4</div>
+                        <div class="recommendation-content">
+                            <h4>Exception Management System</h4>
+                            <p>Implement automated alerts and workflow management for proactive issue resolution.</p>
+                            <div class="recommendation-impact">Potential Impact: 25% reduction in delivery delays</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 40px; border-radius: 15px; text-align: center;">
+                    <h3 style="margin-bottom: 15px;">🚀 Ready to Transform Your Supply Chain?</h3>
+                    <p style="margin-bottom: 25px; opacity: 0.9;">
+                        Our experts can help you implement these recommendations and achieve measurable results within 90 days.
+                    </p>
+                    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <a href="/marketing/leads/demo-booking.html" class="btn" style="background: white; color: #667eea;">
+                            📅 Schedule Strategy Session
+                        </a>
+                        <a href="/marketing/leads/roi-calculator.html" class="btn" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white;">
+                            💰 Calculate ROI
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 1;
+        const totalSections = 4;
+        let responses = {};
+
+        // Navigation functions
+        function nextSection() {
+            if (validateSection()) {
+                if (currentSection === 3) {
+                    calculateScore();
+                }
+                currentSection++;
+                showSection(currentSection);
+                updateProgress();
+                trackEvent('Assessment Section Complete', { section: currentSection - 1 });
+            }
+        }
+
+        function prevSection() {
+            currentSection--;
+            showSection(currentSection);
+            updateProgress();
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(`section${section}`).classList.add('active');
+        }
+
+        function updateProgress() {
+            const progress = ((currentSection - 1) / (totalSections - 1)) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = Math.round(progress) + '% Complete';
+        }
+
+        // Response handling
+        function selectOption(element, category, value) {
+            // Remove previous selections
+            element.parentNode.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Select current option
+            element.classList.add('selected');
+            responses[category] = value;
+            
+            trackEvent('Assessment Response', { category, value });
+        }
+
+        function selectRating(element, category, value) {
+            // Remove previous selections
+            element.parentNode.querySelectorAll('.rating-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Select current rating
+            element.classList.add('selected');
+            responses[category] = value;
+            
+            trackEvent('Assessment Rating', { category, value });
+        }
+
+        function toggleCheckbox(element, category, value) {
+            const checkbox = element.querySelector('.checkbox');
+            const isSelected = element.classList.contains('selected');
+            
+            if (isSelected) {
+                element.classList.remove('selected');
+                checkbox.classList.remove('checked');
+                checkbox.textContent = '';
+                
+                // Remove from responses
+                if (responses[category]) {
+                    responses[category] = responses[category].filter(v => v !== value);
+                }
+            } else {
+                element.classList.add('selected');
+                checkbox.classList.add('checked');
+                checkbox.textContent = '✓';
+                
+                // Add to responses
+                if (!responses[category]) {
+                    responses[category] = [];
+                }
+                responses[category].push(value);
+            }
+            
+            trackEvent('Assessment Checkbox', { category, value, selected: !isSelected });
+        }
+
+        function validateSection() {
+            // Basic validation - ensure at least one response per section
+            const currentSectionElement = document.getElementById(`section${currentSection}`);
+            const hasSelections = currentSectionElement.querySelectorAll('.selected').length > 0;
+            
+            if (!hasSelections) {
+                showNotification('Please complete all questions before continuing', 'warning');
+                return false;
+            }
+            return true;
+        }
+
+        function calculateScore() {
+            // Calculate scores based on responses
+            const visibilityScore = calculateVisibilityScore();
+            const automationScore = calculateAutomationScore();
+            const analyticsScore = calculateAnalyticsScore();
+            const overallScore = Math.round((visibilityScore + automationScore + analyticsScore) / 3);
+            
+            // Update preview
+            document.getElementById('previewScore').textContent = overallScore;
+            document.getElementById('visibilityScore').textContent = visibilityScore;
+            document.getElementById('automationScore').textContent = automationScore;
+            document.getElementById('analyticsScore').textContent = analyticsScore;
+            
+            // Store results
+            window.assessmentResults = {
+                overall: overallScore,
+                visibility: visibilityScore,
+                automation: automationScore,
+                analytics: analyticsScore,
+                responses: responses
+            };
+        }
+
+        function calculateVisibilityScore() {
+            let score = 60; // Base score
+            
+            if (responses.visibility === 1) score += 25; // Real-time
+            else if (responses.visibility === 2) score += 15; // Milestone
+            else if (responses.visibility === 3) score += 5; // Email
+            
+            if (responses.integration) {
+                score += responses.integration * 4; // 4 points per integration level
+            }
+            
+            return Math.min(100, score);
+        }
+
+        function calculateAutomationScore() {
+            let score = 40; // Base score
+            
+            if (responses.automated) {
+                score += responses.automated.length * 8; // 8 points per automated process
+            }
+            
+            if (responses.manual_time === 1) score += 20; // < 1 hour
+            else if (responses.manual_time === 2) score += 10; // 1-3 hours
+            else if (responses.manual_time === 3) score += 5; // 3-6 hours
+            
+            return Math.min(100, score);
+        }
+
+        function calculateAnalyticsScore() {
+            let score = 50; // Base score
+            
+            if (responses.analytics) {
+                score += responses.analytics * 8; // 8 points per analytics level
+            }
+            
+            if (responses.kpis) {
+                score += responses.kpis.length * 5; // 5 points per KPI tracked
+            }
+            
+            return Math.min(100, score);
+        }
+
+        function submitAssessment(event) {
+            event.preventDefault();
+            
+            const leadData = {
+                // Contact info
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                company: document.getElementById('company').value,
+                phone: document.getElementById('phone').value,
+                jobTitle: document.getElementById('jobTitle').value,
+                
+                // Assessment data
+                responses: responses,
+                results: window.assessmentResults,
+                
+                // Tracking
+                source: 'assessment_tool',
+                timestamp: new Date().toISOString()
+            };
+            
+            // Submit to marketing automation
+            submitToMarketing(leadData);
+            
+            // Show results
+            showResults(leadData);
+            
+            trackEvent('Assessment Completed', { 
+                source: 'assessment_tool', 
+                email: leadData.email,
+                score: window.assessmentResults.overall
+            });
+        }
+
+        function showResults(leadData) {
+            // Hide assessment sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            // Update results
+            document.getElementById('resultsCompanyName').textContent = 
+                `Comprehensive analysis for ${leadData.company}`;
+            
+            // Show results dashboard
+            document.getElementById('resultsDashboard').classList.add('active');
+            
+            // Send email with report
+            sendAssessmentReport(leadData);
+        }
+
+        function submitToMarketing(leadData) {
+            console.log('Submitting assessment to marketing automation:', leadData);
+            
+            // Lead scoring based on assessment results
+            let leadScore = 0;
+            if (leadData.results.overall >= 80) leadScore = 100;
+            else if (leadData.results.overall >= 60) leadScore = 75;
+            else if (leadData.results.overall >= 40) leadScore = 50;
+            else leadScore = 25;
+            
+            leadData.leadScore = leadScore;
+            leadData.segmentation = getSegmentation(leadData.results);
+            
+            // In production, this would call your marketing automation API
+        }
+
+        function getSegmentation(results) {
+            if (results.overall >= 80) return 'advanced_user';
+            else if (results.overall >= 60) return 'proficient_user';
+            else if (results.overall >= 40) return 'developing_user';
+            else return 'basic_user';
+        }
+
+        function sendAssessmentReport(leadData) {
+            setTimeout(() => {
+                showNotification('Assessment report sent to ' + leadData.email, 'success');
+            }, 1000);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? '#48bb78' : 
+                           type === 'warning' ? '#ed8936' : '#667eea';
+                           
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${bgColor};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 1000;
+                max-width: 300px;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function trackEvent(eventName, properties = {}) {
+            console.log('Analytics Event:', eventName, properties);
+            
+            // Integration with marketing automation
+            if (typeof marketingAutomation !== 'undefined') {
+                marketingAutomation.track(eventName, properties);
+            }
+        }
+
+        // Initialize
+        updateProgress();
+        trackEvent('Assessment Started', { timestamp: new Date().toISOString() });
+
+        // Track engagement
+        let startTime = Date.now();
+        window.addEventListener('beforeunload', () => {
+            const timeSpent = Math.round((Date.now() - startTime) / 1000);
+            trackEvent('Assessment Time Spent', { seconds: timeSpent, section: currentSection });
+        });
+    </script>
+</body>
+</html>

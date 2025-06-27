@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ROOTUIP Deployment Upload</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 600px; margin: auto; }
+        .file-list { background: #f0f0f0; padding: 20px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ROOTUIP Platform Deployment</h1>
+        <p>Upload these files to your server:</p>
+        <div class="file-list">
+            <ul>
+                <li>rootuip-complete-deploy.tar.gz - Main application</li>
+                <li>nginx-api-fix.conf - Nginx configuration</li>
+                <li>fix-on-server.sh - Deployment script</li>
+            </ul>
+        </div>
+        <h2>Deployment Instructions:</h2>
+        <pre>
+# After uploading files to server:
+cd /path/to/uploads
+chmod +x fix-on-server.sh
+sudo ./fix-on-server.sh
+        </pre>
+    </div>
+</body>
+</html>

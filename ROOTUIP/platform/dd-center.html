@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UIP Platform - D&D Command Center</title>
-    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <link rel="icon" type="image/svg+xml" href="/brand/brand/logo-icon-new.svg">
     <script src="/js/logo-component.js"></script>
     <style>
         * {
@@ -14,9 +14,9 @@
         }
 
         :root {
-            --primary: #00D4AA;
+            --primary: var(--uip-success-500);
             --primary-dark: #00B894;
-            --secondary: #0A1628;
+            --secondary: var(--uip-primary-800);
             --gray-50: #F8FAFB;
             --gray-100: #F1F5F9;
             --gray-200: #E2E8F0;
@@ -34,7 +34,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--gray-50);
             color: var(--gray-900);
             line-height: 1.5;
@@ -786,6 +786,8 @@
             }
         }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -820,7 +822,7 @@
                             <span>23% vs last year</span>
                         </div>
                     </div>
-                    <div class="financial-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">💰</div>
+                    <div class="financial-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);"><span class="uip-savings-icon">$</span></div>
                 </div>
             </div>
 
@@ -870,9 +872,9 @@
         <!-- Prevention Workflow -->
         <div class="workflow-section">
             <div class="section-header">
-                <h2 class="section-title">Prevention Workflow</h2>
+                <h2 class="uip-h2 uip-text-center">Prevention Workflow</h2>
                 <button class="action-btn primary">
-                    <span>⚡</span>
+                    <span><span class="uip-speed-icon">⚡</span></span>
                     <span>Process All</span>
                 </button>
             </div>
@@ -908,11 +910,11 @@
                                 <span>Port of LA</span>
                             </div>
                             <div class="action-detail">
-                                <span>🚢</span>
+                                <span><img src="/brand/brand/logo-icon-new.svg" alt="UIP - Unified Integration Intelligence Platform" style="height: 24px; width: 24px; vertical-align: middle;"></span>
                                 <span>Maersk</span>
                             </div>
                             <div class="action-detail">
-                                <span>💰</span>
+                                <span><span class="uip-savings-icon">$</span></span>
                                 <span>$2,400/day exposure</span>
                             </div>
                             <div class="action-detail">
@@ -938,11 +940,11 @@
                                 <span>Port of Hamburg</span>
                             </div>
                             <div class="action-detail">
-                                <span>🚢</span>
+                                <span><img src="/brand/brand/logo-icon-new.svg" alt="UIP - Unified Integration Intelligence Platform" style="height: 24px; width: 24px; vertical-align: middle;"></span>
                                 <span>Hapag-Lloyd</span>
                             </div>
                             <div class="action-detail">
-                                <span>💰</span>
+                                <span><span class="uip-savings-icon">$</span></span>
                                 <span>$1,800/day exposure</span>
                             </div>
                             <div class="action-detail">
@@ -968,11 +970,11 @@
                                 <span>Port of Shanghai</span>
                             </div>
                             <div class="action-detail">
-                                <span>🚢</span>
+                                <span><img src="/brand/brand/logo-icon-new.svg" alt="UIP - Unified Integration Intelligence Platform" style="height: 24px; width: 24px; vertical-align: middle;"></span>
                                 <span>CMA CGM</span>
                             </div>
                             <div class="action-detail">
-                                <span>💰</span>
+                                <span><span class="uip-savings-icon">$</span></span>
                                 <span>$3,200/day exposure</span>
                             </div>
                             <div class="action-detail">
@@ -992,7 +994,7 @@
         <!-- Automated Actions -->
         <div class="workflow-section">
             <div class="section-header">
-                <h2 class="section-title">Automated Prevention Systems</h2>
+                <h2 class="uip-h2 uip-text-center">Automated Prevention Systems</h2>
                 <button class="action-btn">Configure Rules</button>
             </div>
 
@@ -1077,7 +1079,7 @@
         <!-- Dispute Management -->
         <div class="workflow-section">
             <div class="section-header">
-                <h2 class="section-title">Active Disputes</h2>
+                <h2 class="uip-h2 uip-text-center">Active Disputes</h2>
                 <button class="action-btn primary">
                     <span>📝</span>
                     <span>New Dispute</span>
@@ -1157,7 +1159,7 @@
                 <span>Send Alert</span>
             </div>
             <div class="fab-item" onclick="quickAction('report')">
-                <span>📊</span>
+                <span><span class="uip-metric-icon">📊</span></span>
                 <span>Generate Report</span>
             </div>
         </div>

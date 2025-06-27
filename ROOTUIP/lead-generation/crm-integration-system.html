@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP CRM Integration & Pipeline Automation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .crm-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 48px 32px;
+            text-align: center;
+        }
+        
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        
+        .header-subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+        
+        .header-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+        
+        .header-stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        .crm-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 48px 20px;
+        }
+        
+        .crm-nav {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .nav-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1e40af;
+            text-align: center;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-button {
+            background: #eff6ff;
+            border: 2px solid #3b82f6;
+            color: #1e40af;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+        
+        .nav-button:hover,
+        .nav-button.active {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .crm-section {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 40px;
+        }
+        
+        .crm-section.active {
+            display: block;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .section-description {
+            color: #64748b;
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+        
+        .section-stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        
+        .section-stat {
+            text-align: center;
+            background: #f8fafc;
+            padding: 12px 20px;
+            border-radius: 8px;
+        }
+        
+        .section-stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            display: block;
+        }
+        
+        .section-stat-label {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+        
+        .integration-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .integration-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .integration-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .integration-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-right: 16px;
+        }
+        
+        .integration-info {
+            flex: 1;
+        }
+        
+        .integration-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .integration-type {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .integration-status {
+            margin-left: auto;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        
+        .status-available {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .integration-features {
+            list-style: none;
+            margin-bottom: 16px;
+        }
+        
+        .integration-features li {
+            padding: 4px 0;
+            font-size: 0.875rem;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .integration-features li::before {
+            content: "✓";
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .integration-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .integration-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #d1d5db;
+        }
+        
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+        
+        .automation-flow {
+            background: #fffbeb;
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 32px 0;
+        }
+        
+        .automation-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .automation-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+        
+        .automation-step {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            border-left: 3px solid #f59e0b;
+        }
+        
+        .step-number {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 4px;
+        }
+        
+        .step-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .step-description {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .pipeline-visualization {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            margin: 32px 0;
+        }
+        
+        .pipeline-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .pipeline-stages {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            overflow-x: auto;
+            padding: 20px 0;
+        }
+        
+        .pipeline-stage {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            min-width: 180px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .pipeline-stage:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+        
+        .pipeline-stage:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        
+        .stage-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .stage-count {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #3b82f6;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .stage-value {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .attribution-dashboard {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+        
+        .attribution-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .attribution-subtitle {
+            text-align: center;
+            opacity: 0.9;
+            margin-bottom: 24px;
+        }
+        
+        .attribution-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .attribution-metric {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .metric-title {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .metric-change {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+        
+        .api-documentation {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            margin: 32px 0;
+        }
+        
+        .api-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .api-endpoints {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .api-endpoint {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .endpoint-method {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .method-post {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        
+        .method-get {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .method-put {
+            background: #fed7aa;
+            color: #ea580c;
+        }
+        
+        .endpoint-url {
+            font-family: monospace;
+            font-size: 0.875rem;
+            color: #1e293b;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .endpoint-description {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .setup-wizard {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            margin: 32px 0;
+        }
+        
+        .wizard-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .wizard-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .wizard-step {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+        
+        .wizard-step-number {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #3b82f6;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .wizard-step-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+            margin-top: 8px;
+        }
+        
+        .wizard-step-description {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+        
+        .wizard-step-time {
+            font-size: 0.75rem;
+            color: #10b981;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .crm-container {
+                padding: 20px 10px;
+            }
+            
+            .header-title {
+                font-size: 2rem;
+            }
+            
+            .integration-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .automation-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .pipeline-stages {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .pipeline-stage:not(:last-child)::after {
+                content: '↓';
+                right: auto;
+                top: auto;
+                bottom: -24px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .attribution-metrics {
+                grid-template-columns: 1fr;
+            }
+            
+            .api-endpoints {
+                grid-template-columns: 1fr;
+            }
+            
+            .wizard-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="crm-header">
+        <div class="header-title">CRM Integration & Pipeline Automation</div>
+        <div class="header-subtitle">Seamless integration with enterprise CRM systems and automated pipeline management</div>
+        <div class="header-stats">
+            <div class="header-stat">
+                <span class="stat-value">8</span>
+                <span class="stat-label">CRM Integrations</span>
+            </div>
+            <div class="header-stat">
+                <span class="stat-value">93%</span>
+                <span class="stat-label">Data Accuracy</span>
+            </div>
+            <div class="header-stat">
+                <span class="stat-value">24hrs</span>
+                <span class="stat-label">Sync Frequency</span>
+            </div>
+            <div class="header-stat">
+                <span class="stat-value">47%</span>
+                <span class="stat-label">Pipeline Velocity</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="crm-container">
+        <div class="crm-nav">
+            <div class="nav-title">CRM Integration Components</div>
+            <div class="nav-buttons">
+                <button class="nav-button active" onclick="showSection('lead-creation')">Automatic Lead Creation</button>
+                <button class="nav-button" onclick="showSection('activity-tracking')">Activity Tracking</button>
+                <button class="nav-button" onclick="showSection('sales-alerts')">Sales Alert Triggers</button>
+                <button class="nav-button" onclick="showSection('pipeline-automation')">Pipeline Automation</button>
+                <button class="nav-button" onclick="showSection('attribution-reporting')">Attribution Reporting</button>
+            </div>
+        </div>
+
+        <!-- Automatic Lead Creation -->
+        <div id="lead-creation" class="crm-section active">
+            <div class="section-header">
+                <div class="section-title">Automatic Lead Creation</div>
+                <div class="section-description">Seamless lead creation and enrichment across all major CRM platforms</div>
+                <div class="section-stats">
+                    <div class="section-stat">
+                        <span class="section-stat-value">97%</span>
+                        <span class="section-stat-label">Success Rate</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">< 2 sec</span>
+                        <span class="section-stat-label">Creation Time</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">24/7</span>
+                        <span class="section-stat-label">Automation</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="integration-grid">
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-logo">SF</div>
+                        <div class="integration-info">
+                            <div class="integration-name">Salesforce</div>
+                            <div class="integration-type">Enterprise CRM</div>
+                        </div>
+                        <div class="integration-status status-active">Active</div>
+                    </div>
+                    <ul class="integration-features">
+                        <li>Real-time lead creation and updates</li>
+                        <li>Custom field mapping and enrichment</li>
+                        <li>Lead scoring synchronization</li>
+                        <li>Opportunity pipeline automation</li>
+                        <li>Activity history preservation</li>
+                        <li>Campaign attribution tracking</li>
+                    </ul>
+                    <div class="integration-actions">
+                        <button class="integration-btn btn-primary">Configure</button>
+                        <button class="integration-btn btn-secondary">Test</button>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-logo">HS</div>
+                        <div class="integration-info">
+                            <div class="integration-name">HubSpot</div>
+                            <div class="integration-type">Inbound CRM</div>
+                        </div>
+                        <div class="integration-status status-active">Active</div>
+                    </div>
+                    <ul class="integration-features">
+                        <li>Contact and company creation</li>
+                        <li>Deal pipeline automation</li>
+                        <li>Marketing automation sync</li>
+                        <li>Email engagement tracking</li>
+                        <li>Website behavior integration</li>
+                        <li>Lead nurturing workflows</li>
+                    </ul>
+                    <div class="integration-actions">
+                        <button class="integration-btn btn-primary">Configure</button>
+                        <button class="integration-btn btn-secondary">Test</button>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-logo">MS</div>
+                        <div class="integration-info">
+                            <div class="integration-name">Microsoft Dynamics</div>
+                            <div class="integration-type">Enterprise CRM</div>
+                        </div>
+                        <div class="integration-status status-active">Active</div>
+                    </div>
+                    <ul class="integration-features">
+                        <li>Lead and account management</li>
+                        <li>Opportunity tracking</li>
+                        <li>Azure AD integration</li>
+                        <li>Power BI reporting sync</li>
+                        <li>Custom entity support</li>
+                        <li>Workflow automation</li>
+                    </ul>
+                    <div class="integration-actions">
+                        <button class="integration-btn btn-primary">Configure</button>
+                        <button class="integration-btn btn-secondary">Test</button>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-logo">PP</div>
+                        <div class="integration-info">
+                            <div class="integration-name">Pipedrive</div>
+                            <div class="integration-type">Sales CRM</div>
+                        </div>
+                        <div class="integration-status status-available">Available</div>
+                    </div>
+                    <ul class="integration-features">
+                        <li>Deal and person creation</li>
+                        <li>Pipeline stage automation</li>
+                        <li>Activity logging</li>
+                        <li>Custom field mapping</li>
+                        <li>Email integration</li>
+                        <li>Sales reporting</li>
+                    </ul>
+                    <div class="integration-actions">
+                        <button class="integration-btn btn-primary">Setup</button>
+                        <button class="integration-btn btn-secondary">Learn More</button>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-logo">ZO</div>
+                        <div class="integration-info">
+                            <div class="integration-name">Zoho CRM</div>
+                            <div class="integration-type">Business CRM</div>
+                        </div>
+                        <div class="integration-status status-available">Available</div>
+                    </div>
+                    <ul class="integration-features">
+                        <li>Lead and contact management</li>
+                        <li>Deal tracking</li>
+                        <li>Workflow automation</li>
+                        <li>Custom module support</li>
+                        <li>Email marketing sync</li>
+                        <li>Analytics integration</li>
+                    </ul>
+                    <div class="integration-actions">
+                        <button class="integration-btn btn-primary">Setup</button>
+                        <button class="integration-btn btn-secondary">Learn More</button>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <div class="integration-logo">CP</div>
+                        <div class="integration-info">
+                            <div class="integration-name">Copper CRM</div>
+                            <div class="integration-type">Google Workspace CRM</div>
+                        </div>
+                        <div class="integration-status status-available">Available</div>
+                    </div>
+                    <ul class="integration-features">
+                        <li>Gmail integration</li>
+                        <li>Google Workspace sync</li>
+                        <li>Automatic data capture</li>
+                        <li>Pipeline management</li>
+                        <li>Task automation</li>
+                        <li>Reporting dashboard</li>
+                    </ul>
+                    <div class="integration-actions">
+                        <button class="integration-btn btn-primary">Setup</button>
+                        <button class="integration-btn btn-secondary">Learn More</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="automation-flow">
+                <div class="automation-title">
+                    🤖 Lead Creation Automation Flow
+                </div>
+                <div class="automation-steps">
+                    <div class="automation-step">
+                        <div class="step-number">Step 1</div>
+                        <div class="step-title">Lead Capture</div>
+                        <div class="step-description">Visitor completes form, ROI calculator, or assessment tool on website</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Step 2</div>
+                        <div class="step-title">Data Enrichment</div>
+                        <div class="step-description">Enrich lead data with company information, firmographics, and technographics</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Step 3</div>
+                        <div class="step-title">Lead Scoring</div>
+                        <div class="step-description">Apply lead scoring algorithm based on company size, industry, and engagement</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Step 4</div>
+                        <div class="step-title">CRM Creation</div>
+                        <div class="step-description">Create lead record in CRM with all captured and enriched data</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Step 5</div>
+                        <div class="step-title">Assignment Rules</div>
+                        <div class="step-description">Apply routing rules to assign lead to appropriate sales representative</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Step 6</div>
+                        <div class="step-title">Alert Notification</div>
+                        <div class="step-description">Send real-time alerts to assigned sales rep with lead context and next steps</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Tracking -->
+        <div id="activity-tracking" class="crm-section">
+            <div class="section-header">
+                <div class="section-title">Activity Tracking & Scoring</div>
+                <div class="section-description">Comprehensive tracking of all prospect interactions and engagement activities</div>
+                <div class="section-stats">
+                    <div class="section-stat">
+                        <span class="section-stat-value">847</span>
+                        <span class="section-stat-label">Activities Tracked</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">Real-time</span>
+                        <span class="section-stat-label">Data Sync</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">89%</span>
+                        <span class="section-stat-label">Score Accuracy</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="automation-flow">
+                <div class="automation-title">
+                    📊 Activity Tracking Categories
+                </div>
+                <div class="automation-steps">
+                    <div class="automation-step">
+                        <div class="step-number">Web</div>
+                        <div class="step-title">Website Activities</div>
+                        <div class="step-description">Page visits, time on site, content downloads, form submissions, demo requests</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Email</div>
+                        <div class="step-title">Email Engagement</div>
+                        <div class="step-description">Opens, clicks, replies, forwards, unsubscribes, bounce rates</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Content</div>
+                        <div class="step-title">Content Consumption</div>
+                        <div class="step-description">Whitepaper downloads, case study views, video watches, webinar attendance</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Sales</div>
+                        <div class="step-title">Sales Activities</div>
+                        <div class="step-description">Calls, meetings, demos, proposal sent, contract negotiations</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Social</div>
+                        <div class="step-title">Social Engagement</div>
+                        <div class="step-description">LinkedIn interactions, social shares, company research, profile views</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Intent</div>
+                        <div class="step-title">Intent Signals</div>
+                        <div class="step-description">Pricing page visits, competitor research, technical documentation requests</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="api-documentation">
+                <div class="api-title">Activity Tracking API Endpoints</div>
+                <div class="api-endpoints">
+                    <div class="api-endpoint">
+                        <div class="endpoint-method method-post">POST</div>
+                        <div class="endpoint-url">/api/activities/track</div>
+                        <div class="endpoint-description">Track new prospect activity with scoring impact</div>
+                    </div>
+                    <div class="api-endpoint">
+                        <div class="endpoint-method method-get">GET</div>
+                        <div class="endpoint-url">/api/activities/{leadId}</div>
+                        <div class="endpoint-description">Retrieve all activities for a specific lead</div>
+                    </div>
+                    <div class="api-endpoint">
+                        <div class="endpoint-method method-post">POST</div>
+                        <div class="endpoint-url">/api/scoring/update</div>
+                        <div class="endpoint-description">Update lead score based on new activities</div>
+                    </div>
+                    <div class="api-endpoint">
+                        <div class="endpoint-method method-get">GET</div>
+                        <div class="endpoint-url">/api/activities/timeline</div>
+                        <div class="endpoint-description">Get chronological activity timeline</div>
+                    </div>
+                    <div class="api-endpoint">
+                        <div class="endpoint-method method-post">POST</div>
+                        <div class="endpoint-url">/api/activities/bulk</div>
+                        <div class="endpoint-description">Bulk import historical activity data</div>
+                    </div>
+                    <div class="api-endpoint">
+                        <div class="endpoint-method method-get">GET</div>
+                        <div class="endpoint-url">/api/scoring/rules</div>
+                        <div class="endpoint-description">Retrieve current scoring rules and weights</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales Alert Triggers -->
+        <div id="sales-alerts" class="crm-section">
+            <div class="section-header">
+                <div class="section-title">Sales Alert Triggers</div>
+                <div class="section-description">Real-time alerts for high-priority prospect actions and qualification events</div>
+                <div class="section-stats">
+                    <div class="section-stat">
+                        <span class="section-stat-value">23</span>
+                        <span class="section-stat-label">Alert Types</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">< 30sec</span>
+                        <span class="section-stat-label">Alert Delay</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">73%</span>
+                        <span class="section-stat-label">Response Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="automation-flow">
+                <div class="automation-title">
+                    🚨 High-Priority Alert Triggers
+                </div>
+                <div class="automation-steps">
+                    <div class="automation-step">
+                        <div class="step-number">🎯</div>
+                        <div class="step-title">Demo Request</div>
+                        <div class="step-description">Immediate alert when qualified prospect requests platform demonstration</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">💰</div>
+                        <div class="step-title">Pricing Page Visit</div>
+                        <div class="step-description">Real-time notification when enterprise prospect views pricing information</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">📞</div>
+                        <div class="step-title">Contact Sales</div>
+                        <div class="step-description">Instant alert for direct sales inquiry with lead context and history</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">🏆</div>
+                        <div class="step-title">High Score Achievement</div>
+                        <div class="step-description">Alert when lead score crosses qualification threshold (150+ points)</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">🔄</div>
+                        <div class="step-title">Return Visitor</div>
+                        <div class="step-description">Notification for qualified prospects returning to site within 24 hours</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">📈</div>
+                        <div class="step-title">Competitor Research</div>
+                        <div class="step-description">Alert when prospect researches competitive comparisons</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="automation-flow">
+                <div class="automation-title">
+                    ⚠️ Medium-Priority Alert Triggers
+                </div>
+                <div class="automation-steps">
+                    <div class="automation-step">
+                        <div class="step-number">📊</div>
+                        <div class="step-title">ROI Calculator</div>
+                        <div class="step-description">Alert when enterprise prospect completes ROI calculation</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">📄</div>
+                        <div class="step-title">Case Study Download</div>
+                        <div class="step-description">Notification for relevant case study downloads by qualified leads</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">🎥</div>
+                        <div class="step-title">Video Engagement</div>
+                        <div class="step-description">Alert for prospects watching 75%+ of product demonstration videos</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">📧</div>
+                        <div class="step-title">Email Reply</div>
+                        <div class="step-description">Immediate notification when prospects reply to automated email sequences</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">🌐</div>
+                        <div class="step-title">Deep Site Engagement</div>
+                        <div class="step-description">Alert for prospects spending 10+ minutes exploring multiple pages</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">👥</div>
+                        <div class="step-title">Multiple Stakeholders</div>
+                        <div class="step-description">Notification when multiple contacts from same company show engagement</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pipeline Automation -->
+        <div id="pipeline-automation" class="crm-section">
+            <div class="section-header">
+                <div class="section-title">Pipeline Progression Automation</div>
+                <div class="section-description">Automated pipeline stage advancement based on prospect behavior and qualification</div>
+                <div class="section-stats">
+                    <div class="section-stat">
+                        <span class="section-stat-value">7 stages</span>
+                        <span class="section-stat-label">Pipeline Stages</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">34%</span>
+                        <span class="section-stat-label">Velocity Increase</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">91%</span>
+                        <span class="section-stat-label">Accuracy Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pipeline-visualization">
+                <div class="pipeline-title">Automated Sales Pipeline</div>
+                <div class="pipeline-stages">
+                    <div class="pipeline-stage">
+                        <div class="stage-name">Lead</div>
+                        <span class="stage-count">847</span>
+                        <div class="stage-value">$2.1M pipeline</div>
+                    </div>
+                    <div class="pipeline-stage">
+                        <div class="stage-name">Qualified</div>
+                        <span class="stage-count">234</span>
+                        <div class="stage-value">$4.7M pipeline</div>
+                    </div>
+                    <div class="pipeline-stage">
+                        <div class="stage-name">Demo</div>
+                        <span class="stage-count">89</span>
+                        <div class="stage-value">$8.9M pipeline</div>
+                    </div>
+                    <div class="pipeline-stage">
+                        <div class="stage-name">Evaluation</div>
+                        <span class="stage-count">34</span>
+                        <div class="stage-value">$12.4M pipeline</div>
+                    </div>
+                    <div class="pipeline-stage">
+                        <div class="stage-name">Proposal</div>
+                        <span class="stage-count">23</span>
+                        <div class="stage-value">$18.7M pipeline</div>
+                    </div>
+                    <div class="pipeline-stage">
+                        <div class="stage-name">Negotiation</div>
+                        <span class="stage-count">12</span>
+                        <div class="stage-value">$24.2M pipeline</div>
+                    </div>
+                    <div class="pipeline-stage">
+                        <div class="stage-name">Closed Won</div>
+                        <span class="stage-count">8</span>
+                        <div class="stage-value">$4.6M monthly</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="automation-flow">
+                <div class="automation-title">
+                    🔄 Stage Progression Rules
+                </div>
+                <div class="automation-steps">
+                    <div class="automation-step">
+                        <div class="step-number">Lead → Qualified</div>
+                        <div class="step-title">Auto-Qualification</div>
+                        <div class="step-description">Score ≥150 points + enterprise company + intent signals = automatic qualification</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Qualified → Demo</div>
+                        <div class="step-title">Demo Scheduled</div>
+                        <div class="step-description">Demo booking confirmation triggers automatic stage advancement</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Demo → Evaluation</div>
+                        <div class="step-title">Post-Demo Engagement</div>
+                        <div class="step-description">Demo completion + follow-up content engagement = evaluation stage</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Evaluation → Proposal</div>
+                        <div class="step-title">Technical Validation</div>
+                        <div class="step-description">Technical documentation requests + reference calls = proposal ready</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Proposal → Negotiation</div>
+                        <div class="step-title">Proposal Response</div>
+                        <div class="step-description">Proposal feedback + stakeholder expansion = active negotiation</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Negotiation → Closed</div>
+                        <div class="step-title">Contract Execution</div>
+                        <div class="step-description">Contract signed + payment processed = closed won</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attribution Reporting -->
+        <div id="attribution-reporting" class="crm-section">
+            <div class="section-header">
+                <div class="section-title">Attribution Reporting</div>
+                <div class="section-description">Comprehensive attribution tracking across all marketing channels and touchpoints</div>
+                <div class="section-stats">
+                    <div class="section-stat">
+                        <span class="section-stat-value">15 channels</span>
+                        <span class="section-stat-label">Attribution Sources</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">90-day</span>
+                        <span class="section-stat-label">Lookback Window</span>
+                    </div>
+                    <div class="section-stat">
+                        <span class="section-stat-value">6 models</span>
+                        <span class="section-stat-label">Attribution Models</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="attribution-dashboard">
+                <div class="attribution-title">Multi-Touch Attribution Dashboard</div>
+                <div class="attribution-subtitle">Revenue attribution across all marketing channels and touchpoints</div>
+                <div class="attribution-metrics">
+                    <div class="attribution-metric">
+                        <div class="metric-title">Organic Search</div>
+                        <div class="metric-value">$2.4M</div>
+                        <div class="metric-change">↗ +18% attribution</div>
+                    </div>
+                    <div class="attribution-metric">
+                        <div class="metric-title">Direct Traffic</div>
+                        <div class="metric-value">$1.8M</div>
+                        <div class="metric-change">↗ +12% attribution</div>
+                    </div>
+                    <div class="attribution-metric">
+                        <div class="metric-title">LinkedIn Ads</div>
+                        <div class="metric-value">$1.2M</div>
+                        <div class="metric-change">↗ +23% attribution</div>
+                    </div>
+                    <div class="attribution-metric">
+                        <div class="metric-title">Content Marketing</div>
+                        <div class="metric-value">$980K</div>
+                        <div class="metric-change">↗ +15% attribution</div>
+                    </div>
+                    <div class="attribution-metric">
+                        <div class="metric-title">Email Marketing</div>
+                        <div class="metric-value">$760K</div>
+                        <div class="metric-change">↗ +8% attribution</div>
+                    </div>
+                    <div class="attribution-metric">
+                        <div class="metric-title">Referral Partners</div>
+                        <div class="metric-value">$520K</div>
+                        <div class="metric-change">↗ +34% attribution</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="automation-flow">
+                <div class="automation-title">
+                    📈 Attribution Models Available
+                </div>
+                <div class="automation-steps">
+                    <div class="automation-step">
+                        <div class="step-number">First</div>
+                        <div class="step-title">First Touch Attribution</div>
+                        <div class="step-description">100% credit to the first marketing touchpoint that generated the lead</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Last</div>
+                        <div class="step-title">Last Touch Attribution</div>
+                        <div class="step-description">100% credit to the final touchpoint before conversion or sale</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Linear</div>
+                        <div class="step-title">Linear Attribution</div>
+                        <div class="step-description">Equal credit distributed across all touchpoints in the customer journey</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Decay</div>
+                        <div class="step-title">Time Decay Attribution</div>
+                        <div class="step-description">Higher credit to touchpoints closer to conversion, exponential decay</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Position</div>
+                        <div class="step-title">Position-Based Attribution</div>
+                        <div class="step-description">40% first touch, 40% last touch, 20% distributed to middle touchpoints</div>
+                    </div>
+                    <div class="automation-step">
+                        <div class="step-number">Data</div>
+                        <div class="step-title">Data-Driven Attribution</div>
+                        <div class="step-description">Machine learning model determines optimal credit distribution</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="api-documentation">
+                <div class="api-title">Attribution Reporting API</div>
+                <div class="api-endpoints">
+                    <div class="api-endpoint">
+                        <div class="endpoint-method method-get">GET</div>
+                        <div class="endpoint-url">/api/attribution/revenue</div>
+                        <div class="endpoint-description">Get revenue attribution by channel and time period</div>
+                    </div>
+                    <div class="api-endpoint">
+                        <div class="endpoint-method method-get">GET</div>
+                        <div class="endpoint-url">/api/attribution/journey/{leadId}</div>
+                        <div class="endpoint-description">Retrieve complete customer journey for specific lead</div>
+                    </div>
+                    <div class="api-endpoint">
+                        <div class="endpoint-method method-post">POST</div>
+                        <div class="endpoint-url">/api/attribution/touchpoint</div>
+                        <div class="endpoint-description">Record new marketing touchpoint for attribution tracking</div>
+                    </div>
+                    <div class="api-endpoint">
+                        <div class="endpoint-method method-get">GET</div>
+                        <div class="endpoint-url">/api/attribution/models</div>
+                        <div class="endpoint-description">Compare revenue attribution across different models</div>
+                    </div>
+                    <div class="api-endpoint">
+                        <div class="endpoint-method method-get">GET</div>
+                        <div class="endpoint-url">/api/attribution/campaigns</div>
+                        <div class="endpoint-description">Campaign-level attribution and ROI analysis</div>
+                    </div>
+                    <div class="api-endpoint">
+                        <div class="endpoint-method method-post">POST</div>
+                        <div class="endpoint-url">/api/attribution/export</div>
+                        <div class="endpoint-description">Export attribution data for external analysis</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Setup Wizard -->
+    <div class="setup-wizard">
+        <div class="wizard-title">CRM Integration Setup Wizard</div>
+        <div class="wizard-steps">
+            <div class="wizard-step">
+                <div class="wizard-step-number">1</div>
+                <div class="wizard-step-title">Choose CRM Platform</div>
+                <div class="wizard-step-description">Select your CRM system and authenticate API access</div>
+                <div class="wizard-step-time">⏱️ 5 minutes</div>
+            </div>
+            <div class="wizard-step">
+                <div class="wizard-step-number">2</div>
+                <div class="wizard-step-title">Configure Field Mapping</div>
+                <div class="wizard-step-description">Map UIP lead data to your CRM fields and objects</div>
+                <div class="wizard-step-time">⏱️ 10 minutes</div>
+            </div>
+            <div class="wizard-step">
+                <div class="wizard-step-number">3</div>
+                <div class="wizard-step-title">Set Up Lead Routing</div>
+                <div class="wizard-step-description">Define assignment rules and sales team routing logic</div>
+                <div class="wizard-step-time">⏱️ 15 minutes</div>
+            </div>
+            <div class="wizard-step">
+                <div class="wizard-step-number">4</div>
+                <div class="wizard-step-title">Configure Alert Triggers</div>
+                <div class="wizard-step-description">Set up real-time alerts and notification preferences</div>
+                <div class="wizard-step-time">⏱️ 10 minutes</div>
+            </div>
+            <div class="wizard-step">
+                <div class="wizard-step-number">5</div>
+                <div class="wizard-step-title">Test Integration</div>
+                <div class="wizard-step-description">Run test scenarios to validate data flow and functionality</div>
+                <div class="wizard-step-time">⏱️ 15 minutes</div>
+            </div>
+            <div class="wizard-step">
+                <div class="wizard-step-number">6</div>
+                <div class="wizard-step-title">Go Live</div>
+                <div class="wizard-step-description">Enable live integration and begin automatic lead processing</div>
+                <div class="wizard-step-time">⏱️ 5 minutes</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.crm-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Track CRM system interactions
+        function trackCRMView(sectionId) {
+            // Analytics tracking
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'crm_section_viewed', {
+                    section_type: sectionId,
+                    page: 'crm_integration'
+                });
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('CRM Integration System loaded');
+            
+            // Track initial section view
+            trackCRMView('lead-creation');
+        });
+    </script>
+</body>
+</html>

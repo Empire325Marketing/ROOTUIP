@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Platform - Enterprise Ocean Freight Intelligence</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 20px;
+            border: 3px solid #e5e7eb;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        /* Redirect immediately if not authenticated */
+        .redirect-notice {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            color: #92400e;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <p class="loading-text">Loading ROOTUIP Platform...</p>
+        <div class="redirect-notice" id="redirectNotice">
+            Redirecting to login...
+        </div>
+    </div>
+
+    <script>
+        // Check authentication status
+        function checkAuth() {
+            const token = localStorage.getItem('rootuip_token');
+            const sessionToken = sessionStorage.getItem('rootuip_session');
+            
+            if (!token && !sessionToken) {
+                // Not authenticated - redirect to login
+                document.getElementById('redirectNotice').style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = '/auth/login.html?redirect=' + encodeURIComponent(window.location.pathname);
+                }, 1000);
+            } else {
+                // Authenticated - redirect to dashboard
+                window.location.href = '/dashboard.html';
+            }
+        }
+
+        // Check auth immediately
+        checkAuth();
+
+        // Also check after a short delay in case of slow loading
+        setTimeout(checkAuth, 100);
+    </script>
+</body>
+</html>

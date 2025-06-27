@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UIP Product Roadmap & Go-to-Market Strategy</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js?v=1750888019"></script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #F8FAFB;
+            color: #0A1628;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #0A1628;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #64748B;
+            font-size: 1.125rem;
+        }
+        
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #0A1628;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #00D4AA;
+            padding-left: 1rem;
+        }
+        
+        .roadmap-container {
+            position: relative;
+            padding: 2rem 0;
+            overflow-x: auto;
+        }
+        
+        .roadmap-timeline {
+            display: flex;
+            position: relative;
+            min-width: 1200px;
+            padding-bottom: 2rem;
+        }
+        
+        .timeline-quarter {
+            flex: 1;
+            min-width: 150px;
+            position: relative;
+            padding: 0 1rem;
+        }
+        
+        .quarter-header {
+            background: #0A1628;
+            color: white;
+            padding: 0.75rem;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card {
+            background: #F8FAFB;
+            border: 2px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            border-color: #00D4AA;
+            transform: translateY(-2px);
+        }
+        
+        .feature-card.shipped {
+            background: #E6FCF5;
+            border-color: #00D4AA;
+        }
+        
+        .feature-card.in-progress {
+            background: #FFF8E1;
+            border-color: #FFC107;
+        }
+        
+        .feature-card h4 {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+            color: #0A1628;
+        }
+        
+        .feature-card p {
+            font-size: 0.75rem;
+            color: #64748B;
+            margin: 0;
+        }
+        
+        .product-vision {
+            background: linear-gradient(135deg, #0A1628 0%, #1E293B 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .vision-phases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .phase-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .phase-year {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #00D4AA;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .gtm-strategy {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .strategy-pillar {
+            padding: 2rem;
+            background: #F8FAFB;
+            border-radius: 12px;
+            border: 2px solid #E2E8F0;
+        }
+        
+        .strategy-pillar h3 {
+            color: #0A1628;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .channel-mix {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .channel-bubble {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .bubble {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 0 auto 0.5rem;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .bubble-large {
+            width: 140px;
+            height: 140px;
+            background: #00D4AA;
+        }
+        
+        .bubble-medium {
+            width: 100px;
+            height: 100px;
+            background: #00B894;
+        }
+        
+        .bubble-small {
+            width: 80px;
+            height: 80px;
+            background: #64748B;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .metric-box {
+            background: #F8FAFB;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #E2E8F0;
+        }
+        
+        .metric-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #00D4AA;
+            display: block;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            color: #64748B;
+            margin-top: 0.5rem;
+        }
+        
+        .customer-journey {
+            position: relative;
+            padding: 2rem 0;
+            margin: 2rem 0;
+        }
+        
+        .journey-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .step-number {
+            background: #00D4AA;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+            background: #F8FAFB;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .expansion-strategy {
+            background: #E6FCF5;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .expansion-timeline {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .expansion-phase {
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+            padding: 1rem;
+        }
+        
+        .expansion-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <h1>Product Roadmap & Go-to-Market Strategy</h1>
+        <p class="subtitle">Building the Future of Ocean Freight Intelligence</p>
+    </div>
+
+    <!-- Product Vision -->
+    <div class="product-vision">
+        <h2 style="color: white; text-align: center; margin-bottom: 1rem;">Product Vision: From D&D Prevention to Universal Trade Platform</h2>
+        
+        <div class="vision-phases">
+            <div class="phase-card">
+                <span class="phase-year">2024</span>
+                <h3>Foundation</h3>
+                <p>Best-in-class D&D prevention platform with universal carrier connectivity</p>
+            </div>
+            
+            <div class="phase-card">
+                <span class="phase-year">2025</span>
+                <h3>Intelligence</h3>
+                <p>Predictive supply chain intelligence and automated operations</p>
+            </div>
+            
+            <div class="phase-card">
+                <span class="phase-year">2026</span>
+                <h3>Ecosystem</h3>
+                <p>Platform marketplace connecting shippers, carriers, and service providers</p>
+            </div>
+            
+            <div class="phase-card">
+                <span class="phase-year">2027+</span>
+                <h3>Universal OS</h3>
+                <p>The operating system for global ocean freight</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2024 Product Roadmap -->
+    <div class="section">
+        <h2 class="section-title">2024 Product Roadmap</h2>
+        
+        <div class="roadmap-container">
+            <div class="roadmap-timeline">
+                <!-- Q1 2024 -->
+                <div class="timeline-quarter">
+                    <div class="quarter-header">Q1 2024 ✅</div>
+                    <div class="feature-card shipped">
+                        <h4>🚀 Series A Platform</h4>
+                        <p>Core platform enhancements for scale</p>
+                    </div>
+                    <div class="feature-card shipped">
+                        <h4>📊 Advanced Analytics</h4>
+                        <p>Real-time dashboards & reporting</p>
+                    </div>
+                    <div class="feature-card shipped">
+                        <h4>🔌 API v2 Launch</h4>
+                        <p>Enhanced integration capabilities</p>
+                    </div>
+                </div>
+                
+                <!-- Q2 2024 -->
+                <div class="timeline-quarter">
+                    <div class="quarter-header">Q2 2024</div>
+                    <div class="feature-card in-progress">
+                        <h4>🤖 AI Dispute Engine</h4>
+                        <p>Automated dispute filing & tracking</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📱 Mobile App</h4>
+                        <p>iOS/Android for on-the-go access</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🌐 50 New Carriers</h4>
+                        <p>Expand to 250+ total integrations</p>
+                    </div>
+                </div>
+                
+                <!-- Q3 2024 -->
+                <div class="timeline-quarter">
+                    <div class="quarter-header">Q3 2024</div>
+                    <div class="feature-card">
+                        <h4>🔮 Predictive Analytics 2.0</h4>
+                        <p>ML-powered delay predictions</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>💰 FinOps Module</h4>
+                        <p>Invoice reconciliation & audit</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🌍 Multi-language</h4>
+                        <p>Spanish, Mandarin, German</p>
+                    </div>
+                </div>
+                
+                <!-- Q4 2024 -->
+                <div class="timeline-quarter">
+                    <div class="quarter-header">Q4 2024</div>
+                    <div class="feature-card">
+                        <h4><img src="/brand/logo-icon.svg" alt="UIP" style="height: 24px; width: 24px; vertical-align: middle;"> Carrier Portal</h4>
+                        <p>Direct carrier collaboration tools</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📈 Benchmarking</h4>
+                        <p>Industry performance comparisons</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔄 Workflow Automation</h4>
+                        <p>Custom automation builder</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Go-to-Market Strategy -->
+    <div class="section">
+        <h2 class="section-title">Go-to-Market Strategy</h2>
+        
+        <div class="gtm-strategy">
+            <div class="strategy-pillar">
+                <h3>🎯 Target Market Segmentation</h3>
+                <h4>Primary Targets (2024)</h4>
+                <ul>
+                    <li><strong>Fortune 1000 Shippers:</strong> 100+ vessels, complex operations</li>
+                    <li><strong>Large Retailers:</strong> High container volumes, seasonal peaks</li>
+                    <li><strong>Manufacturers:</strong> Just-in-time sensitivity</li>
+                </ul>
+                <h4>Expansion Targets (2025+)</h4>
+                <ul>
+                    <li><strong>Mid-market:</strong> 20-99 vessels</li>
+                    <li><strong>3PLs/4PLs:</strong> Multi-client operations</li>
+                    <li><strong>Freight Forwarders:</strong> Partnership opportunities</li>
+                </ul>
+            </div>
+            
+            <div class="strategy-pillar">
+                <h3>📊 Pricing & Packaging Strategy</h3>
+                <h4>Current Model</h4>
+                <ul>
+                    <li><strong>Enterprise:</strong> $500K/vessel/year</li>
+                    <li><strong>Platform fee:</strong> All-inclusive pricing</li>
+                    <li><strong>ROI Guarantee:</strong> 3x return or refund</li>
+                </ul>
+                <h4>Future Evolution</h4>
+                <ul>
+                    <li><strong>Usage-based:</strong> Per container pricing option</li>
+                    <li><strong>Success fees:</strong> % of savings captured</li>
+                    <li><strong>Platform tiers:</strong> Basic, Pro, Enterprise</li>
+                </ul>
+            </div>
+        </div>
+        
+        <h3 style="text-align: center; margin: 2rem 0;">Channel Mix & Investment Allocation</h3>
+        
+        <div class="channel-mix">
+            <div class="channel-bubble">
+                <div class="bubble bubble-large">
+                    <div style="font-size: 1.5rem;">40%</div>
+                    <div>Direct Sales</div>
+                </div>
+                <p>Enterprise field sales</p>
+            </div>
+            
+            <div class="channel-bubble">
+                <div class="bubble bubble-medium">
+                    <div style="font-size: 1.25rem;">25%</div>
+                    <div>Partners</div>
+                </div>
+                <p>SIs & consultants</p>
+            </div>
+            
+            <div class="channel-bubble">
+                <div class="bubble bubble-medium">
+                    <div style="font-size: 1.25rem;">20%</div>
+                    <div>Marketing</div>
+                </div>
+                <p>Demand generation</p>
+            </div>
+            
+            <div class="channel-bubble">
+                <div class="bubble bubble-small">
+                    <div style="font-size: 1rem;">15%</div>
+                    <div>Product-Led</div>
+                </div>
+                <p>Self-service</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Acquisition Strategy -->
+    <div class="section">
+        <h2 class="section-title">Customer Acquisition Journey</h2>
+        
+        <div class="customer-journey">
+            <div class="journey-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Awareness & Education</h4>
+                    <p><strong>Tactics:</strong> Industry reports, webinars, thought leadership, SEO content</p>
+                    <p><strong>Goal:</strong> Establish UIP as the authority on D&D prevention</p>
+                    <p><strong>Metrics:</strong> 10K+ MQLs per quarter, 50% brand awareness in target market</p>
+                </div>
+            </div>
+            
+            <div class="journey-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Engagement & Qualification</h4>
+                    <p><strong>Tactics:</strong> ROI calculator, free assessments, executive briefings</p>
+                    <p><strong>Goal:</strong> Identify high-intent prospects with quantified pain</p>
+                    <p><strong>Metrics:</strong> 500 SQLs per quarter, $24M pipeline generation</p>
+                </div>
+            </div>
+            
+            <div class="journey-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Evaluation & Proof</h4>
+                    <p><strong>Tactics:</strong> Live demos, pilot programs, reference calls, site visits</p>
+                    <p><strong>Goal:</strong> Prove ROI and build champion network</p>
+                    <p><strong>Metrics:</strong> 80% demo-to-pilot conversion, 67% win rate</p>
+                </div>
+            </div>
+            
+            <div class="journey-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Purchase & Implementation</h4>
+                    <p><strong>Tactics:</strong> ROI guarantee, fast implementation, executive sponsorship</p>
+                    <p><strong>Goal:</strong> Rapid time-to-value and early wins</p>
+                    <p><strong>Metrics:</strong> 14-day implementation, 100% on-time delivery</p>
+                </div>
+            </div>
+            
+            <div class="journey-step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h4>Expansion & Advocacy</h4>
+                    <p><strong>Tactics:</strong> Success metrics, case studies, referral programs</p>
+                    <p><strong>Goal:</strong> Drive expansion and create customer advocates</p>
+                    <p><strong>Metrics:</strong> 127% net retention, 3+ referrals per customer</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sales & Marketing Metrics -->
+    <div class="section">
+        <h2 class="section-title">Sales & Marketing Efficiency Targets</h2>
+        
+        <div class="metrics-grid">
+            <div class="metric-box">
+                <span class="metric-value">$2.4M</span>
+                <span class="metric-label">Average Deal Size</span>
+            </div>
+            <div class="metric-box">
+                <span class="metric-value">127 days</span>
+                <span class="metric-label">Sales Cycle</span>
+            </div>
+            <div class="metric-box">
+                <span class="metric-value">67%</span>
+                <span class="metric-label">Win Rate</span>
+            </div>
+            <div class="metric-box">
+                <span class="metric-value">$125K</span>
+                <span class="metric-label">CAC Target</span>
+            </div>
+            <div class="metric-box">
+                <span class="metric-value">1.8x</span>
+                <span class="metric-label">Magic Number</span>
+            </div>
+            <div class="metric-box">
+                <span class="metric-value">3:1</span>
+                <span class="metric-label">Pipeline Coverage</span>
+            </div>
+        </div>
+        
+        <h3 style="margin-top: 2rem;">Sales Team Scaling Plan</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+            <thead>
+                <tr style="background: #0A1628; color: white;">
+                    <th style="padding: 1rem; text-align: left;">Role</th>
+                    <th style="padding: 1rem; text-align: center;">Q1 2024</th>
+                    <th style="padding: 1rem; text-align: center;">Q2 2024</th>
+                    <th style="padding: 1rem; text-align: center;">Q3 2024</th>
+                    <th style="padding: 1rem; text-align: center;">Q4 2024</th>
+                    <th style="padding: 1rem; text-align: center;">2025</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background: #F8FAFB;">
+                    <td style="padding: 1rem;">Account Executives</td>
+                    <td style="padding: 1rem; text-align: center;">4</td>
+                    <td style="padding: 1rem; text-align: center;">6</td>
+                    <td style="padding: 1rem; text-align: center;">8</td>
+                    <td style="padding: 1rem; text-align: center;">10</td>
+                    <td style="padding: 1rem; text-align: center;">20</td>
+                </tr>
+                <tr>
+                    <td style="padding: 1rem;">SDRs</td>
+                    <td style="padding: 1rem; text-align: center;">6</td>
+                    <td style="padding: 1rem; text-align: center;">8</td>
+                    <td style="padding: 1rem; text-align: center;">12</td>
+                    <td style="padding: 1rem; text-align: center;">15</td>
+                    <td style="padding: 1rem; text-align: center;">30</td>
+                </tr>
+                <tr style="background: #F8FAFB;">
+                    <td style="padding: 1rem;">Solutions Engineers</td>
+                    <td style="padding: 1rem; text-align: center;">2</td>
+                    <td style="padding: 1rem; text-align: center;">3</td>
+                    <td style="padding: 1rem; text-align: center;">4</td>
+                    <td style="padding: 1rem; text-align: center;">5</td>
+                    <td style="padding: 1rem; text-align: center;">10</td>
+                </tr>
+                <tr>
+                    <td style="padding: 1rem;">Customer Success</td>
+                    <td style="padding: 1rem; text-align: center;">2</td>
+                    <td style="padding: 1rem; text-align: center;">3</td>
+                    <td style="padding: 1rem; text-align: center;">4</td>
+                    <td style="padding: 1rem; text-align: center;">5</td>
+                    <td style="padding: 1rem; text-align: center;">8</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Geographic Expansion -->
+    <div class="expansion-strategy">
+        <h2 style="text-align: center; margin-bottom: 1rem;">Geographic Expansion Strategy</h2>
+        
+        <div class="expansion-timeline">
+            <div class="expansion-phase">
+                <div class="expansion-icon">🇺🇸</div>
+                <h4>2024: North America</h4>
+                <p>Dominate US market</p>
+                <ul style="text-align: left; font-size: 0.875rem;">
+                    <li>East & West Coast</li>
+                    <li>500 target accounts</li>
+                    <li>Local team of 30</li>
+                </ul>
+            </div>
+            
+            <div class="expansion-phase">
+                <div class="expansion-icon">🇪🇺</div>
+                <h4>2025: Europe</h4>
+                <p>Enter key markets</p>
+                <ul style="text-align: left; font-size: 0.875rem;">
+                    <li>UK, Germany, Netherlands</li>
+                    <li>300 target accounts</li>
+                    <li>Local team of 15</li>
+                </ul>
+            </div>
+            
+            <div class="expansion-phase">
+                <div class="expansion-icon">🌏</div>
+                <h4>2026: Asia Pacific</h4>
+                <p>Capture growth markets</p>
+                <ul style="text-align: left; font-size: 0.875rem;">
+                    <li>Singapore, Japan, Australia</li>
+                    <li>400 target accounts</li>
+                    <li>Local team of 20</li>
+                </ul>
+            </div>
+            
+            <div class="expansion-phase">
+                <div class="expansion-icon">🌍</div>
+                <h4>2027+: Global</h4>
+                <p>Worldwide coverage</p>
+                <ul style="text-align: left; font-size: 0.875rem;">
+                    <li>Latin America, Middle East</li>
+                    <li>200 target accounts</li>
+                    <li>Partner-led model</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Partnership Strategy -->
+    <div class="section">
+        <h2 class="section-title">Strategic Partnership Ecosystem</h2>
+        
+        <div class="gtm-strategy">
+            <div class="strategy-pillar">
+                <h3>🤝 Technology Partners</h3>
+                <ul>
+                    <li><strong>ERP Integrations:</strong> SAP, Oracle, Microsoft</li>
+                    <li><strong>Cloud Providers:</strong> AWS Premier Partner</li>
+                    <li><strong>Data Partners:</strong> Port authorities, weather services</li>
+                    <li><strong>AI/ML:</strong> Strategic AI model partnerships</li>
+                </ul>
+            </div>
+            
+            <div class="strategy-pillar">
+                <h3>🌐 Channel Partners</h3>
+                <ul>
+                    <li><strong>System Integrators:</strong> Accenture, Deloitte, PwC</li>
+                    <li><strong>Consultants:</strong> Supply chain specialists</li>
+                    <li><strong>Resellers:</strong> Regional logistics software vendors</li>
+                    <li><strong>Carriers:</strong> Preferred technology provider</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Success Metrics -->
+    <div class="section" style="background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%); color: white;">
+        <h2 style="color: white; text-align: center; margin-bottom: 2rem;">2024-2025 Success Metrics</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+            <div style="text-align: center;">
+                <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">$50M</h3>
+                <p>ARR by end of 2025</p>
+            </div>
+            <div style="text-align: center;">
+                <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">1,000</h3>
+                <p>Vessels under management</p>
+            </div>
+            <div style="text-align: center;">
+                <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">100</h3>
+                <p>Enterprise customers</p>
+            </div>
+            <div style="text-align: center;">
+                <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">#1</h3>
+                <p>Category leader position</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
+</body>
+</html>

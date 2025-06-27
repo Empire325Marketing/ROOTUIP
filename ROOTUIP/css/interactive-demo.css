@@ -22,7 +22,7 @@ body {
 /* Role Selection Screen */
 .role-selection {
     min-height: 100vh;
-    background: linear-gradient(135deg, var(--uip-navy-900) 0%, var(--uip-navy-700) 100%);
+    background: linear-gradient(135deg, var(--uip-primary-800) 0%, var(--uip-navy-700) 100%);
     display: none;
     align-items: center;
     justify-content: center;
@@ -88,7 +88,7 @@ body {
     width: 80px;
     height: 80px;
     margin: 0 auto 1.5rem;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -130,7 +130,7 @@ body {
 .role-select-btn {
     width: 100%;
     padding: 1rem 2rem;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
     border: none;
     border-radius: 8px;
@@ -208,7 +208,7 @@ body {
 
 .nav-role {
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 /* Demo Tabs */
@@ -233,11 +233,11 @@ body {
 
 .demo-tab:hover {
     background: var(--uip-gray-100);
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .demo-tab.active {
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
 }
 
@@ -313,7 +313,7 @@ body {
 .dashboard-title {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .dashboard-actions {
@@ -334,7 +334,7 @@ body {
 
 .export-btn {
     padding: 0.5rem 1.5rem;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
     border: none;
     border-radius: 6px;
@@ -406,7 +406,7 @@ body {
 .kpi-value {
     font-size: 2.5rem;
     font-weight: 800;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     font-family: 'IBM Plex Mono', monospace;
     margin-bottom: 0.5rem;
 }
@@ -434,7 +434,7 @@ body {
 }
 
 .status-bar.on-time {
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
 }
 
 .status-bar.at-risk {
@@ -474,7 +474,7 @@ body {
 
 .progress-fill {
     height: 100%;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     transition: width 0.5s ease;
 }
 
@@ -504,7 +504,7 @@ body {
 .card-header h2 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .card-actions {
@@ -561,7 +561,7 @@ body {
 }
 
 .risk-indicator.low {
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
 }
 
 /* Alerts Panel */
@@ -603,7 +603,7 @@ body {
 }
 
 .alert-item.success {
-    border-left-color: var(--uip-teal-500);
+    border-left-color: var(--uip-success-500);
 }
 
 .alert-icon {
@@ -616,7 +616,7 @@ body {
 
 .alert-title {
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.25rem;
 }
 
@@ -639,7 +639,7 @@ body {
 
 .alert-action {
     padding: 0.25rem 0.75rem;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
     border: none;
     border-radius: 4px;
@@ -683,7 +683,7 @@ body {
 .performance-card h3 {
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1rem;
 }
 
@@ -709,7 +709,7 @@ body {
 
 .carrier-name {
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .carrier-vessels {
@@ -754,7 +754,7 @@ body {
 .stat-value {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .stat-label {
@@ -791,7 +791,7 @@ body {
 }
 
 .vessel-marker.on-time {
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
 }
 
 .vessel-marker.delayed {
@@ -833,7 +833,7 @@ body {
 .vessel-popup h4 {
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1rem;
 }
 
@@ -873,7 +873,7 @@ body {
 .popup-action {
     width: 100%;
     padding: 0.5rem 1rem;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
     border: none;
     border-radius: 6px;
@@ -902,7 +902,7 @@ body {
 .panel-header h3 {
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1rem;
 }
 
@@ -935,7 +935,7 @@ body {
 
 .vessel-item.active {
     background: rgba(0, 212, 170, 0.05);
-    border-left: 3px solid var(--uip-teal-500);
+    border-left: 3px solid var(--uip-success-500);
 }
 
 .vessel-status-indicator {
@@ -946,7 +946,7 @@ body {
 }
 
 .vessel-status-indicator.on-time {
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
 }
 
 .vessel-status-indicator.at-risk {
@@ -963,7 +963,7 @@ body {
 
 .vessel-name {
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .vessel-route {
@@ -1003,7 +1003,7 @@ body {
 .prevention-header h1 {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1rem;
 }
 
@@ -1074,22 +1074,22 @@ body {
 }
 
 .workflow-step.active .step-indicator {
-    background: var(--uip-teal-500);
-    border-color: var(--uip-teal-500);
+    background: var(--uip-success-500);
+    border-color: var(--uip-success-500);
     color: white;
     transform: scale(1.1);
 }
 
 .workflow-step.complete .step-indicator {
     background: var(--uip-teal-100);
-    border-color: var(--uip-teal-500);
+    border-color: var(--uip-success-500);
     color: var(--uip-teal-600);
 }
 
 .step-content h3 {
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.5rem;
 }
 
@@ -1136,7 +1136,7 @@ body {
 .savings-amount {
     font-size: 3rem;
     font-weight: 800;
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
     font-family: 'IBM Plex Mono', monospace;
     animation: pulse 2s ease infinite;
 }
@@ -1164,7 +1164,7 @@ body {
 .prevention-example h2 {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1.5rem;
 }
 
@@ -1195,7 +1195,7 @@ body {
     top: 0.5rem;
     width: 10px;
     height: 10px;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     border-radius: 50%;
 }
 
@@ -1207,7 +1207,7 @@ body {
 
 .event-title {
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.25rem;
 }
 
@@ -1225,7 +1225,7 @@ body {
 .documents-header h1 {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.5rem;
 }
 
@@ -1266,13 +1266,13 @@ body {
 }
 
 .comparison-side.after {
-    border-top: 4px solid var(--uip-teal-500);
+    border-top: 4px solid var(--uip-success-500);
 }
 
 .comparison-side h2 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1.5rem;
 }
 
@@ -1345,7 +1345,7 @@ body {
 .live-processing h3 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1.5rem;
 }
 
@@ -1385,7 +1385,7 @@ body {
 
 .doc-name {
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .doc-status {
@@ -1411,7 +1411,7 @@ body {
 .integrations-header h1 {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1rem;
 }
 
@@ -1444,7 +1444,7 @@ body {
 .integration-section h2 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1.5rem;
 }
 
@@ -1467,7 +1467,7 @@ body {
 
 .integration-card.active {
     background: white;
-    border-color: var(--uip-teal-500);
+    border-color: var(--uip-success-500);
 }
 
 .integration-logo {
@@ -1496,7 +1496,7 @@ body {
 .integration-info h4 {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.5rem;
 }
 
@@ -1516,7 +1516,7 @@ body {
 }
 
 .status-indicator.active {
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     animation: pulse 2s ease infinite;
 }
 
@@ -1554,7 +1554,7 @@ body {
 
 .sync-btn {
     padding: 0.25rem 0.75rem;
-    background: var(--uip-blue-500);
+    background: var(--uip-primary-500);
     color: white;
     border: none;
     border-radius: 4px;
@@ -1582,7 +1582,7 @@ body {
 
 .health-fill {
     height: 100%;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     transition: width 0.5s ease;
 }
 
@@ -1600,7 +1600,7 @@ body {
 .disputes-header h1 {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1rem;
 }
 
@@ -1631,12 +1631,12 @@ body {
 .workflow-header h2 {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .demo-trigger {
     padding: 0.75rem 1.5rem;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
     border: none;
     border-radius: 6px;
@@ -1669,7 +1669,7 @@ body {
 
 .dispute-stage.active {
     background: white;
-    border-color: var(--uip-teal-500);
+    border-color: var(--uip-success-500);
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(0, 212, 170, 0.2);
 }
@@ -1693,7 +1693,7 @@ body {
 .stage-header h3 {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .charge-alert {
@@ -1815,7 +1815,7 @@ body {
 .file-dispute-btn {
     width: 100%;
     padding: 0.5rem 1rem;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
     border: none;
     border-radius: 6px;
@@ -1854,7 +1854,7 @@ body {
 .resolution-success h4 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1rem;
 }
 
@@ -1879,7 +1879,7 @@ body {
 .active-disputes h3 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1rem;
 }
 
@@ -1913,7 +1913,7 @@ body {
 
 .dispute-id {
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .dispute-amount {
@@ -1968,7 +1968,7 @@ body {
 
 .tour-highlight {
     position: absolute;
-    border: 3px solid var(--uip-teal-500);
+    border: 3px solid var(--uip-success-500);
     border-radius: 8px;
     box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease;
@@ -1992,7 +1992,7 @@ body {
 #tooltipTitle {
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.5rem;
 }
 
@@ -2019,7 +2019,7 @@ body {
 
 .tooltip-next {
     padding: 0.5rem 1.5rem;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
     border: none;
     border-radius: 6px;
@@ -2070,7 +2070,7 @@ body {
     transform: translateY(-50%);
     width: 40px;
     height: 80px;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     border: none;
     border-radius: 8px 0 0 8px;
     color: white;
@@ -2087,7 +2087,7 @@ body {
 .cta-content h3 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.5rem;
 }
 
@@ -2100,7 +2100,7 @@ body {
 .cta-primary {
     width: 100%;
     padding: 0.75rem 1.5rem;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
     border: none;
     border-radius: 6px;
@@ -2150,7 +2150,7 @@ body {
     display: block;
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .cta-metrics .label {
@@ -2187,7 +2187,7 @@ body {
 .modal-content h2 {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.5rem;
 }
 
@@ -2212,7 +2212,7 @@ body {
     background: var(--uip-gray-50);
     border: 2px solid var(--uip-gray-200);
     border-radius: 8px;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -2221,7 +2221,7 @@ body {
 
 .exit-option:hover {
     background: white;
-    border-color: var(--uip-teal-500);
+    border-color: var(--uip-success-500);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }

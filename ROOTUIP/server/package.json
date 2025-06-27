@@ -1,0 +1,30 @@
+{
+  "name": "rootuip-backend",
+  "version": "1.0.0",
+  "description": "ROOTUIP Backend API Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "pm2": "pm2 start ecosystem.config.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "morgan": "^1.10.0",
+    "body-parser": "^1.20.2",
+    "sqlite3": "^5.1.6",
+    "ws": "^8.13.0",
+    "uuid": "^9.0.0",
+    "nodemailer": "^6.9.3",
+    "rate-limiter-flexible": "^2.4.1",
+    "compression": "^1.7.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

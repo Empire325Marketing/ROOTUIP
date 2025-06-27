@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Lead Capture System - Ocean Freight ROI Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 32px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+        
+        .hero-stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        .cta-button {
+            background: #10b981;
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .cta-button:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+        
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 48px 20px;
+        }
+        
+        .capture-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 48px;
+        }
+        
+        .capture-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .capture-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+        }
+        
+        .card-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            color: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+        
+        .card-description {
+            color: #64748b;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        
+        .card-benefits {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+        
+        .card-benefits li {
+            padding: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #059669;
+            font-weight: 500;
+        }
+        
+        .card-benefits li::before {
+            content: "✓";
+            font-weight: 700;
+        }
+        
+        .card-button {
+            background: #3b82f6;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .card-button:hover {
+            background: #2563eb;
+        }
+        
+        .roi-calculator {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 48px;
+        }
+        
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .calculator-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+        
+        .calculator-subtitle {
+            color: #64748b;
+            font-size: 1.125rem;
+        }
+        
+        .calculator-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .calculator-results {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .results-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+        
+        .results-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 24px;
+        }
+        
+        .result-metric {
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .gated-form {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            border: 2px dashed #3b82f6;
+            text-align: center;
+        }
+        
+        .gated-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+        
+        .gated-description {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+        
+        .gated-form-fields {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .gated-form input {
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .gated-submit {
+            background: #3b82f6;
+            color: white;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .gated-submit:hover {
+            background: #2563eb;
+        }
+        
+        .assessment-tool {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 48px;
+        }
+        
+        .assessment-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .assessment-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+        
+        .assessment-subtitle {
+            color: #64748b;
+            font-size: 1.125rem;
+        }
+        
+        .assessment-questions {
+            margin-bottom: 32px;
+        }
+        
+        .question-group {
+            margin-bottom: 24px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .question-title {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+        
+        .question-options {
+            display: grid;
+            gap: 8px;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .option-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .option-item input[type="radio"] {
+            margin: 0;
+        }
+        
+        .assessment-score {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 24px;
+            display: none;
+        }
+        
+        .score-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .score-value {
+            font-size: 3rem;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .score-description {
+            opacity: 0.9;
+        }
+        
+        .content-offers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        
+        .offer-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+        
+        .offer-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .offer-icon {
+            width: 48px;
+            height: 48px;
+            background: #eff6ff;
+            color: #3b82f6;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+        }
+        
+        .offer-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .offer-description {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 16px;
+        }
+        
+        .offer-button {
+            background: #f1f5f9;
+            color: #3b82f6;
+            padding: 8px 16px;
+            border: 1px solid #3b82f6;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .offer-button:hover {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .newsletter-signup {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .newsletter-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .newsletter-description {
+            opacity: 0.9;
+            margin-bottom: 24px;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            gap: 12px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .newsletter-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .newsletter-submit {
+            background: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .newsletter-submit:hover {
+            background: #059669;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .modal-subtitle {
+            color: #64748b;
+        }
+        
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .modal-form input,
+        .modal-form select {
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .modal-submit {
+            background: #3b82f6;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.125rem;
+            }
+            
+            .hero-stats {
+                gap: 24px;
+            }
+            
+            .capture-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .calculator-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .modal-content {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-container">
+            <h1 class="hero-title">Stop Losing $7.5M Annually on Ocean Freight</h1>
+            <p class="hero-subtitle">Calculate your exact savings with our AI-powered ocean freight optimization platform. Enterprise customers save an average of $47M over 18 months.</p>
+            
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="stat-value">$84M</span>
+                    <span class="stat-label">Customer Savings</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="stat-value">94%</span>
+                    <span class="stat-label">D&D Reduction</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="stat-value">347%</span>
+                    <span class="stat-label">Average ROI</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="stat-value">48hrs</span>
+                    <span class="stat-label">Implementation</span>
+                </div>
+            </div>
+            
+            <a href="#roi-calculator" class="cta-button">Calculate Your Savings Now</a>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- Lead Capture Options -->
+        <div class="capture-grid">
+            <div class="capture-card">
+                <div class="card-icon">💰</div>
+                <h3 class="card-title">ROI Calculator</h3>
+                <p class="card-description">Get an instant, personalized calculation of your potential savings with detailed financial projections.</p>
+                <ul class="card-benefits">
+                    <li>Instant savings calculation</li>
+                    <li>Detailed financial breakdown</li>
+                    <li>Industry-specific metrics</li>
+                    <li>Implementation timeline</li>
+                </ul>
+                <button class="card-button" onclick="scrollToCalculator()">Calculate My ROI</button>
+            </div>
+
+            <div class="capture-card">
+                <div class="card-icon">📊</div>
+                <h3 class="card-title">System Assessment</h3>
+                <p class="card-description">Rate your current ocean freight management system and discover optimization opportunities.</p>
+                <ul class="card-benefits">
+                    <li>Current system analysis</li>
+                    <li>Gap identification</li>
+                    <li>Improvement roadmap</li>
+                    <li>Competitive benchmarking</li>
+                </ul>
+                <button class="card-button" onclick="scrollToAssessment()">Assess My System</button>
+            </div>
+        </div>
+
+        <!-- ROI Calculator -->
+        <div id="roi-calculator" class="roi-calculator">
+            <div class="calculator-header">
+                <h2 class="calculator-title">Ocean Freight ROI Calculator</h2>
+                <p class="calculator-subtitle">Enter your current freight data to see exact savings potential</p>
+            </div>
+
+            <form class="calculator-form" id="roiForm">
+                <div class="form-group">
+                    <label for="annual-volume">Annual Freight Volume (TEU)</label>
+                    <input type="number" id="annual-volume" name="annualVolume" placeholder="e.g., 10000" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="current-dd-cost">Current Annual D&D Charges ($)</label>
+                    <input type="number" id="current-dd-cost" name="currentDDCost" placeholder="e.g., 7500000" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="manual-hours">Manual Processing Hours/Month</label>
+                    <input type="number" id="manual-hours" name="manualHours" placeholder="e.g., 200" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="labor-cost">Average Hourly Labor Cost ($)</label>
+                    <input type="number" id="labor-cost" name="laborCost" placeholder="e.g., 35" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="company-size">Company Size</label>
+                    <select id="company-size" name="companySize" required>
+                        <option value="">Select size</option>
+                        <option value="startup">Startup (1-50 employees)</option>
+                        <option value="smb">Small Business (51-500 employees)</option>
+                        <option value="mid-market">Mid-Market (501-5,000 employees)</option>
+                        <option value="enterprise">Enterprise (5,001+ employees)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="industry">Industry</label>
+                    <select id="industry" name="industry" required>
+                        <option value="">Select industry</option>
+                        <option value="retail">Retail & E-commerce</option>
+                        <option value="automotive">Automotive</option>
+                        <option value="manufacturing">Manufacturing</option>
+                        <option value="chemicals">Chemicals & Materials</option>
+                        <option value="technology">Technology</option>
+                        <option value="pharmaceuticals">Pharmaceuticals</option>
+                        <option value="food-beverage">Food & Beverage</option>
+                        <option value="fashion">Fashion & Apparel</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </form>
+
+            <div class="calculator-results" id="calculatorResults" style="display: none;">
+                <h3 class="results-title">Your Savings Potential</h3>
+                <div class="results-metrics">
+                    <div class="result-metric">
+                        <span class="metric-value" id="annual-savings">$7,050,000</span>
+                        <span class="metric-label">Annual Savings</span>
+                    </div>
+                    <div class="result-metric">
+                        <span class="metric-value" id="monthly-roi">347%</span>
+                        <span class="metric-label">12-Month ROI</span>
+                    </div>
+                    <div class="result-metric">
+                        <span class="metric-value" id="payback-period">3.5</span>
+                        <span class="metric-label">Payback (Months)</span>
+                    </div>
+                    <div class="result-metric">
+                        <span class="metric-value" id="monthly-savings">$587K</span>
+                        <span class="metric-label">Monthly Savings</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gated-form" id="gatedForm" style="display: none;">
+                <h3 class="gated-title">Get Your Detailed ROI Report</h3>
+                <p class="gated-description">Enter your contact information to receive a comprehensive ROI analysis with implementation timeline and next steps.</p>
+                
+                <form class="gated-form-fields" id="leadCaptureForm">
+                    <input type="text" name="firstName" placeholder="First Name" required>
+                    <input type="text" name="lastName" placeholder="Last Name" required>
+                    <input type="email" name="email" placeholder="Business Email" required>
+                    <input type="text" name="company" placeholder="Company Name" required>
+                    <input type="text" name="title" placeholder="Job Title" required>
+                    <input type="tel" name="phone" placeholder="Phone Number" required>
+                </form>
+                
+                <button class="gated-submit" onclick="submitLeadCapture()">Get My Detailed ROI Report</button>
+            </div>
+        </div>
+
+        <!-- System Assessment Tool -->
+        <div id="system-assessment" class="assessment-tool">
+            <div class="assessment-header">
+                <h2 class="assessment-title">Rate Your Current Ocean Freight System</h2>
+                <p class="assessment-subtitle">Answer 8 questions to get your system optimization score</p>
+            </div>
+
+            <div class="assessment-questions">
+                <div class="question-group">
+                    <div class="question-title">1. How do you currently track container status?</div>
+                    <div class="question-options">
+                        <label class="option-item">
+                            <input type="radio" name="tracking" value="1">
+                            <span>Manual login to multiple carrier websites</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="tracking" value="2">
+                            <span>Email notifications from carriers</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="tracking" value="3">
+                            <span>Basic TMS with limited carrier connections</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="tracking" value="4">
+                            <span>Integrated platform with real-time updates</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-title">2. How often do you experience demurrage and detention charges?</div>
+                    <div class="question-options">
+                        <label class="option-item">
+                            <input type="radio" name="dd-frequency" value="1">
+                            <span>On most shipments (>50%)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="dd-frequency" value="2">
+                            <span>Frequently (25-50%)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="dd-frequency" value="3">
+                            <span>Occasionally (10-25%)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="dd-frequency" value="4">
+                            <span>Rarely (<10%)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-title">3. How much time does your team spend on manual freight coordination?</div>
+                    <div class="question-options">
+                        <label class="option-item">
+                            <input type="radio" name="manual-time" value="1">
+                            <span>More than 200 hours/month</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="manual-time" value="2">
+                            <span>100-200 hours/month</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="manual-time" value="3">
+                            <span>50-100 hours/month</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="manual-time" value="4">
+                            <span>Less than 50 hours/month</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-title">4. How predictable are your container arrival times?</div>
+                    <div class="question-options">
+                        <label class="option-item">
+                            <input type="radio" name="predictability" value="1">
+                            <span>Highly unpredictable (±7+ days)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="predictability" value="2">
+                            <span>Somewhat predictable (±3-7 days)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="predictability" value="3">
+                            <span>Generally predictable (±1-3 days)</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="predictability" value="4">
+                            <span>Very predictable (±24 hours)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-title">5. How well integrated are your freight systems with ERP/TMS?</div>
+                    <div class="question-options">
+                        <label class="option-item">
+                            <input type="radio" name="integration" value="1">
+                            <span>No integration - manual data entry</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="integration" value="2">
+                            <span>Basic file imports/exports</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="integration" value="3">
+                            <span>Scheduled data synchronization</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="integration" value="4">
+                            <span>Real-time API integration</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-title">6. How do you handle port congestion and delays?</div>
+                    <div class="question-options">
+                        <label class="option-item">
+                            <input type="radio" name="congestion" value="1">
+                            <span>React after delays occur</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="congestion" value="2">
+                            <span>Monitor news and adjust manually</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="congestion" value="3">
+                            <span>Basic alerts and contingency plans</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="congestion" value="4">
+                            <span>Predictive analytics with automated response</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-title">7. What's your current visibility into total freight costs?</div>
+                    <div class="question-options">
+                        <label class="option-item">
+                            <input type="radio" name="cost-visibility" value="1">
+                            <span>Limited - only after invoice receipt</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="cost-visibility" value="2">
+                            <span>Basic reporting with monthly summaries</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="cost-visibility" value="3">
+                            <span>Good visibility with weekly analysis</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="cost-visibility" value="4">
+                            <span>Real-time cost tracking and optimization</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-title">8. How satisfied are you with your current freight management solution?</div>
+                    <div class="question-options">
+                        <label class="option-item">
+                            <input type="radio" name="satisfaction" value="1">
+                            <span>Very dissatisfied - major issues</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="satisfaction" value="2">
+                            <span>Somewhat dissatisfied - needs improvement</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="satisfaction" value="3">
+                            <span>Satisfied but room for optimization</span>
+                        </label>
+                        <label class="option-item">
+                            <input type="radio" name="satisfaction" value="4">
+                            <span>Very satisfied - minimal issues</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button class="card-button" onclick="calculateAssessmentScore()">Get My System Score</button>
+
+            <div class="assessment-score" id="assessmentScore">
+                <h3 class="score-title">Your System Optimization Score</h3>
+                <span class="score-value" id="scoreValue">75</span>
+                <p class="score-description" id="scoreDescription">Good system with optimization opportunities</p>
+            </div>
+
+            <div class="gated-form" id="assessmentGatedForm" style="display: none;">
+                <h3 class="gated-title">Get Your Detailed System Analysis</h3>
+                <p class="gated-description">Receive a comprehensive report with specific recommendations for your freight management optimization.</p>
+                
+                <form class="gated-form-fields" id="assessmentLeadForm">
+                    <input type="text" name="firstName" placeholder="First Name" required>
+                    <input type="text" name="lastName" placeholder="Last Name" required>
+                    <input type="email" name="email" placeholder="Business Email" required>
+                    <input type="text" name="company" placeholder="Company Name" required>
+                    <input type="text" name="title" placeholder="Job Title" required>
+                    <input type="tel" name="phone" placeholder="Phone Number" required>
+                </form>
+                
+                <button class="gated-submit" onclick="submitAssessmentLead()">Get My System Analysis Report</button>
+            </div>
+        </div>
+
+        <!-- Content Offers -->
+        <div class="content-offers">
+            <div class="offer-card">
+                <div class="offer-icon">📊</div>
+                <h3 class="offer-title">Ocean Freight Optimization Whitepaper</h3>
+                <p class="offer-description">Comprehensive guide to eliminating $7-15M in annual freight waste through AI-powered automation.</p>
+                <button class="offer-button" onclick="openModal('whitepaper')">Download Free Whitepaper</button>
+            </div>
+
+            <div class="offer-card">
+                <div class="offer-icon">🎥</div>
+                <h3 class="offer-title">Platform Demo</h3>
+                <p class="offer-description">See how UIP eliminates 94% of D&D charges and reduces manual processing by 85% in 30 minutes.</p>
+                <button class="offer-button" onclick="openModal('demo')">Schedule Live Demo</button>
+            </div>
+
+            <div class="offer-card">
+                <div class="offer-icon">📈</div>
+                <h3 class="offer-title">Customer Success Stories</h3>
+                <p class="offer-description">Real case studies showing $47M+ savings and 347% ROI from enterprise customers.</p>
+                <button class="offer-button" onclick="openModal('case-studies')">View Case Studies</button>
+            </div>
+
+            <div class="offer-card">
+                <div class="offer-icon">🔬</div>
+                <h3 class="offer-title">Industry Benchmark Report</h3>
+                <p class="offer-description">Compare your freight performance against industry leaders and identify optimization opportunities.</p>
+                <button class="offer-button" onclick="openModal('benchmark')">Get Benchmark Report</button>
+            </div>
+        </div>
+
+        <!-- Newsletter Signup -->
+        <div class="newsletter-signup">
+            <h2 class="newsletter-title">Ocean Freight Intelligence Weekly</h2>
+            <p class="newsletter-description">Get exclusive insights on ocean freight optimization, industry trends, and cost-saving strategies delivered every Tuesday.</p>
+            
+            <form class="newsletter-form" id="newsletterForm">
+                <input type="email" class="newsletter-input" placeholder="Enter your business email" required>
+                <button type="submit" class="newsletter-submit">Subscribe</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Content Downloads -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Download Content</h3>
+                <p class="modal-subtitle" id="modalSubtitle">Enter your information to access this resource</p>
+            </div>
+            
+            <form class="modal-form" id="modalForm">
+                <input type="text" name="firstName" placeholder="First Name" required>
+                <input type="text" name="lastName" placeholder="Last Name" required>
+                <input type="email" name="email" placeholder="Business Email" required>
+                <input type="text" name="company" placeholder="Company Name" required>
+                <input type="text" name="title" placeholder="Job Title" required>
+                <select name="companySize" required>
+                    <option value="">Company Size</option>
+                    <option value="1-50">1-50 employees</option>
+                    <option value="51-500">51-500 employees</option>
+                    <option value="501-5000">501-5,000 employees</option>
+                    <option value="5000+">5,000+ employees</option>
+                </select>
+                <select name="industry" required>
+                    <option value="">Industry</option>
+                    <option value="retail">Retail & E-commerce</option>
+                    <option value="automotive">Automotive</option>
+                    <option value="manufacturing">Manufacturing</option>
+                    <option value="chemicals">Chemicals & Materials</option>
+                    <option value="technology">Technology</option>
+                    <option value="other">Other</option>
+                </select>
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+                
+                <button type="submit" class="modal-submit">Access Content</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ROI Calculator Logic
+        function scrollToCalculator() {
+            document.getElementById('roi-calculator').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToAssessment() {
+            document.getElementById('system-assessment').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Auto-calculate ROI as user types
+        document.querySelectorAll('#roiForm input, #roiForm select').forEach(input => {
+            input.addEventListener('input', calculateROI);
+        });
+
+        function calculateROI() {
+            const form = document.getElementById('roiForm');
+            const formData = new FormData(form);
+            
+            // Check if all required fields are filled
+            const requiredFields = ['annualVolume', 'currentDDCost', 'manualHours', 'laborCost', 'companySize', 'industry'];
+            const allFilled = requiredFields.every(field => formData.get(field));
+            
+            if (!allFilled) return;
+
+            // Get values
+            const annualVolume = parseFloat(formData.get('annualVolume'));
+            const currentDDCost = parseFloat(formData.get('currentDDCost'));
+            const manualHours = parseFloat(formData.get('manualHours'));
+            const laborCost = parseFloat(formData.get('laborCost'));
+
+            // Calculate savings
+            const ddSavings = currentDDCost * 0.94; // 94% reduction
+            const laborSavings = manualHours * 12 * laborCost * 0.85; // 85% reduction
+            const totalSavings = ddSavings + laborSavings;
+            const monthlySavings = totalSavings / 12;
+
+            // Platform cost (Enterprise tier)
+            const platformCost = 35000 * 12 + 90000; // Monthly fee + implementation
+            const roi = ((totalSavings - platformCost) / platformCost) * 100;
+            const paybackPeriod = platformCost / monthlySavings;
+
+            // Update display
+            document.getElementById('annual-savings').textContent = '$' + totalSavings.toLocaleString();
+            document.getElementById('monthly-roi').textContent = Math.round(roi) + '%';
+            document.getElementById('payback-period').textContent = paybackPeriod.toFixed(1);
+            document.getElementById('monthly-savings').textContent = '$' + Math.round(monthlySavings / 1000) + 'K';
+
+            // Show results and gated form
+            document.getElementById('calculatorResults').style.display = 'block';
+            document.getElementById('gatedForm').style.display = 'block';
+
+            // Track engagement
+            trackEvent('roi_calculator_completed', {
+                annual_volume: annualVolume,
+                current_dd_cost: currentDDCost,
+                calculated_savings: totalSavings,
+                calculated_roi: roi
+            });
+        }
+
+        // Assessment Tool Logic
+        function calculateAssessmentScore() {
+            const questions = ['tracking', 'dd-frequency', 'manual-time', 'predictability', 'integration', 'congestion', 'cost-visibility', 'satisfaction'];
+            let totalScore = 0;
+            let answeredQuestions = 0;
+
+            questions.forEach(question => {
+                const selectedOption = document.querySelector(`input[name="${question}"]:checked`);
+                if (selectedOption) {
+                    totalScore += parseInt(selectedOption.value);
+                    answeredQuestions++;
+                }
+            });
+
+            if (answeredQuestions !== questions.length) {
+                alert('Please answer all questions to get your score.');
+                return;
+            }
+
+            const averageScore = totalScore / questions.length;
+            const percentageScore = Math.round((averageScore / 4) * 100);
+
+            let scoreDescription;
+            if (percentageScore >= 90) {
+                scoreDescription = "Excellent system with minimal optimization needs";
+            } else if (percentageScore >= 75) {
+                scoreDescription = "Good system with some optimization opportunities";
+            } else if (percentageScore >= 50) {
+                scoreDescription = "Average system with significant improvement potential";
+            } else {
+                scoreDescription = "System needs major optimization - high savings potential";
+            }
+
+            document.getElementById('scoreValue').textContent = percentageScore;
+            document.getElementById('scoreDescription').textContent = scoreDescription;
+            document.getElementById('assessmentScore').style.display = 'block';
+            document.getElementById('assessmentGatedForm').style.display = 'block';
+
+            // Track assessment completion
+            trackEvent('system_assessment_completed', {
+                score: percentageScore,
+                category: scoreDescription
+            });
+        }
+
+        // Lead Capture Functions
+        function submitLeadCapture() {
+            const form = document.getElementById('leadCaptureForm');
+            const formData = new FormData(form);
+            
+            // Validate form
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            // Collect all form data
+            const leadData = {
+                source: 'roi_calculator',
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                company: formData.get('company'),
+                title: formData.get('title'),
+                phone: formData.get('phone'),
+                // Include ROI calculation data
+                annualVolume: document.getElementById('annual-volume').value,
+                currentDDCost: document.getElementById('current-dd-cost').value,
+                calculatedSavings: document.getElementById('annual-savings').textContent
+            };
+
+            // Submit lead
+            submitLead(leadData);
+            
+            // Show success message
+            alert('Thank you! Your detailed ROI report will be delivered to your email within 5 minutes. Our team will also follow up to discuss implementation options.');
+        }
+
+        function submitAssessmentLead() {
+            const form = document.getElementById('assessmentLeadForm');
+            const formData = new FormData(form);
+            
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const leadData = {
+                source: 'system_assessment',
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                company: formData.get('company'),
+                title: formData.get('title'),
+                phone: formData.get('phone'),
+                assessmentScore: document.getElementById('scoreValue').textContent
+            };
+
+            submitLead(leadData);
+            alert('Thank you! Your system analysis report will be delivered within 15 minutes with specific optimization recommendations.');
+        }
+
+        // Modal Functions
+        function openModal(contentType) {
+            const modal = document.getElementById('modalOverlay');
+            const title = document.getElementById('modalTitle');
+            const subtitle = document.getElementById('modalSubtitle');
+            
+            const contentTypes = {
+                'whitepaper': {
+                    title: 'Download Ocean Freight Optimization Guide',
+                    subtitle: 'Get the complete 47-page guide to eliminating freight waste'
+                },
+                'demo': {
+                    title: 'Schedule Live Platform Demo',
+                    subtitle: 'See UIP in action with your specific use case'
+                },
+                'case-studies': {
+                    title: 'Access Customer Success Stories',
+                    subtitle: 'Read detailed case studies with ROI breakdowns'
+                },
+                'benchmark': {
+                    title: 'Get Industry Benchmark Report',
+                    subtitle: 'Compare your performance against industry leaders'
+                }
+            };
+
+            title.textContent = contentTypes[contentType].title;
+            subtitle.textContent = contentTypes[contentType].subtitle;
+            modal.style.display = 'flex';
+            
+            // Store content type for tracking
+            modal.dataset.contentType = contentType;
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        // Modal form submission
+        document.getElementById('modalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const contentType = document.getElementById('modalOverlay').dataset.contentType;
+            
+            const leadData = {
+                source: contentType,
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                company: formData.get('company'),
+                title: formData.get('title'),
+                companySize: formData.get('companySize'),
+                industry: formData.get('industry'),
+                phone: formData.get('phone')
+            };
+
+            submitLead(leadData);
+            closeModal();
+            
+            alert(`Thank you! Your ${contentType.replace('-', ' ')} will be delivered to your email within 5 minutes.`);
+        });
+
+        // Newsletter signup
+        document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = this.querySelector('input[type="email"]').value;
+            
+            const leadData = {
+                source: 'newsletter_signup',
+                email: email
+            };
+
+            submitLead(leadData);
+            alert('Thank you for subscribing! You\'ll receive our next Ocean Freight Intelligence Weekly on Tuesday.');
+        });
+
+        // Lead submission function
+        function submitLead(leadData) {
+            // Track the lead capture
+            trackEvent('lead_captured', leadData);
+            
+            // In a real implementation, this would send to your CRM/marketing automation
+            console.log('Lead captured:', leadData);
+            
+            // Simulate API call
+            fetch('/api/leads', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(leadData)
+            }).then(response => {
+                if (response.ok) {
+                    console.log('Lead successfully submitted to CRM');
+                }
+            }).catch(error => {
+                console.error('Error submitting lead:', error);
+            });
+        }
+
+        // Event tracking function
+        function trackEvent(eventName, eventData) {
+            // Google Analytics 4 tracking
+            if (typeof gtag !== 'undefined') {
+                gtag('event', eventName, eventData);
+            }
+            
+            // Additional tracking systems
+            console.log('Event tracked:', eventName, eventData);
+        }
+
+        // Page load tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            trackEvent('page_view', {
+                page: 'lead_capture_system',
+                source: document.referrer || 'direct'
+            });
+        });
+
+        // Scroll tracking for engagement
+        let scrollDepths = [25, 50, 75, 90];
+        let trackedDepths = [];
+
+        window.addEventListener('scroll', function() {
+            const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+            
+            scrollDepths.forEach(depth => {
+                if (scrollPercent >= depth && !trackedDepths.includes(depth)) {
+                    trackedDepths.push(depth);
+                    trackEvent('scroll_depth', { depth: depth });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

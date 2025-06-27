@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="/platform/manifest.json">
+    <link rel="apple-touch-icon" href="/assets/icons/icon-192x192.png">
+    <title>Company Dashboard - ROOTUIP</title>
+    <link rel="stylesheet" href="/platform/css/mobile-responsive.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: #0f172a;
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .company-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .company-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .company-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .notification-badge {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Metrics Summary */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .metric-label {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-change {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .metric-change.positive {
+            color: #10b981;
+        }
+
+        .metric-change.negative {
+            color: #ef4444;
+        }
+
+        /* Charts Section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        /* Active Shipments Table */
+        .shipments-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-in-transit {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-at-port {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-delivered {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-delayed {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Action Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background: white;
+            color: #1e293b;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            background: #eff6ff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1rem;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-wrapper {
+                overflow-x: scroll;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="company-info">
+                <div class="company-logo" id="companyLogo">AC</div>
+                <div>
+                    <div class="company-name" id="companyName">Acme Corporation</div>
+                    <div style="font-size: 0.875rem; color: #94a3b8;">Enterprise Account</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="notification-badge" onclick="showNotifications()">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                    </svg>
+                    <span class="notification-count" id="notificationCount">3</span>
+                </div>
+                <button class="btn btn-secondary" onclick="window.location.href='/platform/customer/team-settings.html'">
+                    Settings
+                </button>
+                <button class="btn btn-secondary" onclick="window.location.href='/platform/customer/user-management.html'">
+                    Team
+                </button>
+                <button class="btn btn-secondary" onclick="window.location.href='/platform/integration-dashboard.html'">
+                    Integrations
+                </button>
+                <button class="btn btn-primary" onclick="window.location.href='/platform/auth/logout'">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard -->
+    <div class="dashboard-container">
+        <!-- Metrics Summary -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Active Shipments</div>
+                <div class="metric-value" id="activeShipments">127</div>
+                <div class="metric-change positive">
+                    <svg width="16" height="16" fill="currentColor">
+                        <path d="M8 4l4 4H4l4-4z"/>
+                    </svg>
+                    <span>12% from last month</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">On-Time Delivery</div>
+                <div class="metric-value" id="onTimeDelivery">94.2%</div>
+                <div class="metric-change positive">
+                    <svg width="16" height="16" fill="currentColor">
+                        <path d="M8 4l4 4H4l4-4z"/>
+                    </svg>
+                    <span>2.1% improvement</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">D&D Risk Score</div>
+                <div class="metric-value" id="ddRiskScore">2.8%</div>
+                <div class="metric-change positive">
+                    <svg width="16" height="16" fill="currentColor" transform="rotate(180)">
+                        <path d="M8 4l4 4H4l4-4z"/>
+                    </svg>
+                    <span>0.5% reduction</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Monthly Cost Savings</div>
+                <div class="metric-value" id="costSavings">$142K</div>
+                <div class="metric-change positive">
+                    <svg width="16" height="16" fill="currentColor">
+                        <path d="M8 4l4 4H4l4-4z"/>
+                    </svg>
+                    <span>18% increase</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="action-card" onclick="trackNewShipment()">
+                <div class="action-icon">📦</div>
+                <div style="font-weight: 600;">Track Shipment</div>
+                <div style="font-size: 0.875rem; color: #64748b;">Add tracking number</div>
+            </div>
+            <div class="action-card" onclick="createBooking()">
+                <div class="action-icon">📋</div>
+                <div style="font-weight: 600;">New Booking</div>
+                <div style="font-size: 0.875rem; color: #64748b;">Create shipment</div>
+            </div>
+            <div class="action-card" onclick="uploadDocuments()">
+                <div class="action-icon">📄</div>
+                <div style="font-weight: 600;">Upload Documents</div>
+                <div style="font-size: 0.875rem; color: #64748b;">Process with AI</div>
+            </div>
+            <div class="action-card" onclick="viewReports()">
+                <div class="action-icon">📊</div>
+                <div style="font-weight: 600;">View Reports</div>
+                <div style="font-size: 0.875rem; color: #64748b;">Analytics & insights</div>
+            </div>
+            <div class="action-card" onclick="window.location.href='/platform/customer/data-interfaces.html'">
+                <div class="action-icon">🔄</div>
+                <div style="font-weight: 600;">Data Import/Export</div>
+                <div style="font-size: 0.875rem; color: #64748b;">Bulk operations & API</div>
+            </div>
+            <div class="action-card" onclick="window.location.href='/platform/customer/support.html'">
+                <div class="action-icon">🎫</div>
+                <div style="font-weight: 600;">Support Center</div>
+                <div style="font-size: 0.875rem; color: #64748b;">Help & tickets</div>
+            </div>
+            <div class="action-card" onclick="window.location.href='/platform/enterprise/workflow-manager.html'" style="border: 2px solid #f59e0b;">
+                <div class="action-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);">⚡</div>
+                <div style="font-weight: 600;">Enterprise Workflows</div>
+                <div style="font-size: 0.875rem; color: #64748b;">$500K+ operations</div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Shipment Volume Trend</h3>
+                    <select class="filter-select">
+                        <option>Last 30 days</option>
+                        <option>Last 90 days</option>
+                        <option>Last year</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="volumeChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Carrier Performance</h3>
+                    <select class="filter-select">
+                        <option>All carriers</option>
+                        <option>Top 5</option>
+                        <option>By region</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="carrierChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Shipments -->
+        <div class="shipments-section">
+            <div class="section-header">
+                <h2 class="section-title">Active Shipments</h2>
+                <button class="btn btn-primary" onclick="window.location.href='/platform/shipments.html'">
+                    View All
+                </button>
+            </div>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Status:</label>
+                    <select class="filter-select" id="statusFilter" onchange="filterShipments()">
+                        <option value="">All</option>
+                        <option value="in-transit">In Transit</option>
+                        <option value="at-port">At Port</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="delayed">Delayed</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Carrier:</label>
+                    <select class="filter-select" id="carrierFilter" onchange="filterShipments()">
+                        <option value="">All</option>
+                        <option value="MAEU">Maersk</option>
+                        <option value="MSCU">MSC</option>
+                        <option value="CMDU">CMA CGM</option>
+                        <option value="HLCU">Hapag-Lloyd</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Route:</label>
+                    <select class="filter-select" id="routeFilter" onchange="filterShipments()">
+                        <option value="">All</option>
+                        <option value="asia-europe">Asia-Europe</option>
+                        <option value="transpacific">Transpacific</option>
+                        <option value="transatlantic">Transatlantic</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="shipmentsTable">
+                    <thead>
+                        <tr>
+                            <th>Container #</th>
+                            <th>B/L Number</th>
+                            <th>Carrier</th>
+                            <th>Origin</th>
+                            <th>Destination</th>
+                            <th>Status</th>
+                            <th>ETA</th>
+                            <th>D&D Risk</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="shipmentsTableBody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Alerts Section -->
+        <div class="shipments-section">
+            <div class="section-header">
+                <h2 class="section-title">Recent Alerts</h2>
+                <button class="btn btn-secondary" onclick="window.location.href='/platform/alerts.html'">
+                    View All
+                </button>
+            </div>
+            <div id="alertsList">
+                <!-- Dynamic alerts -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // Initialize dashboard data
+        let shipments = [];
+        let companyData = {};
+
+        // Load company data
+        async function loadCompanyData() {
+            try {
+                // In production, this would fetch from API
+                const userData = JSON.parse(localStorage.getItem('user') || '{}');
+                companyData = {
+                    name: userData.company || 'Acme Corporation',
+                    id: userData.companyId || 'ACME001',
+                    logo: userData.company ? userData.company.substring(0, 2).toUpperCase() : 'AC'
+                };
+                
+                document.getElementById('companyName').textContent = companyData.name;
+                document.getElementById('companyLogo').textContent = companyData.logo;
+                
+                // Load metrics
+                await loadMetrics();
+                await loadShipments();
+                loadCharts();
+                loadAlerts();
+            } catch (error) {
+                console.error('Error loading company data:', error);
+            }
+        }
+
+        // Load metrics
+        async function loadMetrics() {
+            try {
+                // Try to fetch from API
+                const response = await fetch('/api/metrics');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('activeShipments').textContent = data.activeShipments;
+                    document.getElementById('onTimeDelivery').textContent = data.onTimeDelivery + '%';
+                    document.getElementById('ddRiskScore').textContent = data.ddRiskScore + '%';
+                    document.getElementById('costSavings').textContent = '$' + data.costSavings + 'K';
+                } else {
+                    throw new Error('API not available');
+                }
+            } catch (error) {
+                // Use demo data if API fails
+                console.log('Using demo data - API not available');
+                const metrics = {
+                    activeShipments: 127,
+                    onTimeDelivery: 94.2,
+                    ddRiskScore: 2.8,
+                    costSavings: 142
+                };
+                
+                document.getElementById('activeShipments').textContent = metrics.activeShipments;
+                document.getElementById('onTimeDelivery').textContent = metrics.onTimeDelivery + '%';
+                document.getElementById('ddRiskScore').textContent = metrics.ddRiskScore + '%';
+                document.getElementById('costSavings').textContent = '$' + metrics.costSavings + 'K';
+            }
+        }
+
+        // Load shipments
+        async function loadShipments() {
+            // Simulated shipment data
+            shipments = [
+                {
+                    container: 'MAEU1234567',
+                    blNumber: 'BL123456789',
+                    carrier: 'MAEU',
+                    carrierName: 'Maersk',
+                    origin: 'Shanghai',
+                    destination: 'Rotterdam',
+                    status: 'in-transit',
+                    eta: '2025-07-15',
+                    ddRisk: 'Low',
+                    route: 'asia-europe'
+                },
+                {
+                    container: 'MSCU7654321',
+                    blNumber: 'BL987654321',
+                    carrier: 'MSCU',
+                    carrierName: 'MSC',
+                    origin: 'Singapore',
+                    destination: 'Los Angeles',
+                    status: 'at-port',
+                    eta: '2025-07-10',
+                    ddRisk: 'Medium',
+                    route: 'transpacific'
+                },
+                {
+                    container: 'CMDU2468135',
+                    blNumber: 'BL135792468',
+                    carrier: 'CMDU',
+                    carrierName: 'CMA CGM',
+                    origin: 'Hamburg',
+                    destination: 'New York',
+                    status: 'delayed',
+                    eta: '2025-07-20',
+                    ddRisk: 'High',
+                    route: 'transatlantic'
+                }
+            ];
+            
+            renderShipments(shipments);
+        }
+
+        // Render shipments table
+        function renderShipments(shipmentsToRender) {
+            const tbody = document.getElementById('shipmentsTableBody');
+            tbody.innerHTML = '';
+            
+            shipmentsToRender.forEach(shipment => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td><strong>${shipment.container}</strong></td>
+                    <td>${shipment.blNumber}</td>
+                    <td>${shipment.carrierName}</td>
+                    <td>${shipment.origin}</td>
+                    <td>${shipment.destination}</td>
+                    <td><span class="status-badge status-${shipment.status}">${shipment.status.replace('-', ' ')}</span></td>
+                    <td>${new Date(shipment.eta).toLocaleDateString()}</td>
+                    <td><span class="status-badge ${getRiskClass(shipment.ddRisk)}">${shipment.ddRisk}</span></td>
+                    <td>
+                        <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;" 
+                                onclick="viewShipmentDetails('${shipment.container}')">
+                            View
+                        </button>
+                    </td>
+                `;
+            });
+        }
+
+        // Get risk class for styling
+        function getRiskClass(risk) {
+            switch(risk.toLowerCase()) {
+                case 'low': return 'status-delivered';
+                case 'medium': return 'status-at-port';
+                case 'high': return 'status-delayed';
+                default: return '';
+            }
+        }
+
+        // Filter shipments
+        function filterShipments() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const carrierFilter = document.getElementById('carrierFilter').value;
+            const routeFilter = document.getElementById('routeFilter').value;
+            
+            let filtered = shipments;
+            
+            if (statusFilter) {
+                filtered = filtered.filter(s => s.status === statusFilter);
+            }
+            if (carrierFilter) {
+                filtered = filtered.filter(s => s.carrier === carrierFilter);
+            }
+            if (routeFilter) {
+                filtered = filtered.filter(s => s.route === routeFilter);
+            }
+            
+            renderShipments(filtered);
+        }
+
+        // Load charts
+        function loadCharts() {
+            // Volume trend chart
+            const volumeCtx = document.getElementById('volumeChart').getContext('2d');
+            new Chart(volumeCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Shipments',
+                        data: [65, 72, 68, 81],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // Carrier performance chart
+            const carrierCtx = document.getElementById('carrierChart').getContext('2d');
+            new Chart(carrierCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Maersk', 'MSC', 'CMA CGM', 'Hapag-Lloyd', 'ONE'],
+                    datasets: [{
+                        label: 'On-Time %',
+                        data: [94, 91, 89, 93, 88],
+                        backgroundColor: [
+                            '#3b82f6',
+                            '#8b5cf6',
+                            '#10b981',
+                            '#f59e0b',
+                            '#ef4444'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load alerts
+        function loadAlerts() {
+            const alerts = [
+                {
+                    type: 'warning',
+                    title: 'Potential Delay - CMDU2468135',
+                    message: 'Weather conditions may affect arrival at New York port',
+                    time: '2 hours ago'
+                },
+                {
+                    type: 'success',
+                    title: 'Document Processed - BL123456789',
+                    message: 'Bill of Lading automatically processed and validated',
+                    time: '4 hours ago'
+                },
+                {
+                    type: 'info',
+                    title: 'Rate Update - Transpacific Routes',
+                    message: 'New competitive rates available for Asia-US shipments',
+                    time: '1 day ago'
+                }
+            ];
+            
+            const alertsList = document.getElementById('alertsList');
+            alertsList.innerHTML = alerts.map(alert => `
+                <div style="padding: 1rem; border-left: 4px solid ${getAlertColor(alert.type)}; background: white; margin-bottom: 1rem; border-radius: 4px;">
+                    <div style="font-weight: 600; margin-bottom: 0.25rem;">${alert.title}</div>
+                    <div style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.5rem;">${alert.message}</div>
+                    <div style="color: #94a3b8; font-size: 0.75rem;">${alert.time}</div>
+                </div>
+            `).join('');
+        }
+
+        function getAlertColor(type) {
+            switch(type) {
+                case 'warning': return '#f59e0b';
+                case 'success': return '#10b981';
+                case 'info': return '#3b82f6';
+                case 'error': return '#ef4444';
+                default: return '#64748b';
+            }
+        }
+
+        // Action handlers
+        function trackNewShipment() {
+            window.location.href = '/platform/track-shipment.html';
+        }
+
+        function createBooking() {
+            window.location.href = '/platform/new-booking.html';
+        }
+
+        function uploadDocuments() {
+            window.location.href = '/platform/document-upload.html';
+        }
+
+        function viewReports() {
+            window.location.href = '/platform/reports.html';
+        }
+
+        function viewShipmentDetails(container) {
+            window.location.href = `/platform/shipment-details.html?container=${container}`;
+        }
+
+        function showNotifications() {
+            alert('Notifications feature coming soon!');
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCompanyData();
+            
+            // Initialize PWA features
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/platform/service-worker.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.error('Service Worker registration failed:', err));
+            }
+            
+            // Add mobile navigation
+            if (window.innerWidth <= 768) {
+                addMobileNavigation();
+            }
+        });
+        
+        // Auto-refresh metrics every 30 seconds
+        setInterval(loadMetrics, 30000);
+        
+        // Add mobile navigation
+        function addMobileNavigation() {
+            // Add mobile nav toggle button
+            const navToggle = document.createElement('button');
+            navToggle.className = 'mobile-nav-toggle';
+            navToggle.innerHTML = '☰';
+            navToggle.onclick = toggleMobileNav;
+            document.body.appendChild(navToggle);
+            
+            // Create mobile nav menu
+            const mobileNav = document.createElement('div');
+            mobileNav.className = 'mobile-nav';
+            mobileNav.innerHTML = `
+                <div class="mobile-nav-grid">
+                    <a href="/platform/customer/dashboard.html" class="mobile-nav-item">
+                        <span class="mobile-nav-icon">🏠</span>
+                        <span class="mobile-nav-label">Dashboard</span>
+                    </a>
+                    <a href="/platform/shipments.html" class="mobile-nav-item">
+                        <span class="mobile-nav-icon">📦</span>
+                        <span class="mobile-nav-label">Shipments</span>
+                    </a>
+                    <a href="/platform/track-shipment.html" class="mobile-nav-item">
+                        <span class="mobile-nav-icon">🔍</span>
+                        <span class="mobile-nav-label">Track</span>
+                    </a>
+                    <a href="/platform/new-booking.html" class="mobile-nav-item">
+                        <span class="mobile-nav-icon">➕</span>
+                        <span class="mobile-nav-label">Book</span>
+                    </a>
+                    <a href="/platform/reports.html" class="mobile-nav-item">
+                        <span class="mobile-nav-icon">📊</span>
+                        <span class="mobile-nav-label">Reports</span>
+                    </a>
+                    <a href="/platform/customer/support.html" class="mobile-nav-item">
+                        <span class="mobile-nav-icon">💬</span>
+                        <span class="mobile-nav-label">Support</span>
+                    </a>
+                </div>
+            `;
+            document.body.appendChild(mobileNav);
+        }
+        
+        function toggleMobileNav() {
+            document.querySelector('.mobile-nav').classList.toggle('active');
+        }
+        
+        // Add table mobile attributes
+        document.querySelectorAll('td').forEach(td => {
+            const th = td.closest('table').querySelectorAll('th')[td.cellIndex];
+            if (th) {
+                td.setAttribute('data-label', th.textContent);
+            }
+        });
+    </script>
+    <script src="/platform/pwa-install.js"></script>
+</body>
+</html>

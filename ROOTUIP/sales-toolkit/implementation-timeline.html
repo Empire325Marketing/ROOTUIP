@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP 14-Day Implementation Timeline</title>
-    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <link rel="icon" type="image/svg+xml" href="/brand/brand/logo-icon-new.svg">
     <script src="/js/logo-component.js"></script>
     <style>
         body {
@@ -11,7 +11,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
-            color: #0A1628;
+            color: var(--uip-primary-800);
         }
         .header {
             text-align: center;
@@ -40,7 +40,7 @@
             top: 0;
             bottom: 0;
             width: 4px;
-            background: #00D4AA;
+            background: var(--uip-success-500);
             transform: translateX(-50%);
         }
         .phase {
@@ -66,7 +66,7 @@
             transform: translateX(-50%);
             width: 60px;
             height: 60px;
-            background: #00D4AA;
+            background: var(--uip-success-500);
             color: white;
             border-radius: 50%;
             display: flex;
@@ -79,11 +79,11 @@
         }
         .phase h3 {
             font-size: 1.5rem;
-            color: #0A1628;
+            color: var(--uip-primary-800);
             margin-bottom: 0.5rem;
         }
         .phase-days {
-            color: #00D4AA;
+            color: var(--uip-success-500);
             font-weight: 700;
             margin-bottom: 1rem;
         }
@@ -100,19 +100,19 @@
             content: "✓";
             position: absolute;
             left: 0;
-            color: #00D4AA;
+            color: var(--uip-success-500);
             font-weight: 700;
         }
         .milestone {
             background: #E6FCF5;
-            border: 2px solid #00D4AA;
+            border: 2px solid var(--uip-success-500);
             padding: 1.5rem;
             border-radius: 12px;
             margin: 3rem 0;
             text-align: center;
         }
         .milestone h3 {
-            color: #00D4AA;
+            color: var(--uip-success-500);
             margin-bottom: 0.5rem;
         }
         .success-metrics {
@@ -130,7 +130,7 @@
         .metric-value {
             font-size: 1.5rem;
             font-weight: 800;
-            color: #00D4AA;
+            color: var(--uip-success-500);
             display: block;
         }
         .metric-label {
@@ -138,6 +138,8 @@
             color: #64748B;
         }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="header">

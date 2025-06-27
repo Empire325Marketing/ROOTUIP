@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to ROOTUIP - Setup Your Account</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #1e293b;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .skip-link {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .skip-link:hover {
+            color: white;
+        }
+
+        /* Main Container */
+        .onboarding-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-step.completed:not(:last-child)::after {
+            background: #10b981;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            position: relative;
+            z-index: 1;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        .progress-step.active .step-circle {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .progress-step.completed .step-circle {
+            background: #10b981;
+            color: white;
+        }
+
+        .step-label {
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        .progress-step.active .step-label,
+        .progress-step.completed .step-label {
+            color: white;
+        }
+
+        /* Content Area */
+        .content-card {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .step-content {
+            display: none;
+            flex: 1;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        .step-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .step-description {
+            color: #64748b;
+            margin-bottom: 2rem;
+            font-size: 1.125rem;
+        }
+
+        /* Form Elements */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #334155;
+        }
+
+        .required {
+            color: #ef4444;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-hint {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+
+        /* Option Cards */
+        .option-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .option-card:hover {
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+        }
+
+        .option-card.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .option-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .option-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .option-description {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        /* Feature List */
+        .feature-list {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            padding: 1rem;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .feature-item:hover {
+            background: #f8fafc;
+        }
+
+        .feature-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+        }
+
+        .feature-content {
+            flex: 1;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-description {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+            margin-top: auto;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Welcome Screen */
+        .welcome-content {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-list {
+            text-align: left;
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-icon {
+            color: #10b981;
+            font-size: 1.5rem;
+        }
+
+        /* Loading State */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success Screen */
+        .success-content {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            color: white;
+            font-size: 2.5rem;
+        }
+
+        .next-steps {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .next-step-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .next-step-number {
+            width: 28px;
+            height: 28px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .onboarding-container {
+                padding: 5rem 1rem 1rem;
+            }
+
+            .content-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .progress-steps {
+                overflow-x: auto;
+                padding-bottom: 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">ROOTUIP</a>
+            <a href="/platform/customer/dashboard.html" class="skip-link">Skip Setup →</a>
+        </div>
+    </header>
+
+    <!-- Onboarding Container -->
+    <div class="onboarding-container">
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="progress-step active" data-step="welcome">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Welcome</div>
+                </div>
+                <div class="progress-step" data-step="company">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Company Info</div>
+                </div>
+                <div class="progress-step" data-step="integration">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Integrations</div>
+                </div>
+                <div class="progress-step" data-step="team">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Team Setup</div>
+                </div>
+                <div class="progress-step" data-step="preferences">
+                    <div class="step-circle">5</div>
+                    <div class="step-label">Preferences</div>
+                </div>
+                <div class="progress-step" data-step="complete">
+                    <div class="step-circle">✓</div>
+                    <div class="step-label">Complete</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Card -->
+        <div class="content-card">
+            <!-- Step 1: Welcome -->
+            <div id="welcome-step" class="step-content active">
+                <div class="welcome-content">
+                    <div class="welcome-icon">🎉</div>
+                    <h1 class="step-title">Welcome to ROOTUIP!</h1>
+                    <p class="step-description">
+                        Let's get your account set up in just a few minutes. We'll guide you through the process step by step.
+                    </p>
+                    
+                    <div class="benefit-list">
+                        <div class="benefit-item">
+                            <span class="benefit-icon">✓</span>
+                            <div>
+                                <strong>Save $500,000+ per ship</strong> with our AI-powered optimization
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <span class="benefit-icon">✓</span>
+                            <div>
+                                <strong>Prevent D&D charges</strong> with predictive analytics
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <span class="benefit-icon">✓</span>
+                            <div>
+                                <strong>Real-time tracking</strong> across all carriers
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <span class="benefit-icon">✓</span>
+                            <div>
+                                <strong>Automated document processing</strong> with 99.9% accuracy
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Company Information -->
+            <div id="company-step" class="step-content">
+                <h2 class="step-title">Tell us about your company</h2>
+                <p class="step-description">This information helps us customize your experience and ensure compliance.</p>
+                
+                <form id="company-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Company Name <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="companyName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Industry <span class="required">*</span></label>
+                            <select class="form-select" id="industry" required>
+                                <option value="">Select industry</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="retail">Retail & E-commerce</option>
+                                <option value="automotive">Automotive</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="pharmaceuticals">Pharmaceuticals</option>
+                                <option value="food-beverage">Food & Beverage</option>
+                                <option value="logistics">Logistics & Freight</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Company Size <span class="required">*</span></label>
+                            <select class="form-select" id="companySize" required>
+                                <option value="">Select size</option>
+                                <option value="1-50">1-50 employees</option>
+                                <option value="51-200">51-200 employees</option>
+                                <option value="201-1000">201-1000 employees</option>
+                                <option value="1001-5000">1001-5000 employees</option>
+                                <option value="5000+">5000+ employees</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Annual Shipping Volume</label>
+                            <select class="form-select" id="shippingVolume">
+                                <option value="">Select volume</option>
+                                <option value="<100">Less than 100 TEUs</option>
+                                <option value="100-500">100-500 TEUs</option>
+                                <option value="500-1000">500-1000 TEUs</option>
+                                <option value="1000-5000">1000-5000 TEUs</option>
+                                <option value="5000+">5000+ TEUs</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Primary Shipping Routes</label>
+                        <div class="option-cards">
+                            <div class="option-card" data-route="transpacific">
+                                <div class="option-icon">🌏</div>
+                                <div class="option-title">Transpacific</div>
+                                <div class="option-description">Asia ↔ Americas</div>
+                            </div>
+                            <div class="option-card" data-route="transatlantic">
+                                <div class="option-icon">🌊</div>
+                                <div class="option-title">Transatlantic</div>
+                                <div class="option-description">Europe ↔ Americas</div>
+                            </div>
+                            <div class="option-card" data-route="asia-europe">
+                                <div class="option-icon">🌍</div>
+                                <div class="option-title">Asia-Europe</div>
+                                <div class="option-description">Asia ↔ Europe</div>
+                            </div>
+                            <div class="option-card" data-route="intra-asia">
+                                <div class="option-icon">🌏</div>
+                                <div class="option-title">Intra-Asia</div>
+                                <div class="option-description">Within Asia</div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: Integrations -->
+            <div id="integration-step" class="step-content">
+                <h2 class="step-title">Connect your systems</h2>
+                <p class="step-description">Integrate with your existing tools for seamless operations. You can always add more later.</p>
+                
+                <div class="feature-list">
+                    <label class="feature-item">
+                        <input type="checkbox" class="feature-checkbox" value="sap">
+                        <div class="feature-content">
+                            <div class="feature-title">SAP</div>
+                            <div class="feature-description">Connect your SAP ERP system for automated data sync</div>
+                        </div>
+                    </label>
+                    <label class="feature-item">
+                        <input type="checkbox" class="feature-checkbox" value="oracle">
+                        <div class="feature-content">
+                            <div class="feature-title">Oracle</div>
+                            <div class="feature-description">Integrate with Oracle NetSuite or other Oracle systems</div>
+                        </div>
+                    </label>
+                    <label class="feature-item">
+                        <input type="checkbox" class="feature-checkbox" value="salesforce">
+                        <div class="feature-content">
+                            <div class="feature-title">Salesforce</div>
+                            <div class="feature-description">Sync customer data and shipping information</div>
+                        </div>
+                    </label>
+                    <label class="feature-item">
+                        <input type="checkbox" class="feature-checkbox" value="microsoft">
+                        <div class="feature-content">
+                            <div class="feature-title">Microsoft Dynamics</div>
+                            <div class="feature-description">Connect with Dynamics 365 or Business Central</div>
+                        </div>
+                    </label>
+                    <label class="feature-item">
+                        <input type="checkbox" class="feature-checkbox" value="custom">
+                        <div class="feature-content">
+                            <div class="feature-title">Custom API</div>
+                            <div class="feature-description">Use our REST API for custom integrations</div>
+                        </div>
+                    </label>
+                </div>
+
+                <div style="background: #f8fafc; border-radius: 8px; padding: 1rem; margin-top: 1rem;">
+                    <p style="color: #64748b; font-size: 0.875rem; margin: 0;">
+                        <strong>Note:</strong> Our integration specialists will help you set up these connections after onboarding.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 4: Team Setup -->
+            <div id="team-step" class="step-content">
+                <h2 class="step-title">Invite your team</h2>
+                <p class="step-description">Add team members to collaborate on shipments and operations.</p>
+                
+                <div id="team-members">
+                    <div class="form-group">
+                        <label class="form-label">Team Member 1</label>
+                        <div class="form-grid">
+                            <input type="text" class="form-input" placeholder="Name">
+                            <input type="email" class="form-input" placeholder="Email address">
+                            <select class="form-select">
+                                <option value="">Select role</option>
+                                <option value="admin">Admin</option>
+                                <option value="operations">Operations Manager</option>
+                                <option value="finance">Finance</option>
+                                <option value="viewer">Viewer</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn btn-secondary" onclick="addTeamMember()">
+                    + Add Another Team Member
+                </button>
+                
+                <div style="background: #eff6ff; border-radius: 8px; padding: 1rem; margin-top: 2rem;">
+                    <p style="color: #1e40af; font-size: 0.875rem; margin: 0;">
+                        <strong>Tip:</strong> You can always invite more team members later from the Team Settings page.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 5: Preferences -->
+            <div id="preferences-step" class="step-content">
+                <h2 class="step-title">Set your preferences</h2>
+                <p class="step-description">Customize how you want to receive notifications and reports.</p>
+                
+                <div class="form-group">
+                    <label class="form-label">Email Notifications</label>
+                    <div class="feature-list">
+                        <label class="feature-item">
+                            <input type="checkbox" class="feature-checkbox" checked>
+                            <div class="feature-content">
+                                <div class="feature-title">Shipment Updates</div>
+                                <div class="feature-description">Get notified about arrival, departure, and delays</div>
+                            </div>
+                        </label>
+                        <label class="feature-item">
+                            <input type="checkbox" class="feature-checkbox" checked>
+                            <div class="feature-content">
+                                <div class="feature-title">D&D Risk Alerts</div>
+                                <div class="feature-description">Warnings about potential detention and demurrage</div>
+                            </div>
+                        </label>
+                        <label class="feature-item">
+                            <input type="checkbox" class="feature-checkbox">
+                            <div class="feature-content">
+                                <div class="feature-title">Weekly Reports</div>
+                                <div class="feature-description">Summary of your shipping performance</div>
+                            </div>
+                        </label>
+                        <label class="feature-item">
+                            <input type="checkbox" class="feature-checkbox">
+                            <div class="feature-content">
+                                <div class="feature-title">Rate Updates</div>
+                                <div class="feature-description">New rates and promotions from carriers</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Default Currency</label>
+                    <select class="form-select" id="currency">
+                        <option value="USD" selected>USD - US Dollar</option>
+                        <option value="EUR">EUR - Euro</option>
+                        <option value="GBP">GBP - British Pound</option>
+                        <option value="JPY">JPY - Japanese Yen</option>
+                        <option value="CNY">CNY - Chinese Yuan</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Time Zone</label>
+                    <select class="form-select" id="timezone">
+                        <option value="America/New_York">Eastern Time (US & Canada)</option>
+                        <option value="America/Chicago">Central Time (US & Canada)</option>
+                        <option value="America/Los_Angeles">Pacific Time (US & Canada)</option>
+                        <option value="Europe/London">London</option>
+                        <option value="Europe/Paris">Paris</option>
+                        <option value="Asia/Shanghai">Beijing, Shanghai</option>
+                        <option value="Asia/Tokyo">Tokyo</option>
+                        <option value="Asia/Singapore">Singapore</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Step 6: Complete -->
+            <div id="complete-step" class="step-content">
+                <div class="success-content">
+                    <div class="success-icon">✓</div>
+                    <h2 class="step-title">You're all set!</h2>
+                    <p class="step-description">
+                        Your ROOTUIP account is ready to use. Here's what you can do next:
+                    </p>
+                    
+                    <div class="next-steps">
+                        <h3 style="margin-bottom: 1rem;">Next Steps</h3>
+                        <div class="next-step-item">
+                            <div class="next-step-number">1</div>
+                            <div>
+                                <strong>Track your first shipment</strong><br>
+                                <span style="color: #64748b; font-size: 0.875rem;">
+                                    Add a container or B/L number to start tracking
+                                </span>
+                            </div>
+                        </div>
+                        <div class="next-step-item">
+                            <div class="next-step-number">2</div>
+                            <div>
+                                <strong>Upload shipping documents</strong><br>
+                                <span style="color: #64748b; font-size: 0.875rem;">
+                                    Our AI will extract and process data automatically
+                                </span>
+                            </div>
+                        </div>
+                        <div class="next-step-item">
+                            <div class="next-step-number">3</div>
+                            <div>
+                                <strong>Schedule a demo</strong><br>
+                                <span style="color: #64748b; font-size: 0.875rem;">
+                                    Learn how to maximize your savings with ROOTUIP
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading-state" class="loading">
+                <div class="spinner"></div>
+                <p>Setting up your account...</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button type="button" class="btn btn-secondary" id="backBtn" onclick="previousStep()" style="display: none;">
+                    Back
+                </button>
+                <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextStep()">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        const steps = ['welcome', 'company', 'integration', 'team', 'preferences', 'complete'];
+        const stepContents = document.querySelectorAll('.step-content');
+        const progressSteps = document.querySelectorAll('.progress-step');
+        let formData = {};
+
+        // Initialize
+        function init() {
+            updateUI();
+            
+            // Route option cards
+            document.querySelectorAll('.option-card[data-route]').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+            });
+        }
+
+        // Update UI based on current step
+        function updateUI() {
+            // Update step content
+            stepContents.forEach((content, index) => {
+                content.classList.toggle('active', index === currentStep);
+            });
+
+            // Update progress bar
+            progressSteps.forEach((step, index) => {
+                step.classList.toggle('active', index === currentStep);
+                step.classList.toggle('completed', index < currentStep);
+            });
+
+            // Update buttons
+            const backBtn = document.getElementById('backBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            backBtn.style.display = currentStep > 0 && currentStep < steps.length - 1 ? 'block' : 'none';
+            
+            if (currentStep === steps.length - 1) {
+                nextBtn.textContent = 'Go to Dashboard';
+                nextBtn.onclick = () => window.location.href = '/platform/customer/dashboard.html';
+            } else if (currentStep === 0) {
+                nextBtn.textContent = 'Get Started';
+            } else {
+                nextBtn.textContent = 'Continue';
+            }
+        }
+
+        // Next step
+        function nextStep() {
+            if (currentStep < steps.length - 1) {
+                // Validate current step
+                if (!validateStep()) {
+                    return;
+                }
+                
+                // Save current step data
+                saveStepData();
+                
+                currentStep++;
+                updateUI();
+                
+                // Simulate processing on last step
+                if (currentStep === steps.length - 1) {
+                    processOnboarding();
+                }
+            }
+        }
+
+        // Previous step
+        function previousStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateUI();
+            }
+        }
+
+        // Validate current step
+        function validateStep() {
+            switch (steps[currentStep]) {
+                case 'company':
+                    const companyName = document.getElementById('companyName').value;
+                    const industry = document.getElementById('industry').value;
+                    const companySize = document.getElementById('companySize').value;
+                    
+                    if (!companyName || !industry || !companySize) {
+                        alert('Please fill in all required fields');
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        }
+
+        // Save step data
+        function saveStepData() {
+            switch (steps[currentStep]) {
+                case 'company':
+                    formData.company = {
+                        name: document.getElementById('companyName').value,
+                        industry: document.getElementById('industry').value,
+                        size: document.getElementById('companySize').value,
+                        volume: document.getElementById('shippingVolume').value,
+                        routes: Array.from(document.querySelectorAll('.option-card[data-route].selected'))
+                            .map(card => card.dataset.route)
+                    };
+                    break;
+                case 'integration':
+                    formData.integrations = Array.from(document.querySelectorAll('.feature-checkbox:checked'))
+                        .map(cb => cb.value);
+                    break;
+                case 'team':
+                    formData.team = getTeamMembers();
+                    break;
+                case 'preferences':
+                    formData.preferences = {
+                        notifications: Array.from(document.querySelectorAll('#preferences-step .feature-checkbox:checked'))
+                            .map((cb, index) => ['shipment_updates', 'dd_alerts', 'weekly_reports', 'rate_updates'][index])
+                            .filter(Boolean),
+                        currency: document.getElementById('currency').value,
+                        timezone: document.getElementById('timezone').value
+                    };
+                    break;
+            }
+        }
+
+        // Add team member
+        let teamMemberCount = 1;
+        function addTeamMember() {
+            teamMemberCount++;
+            const teamContainer = document.getElementById('team-members');
+            const newMember = document.createElement('div');
+            newMember.className = 'form-group';
+            newMember.innerHTML = `
+                <label class="form-label">Team Member ${teamMemberCount}</label>
+                <div class="form-grid">
+                    <input type="text" class="form-input" placeholder="Name">
+                    <input type="email" class="form-input" placeholder="Email address">
+                    <select class="form-select">
+                        <option value="">Select role</option>
+                        <option value="admin">Admin</option>
+                        <option value="operations">Operations Manager</option>
+                        <option value="finance">Finance</option>
+                        <option value="viewer">Viewer</option>
+                    </select>
+                </div>
+            `;
+            teamContainer.appendChild(newMember);
+        }
+
+        // Get team members
+        function getTeamMembers() {
+            const members = [];
+            document.querySelectorAll('#team-members .form-group').forEach(group => {
+                const inputs = group.querySelectorAll('input, select');
+                if (inputs[0].value && inputs[1].value && inputs[2].value) {
+                    members.push({
+                        name: inputs[0].value,
+                        email: inputs[1].value,
+                        role: inputs[2].value
+                    });
+                }
+            });
+            return members;
+        }
+
+        // Process onboarding
+        function processOnboarding() {
+            // Show loading
+            document.getElementById('loading-state').style.display = 'block';
+            document.getElementById('complete-step').style.display = 'none';
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Save to localStorage (in production, send to API)
+                localStorage.setItem('onboardingComplete', 'true');
+                localStorage.setItem('companyData', JSON.stringify(formData));
+                
+                // Update user data
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                user.company = formData.company.name;
+                user.onboardingComplete = true;
+                localStorage.setItem('user', JSON.stringify(user));
+                
+                // Show success
+                document.getElementById('loading-state').style.display = 'none';
+                document.getElementById('complete-step').style.display = 'block';
+            }, 2000);
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

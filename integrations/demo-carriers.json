@@ -1,0 +1,22 @@
+{
+  "carriers": [
+    {
+      "carrierId": "MAEU",
+      "config": {
+        "consumerKey": "demo-key",
+        "consumerSecret": "demo-secret",
+        "customerId": "DEMO123",
+        "environment": "sandbox"
+      }
+    },
+    {
+      "carrierId": "MSCU",
+      "config": {
+        "username": "demo",
+        "password": "demo123",
+        "accountNumber": "MSC-DEMO",
+        "environment": "test"
+      }
+    }
+  ]
+}

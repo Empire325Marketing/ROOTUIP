@@ -5,7 +5,7 @@
     font-family: 'Inter', sans-serif;
     font-size: 38px;
     font-weight: normal;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
 }
 
 .reveal h1,
@@ -70,7 +70,7 @@
 .selector-header h1 {
     font-size: 3rem;
     font-weight: 800;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.5rem;
 }
 
@@ -99,7 +99,7 @@
 .presentation-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    border-color: var(--uip-teal-500);
+    border-color: var(--uip-success-500);
 }
 
 .card-header {
@@ -117,7 +117,7 @@
     flex: 1;
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin: 0;
 }
 
@@ -153,14 +153,14 @@
     content: "✓";
     position: absolute;
     left: 0;
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
     font-weight: 700;
 }
 
 .select-presentation {
     width: 100%;
     padding: 0.75rem 1.5rem;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
     border: none;
     border-radius: 8px;
@@ -343,7 +343,7 @@
 }
 
 .validation-item h3 {
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.5rem;
 }
 
@@ -356,7 +356,7 @@
     margin-top: 3rem;
     padding: 2rem;
     background: var(--uip-teal-50);
-    border-left: 4px solid var(--uip-teal-500);
+    border-left: 4px solid var(--uip-success-500);
     border-radius: 8px;
     font-size: 1.1em;
     font-style: italic;
@@ -394,7 +394,7 @@
 }
 
 .architecture-layer h4 {
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1rem;
 }
 
@@ -448,7 +448,7 @@
 .step-day {
     display: inline-block;
     padding: 0.5rem 1rem;
-    background: var(--uip-navy-900);
+    background: var(--uip-primary-800);
     color: white;
     border-radius: 20px;
     font-size: 0.8em;
@@ -457,7 +457,7 @@
 }
 
 .timeline-step h4 {
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.5rem;
 }
 
@@ -501,13 +501,13 @@
 
 .segment h4 {
     font-size: 2.5em;
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
     margin-bottom: 0.5rem;
 }
 
 .segment p {
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.25rem;
 }
 
@@ -527,7 +527,7 @@
 .pricing-structure {
     text-align: center;
     padding: 3rem;
-    background: var(--uip-navy-900);
+    background: var(--uip-primary-800);
     color: white;
     border-radius: 12px;
 }
@@ -564,7 +564,7 @@
 /* ROI Comparison */
 .roi-comparison h4 {
     text-align: center;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 2rem;
 }
 
@@ -593,7 +593,7 @@
 }
 
 .roi-savings {
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
 }
 
 .roi-label {
@@ -610,7 +610,7 @@
     text-align: center;
     font-size: 3em;
     font-weight: 900;
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
     padding: 1rem;
     background: rgba(0, 212, 170, 0.1);
     border-radius: 12px;
@@ -635,7 +635,7 @@
 .metric-value {
     font-size: 3em;
     font-weight: 800;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     font-family: 'IBM Plex Mono', monospace;
 }
 
@@ -648,7 +648,7 @@
 .metric-growth {
     font-size: 1.2em;
     font-weight: 700;
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
 }
 
 .customer-logos {
@@ -688,7 +688,7 @@
 }
 
 .advantage h4 {
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.5rem;
 }
 
@@ -712,7 +712,7 @@
 }
 
 .tech-layer h4 {
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1rem;
 }
 
@@ -728,7 +728,7 @@
 
 .tech-layer li::before {
     content: "▶";
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
     margin-right: 0.5rem;
 }
 
@@ -759,7 +759,7 @@
 }
 
 .metrics-table th {
-    background: var(--uip-navy-900);
+    background: var(--uip-primary-800);
     color: white;
     font-weight: 600;
 }
@@ -793,7 +793,7 @@
 .unit-value {
     font-size: 2.5em;
     font-weight: 800;
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
     font-family: 'IBM Plex Mono', monospace;
 }
 
@@ -828,7 +828,7 @@
 }
 
 .gtm-pillar h4 {
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1rem;
 }
 
@@ -876,7 +876,7 @@
 }
 
 .team-member h4 {
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.25rem;
 }
 
@@ -945,7 +945,7 @@
 
 .advisor strong {
     display: block;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.25rem;
 }
 
@@ -989,13 +989,13 @@
 }
 
 .roadmap-phase.current h4 {
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
 }
 
 .roadmap-phase p {
     font-weight: 600;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.5rem;
 }
 
@@ -1014,7 +1014,7 @@
     text-align: center;
     font-size: 1.5em;
     font-style: italic;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-top: 3rem;
     padding: 2rem;
     background: var(--uip-gray-50);
@@ -1041,7 +1041,7 @@
 .raise-amount h3,
 .valuation h3 {
     font-size: 3em;
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
     margin-bottom: 0.5rem;
 }
 
@@ -1073,7 +1073,7 @@
 .fund-percentage {
     font-size: 2.5em;
     font-weight: 800;
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     display: block;
 }
 
@@ -1104,7 +1104,7 @@
 }
 
 .timing-factor h4 {
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.5rem;
 }
 
@@ -1145,7 +1145,7 @@
 }
 
 .case-study h4 {
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1rem;
 }
 
@@ -1257,7 +1257,7 @@
 }
 
 .your-numbers h3 {
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 1.5rem;
 }
 
@@ -1273,7 +1273,7 @@
 }
 
 .calc-row.total {
-    border-top: 2px solid var(--uip-navy-900);
+    border-top: 2px solid var(--uip-primary-800);
     border-bottom: none;
     margin-top: 1rem;
     padding-top: 1.5rem;
@@ -1287,13 +1287,13 @@
 }
 
 .value.savings {
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
 }
 
 .roi-highlight {
     text-align: center;
     padding: 3rem;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
     border-radius: 12px;
 }
@@ -1335,7 +1335,7 @@
     width: 60px;
     height: 60px;
     line-height: 60px;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
     font-size: 1.5em;
     font-weight: 700;
@@ -1404,7 +1404,7 @@
     display: block;
     font-size: 2.5em;
     font-weight: 800;
-    color: var(--uip-teal-500);
+    color: var(--uip-success-500);
     font-family: 'IBM Plex Mono', monospace;
 }
 
@@ -1417,7 +1417,7 @@
     margin-top: 2rem;
     padding: 1.5rem;
     background: var(--uip-gray-50);
-    border-left: 4px solid var(--uip-teal-500);
+    border-left: 4px solid var(--uip-success-500);
     border-radius: 8px;
     font-style: italic;
 }
@@ -1466,7 +1466,7 @@
 }
 
 .highlight h4 {
-    color: var(--uip-navy-900);
+    color: var(--uip-primary-800);
     margin-bottom: 0.25rem;
 }
 
@@ -1707,7 +1707,7 @@
 .apply-customization {
     width: 100%;
     padding: 0.75rem 1.5rem;
-    background: var(--uip-teal-500);
+    background: var(--uip-success-500);
     color: white;
     border: none;
     border-radius: 8px;

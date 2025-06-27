@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipment Details - ROOTUIP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: #0f172a;
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Shipment Header */
+        .shipment-header {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .shipment-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .shipment-title h1 {
+            font-size: 1.75rem;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .shipment-meta {
+            display: flex;
+            gap: 1.5rem;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-in-transit {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-at-port {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-delivered {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #3b82f6;
+            height: 100%;
+            width: 65%;
+            transition: width 0.3s ease;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: #64748b;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: #1e293b;
+        }
+
+        .tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .info-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -23px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #e2e8f0;
+        }
+
+        .timeline-item.completed .timeline-marker {
+            background: #10b981;
+            border-color: #10b981;
+        }
+
+        .timeline-item.current .timeline-marker {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Documents Table */
+        .documents-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .documents-table th {
+            background: #f8fafc;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .documents-table td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .document-icon {
+            width: 40px;
+            height: 40px;
+            background: #eff6ff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        /* Action Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        /* D&D Risk Analysis */
+        .risk-analysis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .risk-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .risk-score {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-score.low {
+            color: #10b981;
+        }
+
+        .risk-score.medium {
+            color: #f59e0b;
+        }
+
+        .risk-score.high {
+            color: #ef4444;
+        }
+
+        .risk-label {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        /* Communication Log */
+        .comm-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comm-item:last-child {
+            border-bottom: none;
+        }
+
+        .comm-icon {
+            width: 40px;
+            height: 40px;
+            background: #eff6ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .comm-content {
+            flex: 1;
+        }
+
+        .comm-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+        }
+
+        .comm-title {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .comm-time {
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        .comm-message {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/platform/customer/dashboard.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+                Back to Dashboard
+            </a>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-secondary">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 12v7m0 0l3-3m-3 3l-3-3m11-11v7m0 0l3-3m-3 3l-3-3"/>
+                    </svg>
+                    Export
+                </button>
+                <button class="btn btn-primary">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M8 12h.01M11 8h.01M5 8h.01M12 4H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V5a1 1 0 00-1-1z"/>
+                    </svg>
+                    Subscribe
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Shipment Header -->
+        <div class="shipment-header">
+            <div class="shipment-title">
+                <div>
+                    <h1 id="containerNumber">MAEU1234567</h1>
+                    <div class="shipment-meta">
+                        <span>B/L: <strong id="blNumber">BL123456789</strong></span>
+                        <span>Carrier: <strong id="carrier">Maersk</strong></span>
+                        <span>Vessel: <strong id="vessel">Maersk Elba</strong></span>
+                        <span>Voyage: <strong id="voyage">ME123W</strong></span>
+                    </div>
+                </div>
+                <span class="status-badge status-in-transit" id="status">In Transit</span>
+            </div>
+
+            <!-- Progress -->
+            <div class="progress-section">
+                <div class="progress-header">
+                    <div>
+                        <strong id="origin">Shanghai</strong>
+                        <span style="color: #64748b; margin: 0 1rem;">→</span>
+                        <strong id="destination">Rotterdam</strong>
+                    </div>
+                    <span style="color: #64748b; font-size: 0.875rem;">65% complete</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.875rem; color: #64748b;">
+                    <span>Departed: Jun 1, 2025</span>
+                    <span>ETA: Jul 15, 2025</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('overview')">Overview</button>
+            <button class="tab" onclick="showTab('timeline')">Timeline</button>
+            <button class="tab" onclick="showTab('documents')">Documents</button>
+            <button class="tab" onclick="showTab('ddanalysis')">D&D Analysis</button>
+            <button class="tab" onclick="showTab('communication')">Communication</button>
+        </div>
+
+        <!-- Tab Content -->
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <!-- Key Information -->
+            <div class="content-card">
+                <h2 class="card-title">Shipment Information</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Container Type</div>
+                        <div class="info-value">40' High Cube</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Cargo Description</div>
+                        <div class="info-value">Electronics</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Weight</div>
+                        <div class="info-value">24,500 kg</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Volume</div>
+                        <div class="info-value">58 CBM</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Seal Number</div>
+                        <div class="info-value">SL123456</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Temperature</div>
+                        <div class="info-value">N/A (Dry)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Location -->
+            <div class="content-card">
+                <h2 class="card-title">Current Location</h2>
+                <div style="background: #e2e8f0; height: 300px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #64748b;">
+                    Interactive Map - Pacific Ocean (35.6762°N, 139.6503°E)
+                </div>
+                <div style="margin-top: 1rem; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                    <div style="font-weight: 600; margin-bottom: 0.5rem;">Last Update</div>
+                    <div style="color: #64748b; font-size: 0.875rem;">
+                        Position reported 2 hours ago via AIS tracking
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="content-card">
+                <h2 class="card-title">Quick Actions</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <button class="btn btn-secondary" style="justify-content: center;">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12h6m-6 4h6m-6-8h6M4 8l2 2-2 2M4 16l2 2-2 2"/>
+                        </svg>
+                        View B/L
+                    </button>
+                    <button class="btn btn-secondary" style="justify-content: center;">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v12m0 0l-4-4m4 4l4-4"/>
+                        </svg>
+                        Download Invoice
+                    </button>
+                    <button class="btn btn-secondary" style="justify-content: center;">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12h18m-9-9v9"/>
+                        </svg>
+                        Request Update
+                    </button>
+                    <button class="btn btn-secondary" style="justify-content: center;">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 10h8m-8 4h8m-8-8h8M4 8v8"/>
+                        </svg>
+                        File Claim
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline Tab -->
+        <div id="timeline" class="tab-content">
+            <div class="content-card">
+                <h2 class="card-title">Shipment Timeline</h2>
+                <div class="timeline">
+                    <div class="timeline-item completed">
+                        <div class="timeline-marker"></div>
+                        <div style="padding-left: 1rem;">
+                            <div style="font-weight: 600; margin-bottom: 0.25rem;">Container Received</div>
+                            <div style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.25rem;">
+                                Container received at Shanghai terminal
+                            </div>
+                            <div style="color: #94a3b8; font-size: 0.75rem;">May 30, 2025 10:00 AM</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item completed">
+                        <div class="timeline-marker"></div>
+                        <div style="padding-left: 1rem;">
+                            <div style="font-weight: 600; margin-bottom: 0.25rem;">Customs Cleared</div>
+                            <div style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.25rem;">
+                                Export customs clearance completed
+                            </div>
+                            <div style="color: #94a3b8; font-size: 0.75rem;">May 31, 2025 2:00 PM</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item completed">
+                        <div class="timeline-marker"></div>
+                        <div style="padding-left: 1rem;">
+                            <div style="font-weight: 600; margin-bottom: 0.25rem;">Loaded on Vessel</div>
+                            <div style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.25rem;">
+                                Container loaded onto Maersk Elba
+                            </div>
+                            <div style="color: #94a3b8; font-size: 0.75rem;">Jun 1, 2025 6:00 AM</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item current">
+                        <div class="timeline-marker"></div>
+                        <div style="padding-left: 1rem;">
+                            <div style="font-weight: 600; margin-bottom: 0.25rem;">In Transit</div>
+                            <div style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.25rem;">
+                                Currently sailing - Pacific Ocean
+                            </div>
+                            <div style="color: #94a3b8; font-size: 0.75rem;">Updated 2 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div style="padding-left: 1rem;">
+                            <div style="font-weight: 600; margin-bottom: 0.25rem;">Expected Arrival</div>
+                            <div style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.25rem;">
+                                Vessel arrival at Rotterdam port
+                            </div>
+                            <div style="color: #94a3b8; font-size: 0.75rem;">Jul 15, 2025 8:00 AM (estimated)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documents Tab -->
+        <div id="documents" class="tab-content">
+            <div class="content-card">
+                <h2 class="card-title">Shipment Documents</h2>
+                <table class="documents-table">
+                    <thead>
+                        <tr>
+                            <th>Document</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div class="document-icon">📄</div>
+                                    <div>
+                                        <div style="font-weight: 600;">Bill of Lading</div>
+                                        <div style="color: #64748b; font-size: 0.875rem;">BL123456789</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Original</td>
+                            <td><span style="color: #10b981;">✓ Verified</span></td>
+                            <td>Jun 1, 2025</td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div class="document-icon">📋</div>
+                                    <div>
+                                        <div style="font-weight: 600;">Commercial Invoice</div>
+                                        <div style="color: #64748b; font-size: 0.875rem;">INV-2025-1234</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Copy</td>
+                            <td><span style="color: #10b981;">✓ Verified</span></td>
+                            <td>May 28, 2025</td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div class="document-icon">📦</div>
+                                    <div>
+                                        <div style="font-weight: 600;">Packing List</div>
+                                        <div style="color: #64748b; font-size: 0.875rem;">PL-2025-5678</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Copy</td>
+                            <td><span style="color: #10b981;">✓ Verified</span></td>
+                            <td>May 28, 2025</td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm">View</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top: 1.5rem;">
+                    <button class="btn btn-primary">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Upload Document
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- D&D Analysis Tab -->
+        <div id="ddanalysis" class="tab-content">
+            <div class="content-card">
+                <h2 class="card-title">Demurrage & Detention Risk Analysis</h2>
+                <div class="risk-analysis">
+                    <div class="risk-item">
+                        <div class="risk-score low">2.5%</div>
+                        <div class="risk-label">Overall Risk Score</div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-score low">Low</div>
+                        <div class="risk-label">Port Congestion</div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-score low">0 days</div>
+                        <div class="risk-label">Predicted Delay</div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-score low">$0</div>
+                        <div class="risk-label">Estimated D&D</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h2 class="card-title">Risk Factors</h2>
+                <div style="display: grid; gap: 1rem;">
+                    <div style="padding: 1rem; background: #f0fdf4; border-left: 4px solid #10b981; border-radius: 4px;">
+                        <div style="font-weight: 600; color: #065f46; margin-bottom: 0.25rem;">✓ Weather Conditions</div>
+                        <div style="color: #047857; font-size: 0.875rem;">No adverse weather expected along route</div>
+                    </div>
+                    <div style="padding: 1rem; background: #f0fdf4; border-left: 4px solid #10b981; border-radius: 4px;">
+                        <div style="font-weight: 600; color: #065f46; margin-bottom: 0.25rem;">✓ Port Operations</div>
+                        <div style="color: #047857; font-size: 0.875rem;">Rotterdam port operating normally, no strikes</div>
+                    </div>
+                    <div style="padding: 1rem; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px;">
+                        <div style="font-weight: 600; color: #92400e; margin-bottom: 0.25rem;">⚠ Documentation</div>
+                        <div style="color: #b45309; font-size: 0.875rem;">Ensure customs docs ready before arrival</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h2 class="card-title">Recommendations</h2>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                        <strong>1. Pre-clear customs:</strong> Submit documentation 5 days before arrival
+                    </li>
+                    <li style="padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                        <strong>2. Arrange transport:</strong> Book inland transport for Jul 16-17
+                    </li>
+                    <li style="padding: 0.75rem 0;">
+                        <strong>3. Monitor updates:</strong> Track vessel progress daily from Jul 10
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Communication Tab -->
+        <div id="communication" class="tab-content">
+            <div class="content-card">
+                <h2 class="card-title">Communication Log</h2>
+                <div>
+                    <div class="comm-item">
+                        <div class="comm-icon">🚢</div>
+                        <div class="comm-content">
+                            <div class="comm-header">
+                                <span class="comm-title">Vessel Update</span>
+                                <span class="comm-time">2 hours ago</span>
+                            </div>
+                            <div class="comm-message">
+                                Vessel position updated. Currently making good progress across Pacific Ocean.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comm-item">
+                        <div class="comm-icon">📧</div>
+                        <div class="comm-content">
+                            <div class="comm-header">
+                                <span class="comm-title">Carrier Notification</span>
+                                <span class="comm-time">1 day ago</span>
+                            </div>
+                            <div class="comm-message">
+                                Maersk: Your shipment has departed Shanghai port on schedule. Next update at Singapore.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comm-item">
+                        <div class="comm-icon">✅</div>
+                        <div class="comm-content">
+                            <div class="comm-header">
+                                <span class="comm-title">Customs Cleared</span>
+                                <span class="comm-time">3 days ago</span>
+                            </div>
+                            <div class="comm-message">
+                                Export customs clearance completed successfully. Container released for loading.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e2e8f0;">
+                    <h3 style="margin-bottom: 1rem;">Send Message</h3>
+                    <textarea style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px; resize: vertical; min-height: 100px;" placeholder="Type your message or inquiry..."></textarea>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-primary">Send Message</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get container number from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const containerNumber = urlParams.get('container') || 'MAEU1234567';
+
+        // Load shipment details
+        async function loadShipmentDetails() {
+            // In production, fetch from API
+            document.getElementById('containerNumber').textContent = containerNumber;
+            
+            // Simulate different statuses based on container number
+            if (containerNumber.includes('789')) {
+                document.getElementById('status').textContent = 'Delivered';
+                document.getElementById('status').className = 'status-badge status-delivered';
+            }
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Initialize
+        loadShipmentDetails();
+    </script>
+</body>
+</html>

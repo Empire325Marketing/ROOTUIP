@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integration Dashboard - ROOTUIP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f1419;
+            color: #e7e9ea;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(15, 20, 25, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header-content {
+            max-width: 1800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* System Overview */
+        .system-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .system-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .system-card:hover {
+            background: rgba(255,255,255,0.05);
+            transform: translateY(-2px);
+        }
+
+        .system-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #1d9bf0 0%, #7c3aed 100%);
+        }
+
+        .system-card.healthy::before {
+            background: #00d084;
+        }
+
+        .system-card.warning::before {
+            background: #ffa114;
+        }
+
+        .system-card.error::before {
+            background: #f4212e;
+        }
+
+        .system-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .system-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00d084;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 208, 132, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 208, 132, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 208, 132, 0); }
+        }
+
+        .system-status.warning {
+            background: #ffa114;
+        }
+
+        .system-status.error {
+            background: #f4212e;
+            animation: none;
+        }
+
+        .system-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .metric {
+            background: rgba(255,255,255,0.03);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: #71767b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        /* Integration Grid */
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .integration-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .integration-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .integration-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .integration-info {
+            flex: 1;
+        }
+
+        .integration-logo {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .integration-name {
+            font-weight: 600;
+            font-size: 1.125rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .integration-type {
+            font-size: 0.875rem;
+            color: #71767b;
+        }
+
+        .integration-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status-connected {
+            background: rgba(0, 208, 132, 0.2);
+            color: #00d084;
+        }
+
+        .status-disconnected {
+            background: rgba(244, 33, 46, 0.2);
+            color: #f4212e;
+        }
+
+        .status-pending {
+            background: rgba(255, 161, 20, 0.2);
+            color: #ffa114;
+        }
+
+        /* Traffic Chart */
+        .traffic-section {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .time-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .time-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #e7e9ea;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .time-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .time-btn.active {
+            background: #1d9bf0;
+            border-color: #1d9bf0;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        /* Activity Log */
+        .activity-log {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .log-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #e7e9ea;
+            font-size: 0.875rem;
+        }
+
+        .log-entries {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.2s;
+        }
+
+        .log-entry:hover {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .log-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+
+        .log-icon.success {
+            background: rgba(0, 208, 132, 0.2);
+            color: #00d084;
+        }
+
+        .log-icon.error {
+            background: rgba(244, 33, 46, 0.2);
+            color: #f4212e;
+        }
+
+        .log-icon.info {
+            background: rgba(29, 155, 240, 0.2);
+            color: #1d9bf0;
+        }
+
+        .log-content {
+            flex: 1;
+        }
+
+        .log-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .log-details {
+            font-size: 0.875rem;
+            color: #71767b;
+        }
+
+        .log-time {
+            font-size: 0.75rem;
+            color: #71767b;
+        }
+
+        /* Performance Metrics */
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .perf-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .perf-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1d9bf0 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .perf-label {
+            color: #71767b;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .perf-trend {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+
+        .perf-trend.up {
+            color: #00d084;
+        }
+
+        .perf-trend.down {
+            color: #f4212e;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #1d9bf0;
+            color: white;
+        }
+
+        .btn:hover {
+            background: #1a8cd8;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #e7e9ea;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .integration-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .system-overview {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <h1 style="font-size: 1.5rem; font-weight: 700;">Integration Dashboard</h1>
+                <p style="color: #71767b; font-size: 0.875rem;">Real-time monitoring of all system integrations</p>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-secondary" onclick="refreshData()">
+                    🔄 Refresh
+                </button>
+                <button class="btn" onclick="window.location.href='/platform/customer/dashboard.html'">
+                    Back to Dashboard
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- System Overview -->
+        <div class="system-overview">
+            <div class="system-card healthy">
+                <div class="system-name">
+                    <span>Data Pipeline</span>
+                    <div class="system-status"></div>
+                </div>
+                <p style="color: #71767b; font-size: 0.875rem;">Processing 847 events/min</p>
+                <div class="system-metrics">
+                    <div class="metric">
+                        <div class="metric-label">Throughput</div>
+                        <div class="metric-value">12.4K/h</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Latency</div>
+                        <div class="metric-value">124ms</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Success Rate</div>
+                        <div class="metric-value">99.8%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Queue Size</div>
+                        <div class="metric-value">234</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="system-card healthy">
+                <div class="system-name">
+                    <span>API Gateway</span>
+                    <div class="system-status"></div>
+                </div>
+                <p style="color: #71767b; font-size: 0.875rem;">All endpoints operational</p>
+                <div class="system-metrics">
+                    <div class="metric">
+                        <div class="metric-label">Requests/min</div>
+                        <div class="metric-value">3.2K</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Avg Response</div>
+                        <div class="metric-value">89ms</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Error Rate</div>
+                        <div class="metric-value">0.02%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Active Conn</div>
+                        <div class="metric-value">1,247</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="system-card warning">
+                <div class="system-name">
+                    <span>ML Models</span>
+                    <div class="system-status warning"></div>
+                </div>
+                <p style="color: #ffa114; font-size: 0.875rem;">Model update in progress</p>
+                <div class="system-metrics">
+                    <div class="metric">
+                        <div class="metric-label">Predictions/h</div>
+                        <div class="metric-value">45.6K</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Accuracy</div>
+                        <div class="metric-value">94.7%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Model Version</div>
+                        <div class="metric-value">v3.2</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Update ETA</div>
+                        <div class="metric-value">12 min</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="system-card healthy">
+                <div class="system-name">
+                    <span>Message Queue</span>
+                    <div class="system-status"></div>
+                </div>
+                <p style="color: #71767b; font-size: 0.875rem;">All queues healthy</p>
+                <div class="system-metrics">
+                    <div class="metric">
+                        <div class="metric-label">Messages/s</div>
+                        <div class="metric-value">234</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Queue Depth</div>
+                        <div class="metric-value">1.2K</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Consumers</div>
+                        <div class="metric-value">24</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Lag</div>
+                        <div class="metric-value">&lt;1s</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="performance-grid">
+            <div class="perf-card">
+                <div class="perf-value">847M</div>
+                <div class="perf-label">Total API Calls</div>
+                <div class="perf-trend up">
+                    <span>↑</span> 12% from last week
+                </div>
+            </div>
+            <div class="perf-card">
+                <div class="perf-value">99.98%</div>
+                <div class="perf-label">System Uptime</div>
+                <div class="perf-trend">30 days continuous</div>
+            </div>
+            <div class="perf-card">
+                <div class="perf-value">89ms</div>
+                <div class="perf-label">Avg Response Time</div>
+                <div class="perf-trend up">
+                    <span>↑</span> 5ms faster
+                </div>
+            </div>
+            <div class="perf-card">
+                <div class="perf-value">2.1TB</div>
+                <div class="perf-label">Data Processed</div>
+                <div class="perf-trend">This month</div>
+            </div>
+        </div>
+
+        <!-- Integration Status -->
+        <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem;">Active Integrations</h2>
+        <div class="integration-grid">
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-info">
+                        <div class="integration-logo">🚢</div>
+                        <div class="integration-name">Maersk API</div>
+                        <div class="integration-type">Carrier Integration</div>
+                    </div>
+                    <span class="integration-status status-connected">Connected</span>
+                </div>
+                <div class="system-metrics">
+                    <div class="metric">
+                        <div class="metric-label">API Calls Today</div>
+                        <div class="metric-value">12,847</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Success Rate</div>
+                        <div class="metric-value">99.9%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Avg Response</div>
+                        <div class="metric-value">234ms</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Last Sync</div>
+                        <div class="metric-value">2 min ago</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-info">
+                        <div class="integration-logo">🌊</div>
+                        <div class="integration-name">MSC Tracking</div>
+                        <div class="integration-type">Carrier Integration</div>
+                    </div>
+                    <span class="integration-status status-connected">Connected</span>
+                </div>
+                <div class="system-metrics">
+                    <div class="metric">
+                        <div class="metric-label">API Calls Today</div>
+                        <div class="metric-value">9,234</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Success Rate</div>
+                        <div class="metric-value">99.7%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Avg Response</div>
+                        <div class="metric-value">312ms</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Last Sync</div>
+                        <div class="metric-value">5 min ago</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-info">
+                        <div class="integration-logo">🏭</div>
+                        <div class="integration-name">SAP Connector</div>
+                        <div class="integration-type">ERP Integration</div>
+                    </div>
+                    <span class="integration-status status-connected">Connected</span>
+                </div>
+                <div class="system-metrics">
+                    <div class="metric">
+                        <div class="metric-label">Records Synced</div>
+                        <div class="metric-value">45.2K</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Sync Status</div>
+                        <div class="metric-value">Real-time</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Queue Size</div>
+                        <div class="metric-value">0</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Last Error</div>
+                        <div class="metric-value">None</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-info">
+                        <div class="integration-logo">🏛️</div>
+                        <div class="integration-name">Customs API</div>
+                        <div class="integration-type">Government System</div>
+                    </div>
+                    <span class="integration-status status-pending">Maintenance</span>
+                </div>
+                <div class="system-metrics">
+                    <div class="metric">
+                        <div class="metric-label">Submissions</div>
+                        <div class="metric-value">3,421</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Clearance Rate</div>
+                        <div class="metric-value">97.2%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Avg Process</div>
+                        <div class="metric-value">4.2 hrs</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Maintenance ETA</div>
+                        <div class="metric-value">30 min</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-info">
+                        <div class="integration-logo">🏦</div>
+                        <div class="integration-name">Bank API</div>
+                        <div class="integration-type">Financial System</div>
+                    </div>
+                    <span class="integration-status status-connected">Connected</span>
+                </div>
+                <div class="system-metrics">
+                    <div class="metric">
+                        <div class="metric-label">Transactions</div>
+                        <div class="metric-value">1,247</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Success Rate</div>
+                        <div class="metric-value">100%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Processing</div>
+                        <div class="metric-value">Real-time</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Security</div>
+                        <div class="metric-value">TLS 1.3</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-info">
+                        <div class="integration-logo">🌍</div>
+                        <div class="integration-name">AIS Feed</div>
+                        <div class="integration-type">Vessel Tracking</div>
+                    </div>
+                    <span class="integration-status status-connected">Connected</span>
+                </div>
+                <div class="system-metrics">
+                    <div class="metric">
+                        <div class="metric-label">Vessels Tracked</div>
+                        <div class="metric-value">8,234</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Updates/min</div>
+                        <div class="metric-value">847</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Coverage</div>
+                        <div class="metric-value">Global</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Accuracy</div>
+                        <div class="metric-value">99.9%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Traffic Chart -->
+        <div class="traffic-section">
+            <div class="section-header">
+                <h2 class="section-title">API Traffic Overview</h2>
+                <div class="time-selector">
+                    <button class="time-btn" onclick="updateTimeRange('1h')">1H</button>
+                    <button class="time-btn active" onclick="updateTimeRange('24h')">24H</button>
+                    <button class="time-btn" onclick="updateTimeRange('7d')">7D</button>
+                    <button class="time-btn" onclick="updateTimeRange('30d')">30D</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="trafficChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="activity-log">
+            <div class="section-header">
+                <h2 class="section-title">Integration Activity</h2>
+                <button class="btn btn-secondary" onclick="exportLogs()">
+                    📥 Export Logs
+                </button>
+            </div>
+            
+            <div class="log-filters">
+                <select class="filter-select" id="integrationFilter" onchange="filterLogs()">
+                    <option value="">All Integrations</option>
+                    <option value="maersk">Maersk API</option>
+                    <option value="msc">MSC Tracking</option>
+                    <option value="sap">SAP Connector</option>
+                    <option value="customs">Customs API</option>
+                </select>
+                <select class="filter-select" id="typeFilter" onchange="filterLogs()">
+                    <option value="">All Types</option>
+                    <option value="success">Success</option>
+                    <option value="error">Error</option>
+                    <option value="info">Info</option>
+                </select>
+                <select class="filter-select" id="timeFilter" onchange="filterLogs()">
+                    <option value="1h">Last Hour</option>
+                    <option value="24h" selected>Last 24 Hours</option>
+                    <option value="7d">Last 7 Days</option>
+                </select>
+            </div>
+
+            <div class="log-entries" id="logEntries">
+                <!-- Dynamic log entries -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize traffic chart
+        const ctx = document.getElementById('trafficChart').getContext('2d');
+        const trafficChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 24}, (_, i) => `${i}:00`),
+                datasets: [{
+                    label: 'API Calls',
+                    data: Array.from({length: 24}, () => Math.floor(Math.random() * 5000) + 2000),
+                    borderColor: '#1d9bf0',
+                    backgroundColor: 'rgba(29, 155, 240, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Errors',
+                    data: Array.from({length: 24}, () => Math.floor(Math.random() * 50)),
+                    borderColor: '#f4212e',
+                    backgroundColor: 'rgba(244, 33, 46, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#e7e9ea'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: 'rgba(255,255,255,0.05)'
+                        },
+                        ticks: {
+                            color: '#71767b'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: 'rgba(255,255,255,0.05)'
+                        },
+                        ticks: {
+                            color: '#71767b'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Sample log data
+        const sampleLogs = [
+            {
+                type: 'success',
+                integration: 'maersk',
+                title: 'Vessel position updated',
+                details: 'MSC GULSUN - Position: 51.9°N, 4.1°E',
+                time: new Date(Date.now() - 2 * 60000)
+            },
+            {
+                type: 'error',
+                integration: 'customs',
+                title: 'API rate limit exceeded',
+                details: 'Retry scheduled in 5 minutes',
+                time: new Date(Date.now() - 5 * 60000)
+            },
+            {
+                type: 'info',
+                integration: 'sap',
+                title: 'Batch sync completed',
+                details: '1,247 records synchronized',
+                time: new Date(Date.now() - 10 * 60000)
+            },
+            {
+                type: 'success',
+                integration: 'msc',
+                title: 'Container status updated',
+                details: 'MSCU1234567 - Discharged at Rotterdam',
+                time: new Date(Date.now() - 15 * 60000)
+            },
+            {
+                type: 'info',
+                integration: 'bank',
+                title: 'Payment processed',
+                details: 'Invoice #INV-2025-0847 - $45,230',
+                time: new Date(Date.now() - 20 * 60000)
+            }
+        ];
+
+        // Render logs
+        function renderLogs(logs = sampleLogs) {
+            const logEntries = document.getElementById('logEntries');
+            logEntries.innerHTML = logs.map(log => `
+                <div class="log-entry">
+                    <div class="log-icon ${log.type}">
+                        ${log.type === 'success' ? '✓' : log.type === 'error' ? '!' : 'i'}
+                    </div>
+                    <div class="log-content">
+                        <div class="log-title">${log.title}</div>
+                        <div class="log-details">${log.details}</div>
+                        <div class="log-time">${getRelativeTime(log.time)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get relative time
+        function getRelativeTime(date) {
+            const now = new Date();
+            const diff = now - date;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            
+            if (minutes < 60) return `${minutes} min ago`;
+            if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            return date.toLocaleDateString();
+        }
+
+        // Update time range
+        function updateTimeRange(range) {
+            document.querySelectorAll('.time-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update chart data based on range
+            // In production, fetch real data
+        }
+
+        // Filter logs
+        function filterLogs() {
+            // In production, implement actual filtering
+            renderLogs(sampleLogs);
+        }
+
+        // Export logs
+        function exportLogs() {
+            alert('Exporting logs to CSV...');
+        }
+
+        // Refresh data
+        function refreshData() {
+            location.reload();
+        }
+
+        // WebSocket connection for real-time updates
+        function connectWebSocket() {
+            const ws = new WebSocket('wss://app.rootuip.com/api/integrations/realtime');
+            
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                // Update UI with real-time data
+                updateMetrics(data);
+            };
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLogs();
+            // connectWebSocket(); // Enable in production
+            
+            // Simulate real-time updates
+            setInterval(() => {
+                // Update random metrics
+                document.querySelectorAll('.metric-value').forEach(el => {
+                    if (el.textContent.includes('K')) {
+                        const current = parseFloat(el.textContent);
+                        el.textContent = (current + (Math.random() - 0.5) * 0.1).toFixed(1) + 'K';
+                    }
+                });
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

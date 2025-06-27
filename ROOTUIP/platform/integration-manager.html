@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UIP Platform - Integration Manager</title>
-    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <link rel="icon" type="image/svg+xml" href="/brand/brand/logo-icon-new.svg">
     <script src="/js/logo-component.js"></script>
     <script src="/platform/js/integration-engine.js"></script>
     <script src="/platform/js/carrier-adapters.js"></script>
@@ -16,9 +16,9 @@
         }
 
         :root {
-            --primary: #00D4AA;
+            --primary: var(--uip-success-500);
             --primary-dark: #00B894;
-            --secondary: #0A1628;
+            --secondary: var(--uip-primary-800);
             --gray-50: #F8FAFB;
             --gray-100: #F1F5F9;
             --gray-200: #E2E8F0;
@@ -36,7 +36,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--gray-50);
             color: var(--gray-900);
             line-height: 1.5;
@@ -482,6 +482,8 @@
             }
         }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -509,7 +511,7 @@
             <!-- Left Column - Active Connections -->
             <div class="connections-section">
                 <div class="section-header">
-                    <h2 class="section-title">Active Connections</h2>
+                    <h2 class="uip-h2 uip-text-center">Active Connections</h2>
                     <span id="connectionCount" class="badge">0 connections</span>
                 </div>
                 
@@ -523,7 +525,7 @@
                 <!-- New Connection Form -->
                 <div class="setup-card" id="newConnectionCard" style="display: none;">
                     <div class="section-header">
-                        <h3 class="section-title">New Connection</h3>
+                        <h3 class="uip-h2 uip-text-center">New Connection</h3>
                         <button class="btn btn-secondary" onclick="hideNewConnectionForm()">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M18 6L6 18M6 6l12 12"/>
@@ -592,7 +594,7 @@
                 <!-- Statistics -->
                 <div class="setup-card">
                     <div class="section-header">
-                        <h3 class="section-title">Statistics</h3>
+                        <h3 class="uip-h2 uip-text-center">Statistics</h3>
                     </div>
                     
                     <div class="stats-grid">
@@ -618,7 +620,7 @@
                 <!-- Activity Log -->
                 <div class="setup-card">
                     <div class="section-header">
-                        <h3 class="section-title">Recent Activity</h3>
+                        <h3 class="uip-h2 uip-text-center">Recent Activity</h3>
                     </div>
                     
                     <div class="activity-log" id="activityLog">

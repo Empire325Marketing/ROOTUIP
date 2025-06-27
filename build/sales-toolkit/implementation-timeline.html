@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UIP 14-Day Implementation Timeline</title>
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <script src="/js/logo-component.js?v=1750888019"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            color: #0A1628;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .logo {
+            height: 60px;
+            margin-bottom: 1rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            font-size: 1.25rem;
+            color: #64748B;
+        }
+        .timeline-container {
+            position: relative;
+            padding: 2rem 0;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #00D4AA;
+            transform: translateX(-50%);
+        }
+        .phase {
+            display: flex;
+            align-items: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+        .phase:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        .phase-content {
+            flex: 1;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin: 0 2rem;
+        }
+        .phase-marker {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: #00D4AA;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,212,170,0.3);
+        }
+        .phase h3 {
+            font-size: 1.5rem;
+            color: #0A1628;
+            margin-bottom: 0.5rem;
+        }
+        .phase-days {
+            color: #00D4AA;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .task-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #00D4AA;
+            font-weight: 700;
+        }
+        .milestone {
+            background: #E6FCF5;
+            border: 2px solid #00D4AA;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 3rem 0;
+            text-align: center;
+        }
+        .milestone h3 {
+            color: #00D4AA;
+            margin-bottom: 0.5rem;
+        }
+        .success-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .metric {
+            text-align: center;
+            padding: 1rem;
+            background: #F8FAFB;
+            border-radius: 8px;
+        }
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #00D4AA;
+            display: block;
+        }
+        .metric-label {
+            font-size: 0.875rem;
+            color: #64748B;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+            <div class="uip-logo" data-size="large" data-type="icon" data-theme="color" data-link="false"></div>
+        <h1>14-Day Implementation Timeline</h1>
+        <p class="subtitle">From Contract to Full Automation in Two Weeks</p>
+    </div>
+
+    <div class="timeline-container">
+        <div class="timeline-line"></div>
+        
+        <!-- Phase 1 -->
+        <div class="phase">
+            <div class="phase-marker">1</div>
+            <div class="phase-content">
+                <h3>Discovery & Planning</h3>
+                <div class="phase-days">Days 1-3</div>
+                <ul class="task-list">
+                    <li>Kickoff meeting with stakeholders</li>
+                    <li>Map existing carrier systems and processes</li>
+                    <li>Document current D&D management workflow</li>
+                    <li>Identify integration requirements</li>
+                    <li>Define success metrics and KPIs</li>
+                    <li>Create implementation project plan</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="phase">
+            <div class="phase-marker">2</div>
+            <div class="phase-content">
+                <h3>Integration & Configuration</h3>
+                <div class="phase-days">Days 4-7</div>
+                <ul class="task-list">
+                    <li>Connect primary carrier systems</li>
+                    <li>Configure automated data ingestion</li>
+                    <li>Set up dispute rules and thresholds</li>
+                    <li>Customize dashboards and reports</li>
+                    <li>Establish alert parameters</li>
+                    <li>Complete remaining carrier integrations</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="phase">
+            <div class="phase-marker">3</div>
+            <div class="phase-content">
+                <h3>Testing & Training</h3>
+                <div class="phase-days">Days 8-10</div>
+                <ul class="task-list">
+                    <li>Validate data accuracy and completeness</li>
+                    <li>Test automated dispute filing</li>
+                    <li>Admin team training (4 hours)</li>
+                    <li>End user training (2 hours)</li>
+                    <li>Process documentation handoff</li>
+                    <li>User acceptance testing</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Phase 4 -->
+        <div class="phase">
+            <div class="phase-marker">4</div>
+            <div class="phase-content">
+                <h3>Go-Live & Optimization</h3>
+                <div class="phase-days">Days 11-14</div>
+                <ul class="task-list">
+                    <li>Production deployment</li>
+                    <li>Monitor initial operations</li>
+                    <li>Fine-tune alert thresholds</li>
+                    <li>First automated disputes filed</li>
+                    <li>Success metrics review</li>
+                    <li>Handoff to support team</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="milestone">
+        <h3>🎉 Day 14: Full Automation Achieved</h3>
+        <p>Your ocean freight operations are now fully automated with UIP</p>
+        
+        <div class="success-metrics">
+            <div class="metric">
+                <span class="metric-value">100%</span>
+                <span class="metric-label">Container Visibility</span>
+            </div>
+            <div class="metric">
+                <span class="metric-value">200+</span>
+                <span class="metric-label">Carriers Connected</span>
+            </div>
+            <div class="metric">
+                <span class="metric-value">24/7</span>
+                <span class="metric-label">Automated Monitoring</span>
+            </div>
+            <div class="metric">
+                <span class="metric-value">94%</span>
+                <span class="metric-label">D&D Prevention</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 3rem; padding: 2rem; background: #F8FAFB; border-radius: 12px;">
+        <h3>Post-Implementation Support</h3>
+        <ul>
+            <li><strong>Day 15-30:</strong> Daily monitoring and optimization support</li>
+            <li><strong>Day 30:</strong> First month performance review and ROI analysis</li>
+            <li><strong>Ongoing:</strong> 24/7 technical support and quarterly business reviews</li>
+            <li><strong>Continuous:</strong> Platform updates and new feature rollouts</li>
+        </ul>
+    </div>
+    <script>
+        // Initialize UIP logos
+        document.addEventListener("DOMContentLoaded", function() {
+            UIPLogo.init();
+        });
+    </script>
+</body>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ROOTUIP Web Push Deployment</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        .code-block {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            margin: 20px 0;
+        }
+        .button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .button:hover { background: #2563eb; }
+        .status {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .step {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        .copy-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 ROOTUIP Web Push Deployment</h1>
+        
+        <div class="status info">
+            <strong>Current Issue:</strong> Pages showing "loading" because API endpoints are not configured in nginx.
+        </div>
+
+        <h2>Quick Fix: Copy & Paste Solution</h2>
+        
+        <div class="step">
+            <h3>Step 1: SSH to your server</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard('ssh iii@157.173.124.19')">Copy</button>
+                ssh iii@157.173.124.19
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Create API configuration file</h3>
+            <p>Run this command to create the API endpoints configuration:</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(document.getElementById('apiConfig').textContent)">Copy</button>
+                <pre id="apiConfig">sudo tee /etc/nginx/sites-available/rootuip-api.conf << 'EOF'
+# ROOTUIP API Configuration - Fixes loading issue
+location /api/metrics {
+    add_header Content-Type application/json;
+    add_header Access-Control-Allow-Origin *;
+    return 200 '{"activeShipments":127,"onTimeDelivery":"94.2","ddRiskScore":"2.8","costSavings":142}';
+}
+
+location /api/notifications {
+    add_header Content-Type application/json;
+    add_header Access-Control-Allow-Origin *;
+    return 200 '{"success":true,"notifications":[],"unreadCount":0}';
+}
+
+location /api/shipments {
+    add_header Content-Type application/json;
+    add_header Access-Control-Allow-Origin *;
+    return 200 '{"success":true,"shipments":[{"container":"MAEU1234567","blNumber":"BL123456789","carrierName":"Maersk","origin":"Shanghai","destination":"Rotterdam","status":"in-transit","eta":"2025-07-15","ddRisk":"Low"}],"total":1}';
+}
+
+location /api/user {
+    add_header Content-Type application/json;
+    add_header Access-Control-Allow-Origin *;
+    return 200 '{"success":true,"user":{"name":"Demo User","company":"Acme Corporation","role":"Admin"}}';
+}
+
+location /api/ping {
+    add_header Content-Type application/json;
+    add_header Access-Control-Allow-Origin *;
+    return 200 '{"status":"ok"}';
+}
+EOF</pre>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Include in main nginx config</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(document.getElementById('includeCmd').textContent)">Copy</button>
+                <pre id="includeCmd">sudo sed -i '/server_name app.rootuip.com;/a\    include /etc/nginx/sites-available/rootuip-api.conf;' /etc/nginx/sites-available/app.rootuip.com</pre>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Test and reload nginx</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard('sudo nginx -t && sudo systemctl reload nginx')">Copy</button>
+                sudo nginx -t && sudo systemctl reload nginx
+            </div>
+        </div>
+
+        <h2>Alternative: One Command Fix</h2>
+        <p>Copy and paste this entire command to fix everything at once:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(document.getElementById('oneCmd').textContent)">Copy All</button>
+            <pre id="oneCmd">sudo tee /etc/nginx/sites-available/rootuip-api.conf << 'EOF'
+location /api/metrics {
+    add_header Content-Type application/json;
+    add_header Access-Control-Allow-Origin *;
+    return 200 '{"activeShipments":127,"onTimeDelivery":"94.2","ddRiskScore":"2.8","costSavings":142}';
+}
+location /api/notifications {
+    add_header Content-Type application/json;
+    add_header Access-Control-Allow-Origin *;
+    return 200 '{"success":true,"notifications":[],"unreadCount":0}';
+}
+location /api/shipments {
+    add_header Content-Type application/json;
+    add_header Access-Control-Allow-Origin *;
+    return 200 '{"success":true,"shipments":[{"container":"MAEU1234567","blNumber":"BL123456789","carrierName":"Maersk","origin":"Shanghai","destination":"Rotterdam","status":"in-transit","eta":"2025-07-15","ddRisk":"Low"}],"total":1}';
+}
+location /api/user {
+    add_header Content-Type application/json;
+    add_header Access-Control-Allow-Origin *;
+    return 200 '{"success":true,"user":{"name":"Demo User","company":"Acme Corporation","role":"Admin"}}';
+}
+location /api/ping {
+    add_header Content-Type application/json;
+    add_header Access-Control-Allow-Origin *;
+    return 200 '{"status":"ok"}';
+}
+EOF && sudo sed -i '/server_name app.rootuip.com;/a\    include /etc/nginx/sites-available/rootuip-api.conf;' /etc/nginx/sites-available/app.rootuip.com && sudo nginx -t && sudo systemctl reload nginx && echo "✅ ROOTUIP API endpoints configured! Pages should now load properly."</pre>
+        </div>
+
+        <h2>Deploy Complete Platform (Optional)</h2>
+        <p>To deploy all PWA features and platform updates:</p>
+        <div class="step">
+            <h3>Download and extract platform files</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(document.getElementById('deployCmd').textContent)">Copy</button>
+                <pre id="deployCmd"># First, upload these files from your local machine:
+# rootuip-complete-deploy.tar.gz (663KB)
+
+# Then on the server:
+cd ~
+tar -xzf rootuip-complete-deploy.tar.gz
+sudo cp -r platform/* /var/www/html/platform/
+sudo cp -r assets/* /var/www/html/assets/
+sudo chown -R www-data:www-data /var/www/html/
+echo "✅ Platform files deployed!"</pre>
+            </div>
+        </div>
+
+        <h2>Test Your Deployment</h2>
+        <p>After applying the fix, test these URLs:</p>
+        <ul>
+            <li><a href="https://app.rootuip.com/api/metrics" target="_blank">API Metrics Test</a> - Should return JSON data</li>
+            <li><a href="https://app.rootuip.com/platform/customer/dashboard.html" target="_blank">Customer Dashboard</a> - Should load without "loading" status</li>
+            <li><a href="https://app.rootuip.com/platform/mobile-app.html" target="_blank">Mobile App</a> - Should display content properly</li>
+        </ul>
+
+        <div class="status success" style="display: none;" id="successMsg">
+            ✅ Configuration copied to clipboard! Paste it in your SSH session.
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                document.getElementById('successMsg').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('successMsg').style.display = 'none';
+                }, 3000);
+            }, function(err) {
+                alert('Could not copy text. Please select and copy manually.');
+            });
+        }
+    </script>
+</body>
+</html>

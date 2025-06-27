@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - ROOTUIP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: #0f172a;
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        /* Main Content */
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        /* Search and Filters */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background: white;
+            color: #1e293b;
+            font-size: 1rem;
+        }
+
+        /* Users Table */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        /* User Info */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .user-details {
+            min-width: 0;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .user-email {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        /* Role Badge */
+        .role-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .role-admin {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .role-manager {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .role-user {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .role-viewer {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-inactive {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Action Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-danger:hover {
+            background: #fecaca;
+        }
+
+        /* Actions Menu */
+        .actions {
+            position: relative;
+        }
+
+        .actions-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            color: #64748b;
+            border-radius: 4px;
+        }
+
+        .actions-btn:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .actions-menu {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 160px;
+            z-index: 10;
+            display: none;
+        }
+
+        .actions-menu.show {
+            display: block;
+        }
+
+        .actions-menu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: #1e293b;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: background 0.2s;
+        }
+
+        .actions-menu a:hover {
+            background: #f8fafc;
+        }
+
+        .actions-menu hr {
+            margin: 0.25rem 0;
+            border: none;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0.25rem;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #1e293b;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-help {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+
+        /* Permissions Grid */
+        .permissions-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .permission-group {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .permission-group-title {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #0f172a;
+        }
+
+        .permission-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+        }
+
+        .permission-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+        }
+
+        .permission-label {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .permission-description {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-left: 1.75rem;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .pagination-info {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #e2e8f0;
+            background: white;
+            color: #475569;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .search-input {
+                min-width: auto;
+            }
+
+            .modal-content {
+                margin: 1rem;
+            }
+
+            .table-wrapper {
+                overflow-x: scroll;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/platform/customer/dashboard.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+                Back to Dashboard
+            </a>
+            <h1>User Management</h1>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Users</div>
+                <div class="stat-value" id="totalUsers">24</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Active Users</div>
+                <div class="stat-value" id="activeUsers">21</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Pending Invites</div>
+                <div class="stat-value" id="pendingInvites">3</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">User Limit</div>
+                <div class="stat-value" id="userLimit">50</div>
+            </div>
+        </div>
+
+        <!-- Users List -->
+        <div class="content-card">
+            <div class="card-header">
+                <h2 class="card-title">Company Users</h2>
+                <button class="btn btn-primary" onclick="showAddUserModal()">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Add User
+                </button>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <input type="text" class="search-input" placeholder="Search users..." id="searchInput" onkeyup="filterUsers()">
+                <select class="filter-select" id="roleFilter" onchange="filterUsers()">
+                    <option value="">All Roles</option>
+                    <option value="admin">Admin</option>
+                    <option value="manager">Manager</option>
+                    <option value="user">User</option>
+                    <option value="viewer">Viewer</option>
+                </select>
+                <select class="filter-select" id="statusFilter" onchange="filterUsers()">
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="pending">Pending</option>
+                </select>
+            </div>
+
+            <!-- Users Table -->
+            <div class="table-wrapper">
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Role</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Last Active</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <div class="pagination-info">
+                    Showing <span id="showingFrom">1</span>-<span id="showingTo">10</span> of <span id="totalCount">24</span> users
+                </div>
+                <div class="pagination-controls">
+                    <button class="pagination-btn" onclick="previousPage()" id="prevBtn">Previous</button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn" onclick="nextPage()" id="nextBtn">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit User Modal -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add New User</h3>
+                <button class="modal-close" onclick="closeModal('userModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <div class="form-group">
+                        <label class="form-label" for="userName">Full Name</label>
+                        <input type="text" id="userName" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="userEmail">Email Address</label>
+                        <input type="email" id="userEmail" class="form-input" required>
+                        <div class="form-help">An invitation will be sent to this email address</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="userRole">Role</label>
+                        <select id="userRole" class="form-select" required onchange="updatePermissions()">
+                            <option value="">Select a role</option>
+                            <option value="admin">Admin - Full system access</option>
+                            <option value="manager">Manager - Manage shipments and users</option>
+                            <option value="user">User - Create and track shipments</option>
+                            <option value="viewer">Viewer - Read-only access</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="userDepartment">Department</label>
+                        <input type="text" id="userDepartment" class="form-input" placeholder="e.g., Operations, Finance">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Permissions</label>
+                        <div class="permissions-grid" id="permissionsGrid">
+                            <div class="permission-group">
+                                <div class="permission-group-title">Shipments</div>
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm-view-shipments" class="permission-checkbox">
+                                    <label for="perm-view-shipments" class="permission-label">View Shipments</label>
+                                </div>
+                                <div class="permission-description">Access to view all company shipments</div>
+                                
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm-create-shipments" class="permission-checkbox">
+                                    <label for="perm-create-shipments" class="permission-label">Create Shipments</label>
+                                </div>
+                                <div class="permission-description">Ability to create new shipment bookings</div>
+                                
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm-edit-shipments" class="permission-checkbox">
+                                    <label for="perm-edit-shipments" class="permission-label">Edit Shipments</label>
+                                </div>
+                                <div class="permission-description">Modify existing shipment details</div>
+                            </div>
+
+                            <div class="permission-group">
+                                <div class="permission-group-title">Documents</div>
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm-view-documents" class="permission-checkbox">
+                                    <label for="perm-view-documents" class="permission-label">View Documents</label>
+                                </div>
+                                <div class="permission-description">Access shipping documents and invoices</div>
+                                
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm-upload-documents" class="permission-checkbox">
+                                    <label for="perm-upload-documents" class="permission-label">Upload Documents</label>
+                                </div>
+                                <div class="permission-description">Upload and process new documents</div>
+                            </div>
+
+                            <div class="permission-group">
+                                <div class="permission-group-title">Reports & Analytics</div>
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm-view-reports" class="permission-checkbox">
+                                    <label for="perm-view-reports" class="permission-label">View Reports</label>
+                                </div>
+                                <div class="permission-description">Access analytics and performance reports</div>
+                                
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm-export-data" class="permission-checkbox">
+                                    <label for="perm-export-data" class="permission-label">Export Data</label>
+                                </div>
+                                <div class="permission-description">Download reports and shipment data</div>
+                            </div>
+
+                            <div class="permission-group">
+                                <div class="permission-group-title">Administration</div>
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm-manage-users" class="permission-checkbox">
+                                    <label for="perm-manage-users" class="permission-label">Manage Users</label>
+                                </div>
+                                <div class="permission-description">Add, edit, and remove company users</div>
+                                
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm-billing" class="permission-checkbox">
+                                    <label for="perm-billing" class="permission-label">Billing Access</label>
+                                </div>
+                                <div class="permission-description">View and manage billing information</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('userModal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Send Invitation</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample users data
+        let users = [
+            {
+                id: 1,
+                name: 'John Smith',
+                email: 'john.smith@acmecorp.com',
+                role: 'admin',
+                department: 'Management',
+                status: 'active',
+                lastActive: '2 hours ago',
+                avatar: 'JS'
+            },
+            {
+                id: 2,
+                name: 'Sarah Johnson',
+                email: 'sarah.j@acmecorp.com',
+                role: 'manager',
+                department: 'Operations',
+                status: 'active',
+                lastActive: '1 hour ago',
+                avatar: 'SJ'
+            },
+            {
+                id: 3,
+                name: 'Mike Chen',
+                email: 'mike.chen@acmecorp.com',
+                role: 'user',
+                department: 'Logistics',
+                status: 'active',
+                lastActive: '30 minutes ago',
+                avatar: 'MC'
+            },
+            {
+                id: 4,
+                name: 'Emma Wilson',
+                email: 'emma.w@acmecorp.com',
+                role: 'viewer',
+                department: 'Finance',
+                status: 'pending',
+                lastActive: 'Never',
+                avatar: 'EW'
+            }
+        ];
+
+        // Load users
+        function loadUsers() {
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = '';
+
+            users.forEach(user => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>
+                        <div class="user-info">
+                            <div class="user-avatar">${user.avatar}</div>
+                            <div class="user-details">
+                                <div class="user-name">${user.name}</div>
+                                <div class="user-email">${user.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="role-badge role-${user.role}">${user.role}</span></td>
+                    <td>${user.department}</td>
+                    <td>
+                        <span class="status-badge status-${user.status}">
+                            <span style="width: 6px; height: 6px; background: currentColor; border-radius: 50%; display: inline-block;"></span>
+                            ${user.status}
+                        </span>
+                    </td>
+                    <td>${user.lastActive}</td>
+                    <td>
+                        <div class="actions">
+                            <button class="actions-btn" onclick="toggleActionsMenu(event, ${user.id})">
+                                <svg width="20" height="20" fill="currentColor">
+                                    <circle cx="10" cy="10" r="2"/>
+                                    <circle cx="10" cy="4" r="2"/>
+                                    <circle cx="10" cy="16" r="2"/>
+                                </svg>
+                            </button>
+                            <div class="actions-menu" id="actions-menu-${user.id}">
+                                <a href="#" onclick="editUser(${user.id})">Edit User</a>
+                                <a href="#" onclick="resetPassword(${user.id})">Reset Password</a>
+                                <a href="#" onclick="viewActivity(${user.id})">View Activity</a>
+                                <hr>
+                                ${user.status === 'active' ? 
+                                    `<a href="#" onclick="deactivateUser(${user.id})">Deactivate</a>` :
+                                    `<a href="#" onclick="activateUser(${user.id})">Activate</a>`
+                                }
+                                ${user.status === 'pending' ? 
+                                    `<a href="#" onclick="resendInvite(${user.id})">Resend Invite</a>` : ''
+                                }
+                                <hr>
+                                <a href="#" onclick="removeUser(${user.id})" style="color: #dc2626;">Remove User</a>
+                            </div>
+                        </div>
+                    </td>
+                `;
+            });
+        }
+
+        // Toggle actions menu
+        function toggleActionsMenu(event, userId) {
+            event.stopPropagation();
+            const menu = document.getElementById(`actions-menu-${userId}`);
+            
+            // Close all other menus
+            document.querySelectorAll('.actions-menu').forEach(m => {
+                if (m !== menu) m.classList.remove('show');
+            });
+            
+            menu.classList.toggle('show');
+        }
+
+        // Close menus when clicking outside
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.actions-menu').forEach(m => {
+                m.classList.remove('show');
+            });
+        });
+
+        // Modal functions
+        function showAddUserModal() {
+            document.getElementById('modalTitle').textContent = 'Add New User';
+            document.getElementById('userForm').reset();
+            document.getElementById('userModal').classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Update permissions based on role
+        function updatePermissions() {
+            const role = document.getElementById('userRole').value;
+            const permissions = {
+                admin: ['view-shipments', 'create-shipments', 'edit-shipments', 'view-documents', 
+                        'upload-documents', 'view-reports', 'export-data', 'manage-users', 'billing'],
+                manager: ['view-shipments', 'create-shipments', 'edit-shipments', 'view-documents', 
+                          'upload-documents', 'view-reports', 'export-data'],
+                user: ['view-shipments', 'create-shipments', 'view-documents', 'upload-documents'],
+                viewer: ['view-shipments', 'view-documents', 'view-reports']
+            };
+
+            // Reset all checkboxes
+            document.querySelectorAll('.permission-checkbox').forEach(cb => {
+                cb.checked = false;
+                cb.disabled = false;
+            });
+
+            // Check appropriate permissions
+            if (permissions[role]) {
+                permissions[role].forEach(perm => {
+                    const checkbox = document.getElementById(`perm-${perm}`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        checkbox.disabled = true;
+                    }
+                });
+            }
+        }
+
+        // Form submission
+        document.getElementById('userForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('userName').value,
+                email: document.getElementById('userEmail').value,
+                role: document.getElementById('userRole').value,
+                department: document.getElementById('userDepartment').value,
+                permissions: []
+            };
+
+            // Get selected permissions
+            document.querySelectorAll('.permission-checkbox:checked').forEach(cb => {
+                formData.permissions.push(cb.id.replace('perm-', ''));
+            });
+
+            // Simulate API call
+            console.log('Sending invitation:', formData);
+            
+            // Add to users list
+            const newUser = {
+                id: users.length + 1,
+                name: formData.name,
+                email: formData.email,
+                role: formData.role,
+                department: formData.department,
+                status: 'pending',
+                lastActive: 'Never',
+                avatar: formData.name.split(' ').map(n => n[0]).join('').toUpperCase()
+            };
+            
+            users.unshift(newUser);
+            loadUsers();
+            closeModal('userModal');
+            
+            // Show success message
+            alert(`Invitation sent to ${formData.email}`);
+        });
+
+        // Filter users
+        function filterUsers() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const roleFilter = document.getElementById('roleFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            const filtered = users.filter(user => {
+                const matchesSearch = user.name.toLowerCase().includes(searchValue) || 
+                                    user.email.toLowerCase().includes(searchValue) ||
+                                    user.department.toLowerCase().includes(searchValue);
+                const matchesRole = !roleFilter || user.role === roleFilter;
+                const matchesStatus = !statusFilter || user.status === statusFilter;
+                
+                return matchesSearch && matchesRole && matchesStatus;
+            });
+            
+            // Re-render table with filtered users
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: #64748b;">No users found</td></tr>';
+            } else {
+                // Temporarily replace users array
+                const tempUsers = users;
+                users = filtered;
+                loadUsers();
+                users = tempUsers;
+            }
+        }
+
+        // User actions
+        function editUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (user) {
+                document.getElementById('modalTitle').textContent = 'Edit User';
+                document.getElementById('userName').value = user.name;
+                document.getElementById('userEmail').value = user.email;
+                document.getElementById('userRole').value = user.role;
+                document.getElementById('userDepartment').value = user.department;
+                updatePermissions();
+                document.getElementById('userModal').classList.add('show');
+            }
+        }
+
+        function resetPassword(userId) {
+            const user = users.find(u => u.id === userId);
+            if (confirm(`Send password reset email to ${user.email}?`)) {
+                alert(`Password reset email sent to ${user.email}`);
+            }
+        }
+
+        function viewActivity(userId) {
+            alert('Activity log feature coming soon!');
+        }
+
+        function deactivateUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (confirm(`Deactivate ${user.name}? They will lose access to the platform.`)) {
+                user.status = 'inactive';
+                loadUsers();
+            }
+        }
+
+        function activateUser(userId) {
+            const user = users.find(u => u.id === userId);
+            user.status = 'active';
+            loadUsers();
+        }
+
+        function resendInvite(userId) {
+            const user = users.find(u => u.id === userId);
+            alert(`Invitation resent to ${user.email}`);
+        }
+
+        function removeUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (confirm(`Permanently remove ${user.name}? This action cannot be undone.`)) {
+                users = users.filter(u => u.id !== userId);
+                loadUsers();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUsers();
+        });
+    </script>
+</body>
+</html>

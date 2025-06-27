@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP AI/ML Dashboard - Predictive Analytics & Insights</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #9333ea 0%, #c026d3 100%);
+            padding: 24px 32px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        
+        .model-selector {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .model-dropdown {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+        
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        
+        .card-subtitle {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+        
+        .risk-meter {
+            grid-column: span 4;
+        }
+        
+        .prediction-panel {
+            grid-column: span 8;
+        }
+        
+        .feature-importance {
+            grid-column: span 6;
+        }
+        
+        .model-performance {
+            grid-column: span 6;
+        }
+        
+        .insights-feed {
+            grid-column: span 4;
+        }
+        
+        .optimization-panel {
+            grid-column: span 8;
+        }
+        
+        .risk-gauge {
+            position: relative;
+            width: 280px;
+            height: 200px;
+            margin: 0 auto;
+        }
+        
+        .gauge-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .gauge-background {
+            fill: none;
+            stroke: #334155;
+            stroke-width: 20;
+        }
+        
+        .gauge-fill {
+            fill: none;
+            stroke-width: 20;
+            stroke-linecap: round;
+            transition: stroke-dasharray 1s ease-in-out;
+        }
+        
+        .gauge-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .gauge-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+        
+        .gauge-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .risk-indicators {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+        
+        .risk-indicator {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .indicator-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .indicator-label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+        
+        .prediction-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .prediction-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .prediction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+        }
+        
+        .prediction-title {
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        
+        .prediction-confidence {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+        
+        .prediction-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #9333ea;
+            margin-bottom: 8px;
+        }
+        
+        .prediction-details {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+        
+        .confidence-bar {
+            background: #334155;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #9333ea 0%, #c026d3 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .feature-chart {
+            height: 300px;
+            position: relative;
+        }
+        
+        .chart-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .performance-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .metric-box {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #9333ea;
+            display: block;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+        
+        .metric-trend {
+            font-size: 0.75rem;
+            margin-top: 8px;
+        }
+        
+        .trend-up {
+            color: #10b981;
+        }
+        
+        .trend-down {
+            color: #ef4444;
+        }
+        
+        .insight-item {
+            padding: 16px;
+            border-bottom: 1px solid #334155;
+            transition: background 0.3s ease;
+        }
+        
+        .insight-item:hover {
+            background: rgba(147, 51, 234, 0.1);
+        }
+        
+        .insight-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+        }
+        
+        .insight-critical {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .insight-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+        
+        .insight-info {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+        
+        .insight-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .insight-title {
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 4px;
+        }
+        
+        .insight-description {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+        
+        .insight-time {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 8px;
+        }
+        
+        .optimization-grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .optimization-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .optimization-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #9333ea 0%, #c026d3 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .optimization-content {
+            flex: 1;
+        }
+        
+        .optimization-title {
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 4px;
+        }
+        
+        .optimization-description {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+        
+        .optimization-savings {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #10b981;
+        }
+        
+        .btn {
+            background: #9333ea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #a855f7;
+        }
+        
+        .btn-secondary {
+            background: #475569;
+        }
+        
+        .btn-secondary:hover {
+            background: #64748b;
+        }
+        
+        .training-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: rgba(147, 51, 234, 0.1);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+        
+        .container-input {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #e2e8f0;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            margin-bottom: 16px;
+        }
+        
+        .container-input:focus {
+            outline: none;
+            border-color: #9333ea;
+        }
+        
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .risk-meter,
+            .prediction-panel,
+            .feature-importance,
+            .model-performance,
+            .insights-feed,
+            .optimization-panel {
+                grid-column: span 4;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-content">
+            <div>
+                <h1 class="header-title">AI/ML Analytics Dashboard</h1>
+                <p class="card-subtitle">Real-time predictions and insights powered by machine learning</p>
+            </div>
+            <div class="model-selector">
+                <select class="model-dropdown" id="modelSelector">
+                    <option value="ddRisk">D&D Risk Model v2.3.1</option>
+                    <option value="portCongestion">Port Congestion Model</option>
+                    <option value="delayPrediction">Delay Prediction v1.8.0</option>
+                    <option value="costOptimization">Cost Optimization v1.2.0</option>
+                </select>
+                <button class="btn btn-secondary">Model Details</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Risk Assessment Meter -->
+        <div class="card risk-meter">
+            <div class="card-header">
+                <h2 class="card-title">D&D Risk Assessment</h2>
+            </div>
+            
+            <div class="risk-gauge">
+                <svg class="gauge-svg" viewBox="0 0 300 200">
+                    <path class="gauge-background" 
+                          d="M 50 150 A 100 100 0 0 1 250 150" />
+                    <path class="gauge-fill" id="riskGauge"
+                          d="M 50 150 A 100 100 0 0 1 250 150"
+                          stroke="#9333ea"
+                          stroke-dasharray="0 314" />
+                </svg>
+                <div class="gauge-center">
+                    <div class="gauge-value" id="riskValue">72</div>
+                    <div class="gauge-label">Risk Score</div>
+                </div>
+            </div>
+            
+            <div class="risk-indicators">
+                <div class="risk-indicator">
+                    <div class="indicator-value" style="color: #ef4444;">HIGH</div>
+                    <div class="indicator-label">Risk Level</div>
+                </div>
+                <div class="risk-indicator">
+                    <div class="indicator-value" style="color: #f59e0b;">$4,280</div>
+                    <div class="indicator-label">Est. Charges</div>
+                </div>
+                <div class="risk-indicator">
+                    <div class="indicator-value" style="color: #3b82f6;">85%</div>
+                    <div class="indicator-label">Confidence</div>
+                </div>
+            </div>
+            
+            <input type="text" class="container-input" placeholder="Enter container number for analysis..." id="containerInput">
+            <button class="btn" style="width: 100%;" onclick="analyzeContainer()">Analyze Risk</button>
+        </div>
+
+        <!-- Predictions Panel -->
+        <div class="card prediction-panel">
+            <div class="card-header">
+                <h2 class="card-title">AI Predictions</h2>
+            </div>
+            
+            <div class="prediction-grid">
+                <div class="prediction-card">
+                    <div class="prediction-header">
+                        <div>
+                            <div class="prediction-title">Demurrage Days</div>
+                            <div class="prediction-confidence">Confidence: 87%</div>
+                        </div>
+                    </div>
+                    <div class="prediction-value">8-12</div>
+                    <div class="prediction-details">Based on current port congestion</div>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: 87%"></div>
+                    </div>
+                </div>
+                
+                <div class="prediction-card">
+                    <div class="prediction-header">
+                        <div>
+                            <div class="prediction-title">Detention Risk</div>
+                            <div class="prediction-confidence">Confidence: 78%</div>
+                        </div>
+                    </div>
+                    <div class="prediction-value">45%</div>
+                    <div class="prediction-details">Moderate risk of detention charges</div>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: 78%"></div>
+                    </div>
+                </div>
+                
+                <div class="prediction-card">
+                    <div class="prediction-header">
+                        <div>
+                            <div class="prediction-title">Port Congestion</div>
+                            <div class="prediction-confidence">Next 7 days forecast</div>
+                        </div>
+                    </div>
+                    <div class="prediction-value">73%</div>
+                    <div class="prediction-details">USLAX - Increasing trend</div>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: 73%"></div>
+                    </div>
+                </div>
+                
+                <div class="prediction-card">
+                    <div class="prediction-header">
+                        <div>
+                            <div class="prediction-title">Arrival Delay</div>
+                            <div class="prediction-confidence">Confidence: 82%</div>
+                        </div>
+                    </div>
+                    <div class="prediction-value">3.5 days</div>
+                    <div class="prediction-details">Vessel behind schedule</div>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: 82%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Importance -->
+        <div class="card feature-importance">
+            <div class="card-header">
+                <h2 class="card-title">Risk Factor Analysis</h2>
+            </div>
+            
+            <div class="feature-chart">
+                <canvas class="chart-canvas" id="featureChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Model Performance -->
+        <div class="card model-performance">
+            <div class="card-header">
+                <h2 class="card-title">Model Performance</h2>
+            </div>
+            
+            <div class="performance-metrics">
+                <div class="metric-box">
+                    <span class="metric-value">89%</span>
+                    <span class="metric-label">Accuracy</span>
+                    <div class="metric-trend trend-up">↑ 2.3%</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-value">2.5M</span>
+                    <span class="metric-label">Training Samples</span>
+                    <div class="metric-trend trend-up">↑ 125K</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-value">47</span>
+                    <span class="metric-label">Features</span>
+                    <div class="metric-trend">Stable</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-value">12ms</span>
+                    <span class="metric-label">Inference Time</span>
+                    <div class="metric-trend trend-down">↓ 8%</div>
+                </div>
+            </div>
+            
+            <div class="training-status">
+                <span class="status-indicator"></span>
+                <span>Model continuously learning from new data</span>
+            </div>
+        </div>
+
+        <!-- AI Insights Feed -->
+        <div class="card insights-feed">
+            <div class="card-header">
+                <h2 class="card-title">AI Insights</h2>
+            </div>
+            
+            <div class="insights-list">
+                <div class="insight-item">
+                    <div class="insight-icon insight-critical">⚠</div>
+                    <div class="insight-title">Critical Risk Detected</div>
+                    <div class="insight-description">Port congestion at USLAX reaching 82% - expect significant delays</div>
+                    <div class="insight-time">2 minutes ago</div>
+                </div>
+                
+                <div class="insight-item">
+                    <div class="insight-icon insight-warning">📊</div>
+                    <div class="insight-title">Pattern Recognition</div>
+                    <div class="insight-description">Similar conditions led to avg $3,500 charges in past 30 days</div>
+                    <div class="insight-time">15 minutes ago</div>
+                </div>
+                
+                <div class="insight-item">
+                    <div class="insight-icon insight-success">✓</div>
+                    <div class="insight-title">Optimization Found</div>
+                    <div class="insight-description">Early pickup could save $2,100 in potential charges</div>
+                    <div class="insight-time">1 hour ago</div>
+                </div>
+                
+                <div class="insight-item">
+                    <div class="insight-icon insight-info">🔮</div>
+                    <div class="insight-title">Forecast Update</div>
+                    <div class="insight-description">ML models predict 15% increase in D&D charges next week</div>
+                    <div class="insight-time">2 hours ago</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cost Optimization Recommendations -->
+        <div class="card optimization-panel">
+            <div class="card-header">
+                <h2 class="card-title">AI-Powered Optimization Strategies</h2>
+            </div>
+            
+            <div class="optimization-grid">
+                <div class="optimization-card">
+                    <div class="optimization-icon">🚀</div>
+                    <div class="optimization-content">
+                        <div class="optimization-title">Early Container Pickup</div>
+                        <div class="optimization-description">
+                            Schedule pickup within 48 hours of discharge to avoid demurrage. 
+                            AI predicts 85% success rate based on historical patterns.
+                        </div>
+                        <div class="optimization-savings">Potential Savings: $2,800</div>
+                    </div>
+                    <button class="btn">Implement</button>
+                </div>
+                
+                <div class="optimization-card">
+                    <div class="optimization-icon">🔄</div>
+                    <div class="optimization-content">
+                        <div class="optimization-title">Alternative Port Routing</div>
+                        <div class="optimization-description">
+                            Route through USOAK instead of USLAX. Lower congestion predicted 
+                            for next 14 days with 78% confidence.
+                        </div>
+                        <div class="optimization-savings">Potential Savings: $4,200/month</div>
+                    </div>
+                    <button class="btn">Analyze Route</button>
+                </div>
+                
+                <div class="optimization-card">
+                    <div class="optimization-icon">📋</div>
+                    <div class="optimization-content">
+                        <div class="optimization-title">Automated Dispute Filing</div>
+                        <div class="optimization-description">
+                            AI identified 12 containers eligible for disputes. 
+                            Historical success rate: 65% with average recovery of $1,850.
+                        </div>
+                        <div class="optimization-savings">Potential Recovery: $22,200</div>
+                    </div>
+                    <button class="btn">Review Cases</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize risk gauge animation
+        function animateRiskGauge(value) {
+            const gauge = document.getElementById('riskGauge');
+            const riskValueEl = document.getElementById('riskValue');
+            
+            // Convert value (0-100) to stroke-dasharray
+            const maxDash = 314; // Circumference of semi-circle
+            const dashValue = (value / 100) * maxDash;
+            
+            gauge.style.strokeDasharray = `${dashValue} ${maxDash}`;
+            riskValueEl.textContent = value;
+            
+            // Change color based on risk level
+            if (value >= 80) {
+                gauge.style.stroke = '#ef4444'; // Red
+            } else if (value >= 60) {
+                gauge.style.stroke = '#f59e0b'; // Orange
+            } else if (value >= 40) {
+                gauge.style.stroke = '#3b82f6'; // Blue
+            } else {
+                gauge.style.stroke = '#10b981'; // Green
+            }
+        }
+
+        // Feature importance chart
+        const featureCtx = document.getElementById('featureChart').getContext('2d');
+        
+        function drawFeatureChart() {
+            const features = [
+                { name: 'Port Congestion', value: 45, color: '#ef4444' },
+                { name: 'Vessel Schedule', value: 25, color: '#f59e0b' },
+                { name: 'Historical Patterns', value: 20, color: '#3b82f6' },
+                { name: 'Carrier Performance', value: 15, color: '#10b981' },
+                { name: 'Seasonality', value: 15, color: '#9333ea' },
+                { name: 'Cargo Type', value: 10, color: '#6366f1' }
+            ];
+            
+            const canvas = featureCtx.canvas;
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            const barHeight = 30;
+            const barGap = 15;
+            const maxWidth = canvas.width - 150;
+            
+            features.forEach((feature, index) => {
+                const y = index * (barHeight + barGap) + 20;
+                const barWidth = (feature.value / 50) * maxWidth;
+                
+                // Draw bar
+                featureCtx.fillStyle = feature.color;
+                featureCtx.fillRect(120, y, barWidth, barHeight);
+                
+                // Draw label
+                featureCtx.fillStyle = '#e2e8f0';
+                featureCtx.font = '12px Inter';
+                featureCtx.textAlign = 'right';
+                featureCtx.fillText(feature.name, 110, y + barHeight / 2 + 4);
+                
+                // Draw value
+                featureCtx.textAlign = 'left';
+                featureCtx.fillText(`${feature.value}%`, barWidth + 130, y + barHeight / 2 + 4);
+            });
+        }
+
+        // Analyze container function
+        function analyzeContainer() {
+            const input = document.getElementById('containerInput');
+            const containerNumber = input.value.trim();
+            
+            if (!containerNumber) {
+                alert('Please enter a container number');
+                return;
+            }
+            
+            // Simulate analysis
+            console.log(`Analyzing container: ${containerNumber}`);
+            
+            // Animate risk gauge with random value
+            const newRisk = 45 + Math.floor(Math.random() * 40);
+            animateRiskGauge(newRisk);
+            
+            // Update predictions
+            updatePredictions();
+        }
+
+        // Update predictions with simulated data
+        function updatePredictions() {
+            const predictions = document.querySelectorAll('.prediction-value');
+            predictions[0].textContent = `${5 + Math.floor(Math.random() * 10)}-${10 + Math.floor(Math.random() * 8)}`;
+            predictions[1].textContent = `${30 + Math.floor(Math.random() * 40)}%`;
+            predictions[2].textContent = `${60 + Math.floor(Math.random() * 25)}%`;
+            predictions[3].textContent = `${1 + Math.random() * 5}.${Math.floor(Math.random() * 10)} days`;
+        }
+
+        // Real-time updates simulation
+        setInterval(() => {
+            // Update random metrics
+            const metrics = document.querySelectorAll('.metric-value');
+            const accuracy = 85 + Math.random() * 8;
+            metrics[0].textContent = `${accuracy.toFixed(0)}%`;
+            
+            // Add new insight occasionally
+            if (Math.random() > 0.8) {
+                addNewInsight();
+            }
+        }, 5000);
+
+        // Add new insight to feed
+        function addNewInsight() {
+            const insights = [
+                {
+                    type: 'warning',
+                    icon: '⚠',
+                    title: 'Congestion Alert',
+                    description: 'Port congestion increasing at major terminals'
+                },
+                {
+                    type: 'success',
+                    icon: '✓',
+                    title: 'Cost Savings Identified',
+                    description: 'New optimization strategy could save $1,500'
+                },
+                {
+                    type: 'info',
+                    icon: '📊',
+                    title: 'Model Update',
+                    description: 'Risk prediction accuracy improved by 1.2%'
+                }
+            ];
+            
+            const insight = insights[Math.floor(Math.random() * insights.length)];
+            const insightsList = document.querySelector('.insights-list');
+            
+            const newInsight = document.createElement('div');
+            newInsight.className = 'insight-item';
+            newInsight.innerHTML = `
+                <div class="insight-icon insight-${insight.type}">${insight.icon}</div>
+                <div class="insight-title">${insight.title}</div>
+                <div class="insight-description">${insight.description}</div>
+                <div class="insight-time">Just now</div>
+            `;
+            
+            insightsList.insertBefore(newInsight, insightsList.firstChild);
+            
+            // Remove old insights if too many
+            if (insightsList.children.length > 5) {
+                insightsList.removeChild(insightsList.lastChild);
+            }
+        }
+
+        // Initialize
+        animateRiskGauge(72);
+        drawFeatureChart();
+        
+        // Handle window resize
+        window.addEventListener('resize', drawFeatureChart);
+    </script>
+</body>
+</html>

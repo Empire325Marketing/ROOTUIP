@@ -1,0 +1,56 @@
+<!-- UIP Monochrome Logo - Single Color Applications -->
+<svg width="320" height="80" viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Monochrome Logo Mark -->
+  <g id="monoMark">
+    <!-- Outer Frame -->
+    <rect x="8" y="12" width="56" height="56" rx="12" fill="none" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+    
+    <!-- Central Hub -->
+    <circle cx="36" cy="40" r="14" fill="currentColor"/>
+    
+    <!-- Integration Connections -->
+    <g stroke="currentColor" stroke-width="3" fill="none" opacity="0.7">
+      <!-- Primary Lines -->
+      <line x1="14" y1="40" x2="22" y2="40" stroke-linecap="round"/>
+      <line x1="50" y1="40" x2="58" y2="40" stroke-linecap="round"/>
+      <line x1="36" y1="18" x2="36" y2="26" stroke-linecap="round"/>
+      <line x1="36" y1="54" x2="36" y2="62" stroke-linecap="round"/>
+      
+      <!-- Diagonal Lines -->
+      <line x1="20.5" y1="25.5" x2="26.8" y2="31.8" stroke-linecap="round"/>
+      <line x1="51.5" y1="25.5" x2="45.2" y2="31.8" stroke-linecap="round"/>
+      <line x1="20.5" y1="54.5" x2="26.8" y2="48.2" stroke-linecap="round"/>
+      <line x1="51.5" y1="54.5" x2="45.2" y2="48.2" stroke-linecap="round"/>
+    </g>
+    
+    <!-- Connection Points -->
+    <g fill="currentColor" opacity="0.8">
+      <circle cx="14" cy="40" r="3"/>
+      <circle cx="58" cy="40" r="3"/>
+      <circle cx="36" cy="18" r="3"/>
+      <circle cx="36" cy="62" r="3"/>
+      <circle cx="20.5" cy="25.5" r="2.5"/>
+      <circle cx="51.5" cy="25.5" r="2.5"/>
+      <circle cx="20.5" cy="54.5" r="2.5"/>
+      <circle cx="51.5" cy="54.5" r="2.5"/>
+    </g>
+    
+    <!-- Central "U" -->
+    <text x="36" y="48" font-family="Inter, sans-serif" font-size="16" font-weight="700" text-anchor="middle" fill="white">U</text>
+  </g>
+  
+  <!-- Monochrome Wordmark -->
+  <g id="monoWordmark">
+    <!-- UIP Main -->
+    <text x="80" y="48" font-family="Inter, sans-serif" font-size="36" font-weight="700" fill="currentColor" letter-spacing="-0.02em">UIP</text>
+    
+    <!-- Tagline -->
+    <text x="80" y="62" font-family="Inter, sans-serif" font-size="11" font-weight="500" fill="currentColor" opacity="0.7" letter-spacing="0.05em">UNIFIED INTEGRATION INTELLIGENCE PLATFORM</text>
+  </g>
+  
+  <!-- Enterprise Badge -->
+  <g id="monoBadge">
+    <rect x="265" y="15" width="50" height="18" rx="9" fill="none" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+    <text x="290" y="26" font-family="Inter, sans-serif" font-size="9" font-weight="600" text-anchor="middle" fill="currentColor" opacity="0.7" letter-spacing="0.03em">ENTERPRISE</text>
+  </g>
+</svg>

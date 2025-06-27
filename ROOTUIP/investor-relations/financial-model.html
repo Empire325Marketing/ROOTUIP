@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>UIP 10-Year Financial Model | Series A Projections</title>
-    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <link rel="icon" type="image/svg+xml" href="/brand/brand/logo-icon-new.svg">
     <script src="/js/logo-component.js"></script>
     <style>
         body {
@@ -11,7 +11,7 @@
             margin: 0;
             padding: 2rem;
             background: #F8FAFB;
-            color: #0A1628;
+            color: var(--uip-primary-800);
         }
         
         .header {
@@ -26,7 +26,7 @@
         h1 {
             font-size: 2.5rem;
             font-weight: 900;
-            color: #0A1628;
+            color: var(--uip-primary-800);
             margin-bottom: 0.5rem;
         }
         
@@ -53,9 +53,9 @@
         }
         
         .scenario-btn.active {
-            background: #00D4AA;
+            background: var(--uip-success-500);
             color: white;
-            border-color: #00D4AA;
+            border-color: var(--uip-success-500);
         }
         
         .model-section {
@@ -69,9 +69,9 @@
         .section-title {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #0A1628;
+            color: var(--uip-primary-800);
             margin-bottom: 1.5rem;
-            border-left: 4px solid #00D4AA;
+            border-left: 4px solid var(--uip-success-500);
             padding-left: 1rem;
         }
         
@@ -84,7 +84,7 @@
         }
         
         .financial-table thead {
-            background: #0A1628;
+            background: var(--uip-primary-800);
             color: white;
         }
         
@@ -107,7 +107,7 @@
         }
         
         .financial-table thead th:first-child {
-            background: #0A1628;
+            background: var(--uip-primary-800);
         }
         
         .financial-table .highlight-row {
@@ -139,7 +139,7 @@
         .metric-value {
             font-size: 1.75rem;
             font-weight: 800;
-            color: #00D4AA;
+            color: var(--uip-success-500);
             display: block;
         }
         
@@ -188,6 +188,8 @@
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="header">
@@ -203,7 +205,7 @@
 
     <!-- Key Metrics Summary -->
     <div class="model-section">
-        <h2 class="section-title">Key Metrics Summary</h2>
+        <h2 class="uip-h2 uip-text-center">Key Metrics Summary</h2>
         <div class="metrics-grid">
             <div class="metric-card">
                 <span class="metric-value" id="year10Revenue">$847M</span>
@@ -234,7 +236,7 @@
 
     <!-- Revenue Projections -->
     <div class="model-section">
-        <h2 class="section-title">Revenue Projections</h2>
+        <h2 class="uip-h2 uip-text-center">Revenue Projections</h2>
         
         <div class="chart-container">
             <canvas id="revenueChart"></canvas>
@@ -329,7 +331,7 @@
 
     <!-- Unit Economics -->
     <div class="model-section">
-        <h2 class="section-title">Unit Economics by Segment</h2>
+        <h2 class="uip-h2 uip-text-center">Unit Economics by Segment</h2>
         
         <table class="financial-table">
             <thead>
@@ -411,7 +413,7 @@
 
     <!-- Operating Model -->
     <div class="model-section">
-        <h2 class="section-title">Operating Model & Cash Flow</h2>
+        <h2 class="uip-h2 uip-text-center">Operating Model & Cash Flow</h2>
         
         <table class="financial-table">
             <thead>
@@ -495,7 +497,7 @@
 
     <!-- Market Penetration -->
     <div class="model-section">
-        <h2 class="section-title">Market Penetration Analysis</h2>
+        <h2 class="uip-h2 uip-text-center">Market Penetration Analysis</h2>
         
         <div class="chart-container">
             <canvas id="marketChart"></canvas>
@@ -559,7 +561,7 @@
 
     <!-- Funding & Milestones -->
     <div class="model-section">
-        <h2 class="section-title">Funding Timeline & Milestones</h2>
+        <h2 class="uip-h2 uip-text-center">Funding Timeline & Milestones</h2>
         
         <table class="financial-table">
             <thead>
@@ -640,7 +642,7 @@
                 datasets: [{
                     label: 'ARR ($M)',
                     data: [7.3, 24.7, 54.3, 98.7, 160.9, 247.3, 333.5, 424.0, 543.6, 648.2],
-                    borderColor: '#00D4AA',
+                    borderColor: 'var(--uip-success-500)',
                     backgroundColor: 'rgba(0, 212, 170, 0.1)',
                     borderWidth: 3,
                     fill: true,
@@ -696,7 +698,7 @@
                     {
                         label: '2030',
                         data: [5.8, 3.2, 1.5, 1.0],
-                        backgroundColor: '#00D4AA'
+                        backgroundColor: 'var(--uip-success-500)'
                     },
                     {
                         label: '2033',

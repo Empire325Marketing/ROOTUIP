@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freight Intelligence Insights | UIP Blog</title>
+    <meta name="description" content="Latest insights, trends, and best practices in freight intelligence, supply chain optimization, and logistics technology. Expert analysis from UIP.">
+    <meta name="keywords" content="freight intelligence, supply chain, logistics, container tracking, shipping optimization, freight technology">
+    <link rel="canonical" href="https://rootuip.com/marketing/blog/">
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rootuip.com/marketing/blog/">
+    <meta property="og:title" content="Freight Intelligence Insights | UIP Blog">
+    <meta property="og:description" content="Latest insights, trends, and best practices in freight intelligence and supply chain optimization.">
+    <meta property="og:image" content="https://rootuip.com/images/blog-social.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://rootuip.com/marketing/blog/">
+    <meta property="twitter:title" content="Freight Intelligence Insights | UIP Blog">
+    <meta property="twitter:description" content="Latest insights, trends, and best practices in freight intelligence and supply chain optimization.">
+    <meta property="twitter:image" content="https://rootuip.com/images/blog-social.jpg">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .header-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .header-cta:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-bar {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-categories {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-category {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-category:hover, .nav-category.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 10px 40px 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 14px;
+            width: 250px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            width: 300px;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #a0aec0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .main-content {
+            padding: 40px 0;
+        }
+
+        .content-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        .featured-post {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .featured-post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .featured-image {
+            height: 300px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+            position: relative;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #f56565;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .featured-content {
+            padding: 30px;
+        }
+
+        .featured-category {
+            color: #667eea;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .featured-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .featured-excerpt {
+            color: #718096;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .featured-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .blog-image {
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .blog-content {
+            padding: 25px;
+        }
+
+        .blog-category {
+            color: #667eea;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .blog-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .blog-excerpt {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #a0aec0;
+            font-size: 0.8rem;
+        }
+
+        .sidebar {
+            padding: 0;
+        }
+
+        .sidebar-widget {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .widget-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .newsletter-input {
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .newsletter-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .popular-posts {
+            list-style: none;
+        }
+
+        .popular-post {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .popular-post:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .popular-number {
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .popular-content h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+
+        .popular-content p {
+            color: #a0aec0;
+            font-size: 0.8rem;
+        }
+
+        .categories-list {
+            list-style: none;
+        }
+
+        .categories-list li {
+            margin-bottom: 10px;
+        }
+
+        .categories-list a {
+            color: #4a5568;
+            text-decoration: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            transition: all 0.3s ease;
+        }
+
+        .categories-list a:hover {
+            color: #667eea;
+            padding-left: 5px;
+        }
+
+        .category-count {
+            background: #f7fafc;
+            color: #718096;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+        }
+
+        .pagination a, .pagination span {
+            padding: 10px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #4a5568;
+            transition: all 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .pagination .current {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .lead-magnet {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .lead-magnet h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .lead-magnet p {
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .lead-magnet-btn {
+            background: white;
+            color: #667eea;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .lead-magnet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .content-layout {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .nav-categories {
+                display: none;
+            }
+
+            .search-input {
+                width: 200px;
+            }
+
+            .search-input:focus {
+                width: 220px;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .featured-title {
+                font-size: 1.6rem;
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "UIP Freight Intelligence Insights",
+        "description": "Latest insights, trends, and best practices in freight intelligence and supply chain optimization",
+        "url": "https://rootuip.com/marketing/blog/",
+        "publisher": {
+            "@type": "Organization",
+            "name": "UIP",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://rootuip.com/brand/logo.png"
+            }
+        }
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>Freight Intelligence Insights</h1>
+            <p class="header-subtitle">Expert analysis, industry trends, and actionable strategies for supply chain excellence</p>
+            <a href="/marketing/leads/assessment-tool.html" class="header-cta">
+                📊 Get Free Supply Chain Assessment
+            </a>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="nav-categories">
+                    <a href="#" class="nav-category active" onclick="filterPosts('all')">All Posts</a>
+                    <a href="#" class="nav-category" onclick="filterPosts('technology')">Technology</a>
+                    <a href="#" class="nav-category" onclick="filterPosts('optimization')">Optimization</a>
+                    <a href="#" class="nav-category" onclick="filterPosts('trends')">Industry Trends</a>
+                    <a href="#" class="nav-category" onclick="filterPosts('case-studies')">Case Studies</a>
+                </div>
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="Search articles..." id="searchInput">
+                    <button class="search-btn" onclick="searchPosts()">🔍</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="content-layout">
+                <!-- Blog Content -->
+                <div class="blog-content">
+                    <!-- Featured Post -->
+                    <article class="featured-post">
+                        <div class="featured-image">
+                            <div class="featured-badge">Featured</div>
+                            📊
+                        </div>
+                        <div class="featured-content">
+                            <div class="featured-category">Technology</div>
+                            <h2 class="featured-title">The Future of AI in Supply Chain: 2024 Predictions and Beyond</h2>
+                            <p class="featured-excerpt">
+                                Explore how artificial intelligence is revolutionizing freight intelligence, from predictive analytics 
+                                to autonomous optimization. Learn what industry leaders need to know to stay competitive.
+                            </p>
+                            <div class="featured-meta">
+                                <div class="author-info">
+                                    <div class="author-avatar">JS</div>
+                                    <div>
+                                        <div style="font-weight: 600; color: #2d3748;">John Smith</div>
+                                        <div>Chief Technology Officer</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>Dec 20, 2024</div>
+                                    <div>8 min read</div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Lead Magnet CTA -->
+                    <div class="lead-magnet">
+                        <h3>🚀 Free ROI Calculator</h3>
+                        <p>Calculate your potential savings with freight intelligence automation. Get personalized insights in under 2 minutes.</p>
+                        <a href="/marketing/leads/roi-calculator.html" class="lead-magnet-btn">Calculate Your ROI</a>
+                    </div>
+
+                    <!-- Blog Grid -->
+                    <div class="blog-grid" id="blogGrid">
+                        <a href="#" class="blog-card" data-category="optimization">
+                            <div class="blog-image">⚡</div>
+                            <div class="blog-content">
+                                <div class="blog-category">Optimization</div>
+                                <h3 class="blog-title">5 Ways to Reduce Freight Costs by 30% in 2024</h3>
+                                <p class="blog-excerpt">
+                                    Proven strategies for cost optimization that leading logistics companies are using to drive profitability.
+                                </p>
+                                <div class="blog-meta">
+                                    <span>Sarah Johnson • Dec 18, 2024</span>
+                                    <span>6 min read</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="#" class="blog-card" data-category="technology">
+                            <div class="blog-image">🤖</div>
+                            <div class="blog-content">
+                                <div class="blog-category">Technology</div>
+                                <h3 class="blog-title">Container Tracking Revolution: Real-Time Visibility Explained</h3>
+                                <p class="blog-excerpt">
+                                    How modern tracking technology is eliminating supply chain blind spots and improving customer satisfaction.
+                                </p>
+                                <div class="blog-meta">
+                                    <span>Mike Chen • Dec 15, 2024</span>
+                                    <span>4 min read</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="#" class="blog-card" data-category="case-studies">
+                            <div class="blog-image">📈</div>
+                            <div class="blog-content">
+                                <div class="blog-category">Case Studies</div>
+                                <h3 class="blog-title">How GlobalTech Reduced Transit Times by 40%</h3>
+                                <p class="blog-excerpt">
+                                    A deep dive into GlobalTech's digital transformation journey and the strategies that delivered results.
+                                </p>
+                                <div class="blog-meta">
+                                    <span>Emma Davis • Dec 12, 2024</span>
+                                    <span>7 min read</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="#" class="blog-card" data-category="trends">
+                            <div class="blog-image">🌍</div>
+                            <div class="blog-content">
+                                <div class="blog-category">Industry Trends</div>
+                                <h3 class="blog-title">Supply Chain Sustainability: The New Competitive Advantage</h3>
+                                <p class="blog-excerpt">
+                                    Why environmental responsibility is becoming a key differentiator in freight and logistics.
+                                </p>
+                                <div class="blog-meta">
+                                    <span>David Wilson • Dec 10, 2024</span>
+                                    <span>5 min read</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="#" class="blog-card" data-category="optimization">
+                            <div class="blog-image">📊</div>
+                            <div class="blog-content">
+                                <div class="blog-category">Optimization</div>
+                                <h3 class="blog-title">Data-Driven Route Optimization: Best Practices Guide</h3>
+                                <p class="blog-excerpt">
+                                    Learn how to leverage analytics for smarter routing decisions and improved delivery performance.
+                                </p>
+                                <div class="blog-meta">
+                                    <span>Lisa Rodriguez • Dec 8, 2024</span>
+                                    <span>6 min read</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="#" class="blog-card" data-category="technology">
+                            <div class="blog-image">🔗</div>
+                            <div class="blog-content">
+                                <div class="blog-category">Technology</div>
+                                <h3 class="blog-title">API Integration Strategies for Modern Logistics</h3>
+                                <p class="blog-excerpt">
+                                    Essential guide to connecting disparate systems and creating seamless operational workflows.
+                                </p>
+                                <div class="blog-meta">
+                                    <span>Alex Thompson • Dec 5, 2024</span>
+                                    <span>8 min read</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <a href="#">← Previous</a>
+                        <span class="current">1</span>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#">Next →</a>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <!-- Newsletter Signup -->
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">📧 Weekly Insights</h3>
+                        <p style="color: #718096; margin-bottom: 20px; font-size: 0.9rem;">
+                            Get the latest freight intelligence trends delivered to your inbox every Tuesday.
+                        </p>
+                        <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                            <input type="email" class="newsletter-input" placeholder="Your email address" required>
+                            <button type="submit" class="newsletter-btn">Subscribe Now</button>
+                        </form>
+                        <p style="color: #a0aec0; font-size: 0.7rem; margin-top: 10px;">
+                            Join 12,000+ logistics professionals. Unsubscribe anytime.
+                        </p>
+                    </div>
+
+                    <!-- Popular Posts -->
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">🔥 Most Popular</h3>
+                        <ul class="popular-posts">
+                            <li class="popular-post">
+                                <div class="popular-number">1</div>
+                                <div class="popular-content">
+                                    <h4>Complete Guide to Freight Rate Optimization</h4>
+                                    <p>2,847 reads • 12 min</p>
+                                </div>
+                            </li>
+                            <li class="popular-post">
+                                <div class="popular-number">2</div>
+                                <div class="popular-content">
+                                    <h4>Digital Transformation ROI: What to Expect</h4>
+                                    <p>2,156 reads • 8 min</p>
+                                </div>
+                            </li>
+                            <li class="popular-post">
+                                <div class="popular-number">3</div>
+                                <div class="popular-content">
+                                    <h4>Supply Chain Resilience in Uncertain Times</h4>
+                                    <p>1,923 reads • 10 min</p>
+                                </div>
+                            </li>
+                            <li class="popular-post">
+                                <div class="popular-number">4</div>
+                                <div class="popular-content">
+                                    <h4>Container Tracking: Technology Deep Dive</h4>
+                                    <p>1,742 reads • 6 min</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Categories -->
+                    <div class="sidebar-widget">
+                        <h3 class="widget-title">📂 Categories</h3>
+                        <ul class="categories-list">
+                            <li><a href="#">Technology <span class="category-count">23</span></a></li>
+                            <li><a href="#">Optimization <span class="category-count">18</span></a></li>
+                            <li><a href="#">Industry Trends <span class="category-count">15</span></a></li>
+                            <li><a href="#">Case Studies <span class="category-count">12</span></a></li>
+                            <li><a href="#">Best Practices <span class="category-count">9</span></a></li>
+                            <li><a href="#">Sustainability <span class="category-count">7</span></a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Resource CTA -->
+                    <div class="sidebar-widget" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                        <h3 style="color: white; border-color: rgba(255,255,255,0.3);">🎯 Free Resources</h3>
+                        <p style="opacity: 0.9; margin-bottom: 20px;">
+                            Download our comprehensive Supply Chain Optimization Toolkit
+                        </p>
+                        <a href="/marketing/leads/content-downloads.html" style="background: white; color: #667eea; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
+                            Download Now
+                        </a>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Blog functionality
+        function filterPosts(category) {
+            const cards = document.querySelectorAll('.blog-card');
+            const navLinks = document.querySelectorAll('.nav-category');
+            
+            // Update active nav
+            navLinks.forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter posts
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            trackEvent('Blog Filter', { category: category });
+        }
+
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.blog-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.blog-title').textContent.toLowerCase();
+                const excerpt = card.querySelector('.blog-excerpt').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || excerpt.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            trackEvent('Blog Search', { query: searchTerm });
+        }
+
+        function subscribeNewsletter(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input[type="email"]').value;
+            
+            // Show success message
+            const form = event.target;
+            form.innerHTML = `
+                <div style="text-align: center; color: #48bb78; font-weight: 600;">
+                    ✅ Thank you! Check your email to confirm.
+                </div>
+            `;
+            
+            trackEvent('Newsletter Signup', { source: 'blog_sidebar' });
+            
+            // Redirect to lead capture
+            setTimeout(() => {
+                window.location.href = '/marketing/automation/welcome-sequence.html?email=' + encodeURIComponent(email);
+            }, 2000);
+        }
+
+        // Analytics tracking
+        function trackEvent(eventName, properties = {}) {
+            console.log('Analytics Event:', eventName, properties);
+            
+            // Integration with marketing automation
+            if (typeof marketingAutomation !== 'undefined') {
+                marketingAutomation.track(eventName, properties);
+            }
+        }
+
+        // Track page view
+        trackEvent('Blog Page View', {
+            page: 'blog_index',
+            timestamp: new Date().toISOString()
+        });
+
+        // Track scroll depth for engagement
+        let maxScroll = 0;
+        window.addEventListener('scroll', () => {
+            const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+            if (scrollPercent > maxScroll) {
+                maxScroll = scrollPercent;
+                if (maxScroll % 25 === 0) { // Track at 25%, 50%, 75%, 100%
+                    trackEvent('Scroll Depth', { depth: maxScroll });
+                }
+            }
+        });
+
+        // Track time on page
+        const startTime = Date.now();
+        window.addEventListener('beforeunload', () => {
+            const timeSpent = Math.round((Date.now() - startTime) / 1000);
+            trackEvent('Time on Page', { seconds: timeSpent, page: 'blog_index' });
+        });
+    </script>
+</body>
+</html>

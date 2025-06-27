@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UIP Platform - Container Tracking</title>
-    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <link rel="icon" type="image/svg+xml" href="/brand/brand/logo-icon-new.svg">
     <script src="/js/logo-component.js"></script>
     <style>
         * {
@@ -14,9 +14,9 @@
         }
 
         :root {
-            --primary: #00D4AA;
+            --primary: var(--uip-success-500);
             --primary-dark: #00B894;
-            --secondary: #0A1628;
+            --secondary: var(--uip-primary-800);
             --gray-50: #F8FAFB;
             --gray-100: #F1F5F9;
             --gray-200: #E2E8F0;
@@ -34,7 +34,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--gray-50);
             color: var(--gray-900);
             line-height: 1.5;
@@ -527,6 +527,8 @@
             }
         }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -609,7 +611,7 @@
             </div>
             <div class="stat-card">
                 <div class="stat-icon" style="background: rgba(0, 212, 170, 0.1); color: var(--primary);">
-                    🚢
+                    <img src="/brand/brand/logo-icon-new.svg" alt="UIP - Unified Integration Intelligence Platform" style="height: 24px; width: 24px; vertical-align: middle;">
                 </div>
                 <div class="stat-content">
                     <div class="stat-value">1,234</div>

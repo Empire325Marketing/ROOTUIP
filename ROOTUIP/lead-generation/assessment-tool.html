@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Your Current System - Free Assessment | ROOTUIP</title>
+    <link rel="stylesheet" href="/brand/enterprise-colors.css">
+    <link rel="stylesheet" href="/brand/typography.css">
+    <link rel="stylesheet" href="/css/assessment-tool.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">ROOTUIP</a>
+            <div class="nav-links">
+                <a href="/roi-calculator">ROI Calculator</a>
+                <a href="/demo" class="cta-button">Book Demo</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="assessment-hero">
+        <div class="container">
+            <h1>How Does Your Current System Stack Up?</h1>
+            <p class="subtitle">Get a personalized assessment of your freight operations in just 5 minutes</p>
+            <div class="trust-indicators">
+                <span>✓ No registration required to start</span>
+                <span>✓ Industry benchmarks included</span>
+                <span>✓ Actionable recommendations</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="assessment-container">
+        <div class="container">
+            <div class="assessment-wrapper">
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                    <div class="progress-steps">
+                        <div class="step active" data-step="1">
+                            <span class="number">1</span>
+                            <span class="label">Operations</span>
+                        </div>
+                        <div class="step" data-step="2">
+                            <span class="number">2</span>
+                            <span class="label">Technology</span>
+                        </div>
+                        <div class="step" data-step="3">
+                            <span class="number">3</span>
+                            <span class="label">Challenges</span>
+                        </div>
+                        <div class="step" data-step="4">
+                            <span class="number">4</span>
+                            <span class="label">Goals</span>
+                        </div>
+                        <div class="step" data-step="5">
+                            <span class="number">5</span>
+                            <span class="label">Results</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assessment Questions -->
+                <form id="assessment-form">
+                    <!-- Step 1: Operations -->
+                    <div class="assessment-step active" data-step="1">
+                        <h2>Tell us about your operations</h2>
+                        
+                        <div class="question-group">
+                            <label>How many shipments do you process monthly?</label>
+                            <div class="radio-grid">
+                                <label class="radio-card">
+                                    <input type="radio" name="shipment_volume" value="0-100">
+                                    <span>Less than 100</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="shipment_volume" value="100-500">
+                                    <span>100-500</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="shipment_volume" value="500-1000">
+                                    <span>500-1,000</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="shipment_volume" value="1000+">
+                                    <span>1,000+</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-group">
+                            <label>How many carriers do you work with?</label>
+                            <div class="radio-grid">
+                                <label class="radio-card">
+                                    <input type="radio" name="carrier_count" value="1-3">
+                                    <span>1-3 carriers</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="carrier_count" value="4-10">
+                                    <span>4-10 carriers</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="carrier_count" value="11-20">
+                                    <span>11-20 carriers</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="carrier_count" value="20+">
+                                    <span>20+ carriers</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-group">
+                            <label>What percentage of your documentation is still manual?</label>
+                            <div class="slider-container">
+                                <input type="range" name="manual_percentage" min="0" max="100" value="50" class="slider">
+                                <div class="slider-labels">
+                                    <span>0%</span>
+                                    <span class="value" id="manual-value">50%</span>
+                                    <span>100%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Technology -->
+                    <div class="assessment-step" data-step="2">
+                        <h2>Current technology stack</h2>
+                        
+                        <div class="question-group">
+                            <label>Which systems do you currently use? (Select all that apply)</label>
+                            <div class="checkbox-grid">
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="current_systems" value="erp">
+                                    <span>ERP System</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="current_systems" value="tms">
+                                    <span>TMS</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="current_systems" value="wms">
+                                    <span>WMS</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="current_systems" value="custom">
+                                    <span>Custom Solution</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="current_systems" value="spreadsheets">
+                                    <span>Spreadsheets</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="current_systems" value="none">
+                                    <span>None/Manual</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-group">
+                            <label>How would you rate your current carrier integration?</label>
+                            <div class="rating-scale">
+                                <label class="rating-option">
+                                    <input type="radio" name="integration_rating" value="1">
+                                    <span>1</span>
+                                    <small>No Integration</small>
+                                </label>
+                                <label class="rating-option">
+                                    <input type="radio" name="integration_rating" value="2">
+                                    <span>2</span>
+                                    <small>Basic</small>
+                                </label>
+                                <label class="rating-option">
+                                    <input type="radio" name="integration_rating" value="3">
+                                    <span>3</span>
+                                    <small>Moderate</small>
+                                </label>
+                                <label class="rating-option">
+                                    <input type="radio" name="integration_rating" value="4">
+                                    <span>4</span>
+                                    <small>Good</small>
+                                </label>
+                                <label class="rating-option">
+                                    <input type="radio" name="integration_rating" value="5">
+                                    <span>5</span>
+                                    <small>Excellent</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-group">
+                            <label>How long does it take to onboard a new carrier?</label>
+                            <div class="radio-grid">
+                                <label class="radio-card">
+                                    <input type="radio" name="onboarding_time" value="days">
+                                    <span>Days</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="onboarding_time" value="weeks">
+                                    <span>Weeks</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="onboarding_time" value="months">
+                                    <span>Months</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="onboarding_time" value="not_possible">
+                                    <span>Not Possible</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Challenges -->
+                    <div class="assessment-step" data-step="3">
+                        <h2>Your biggest challenges</h2>
+                        
+                        <div class="question-group">
+                            <label>What are your top 3 pain points? (Drag to reorder)</label>
+                            <div class="sortable-list" id="pain-points">
+                                <div class="sortable-item" data-value="manual_processes">
+                                    <span class="drag-handle">⋮⋮</span>
+                                    <span>Manual data entry and documentation</span>
+                                </div>
+                                <div class="sortable-item" data-value="visibility">
+                                    <span class="drag-handle">⋮⋮</span>
+                                    <span>Lack of real-time visibility</span>
+                                </div>
+                                <div class="sortable-item" data-value="dd_charges">
+                                    <span class="drag-handle">⋮⋮</span>
+                                    <span>High detention & demurrage charges</span>
+                                </div>
+                                <div class="sortable-item" data-value="errors">
+                                    <span class="drag-handle">⋮⋮</span>
+                                    <span>Documentation errors and delays</span>
+                                </div>
+                                <div class="sortable-item" data-value="integration">
+                                    <span class="drag-handle">⋮⋮</span>
+                                    <span>Multiple system integrations</span>
+                                </div>
+                                <div class="sortable-item" data-value="compliance">
+                                    <span class="drag-handle">⋮⋮</span>
+                                    <span>Compliance and audit trails</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question-group">
+                            <label>How much time does your team spend on manual tasks daily?</label>
+                            <div class="radio-grid">
+                                <label class="radio-card">
+                                    <input type="radio" name="manual_time" value="0-2">
+                                    <span>0-2 hours</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="manual_time" value="2-4">
+                                    <span>2-4 hours</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="manual_time" value="4-6">
+                                    <span>4-6 hours</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="manual_time" value="6+">
+                                    <span>6+ hours</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-group">
+                            <label>What's the impact of these challenges on your business?</label>
+                            <textarea name="challenge_impact" rows="3" placeholder="e.g., Customer complaints, lost revenue, team burnout..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Goals -->
+                    <div class="assessment-step" data-step="4">
+                        <h2>Your goals and timeline</h2>
+                        
+                        <div class="question-group">
+                            <label>What are your primary goals for improving operations?</label>
+                            <div class="checkbox-grid">
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="goals" value="reduce_costs">
+                                    <span>Reduce operational costs</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="goals" value="improve_efficiency">
+                                    <span>Improve efficiency</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="goals" value="better_visibility">
+                                    <span>Better visibility</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="goals" value="scale_operations">
+                                    <span>Scale operations</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="goals" value="customer_satisfaction">
+                                    <span>Improve customer satisfaction</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="goals" value="compliance">
+                                    <span>Ensure compliance</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-group">
+                            <label>When are you looking to implement improvements?</label>
+                            <div class="radio-grid">
+                                <label class="radio-card">
+                                    <input type="radio" name="timeline" value="immediate">
+                                    <span>Immediately</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="timeline" value="3_months">
+                                    <span>Next 3 months</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="timeline" value="6_months">
+                                    <span>Next 6 months</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="timeline" value="next_year">
+                                    <span>Next year</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-group">
+                            <label>Do you have budget allocated for operational improvements?</label>
+                            <div class="radio-grid">
+                                <label class="radio-card">
+                                    <input type="radio" name="budget_allocated" value="yes">
+                                    <span>Yes</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="budget_allocated" value="evaluating">
+                                    <span>Evaluating</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="budget_allocated" value="next_budget">
+                                    <span>Next budget cycle</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="budget_allocated" value="no">
+                                    <span>Not yet</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Results (Lead Capture) -->
+                    <div class="assessment-step" data-step="5">
+                        <div class="results-preview">
+                            <h2>Your Assessment is Ready!</h2>
+                            <div class="score-preview">
+                                <div class="score-meter">
+                                    <svg viewBox="0 0 200 100" class="meter">
+                                        <path d="M 20 80 A 70 70 0 0 1 180 80" fill="none" stroke="#e0e0e0" stroke-width="20"/>
+                                        <path id="score-path" d="M 20 80 A 70 70 0 0 1 180 80" fill="none" stroke="var(--primary)" stroke-width="20" stroke-dasharray="220" stroke-dashoffset="220"/>
+                                    </svg>
+                                    <div class="score-value">
+                                        <span id="score-number">0</span>
+                                        <small>out of 100</small>
+                                    </div>
+                                </div>
+                                <p class="score-label" id="score-label">Calculating...</p>
+                            </div>
+                            
+                            <div class="preview-insights">
+                                <h3>Your personalized report includes:</h3>
+                                <ul>
+                                    <li>✓ Detailed breakdown of improvement areas</li>
+                                    <li>✓ Industry benchmark comparisons</li>
+                                    <li>✓ Specific recommendations for your situation</li>
+                                    <li>✓ Potential cost savings estimate</li>
+                                    <li>✓ Implementation roadmap</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="lead-capture-section">
+                            <h3>Get Your Complete Assessment Report</h3>
+                            <p>Enter your details to receive your personalized recommendations</p>
+                            
+                            <div class="form-group">
+                                <label>Business Email*</label>
+                                <input type="email" name="email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Full Name*</label>
+                                <input type="text" name="full_name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Company*</label>
+                                <input type="text" name="company" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Job Title*</label>
+                                <input type="text" name="job_title" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" name="phone">
+                            </div>
+
+                            <button type="submit" class="submit-btn">Get My Assessment Report</button>
+                            
+                            <p class="privacy">Your information is secure and will never be shared.</p>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Navigation -->
+                <div class="assessment-nav">
+                    <button type="button" class="nav-btn prev" id="prev-btn" style="display: none;">
+                        ← Previous
+                    </button>
+                    <button type="button" class="nav-btn next" id="next-btn">
+                        Next →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="/js/assessment-tool.js"></script>
+    <script src="/js/lead-tracking.js"></script>
+</body>
+</html>

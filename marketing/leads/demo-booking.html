@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Your UIP Demo | Freight Intelligence Platform</title>
+    <meta name="description" content="Book a personalized demo of UIP's freight intelligence platform. See how we can transform your supply chain operations in 30 minutes.">
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .booking-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+        }
+
+        .value-props {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .value-prop {
+            color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .booking-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .demo-info {
+            padding-right: 20px;
+        }
+
+        .demo-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .demo-description {
+            color: #718096;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .demo-highlights {
+            margin-bottom: 30px;
+        }
+
+        .demo-highlights h3 {
+            font-size: 1.3rem;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .highlight-list {
+            list-style: none;
+        }
+
+        .highlight-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: #4a5568;
+        }
+
+        .highlight-icon {
+            width: 20px;
+            height: 20px;
+            background: #48bb78;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .demo-testimonial {
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: #4a5568;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .testimonial-company {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .booking-form {
+            padding-left: 20px;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .demo-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .demo-type-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .demo-type-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .demo-type-card.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .demo-type-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .demo-type-label {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.9rem;
+        }
+
+        .calendar-section {
+            margin: 25px 0;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-month {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-nav-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-nav-btn:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .calendar-day {
+            background: white;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .calendar-day:hover {
+            background: #f7fafc;
+        }
+
+        .calendar-day.available {
+            background: #f0fff4;
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .calendar-day.available:hover {
+            background: #c6f6d5;
+        }
+
+        .calendar-day.selected {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        .calendar-day.disabled {
+            color: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        .calendar-day.today {
+            background: #fed7d7;
+            color: #c53030;
+            font-weight: 600;
+        }
+
+        .time-slots {
+            margin-top: 25px;
+        }
+
+        .time-slots-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .time-slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .time-slot {
+            padding: 10px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            background: white;
+        }
+
+        .time-slot:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+        }
+
+        .time-slot.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        .time-slot.unavailable {
+            background: #f7fafc;
+            color: #a0aec0;
+            cursor: not-allowed;
+            border-color: #f1f5f9;
+        }
+
+        .booking-summary {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        .summary-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .summary-label {
+            color: #718096;
+        }
+
+        .summary-value {
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .form-disclaimer {
+            font-size: 0.8rem;
+            color: #a0aec0;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .confirmation-screen {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .confirmation-screen.active {
+            display: block;
+        }
+
+        .confirmation-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .confirmation-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .confirmation-details {
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .next-steps {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 25px;
+        }
+
+        .next-steps h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .next-steps ul {
+            list-style: none;
+            color: #4a5568;
+        }
+
+        .next-steps li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 968px) {
+            .booking-layout {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .demo-info {
+                padding-right: 0;
+            }
+
+            .booking-form {
+                padding-left: 0;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .value-props {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-type-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .time-slots-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="booking-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📅 Schedule Your Demo</h1>
+            <p class="header-subtitle">See how UIP can transform your supply chain in just 30 minutes</p>
+            <div class="value-props">
+                <div class="value-prop">
+                    <span>✅</span> Personalized to your industry
+                </div>
+                <div class="value-prop">
+                    <span>🚀</span> Live platform walkthrough
+                </div>
+                <div class="value-prop">
+                    <span>💡</span> ROI analysis included
+                </div>
+                <div class="value-prop">
+                    <span>🎯</span> Custom solution design
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Layout -->
+        <div class="booking-layout" id="bookingLayout">
+            <!-- Demo Information -->
+            <div class="demo-info">
+                <h2 class="demo-title">Transform Your Freight Operations</h2>
+                <p class="demo-description">
+                    Join over 500+ companies who have revolutionized their supply chain with UIP's intelligent 
+                    freight platform. Our experts will show you exactly how to optimize your operations.
+                </p>
+
+                <div class="demo-highlights">
+                    <h3>What You'll Learn</h3>
+                    <ul class="highlight-list">
+                        <li class="highlight-item">
+                            <span class="highlight-icon">✓</span>
+                            Real-time shipment tracking and visibility
+                        </li>
+                        <li class="highlight-item">
+                            <span class="highlight-icon">✓</span>
+                            Automated freight cost optimization
+                        </li>
+                        <li class="highlight-item">
+                            <span class="highlight-icon">✓</span>
+                            Predictive analytics and route planning
+                        </li>
+                        <li class="highlight-item">
+                            <span class="highlight-icon">✓</span>
+                            Seamless carrier integration
+                        </li>
+                        <li class="highlight-item">
+                            <span class="highlight-icon">✓</span>
+                            Compliance and documentation automation
+                        </li>
+                        <li class="highlight-item">
+                            <span class="highlight-icon">✓</span>
+                            Custom reporting and dashboards
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="demo-testimonial">
+                    <div class="testimonial-text">
+                        "The UIP demo opened our eyes to possibilities we didn't even know existed. 
+                        We're now saving $2M annually and our customer satisfaction has increased by 40%."
+                    </div>
+                    <div class="testimonial-author">Sarah Chen</div>
+                    <div class="testimonial-company">VP of Logistics, TechCorp Industries</div>
+                </div>
+            </div>
+
+            <!-- Booking Form -->
+            <div class="booking-form">
+                <h3 class="form-title">Book Your Personalized Demo</h3>
+
+                <form id="demoBookingForm" onsubmit="submitBooking(event)">
+                    <!-- Contact Information -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name *</label>
+                            <input type="text" class="form-input" id="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name *</label>
+                            <input type="text" class="form-input" id="lastName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Business Email *</label>
+                        <input type="email" class="form-input" id="email" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Company Name *</label>
+                            <input type="text" class="form-input" id="company" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-input" id="phone">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Job Title</label>
+                            <input type="text" class="form-input" id="jobTitle" placeholder="e.g., Supply Chain Director">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Company Size</label>
+                            <select class="form-select" id="companySize">
+                                <option value="">Select Size</option>
+                                <option value="startup">Startup (1-50 employees)</option>
+                                <option value="small">Small (51-200 employees)</option>
+                                <option value="medium">Medium (201-1000 employees)</option>
+                                <option value="large">Large (1000+ employees)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Demo Type Selection -->
+                    <div class="form-group">
+                        <label class="form-label">Demo Type *</label>
+                        <div class="demo-type-grid">
+                            <div class="demo-type-card" onclick="selectDemoType(this, 'overview')">
+                                <span class="demo-type-icon">🔍</span>
+                                <div class="demo-type-label">Platform Overview</div>
+                            </div>
+                            <div class="demo-type-card" onclick="selectDemoType(this, 'industry')">
+                                <span class="demo-type-icon">🏭</span>
+                                <div class="demo-type-label">Industry-Specific</div>
+                            </div>
+                            <div class="demo-type-card" onclick="selectDemoType(this, 'technical')">
+                                <span class="demo-type-icon">⚙️</span>
+                                <div class="demo-type-label">Technical Deep-Dive</div>
+                            </div>
+                            <div class="demo-type-card" onclick="selectDemoType(this, 'executive')">
+                                <span class="demo-type-icon">📊</span>
+                                <div class="demo-type-label">Executive Brief</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Current Challenges -->
+                    <div class="form-group">
+                        <label class="form-label">Primary Challenge</label>
+                        <select class="form-select" id="challenge">
+                            <option value="">Select Primary Challenge</option>
+                            <option value="visibility">Lack of shipment visibility</option>
+                            <option value="costs">High freight costs</option>
+                            <option value="delays">Frequent delivery delays</option>
+                            <option value="manual">Too much manual processing</option>
+                            <option value="integration">System integration issues</option>
+                            <option value="compliance">Compliance requirements</option>
+                            <option value="reporting">Limited reporting capabilities</option>
+                            <option value="scaling">Scaling operations</option>
+                        </select>
+                    </div>
+
+                    <!-- Additional Notes -->
+                    <div class="form-group">
+                        <label class="form-label">Additional Notes (Optional)</label>
+                        <textarea class="form-textarea" id="notes" placeholder="Any specific topics you'd like us to cover or questions you have..."></textarea>
+                    </div>
+
+                    <!-- Calendar Section -->
+                    <div class="calendar-section">
+                        <div class="calendar-header">
+                            <div class="calendar-month" id="calendarMonth">December 2024</div>
+                            <div class="calendar-nav">
+                                <button type="button" class="calendar-nav-btn" onclick="changeMonth(-1)">‹</button>
+                                <button type="button" class="calendar-nav-btn" onclick="changeMonth(1)">›</button>
+                            </div>
+                        </div>
+                        <div class="calendar-grid" id="calendarGrid">
+                            <!-- Calendar days will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Time Slots -->
+                    <div class="time-slots" id="timeSlots" style="display: none;">
+                        <div class="time-slots-title">Available Times (EST)</div>
+                        <div class="time-slots-grid" id="timeSlotsGrid">
+                            <!-- Time slots will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Booking Summary -->
+                    <div class="booking-summary" id="bookingSummary" style="display: none;">
+                        <div class="summary-title">📋 Booking Summary</div>
+                        <div class="summary-item">
+                            <span class="summary-label">Demo Type:</span>
+                            <span class="summary-value" id="summaryDemoType">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Date:</span>
+                            <span class="summary-value" id="summaryDate">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Time:</span>
+                            <span class="summary-value" id="summaryTime">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Duration:</span>
+                            <span class="summary-value">30 minutes</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                        📅 Confirm Demo Booking
+                    </button>
+
+                    <div class="form-disclaimer">
+                        You'll receive a calendar invitation with video conference details. 
+                        We respect your privacy and will only use your information for this demo.
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Confirmation Screen -->
+        <div class="confirmation-screen" id="confirmationScreen">
+            <div class="confirmation-icon">✅</div>
+            <h2 class="confirmation-title">Demo Scheduled Successfully!</h2>
+            <p style="color: #718096; margin-bottom: 25px;">
+                Thank you for booking a demo with UIP. We're excited to show you how we can transform your supply chain operations.
+            </p>
+
+            <div class="confirmation-details">
+                <h3 style="color: #2d3748; margin-bottom: 15px;">📋 Your Demo Details</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <strong>Date:</strong> <span id="confirmedDate"></span><br>
+                        <strong>Time:</strong> <span id="confirmedTime"></span><br>
+                        <strong>Duration:</strong> 30 minutes
+                    </div>
+                    <div>
+                        <strong>Demo Type:</strong> <span id="confirmedDemoType"></span><br>
+                        <strong>Contact:</strong> <span id="confirmedContact"></span><br>
+                        <strong>Company:</strong> <span id="confirmedCompany"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h3>🚀 What Happens Next?</h3>
+                <ul>
+                    <li>
+                        <span class="step-number">1</span>
+                        You'll receive a calendar invitation within 5 minutes
+                    </li>
+                    <li>
+                        <span class="step-number">2</span>
+                        Our team will send you a pre-demo questionnaire (optional)
+                    </li>
+                    <li>
+                        <span class="step-number">3</span>
+                        We'll prepare a customized demo based on your industry and needs
+                    </li>
+                    <li>
+                        <span class="step-number">4</span>
+                        Join the video call at your scheduled time - no software to install
+                    </li>
+                </ul>
+            </div>
+
+            <div style="margin-top: 30px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <a href="/marketing/leads/roi-calculator.html" class="submit-btn" style="width: auto; text-decoration: none; display: inline-block;">
+                    💰 Calculate Your ROI
+                </a>
+                <a href="/marketing/blog/index.html" class="submit-btn" style="width: auto; text-decoration: none; display: inline-block; background: #f7fafc; color: #667eea;">
+                    📚 Read Our Blog
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentDate = new Date();
+        let selectedDate = null;
+        let selectedTime = null;
+        let selectedDemoType = null;
+
+        // Demo type selection
+        function selectDemoType(element, type) {
+            // Remove previous selections
+            document.querySelectorAll('.demo-type-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Select current option
+            element.classList.add('selected');
+            selectedDemoType = type;
+            
+            // Update summary
+            const typeLabels = {
+                'overview': 'Platform Overview',
+                'industry': 'Industry-Specific Demo',
+                'technical': 'Technical Deep-Dive',
+                'executive': 'Executive Brief'
+            };
+            
+            document.getElementById('summaryDemoType').textContent = typeLabels[type];
+            updateSubmitButton();
+            
+            trackEvent('Demo Type Selected', { type: type });
+        }
+
+        // Calendar functions
+        function initializeCalendar() {
+            updateCalendarDisplay();
+            generateCalendar();
+        }
+
+        function updateCalendarDisplay() {
+            const months = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            document.getElementById('calendarMonth').textContent = 
+                `${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+        }
+
+        function changeMonth(direction) {
+            currentDate.setMonth(currentDate.getMonth() + direction);
+            updateCalendarDisplay();
+            generateCalendar();
+        }
+
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const today = new Date();
+            
+            // Clear previous calendar
+            grid.innerHTML = '';
+            
+            // Add day headers
+            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayHeaders.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'calendar-day';
+                dayHeader.style.fontWeight = '600';
+                dayHeader.style.background = '#f7fafc';
+                dayHeader.style.color = '#4a5568';
+                dayHeader.textContent = day;
+                grid.appendChild(dayHeader);
+            });
+            
+            // Add empty cells for days before month starts
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day';
+                grid.appendChild(emptyDay);
+            }
+            
+            // Add days of the month
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                
+                const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+                
+                // Check if day is today
+                if (dayDate.toDateString() === today.toDateString()) {
+                    dayElement.classList.add('today');
+                }
+                
+                // Check if day is available (weekdays, not in past, not weekends)
+                if (dayDate >= today && dayDate.getDay() !== 0 && dayDate.getDay() !== 6) {
+                    dayElement.classList.add('available');
+                    dayElement.onclick = () => selectDate(dayDate, dayElement);
+                } else {
+                    dayElement.classList.add('disabled');
+                }
+                
+                grid.appendChild(dayElement);
+            }
+        }
+
+        function selectDate(date, element) {
+            // Remove previous selections
+            document.querySelectorAll('.calendar-day').forEach(day => {
+                day.classList.remove('selected');
+            });
+            
+            // Select current date
+            element.classList.add('selected');
+            selectedDate = date;
+            
+            // Update summary
+            document.getElementById('summaryDate').textContent = 
+                date.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            
+            // Show time slots
+            generateTimeSlots();
+            document.getElementById('timeSlots').style.display = 'block';
+            
+            updateSubmitButton();
+            trackEvent('Demo Date Selected', { date: date.toISOString().split('T')[0] });
+        }
+
+        function generateTimeSlots() {
+            const grid = document.getElementById('timeSlotsGrid');
+            grid.innerHTML = '';
+            
+            // Generate time slots (9 AM to 5 PM, excluding lunch 12-1 PM)
+            const timeSlots = [
+                '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
+                '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM',
+                '4:00 PM', '4:30 PM', '5:00 PM'
+            ];
+            
+            timeSlots.forEach(time => {
+                const slot = document.createElement('div');
+                slot.className = 'time-slot';
+                slot.textContent = time;
+                
+                // Randomly mark some slots as unavailable for demo purposes
+                if (Math.random() > 0.7) {
+                    slot.classList.add('unavailable');
+                } else {
+                    slot.onclick = () => selectTime(time, slot);
+                }
+                
+                grid.appendChild(slot);
+            });
+        }
+
+        function selectTime(time, element) {
+            // Remove previous selections
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.classList.remove('selected');
+            });
+            
+            // Select current time
+            element.classList.add('selected');
+            selectedTime = time;
+            
+            // Update summary
+            document.getElementById('summaryTime').textContent = time;
+            document.getElementById('bookingSummary').style.display = 'block';
+            
+            updateSubmitButton();
+            trackEvent('Demo Time Selected', { time: time });
+        }
+
+        function updateSubmitButton() {
+            const submitBtn = document.getElementById('submitBtn');
+            const isValid = selectedDemoType && selectedDate && selectedTime;
+            
+            submitBtn.disabled = !isValid;
+            
+            if (isValid) {
+                submitBtn.textContent = '📅 Confirm Demo Booking';
+            } else {
+                submitBtn.textContent = '📅 Select Date & Time to Continue';
+            }
+        }
+
+        function submitBooking(event) {
+            event.preventDefault();
+            
+            const leadData = {
+                // Contact info
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                company: document.getElementById('company').value,
+                phone: document.getElementById('phone').value,
+                jobTitle: document.getElementById('jobTitle').value,
+                companySize: document.getElementById('companySize').value,
+                
+                // Demo details
+                demoType: selectedDemoType,
+                challenge: document.getElementById('challenge').value,
+                notes: document.getElementById('notes').value,
+                
+                // Scheduling
+                date: selectedDate.toISOString(),
+                time: selectedTime,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                
+                // Tracking
+                source: 'demo_booking',
+                timestamp: new Date().toISOString()
+            };
+            
+            // Submit to marketing automation and calendar system
+            submitToSystems(leadData);
+            
+            // Show confirmation
+            showConfirmation(leadData);
+            
+            trackEvent('Demo Booked', { 
+                source: 'demo_booking', 
+                email: leadData.email,
+                demoType: leadData.demoType,
+                date: selectedDate.toISOString().split('T')[0]
+            });
+        }
+
+        function submitToSystems(leadData) {
+            console.log('Submitting demo booking:', leadData);
+            
+            // Lead scoring - demo bookings are high-intent
+            leadData.leadScore = 90;
+            leadData.segmentation = 'high_intent_prospect';
+            
+            // In production, this would:
+            // 1. Call marketing automation API
+            // 2. Create calendar event
+            // 3. Send confirmation emails
+            // 4. Notify sales team
+        }
+
+        function showConfirmation(leadData) {
+            // Hide booking form
+            document.getElementById('bookingLayout').style.display = 'none';
+            
+            // Update confirmation details
+            document.getElementById('confirmedDate').textContent = 
+                selectedDate.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            document.getElementById('confirmedTime').textContent = selectedTime;
+            document.getElementById('confirmedDemoType').textContent = 
+                document.getElementById('summaryDemoType').textContent;
+            document.getElementById('confirmedContact').textContent = 
+                `${leadData.firstName} ${leadData.lastName}`;
+            document.getElementById('confirmedCompany').textContent = leadData.company;
+            
+            // Show confirmation screen
+            document.getElementById('confirmationScreen').classList.add('active');
+            
+            // Send confirmation email simulation
+            setTimeout(() => {
+                showNotification('Calendar invitation sent to ' + leadData.email, 'success');
+            }, 1000);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? '#48bb78' : 
+                           type === 'warning' ? '#ed8936' : '#667eea';
+                           
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${bgColor};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 1000;
+                max-width: 300px;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function trackEvent(eventName, properties = {}) {
+            console.log('Analytics Event:', eventName, properties);
+            
+            // Integration with marketing automation
+            if (typeof marketingAutomation !== 'undefined') {
+                marketingAutomation.track(eventName, properties);
+            }
+        }
+
+        // Initialize
+        initializeCalendar();
+        trackEvent('Demo Booking Page Loaded', { timestamp: new Date().toISOString() });
+
+        // Track engagement
+        let startTime = Date.now();
+        window.addEventListener('beforeunload', () => {
+            const timeSpent = Math.round((Date.now() - startTime) / 1000);
+            trackEvent('Demo Booking Time Spent', { seconds: timeSpent });
+        });
+    </script>
+</body>
+</html>

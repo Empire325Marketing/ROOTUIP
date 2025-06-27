@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Enterprise Analytics Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 24px 32px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .dashboard-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .dashboard-subtitle {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .metric-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+        
+        .metric-trend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .trend-up {
+            color: #10b981;
+        }
+        
+        .trend-down {
+            color: #ef4444;
+        }
+        
+        .metric-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+            font-family: "JetBrains Mono", monospace;
+        }
+        
+        .metric-description {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .chart-header {
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .chart-subtitle {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            overflow-x: auto;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th,
+        .data-table td {
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .data-table th {
+            font-weight: 600;
+            color: #374151;
+            background: #f9fafb;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+        
+        .data-table td {
+            font-size: 0.875rem;
+        }
+        
+        .data-table tr:hover {
+            background: #f9fafb;
+        }
+        
+        .filter-bar {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .filter-select,
+        .filter-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            background: white;
+        }
+        
+        .refresh-button {
+            padding: 8px 16px;
+            background: #1e40af;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        
+        .refresh-button:hover {
+            background: #1d4ed8;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-active {
+            background: #10b981;
+        }
+        
+        .status-inactive {
+            background: #ef4444;
+        }
+        
+        .status-pending {
+            background: #f59e0b;
+        }
+        
+        .attribution-flow {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 24px;
+        }
+        
+        .flow-step {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .flow-step:last-child {
+            border-bottom: none;
+        }
+        
+        .flow-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #1e40af;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-right: 16px;
+        }
+        
+        .flow-content {
+            flex: 1;
+        }
+        
+        .flow-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .flow-description {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .flow-metric {
+            font-family: "JetBrains Mono", monospace;
+            font-weight: 600;
+            color: #1e40af;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 16px;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <div class="dashboard-title">UIP Enterprise Analytics</div>
+        <div class="dashboard-subtitle">Real-time insights for enterprise sales optimization</div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Filters -->
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label class="filter-label">Date Range:</label>
+                <select class="filter-select" id="dateRange">
+                    <option value="today">Today</option>
+                    <option value="yesterday">Yesterday</option>
+                    <option value="7days">Last 7 Days</option>
+                    <option value="30days" selected>Last 30 Days</option>
+                    <option value="90days">Last 90 Days</option>
+                    <option value="custom">Custom Range</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Traffic Source:</label>
+                <select class="filter-select" id="trafficSource">
+                    <option value="all">All Sources</option>
+                    <option value="organic">Organic Search</option>
+                    <option value="paid">Paid Search</option>
+                    <option value="social">Social Media</option>
+                    <option value="direct">Direct</option>
+                    <option value="referral">Referral</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Company Size:</label>
+                <select class="filter-select" id="companySize">
+                    <option value="all">All Sizes</option>
+                    <option value="10-50">10-50 vessels</option>
+                    <option value="50-100">50-100 vessels</option>
+                    <option value="100+">100+ vessels</option>
+                </select>
+            </div>
+            
+            <button class="refresh-button" onclick="refreshDashboard()">
+                🔄 Refresh Data
+            </button>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-title">Total Sessions</div>
+                    <div class="metric-trend trend-up">
+                        ↗ <span id="sessionsTrend">+12.5%</span>
+                    </div>
+                </div>
+                <div class="metric-value" id="totalSessions">2,847</div>
+                <div class="metric-description">Unique website sessions this period</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-title">ROI Calculator Completions</div>
+                    <div class="metric-trend trend-up">
+                        ↗ <span id="roiTrend">+8.3%</span>
+                    </div>
+                </div>
+                <div class="metric-value" id="roiCompletions">187</div>
+                <div class="metric-description">Qualified leads from ROI calculator</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-title">Demo Bookings</div>
+                    <div class="metric-trend trend-up">
+                        ↗ <span id="demoTrend">+15.7%</span>
+                    </div>
+                </div>
+                <div class="metric-value" id="demoBookings">43</div>
+                <div class="metric-description">Enterprise demo requests</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-title">Average Lead Score</div>
+                    <div class="metric-trend trend-up">
+                        ↗ <span id="leadScoreTrend">+6.2%</span>
+                    </div>
+                </div>
+                <div class="metric-value" id="avgLeadScore">94</div>
+                <div class="metric-description">Composite lead quality score</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-title">Conversion Rate</div>
+                    <div class="metric-trend trend-up">
+                        ↗ <span id="conversionTrend">+2.1%</span>
+                    </div>
+                </div>
+                <div class="metric-value" id="conversionRate">3.8%</div>
+                <div class="metric-description">Session to qualified lead conversion</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-title">Pipeline Value</div>
+                    <div class="metric-trend trend-up">
+                        ↗ <span id="pipelineTrend">+22.4%</span>
+                    </div>
+                </div>
+                <div class="metric-value" id="pipelineValue">$2.1M</div>
+                <div class="metric-description">Total qualified pipeline generated</div>
+            </div>
+        </div>
+
+        <!-- Attribution Flow -->
+        <div class="attribution-flow">
+            <div class="chart-header">
+                <div class="chart-title">Enterprise Customer Journey</div>
+                <div class="chart-subtitle">Average path from first touch to demo booking</div>
+            </div>
+            
+            <div class="flow-step">
+                <div class="flow-number">1</div>
+                <div class="flow-content">
+                    <div class="flow-title">First Touch</div>
+                    <div class="flow-description">LinkedIn: 42% | Organic Search: 28% | Direct: 18% | Paid Search: 12%</div>
+                </div>
+                <div class="flow-metric">100%</div>
+            </div>
+            
+            <div class="flow-step">
+                <div class="flow-number">2</div>
+                <div class="flow-content">
+                    <div class="flow-title">Homepage Engagement</div>
+                    <div class="flow-description">Average time: 2m 34s | Scroll depth: 68%</div>
+                </div>
+                <div class="flow-metric">87%</div>
+            </div>
+            
+            <div class="flow-step">
+                <div class="flow-number">3</div>
+                <div class="flow-content">
+                    <div class="flow-title">ROI Calculator</div>
+                    <div class="flow-description">View: 34% | Start: 21% | Complete: 15%</div>
+                </div>
+                <div class="flow-metric">34%</div>
+            </div>
+            
+            <div class="flow-step">
+                <div class="flow-number">4</div>
+                <div class="flow-content">
+                    <div class="flow-title">Demo Form</div>
+                    <div class="flow-description">View: 28% | Start: 18% | Complete: 12%</div>
+                </div>
+                <div class="flow-metric">18%</div>
+            </div>
+            
+            <div class="flow-step">
+                <div class="flow-number">5</div>
+                <div class="flow-content">
+                    <div class="flow-title">Qualified Lead</div>
+                    <div class="flow-description">Demo scheduled and qualified by sales team</div>
+                </div>
+                <div class="flow-metric">12%</div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Traffic Sources</div>
+                    <div class="chart-subtitle">Sessions by acquisition channel</div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="trafficChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Conversion Funnel</div>
+                    <div class="chart-subtitle">Step-by-step conversion rates</div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="funnelChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Lead Quality Distribution</div>
+                    <div class="chart-subtitle">Leads by score ranges</div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="leadQualityChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Campaign Performance</div>
+                    <div class="chart-subtitle">ROI by marketing campaign</div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="campaignChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lead Attribution Table -->
+        <div class="table-container">
+            <div class="chart-header">
+                <div class="chart-title">Recent High-Value Leads</div>
+                <div class="chart-subtitle">Latest qualified leads with attribution data</div>
+            </div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Lead ID</th>
+                        <th>Company</th>
+                        <th>Fleet Size</th>
+                        <th>Lead Score</th>
+                        <th>First Touch</th>
+                        <th>Last Touch</th>
+                        <th>Touchpoints</th>
+                        <th>Time to Convert</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="leadsTableBody">
+                    <tr>
+                        <td>UIP-2024-001</td>
+                        <td>Global Shipping Corp</td>
+                        <td>100+ vessels</td>
+                        <td>185</td>
+                        <td>LinkedIn</td>
+                        <td>Direct</td>
+                        <td>7</td>
+                        <td>14 days</td>
+                        <td><span class="status-indicator status-active"></span>Qualified</td>
+                    </tr>
+                    <tr>
+                        <td>UIP-2024-002</td>
+                        <td>Maritime Solutions Inc</td>
+                        <td>50-100 vessels</td>
+                        <td>167</td>
+                        <td>Organic Search</td>
+                        <td>Demo Form</td>
+                        <td>5</td>
+                        <td>7 days</td>
+                        <td><span class="status-indicator status-pending"></span>Demo Scheduled</td>
+                    </tr>
+                    <tr>
+                        <td>UIP-2024-003</td>
+                        <td>Ocean Freight Partners</td>
+                        <td>100+ vessels</td>
+                        <td>192</td>
+                        <td>LinkedIn</td>
+                        <td>ROI Calculator</td>
+                        <td>9</td>
+                        <td>21 days</td>
+                        <td><span class="status-indicator status-active"></span>Qualified</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // Analytics Dashboard JavaScript
+        class AnalyticsDashboard {
+            constructor() {
+                this.charts = {};
+                this.data = {};
+                this.refreshInterval = 300000; // 5 minutes
+                this.init();
+            }
+
+            init() {
+                this.loadInitialData();
+                this.createCharts();
+                this.setupAutoRefresh();
+                this.setupFilters();
+                console.log('Analytics dashboard initialized');
+            }
+
+            loadInitialData() {
+                // In production, this would fetch from your analytics API
+                this.data = {
+                    sessions: 2847,
+                    roiCompletions: 187,
+                    demoBookings: 43,
+                    avgLeadScore: 94,
+                    conversionRate: 3.8,
+                    pipelineValue: 2100000,
+                    trafficSources: {
+                        linkedin: 42,
+                        organic: 28,
+                        direct: 18,
+                        paid: 12
+                    },
+                    conversionFunnel: [100, 87, 34, 18, 12],
+                    leadQuality: {
+                        high: 65,
+                        medium: 78,
+                        low: 44
+                    },
+                    campaigns: [
+                        { name: 'LinkedIn Enterprise', roi: 347, leads: 23 },
+                        { name: 'Google Brand', roi: 289, leads: 18 },
+                        { name: 'Industry Publications', roi: 234, leads: 12 },
+                        { name: 'Retargeting', roi: 412, leads: 31 }
+                    ]
+                };
+            }
+
+            createCharts() {
+                this.createTrafficChart();
+                this.createFunnelChart();
+                this.createLeadQualityChart();
+                this.createCampaignChart();
+            }
+
+            createTrafficChart() {
+                const ctx = document.getElementById('trafficChart').getContext('2d');
+                this.charts.traffic = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['LinkedIn', 'Organic Search', 'Direct', 'Paid Search'],
+                        datasets: [{
+                            data: [42, 28, 18, 12],
+                            backgroundColor: [
+                                '#0077B5',
+                                '#10b981',
+                                '#1e40af',
+                                '#f59e0b'
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    usePointStyle: true
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            createFunnelChart() {
+                const ctx = document.getElementById('funnelChart').getContext('2d');
+                this.charts.funnel = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Landing', 'Engagement', 'ROI Calc', 'Demo Form', 'Qualified'],
+                        datasets: [{
+                            label: 'Conversion %',
+                            data: [100, 87, 34, 18, 12],
+                            backgroundColor: '#1e40af',
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            createLeadQualityChart() {
+                const ctx = document.getElementById('leadQualityChart').getContext('2d');
+                this.charts.leadQuality = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['High (150+)', 'Medium (100-149)', 'Low (<100)'],
+                        datasets: [{
+                            label: 'Number of Leads',
+                            data: [65, 78, 44],
+                            backgroundColor: [
+                                '#10b981',
+                                '#f59e0b',
+                                '#ef4444'
+                            ],
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            createCampaignChart() {
+                const ctx = document.getElementById('campaignChart').getContext('2d');
+                this.charts.campaign = new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: 'Campaign Performance',
+                            data: [
+                                { x: 23, y: 347 },
+                                { x: 18, y: 289 },
+                                { x: 12, y: 234 },
+                                { x: 31, y: 412 }
+                            ],
+                            backgroundColor: '#1e40af',
+                            borderColor: '#3b82f6',
+                            pointRadius: 8,
+                            pointHoverRadius: 10
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const campaigns = ['LinkedIn Enterprise', 'Google Brand', 'Industry Publications', 'Retargeting'];
+                                        return campaigns[context.dataIndex] + ': ' + context.parsed.y + '% ROI, ' + context.parsed.x + ' leads';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Number of Leads'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'ROI %'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            setupAutoRefresh() {
+                setInterval(() => {
+                    this.refreshData();
+                }, this.refreshInterval);
+            }
+
+            setupFilters() {
+                document.getElementById('dateRange').addEventListener('change', (e) => {
+                    this.filterData('dateRange', e.target.value);
+                });
+
+                document.getElementById('trafficSource').addEventListener('change', (e) => {
+                    this.filterData('trafficSource', e.target.value);
+                });
+
+                document.getElementById('companySize').addEventListener('change', (e) => {
+                    this.filterData('companySize', e.target.value);
+                });
+            }
+
+            filterData(filterType, value) {
+                console.log('Filtering data:', filterType, value);
+                // In production, this would fetch filtered data from the API
+                this.refreshData();
+            }
+
+            refreshData() {
+                // Simulate data refresh with small variations
+                const variance = () => (Math.random() - 0.5) * 0.1;
+                
+                // Update metrics with slight variations
+                document.getElementById('totalSessions').textContent = 
+                    Math.round(this.data.sessions * (1 + variance()));
+                document.getElementById('roiCompletions').textContent = 
+                    Math.round(this.data.roiCompletions * (1 + variance()));
+                document.getElementById('demoBookings').textContent = 
+                    Math.round(this.data.demoBookings * (1 + variance()));
+                
+                console.log('Dashboard data refreshed');
+            }
+
+            // Public API methods
+            updateMetric(metricId, value, trend = null) {
+                const element = document.getElementById(metricId);
+                if (element) {
+                    element.textContent = value;
+                }
+                
+                if (trend) {
+                    const trendElement = document.getElementById(metricId + 'Trend');
+                    if (trendElement) {
+                        trendElement.textContent = trend;
+                    }
+                }
+            }
+
+            addLeadToTable(leadData) {
+                const tbody = document.getElementById('leadsTableBody');
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${leadData.id}</td>
+                    <td>${leadData.company}</td>
+                    <td>${leadData.fleetSize}</td>
+                    <td>${leadData.score}</td>
+                    <td>${leadData.firstTouch}</td>
+                    <td>${leadData.lastTouch}</td>
+                    <td>${leadData.touchpoints}</td>
+                    <td>${leadData.timeToConvert}</td>
+                    <td><span class="status-indicator status-${leadData.status.toLowerCase()}"></span>${leadData.status}</td>
+                `;
+                
+                tbody.insertBefore(row, tbody.firstChild);
+                
+                // Keep only last 10 rows
+                while (tbody.children.length > 10) {
+                    tbody.removeChild(tbody.lastChild);
+                }
+            }
+        }
+
+        // Global refresh function
+        function refreshDashboard() {
+            if (window.dashboard) {
+                window.dashboard.refreshData();
+            }
+        }
+
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.dashboard = new AnalyticsDashboard();
+        });
+
+        // Integration with analytics systems
+        if (window.uipAnalytics) {
+            window.uipAnalytics.onConversion = (conversionData) => {
+                if (window.dashboard && conversionData.goal === 'demo_booking') {
+                    window.dashboard.addLeadToTable({
+                        id: 'UIP-' + Date.now(),
+                        company: conversionData.company || 'Unknown',
+                        fleetSize: conversionData.fleet_size || 'Unknown',
+                        score: conversionData.lead_score || 0,
+                        firstTouch: 'Recent',
+                        lastTouch: 'Demo Form',
+                        touchpoints: 1,
+                        timeToConvert: '< 1 day',
+                        status: 'Pending'
+                    });
+                }
+            };
+        }
+    </script>
+</body>
+</html>

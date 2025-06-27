@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP Brand Assets - Unified Intelligence Platform</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="brand-colors.css?v=1750888019">
+    <link rel="stylesheet" href="typography.css?v=1750888019">
+    <style>
+        body {
+            font-family: var(--font-sans);
+            background: var(--gray-50);
+            color: var(--gray-900);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: var(--navy-900);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: var(--text-5xl);
+            font-weight: 800;
+            margin: 0 0 16px 0;
+        }
+        
+        .header p {
+            font-size: var(--text-xl);
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        .section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            font-size: var(--text-3xl);
+            font-weight: 700;
+            color: var(--navy-900);
+            margin-bottom: 40px;
+        }
+        
+        .asset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        
+        .asset-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+        
+        .asset-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+        
+        .asset-card h3 {
+            color: var(--navy-800);
+            font-size: var(--text-xl);
+            margin: 0 0 12px 0;
+        }
+        
+        .asset-card p {
+            color: var(--gray-600);
+            margin: 0 0 16px 0;
+        }
+        
+        .asset-preview {
+            background: var(--gray-50);
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            text-align: center;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .asset-preview img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .download-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        
+        .download-link:hover {
+            color: var(--blue-700);
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        
+        .color-item {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .color-swatch {
+            height: 100px;
+            position: relative;
+        }
+        
+        .color-info {
+            padding: 16px;
+        }
+        
+        .color-info h4 {
+            margin: 0 0 4px 0;
+            font-size: var(--text-base);
+            font-weight: 600;
+        }
+        
+        .color-info code {
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            color: var(--gray-600);
+        }
+        
+        .font-showcase {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .font-showcase h3 {
+            font-size: var(--text-2xl);
+            margin: 0 0 16px 0;
+        }
+        
+        .font-weights {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .font-weight-item {
+            padding: 12px;
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+        }
+        
+        .quick-links {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .quick-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--blue-600);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .quick-link:hover {
+            background: var(--blue-700);
+            transform: translateY(-1px);
+        }
+        
+        .implementation-code {
+            background: var(--gray-900);
+            color: var(--gray-100);
+            padding: 24px;
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+        
+        .footer {
+            background: var(--navy-900);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-top: 80px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <img src="logo.svg" alt="UIP Logo" style="height: 80px; margin-bottom: 24px;">
+            <h1>UIP Brand Assets</h1>
+            <p>Everything you need to implement the Unified Intelligence Platform brand consistently across all touchpoints.</p>
+        </div>
+    </header>
+    
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="quick-links">
+                    <a href="brand-guidelines.md" class="quick-link">
+                        📋 Brand Guidelines
+                    </a>
+                    <a href="generate-favicon.html" class="quick-link">
+                        🎨 Generate Favicons
+                    </a>
+                    <a href="generate-social-images.html" class="quick-link">
+                        📱 Generate Social Images
+                    </a>
+                    <a href="/update-brand.sh" class="quick-link">
+                        🔧 Brand Update Script
+                    </a>
+                </div>
+                
+                <h2 class="section-title">Logo Assets</h2>
+                <div class="asset-grid">
+                    <div class="asset-card">
+                        <h3>Primary Logo</h3>
+                        <p>Full logo with wordmark for primary brand applications</p>
+                        <div class="asset-preview">
+                            <img src="logo.svg" alt="UIP Primary Logo" style="max-height: 60px;">
+                        </div>
+                        <a href="logo.svg" download class="download-link">
+                            ⬇ Download SVG
+                        </a>
+                    </div>
+                    
+                    <div class="asset-card">
+                        <h3>Icon Logo</h3>
+                        <p>Standalone icon for compact spaces and app icons</p>
+                        <div class="asset-preview">
+                            <img src="logo-icon.svg" alt="UIP Icon" style="max-height: 60px;">
+                        </div>
+                        <a href="logo-icon.svg" download class="download-link">
+                            ⬇ Download SVG
+                        </a>
+                    </div>
+                    
+                    <div class="asset-card">
+                        <h3>Favicon</h3>
+                        <p>Optimized favicon for browser tabs</p>
+                        <div class="asset-preview">
+                            <img src="/favicon.svg" alt="UIP Favicon" style="max-height: 32px;">
+                        </div>
+                        <a href="/favicon.svg" download class="download-link">
+                            ⬇ Download SVG
+                        </a>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">Color Palette</h2>
+                <div class="color-grid">
+                    <div class="color-item">
+                        <div class="color-swatch" style="background: var(--navy-900);"></div>
+                        <div class="color-info">
+                            <h4>Navy 900</h4>
+                            <code>#0A1628</code>
+                        </div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-swatch" style="background: var(--blue-600);"></div>
+                        <div class="color-info">
+                            <h4>Innovation Blue</h4>
+                            <code>#0052CC</code>
+                        </div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-swatch" style="background: var(--teal-500);"></div>
+                        <div class="color-info">
+                            <h4>Success Teal</h4>
+                            <code>#00D4AA</code>
+                        </div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-swatch" style="background: var(--orange-500);"></div>
+                        <div class="color-info">
+                            <h4>Alert Orange</h4>
+                            <code>#FF7A45</code>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">Typography</h2>
+                <div class="font-showcase">
+                    <h3 style="font-family: var(--font-sans);">Inter - Primary Font</h3>
+                    <div class="font-weights">
+                        <div class="font-weight-item" style="font-weight: 400;">
+                            Regular (400) - Body text and general content
+                        </div>
+                        <div class="font-weight-item" style="font-weight: 600;">
+                            Semibold (600) - Subheadings and emphasis
+                        </div>
+                        <div class="font-weight-item" style="font-weight: 700;">
+                            Bold (700) - Headers and CTAs
+                        </div>
+                        <div class="font-weight-item" style="font-weight: 800;">
+                            Extra Bold (800) - Hero text and major headers
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="font-showcase">
+                    <h3 style="font-family: var(--font-mono);">JetBrains Mono - Data Font</h3>
+                    <div class="font-weight-item" style="font-family: var(--font-mono);">
+                        $14,000,000 • 67% • 91% • Used for metrics, data, and code
+                    </div>
+                </div>
+                
+                <h2 class="section-title">Implementation</h2>
+                <div class="implementation-code">
+&lt;!-- Add to HTML head --&gt;
+&lt;link rel="icon" type="image/svg+xml" href="/favicon.svg"&gt;
+&lt;link rel="apple-touch-icon" href="/apple-touch-icon.png"&gt;
+&lt;link rel="manifest" href="/site.webmanifest"&gt;
+&lt;meta name="theme-color" content="#1e40af"&gt;
+
+&lt;!-- Brand CSS --&gt;
+&lt;link rel="stylesheet" href="/brand/brand-colors.css?v=1750888019"&gt;
+&lt;link rel="stylesheet" href="/brand/typography.css?v=1750888019"&gt;
+
+&lt;!-- Fonts --&gt;
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"&gt;</div>
+                
+                <h2 class="section-title">Brand Voice</h2>
+                <div class="asset-card">
+                    <h3>Key Messages</h3>
+                    <ul style="color: var(--gray-700); margin: 0; padding-left: 20px;">
+                        <li><strong>Primary:</strong> "Stop Losing $14M Per Vessel to Ocean Freight Inefficiencies"</li>
+                        <li><strong>Value Props:</strong> 67% Cost Reduction • 91% Automation Rate • 14-Day Implementation</li>
+                        <li><strong>Tone:</strong> Professional, data-driven, confident, solution-focused</li>
+                        <li><strong>Audience:</strong> C-suite executives, logistics directors, operations managers</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Unified Intelligence Platform. Enterprise Ocean Freight Automation.</p>
+        </div>
+    </footer>
+</body>
+</html>

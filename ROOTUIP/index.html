@@ -5,12 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="UIP - Stop Losing $14M Per Vessel to Ocean Freight Inefficiencies. AI-powered automation platform.">
     <title>UIP - Unified Integration Intelligence Platform | Save $14M Per Vessel</title>
-    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
-    <script src="/js/logo-component.js"></script>
-    <link rel="stylesheet" href="brand/brand-colors.css">
-    <link rel="stylesheet" href="brand/typography.css">
-    <link rel="stylesheet" href="css/uip-style.css">
-    <link rel="icon" type="image/svg+xml" href="brand/logo-icon.svg">
+    <link rel="icon" type="image/svg+xml" href="/brand/brand/logo-icon-new.svg">
+    <!-- Preload critical resources -->
+    <link rel="preload" href="brand/logo-horizontal.svg" as="image" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Critical CSS inline for instant rendering -->
+    <style>
+        /* Critical CSS - Above the fold only - Inline for instant rendering */
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.4;color:#1e293b;background:#f8fafc;font-weight:400;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+        .container{max-width:1440px;margin:0 auto;padding:0 24px}
+        .navbar{position:fixed;top:0;width:100%;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:1000;border-bottom:1px solid #e2e8f0;transition:all .25s ease}
+        .nav-wrapper{display:flex;justify-content:space-between;align-items:center;padding:16px 0;max-width:1440px;margin:0 auto}
+        .nav-logo{height:40px;width:280px;transition:opacity .3s ease}
+        .nav-links{display:flex;list-style:none;gap:40px;margin:0}
+        .nav-links a{color:#1e40af;text-decoration:none;font-weight:500;font-size:1rem;transition:color .15s ease;padding:8px 0}
+        .nav-links a:hover{color:#3b82f6}
+        .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 24px;border-radius:8px;font-weight:600;text-decoration:none;transition:all .25s ease;border:none;font-size:1rem;white-space:nowrap;cursor:pointer;min-width:fit-content}
+        .btn-primary{background:linear-gradient(135deg,#1e40af 0%,#3b82f6 100%);color:white;box-shadow:0 4px 6px rgba(0,0,0,.1)}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 15px rgba(0,0,0,.2)}
+        .btn-secondary{background:transparent;color:white;border:2px solid white;backdrop-filter:blur(10px)}
+        .btn-secondary:hover{background:rgba(255,255,255,.1)}
+        .btn-lg{padding:18px 36px;font-size:1.125rem;border-radius:10px}
+        .hero{background:linear-gradient(135deg,#1e40af 0%,#3b82f6 50%,#0ea5e9 100%);color:white;padding:180px 24px 120px;margin-top:72px;min-height:80vh;display:flex;align-items:center}
+        .hero-content{text-align:center;max-width:1000px;margin:0 auto}
+        .uip-hero-title{font-size:clamp(2.5rem,5vw,4rem);font-weight:800;line-height:1.1;margin-bottom:24px;letter-spacing:-0.02em}
+        .uip-text-success{color:#10b981;text-shadow:0 0 20px rgba(16,185,129,.3)}
+        .uip-lead{font-size:clamp(1.125rem,2vw,1.25rem);font-weight:400;opacity:.95;margin-bottom:40px;max-width:700px;margin-left:auto;margin-right:auto;line-height:1.6}
+        .hero-cta{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:64px}
+        .loss-counter{background:rgba(255,255,255,.05);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:24px;text-align:center;max-width:400px;margin:0 auto 40px}
+        .counter-label{font-size:.875rem;opacity:.9;margin-bottom:8px;font-weight:500}
+        .counter-value{font-family:"JetBrains Mono",monospace;font-size:2rem;font-weight:700;color:#10b981;margin-bottom:4px}
+        .counter-sublabel{font-size:.75rem;opacity:.7}
+        .trust-indicators{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:32px;margin-top:80px;max-width:800px;margin-left:auto;margin-right:auto}
+        .trust-item{text-align:center;background:rgba(255,255,255,.05);padding:24px;border-radius:12px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1)}
+        .trust-value{font-family:"JetBrains Mono",monospace;font-size:2.25rem;font-weight:700;color:#10b981;line-height:1;margin-bottom:8px}
+        .trust-label{font-size:.875rem;opacity:.9;font-weight:500}
+        .lazy{opacity:0;transition:opacity .3s ease;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:loading 1.5s infinite}
+        .loaded{opacity:1}
+        @keyframes loading{0%{background-position:200% 0}100%{background-position:-200% 0}}
+        @media (max-width:768px){
+        .container{padding:0 16px}
+        .nav-links{display:none}
+        .nav-wrapper{padding:12px 0}
+        .hero{padding:120px 16px 60px;min-height:70vh}
+        .uip-hero-title{font-size:2rem;line-height:1.2;margin-bottom:16px}
+        .uip-lead{font-size:1rem;margin-bottom:32px}
+        .hero-cta{flex-direction:column;align-items:center;gap:12px}
+        .btn-lg{width:100%;max-width:280px;padding:16px 24px}
+        .trust-indicators{grid-template-columns:repeat(2,1fr);gap:24px}
+        .loss-counter{margin-bottom:32px}
+        .counter-value{font-size:1.5rem}
+        }
+        @media (prefers-reduced-motion:reduce){
+        *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+        .lazy,.loaded{transition:none}
+        @keyframes loading{0%,100%{background-position:0 0}}
+        }
+    </style>
+    
+    <!-- Load fonts with font-display: swap for better performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    
+    <!-- Load non-critical CSS async -->
+    <link rel="stylesheet" href="brand/enterprise-colors.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="brand/enterprise-typography.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/uip-enhanced.css" media="print" onload="this.media='all'">
+    
+    <!-- Fallback for no-JS -->
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="brand/enterprise-colors.css">
+        <link rel="stylesheet" href="brand/enterprise-typography.css">
+        <link rel="stylesheet" href="css/uip-enhanced.css">
+    </noscript>
+    <link rel="icon" type="image/svg+xml" href="brand/brand/favicon.svg">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#1e40af">
+    <meta property="og:title" content="UIP - Stop Losing $14M Per Vessel to Ocean Freight Inefficiencies">
+    <meta property="og:description" content="The only AI platform that connects ALL carrier systems to eliminate detention & demurrage charges forever. 94% D&D reduction in 48 hours.">
+    <meta property="og:image" content="https://rootuip.com/brand/social-card.svg">
+    <meta property="og:url" content="https://rootuip.com">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="UIP - Unified Integration Intelligence Platform">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="UIP - Save $14M Per Vessel">
+    <meta name="twitter:description" content="Enterprise AI platform eliminating ocean freight inefficiencies. 94% D&D reduction guaranteed.">
+    <meta name="twitter:image" content="https://rootuip.com/brand/social-card.svg">
+    <meta name="twitter:site" content="@UIPPlatform">
 </head>
 <body>
     <!-- Navigation -->
@@ -18,16 +102,19 @@
         <div class="container">
             <div class="nav-wrapper">
                 <div class="logo-container">
-            <div class="uip-logo" data-size="medium" data-type="horizontal" data-theme="white" data-link="true"></div>
+                    <a href="/" class="nav-logo-link">
+                        <img src="brand/logo-horizontal.svg" alt="UIP - Unified Integration Intelligence Platform" class="nav-logo" height="40" width="280" loading="eager">
+                    </a>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="#platform">Platform</a></li>
-                    <li><a href="#solutions">Solutions</a></li>
-                    <li><a href="#roi">ROI Calculator</a></li>
-                    <li><a href="#resources">Resources</a></li>
+                    <li><a href="platform/dashboard.html">Platform</a></li>
+                    <li><a href="interactive-demo.html">Solutions</a></li>
+                    <li><a href="lead-generation/assessment-tool.html">Assessment</a></li>
+                    <li><a href="roi-calculator.html">ROI Calculator</a></li>
+                    <li><a href="sales-toolkit.html">Resources</a></li>
                 </ul>
                 <div class="nav-cta">
-                    <a href="#demo" class="btn btn-primary">Book Demo</a>
+                    <a href="lead-generation/assessment-tool.html" class="btn btn-primary">Book Demo</a>
                 </div>
             </div>
         </div>
@@ -37,12 +124,12 @@
     <section id="home" class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1 class="hero-title">Stop Losing <span class="text-savings">$14M Per Vessel</span><br>to Ocean Freight Inefficiencies</h1>
-                <p class="hero-subtitle">The only AI platform that connects ALL carrier systems to eliminate detention & demurrage charges forever</p>
+                <h1 class="uip-hero-title">Stop Losing <span class="uip-text-success">$14M Per Vessel</span><br>to Ocean Freight Inefficiencies</h1>
+                <p class="uip-lead" style="color: rgba(255,255,255,0.9);">The only AI platform that connects ALL carrier systems to eliminate detention & demurrage charges forever</p>
                 
                 <div class="hero-cta">
-                    <a href="#roi" class="btn btn-primary btn-lg">Calculate Your Savings</a>
-                    <a href="#demo" class="btn btn-secondary btn-lg">See Live Demo</a>
+                    <a href="roi-calculator.html" class="btn btn-primary btn-lg">Calculate Your Savings</a>
+                    <a href="interactive-demo.html" class="btn btn-secondary btn-lg">See Live Demo</a>
                 </div>
                 
                 <!-- Live Loss Counter -->
@@ -78,29 +165,29 @@
     <!-- Problem Section -->
     <section id="problem" class="problem-section">
         <div class="container">
-            <h2 class="section-title">The $20 Billion Problem Hiding in Your Operations</h2>
-            <p class="section-subtitle">Ocean freight loses billions annually to preventable inefficiencies</p>
+            <h2 class="uip-h2 uip-text-center">The $20 Billion Problem Hiding in Your Operations</h2>
+            <p class="uip-lead uip-text-center">Ocean freight loses billions annually to preventable inefficiencies</p>
             
             <div class="problem-grid">
                 <div class="problem-card">
-                    <div class="problem-icon">📊</div>
-                    <h3>$7-9B in D&D Charges</h3>
-                    <p>87% are completely preventable with proper data integration</p>
+                    <div class="problem-icon" style="background: var(--uip-error-100); color: var(--uip-error-600); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 24px; font-weight: bold;">$</div>
+                    <h3 class="uip-h4">$7-9B in D&D Charges</h3>
+                    <p class="uip-body">87% are completely preventable with proper data integration</p>
                 </div>
                 <div class="problem-card">
-                    <div class="problem-icon">🚢</div>
-                    <h3>200+ Carrier Systems</h3>
-                    <p>No standardization means your team wastes 160+ hours weekly</p>
+                    <div class="problem-icon" style="background: var(--uip-warning-100); color: var(--uip-warning-600); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 18px; font-weight: bold;">200+</div>
+                    <h3 class="uip-h4">Carrier Systems</h3>
+                    <p class="uip-body">No standardization means your team wastes 160+ hours weekly</p>
                 </div>
                 <div class="problem-card">
-                    <div class="problem-icon">⚠️</div>
-                    <h3>67% Dispute Success</h3>
-                    <p>Manual processes leave money on the table every day</p>
+                    <div class="problem-icon" style="background: var(--uip-error-100); color: var(--uip-error-600); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 18px; font-weight: bold;">67%</div>
+                    <h3 class="uip-h4">Dispute Success</h3>
+                    <p class="uip-body">Manual processes leave money on the table every day</p>
                 </div>
                 <div class="problem-card">
-                    <div class="problem-icon">📉</div>
-                    <h3>Reactive Operations</h3>
-                    <p>You learn about charges after it's too late to prevent them</p>
+                    <div class="problem-icon" style="background: var(--uip-warning-100); color: var(--uip-warning-600); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 20px; font-weight: bold;">⏰</div>
+                    <h3 class="uip-h4">Reactive Operations</h3>
+                    <p class="uip-body">You learn about charges after it's too late to prevent them</p>
                 </div>
             </div>
         </div>
@@ -109,12 +196,12 @@
     <!-- Platform Section -->
     <section id="platform" class="platform-section">
         <div class="container">
-            <h2 class="section-title">The Only Platform That Connects Everything</h2>
-            <p class="section-subtitle">Universal integration across ALL carrier data sources</p>
+            <h2 class="uip-h2 uip-text-center">The Only Platform That Connects Everything</h2>
+            <p class="uip-lead uip-text-center">Universal integration across ALL carrier data sources</p>
             
             <div class="integration-showcase">
                 <div class="integration-hub">
-                    <img src="brand/logo-icon.svg" alt="UIP Hub" class="hub-icon">
+                    <img data-src="brand/brand/logo-icon-new.svg" alt="UIP Hub" class="hub-icon lazy" loading="lazy">
                     <div class="connection-lines">
                         <div class="connection-line line-1"></div>
                         <div class="connection-line line-2"></div>
@@ -145,24 +232,24 @@
             
             <div class="platform-features">
                 <div class="feature-card">
-                    <div class="feature-icon">🤖</div>
-                    <h3>D&D Prevention AI</h3>
-                    <p>Predicts risks 14 days before charges occur</p>
+                    <div class="feature-icon" style="background: var(--uip-tech-100); color: var(--uip-tech-600); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 18px; font-weight: bold;">AI</div>
+                    <h3 class="uip-h4">D&D Prevention AI</h3>
+                    <p class="uip-body">Predicts risks 14 days before charges occur</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Automated Disputes</h3>
-                    <p>94% success rate with zero manual effort</p>
+                    <div class="feature-icon" style="background: var(--uip-success-100); color: var(--uip-success-600); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 18px; font-weight: bold;">94%</div>
+                    <h3 class="uip-h4">Automated Disputes</h3>
+                    <p class="uip-body">Success rate with zero manual effort</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🔍</div>
-                    <h3>Real-time Processing</h3>
-                    <p>GPU-powered OCR and data extraction</p>
+                    <div class="feature-icon" style="background: var(--uip-tech-100); color: var(--uip-tech-600); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 18px; font-weight: bold;">GPU</div>
+                    <h3 class="uip-h4">Real-time Processing</h3>
+                    <p class="uip-body">GPU-powered OCR and data extraction</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">📈</div>
-                    <h3>Predictive Analytics</h3>
-                    <p>Prevent problems before they cost you</p>
+                    <div class="feature-icon" style="background: var(--uip-primary-100); color: var(--uip-primary-600); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 18px; font-weight: bold;"><span class="uip-metric-icon">📊</span></div>
+                    <h3 class="uip-h4">Predictive Analytics</h3>
+                    <p class="uip-body">Prevent problems before they cost you</p>
                 </div>
             </div>
         </div>
@@ -171,8 +258,8 @@
     <!-- ROI Calculator Section -->
     <section id="roi" class="roi-section">
         <div class="container">
-            <h2 class="section-title">Calculate Your Savings</h2>
-            <p class="section-subtitle">See your potential ROI in seconds</p>
+            <h2 class="uip-h2 uip-text-center">Calculate Your Savings</h2>
+            <p class="uip-lead uip-text-center">See your potential ROI in seconds</p>
             
             <div class="roi-calculator">
                 <div class="calculator-inputs">
@@ -217,8 +304,8 @@
     <!-- Demo CTA Section -->
     <section id="demo" class="demo-section">
         <div class="container">
-            <h2 class="section-title">See UIP in Action</h2>
-            <p class="section-subtitle">Join industry leaders saving millions with intelligent automation</p>
+            <h2 class="uip-h2 uip-text-center" style="color: var(--uip-text-inverse);">See UIP in Action</h2>
+            <p class="uip-lead uip-text-center" style="color: rgba(255,255,255,0.9);">Join industry leaders saving millions with intelligent automation</p>
             
             <div class="demo-form">
                 <form id="demoForm">
@@ -246,8 +333,8 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <img src="brand/logo.svg" alt="UIP Logo" class="footer-logo">
-                    <p>The future of ocean freight automation</p>
+                    <img data-src="brand/logo-horizontal.svg" alt="UIP - Unified Integration Intelligence Platform" class="footer-logo lazy" style="filter: brightness(0) invert(1);" loading="lazy">
+                    <p class="uip-body">Enterprise AI platform eliminating $15-20B in annual ocean freight inefficiencies</p>
                 </div>
                 <div class="footer-links">
                     <h4>Platform</h4>
@@ -283,11 +370,178 @@
         </div>
     </footer>
 
-    <script src="js/uip-scripts.js"></script>
+    <!-- Enhanced Service Worker Registration -->
     <script>
-        // Initialize UIP logos
-        document.addEventListener("DOMContentLoaded", function() {
-            UIPLogo.init();
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw-enhanced.js')
+                    .then(function(registration) {
+                        console.log('Enhanced SW registered: ', registration);
+                        
+                        // Monitor performance
+                        if (registration.active) {
+                            const messageChannel = new MessageChannel();
+                            messageChannel.port1.onmessage = function(event) {
+                                if (event.data.type === 'CACHE_STATS_RESPONSE') {
+                                    console.log('Cache Stats:', event.data.stats);
+                                }
+                            };
+                            registration.active.postMessage({
+                                type: 'CACHE_STATS'
+                            }, [messageChannel.port2]);
+                        }
+                    })
+                    .catch(function(registrationError) {
+                        console.log('Enhanced SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+
+    <!-- Performance Monitoring -->
+    <script>
+        window.addEventListener('load', function() {
+            // Core Web Vitals monitoring
+            if ('web-vital' in window) {
+                import('https://unpkg.com/web-vitals?module').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+                    getCLS(console.log);
+                    getFID(console.log);
+                    getFCP(console.log);
+                    getLCP(console.log);
+                    getTTFB(console.log);
+                });
+            }
+            
+            // Basic performance metrics
+            setTimeout(function() {
+                const perfData = performance.timing;
+                const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+                const domReadyTime = perfData.domContentLoadedEventEnd - perfData.navigationStart;
+                
+                // Track performance if analytics available
+                if (window.gtag) {
+                    gtag('event', 'page_load_time', {
+                        'event_category': 'performance',
+                        'value': pageLoadTime,
+                        'custom_parameter_1': domReadyTime
+                    });
+                }
+                
+                console.log('Page Load Time:', pageLoadTime + 'ms');
+                console.log('DOM Ready Time:', domReadyTime + 'ms');
+            }, 0);
         });
     </script>
+
+    <!-- Progressive JavaScript Loading - Deferred for performance -->
+    <script>
+        // Load critical scripts immediately after DOM
+        const loadScript = (src, defer = true) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = true;
+            if (defer) script.defer = true;
+            document.head.appendChild(script);
+        };
+        
+        // Load most critical scripts first
+        document.addEventListener('DOMContentLoaded', () => {
+            loadScript('js/enhanced-lazy-loading.min.js', false);
+        });
+        
+        // Load non-critical scripts after page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                // Load analytics suite
+                loadScript('js/analytics-ga4.js');
+                loadScript('js/conversion-tracking.js');
+                loadScript('js/heatmap-analytics.js');
+                loadScript('js/lead-attribution.js');
+                loadScript('js/automated-reporting.js');
+                
+                // Load main scripts
+                loadScript('js/uip-scripts.js');
+                if (window.UIPLogo) UIPLogo.init();
+            }, 100);
+        });
+    </script>
+    
+    <!-- Live Loss Counter -->
+    <script>
+        function updateLossCounter() {
+            const counter = document.getElementById('lossCounter');
+            if (counter) {
+                const startDate = new Date().setHours(0, 0, 0, 0);
+                const now = Date.now();
+                const secondsElapsed = Math.floor((now - startDate) / 1000);
+                const lossPerSecond = 634; // $634 per second industry loss
+                const currentLoss = secondsElapsed * lossPerSecond;
+                
+                counter.textContent = '$' + currentLoss.toLocaleString();
+            }
+        }
+        
+        // Update counter every second
+        setInterval(updateLossCounter, 1000);
+        updateLossCounter(); // Initial call
+    </script>
+    
+    <!-- ROI Calculator Enhancement -->
+    <script>
+        function calculateROI() {
+            const vessels = parseInt(document.getElementById('vesselCount')?.value) || 10;
+            const containers = parseInt(document.getElementById('containerVolume')?.value) || 50000;
+            const ddCharges = parseInt(document.getElementById('ddCharges')?.value) || 140000000;
+            const manualHours = parseInt(document.getElementById('manualHours')?.value) || 160;
+            
+            // UIP savings calculations
+            const ddReduction = ddCharges * 0.94; // 94% D&D reduction
+            const automationSavings = manualHours * 52 * 75; // $75/hour, 52 weeks
+            const efficiencyGains = vessels * 2500000; // $2.5M per vessel efficiency
+            
+            const totalSavings = ddReduction + automationSavings + efficiencyGains;
+            const fiveYearValue = totalSavings * 5;
+            const uipCost = vessels * 500000; // $500K per vessel
+            const roiDays = Math.ceil((uipCost / totalSavings) * 365);
+            
+            // Update display
+            document.getElementById('annualSavings').textContent = '$' + Math.round(totalSavings / 1000000) + 'M';
+            document.getElementById('roiTimeline').textContent = Math.min(roiDays, 90) + ' days';
+            document.getElementById('fiveYearValue').textContent = '$' + Math.round(fiveYearValue / 1000000) + 'M';
+        }
+        
+        // Auto-calculate on input change
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = ['vesselCount', 'containerVolume', 'ddCharges', 'manualHours'];
+            inputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', calculateROI);
+                }
+            });
+            calculateROI(); // Initial calculation
+        });
+    </script>
+    
+    <!-- Demo Form Enhancement -->
+    <script>
+        document.getElementById('demoForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Track conversion
+            if (window.gtag) {
+                gtag('event', 'demo_request', {
+                    'event_category': 'conversion',
+                    'event_label': 'homepage'
+                });
+            }
+            
+            // Show success message
+            alert('Thank you! We\'ll contact you within 24 hours to schedule your personalized demo.');
+            
+            // Here you would normally submit to your backend
+            console.log('Demo form submitted');
+        });
+    </script>
+
 </body>

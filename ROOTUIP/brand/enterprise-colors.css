@@ -1,0 +1,200 @@
+/* UIP Enterprise Color System - Professional Grade */
+
+:root {
+  /* PRIMARY COLORS - Trust & Reliability */
+  --uip-primary-50:  #eff6ff;   /* Lightest blue background */
+  --uip-primary-100: #dbeafe;   /* Light blue backgrounds */
+  --uip-primary-200: #bfdbfe;   /* Subtle accents */
+  --uip-primary-300: #93c5fd;   /* Disabled states */
+  --uip-primary-400: #60a5fa;   /* Hover states */
+  --uip-primary-500: #3b82f6;   /* Primary brand blue */
+  --uip-primary-600: #2563eb;   /* Default buttons */
+  --uip-primary-700: #1d4ed8;   /* Active states */
+  --uip-primary-800: #1e40af;   /* Enterprise blue */
+  --uip-primary-900: #1e3a8a;   /* Darkest blue */
+
+  /* SECONDARY COLORS - Technology & Intelligence */
+  --uip-tech-50:  #f0f9ff;     /* Data backgrounds */
+  --uip-tech-100: #e0f2fe;     /* Light tech accents */
+  --uip-tech-200: #bae6fd;     /* Data visualization */
+  --uip-tech-300: #7dd3fc;     /* Charts and graphs */
+  --uip-tech-400: #38bdf8;     /* Interactive elements */
+  --uip-tech-500: #0ea5e9;     /* Technology blue */
+  --uip-tech-600: #0284c7;     /* Data points */
+  --uip-tech-700: #0369a1;     /* Analytics */
+  --uip-tech-800: #075985;     /* Dashboard headers */
+  --uip-tech-900: #0c4a6e;     /* Deep tech */
+
+  /* SUCCESS COLORS - Savings & ROI */
+  --uip-success-50:  #ecfdf5;  /* Success backgrounds */
+  --uip-success-100: #d1fae5;  /* Light success */
+  --uip-success-200: #a7f3d0;  /* ROI indicators */
+  --uip-success-300: #6ee7b7;  /* Savings highlights */
+  --uip-success-400: #34d399;  /* Positive metrics */
+  --uip-success-500: #10b981;  /* Primary success */
+  --uip-success-600: #059669;  /* Success buttons */
+  --uip-success-700: #047857;  /* ROI calculations */
+  --uip-success-800: #065f46;  /* Deep success */
+  --uip-success-900: #064e3b;  /* Darkest success */
+
+  /* WARNING COLORS - Attention & Urgency */
+  --uip-warning-50:  #fffbeb;  /* Warning backgrounds */
+  --uip-warning-100: #fef3c7;  /* Light warnings */
+  --uip-warning-200: #fde68a;  /* Risk indicators */
+  --uip-warning-300: #fcd34d;  /* Attention needed */
+  --uip-warning-400: #fbbf24;  /* Caution states */
+  --uip-warning-500: #f59e0b;  /* Primary warning */
+  --uip-warning-600: #d97706;  /* Warning actions */
+  --uip-warning-700: #b45309;  /* Alert states */
+  --uip-warning-800: #92400e;  /* Critical warnings */
+  --uip-warning-900: #78350f;  /* Urgent alerts */
+
+  /* ERROR COLORS - Critical Issues */
+  --uip-error-50:  #fef2f2;    /* Error backgrounds */
+  --uip-error-100: #fee2e2;    /* Light errors */
+  --uip-error-200: #fecaca;    /* Error indicators */
+  --uip-error-300: #fca5a5;    /* Problem states */
+  --uip-error-400: #f87171;    /* Error highlights */
+  --uip-error-500: #ef4444;    /* Primary error */
+  --uip-error-600: #dc2626;    /* Error actions */
+  --uip-error-700: #b91c1c;    /* Critical errors */
+  --uip-error-800: #991b1b;    /* Severe problems */
+  --uip-error-900: #7f1d1d;    /* System failures */
+
+  /* NEUTRAL GRAYS - Professional Hierarchy */
+  --uip-gray-50:  #f8fafc;     /* Page backgrounds */
+  --uip-gray-100: #f1f5f9;     /* Card backgrounds */
+  --uip-gray-200: #e2e8f0;     /* Subtle borders */
+  --uip-gray-300: #cbd5e1;     /* Border elements */
+  --uip-gray-400: #94a3b8;     /* Placeholder text */
+  --uip-gray-500: #64748b;     /* Secondary text */
+  --uip-gray-600: #475569;     /* Body text */
+  --uip-gray-700: #334155;     /* Headings */
+  --uip-gray-800: #1e293b;     /* Primary text */
+  --uip-gray-900: #0f172a;     /* Darkest text */
+
+  /* SEMANTIC ASSIGNMENTS */
+  --uip-background:     var(--uip-gray-50);
+  --uip-surface:        #ffffff;
+  --uip-surface-2:      var(--uip-gray-100);
+  --uip-border:         var(--uip-gray-200);
+  --uip-border-strong:  var(--uip-gray-300);
+  
+  --uip-text-primary:   var(--uip-gray-900);
+  --uip-text-secondary: var(--uip-gray-700);
+  --uip-text-muted:     var(--uip-gray-500);
+  --uip-text-inverse:   #ffffff;
+  
+  --uip-link:           var(--uip-primary-600);
+  --uip-link-hover:     var(--uip-primary-700);
+  --uip-link-visited:   var(--uip-primary-800);
+
+  /* ENTERPRISE GRADIENTS */
+  --uip-gradient-primary: linear-gradient(135deg, var(--uip-primary-800) 0%, var(--uip-primary-600) 100%);
+  --uip-gradient-tech: linear-gradient(135deg, var(--uip-tech-600) 0%, var(--uip-tech-500) 100%);
+  --uip-gradient-success: linear-gradient(135deg, var(--uip-success-600) 0%, var(--uip-success-500) 100%);
+  --uip-gradient-hero: linear-gradient(135deg, var(--uip-primary-900) 0%, var(--uip-primary-700) 50%, var(--uip-tech-600) 100%);
+  --uip-gradient-subtle: linear-gradient(135deg, var(--uip-gray-50) 0%, var(--uip-gray-100) 100%);
+
+  /* ENTERPRISE SHADOWS */
+  --uip-shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --uip-shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.1), 0 1px 2px -1px rgba(15, 23, 42, 0.1);
+  --uip-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -2px rgba(15, 23, 42, 0.1);
+  --uip-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.1);
+  --uip-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
+  --uip-shadow-2xl: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  --uip-shadow-inner: inset 0 2px 4px 0 rgba(15, 23, 42, 0.05);
+
+  /* ENTERPRISE FOCUS RINGS */
+  --uip-focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  --uip-focus-ring-success: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  --uip-focus-ring-warning: 0 0 0 3px rgba(245, 158, 11, 0.1);
+  --uip-focus-ring-error: 0 0 0 3px rgba(239, 68, 68, 0.1);
+
+  /* ANIMATION TIMINGS */
+  --uip-transition-fast: 0.15s ease-out;
+  --uip-transition-normal: 0.25s ease-out;
+  --uip-transition-slow: 0.35s ease-out;
+  --uip-transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* ENTERPRISE SPACING */
+  --uip-space-px: 1px;
+  --uip-space-1: 0.25rem;   /* 4px */
+  --uip-space-2: 0.5rem;    /* 8px */
+  --uip-space-3: 0.75rem;   /* 12px */
+  --uip-space-4: 1rem;      /* 16px */
+  --uip-space-5: 1.25rem;   /* 20px */
+  --uip-space-6: 1.5rem;    /* 24px */
+  --uip-space-8: 2rem;      /* 32px */
+  --uip-space-10: 2.5rem;   /* 40px */
+  --uip-space-12: 3rem;     /* 48px */
+  --uip-space-16: 4rem;     /* 64px */
+  --uip-space-20: 5rem;     /* 80px */
+  --uip-space-24: 6rem;     /* 96px */
+  --uip-space-32: 8rem;     /* 128px */
+
+  /* ENTERPRISE BREAKPOINTS */
+  --uip-breakpoint-sm: 640px;
+  --uip-breakpoint-md: 768px;
+  --uip-breakpoint-lg: 1024px;
+  --uip-breakpoint-xl: 1280px;
+  --uip-breakpoint-2xl: 1536px;
+}
+
+/* DARK MODE ENTERPRISE COLORS */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --uip-background:     #0f172a;
+    --uip-surface:        #1e293b;
+    --uip-surface-2:      #334155;
+    --uip-border:         #475569;
+    --uip-border-strong:  #64748b;
+    
+    --uip-text-primary:   #f8fafc;
+    --uip-text-secondary: #e2e8f0;
+    --uip-text-muted:     #94a3b8;
+    --uip-text-inverse:   #0f172a;
+  }
+}
+
+/* PRINT COLORS */
+@media print {
+  :root {
+    --uip-primary-600:    #000000;
+    --uip-text-primary:   #000000;
+    --uip-text-secondary: #333333;
+    --uip-background:     #ffffff;
+    --uip-surface:        #ffffff;
+  }
+}
+
+/* HIGH CONTRAST MODE */
+@media (prefers-contrast: high) {
+  :root {
+    --uip-primary-600:    #000080;
+    --uip-success-600:    #006400;
+    --uip-warning-600:    #ff8c00;
+    --uip-error-600:      #dc143c;
+    --uip-text-primary:   #000000;
+    --uip-border:         #000000;
+  }
+}
+
+/* COLOR UTILITY CLASSES */
+.text-primary { color: var(--uip-primary-600); }
+.text-tech { color: var(--uip-tech-600); }
+.text-success { color: var(--uip-success-600); }
+.text-warning { color: var(--uip-warning-600); }
+.text-error { color: var(--uip-error-600); }
+
+.bg-primary { background-color: var(--uip-primary-600); }
+.bg-tech { background-color: var(--uip-tech-600); }
+.bg-success { background-color: var(--uip-success-600); }
+.bg-warning { background-color: var(--uip-warning-600); }
+.bg-error { background-color: var(--uip-error-600); }
+
+.border-primary { border-color: var(--uip-primary-600); }
+.border-tech { border-color: var(--uip-tech-600); }
+.border-success { border-color: var(--uip-success-600); }
+.border-warning { border-color: var(--uip-warning-600); }
+.border-error { border-color: var(--uip-error-600); }

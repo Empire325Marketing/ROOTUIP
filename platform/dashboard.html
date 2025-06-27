@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Dashboard - ROOTUIP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.125rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .dashboard-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-4px);
+            border-color: #3b82f6;
+            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.2);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: white;
+        }
+
+        .card-description {
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-features li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #cbd5e1;
+            font-size: 0.875rem;
+        }
+
+        .card-features li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .card-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #3b82f6;
+            font-weight: 500;
+            transition: gap 0.2s;
+        }
+
+        .dashboard-card:hover .card-action {
+            gap: 0.75rem;
+        }
+
+        .user-info {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            text-align: right;
+        }
+
+        .user-role {
+            background: rgba(139, 92, 246, 0.2);
+            color: #a78bfa;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-info {
+                position: static;
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="user-info" id="userInfo">
+        <div class="user-role">Enterprise</div>
+        <div id="userName" style="font-weight: 600;">Loading...</div>
+        <div id="userCompany" style="font-size: 0.875rem; color: #94a3b8;">Company</div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">R</div>
+            <h1>ROOTUIP Platform</h1>
+            <p class="subtitle">Choose your dashboard</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Customer Dashboard -->
+            <a href="/platform/customer/dashboard.html" class="dashboard-card">
+                <div class="card-icon">📊</div>
+                <h2 class="card-title">Customer Dashboard</h2>
+                <p class="card-description">
+                    Comprehensive view of your shipments, analytics, and company performance metrics.
+                </p>
+                <ul class="card-features">
+                    <li>Real-time shipment tracking</li>
+                    <li>D&D risk analysis</li>
+                    <li>Cost savings analytics</li>
+                    <li>Document management</li>
+                    <li>Carrier performance metrics</li>
+                </ul>
+                <span class="card-action">
+                    Enter Dashboard
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14m0 0l-6-6m6 6l-6 6"/>
+                    </svg>
+                </span>
+            </a>
+
+            <!-- Admin Panel -->
+            <a href="/platform/admin/users.html" class="dashboard-card">
+                <div class="card-icon">⚙️</div>
+                <h2 class="card-title">Admin Panel</h2>
+                <p class="card-description">
+                    System administration, user management, and platform configuration.
+                </p>
+                <ul class="card-features">
+                    <li>User management</li>
+                    <li>Role assignments</li>
+                    <li>System settings</li>
+                    <li>Integration management</li>
+                    <li>Security controls</li>
+                </ul>
+                <span class="card-action">
+                    Enter Admin Panel
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14m0 0l-6-6m6 6l-6 6"/>
+                    </svg>
+                </span>
+            </a>
+
+            <!-- Operations Center -->
+            <a href="/platform/operations/center.html" class="dashboard-card">
+                <div class="card-icon">🚢</div>
+                <h2 class="card-title">Operations Center</h2>
+                <p class="card-description">
+                    Manage daily operations, monitor shipments, and handle exceptions.
+                </p>
+                <ul class="card-features">
+                    <li>Live shipment monitoring</li>
+                    <li>Exception handling</li>
+                    <li>Document processing</li>
+                    <li>Communication hub</li>
+                    <li>Workflow automation</li>
+                </ul>
+                <span class="card-action">
+                    Enter Operations
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14m0 0l-6-6m6 6l-6 6"/>
+                    </svg>
+                </span>
+            </a>
+
+            <!-- Integration Hub -->
+            <a href="/platform/integrations.html" class="dashboard-card">
+                <div class="card-icon">🔌</div>
+                <h2 class="card-title">Integration Hub</h2>
+                <p class="card-description">
+                    Connect with carriers, manage APIs, and monitor integration health.
+                </p>
+                <ul class="card-features">
+                    <li>Carrier connections</li>
+                    <li>API monitoring</li>
+                    <li>Webhook management</li>
+                    <li>Data synchronization</li>
+                    <li>Error tracking</li>
+                </ul>
+                <span class="card-action">
+                    Manage Integrations
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14m0 0l-6-6m6 6l-6 6"/>
+                    </svg>
+                </span>
+            </a>
+
+            <!-- Reports & Analytics -->
+            <a href="/platform/reports.html" class="dashboard-card">
+                <div class="card-icon">📈</div>
+                <h2 class="card-title">Reports & Analytics</h2>
+                <p class="card-description">
+                    Generate custom reports, analyze trends, and export data.
+                </p>
+                <ul class="card-features">
+                    <li>Custom report builder</li>
+                    <li>Performance analytics</li>
+                    <li>Financial reports</li>
+                    <li>Compliance tracking</li>
+                    <li>Data export tools</li>
+                </ul>
+                <span class="card-action">
+                    View Reports
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14m0 0l-6-6m6 6l-6 6"/>
+                    </svg>
+                </span>
+            </a>
+
+            <!-- Support Center -->
+            <a href="/platform/support.html" class="dashboard-card">
+                <div class="card-icon">💬</div>
+                <h2 class="card-title">Support Center</h2>
+                <p class="card-description">
+                    Access help resources, submit tickets, and contact support team.
+                </p>
+                <ul class="card-features">
+                    <li>Knowledge base</li>
+                    <li>Video tutorials</li>
+                    <li>Support tickets</li>
+                    <li>Live chat</li>
+                    <li>API documentation</li>
+                </ul>
+                <span class="card-action">
+                    Get Support
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14m0 0l-6-6m6 6l-6 6"/>
+                    </svg>
+                </span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Load user information
+        function loadUserInfo() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (user.name) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userCompany').textContent = user.company || 'ROOTUIP User';
+                
+                // Set role badge
+                const roleEl = document.querySelector('.user-role');
+                if (user.role === 'admin') {
+                    roleEl.textContent = 'Admin';
+                    roleEl.style.background = 'rgba(239, 68, 68, 0.2)';
+                    roleEl.style.color = '#f87171';
+                } else if (user.role === 'operations') {
+                    roleEl.textContent = 'Operations';
+                    roleEl.style.background = 'rgba(59, 130, 246, 0.2)';
+                    roleEl.style.color = '#60a5fa';
+                }
+            } else {
+                // Redirect to login if not authenticated
+                window.location.href = '/platform/auth/login.html';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadUserInfo);
+    </script>
+</body>
+</html>

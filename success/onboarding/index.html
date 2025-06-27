@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Onboarding | UIP Success Platform</title>
+    <meta name="description" content="Comprehensive onboarding management system for UIP customers with milestone tracking, resource allocation, and success measurement.">
+    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #333;
+        }
+
+        .onboarding-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: #1a202c;
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            padding: 0 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #48bb78;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-section {
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .nav-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #a0aec0;
+            margin-bottom: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            margin: 5px -15px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #edf2f7;
+        }
+
+        /* Onboarding Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-info h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .stat-info p {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        /* Active Implementations */
+        .implementations-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-select {
+            padding: 8px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background: white;
+        }
+
+        .implementations-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .implementation-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .implementation-card:hover {
+            border-color: #48bb78;
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.1);
+        }
+
+        .impl-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .impl-customer {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .impl-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-on-track {
+            background: #f0fff4;
+            color: #48bb78;
+        }
+
+        .status-at-risk {
+            background: #fffaf0;
+            color: #f6ad55;
+        }
+
+        .status-delayed {
+            background: #fff5f5;
+            color: #f56565;
+        }
+
+        .impl-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .impl-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        /* Milestone Progress */
+        .milestone-progress {
+            margin-bottom: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .progress-percentage {
+            font-weight: 600;
+            color: #48bb78;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .milestones-list {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .milestone-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            background: #f7fafc;
+            border-radius: 15px;
+            font-size: 0.85rem;
+        }
+
+        .milestone-item.completed {
+            background: #f0fff4;
+            color: #48bb78;
+        }
+
+        .milestone-item.in-progress {
+            background: #ebf8ff;
+            color: #4299e1;
+        }
+
+        /* Risk Indicators */
+        .risk-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .risk-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .risk-card.high {
+            border-color: #f56565;
+            background: #fff5f5;
+        }
+
+        .risk-card.medium {
+            border-color: #f6ad55;
+            background: #fffaf0;
+        }
+
+        .risk-card.low {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+
+        .risk-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .risk-title {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .risk-level {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .risk-level.high {
+            background: #f56565;
+            color: white;
+        }
+
+        .risk-level.medium {
+            background: #f6ad55;
+            color: white;
+        }
+
+        .risk-level.low {
+            background: #48bb78;
+            color: white;
+        }
+
+        .risk-description {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .risk-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Resource Allocation */
+        .resource-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-card {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .resource-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0 auto 10px;
+        }
+
+        .resource-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .resource-role {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .resource-workload {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            margin-bottom: 10px;
+        }
+
+        .workload-bar {
+            width: 8px;
+            height: 30px;
+            background: #e2e8f0;
+            border-radius: 4px;
+        }
+
+        .workload-bar.filled {
+            background: #48bb78;
+        }
+
+        .resource-availability {
+            font-size: 0.85rem;
+            color: #718096;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 25px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .close {
+            font-size: 24px;
+            color: #a0aec0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            color: #4a5568;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .impl-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="onboarding-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>🌟 UIP Success</h2>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Customer Success</div>
+                <a href="/success/onboarding/index.html" class="nav-item active">
+                    <span>🚀</span> Onboarding
+                </a>
+                <a href="/success/health/index.html" class="nav-item">
+                    <span>❤️</span> Health Monitoring
+                </a>
+                <a href="/success/support/index.html" class="nav-item">
+                    <span>🎯</span> Support Center
+                </a>
+                <a href="/success/programs/index.html" class="nav-item">
+                    <span>🎓</span> Success Programs
+                </a>
+                <a href="/success/expansion/index.html" class="nav-item">
+                    <span>📈</span> Expansion
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Analytics</div>
+                <a href="#" class="nav-item">
+                    <span>📊</span> Success Metrics
+                </a>
+                <a href="#" class="nav-item">
+                    <span>💰</span> Revenue Impact
+                </a>
+                <a href="#" class="nav-item">
+                    <span>🔄</span> Retention Analysis
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Resources</div>
+                <a href="#" class="nav-item">
+                    <span>📚</span> Best Practices
+                </a>
+                <a href="#" class="nav-item">
+                    <span>🏆</span> Success Stories
+                </a>
+                <a href="#" class="nav-item">
+                    <span>🤝</span> Community
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-top">
+                    <h1 class="page-title">Customer Onboarding</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" onclick="openResourceManager()">
+                            👥 Manage Resources
+                        </button>
+                        <button class="btn btn-primary" onclick="createImplementation()">
+                            + New Implementation
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Onboarding Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #f0fff4; color: #48bb78;">🚀</div>
+                    <div class="stat-info">
+                        <h3>23</h3>
+                        <p>Active Implementations</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e6fffa; color: #319795;">⏱️</div>
+                    <div class="stat-info">
+                        <h3>42 days</h3>
+                        <p>Avg Time to Value</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fef5e7; color: #f6ad55;">⚠️</div>
+                    <div class="stat-info">
+                        <h3>3</h3>
+                        <p>At-Risk Projects</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #ebf8ff; color: #4299e1;">✅</div>
+                    <div class="stat-info">
+                        <h3>94%</h3>
+                        <p>Success Rate</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Implementations -->
+            <div class="implementations-section">
+                <div class="section-header">
+                    <h2 class="section-title">Active Implementations</h2>
+                    <div class="filter-controls">
+                        <select class="filter-select" id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="on-track">On Track</option>
+                            <option value="at-risk">At Risk</option>
+                            <option value="delayed">Delayed</option>
+                        </select>
+                        <select class="filter-select" id="phaseFilter">
+                            <option value="">All Phases</option>
+                            <option value="kickoff">Kickoff</option>
+                            <option value="setup">Setup</option>
+                            <option value="integration">Integration</option>
+                            <option value="training">Training</option>
+                            <option value="go-live">Go Live</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="implementations-grid">
+                    <!-- GlobalTech Implementation -->
+                    <div class="implementation-card" onclick="openImplementationDetail('globaltech')">
+                        <div class="impl-header">
+                            <h3 class="impl-customer">GlobalTech Industries</h3>
+                            <span class="impl-status status-on-track">On Track</span>
+                        </div>
+                        
+                        <div class="impl-details">
+                            <div class="impl-detail">
+                                <span class="detail-label">Start Date</span>
+                                <span class="detail-value">Nov 15, 2024</span>
+                            </div>
+                            <div class="impl-detail">
+                                <span class="detail-label">Go-Live Target</span>
+                                <span class="detail-value">Jan 30, 2025</span>
+                            </div>
+                            <div class="impl-detail">
+                                <span class="detail-label">CSM</span>
+                                <span class="detail-value">Sarah Chen</span>
+                            </div>
+                            <div class="impl-detail">
+                                <span class="detail-label">Package</span>
+                                <span class="detail-value">Enterprise Pro</span>
+                            </div>
+                        </div>
+
+                        <div class="milestone-progress">
+                            <div class="progress-header">
+                                <span class="progress-title">Overall Progress</span>
+                                <span class="progress-percentage">65%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%;"></div>
+                            </div>
+                            <div class="milestones-list">
+                                <div class="milestone-item completed">✓ Kickoff</div>
+                                <div class="milestone-item completed">✓ Setup</div>
+                                <div class="milestone-item in-progress">⏳ Integration</div>
+                                <div class="milestone-item">○ Training</div>
+                                <div class="milestone-item">○ Go-Live</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TechCorp Implementation -->
+                    <div class="implementation-card" onclick="openImplementationDetail('techcorp')">
+                        <div class="impl-header">
+                            <h3 class="impl-customer">TechCorp Solutions</h3>
+                            <span class="impl-status status-at-risk">At Risk</span>
+                        </div>
+                        
+                        <div class="impl-details">
+                            <div class="impl-detail">
+                                <span class="detail-label">Start Date</span>
+                                <span class="detail-value">Oct 20, 2024</span>
+                            </div>
+                            <div class="impl-detail">
+                                <span class="detail-label">Go-Live Target</span>
+                                <span class="detail-value">Dec 30, 2024</span>
+                            </div>
+                            <div class="impl-detail">
+                                <span class="detail-label">CSM</span>
+                                <span class="detail-value">Mike Ross</span>
+                            </div>
+                            <div class="impl-detail">
+                                <span class="detail-label">Package</span>
+                                <span class="detail-value">Business Plus</span>
+                            </div>
+                        </div>
+
+                        <div class="milestone-progress">
+                            <div class="progress-header">
+                                <span class="progress-title">Overall Progress</span>
+                                <span class="progress-percentage" style="color: #f6ad55;">45%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%; background: #f6ad55;"></div>
+                            </div>
+                            <div class="milestones-list">
+                                <div class="milestone-item completed">✓ Kickoff</div>
+                                <div class="milestone-item completed">✓ Setup</div>
+                                <div class="milestone-item in-progress" style="background: #fef5e7; color: #f6ad55;">⚠️ Integration</div>
+                                <div class="milestone-item">○ Training</div>
+                                <div class="milestone-item">○ Go-Live</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FastShip Implementation -->
+                    <div class="implementation-card" onclick="openImplementationDetail('fastship')">
+                        <div class="impl-header">
+                            <h3 class="impl-customer">FastShip Express</h3>
+                            <span class="impl-status status-on-track">On Track</span>
+                        </div>
+                        
+                        <div class="impl-details">
+                            <div class="impl-detail">
+                                <span class="detail-label">Start Date</span>
+                                <span class="detail-value">Dec 1, 2024</span>
+                            </div>
+                            <div class="impl-detail">
+                                <span class="detail-label">Go-Live Target</span>
+                                <span class="detail-value">Feb 15, 2025</span>
+                            </div>
+                            <div class="impl-detail">
+                                <span class="detail-label">CSM</span>
+                                <span class="detail-value">Emma Davis</span>
+                            </div>
+                            <div class="impl-detail">
+                                <span class="detail-label">Package</span>
+                                <span class="detail-value">Enterprise</span>
+                            </div>
+                        </div>
+
+                        <div class="milestone-progress">
+                            <div class="progress-header">
+                                <span class="progress-title">Overall Progress</span>
+                                <span class="progress-percentage">25%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 25%;"></div>
+                            </div>
+                            <div class="milestones-list">
+                                <div class="milestone-item completed">✓ Kickoff</div>
+                                <div class="milestone-item in-progress">⏳ Setup</div>
+                                <div class="milestone-item">○ Integration</div>
+                                <div class="milestone-item">○ Training</div>
+                                <div class="milestone-item">○ Go-Live</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Indicators -->
+            <div class="risk-section">
+                <div class="section-header">
+                    <h2 class="section-title">Risk Management</h2>
+                    <button class="btn btn-secondary">
+                        📊 Risk Report
+                    </button>
+                </div>
+
+                <div class="risk-grid">
+                    <div class="risk-card high">
+                        <div class="risk-header">
+                            <span class="risk-title">TechCorp - Integration Delays</span>
+                            <span class="risk-level high">High</span>
+                        </div>
+                        <p class="risk-description">
+                            API integration delayed due to technical complexities. Customer IT team bandwidth constraints.
+                        </p>
+                        <div class="risk-actions">
+                            <button class="btn btn-secondary" onclick="createMitigationPlan('techcorp-integration')">
+                                📋 Mitigation Plan
+                            </button>
+                            <button class="btn btn-secondary" onclick="escalateRisk('techcorp-integration')">
+                                ⬆️ Escalate
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="risk-card medium">
+                        <div class="risk-header">
+                            <span class="risk-title">MegaCorp - Training Participation</span>
+                            <span class="risk-level medium">Medium</span>
+                        </div>
+                        <p class="risk-description">
+                            Low attendance in training sessions. Only 40% of users have completed onboarding modules.
+                        </p>
+                        <div class="risk-actions">
+                            <button class="btn btn-secondary" onclick="createMitigationPlan('megacorp-training')">
+                                📋 Mitigation Plan
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="risk-card low">
+                        <div class="risk-header">
+                            <span class="risk-title">GlobalTech - Minor Config Issues</span>
+                            <span class="risk-level low">Low</span>
+                        </div>
+                        <p class="risk-description">
+                            Minor configuration adjustments needed for custom workflows. No impact on timeline.
+                        </p>
+                        <div class="risk-actions">
+                            <button class="btn btn-secondary" onclick="trackRisk('globaltech-config')">
+                                👁️ Monitor
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resource Allocation -->
+            <div class="resource-section">
+                <div class="section-header">
+                    <h2 class="section-title">Resource Allocation</h2>
+                    <button class="btn btn-secondary">
+                        📅 Resource Calendar
+                    </button>
+                </div>
+
+                <div class="resource-grid">
+                    <div class="resource-card">
+                        <div class="resource-avatar">SC</div>
+                        <h4 class="resource-name">Sarah Chen</h4>
+                        <p class="resource-role">Senior CSM</p>
+                        <div class="resource-workload">
+                            <div class="workload-bar filled"></div>
+                            <div class="workload-bar filled"></div>
+                            <div class="workload-bar filled"></div>
+                            <div class="workload-bar"></div>
+                            <div class="workload-bar"></div>
+                        </div>
+                        <p class="resource-availability">60% Utilized</p>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-avatar">MR</div>
+                        <h4 class="resource-name">Mike Ross</h4>
+                        <p class="resource-role">CSM</p>
+                        <div class="resource-workload">
+                            <div class="workload-bar filled"></div>
+                            <div class="workload-bar filled"></div>
+                            <div class="workload-bar filled"></div>
+                            <div class="workload-bar filled"></div>
+                            <div class="workload-bar"></div>
+                        </div>
+                        <p class="resource-availability">80% Utilized</p>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-avatar">ED</div>
+                        <h4 class="resource-name">Emma Davis</h4>
+                        <p class="resource-role">Technical CSM</p>
+                        <div class="resource-workload">
+                            <div class="workload-bar filled"></div>
+                            <div class="workload-bar filled"></div>
+                            <div class="workload-bar"></div>
+                            <div class="workload-bar"></div>
+                            <div class="workload-bar"></div>
+                        </div>
+                        <p class="resource-availability">40% Utilized</p>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-avatar">JW</div>
+                        <h4 class="resource-name">John Wilson</h4>
+                        <p class="resource-role">Implementation Specialist</p>
+                        <div class="resource-workload">
+                            <div class="workload-bar filled"></div>
+                            <div class="workload-bar filled"></div>
+                            <div class="workload-bar filled"></div>
+                            <div class="workload-bar filled"></div>
+                            <div class="workload-bar filled"></div>
+                        </div>
+                        <p class="resource-availability">100% Utilized</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Implementation Detail Modal -->
+    <div id="implementationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Implementation Details</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="implementationDetails">
+                    <!-- Dynamic content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Onboarding data management
+        let onboardingData = {
+            implementations: [
+                {
+                    id: 'globaltech',
+                    customer: 'GlobalTech Industries',
+                    status: 'on-track',
+                    progress: 65,
+                    startDate: '2024-11-15',
+                    targetDate: '2025-01-30',
+                    csm: 'Sarah Chen',
+                    package: 'Enterprise Pro',
+                    milestones: {
+                        kickoff: 'completed',
+                        setup: 'completed',
+                        integration: 'in-progress',
+                        training: 'pending',
+                        goLive: 'pending'
+                    },
+                    risks: []
+                },
+                {
+                    id: 'techcorp',
+                    customer: 'TechCorp Solutions',
+                    status: 'at-risk',
+                    progress: 45,
+                    startDate: '2024-10-20',
+                    targetDate: '2024-12-30',
+                    csm: 'Mike Ross',
+                    package: 'Business Plus',
+                    milestones: {
+                        kickoff: 'completed',
+                        setup: 'completed',
+                        integration: 'at-risk',
+                        training: 'pending',
+                        goLive: 'pending'
+                    },
+                    risks: ['integration-delays']
+                }
+            ],
+            resources: [
+                { id: 'sc', name: 'Sarah Chen', role: 'Senior CSM', utilization: 60 },
+                { id: 'mr', name: 'Mike Ross', role: 'CSM', utilization: 80 },
+                { id: 'ed', name: 'Emma Davis', role: 'Technical CSM', utilization: 40 },
+                { id: 'jw', name: 'John Wilson', role: 'Implementation Specialist', utilization: 100 }
+            ]
+        };
+
+        function openImplementationDetail(implId) {
+            const impl = onboardingData.implementations.find(i => i.id === implId);
+            if (!impl) return;
+
+            document.getElementById('modalTitle').textContent = `${impl.customer} - Implementation Details`;
+            
+            // Build detailed view
+            const detailsHtml = `
+                <div style="display: grid; gap: 20px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <strong>Status:</strong> ${impl.status.replace('-', ' ')}
+                        </div>
+                        <div>
+                            <strong>Progress:</strong> ${impl.progress}%
+                        </div>
+                        <div>
+                            <strong>Start Date:</strong> ${formatDate(impl.startDate)}
+                        </div>
+                        <div>
+                            <strong>Target Go-Live:</strong> ${formatDate(impl.targetDate)}
+                        </div>
+                        <div>
+                            <strong>CSM:</strong> ${impl.csm}
+                        </div>
+                        <div>
+                            <strong>Package:</strong> ${impl.package}
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 style="margin-bottom: 10px;">Milestone Timeline</h4>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            ${Object.entries(impl.milestones).map(([key, status]) => `
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="width: 20px;">${getStatusIcon(status)}</span>
+                                    <span style="flex: 1; text-transform: capitalize;">${key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                                    <span style="color: ${getStatusColor(status)}; font-size: 0.9rem;">${status.replace('-', ' ')}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-primary" onclick="updateImplementation('${implId}')">
+                            Update Progress
+                        </button>
+                        <button class="btn btn-secondary" onclick="scheduleCall('${implId}')">
+                            📅 Schedule Call
+                        </button>
+                        <button class="btn btn-secondary" onclick="viewDocuments('${implId}')">
+                            📄 View Documents
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('implementationDetails').innerHTML = detailsHtml;
+            document.getElementById('implementationModal').style.display = 'block';
+
+            trackEvent('Implementation Detail Viewed', { customer: impl.customer, status: impl.status });
+        }
+
+        function getStatusIcon(status) {
+            const icons = {
+                'completed': '✅',
+                'in-progress': '⏳',
+                'at-risk': '⚠️',
+                'pending': '○'
+            };
+            return icons[status] || '○';
+        }
+
+        function getStatusColor(status) {
+            const colors = {
+                'completed': '#48bb78',
+                'in-progress': '#4299e1',
+                'at-risk': '#f6ad55',
+                'pending': '#a0aec0'
+            };
+            return colors[status] || '#a0aec0';
+        }
+
+        function formatDate(dateStr) {
+            return new Date(dateStr).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+
+        function closeModal() {
+            document.getElementById('implementationModal').style.display = 'none';
+        }
+
+        function createImplementation() {
+            trackEvent('New Implementation Started');
+            console.log('Opening new implementation wizard');
+            // In production, this would open implementation creation flow
+        }
+
+        function createMitigationPlan(riskId) {
+            trackEvent('Mitigation Plan Created', { riskId: riskId });
+            console.log('Creating mitigation plan for:', riskId);
+            // In production, this would open mitigation planning interface
+        }
+
+        function escalateRisk(riskId) {
+            trackEvent('Risk Escalated', { riskId: riskId });
+            alert('Risk escalated to leadership team. You will receive follow-up within 24 hours.');
+        }
+
+        function trackRisk(riskId) {
+            trackEvent('Risk Monitoring Started', { riskId: riskId });
+            console.log('Tracking risk:', riskId);
+        }
+
+        function openResourceManager() {
+            trackEvent('Resource Manager Opened');
+            console.log('Opening resource management interface');
+            // In production, this would open resource allocation tool
+        }
+
+        function updateImplementation(implId) {
+            trackEvent('Implementation Updated', { implId: implId });
+            console.log('Updating implementation:', implId);
+            // In production, this would open update interface
+        }
+
+        function scheduleCall(implId) {
+            trackEvent('Call Scheduled', { implId: implId });
+            console.log('Scheduling call for:', implId);
+            // In production, this would open calendar integration
+        }
+
+        function viewDocuments(implId) {
+            trackEvent('Documents Viewed', { implId: implId });
+            console.log('Viewing documents for:', implId);
+            // In production, this would open document repository
+        }
+
+        function trackEvent(eventName, properties = {}) {
+            console.log('Customer Success Event:', eventName, properties);
+            
+            // Integration with analytics
+            if (typeof analytics !== 'undefined') {
+                analytics.track(eventName, {
+                    ...properties,
+                    timestamp: new Date().toISOString()
+                });
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add filter event listeners
+            document.getElementById('statusFilter').addEventListener('change', filterImplementations);
+            document.getElementById('phaseFilter').addEventListener('change', filterImplementations);
+            
+            trackEvent('Onboarding Dashboard Loaded');
+        });
+
+        function filterImplementations() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const phaseFilter = document.getElementById('phaseFilter').value;
+            
+            console.log('Filtering implementations:', { status: statusFilter, phase: phaseFilter });
+            // In production, this would filter the implementation cards
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('implementationModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

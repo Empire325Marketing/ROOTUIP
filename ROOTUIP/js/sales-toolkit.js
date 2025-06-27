@@ -1408,7 +1408,7 @@ class SalesToolkit {
 
                 <div class="persona">
                     <div class="persona-header">
-                        <h3>🚢 Logistics Manager</h3>
+                        <h3><img src="/brand/logo-icon.svg" alt="UIP" style="height: 24px; width: 24px; vertical-align: middle;"> Logistics Manager</h3>
                         <span class="influence-level">Daily User / Champion</span>
                     </div>
                     

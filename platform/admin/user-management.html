@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - User Management | ROOTUIP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        /* Admin Header */
+        .admin-header {
+            background: #1e293b;
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-badge {
+            background: #dc2626;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-left: 1rem;
+        }
+
+        /* Layout */
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Sidebar */
+        .admin-sidebar {
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding: 2rem 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-link {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #475569;
+            text-decoration: none;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .sidebar-link:hover {
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        .sidebar-link.active {
+            background: #eff6ff;
+            color: #3b82f6;
+            font-weight: 500;
+        }
+
+        .sidebar-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #3b82f6;
+        }
+
+        /* Main Content */
+        .admin-content {
+            padding: 2rem;
+            max-width: 1400px;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: #eff6ff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .stat-trend {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-trend.up {
+            color: #10b981;
+        }
+
+        /* Search and Filters */
+        .controls-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            font-size: 0.875rem;
+            color: #1e293b;
+        }
+
+        /* Users Table */
+        .users-table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 500;
+            color: #475569;
+            font-size: 0.875rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        tr:hover {
+            background: #fafbfc;
+        }
+
+        /* User Cell */
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 500;
+            margin-bottom: 0.125rem;
+        }
+
+        .user-email {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Role Badge */
+        .role-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: #eff6ff;
+            color: #1e40af;
+        }
+
+        .role-badge.admin {
+            background: #fce7f3;
+            color: #9f1239;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem;
+            background: none;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #64748b;
+        }
+
+        .action-btn:hover {
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #334155;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="header-content">
+            <div style="display: flex; align-items: center;">
+                <h1 style="font-size: 1.25rem;">ROOTUIP Admin Panel</h1>
+                <span class="admin-badge">Administrator</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span style="color: #94a3b8; font-size: 0.875rem;">admin@rootuip.com</span>
+                <button class="btn btn-secondary" onclick="window.location.href='/platform/auth/logout'">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Layout -->
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Management</div>
+                <nav class="sidebar-nav">
+                    <a href="#" class="sidebar-link active">
+                        👥 User Management
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        🏢 Company Management
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        🔑 Access Control
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        📊 System Analytics
+                    </a>
+                </nav>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Operations</div>
+                <nav class="sidebar-nav">
+                    <a href="#" class="sidebar-link">
+                        🚢 Shipment Overview
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        🔄 Workflow Monitor
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        🔌 Integration Status
+                    </a>
+                </nav>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">System</div>
+                <nav class="sidebar-nav">
+                    <a href="#" class="sidebar-link">
+                        ⚙️ Configuration
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        📝 Audit Logs
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        🔒 Security Settings
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <!-- Stats Overview -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value">2,847</div>
+                    <div class="stat-label">Total Users</div>
+                    <div class="stat-trend up">
+                        <span>↑</span> 12% from last month
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏢</div>
+                    <div class="stat-value">156</div>
+                    <div class="stat-label">Active Companies</div>
+                    <div class="stat-trend up">
+                        <span>↑</span> 8 new this month
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-value">2,412</div>
+                    <div class="stat-label">Active Users (30d)</div>
+                    <div class="stat-trend">84.7% activity rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎫</div>
+                    <div class="stat-value">23</div>
+                    <div class="stat-label">Pending Invites</div>
+                    <div class="stat-trend">Avg. acceptance: 92%</div>
+                </div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="controls-bar">
+                <div class="search-box">
+                    <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <input type="text" class="search-input" placeholder="Search users by name, email, or company..." id="searchInput" onkeyup="searchUsers()">
+                </div>
+                <select class="filter-select" id="statusFilter" onchange="filterUsers()">
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="pending">Pending</option>
+                </select>
+                <select class="filter-select" id="roleFilter" onchange="filterUsers()">
+                    <option value="">All Roles</option>
+                    <option value="admin">Admin</option>
+                    <option value="operations">Operations</option>
+                    <option value="finance">Finance</option>
+                    <option value="viewer">Viewer</option>
+                </select>
+                <select class="filter-select" id="companyFilter" onchange="filterUsers()">
+                    <option value="">All Companies</option>
+                    <option value="ACME001">Acme Corporation</option>
+                    <option value="GLOBAL001">Global Logistics Inc</option>
+                    <option value="OCEAN001">Ocean Freight Co</option>
+                </select>
+            </div>
+
+            <!-- Users Table -->
+            <div class="users-table-container">
+                <div class="table-header">
+                    <h2 class="table-title">All Users</h2>
+                    <button class="btn btn-primary" onclick="openCreateUserModal()">
+                        <span>+</span> Add New User
+                    </button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Company</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Last Active</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create/Edit User Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Create New User</h2>
+                <button class="close-btn" onclick="closeUserModal()">&times;</button>
+            </div>
+            
+            <form id="userForm" onsubmit="saveUser(event)">
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-input" id="userName" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="userEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Company</label>
+                    <select class="form-select" id="userCompany" required>
+                        <option value="">Select company</option>
+                        <option value="ACME001">Acme Corporation</option>
+                        <option value="GLOBAL001">Global Logistics Inc</option>
+                        <option value="OCEAN001">Ocean Freight Co</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-select" id="userRole" required>
+                        <option value="">Select role</option>
+                        <option value="admin">Admin</option>
+                        <option value="operations">Operations Manager</option>
+                        <option value="finance">Finance</option>
+                        <option value="viewer">Viewer</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" id="userStatus">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="pending">Pending Activation</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeUserModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Save User
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Sample user data
+        let users = [
+            {
+                id: 1,
+                name: 'John Doe',
+                email: 'john.doe@acmecorp.com',
+                company: 'ACME001',
+                companyName: 'Acme Corporation',
+                role: 'admin',
+                status: 'active',
+                lastActive: '2025-06-27T10:30:00',
+                avatar: 'JD'
+            },
+            {
+                id: 2,
+                name: 'Sarah Smith',
+                email: 'sarah.smith@globallogistics.com',
+                company: 'GLOBAL001',
+                companyName: 'Global Logistics Inc',
+                role: 'operations',
+                status: 'active',
+                lastActive: '2025-06-27T09:15:00',
+                avatar: 'SS'
+            },
+            {
+                id: 3,
+                name: 'Michael Chen',
+                email: 'michael.chen@oceanfreight.com',
+                company: 'OCEAN001',
+                companyName: 'Ocean Freight Co',
+                role: 'finance',
+                status: 'active',
+                lastActive: '2025-06-26T16:45:00',
+                avatar: 'MC'
+            },
+            {
+                id: 4,
+                name: 'Emily Johnson',
+                email: 'emily.j@acmecorp.com',
+                company: 'ACME001',
+                companyName: 'Acme Corporation',
+                role: 'viewer',
+                status: 'pending',
+                lastActive: null,
+                avatar: 'EJ'
+            },
+            {
+                id: 5,
+                name: 'Robert Wilson',
+                email: 'robert.wilson@globallogistics.com',
+                company: 'GLOBAL001',
+                companyName: 'Global Logistics Inc',
+                role: 'operations',
+                status: 'inactive',
+                lastActive: '2025-06-20T14:20:00',
+                avatar: 'RW'
+            }
+        ];
+
+        let editingUserId = null;
+
+        // Render users table
+        function renderUsers(usersToRender = users) {
+            const tbody = document.getElementById('usersTableBody');
+            
+            if (usersToRender.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: #64748b; padding: 3rem;">
+                            No users found matching your criteria.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = usersToRender.map(user => `
+                <tr>
+                    <td>
+                        <div class="user-cell">
+                            <div class="user-avatar">${user.avatar}</div>
+                            <div class="user-info">
+                                <div class="user-name">${user.name}</div>
+                                <div class="user-email">${user.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${user.companyName}</td>
+                    <td>
+                        <span class="role-badge ${user.role === 'admin' ? 'admin' : ''}">${user.role}</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-${user.status}">${user.status}</span>
+                    </td>
+                    <td>${user.lastActive ? getRelativeTime(user.lastActive) : 'Never'}</td>
+                    <td>
+                        <div class="actions">
+                            <button class="action-btn" onclick="editUser(${user.id})" title="Edit">
+                                ✏️
+                            </button>
+                            <button class="action-btn" onclick="toggleUserStatus(${user.id})" title="Toggle Status">
+                                ${user.status === 'active' ? '🔒' : '🔓'}
+                            </button>
+                            <button class="action-btn" onclick="deleteUser(${user.id})" title="Delete">
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Get relative time
+        function getRelativeTime(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = now - date;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+            
+            if (minutes < 60) return `${minutes} min ago`;
+            if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            if (days < 7) return `${days} day${days > 1 ? 's' : ''} ago`;
+            return date.toLocaleDateString();
+        }
+
+        // Search users
+        function searchUsers() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = users.filter(user => 
+                user.name.toLowerCase().includes(query) ||
+                user.email.toLowerCase().includes(query) ||
+                user.companyName.toLowerCase().includes(query)
+            );
+            renderUsers(filtered);
+        }
+
+        // Filter users
+        function filterUsers() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const roleFilter = document.getElementById('roleFilter').value;
+            const companyFilter = document.getElementById('companyFilter').value;
+            
+            let filtered = users;
+            
+            if (statusFilter) {
+                filtered = filtered.filter(u => u.status === statusFilter);
+            }
+            if (roleFilter) {
+                filtered = filtered.filter(u => u.role === roleFilter);
+            }
+            if (companyFilter) {
+                filtered = filtered.filter(u => u.company === companyFilter);
+            }
+            
+            renderUsers(filtered);
+        }
+
+        // Open create user modal
+        function openCreateUserModal() {
+            editingUserId = null;
+            document.getElementById('modalTitle').textContent = 'Create New User';
+            document.getElementById('userForm').reset();
+            document.getElementById('userModal').classList.add('active');
+        }
+
+        // Edit user
+        function editUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+            
+            editingUserId = userId;
+            document.getElementById('modalTitle').textContent = 'Edit User';
+            document.getElementById('userName').value = user.name;
+            document.getElementById('userEmail').value = user.email;
+            document.getElementById('userCompany').value = user.company;
+            document.getElementById('userRole').value = user.role;
+            document.getElementById('userStatus').value = user.status;
+            document.getElementById('userModal').classList.add('active');
+        }
+
+        // Close modal
+        function closeUserModal() {
+            document.getElementById('userModal').classList.remove('active');
+            document.getElementById('userForm').reset();
+            editingUserId = null;
+        }
+
+        // Save user
+        function saveUser(event) {
+            event.preventDefault();
+            
+            const userData = {
+                name: document.getElementById('userName').value,
+                email: document.getElementById('userEmail').value,
+                company: document.getElementById('userCompany').value,
+                companyName: document.getElementById('userCompany').selectedOptions[0].text,
+                role: document.getElementById('userRole').value,
+                status: document.getElementById('userStatus').value,
+                avatar: document.getElementById('userName').value.split(' ').map(n => n[0]).join('').toUpperCase()
+            };
+            
+            if (editingUserId) {
+                // Update existing user
+                const index = users.findIndex(u => u.id === editingUserId);
+                users[index] = { ...users[index], ...userData };
+                alert('User updated successfully!');
+            } else {
+                // Create new user
+                const newUser = {
+                    id: Math.max(...users.map(u => u.id)) + 1,
+                    ...userData,
+                    lastActive: null
+                };
+                users.push(newUser);
+                alert('User created successfully! An invitation email has been sent.');
+            }
+            
+            renderUsers();
+            closeUserModal();
+        }
+
+        // Toggle user status
+        function toggleUserStatus(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+            
+            user.status = user.status === 'active' ? 'inactive' : 'active';
+            renderUsers();
+        }
+
+        // Delete user
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+                users = users.filter(u => u.id !== userId);
+                renderUsers();
+                alert('User deleted successfully.');
+            }
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderUsers();
+        });
+    </script>
+</body>
+</html>
