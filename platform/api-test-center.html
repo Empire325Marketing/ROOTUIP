@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIP API Test Center</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f7fa;
+        }
+        
+        .header {
+            background: #1a1a2e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .api-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .api-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .api-card h3 {
+            margin-top: 0;
+            color: #1a1a2e;
+            border-bottom: 2px solid #00D4AA;
+            padding-bottom: 10px;
+        }
+        
+        .endpoint-info {
+            background: #f0f4f8;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        button {
+            background: #00D4AA;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #00B894;
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .response-box {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .response-box pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 13px;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #00D4AA;
+            margin-bottom: 30px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background: #f0f4f8;
+            border: none;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background: #00D4AA;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .json-example {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+        }
+        
+        .hint {
+            color: #666;
+            font-size: 14px;
+            font-style: italic;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚢 UIP API Test Center</h1>
+        <p>Comprehensive testing interface for all ROOTUIP platform APIs</p>
+    </div>
+    
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('core')">Core APIs</button>
+            <button class="tab" onclick="showTab('platform')">Platform APIs</button>
+            <button class="tab" onclick="showTab('customer')">Customer APIs</button>
+            <button class="tab" onclick="showTab('integration')">Integration APIs</button>
+            <button class="tab" onclick="showTab('analytics')">Analytics APIs</button>
+        </div>
+        
+        <!-- Core APIs Tab -->
+        <div id="core" class="tab-content active">
+            <div class="api-grid">
+                <!-- Health Check -->
+                <div class="api-card">
+                    <h3>Health Check</h3>
+                    <div class="endpoint-info">GET /api/health</div>
+                    <p>Check platform health and service status</p>
+                    <button onclick="testHealth()">Test Health Endpoint</button>
+                    <div id="health-response" class="response-box" style="display:none;"></div>
+                </div>
+                
+                <!-- Platform Metrics -->
+                <div class="api-card">
+                    <h3>Platform Metrics</h3>
+                    <div class="endpoint-info">GET /api/metrics</div>
+                    <p>Get current platform performance metrics</p>
+                    <button onclick="testMetrics()">Get Metrics</button>
+                    <div id="metrics-response" class="response-box" style="display:none;"></div>
+                </div>
+                
+                <!-- User Profile -->
+                <div class="api-card">
+                    <h3>User Profile</h3>
+                    <div class="endpoint-info">GET /api/user</div>
+                    <p>Get current user information</p>
+                    <button onclick="testUser()">Get User Info</button>
+                    <div id="user-response" class="response-box" style="display:none;"></div>
+                </div>
+                
+                <!-- ROI Calculator -->
+                <div class="api-card">
+                    <h3>ROI Calculator</h3>
+                    <div class="endpoint-info">POST /api/roi-calculator/submit</div>
+                    <p>Calculate and save ROI analysis</p>
+                    
+                    <form id="roi-form" onsubmit="submitROI(event)">
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" name="email" required placeholder="john@company.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Company *</label>
+                            <input type="text" name="company" required placeholder="Acme Corporation">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Annual Container Volume *</label>
+                            <input type="number" name="containerVolume" required placeholder="5000">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Average D&D Cost per Day ($)</label>
+                            <input type="number" name="ddCostPerDay" placeholder="150" value="150">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Current D&D Days (Annual)</label>
+                            <input type="number" name="currentDDDays" placeholder="500" value="500">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Industry</label>
+                            <select name="industry">
+                                <option value="">Select Industry</option>
+                                <option value="retail">Retail</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="automotive">Automotive</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="food">Food & Beverage</option>
+                                <option value="pharmaceutical">Pharmaceutical</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit">Calculate ROI</button>
+                    </form>
+                    
+                    <div class="json-example">
+Example JSON:
+{
+  "email": "john@company.com",
+  "company": "Acme Corporation",
+  "containerVolume": 5000,
+  "ddCostPerDay": 150,
+  "currentDDDays": 500,
+  "industry": "retail"
+}
+                    </div>
+                    
+                    <div id="roi-response" class="response-box" style="display:none;"></div>
+                </div>
+                
+                <!-- Container Tracking -->
+                <div class="api-card">
+                    <h3>Recent Containers</h3>
+                    <div class="endpoint-info">GET /api/containers/recent</div>
+                    <p>Get list of recent container shipments</p>
+                    <button onclick="testContainers()">Get Containers</button>
+                    <div id="containers-response" class="response-box" style="display:none;"></div>
+                </div>
+                
+                <!-- Authentication -->
+                <div class="api-card">
+                    <h3>Authentication</h3>
+                    <div class="endpoint-info">POST /auth/login</div>
+                    <p>Login to the platform</p>
+                    
+                    <form id="login-form" onsubmit="testLogin(event)">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" required placeholder="demo@rootuip.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" required placeholder="password">
+                        </div>
+                        
+                        <button type="submit">Test Login</button>
+                    </form>
+                    
+                    <div id="login-response" class="response-box" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Platform APIs Tab -->
+        <div id="platform" class="tab-content">
+            <div class="api-grid">
+                <!-- Workflow Engine -->
+                <div class="api-card">
+                    <h3>Workflow Engine</h3>
+                    <div class="endpoint-info">POST /api/workflows/create</div>
+                    <p>Create automated workflows</p>
+                    
+                    <form id="workflow-form" onsubmit="createWorkflow(event)">
+                        <div class="form-group">
+                            <label>Workflow Name</label>
+                            <input type="text" name="name" required placeholder="D&D Alert Workflow">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Trigger Type</label>
+                            <select name="trigger" required>
+                                <option value="container_arrival">Container Arrival</option>
+                                <option value="dd_risk_high">High D&D Risk</option>
+                                <option value="document_received">Document Received</option>
+                                <option value="schedule_change">Schedule Change</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Actions (JSON)</label>
+                            <textarea name="actions" required placeholder='[{"type": "send_alert", "recipients": ["ops@company.com"]}]'></textarea>
+                        </div>
+                        
+                        <button type="submit">Create Workflow</button>
+                    </form>
+                    
+                    <div id="workflow-response" class="response-box" style="display:none;"></div>
+                </div>
+                
+                <!-- Integration Status -->
+                <div class="api-card">
+                    <h3>Integration Status</h3>
+                    <div class="endpoint-info">GET /api/integrations/status</div>
+                    <p>Check status of all integrations</p>
+                    <button onclick="checkIntegrations()">Check Status</button>
+                    <div id="integrations-response" class="response-box" style="display:none;"></div>
+                </div>
+                
+                <!-- Document Queue -->
+                <div class="api-card">
+                    <h3>Document Queue</h3>
+                    <div class="endpoint-info">GET /api/documents/queue</div>
+                    <p>Get pending document processing queue</p>
+                    <button onclick="getDocumentQueue()">Get Queue</button>
+                    <div id="documents-response" class="response-box" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Customer APIs Tab -->
+        <div id="customer" class="tab-content">
+            <div class="api-grid">
+                <!-- Shipment Tracking -->
+                <div class="api-card">
+                    <h3>Track Shipment</h3>
+                    <div class="endpoint-info">GET /api/shipments/track/{containerId}</div>
+                    <p>Track specific container shipment</p>
+                    
+                    <form id="track-form" onsubmit="trackShipment(event)">
+                        <div class="form-group">
+                            <label>Container ID</label>
+                            <input type="text" name="containerId" required placeholder="MSKU7834521">
+                        </div>
+                        
+                        <button type="submit">Track Container</button>
+                    </form>
+                    
+                    <div id="track-response" class="response-box" style="display:none;"></div>
+                </div>
+                
+                <!-- Customer Metrics -->
+                <div class="api-card">
+                    <h3>Customer Dashboard Metrics</h3>
+                    <div class="endpoint-info">GET /api/customer/metrics</div>
+                    <p>Get customer-specific KPIs</p>
+                    <button onclick="getCustomerMetrics()">Get Metrics</button>
+                    <div id="customer-metrics-response" class="response-box" style="display:none;"></div>
+                </div>
+                
+                <!-- Support Ticket -->
+                <div class="api-card">
+                    <h3>Create Support Ticket</h3>
+                    <div class="endpoint-info">POST /api/support/ticket</div>
+                    <p>Submit a support request</p>
+                    
+                    <form id="support-form" onsubmit="createTicket(event)">
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <input type="text" name="subject" required placeholder="Integration Issue">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Priority</label>
+                            <select name="priority" required>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="critical">Critical</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="description" required placeholder="Describe your issue..."></textarea>
+                        </div>
+                        
+                        <button type="submit">Create Ticket</button>
+                    </form>
+                    
+                    <div id="support-response" class="response-box" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Integration APIs Tab -->
+        <div id="integration" class="tab-content">
+            <div class="api-grid">
+                <!-- Carrier Integration -->
+                <div class="api-card">
+                    <h3>Add Carrier Integration</h3>
+                    <div class="endpoint-info">POST /api/integrations/carrier</div>
+                    <p>Connect a new carrier system</p>
+                    
+                    <form id="carrier-form" onsubmit="addCarrier(event)">
+                        <div class="form-group">
+                            <label>Carrier Name</label>
+                            <select name="carrier" required>
+                                <option value="">Select Carrier</option>
+                                <option value="maersk">Maersk</option>
+                                <option value="msc">MSC</option>
+                                <option value="cosco">COSCO</option>
+                                <option value="hapag-lloyd">Hapag-Lloyd</option>
+                                <option value="one">ONE</option>
+                                <option value="evergreen">Evergreen</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>API Key</label>
+                            <input type="text" name="apiKey" required placeholder="Your carrier API key">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Account ID</label>
+                            <input type="text" name="accountId" placeholder="Optional account identifier">
+                        </div>
+                        
+                        <button type="submit">Connect Carrier</button>
+                    </form>
+                    
+                    <div id="carrier-response" class="response-box" style="display:none;"></div>
+                </div>
+                
+                <!-- Terminal Integration -->
+                <div class="api-card">
+                    <h3>Terminal Data Feed</h3>
+                    <div class="endpoint-info">GET /api/integrations/terminals</div>
+                    <p>Get connected terminal feeds</p>
+                    <button onclick="getTerminals()">Get Terminal Data</button>
+                    <div id="terminals-response" class="response-box" style="display:none;"></div>
+                </div>
+                
+                <!-- ERP Integration -->
+                <div class="api-card">
+                    <h3>ERP System Integration</h3>
+                    <div class="endpoint-info">POST /api/integrations/erp/test</div>
+                    <p>Test ERP connection</p>
+                    
+                    <form id="erp-form" onsubmit="testERP(event)">
+                        <div class="form-group">
+                            <label>ERP System</label>
+                            <select name="system" required>
+                                <option value="sap">SAP</option>
+                                <option value="oracle">Oracle</option>
+                                <option value="microsoft">Microsoft Dynamics</option>
+                                <option value="netsuite">NetSuite</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Connection String</label>
+                            <input type="text" name="connection" required placeholder="ERP connection details">
+                        </div>
+                        
+                        <button type="submit">Test Connection</button>
+                    </form>
+                    
+                    <div id="erp-response" class="response-box" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Analytics APIs Tab -->
+        <div id="analytics" class="tab-content">
+            <div class="api-grid">
+                <!-- D&D Analytics -->
+                <div class="api-card">
+                    <h3>D&D Risk Analysis</h3>
+                    <div class="endpoint-info">POST /api/analytics/dd-risk</div>
+                    <p>Analyze D&D risk for containers</p>
+                    
+                    <form id="dd-risk-form" onsubmit="analyzeDDRisk(event)">
+                        <div class="form-group">
+                            <label>Container IDs (comma-separated)</label>
+                            <input type="text" name="containers" required placeholder="MSKU123,MSKU456">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Time Window (days)</label>
+                            <input type="number" name="timeWindow" value="7" min="1" max="30">
+                        </div>
+                        
+                        <button type="submit">Analyze Risk</button>
+                    </form>
+                    
+                    <div id="dd-risk-response" class="response-box" style="display:none;"></div>
+                </div>
+                
+                <!-- Performance Analytics -->
+                <div class="api-card">
+                    <h3>Performance Report</h3>
+                    <div class="endpoint-info">GET /api/analytics/performance</div>
+                    <p>Generate performance analytics report</p>
+                    
+                    <form id="performance-form" onsubmit="getPerformance(event)">
+                        <div class="form-group">
+                            <label>Report Period</label>
+                            <select name="period" required>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="quarterly">Quarterly</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit">Generate Report</button>
+                    </form>
+                    
+                    <div id="performance-response" class="response-box" style="display:none;"></div>
+                </div>
+                
+                <!-- Predictive Analytics -->
+                <div class="api-card">
+                    <h3>AI Predictions</h3>
+                    <div class="endpoint-info">POST /api/analytics/predict</div>
+                    <p>Get AI-powered predictions</p>
+                    
+                    <form id="predict-form" onsubmit="getPredictions(event)">
+                        <div class="form-group">
+                            <label>Prediction Type</label>
+                            <select name="type" required>
+                                <option value="eta">ETA Accuracy</option>
+                                <option value="dd_risk">D&D Risk Score</option>
+                                <option value="port_congestion">Port Congestion</option>
+                                <option value="cost_forecast">Cost Forecast</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Target Data (JSON)</label>
+                            <textarea name="data" required placeholder='{"portCode": "USLAX", "vesselId": "9781234"}'></textarea>
+                        </div>
+                        
+                        <button type="submit">Get Predictions</button>
+                    </form>
+                    
+                    <div id="predict-response" class="response-box" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        // Helper function to make API calls
+        async function makeApiCall(url, options = {}) {
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    }
+                });
+                
+                const data = await response.json();
+                return { success: response.ok, status: response.status, data };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+        
+        // Helper function to display response
+        function displayResponse(elementId, response, success = true) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `response-box ${success ? 'success' : 'error'}`;
+            element.innerHTML = `<pre>${JSON.stringify(response, null, 2)}</pre>`;
+        }
+        
+        // Core API Functions
+        async function testHealth() {
+            const result = await makeApiCall('/api/health');
+            displayResponse('health-response', result.data, result.success);
+        }
+        
+        async function testMetrics() {
+            const result = await makeApiCall('/api/metrics');
+            displayResponse('metrics-response', result.data, result.success);
+        }
+        
+        async function testUser() {
+            const result = await makeApiCall('/api/user');
+            displayResponse('user-response', result.data, result.success);
+        }
+        
+        async function testContainers() {
+            const result = await makeApiCall('/api/containers/recent');
+            displayResponse('containers-response', result.data, result.success);
+        }
+        
+        async function submitROI(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                email: formData.get('email'),
+                company: formData.get('company'),
+                containerVolume: parseInt(formData.get('containerVolume')),
+                ddCostPerDay: parseInt(formData.get('ddCostPerDay')) || 150,
+                currentDDDays: parseInt(formData.get('currentDDDays')) || 500,
+                industry: formData.get('industry') || 'other'
+            };
+            
+            const result = await makeApiCall('/api/roi-calculator/submit', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+            
+            displayResponse('roi-response', result.data, result.success);
+        }
+        
+        async function testLogin(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                email: formData.get('email'),
+                password: formData.get('password')
+            };
+            
+            const result = await makeApiCall('/auth/login', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+            
+            displayResponse('login-response', result.data, result.success);
+        }
+        
+        // Platform API Functions
+        async function createWorkflow(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                name: formData.get('name'),
+                trigger: formData.get('trigger'),
+                actions: JSON.parse(formData.get('actions'))
+            };
+            
+            const result = await makeApiCall('/api/workflows/create', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+            
+            displayResponse('workflow-response', result.data || { message: 'Workflow endpoint not implemented' }, false);
+        }
+        
+        async function checkIntegrations() {
+            const result = await makeApiCall('/api/integrations/status');
+            displayResponse('integrations-response', result.data || { message: 'Integration status endpoint not implemented' }, false);
+        }
+        
+        async function getDocumentQueue() {
+            const result = await makeApiCall('/api/documents/queue');
+            displayResponse('documents-response', result.data || { message: 'Document queue endpoint not implemented' }, false);
+        }
+        
+        // Customer API Functions
+        async function trackShipment(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const containerId = formData.get('containerId');
+            
+            const result = await makeApiCall(`/api/shipments/track/${containerId}`);
+            displayResponse('track-response', result.data || { message: 'Shipment tracking endpoint not implemented' }, false);
+        }
+        
+        async function getCustomerMetrics() {
+            const result = await makeApiCall('/api/customer/metrics');
+            displayResponse('customer-metrics-response', result.data || { message: 'Customer metrics endpoint not implemented' }, false);
+        }
+        
+        async function createTicket(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                subject: formData.get('subject'),
+                priority: formData.get('priority'),
+                description: formData.get('description')
+            };
+            
+            const result = await makeApiCall('/api/support/ticket', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+            
+            displayResponse('support-response', result.data || { message: 'Support ticket endpoint not implemented' }, false);
+        }
+        
+        // Integration API Functions
+        async function addCarrier(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                carrier: formData.get('carrier'),
+                apiKey: formData.get('apiKey'),
+                accountId: formData.get('accountId')
+            };
+            
+            const result = await makeApiCall('/api/integrations/carrier', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+            
+            displayResponse('carrier-response', result.data || { message: 'Carrier integration endpoint not implemented' }, false);
+        }
+        
+        async function getTerminals() {
+            const result = await makeApiCall('/api/integrations/terminals');
+            displayResponse('terminals-response', result.data || { message: 'Terminal data endpoint not implemented' }, false);
+        }
+        
+        async function testERP(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                system: formData.get('system'),
+                connection: formData.get('connection')
+            };
+            
+            const result = await makeApiCall('/api/integrations/erp/test', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+            
+            displayResponse('erp-response', result.data || { message: 'ERP test endpoint not implemented' }, false);
+        }
+        
+        // Analytics API Functions
+        async function analyzeDDRisk(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                containers: formData.get('containers').split(',').map(c => c.trim()),
+                timeWindow: parseInt(formData.get('timeWindow'))
+            };
+            
+            const result = await makeApiCall('/api/analytics/dd-risk', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+            
+            displayResponse('dd-risk-response', result.data || { message: 'D&D risk analysis endpoint not implemented' }, false);
+        }
+        
+        async function getPerformance(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const period = formData.get('period');
+            
+            const result = await makeApiCall(`/api/analytics/performance?period=${period}`);
+            displayResponse('performance-response', result.data || { message: 'Performance report endpoint not implemented' }, false);
+        }
+        
+        async function getPredictions(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                type: formData.get('type'),
+                data: JSON.parse(formData.get('data'))
+            };
+            
+            const result = await makeApiCall('/api/analytics/predict', {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+            
+            displayResponse('predict-response', result.data || { message: 'AI predictions endpoint not implemented' }, false);
+        }
+    </script>
+</body>
+</html>
