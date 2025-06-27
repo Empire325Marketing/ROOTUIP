@@ -1,0 +1,44 @@
+<!-- Google Analytics 4 (GA4) - ROOTUIP -->
+<!-- Add this snippet to the <head> section of all HTML pages -->
+<!-- Replace G-XXXXXXXXXX with your actual GA4 Measurement ID -->
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  // Basic configuration
+  gtag('config', 'G-XXXXXXXXXX', {
+    send_page_view: true,
+    custom_map: {
+      'dimension1': 'user_type',
+      'dimension2': 'company_id'
+    }
+  });
+</script>
+
+<!-- Enhanced Analytics for ROOTUIP -->
+<script src="/analytics/google-analytics-setup.js"></script>
+
+<!-- Example usage in your application -->
+<script>
+// Track user login
+RootUIAnalytics.trackLogin('email');
+
+// Track shipment search
+RootUIAnalytics.trackShipmentSearch('container_number', 15);
+
+// Track document upload
+RootUIAnalytics.trackDocumentUpload('bill_of_lading', 245000);
+
+// Track feature usage
+RootUIAnalytics.trackFeatureUsage('blockchain_verification', 'document_verified');
+
+// Track conversion
+RootUIAnalytics.trackConversion('trial_signup', 0);
+
+// Track API call
+RootUIAnalytics.trackAPICall('/api/shipments', 150);
+</script>

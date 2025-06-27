@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAML SSO Setup - ROOTUIP</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .sso-setup {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .setup-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .provider-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .provider-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .provider-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .provider-logo {
+            height: 60px;
+            margin-bottom: 15px;
+        }
+        .setup-steps {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .step {
+            display: flex;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+        .step-number {
+            background: #1e3a8a;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .metadata-box {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .copy-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .copy-button:hover {
+            background: #2563eb;
+        }
+        .config-form {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #374151;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .form-group textarea {
+            min-height: 100px;
+            font-family: monospace;
+        }
+        pre {
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: #6b7280;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .tab.active {
+            color: #1e3a8a;
+            border-bottom-color: #1e3a8a;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ROOTUIP2025"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ROOTUIP2025');
+</script>
+</head>
+<body>
+    <div class="sso-setup">
+        <div class="setup-header">
+            <h1>SAML 2.0 SSO Configuration</h1>
+            <p>Configure Single Sign-On with your enterprise identity provider</p>
+        </div>
+
+        <h2>Supported Identity Providers</h2>
+        <div class="provider-grid">
+            <div class="provider-card" onclick="selectProvider('okta')">
+                <div class="provider-logo">🔐</div>
+                <h3>Okta</h3>
+                <p>Enterprise identity and access management</p>
+            </div>
+            <div class="provider-card" onclick="selectProvider('azure')">
+                <div class="provider-logo">☁️</div>
+                <h3>Azure AD</h3>
+                <p>Microsoft enterprise identity service</p>
+            </div>
+            <div class="provider-card" onclick="selectProvider('onelogin')">
+                <div class="provider-logo">🔑</div>
+                <h3>OneLogin</h3>
+                <p>Unified access management platform</p>
+            </div>
+            <div class="provider-card" onclick="selectProvider('ping')">
+                <div class="provider-logo">🛡️</div>
+                <h3>PingIdentity</h3>
+                <p>Intelligent identity solutions</p>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('metadata')">1. Service Provider Metadata</button>
+            <button class="tab" onclick="switchTab('configure')">2. Configure IdP</button>
+            <button class="tab" onclick="switchTab('test')">3. Test Connection</button>
+        </div>
+
+        <div id="metadata-tab" class="tab-content active">
+            <div class="setup-steps">
+                <h2>Service Provider (SP) Metadata</h2>
+                <p>Use this metadata to configure ROOTUIP in your identity provider:</p>
+                
+                <div class="metadata-box">
+                    <h4>Key Information:</h4>
+                    <ul>
+                        <li><strong>Entity ID:</strong> https://app.rootuip.com/saml/metadata</li>
+                        <li><strong>ACS URL:</strong> https://app.rootuip.com/saml/acs</li>
+                        <li><strong>SLO URL:</strong> https://app.rootuip.com/saml/sls</li>
+                        <li><strong>NameID Format:</strong> EmailAddress</li>
+                    </ul>
+                    
+                    <h4>Required Attributes:</h4>
+                    <ul>
+                        <li>email (required)</li>
+                        <li>firstName</li>
+                        <li>lastName</li>
+                        <li>groups/roles</li>
+                        <li>department</li>
+                        <li>company</li>
+                    </ul>
+
+                    <h4>Download Metadata:</h4>
+                    <button class="copy-button" onclick="downloadMetadata()">Download XML Metadata</button>
+                    <button class="copy-button" onclick="copyMetadataURL()">Copy Metadata URL</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="configure-tab" class="tab-content">
+            <div class="config-form">
+                <h2>Configure Your Identity Provider</h2>
+                
+                <div class="form-group">
+                    <label>Select Identity Provider</label>
+                    <select id="idp-type" onchange="updateIdPForm()">
+                        <option value="">Select Provider</option>
+                        <option value="okta">Okta</option>
+                        <option value="azure">Azure AD</option>
+                        <option value="onelogin">OneLogin</option>
+                        <option value="ping">PingIdentity</option>
+                        <option value="custom">Custom SAML 2.0</option>
+                    </select>
+                </div>
+
+                <div id="idp-specific-fields">
+                    <!-- Dynamic fields based on IdP selection -->
+                </div>
+
+                <div class="form-group">
+                    <label>IdP Metadata URL</label>
+                    <input type="url" id="idp-metadata-url" placeholder="https://your-idp.com/metadata">
+                </div>
+
+                <div class="form-group">
+                    <label>IdP Certificate (X.509)</label>
+                    <textarea id="idp-cert" placeholder="-----BEGIN CERTIFICATE-----
+...
+-----END CERTIFICATE-----"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Attribute Mapping (JSON)</label>
+                    <textarea id="attribute-mapping">{
+  "email": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+  "firstName": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname",
+  "lastName": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname",
+  "groups": "http://schemas.xmlsoap.org/claims/Group"
+}</textarea>
+                </div>
+
+                <button class="btn btn-primary" onclick="saveIdPConfig()">Save Configuration</button>
+            </div>
+
+            <div class="setup-steps" style="margin-top: 30px;">
+                <h3>Provider-Specific Instructions</h3>
+                
+                <div id="okta-instructions" class="provider-instructions" style="display: none;">
+                    <h4>Okta Configuration Steps:</h4>
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div>In Okta Admin Console, go to Applications → Create App Integration</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div>Choose SAML 2.0 and click Next</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div>App name: "ROOTUIP", App logo: Upload ROOTUIP logo</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div>Single sign on URL: <code>https://app.rootuip.com/saml/acs</code></div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div>Audience URI (SP Entity ID): <code>https://app.rootuip.com/saml/metadata</code></div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div>Name ID format: EmailAddress</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">7</div>
+                        <div>Add attribute statements as shown above</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">8</div>
+                        <div>Assign users/groups to the application</div>
+                    </div>
+                </div>
+
+                <div id="azure-instructions" class="provider-instructions" style="display: none;">
+                    <h4>Azure AD Configuration Steps:</h4>
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div>In Azure Portal, go to Azure Active Directory → Enterprise applications</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div>Click "New application" → "Create your own application"</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div>Name: "ROOTUIP", select "Integrate any other application"</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div>Go to Single sign-on → Select SAML</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div>Basic SAML Configuration:
+                            <ul>
+                                <li>Identifier: <code>https://app.rootuip.com/saml/metadata</code></li>
+                                <li>Reply URL: <code>https://app.rootuip.com/saml/acs</code></li>
+                                <li>Sign on URL: <code>https://app.rootuip.com</code></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div>Configure user attributes and claims as needed</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">7</div>
+                        <div>Download Federation Metadata XML and Certificate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="test-tab" class="tab-content">
+            <div class="setup-steps">
+                <h2>Test SSO Connection</h2>
+                
+                <div class="test-section">
+                    <h3>Connection Status</h3>
+                    <div id="connection-status" class="metadata-box">
+                        <p>⏳ No configuration detected. Please complete setup first.</p>
+                    </div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Test Authentication</h3>
+                    <p>Click the button below to test SSO authentication:</p>
+                    <button class="btn btn-primary" onclick="testSSO()">Test SSO Login</button>
+                </div>
+
+                <div class="test-section">
+                    <h3>Debug Information</h3>
+                    <pre id="debug-info">No debug information available</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectProvider(provider) {
+            document.getElementById('idp-type').value = provider;
+            updateIdPForm();
+            switchTab('configure');
+        }
+
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab')[
+                tab === 'metadata' ? 0 : tab === 'configure' ? 1 : 2
+            ].classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(tab + '-tab').classList.add('active');
+        }
+
+        function updateIdPForm() {
+            const idpType = document.getElementById('idp-type').value;
+            
+            // Hide all provider instructions
+            document.querySelectorAll('.provider-instructions').forEach(i => i.style.display = 'none');
+            
+            // Show selected provider instructions
+            if (idpType && document.getElementById(idpType + '-instructions')) {
+                document.getElementById(idpType + '-instructions').style.display = 'block';
+            }
+
+            // Update form fields based on provider
+            const specificFields = document.getElementById('idp-specific-fields');
+            
+            if (idpType === 'okta') {
+                specificFields.innerHTML = `
+                    <div class="form-group">
+                        <label>Okta Domain</label>
+                        <input type="text" id="okta-domain" placeholder="your-org.okta.com">
+                    </div>
+                    <div class="form-group">
+                        <label>App ID</label>
+                        <input type="text" id="okta-app-id" placeholder="0oa1234567890">
+                    </div>
+                `;
+            } else if (idpType === 'azure') {
+                specificFields.innerHTML = `
+                    <div class="form-group">
+                        <label>Tenant ID</label>
+                        <input type="text" id="azure-tenant-id" placeholder="12345678-1234-1234-1234-123456789012">
+                    </div>
+                    <div class="form-group">
+                        <label>Application ID</label>
+                        <input type="text" id="azure-app-id" placeholder="12345678-1234-1234-1234-123456789012">
+                    </div>
+                `;
+            }
+        }
+
+        function downloadMetadata() {
+            const metadata = `<?xml version="1.0"?>
+<EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" entityID="https://app.rootuip.com/saml/metadata">
+    <SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://app.rootuip.com/saml/sls"/>
+        <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</NameIDFormat>
+        <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://app.rootuip.com/saml/acs" index="1"/>
+    </SPSSODescriptor>
+</EntityDescriptor>`;
+            
+            const blob = new Blob([metadata], { type: 'application/xml' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'rootuip-sp-metadata.xml';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function copyMetadataURL() {
+            navigator.clipboard.writeText('https://app.rootuip.com/saml/metadata');
+            alert('Metadata URL copied to clipboard!');
+        }
+
+        function saveIdPConfig() {
+            alert('Configuration would be saved to the server. Backend API required.');
+        }
+
+        function testSSO() {
+            window.open('https://app.rootuip.com/saml/login', '_blank');
+        }
+    </script>
+</body>
+</html>
