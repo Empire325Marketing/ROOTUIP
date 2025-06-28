@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Auth Test - ROOTUIP</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f7fa;
+        }
+        
+        .header {
+            background: #1a1a2e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .test-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-section h2 {
+            margin-top: 0;
+            color: #1a1a2e;
+            border-bottom: 2px solid #00D4AA;
+            padding-bottom: 10px;
+        }
+        
+        button {
+            background: #00D4AA;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background: #00B894;
+        }
+        
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #00D4AA;
+        }
+        
+        .feature-card h3 {
+            margin-top: 0;
+            color: #1a1a2e;
+        }
+        
+        .qr-code {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #00D4AA;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔒 Enterprise Authentication Test Suite</h1>
+        <p>Testing Fortune 500-grade security features</p>
+    </div>
+    
+    <div class="container">
+        <!-- Enterprise Features Overview -->
+        <div class="test-section">
+            <h2>Enterprise Authentication Features</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <h3>✅ Multi-Factor Authentication</h3>
+                    <p>TOTP-based 2FA with backup codes</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✅ Single Sign-On Ready</h3>
+                    <p>SAML 2.0, OAuth 2.0, OpenID Connect</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✅ Role-Based Access Control</h3>
+                    <p>Admin, Operator, Viewer roles</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✅ Session Management</h3>
+                    <p>15-minute expiration, refresh tokens</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✅ Password Policies</h3>
+                    <p>Enterprise-grade requirements</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✅ API Key Management</h3>
+                    <p>Scoped keys for integrations</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✅ Rate Limiting</h3>
+                    <p>DDoS protection on all endpoints</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✅ Audit Logging</h3>
+                    <p>Complete action history</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✅ CSRF Protection</h3>
+                    <p>Token-based form security</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Registration with Password Policy -->
+        <div class="test-section">
+            <h2>1. Enterprise Registration (Password Policy Test)</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" name="companyName" value="Fortune 500 Corp" required>
+                </div>
+                <div class="form-group">
+                    <label>Company Domain</label>
+                    <input type="text" name="companyDomain" value="fortune500.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Admin Email</label>
+                    <input type="email" name="email" value="admin@fortune500.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password (min 12 chars, uppercase, lowercase, number, special)</label>
+                    <input type="password" name="password" value="SecurePass123!" required>
+                </div>
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" name="firstName" value="John" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" name="lastName" value="Admin" required>
+                </div>
+                <button type="submit">Register Enterprise Account</button>
+            </form>
+            <div id="register-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test Login with MFA -->
+        <div class="test-section">
+            <h2>2. Login with MFA Support</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" value="admin@fortune500.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" value="SecurePass123!" required>
+                </div>
+                <div class="form-group" id="mfa-group" style="display:none;">
+                    <label>MFA Code</label>
+                    <input type="text" name="mfaCode" pattern="[0-9]{6}" maxlength="6">
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <div id="login-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test MFA Setup -->
+        <div class="test-section">
+            <h2>3. Enable Multi-Factor Authentication</h2>
+            <button onclick="enableMFA()">Setup MFA</button>
+            <div id="mfa-setup" style="display:none;">
+                <div class="qr-code">
+                    <img id="qr-code" alt="MFA QR Code">
+                    <p>Secret: <code id="mfa-secret"></code></p>
+                </div>
+                <form id="verify-mfa-form">
+                    <div class="form-group">
+                        <label>Enter 6-digit code from authenticator app</label>
+                        <input type="text" name="token" pattern="[0-9]{6}" maxlength="6" required>
+                    </div>
+                    <button type="submit">Verify and Enable MFA</button>
+                </form>
+            </div>
+            <div id="mfa-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test API Key Creation -->
+        <div class="test-section">
+            <h2>4. API Key Management</h2>
+            <form id="api-key-form">
+                <div class="form-group">
+                    <label>Key Name</label>
+                    <input type="text" name="name" value="Integration Key" required>
+                </div>
+                <div class="form-group">
+                    <label>Permissions (JSON)</label>
+                    <input type="text" name="permissions" value='{"read": true, "write": false}'>
+                </div>
+                <div class="form-group">
+                    <label>Expires In (days)</label>
+                    <input type="number" name="expiresIn" value="90">
+                </div>
+                <button type="submit">Create API Key</button>
+            </form>
+            <div id="api-key-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test User Invitation -->
+        <div class="test-section">
+            <h2>5. User Invitation System</h2>
+            <form id="invite-form">
+                <div class="form-group">
+                    <label>Email to Invite</label>
+                    <input type="email" name="email" value="user@fortune500.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select name="role" required>
+                        <option value="viewer">Viewer (Read-only)</option>
+                        <option value="operator">Operator</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
+                <button type="submit">Send Invitation</button>
+            </form>
+            <div id="invite-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test Audit Logs -->
+        <div class="test-section">
+            <h2>6. Audit Log Retrieval</h2>
+            <button onclick="getAuditLogs()">Fetch Recent Audit Logs</button>
+            <div id="audit-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test SSO Metadata -->
+        <div class="test-section">
+            <h2>7. SSO Readiness Check</h2>
+            <button onclick="getSSOMetadata()">Get SSO Metadata</button>
+            <div id="sso-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Session Info -->
+        <div class="test-section">
+            <h2>Current Session Info</h2>
+            <div id="session-info">
+                <p>Access Token: <span id="access-token" class="badge">Not logged in</span></p>
+                <p>Refresh Token: <span id="refresh-token" class="badge">Not logged in</span></p>
+                <p>User Role: <span id="user-role" class="badge">N/A</span></p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let accessToken = null;
+        let refreshToken = null;
+        let mfaSecret = null;
+
+        // Helper function to display results
+        function displayResult(elementId, data, isSuccess = true) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `result ${isSuccess ? 'success' : 'error'}`;
+            element.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        }
+
+        // Update session info
+        function updateSessionInfo() {
+            document.getElementById('access-token').textContent = accessToken ? accessToken.substring(0, 20) + '...' : 'Not logged in';
+            document.getElementById('refresh-token').textContent = refreshToken ? refreshToken.substring(0, 20) + '...' : 'Not logged in';
+        }
+
+        // Registration
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: formData.get('email'),
+                        password: formData.get('password'),
+                        firstName: formData.get('firstName'),
+                        lastName: formData.get('lastName'),
+                        companyName: formData.get('companyName'),
+                        companyDomain: formData.get('companyDomain')
+                    })
+                });
+                
+                const data = await response.json();
+                displayResult('register-result', data, response.ok);
+            } catch (error) {
+                displayResult('register-result', { error: error.message }, false);
+            }
+        });
+
+        // Login
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: formData.get('email'),
+                        password: formData.get('password'),
+                        mfaCode: formData.get('mfaCode')
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.requiresMFA) {
+                    document.getElementById('mfa-group').style.display = 'block';
+                    displayResult('login-result', { message: 'MFA required. Enter your 6-digit code.' }, true);
+                } else if (data.success) {
+                    accessToken = data.accessToken;
+                    refreshToken = data.refreshToken;
+                    updateSessionInfo();
+                    if (data.user) {
+                        document.getElementById('user-role').textContent = data.user.role;
+                    }
+                    displayResult('login-result', data, true);
+                } else {
+                    displayResult('login-result', data, false);
+                }
+            } catch (error) {
+                displayResult('login-result', { error: error.message }, false);
+            }
+        });
+
+        // Enable MFA
+        async function enableMFA() {
+            if (!accessToken) {
+                alert('Please login first');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/auth/mfa/enable', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('mfa-setup').style.display = 'block';
+                    document.getElementById('qr-code').src = data.qrCode;
+                    document.getElementById('mfa-secret').textContent = data.secret;
+                    mfaSecret = data.secret;
+                }
+                
+                displayResult('mfa-result', data, response.ok);
+            } catch (error) {
+                displayResult('mfa-result', { error: error.message }, false);
+            }
+        }
+
+        // Verify MFA
+        document.getElementById('verify-mfa-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/auth/mfa/verify', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        token: formData.get('token')
+                    })
+                });
+                
+                const data = await response.json();
+                displayResult('mfa-result', data, response.ok);
+            } catch (error) {
+                displayResult('mfa-result', { error: error.message }, false);
+            }
+        });
+
+        // Create API Key
+        document.getElementById('api-key-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            if (!accessToken) {
+                alert('Please login first');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/auth/api-keys', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: formData.get('name'),
+                        permissions: JSON.parse(formData.get('permissions') || '{}'),
+                        expiresIn: parseInt(formData.get('expiresIn'))
+                    })
+                });
+                
+                const data = await response.json();
+                displayResult('api-key-result', data, response.ok);
+            } catch (error) {
+                displayResult('api-key-result', { error: error.message }, false);
+            }
+        });
+
+        // Invite User
+        document.getElementById('invite-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            if (!accessToken) {
+                alert('Please login first');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/auth/users/invite', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: formData.get('email'),
+                        role: formData.get('role')
+                    })
+                });
+                
+                const data = await response.json();
+                displayResult('invite-result', data, response.ok);
+            } catch (error) {
+                displayResult('invite-result', { error: error.message }, false);
+            }
+        });
+
+        // Get Audit Logs
+        async function getAuditLogs() {
+            if (!accessToken) {
+                alert('Please login first');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/auth/security/audit-logs?limit=10', {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                displayResult('audit-result', data, response.ok);
+            } catch (error) {
+                displayResult('audit-result', { error: error.message }, false);
+            }
+        }
+
+        // Get SSO Metadata
+        async function getSSOMetadata() {
+            try {
+                const response = await fetch('/auth/sso/metadata');
+                const data = await response.json();
+                displayResult('sso-result', data, response.ok);
+            } catch (error) {
+                displayResult('sso-result', { error: error.message }, false);
+            }
+        }
+    </script>
+</body>
+</html>

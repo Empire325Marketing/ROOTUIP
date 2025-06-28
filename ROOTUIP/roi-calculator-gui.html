@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP ROI Calculator - D&D Savings Analysis</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #00D4AA, #00E5FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            color: #a0a0a0;
+            font-size: 1.2em;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: -30px auto 40px;
+            padding: 0 20px;
+        }
+        
+        .calculator-wrapper {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+        }
+        
+        .input-section {
+            padding: 40px;
+            background: white;
+        }
+        
+        .results-section {
+            padding: 40px;
+            background: linear-gradient(135deg, #00D4AA 0%, #00E5FF 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .form-title {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            color: #1a1a2e;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #00D4AA;
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+        }
+        
+        .form-group .hint {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .input-with-addon {
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-with-addon input {
+            border-radius: 8px 0 0 8px;
+            border-right: none;
+        }
+        
+        .input-addon {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-left: none;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            color: #666;
+        }
+        
+        .btn-calculate {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #00D4AA 0%, #00E5FF 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 170, 0.4);
+        }
+        
+        .btn-calculate:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results-content {
+            text-align: center;
+        }
+        
+        .results-title {
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+        
+        .savings-amount {
+            font-size: 4em;
+            font-weight: 700;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .metric-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn-action {
+            flex: 1;
+            padding: 12px 20px;
+            background: white;
+            color: #00D4AA;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-section {
+                min-height: 400px;
+            }
+        }
+        
+        .json-preview {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚢 ROOTUIP ROI Calculator</h1>
+        <p>Calculate Your D&D Savings with Ocean Freight Intelligence</p>
+    </div>
+    
+    <div class="container">
+        <div class="calculator-wrapper">
+            <div class="calculator-grid">
+                <!-- Input Section -->
+                <div class="input-section">
+                    <h2 class="form-title">Calculate Your Savings</h2>
+                    
+                    <form id="roi-form">
+                        <div class="form-group">
+                            <label for="email">Business Email *</label>
+                            <input type="email" id="email" name="email" required placeholder="john@company.com">
+                            <div class="hint">We'll send your detailed ROI report to this email</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="company">Company Name *</label>
+                            <input type="text" id="company" name="company" required placeholder="Acme Corporation">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="containerVolume">Annual Container Volume *</label>
+                            <div class="input-with-addon">
+                                <input type="number" id="containerVolume" name="containerVolume" required placeholder="5000" min="1">
+                                <span class="input-addon">TEUs/year</span>
+                            </div>
+                            <div class="hint">Total twenty-foot equivalent units handled annually</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="ddCostPerDay">Average D&D Cost per Container/Day</label>
+                            <div class="input-with-addon">
+                                <input type="number" id="ddCostPerDay" name="ddCostPerDay" value="150" min="0">
+                                <span class="input-addon">$/day</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="currentDDDays">Current Annual D&D Days</label>
+                            <input type="number" id="currentDDDays" name="currentDDDays" value="500" min="0">
+                            <div class="hint">Total days of D&D charges across all containers annually</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="industry">Industry</label>
+                            <select id="industry" name="industry">
+                                <option value="">Select Your Industry</option>
+                                <option value="retail">Retail & E-commerce</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="automotive">Automotive</option>
+                                <option value="electronics">Electronics & Technology</option>
+                                <option value="food">Food & Beverage</option>
+                                <option value="pharmaceutical">Pharmaceutical & Healthcare</option>
+                                <option value="chemical">Chemical & Materials</option>
+                                <option value="textile">Textile & Apparel</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn-calculate">Calculate My Savings</button>
+                    </form>
+                    
+                    <div class="error-message" id="error-message"></div>
+                    <div class="success-message" id="success-message"></div>
+                    
+                    <div class="json-preview" id="json-preview"></div>
+                </div>
+                
+                <!-- Results Section -->
+                <div class="results-section">
+                    <div class="results-content" id="results-content">
+                        <h2 class="results-title">Your Estimated Annual Savings</h2>
+                        
+                        <div class="loading" id="loading">
+                            <div class="spinner"></div>
+                            <p>Calculating your savings...</p>
+                        </div>
+                        
+                        <div id="results-display" style="display: none;">
+                            <div class="savings-amount" id="savings-amount">$0</div>
+                            <p>Potential savings with ROOTUIP platform</p>
+                            
+                            <div class="metric-grid">
+                                <div class="metric-card">
+                                    <div class="metric-value" id="dd-reduction">0%</div>
+                                    <div class="metric-label">D&D Reduction</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value" id="roi-percentage">0%</div>
+                                    <div class="metric-label">ROI</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value" id="payback-period">0</div>
+                                    <div class="metric-label">Months to Payback</div>
+                                </div>
+                                <div class="metric-card">
+                                    <div class="metric-value" id="containers-optimized">0</div>
+                                    <div class="metric-label">Containers Optimized</div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action" onclick="downloadReport()">Download Report</button>
+                                <button class="btn-action" onclick="scheduleDemo()">Schedule Demo</button>
+                            </div>
+                        </div>
+                        
+                        <div id="initial-message">
+                            <p style="font-size: 1.2em; opacity: 0.9;">
+                                Fill out the form to see how much you can save on detention and demurrage charges with our AI-powered platform.
+                            </p>
+                            <p style="margin-top: 30px; opacity: 0.8;">
+                                Our typical customers see:
+                            </p>
+                            <ul style="text-align: left; display: inline-block; margin-top: 20px;">
+                                <li>30-50% reduction in D&D charges</li>
+                                <li>ROI within 3-6 months</li>
+                                <li>Automated exception handling</li>
+                                <li>Real-time visibility across all shipments</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Form submission handler
+        document.getElementById('roi-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Clear previous messages
+            document.getElementById('error-message').style.display = 'none';
+            document.getElementById('success-message').style.display = 'none';
+            document.getElementById('json-preview').style.display = 'none';
+            
+            // Get form data
+            const formData = new FormData(e.target);
+            const data = {
+                email: formData.get('email'),
+                company: formData.get('company'),
+                containerVolume: parseInt(formData.get('containerVolume')),
+                ddCostPerDay: parseInt(formData.get('ddCostPerDay')) || 150,
+                currentDDDays: parseInt(formData.get('currentDDDays')) || 500,
+                industry: formData.get('industry') || 'other'
+            };
+            
+            // Show JSON preview (for testing)
+            const jsonPreview = document.getElementById('json-preview');
+            jsonPreview.textContent = 'API Request:\n' + JSON.stringify(data, null, 2);
+            jsonPreview.style.display = 'block';
+            
+            // Show loading
+            document.getElementById('initial-message').style.display = 'none';
+            document.getElementById('results-display').style.display = 'none';
+            document.getElementById('loading').classList.add('active');
+            
+            try {
+                // Submit to API
+                const response = await fetch('/api/roi-calculator/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                // Calculate ROI metrics
+                const annualDDCost = data.ddCostPerDay * data.currentDDDays;
+                const reductionRate = 0.35; // 35% average reduction
+                const annualSavings = Math.round(annualDDCost * reductionRate);
+                const roiPercentage = Math.round((annualSavings / 120000) * 100); // Assuming $120k annual platform cost
+                const paybackMonths = Math.round(120000 / (annualSavings / 12));
+                const containersOptimized = Math.round(data.containerVolume * 0.15); // 15% of containers typically have D&D
+                
+                // Hide loading
+                document.getElementById('loading').classList.remove('active');
+                
+                // Display results
+                document.getElementById('savings-amount').textContent = '$' + annualSavings.toLocaleString();
+                document.getElementById('dd-reduction').textContent = (reductionRate * 100) + '%';
+                document.getElementById('roi-percentage').textContent = roiPercentage + '%';
+                document.getElementById('payback-period').textContent = paybackMonths;
+                document.getElementById('containers-optimized').textContent = containersOptimized.toLocaleString();
+                
+                document.getElementById('results-display').style.display = 'block';
+                
+                // Show success message
+                document.getElementById('success-message').textContent = `Success! Lead ID: ${result.leadId || 'lead_' + Date.now()}. We'll send your detailed report to ${data.email}.`;
+                document.getElementById('success-message').style.display = 'block';
+                
+            } catch (error) {
+                // Hide loading
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('initial-message').style.display = 'block';
+                
+                // Show error
+                document.getElementById('error-message').textContent = 'Error: ' + error.message;
+                document.getElementById('error-message').style.display = 'block';
+            }
+        });
+        
+        // Action button handlers
+        function downloadReport() {
+            alert('Report download functionality would be implemented here. The report would include detailed ROI analysis, implementation timeline, and case studies.');
+        }
+        
+        function scheduleDemo() {
+            window.location.href = '/marketing/leads/demo-booking.html';
+        }
+        
+        // Auto-calculate as user types
+        const inputs = ['containerVolume', 'ddCostPerDay', 'currentDDDays'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', function() {
+                // Could implement live calculation preview here
+            });
+        });
+    </script>
+</body>
+</html>

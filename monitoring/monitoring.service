@@ -1,0 +1,38 @@
+[Unit]
+Description=ROOTUIP Enterprise Monitoring Service
+Documentation=https://rootuip.com/docs/monitoring
+After=network.target postgresql.service redis.service
+
+[Service]
+Type=simple
+User=iii
+Group=iii
+WorkingDirectory=/home/iii/ROOTUIP/monitoring
+Environment="NODE_ENV=production"
+Environment="MONITORING_PORT=3006"
+# Alert configuration (uncomment and set when ready)
+# Environment="SMTP_HOST=smtp.gmail.com"
+# Environment="SMTP_PORT=587"
+# Environment="SMTP_USER=alerts@rootuip.com"
+# Environment="SMTP_PASS=your-smtp-password"
+# Environment="ALERT_EMAILS=admin@rootuip.com,ops@rootuip.com"
+# Environment="SLACK_TOKEN=xoxb-your-slack-token"
+# Environment="TWILIO_ACCOUNT_SID=your-twilio-sid"
+# Environment="TWILIO_AUTH_TOKEN=your-twilio-token"
+# Environment="TWILIO_PHONE=+1234567890"
+# Environment="ALERT_PHONES=+1234567890,+0987654321"
+ExecStart=/usr/bin/node /home/iii/ROOTUIP/monitoring/start-monitoring.js
+Restart=always
+RestartSec=10
+StandardOutput=append:/home/iii/ROOTUIP/logs/monitoring.log
+StandardError=append:/home/iii/ROOTUIP/logs/monitoring-error.log
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/home/iii/ROOTUIP/monitoring /home/iii/ROOTUIP/logs
+
+[Install]
+WantedBy=multi-user.target

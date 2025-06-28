@@ -1,0 +1,18 @@
+[Unit]
+Description=ROOTUIP ML Processing Server
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=iii
+Group=iii
+WorkingDirectory=/home/iii/ROOTUIP/ml_system
+Environment="NODE_ENV=production"
+ExecStart=/usr/bin/node /home/iii/ROOTUIP/ml_system/ml-server.js
+Restart=always
+RestartSec=10
+StandardOutput=append:/home/iii/ROOTUIP/logs/ml-server.log
+StandardError=append:/home/iii/ROOTUIP/logs/ml-server.error.log
+
+[Install]
+WantedBy=multi-user.target

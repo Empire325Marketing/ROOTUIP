@@ -1,0 +1,14 @@
+{
+  "name": "rootuip-security-middleware",
+  "version": "1.0.0",
+  "description": "Security middleware for ROOTUIP platform",
+  "main": "security-config.js",
+  "dependencies": {
+    "express-rate-limit": "^6.10.0",
+    "helmet": "^7.0.0",
+    "cors": "^2.8.5",
+    "express-mongo-sanitize": "^2.2.0",
+    "xss-clean": "^0.1.4",
+    "hpp": "^0.2.3"
+  }
+}

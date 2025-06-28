@@ -1,0 +1,19 @@
+[Unit]
+Description=ROOTUIP API Gateway Service
+After=network.target auth-service.service ml-server.service
+
+[Service]
+Type=simple
+User=iii
+Group=iii
+WorkingDirectory=/home/iii/ROOTUIP
+Environment="NODE_ENV=production"
+Environment="PORT=3006"
+ExecStart=/usr/bin/node /home/iii/ROOTUIP/api-gateway-database.js
+Restart=always
+RestartSec=10
+StandardOutput=append:/home/iii/ROOTUIP/logs/api-gateway.log
+StandardError=append:/home/iii/ROOTUIP/logs/api-gateway.error.log
+
+[Install]
+WantedBy=multi-user.target

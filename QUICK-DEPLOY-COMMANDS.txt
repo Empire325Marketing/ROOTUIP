@@ -1,0 +1,41 @@
+# QUICK DEPLOYMENT TO YOUR VPS (145.223.73.4)
+
+# 1. From this machine, copy the deployment package:
+scp /home/iii/ROOTUIP/rootuip-ml-deployment.tar.gz root@145.223.73.4:/root/
+
+# 2. SSH to your VPS:
+ssh root@145.223.73.4
+
+# 3. On your VPS, run these commands:
+cd /root
+tar -xzf rootuip-ml-deployment.tar.gz
+
+# Install dependencies
+npm install
+cd ml-system && npm install && cd ..
+
+# Copy HTML files to web directory (adjust path as needed)
+cp *.html /var/www/html/
+# OR if different location:
+# cp *.html /home/iii/ROOTUIP/ROOTUIP/
+
+# Start services
+pm2 start ml-system/ml-server.js --name ml-system
+pm2 start auth-enterprise/simple-auth.js --name auth-service  
+pm2 start static-server.js --name static-server
+pm2 save
+
+# Update nginx config to add:
+# location /ml/ {
+#     proxy_pass http://localhost:3004/ml/;
+# }
+# location /auth/ {
+#     proxy_pass http://localhost:3003/auth/;
+# }
+
+# Reload nginx
+nginx -s reload
+
+# DONE! Access at:
+# https://rootuip.com/ml-demo.html
+# https://rootuip.com/login.html

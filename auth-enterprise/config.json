@@ -1,0 +1,26 @@
+{
+  "port": 3003,
+  "database": {
+    "host": "localhost",
+    "port": 5432,
+    "database": "rootuip",
+    "user": "postgres",
+    "password": "rootuip123"
+  },
+  "jwt": {
+    "secret": "enterprise-secret-key-change-in-production",
+    "accessTokenExpiry": "15m",
+    "refreshTokenExpiry": "7d"
+  },
+  "session": {
+    "secret": "session-secret-key-change-in-production",
+    "maxAge": 86400000
+  },
+  "cors": {
+    "origins": ["https://app.rootuip.com", "http://localhost:3000"]
+  },
+  "rateLimit": {
+    "windowMs": 900000,
+    "max": 100
+  }
+}

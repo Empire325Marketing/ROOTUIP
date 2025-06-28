@@ -1,0 +1,79 @@
+{
+  "accuracy": 0.9266,
+  "precision": 0.4199029126213592,
+  "recall": 0.574750830564784,
+  "f1_score": 0.485273492286115,
+  "auc_roc": 0.9065893004732045,
+  "confusion_matrix": [
+    [
+      8920,
+      478
+    ],
+    [
+      256,
+      346
+    ]
+  ],
+  "feature_importance": [
+    {
+      "feature": "risk_composite_score",
+      "importance": 0.2233884500480914
+    },
+    {
+      "feature": "time_pressure_index",
+      "importance": 0.1281848372290379
+    },
+    {
+      "feature": "route_congestion_product",
+      "importance": 0.09607211294787044
+    },
+    {
+      "feature": "historical_performance_ratio",
+      "importance": 0.09505390608422822
+    },
+    {
+      "feature": "carrier_reliability_score",
+      "importance": 0.06281277638728203
+    },
+    {
+      "feature": "days_until_eta",
+      "importance": 0.058506957382422876
+    },
+    {
+      "feature": "seasonal_risk_factor",
+      "importance": 0.051433325515662674
+    },
+    {
+      "feature": "port_congestion_index",
+      "importance": 0.04645568575672215
+    },
+    {
+      "feature": "transit_time_days",
+      "importance": 0.04373295368552443
+    },
+    {
+      "feature": "route_risk_score",
+      "importance": 0.04078511696610677
+    },
+    {
+      "feature": "documentation_risk_factor",
+      "importance": 0.03852506250539711
+    },
+    {
+      "feature": "historical_dd_rate",
+      "importance": 0.0317896833212766
+    },
+    {
+      "feature": "customs_complexity_score",
+      "importance": 0.03064582946402401
+    },
+    {
+      "feature": "documentation_completeness",
+      "importance": 0.02938581271059741
+    },
+    {
+      "feature": "container_value_usd",
+      "importance": 0.023227489995756127
+    }
+  ]
+}

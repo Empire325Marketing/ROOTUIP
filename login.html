@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ROOTUIP Enterprise</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0c0c1e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+        
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 20px;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            color: #1a1a2e;
+            font-size: 32px;
+            font-weight: 700;
+        }
+        
+        .logo .tagline {
+            color: #00D4AA;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #00D4AA;
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+        }
+        
+        .mfa-section {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f5f7fa;
+            border-radius: 6px;
+        }
+        
+        .mfa-section h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #1a1a2e;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #00D4AA;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #00B894;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
+        }
+        
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .divider {
+            margin: 30px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e0e0e0;
+        }
+        
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .links {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .links a {
+            color: #00D4AA;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        
+        .links a:hover {
+            color: #00B894;
+            text-decoration: underline;
+        }
+        
+        .enterprise-badge {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .enterprise-badge .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #00D4AA;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo">
+                <h1>ROOTUIP</h1>
+                <div class="tagline">Enterprise Platform</div>
+            </div>
+            
+            <div id="error-message" class="alert alert-error" style="display: none;"></div>
+            <div id="info-message" class="alert alert-info" style="display: none;"></div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="admin@company.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+                
+                <div id="mfa-section" class="mfa-section">
+                    <h3>Two-Factor Authentication</h3>
+                    <p style="margin-bottom: 10px; font-size: 14px; color: #666;">
+                        Enter the 6-digit code from your authenticator app
+                    </p>
+                    <div class="form-group">
+                        <input type="text" id="mfa-code" name="mfaCode" pattern="[0-9]{6}" maxlength="6" placeholder="000000">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="login-btn">
+                    Sign In
+                </button>
+            </form>
+            
+            <div class="divider">
+                <span>or</span>
+            </div>
+            
+            <div class="links">
+                <a href="/enterprise-auth-test.html">Test Enterprise Features</a>
+                <br><br>
+                <a href="#" onclick="showDemo()">Use Demo Account</a>
+            </div>
+            
+            <div class="enterprise-badge">
+                <span class="badge">🔒 Enterprise-Grade Security</span>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 10px; color: #666;">Authenticating...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const form = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
+        const infoMessage = document.getElementById('info-message');
+        const mfaSection = document.getElementById('mfa-section');
+        const loading = document.getElementById('loading');
+        const loginBtn = document.getElementById('login-btn');
+        
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            infoMessage.style.display = 'none';
+        }
+        
+        function showInfo(message) {
+            infoMessage.textContent = message;
+            infoMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+        }
+        
+        function hideMessages() {
+            errorMessage.style.display = 'none';
+            infoMessage.style.display = 'none';
+        }
+        
+        function showDemo() {
+            document.getElementById('email').value = 'demo@rootuip.com';
+            document.getElementById('password').value = 'Demo123456';
+            showInfo('Demo credentials filled. Click Sign In to continue.');
+        }
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideMessages();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const mfaCode = document.getElementById('mfa-code').value;
+            
+            loading.style.display = 'block';
+            loginBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password,
+                        mfaCode: mfaCode || undefined
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.requiresMFA) {
+                    mfaSection.style.display = 'block';
+                    showInfo('Please enter your 2FA code');
+                    document.getElementById('mfa-code').focus();
+                } else if (data.success) {
+                    // Store tokens
+                    localStorage.setItem('authToken', data.accessToken);
+                    localStorage.setItem('refreshToken', data.refreshToken);
+                    localStorage.setItem('userRole', data.user.role);
+                    
+                    showInfo('Login successful! Redirecting...');
+                    
+                    // Redirect based on role
+                    setTimeout(() => {
+                        if (data.user.role === 'admin') {
+                            window.location.href = '/security-dashboard.html';
+                        } else {
+                            window.location.href = '/dashboard.html';
+                        }
+                    }, 1000);
+                } else {
+                    showError(data.error || 'Login failed');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('Network error. Please try again.');
+            } finally {
+                loading.style.display = 'none';
+                loginBtn.disabled = false;
+            }
+        });
+        
+        // Auto-focus email field
+        document.getElementById('email').focus();
+        
+        // Handle MFA code input
+        document.getElementById('mfa-code').addEventListener('input', (e) => {
+            const value = e.target.value;
+            if (value.length === 6 && /^\d{6}$/.test(value)) {
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html>

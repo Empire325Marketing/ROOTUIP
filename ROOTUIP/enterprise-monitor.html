@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Enterprise Monitoring - Real-Time Operations Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4fd1c5;
+            --secondary: #63b3ed;
+            --success: #48bb78;
+            --warning: #f6d55c;
+            --danger: #e53e3e;
+            --dark-bg: #0a0e27;
+            --card-bg: rgba(26, 31, 58, 0.95);
+            --text-primary: #e0e6ed;
+            --text-secondary: #a0aec0;
+            --border-color: rgba(79, 209, 197, 0.2);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .dashboard-header {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .overall-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(72, 187, 120, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 6px;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .dashboard-container {
+            max-width: 1800px;
+            margin: 5rem auto 2rem;
+            padding: 0 2rem;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .kpi-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+
+        .kpi-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-trend {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .trend-up { color: var(--success); }
+        .trend-down { color: var(--danger); }
+        .trend-neutral { color: var(--text-secondary); }
+
+        .monitoring-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            height: 400px;
+        }
+
+        .alerts-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .alert-item {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .alert-critical {
+            background: rgba(229, 62, 62, 0.1);
+            border: 1px solid rgba(229, 62, 62, 0.3);
+        }
+
+        .alert-warning {
+            background: rgba(246, 213, 92, 0.1);
+            border: 1px solid rgba(246, 213, 92, 0.3);
+        }
+
+        .alert-info {
+            background: rgba(99, 179, 237, 0.1);
+            border: 1px solid rgba(99, 179, 237, 0.3);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .service-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-healthy {
+            background: rgba(72, 187, 120, 0.2);
+            color: var(--success);
+        }
+
+        .status-degraded {
+            background: rgba(246, 213, 92, 0.2);
+            color: var(--warning);
+        }
+
+        .status-down {
+            background: rgba(229, 62, 62, 0.2);
+            color: var(--danger);
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(160, 174, 192, 0.1);
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .performance-table {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid rgba(160, 174, 192, 0.1);
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .latency-good { color: var(--success); }
+        .latency-ok { color: var(--warning); }
+        .latency-bad { color: var(--danger); }
+
+        .refresh-controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(79, 209, 197, 0.4);
+        }
+
+        .auto-refresh {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .heatmap-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(24, 1fr);
+            gap: 2px;
+            margin-top: 1rem;
+        }
+
+        .heatmap-cell {
+            aspect-ratio: 1;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .heatmap-cell:hover {
+            transform: scale(1.5);
+            z-index: 10;
+        }
+
+        .heat-0 { background: rgba(79, 209, 197, 0.1); }
+        .heat-1 { background: rgba(79, 209, 197, 0.3); }
+        .heat-2 { background: rgba(79, 209, 197, 0.5); }
+        .heat-3 { background: rgba(246, 213, 92, 0.5); }
+        .heat-4 { background: rgba(229, 62, 62, 0.5); }
+
+        @media (max-width: 1200px) {
+            .monitoring-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-content">
+            <div class="logo">
+                <h1>ROOTUIP Enterprise Monitor</h1>
+            </div>
+            <div class="status-bar">
+                <div class="overall-status">
+                    <div class="status-indicator"></div>
+                    <span>All Systems Operational</span>
+                </div>
+                <div style="color: var(--text-secondary);">
+                    Last Update: <span id="lastUpdate">--:--:--</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- KPI Grid -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">Uptime SLA</div>
+                <div class="kpi-value" id="uptimeSLA">99.99%</div>
+                <div class="kpi-trend trend-up">
+                    <span>↑</span> 0.01% from last month
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-label">Avg Response Time</div>
+                <div class="kpi-value" id="avgResponseTime">45ms</div>
+                <div class="kpi-trend trend-up">
+                    <span>↓</span> 12ms improvement
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-label">Predictions/Hour</div>
+                <div class="kpi-value" id="predictionsHour">4.3K</div>
+                <div class="kpi-trend trend-up">
+                    <span>↑</span> 15% increase
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-label">Error Rate</div>
+                <div class="kpi-value" id="errorRate">0.02%</div>
+                <div class="kpi-trend trend-neutral">
+                    <span>—</span> No change
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-label">Active Users</div>
+                <div class="kpi-value" id="activeUsers">247</div>
+                <div class="kpi-trend trend-up">
+                    <span>↑</span> 23 new today
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-label">Cache Hit Rate</div>
+                <div class="kpi-value" id="cacheHitRate">94.7%</div>
+                <div class="kpi-trend trend-up">
+                    <span>↑</span> 2.3% improvement
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-label">DB Connections</div>
+                <div class="kpi-value" id="dbConnections">45/200</div>
+                <div class="kpi-trend trend-neutral">
+                    <span>—</span> Healthy
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-label">Prevention Rate</div>
+                <div class="kpi-value" id="preventionRate">94.2%</div>
+                <div class="kpi-trend trend-up">
+                    <span>↑</span> Exceeding target
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Monitoring Grid -->
+        <div class="monitoring-grid">
+            <div class="chart-container">
+                <h3 style="margin-bottom: 1rem;">Real-Time Performance Metrics</h3>
+                <canvas id="performanceChart"></canvas>
+            </div>
+            
+            <div class="alerts-panel">
+                <h3 style="margin-bottom: 1rem;">Active Alerts</h3>
+                <div id="alertsList">
+                    <!-- Alerts will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Status -->
+        <h2 style="margin: 2rem 0 1rem;">Service Health</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-header">
+                    <h4>ML Processing Server</h4>
+                    <span class="service-status status-healthy">HEALTHY</span>
+                </div>
+                <div class="metric-row">
+                    <span>CPU Usage</span>
+                    <span id="mlCpu">25.2%</span>
+                </div>
+                <div class="metric-row">
+                    <span>Memory</span>
+                    <span id="mlMemory">209MB / 2GB</span>
+                </div>
+                <div class="metric-row">
+                    <span>Request Queue</span>
+                    <span id="mlQueue">0</span>
+                </div>
+                <div class="metric-row">
+                    <span>P95 Latency</span>
+                    <span id="mlLatency" class="latency-good">45ms</span>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-header">
+                    <h4>PostgreSQL Database</h4>
+                    <span class="service-status status-healthy">HEALTHY</span>
+                </div>
+                <div class="metric-row">
+                    <span>Active Connections</span>
+                    <span id="dbActive">45 / 200</span>
+                </div>
+                <div class="metric-row">
+                    <span>Query Time</span>
+                    <span id="dbQueryTime" class="latency-good">2.1ms</span>
+                </div>
+                <div class="metric-row">
+                    <span>Cache Hit Ratio</span>
+                    <span id="dbCacheHit">98.5%</span>
+                </div>
+                <div class="metric-row">
+                    <span>Replication Lag</span>
+                    <span id="dbReplication">0ms</span>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-header">
+                    <h4>Redis Cache</h4>
+                    <span class="service-status status-healthy">HEALTHY</span>
+                </div>
+                <div class="metric-row">
+                    <span>Memory Usage</span>
+                    <span id="redisMemory">1.2GB / 4GB</span>
+                </div>
+                <div class="metric-row">
+                    <span>Hit Rate</span>
+                    <span id="redisHitRate">94.7%</span>
+                </div>
+                <div class="metric-row">
+                    <span>Ops/Second</span>
+                    <span id="redisOps">2,450</span>
+                </div>
+                <div class="metric-row">
+                    <span>Evictions</span>
+                    <span id="redisEvictions">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Request Heatmap -->
+        <div class="heatmap-container">
+            <h3>24-Hour Request Heatmap</h3>
+            <div class="heatmap-grid" id="heatmap">
+                <!-- Heatmap cells will be generated -->
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                <span>00:00</span>
+                <span>06:00</span>
+                <span>12:00</span>
+                <span>18:00</span>
+                <span>24:00</span>
+            </div>
+        </div>
+
+        <!-- Performance Table -->
+        <div class="performance-table">
+            <h3 style="margin-bottom: 1rem;">Endpoint Performance</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Endpoint</th>
+                        <th>Requests/min</th>
+                        <th>Avg Response</th>
+                        <th>P95 Response</th>
+                        <th>P99 Response</th>
+                        <th>Error Rate</th>
+                    </tr>
+                </thead>
+                <tbody id="endpointTable">
+                    <tr>
+                        <td>/ml/predict-dd-risk</td>
+                        <td>245</td>
+                        <td class="latency-good">32ms</td>
+                        <td class="latency-good">45ms</td>
+                        <td class="latency-ok">89ms</td>
+                        <td>0.01%</td>
+                    </tr>
+                    <tr>
+                        <td>/ml/process-document</td>
+                        <td>87</td>
+                        <td class="latency-good">125ms</td>
+                        <td class="latency-ok">245ms</td>
+                        <td class="latency-ok">380ms</td>
+                        <td>0.05%</td>
+                    </tr>
+                    <tr>
+                        <td>/auth/login</td>
+                        <td>34</td>
+                        <td class="latency-good">18ms</td>
+                        <td class="latency-good">25ms</td>
+                        <td class="latency-good">45ms</td>
+                        <td>0.00%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Refresh Controls -->
+        <div class="refresh-controls">
+            <div class="auto-refresh">
+                <input type="checkbox" id="autoRefresh" checked>
+                <label for="autoRefresh">Auto-refresh (5s)</label>
+            </div>
+            <button class="refresh-btn" onclick="refreshDashboard()">
+                Refresh Now
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize performance chart
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        const performanceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: generateTimeLabels(30),
+                datasets: [{
+                    label: 'Response Time (ms)',
+                    data: generateRandomData(30, 20, 60),
+                    borderColor: '#4fd1c5',
+                    backgroundColor: 'rgba(79, 209, 197, 0.1)',
+                    tension: 0.4,
+                    yAxisID: 'y'
+                }, {
+                    label: 'Requests/min',
+                    data: generateRandomData(30, 200, 300),
+                    borderColor: '#63b3ed',
+                    backgroundColor: 'rgba(99, 179, 237, 0.1)',
+                    tension: 0.4,
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#e0e6ed'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: 'rgba(160, 174, 192, 0.1)'
+                        },
+                        ticks: {
+                            color: '#a0aec0'
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Response Time (ms)',
+                            color: '#a0aec0'
+                        },
+                        grid: {
+                            color: 'rgba(160, 174, 192, 0.1)'
+                        },
+                        ticks: {
+                            color: '#a0aec0'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Requests/min',
+                            color: '#a0aec0'
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        },
+                        ticks: {
+                            color: '#a0aec0'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Generate time labels
+        function generateTimeLabels(count) {
+            const labels = [];
+            const now = new Date();
+            for (let i = count - 1; i >= 0; i--) {
+                const time = new Date(now - i * 60000);
+                labels.push(time.toLocaleTimeString().substr(0, 5));
+            }
+            return labels;
+        }
+
+        // Generate random data
+        function generateRandomData(count, min, max) {
+            return Array.from({length: count}, () => Math.random() * (max - min) + min);
+        }
+
+        // Generate heatmap
+        function generateHeatmap() {
+            const heatmap = document.getElementById('heatmap');
+            heatmap.innerHTML = '';
+            
+            for (let hour = 0; hour < 24; hour++) {
+                for (let segment = 0; segment < 6; segment++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'heatmap-cell heat-' + Math.floor(Math.random() * 5);
+                    cell.title = `${hour}:${segment * 10} - ${Math.floor(Math.random() * 500)} requests`;
+                    heatmap.appendChild(cell);
+                }
+            }
+        }
+
+        // Generate alerts
+        function generateAlerts() {
+            const alertsList = document.getElementById('alertsList');
+            const alerts = [
+                { level: 'warning', message: 'Cache memory usage at 85%', time: '2 min ago' },
+                { level: 'info', message: 'Backup completed successfully', time: '15 min ago' },
+                { level: 'info', message: 'SSL certificate renewal in 30 days', time: '1 hour ago' }
+            ];
+            
+            alertsList.innerHTML = alerts.map(alert => `
+                <div class="alert-item alert-${alert.level}">
+                    <div>
+                        <div style="font-weight: 500;">${alert.message}</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">${alert.time}</div>
+                    </div>
+                    <span style="cursor: pointer;">✕</span>
+                </div>
+            `).join('');
+        }
+
+        // Update dashboard
+        function updateDashboard() {
+            // Update timestamp
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+            
+            // Update KPIs with slight variations
+            document.getElementById('avgResponseTime').textContent = (40 + Math.random() * 10).toFixed(0) + 'ms';
+            document.getElementById('predictionsHour').textContent = (4.2 + Math.random() * 0.2).toFixed(1) + 'K';
+            document.getElementById('activeUsers').textContent = Math.floor(240 + Math.random() * 20);
+            
+            // Update chart
+            performanceChart.data.labels.push(new Date().toLocaleTimeString().substr(0, 5));
+            performanceChart.data.labels.shift();
+            
+            performanceChart.data.datasets[0].data.push(20 + Math.random() * 40);
+            performanceChart.data.datasets[0].data.shift();
+            
+            performanceChart.data.datasets[1].data.push(200 + Math.random() * 100);
+            performanceChart.data.datasets[1].data.shift();
+            
+            performanceChart.update('none');
+            
+            // Update service metrics
+            document.getElementById('mlCpu').textContent = (20 + Math.random() * 15).toFixed(1) + '%';
+            document.getElementById('mlMemory').textContent = Math.floor(200 + Math.random() * 50) + 'MB / 2GB';
+            document.getElementById('mlLatency').textContent = Math.floor(30 + Math.random() * 30) + 'ms';
+        }
+
+        // Refresh dashboard
+        function refreshDashboard() {
+            updateDashboard();
+            generateAlerts();
+        }
+
+        // Auto-refresh
+        let refreshInterval;
+        function toggleAutoRefresh() {
+            const autoRefresh = document.getElementById('autoRefresh').checked;
+            if (autoRefresh) {
+                refreshInterval = setInterval(updateDashboard, 5000);
+            } else {
+                clearInterval(refreshInterval);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            generateHeatmap();
+            generateAlerts();
+            updateDashboard();
+            toggleAutoRefresh();
+            
+            document.getElementById('autoRefresh').addEventListener('change', toggleAutoRefresh);
+        });
+    </script>
+</body>
+</html>

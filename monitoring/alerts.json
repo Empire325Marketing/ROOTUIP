@@ -1,0 +1,50 @@
+{
+  "alerts": {
+    "service_down": {
+      "enabled": true,
+      "threshold": 3,
+      "severity": "critical",
+      "channels": ["email", "webhook"]
+    },
+    "high_error_rate": {
+      "enabled": true,
+      "threshold": 5,
+      "window": 300,
+      "severity": "high",
+      "channels": ["email"]
+    },
+    "slow_response": {
+      "enabled": true,
+      "threshold": 1000,
+      "window": 300,
+      "severity": "medium",
+      "channels": ["email"]
+    },
+    "security_breach_attempt": {
+      "enabled": true,
+      "patterns": ["multiple_failed_logins", "suspicious_activity"],
+      "severity": "critical",
+      "channels": ["email", "webhook", "sms"]
+    }
+  },
+  "channels": {
+    "email": {
+      "to": ["security@rootuip.com", "ops@rootuip.com"],
+      "from": "alerts@rootuip.com",
+      "smtp": {
+        "host": "smtp.rootuip.com",
+        "port": 587,
+        "secure": false
+      }
+    },
+    "webhook": {
+      "url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+      "method": "POST"
+    },
+    "sms": {
+      "enabled": false,
+      "provider": "twilio",
+      "to": ["+1234567890"]
+    }
+  }
+}

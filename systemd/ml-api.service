@@ -1,0 +1,19 @@
+[Unit]
+Description=ROOTUIP Python ML Prediction API
+After=network.target ml-server.service
+
+[Service]
+Type=simple
+User=iii
+Group=iii
+WorkingDirectory=/home/iii/ROOTUIP/ml-system
+Environment="PATH=/home/iii/ROOTUIP/.venv/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONPATH=/home/iii/ROOTUIP/ml-system"
+ExecStart=/home/iii/ROOTUIP/.venv/bin/python -m uvicorn api:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=10
+StandardOutput=append:/home/iii/ROOTUIP/logs/ml-api.log
+StandardError=append:/home/iii/ROOTUIP/logs/ml-api.error.log
+
+[Install]
+WantedBy=multi-user.target

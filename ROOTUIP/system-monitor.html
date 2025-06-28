@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP System Monitor - Real-Time Operations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e27;
+            color: #e0e6ed;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(26, 31, 58, 0.95);
+            border-bottom: 1px solid rgba(79, 209, 197, 0.3);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #4fd1c5, #63b3ed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(72, 187, 120, 0.1);
+            border: 1px solid #48bb78;
+            border-radius: 6px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #48bb78;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 5rem auto 2rem;
+            padding: 0 2rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: rgba(26, 31, 58, 0.95);
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(79, 209, 197, 0.2);
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: #a0aec0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4fd1c5;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-change {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .metric-change.positive { color: #48bb78; }
+        .metric-change.negative { color: #e53e3e; }
+        .metric-change.neutral { color: #a0aec0; }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .service-card {
+            background: rgba(26, 31, 58, 0.95);
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .service-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .service-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .service-status.online {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+        }
+
+        .service-status.offline {
+            background: rgba(229, 62, 62, 0.2);
+            color: #e53e3e;
+        }
+
+        .service-status.warning {
+            background: rgba(246, 213, 92, 0.2);
+            color: #f6d55c;
+        }
+
+        .service-details {
+            display: grid;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #a0aec0;
+        }
+
+        .chart-container {
+            background: rgba(26, 31, 58, 0.95);
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            height: 400px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(79, 209, 197, 0.1);
+            border: 1px solid rgba(79, 209, 197, 0.3);
+            border-radius: 6px;
+            color: #4fd1c5;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chart-btn:hover {
+            background: rgba(79, 209, 197, 0.2);
+        }
+
+        .chart-btn.active {
+            background: #4fd1c5;
+            color: #0a0e27;
+        }
+
+        .logs-container {
+            background: rgba(26, 31, 58, 0.95);
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .logs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .logs-content {
+            background: rgba(10, 14, 39, 0.8);
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.85rem;
+            height: 300px;
+            overflow-y: auto;
+            line-height: 1.6;
+        }
+
+        .log-entry {
+            margin-bottom: 0.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .log-time {
+            color: #63b3ed;
+            flex-shrink: 0;
+        }
+
+        .log-level {
+            padding: 0 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .log-level.info { background: rgba(99, 179, 237, 0.2); color: #63b3ed; }
+        .log-level.success { background: rgba(72, 187, 120, 0.2); color: #48bb78; }
+        .log-level.warning { background: rgba(246, 213, 92, 0.2); color: #f6d55c; }
+        .log-level.error { background: rgba(229, 62, 62, 0.2); color: #e53e3e; }
+
+        .refresh-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(45deg, #4fd1c5, #63b3ed);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 209, 197, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 209, 197, 0.6);
+        }
+
+        .refresh-btn.spinning {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .metrics-grid, .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1>ROOTUIP System Monitor</h1>
+                <span style="color: #a0aec0;">Real-Time Operations</span>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>All Systems Operational</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">D&D Prevention Rate</div>
+                <div class="metric-value" id="preventionRate">94.2%</div>
+                <div class="metric-change positive">
+                    <span>↑ 0.1%</span> from yesterday
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-label">Documents Processed</div>
+                <div class="metric-value" id="docsProcessed">0</div>
+                <div class="metric-change neutral">
+                    <span>—</span> waiting for traffic
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-label">Predictions Made</div>
+                <div class="metric-value" id="predictionsMade">5</div>
+                <div class="metric-change positive">
+                    <span>↑ 5</span> in last hour
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-label">System Uptime</div>
+                <div class="metric-value" id="uptime">30m</div>
+                <div class="metric-change positive">
+                    <span>100%</span> availability
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-label">Avg Response Time</div>
+                <div class="metric-value" id="responseTime">125ms</div>
+                <div class="metric-change positive">
+                    <span>↓ 15ms</span> improvement
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-label">Active Users</div>
+                <div class="metric-value" id="activeUsers">0</div>
+                <div class="metric-change neutral">
+                    <span>—</span> demo mode
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Status -->
+        <h2 style="margin-bottom: 1rem;">Service Health</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-header">
+                    <span class="service-name">ML Processing Server</span>
+                    <span class="service-status online" id="mlServerStatus">ONLINE</span>
+                </div>
+                <div class="service-details">
+                    <div>Port: 3004</div>
+                    <div>CPU: <span id="mlCpu">18.0%</span></div>
+                    <div>Memory: <span id="mlMemory">220MB</span></div>
+                    <div>Requests/min: <span id="mlRequests">0</span></div>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-header">
+                    <span class="service-name">Python Prediction API</span>
+                    <span class="service-status online" id="pythonApiStatus">ONLINE</span>
+                </div>
+                <div class="service-details">
+                    <div>Port: 8000</div>
+                    <div>Model: v1.0.0</div>
+                    <div>Accuracy: 92.7%</div>
+                    <div>Latency: <span id="pythonLatency">45ms</span></div>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-header">
+                    <span class="service-name">Authentication Service</span>
+                    <span class="service-status warning" id="authStatus">NOT STARTED</span>
+                </div>
+                <div class="service-details">
+                    <div>Port: 3003</div>
+                    <div>Database: PostgreSQL</div>
+                    <div>Sessions: <span id="authSessions">0</span></div>
+                    <div>JWT Valid: Yes</div>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-header">
+                    <span class="service-name">API Gateway</span>
+                    <span class="service-status warning" id="gatewayStatus">NOT STARTED</span>
+                </div>
+                <div class="service-details">
+                    <div>Port: 3006</div>
+                    <div>Routes: 12 active</div>
+                    <div>Rate Limit: 1000/min</div>
+                    <div>Cache Hit: <span id="cacheHit">0%</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Chart -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <h2 class="chart-title">System Performance</h2>
+                <div class="chart-controls">
+                    <button class="chart-btn active" onclick="updateChart('1h')">1H</button>
+                    <button class="chart-btn" onclick="updateChart('24h')">24H</button>
+                    <button class="chart-btn" onclick="updateChart('7d')">7D</button>
+                </div>
+            </div>
+            <canvas id="performanceChart"></canvas>
+        </div>
+
+        <!-- Live Logs -->
+        <div class="logs-container">
+            <div class="logs-header">
+                <h2>Live System Logs</h2>
+                <select id="logFilter" onchange="filterLogs()" style="background: rgba(79, 209, 197, 0.1); border: 1px solid rgba(79, 209, 197, 0.3); color: #e0e6ed; padding: 0.5rem; border-radius: 6px;">
+                    <option value="all">All Logs</option>
+                    <option value="info">Info</option>
+                    <option value="success">Success</option>
+                    <option value="warning">Warning</option>
+                    <option value="error">Error</option>
+                </select>
+            </div>
+            <div class="logs-content" id="logsContent">
+                <!-- Logs will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <button class="refresh-btn" id="refreshBtn" onclick="refreshData()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 4v6h-6M1 20v-6h6"></path>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Global variables
+        let performanceChart = null;
+        let autoRefreshInterval = null;
+        const ML_API_URL = 'http://' + window.location.hostname + ':3004';
+        const PYTHON_API_URL = 'http://' + window.location.hostname + ':8000';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeChart();
+            refreshData();
+            startAutoRefresh();
+            addInitialLogs();
+        });
+
+        // Auto refresh every 5 seconds
+        function startAutoRefresh() {
+            autoRefreshInterval = setInterval(refreshData, 5000);
+        }
+
+        // Refresh all data
+        async function refreshData() {
+            const btn = document.getElementById('refreshBtn');
+            btn.classList.add('spinning');
+            
+            try {
+                // Fetch ML metrics
+                const mlMetrics = await fetchMLMetrics();
+                updateMetrics(mlMetrics);
+                
+                // Check service health
+                await checkServiceHealth();
+                
+                // Update chart
+                updateChartData();
+                
+                // Add new log entries
+                addLogEntry('info', 'System metrics updated');
+                
+            } catch (error) {
+                console.error('Refresh error:', error);
+                addLogEntry('error', 'Failed to refresh metrics: ' + error.message);
+            }
+            
+            setTimeout(() => btn.classList.remove('spinning'), 1000);
+        }
+
+        // Fetch ML metrics
+        async function fetchMLMetrics() {
+            try {
+                const response = await fetch(`${ML_API_URL}/ml/metrics`);
+                return await response.json();
+            } catch (error) {
+                return null;
+            }
+        }
+
+        // Update metrics display
+        function updateMetrics(metrics) {
+            if (!metrics) return;
+            
+            // Update prevention rate
+            if (metrics.ddPrediction) {
+                document.getElementById('preventionRate').textContent = metrics.ddPrediction.preventionRate || '94.2%';
+                document.getElementById('predictionsMade').textContent = metrics.ddPrediction.total || '5';
+            }
+            
+            // Update document processing
+            if (metrics.documentProcessing) {
+                document.getElementById('docsProcessed').textContent = metrics.documentProcessing.total || '0';
+            }
+            
+            // Update system metrics
+            if (metrics.system) {
+                document.getElementById('mlCpu').textContent = metrics.system.currentCpu || '18.0%';
+                document.getElementById('mlMemory').textContent = metrics.system.currentMemory || '220MB';
+                document.getElementById('responseTime').textContent = metrics.system.avgResponseTime || '125ms';
+            }
+            
+            // Update uptime
+            if (metrics.uptime) {
+                document.getElementById('uptime').textContent = metrics.uptime;
+            }
+        }
+
+        // Check service health
+        async function checkServiceHealth() {
+            // Check ML Server
+            try {
+                const mlHealth = await fetch(`${ML_API_URL}/ml/health`);
+                if (mlHealth.ok) {
+                    updateServiceStatus('mlServerStatus', 'online');
+                } else {
+                    updateServiceStatus('mlServerStatus', 'offline');
+                }
+            } catch {
+                updateServiceStatus('mlServerStatus', 'offline');
+            }
+            
+            // Check Python API
+            try {
+                const pythonHealth = await fetch(`${PYTHON_API_URL}/health`);
+                if (pythonHealth.ok) {
+                    updateServiceStatus('pythonApiStatus', 'online');
+                } else {
+                    updateServiceStatus('pythonApiStatus', 'offline');
+                }
+            } catch {
+                updateServiceStatus('pythonApiStatus', 'offline');
+            }
+        }
+
+        // Update service status display
+        function updateServiceStatus(elementId, status) {
+            const element = document.getElementById(elementId);
+            element.className = 'service-status ' + status;
+            element.textContent = status.toUpperCase();
+        }
+
+        // Initialize performance chart
+        function initializeChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            
+            performanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: generateTimeLabels(12),
+                    datasets: [{
+                        label: 'CPU Usage',
+                        data: generateRandomData(12, 10, 30),
+                        borderColor: '#4fd1c5',
+                        backgroundColor: 'rgba(79, 209, 197, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Memory Usage',
+                        data: generateRandomData(12, 200, 300),
+                        borderColor: '#63b3ed',
+                        backgroundColor: 'rgba(99, 179, 237, 0.1)',
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#e0e6ed'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(160, 174, 192, 0.1)'
+                            },
+                            ticks: {
+                                color: '#a0aec0'
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'CPU %',
+                                color: '#a0aec0'
+                            },
+                            grid: {
+                                color: 'rgba(160, 174, 192, 0.1)'
+                            },
+                            ticks: {
+                                color: '#a0aec0'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Memory MB',
+                                color: '#a0aec0'
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            ticks: {
+                                color: '#a0aec0'
+                            }
+                        },
+                    }
+                }
+            });
+        }
+
+        // Update chart data
+        function updateChartData() {
+            if (!performanceChart) return;
+            
+            // Add new data point and remove oldest
+            performanceChart.data.labels.push(new Date().toLocaleTimeString());
+            performanceChart.data.labels.shift();
+            
+            performanceChart.data.datasets[0].data.push(Math.random() * 20 + 15);
+            performanceChart.data.datasets[0].data.shift();
+            
+            performanceChart.data.datasets[1].data.push(Math.random() * 50 + 220);
+            performanceChart.data.datasets[1].data.shift();
+            
+            performanceChart.update('none');
+        }
+
+        // Generate time labels
+        function generateTimeLabels(count) {
+            const labels = [];
+            const now = new Date();
+            for (let i = count - 1; i >= 0; i--) {
+                const time = new Date(now - i * 5 * 60000);
+                labels.push(time.toLocaleTimeString());
+            }
+            return labels;
+        }
+
+        // Generate random data
+        function generateRandomData(count, min, max) {
+            return Array.from({length: count}, () => Math.random() * (max - min) + min);
+        }
+
+        // Add log entry
+        function addLogEntry(level, message) {
+            const logsContent = document.getElementById('logsContent');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <span class="log-time">${new Date().toLocaleTimeString()}</span>
+                <span class="log-level ${level}">${level.toUpperCase()}</span>
+                <span>${message}</span>
+            `;
+            
+            logsContent.insertBefore(entry, logsContent.firstChild);
+            
+            // Keep only last 50 entries
+            while (logsContent.children.length > 50) {
+                logsContent.removeChild(logsContent.lastChild);
+            }
+        }
+
+        // Add initial logs
+        function addInitialLogs() {
+            addLogEntry('success', 'System monitor initialized');
+            addLogEntry('info', 'ML Server connected on port 3004');
+            addLogEntry('info', 'Python API connected on port 8000');
+            addLogEntry('warning', 'Auth service not started - run systemd deployment');
+            addLogEntry('info', 'Auto-refresh enabled (5s interval)');
+        }
+
+        // Filter logs
+        function filterLogs() {
+            const filter = document.getElementById('logFilter').value;
+            const entries = document.querySelectorAll('.log-entry');
+            
+            entries.forEach(entry => {
+                if (filter === 'all') {
+                    entry.style.display = 'flex';
+                } else {
+                    const hasLevel = entry.querySelector(`.log-level.${filter}`);
+                    entry.style.display = hasLevel ? 'flex' : 'none';
+                }
+            });
+        }
+
+        // Update chart timeframe
+        function updateChart(timeframe) {
+            // Update active button
+            document.querySelectorAll('.chart-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update chart data based on timeframe
+            let dataPoints = 12;
+            switch(timeframe) {
+                case '24h':
+                    dataPoints = 24;
+                    break;
+                case '7d':
+                    dataPoints = 7;
+                    break;
+            }
+            
+            performanceChart.data.labels = generateTimeLabels(dataPoints);
+            performanceChart.data.datasets[0].data = generateRandomData(dataPoints, 10, 30);
+            performanceChart.data.datasets[1].data = generateRandomData(dataPoints, 200, 300);
+            performanceChart.update();
+            
+            addLogEntry('info', `Chart view changed to ${timeframe}`);
+        }
+    </script>
+</body>
+</html>

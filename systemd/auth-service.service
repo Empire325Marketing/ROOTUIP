@@ -1,0 +1,23 @@
+[Unit]
+Description=ROOTUIP Enterprise Authentication Service
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=iii
+Group=iii
+WorkingDirectory=/home/iii/ROOTUIP/auth-enterprise
+Environment="NODE_ENV=production"
+Environment="PORT=3003"
+Environment="DB_HOST=localhost"
+Environment="DB_NAME=rootuip"
+Environment="DB_USER=uip_user"
+Environment="DB_PASSWORD=U1Pp@ssw0rd!"
+ExecStart=/usr/bin/node /home/iii/ROOTUIP/auth-enterprise/server.js
+Restart=always
+RestartSec=10
+StandardOutput=append:/home/iii/ROOTUIP/logs/auth-service.log
+StandardError=append:/home/iii/ROOTUIP/logs/auth-service.error.log
+
+[Install]
+WantedBy=multi-user.target

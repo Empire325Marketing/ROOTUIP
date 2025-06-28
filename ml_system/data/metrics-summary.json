@@ -1,0 +1,58 @@
+{
+  "timestamp": "2025-06-28T17:57:44.998Z",
+  "uptime": "2h 35m 0s",
+  "documentProcessing": {
+    "total": 0,
+    "successful": 0,
+    "failed": 0,
+    "successRate": "0.00%",
+    "avgProcessingTime": "0ms",
+    "documentsPerSecond": "0.00",
+    "throughput": "0.00 MB/s",
+    "peakProcessingTime": "0ms",
+    "minProcessingTime": "nullms"
+  },
+  "ddPrediction": {
+    "total": 6,
+    "successful": 6,
+    "failed": 0,
+    "avgPredictionTime": "1ms",
+    "predictionsPerSecond": "1200.00",
+    "preventionRate": "100.0%",
+    "riskDistribution": {
+      "low": 0,
+      "mediumLow": 0,
+      "medium": 0,
+      "mediumHigh": 0,
+      "high": 0
+    },
+    "accuracyScore": "94.2%"
+  },
+  "system": {
+    "currentCpu": "37.2%",
+    "avgCpu": "28.5%",
+    "currentMemory": "201MB",
+    "avgMemory": "250MB",
+    "requestsPerMinute": 0,
+    "errorRate": "0.00%",
+    "avgResponseTime": "0ms"
+  },
+  "performance": {
+    "totalProcessed": 6,
+    "overallSuccessRate": "100.00%",
+    "systemEfficiency": "77.8%",
+    "scalabilityFactor": {
+      "currentCapacity": "1200.00 ops/sec",
+      "estimatedMaxCapacity": "4215.18 ops/sec",
+      "scalabilityRatio": "3.51x",
+      "recommendation": "System can handle 2x current load"
+    },
+    "recommendedOptimizations": [
+      {
+        "area": "Overall",
+        "issue": "None",
+        "recommendation": "System performing optimally"
+      }
+    ]
+  }
+}

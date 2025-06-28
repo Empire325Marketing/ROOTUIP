@@ -1,0 +1,41 @@
+/home/iii/ROOTUIP/.venv/lib/python3.12/site-packages/sklearn/base.py:440: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.4.1.post1 when using version 1.7.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+/home/iii/ROOTUIP/.venv/lib/python3.12/site-packages/sklearn/base.py:440: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.4.1.post1 when using version 1.7.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+/home/iii/ROOTUIP/.venv/lib/python3.12/site-packages/sklearn/base.py:440: InconsistentVersionWarning: Trying to unpickle estimator StandardScaler from version 1.4.1.post1 when using version 1.7.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+2025-06-28 11:26:48,106 - ROOTUIP_Predictor - INFO - Model loaded from /home/iii/ROOTUIP/models/dnd_model.pkl
+INFO:     Started server process [771538]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:54308 - "GET /health HTTP/1.1" 200 OK
+/home/iii/ROOTUIP/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but StandardScaler was fitted with feature names
+  warnings.warn(
+/home/iii/ROOTUIP/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/iii/ROOTUIP/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+2025-06-28 11:45:32,958 - ROOTUIP_Predictor - INFO - Prediction complete: Risk=0.0%, Level=VERY_LOW
+INFO:     127.0.0.1:49814 - "POST /predict HTTP/1.1" 200 OK
+/home/iii/ROOTUIP/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but StandardScaler was fitted with feature names
+  warnings.warn(
+/home/iii/ROOTUIP/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/iii/ROOTUIP/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+2025-06-28 11:46:20,738 - ROOTUIP_Predictor - INFO - Prediction complete: Risk=0.0%, Level=VERY_LOW
+INFO:     127.0.0.1:59164 - "POST /predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36768 - "GET /health HTTP/1.1" 200 OK
+/home/iii/ROOTUIP/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but StandardScaler was fitted with feature names
+  warnings.warn(
+/home/iii/ROOTUIP/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/iii/ROOTUIP/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2749: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+2025-06-28 11:53:32,302 - ROOTUIP_Predictor - INFO - Prediction complete: Risk=0.0%, Level=VERY_LOW
+INFO:     127.0.0.1:59898 - "POST /predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59362 - "GET /health HTTP/1.1" 200 OK

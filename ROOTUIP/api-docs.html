@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP API Documentation - Developer Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e27;
+            color: #e0e6ed;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(26, 31, 58, 0.95);
+            border-bottom: 1px solid rgba(79, 209, 197, 0.3);
+            padding: 1.5rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #4fd1c5, #63b3ed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .api-version {
+            background: rgba(79, 209, 197, 0.1);
+            border: 1px solid rgba(79, 209, 197, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 6rem auto 2rem;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 6rem;
+            height: calc(100vh - 8rem);
+            overflow-y: auto;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-title {
+            font-size: 0.85rem;
+            color: #a0aec0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 0.5rem 0;
+            color: #e0e6ed;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            padding-left: 1rem;
+        }
+
+        .nav-item:hover {
+            color: #4fd1c5;
+            border-left-color: #4fd1c5;
+        }
+
+        .nav-item.active {
+            color: #4fd1c5;
+            border-left-color: #4fd1c5;
+            background: rgba(79, 209, 197, 0.1);
+        }
+
+        .content {
+            background: rgba(26, 31, 58, 0.95);
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .endpoint {
+            margin-bottom: 3rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid rgba(79, 209, 197, 0.2);
+        }
+
+        .endpoint:last-child {
+            border-bottom: none;
+        }
+
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .method {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .method.get { background: rgba(99, 179, 237, 0.2); color: #63b3ed; }
+        .method.post { background: rgba(72, 187, 120, 0.2); color: #48bb78; }
+        .method.put { background: rgba(246, 213, 92, 0.2); color: #f6d55c; }
+        .method.delete { background: rgba(229, 62, 62, 0.2); color: #e53e3e; }
+
+        .endpoint-path {
+            font-size: 1.2rem;
+            font-weight: 600;
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+
+        .endpoint-description {
+            color: #a0aec0;
+            margin-bottom: 1.5rem;
+        }
+
+        .code-block {
+            background: rgba(10, 14, 39, 0.8);
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            color: #e0e6ed;
+        }
+
+        .parameters {
+            margin: 1.5rem 0;
+        }
+
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .param-table th {
+            text-align: left;
+            padding: 0.75rem;
+            background: rgba(79, 209, 197, 0.1);
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            font-weight: 600;
+        }
+
+        .param-table td {
+            padding: 0.75rem;
+            border: 1px solid rgba(79, 209, 197, 0.2);
+        }
+
+        .param-required {
+            color: #e53e3e;
+            font-weight: 600;
+        }
+
+        .param-optional {
+            color: #a0aec0;
+        }
+
+        .response-example {
+            margin-top: 1.5rem;
+        }
+
+        .tab-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            background: rgba(79, 209, 197, 0.1);
+            border: 1px solid rgba(79, 209, 197, 0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            background: rgba(79, 209, 197, 0.2);
+        }
+
+        .tab.active {
+            background: #4fd1c5;
+            color: #0a0e27;
+        }
+
+        .auth-section {
+            background: rgba(79, 209, 197, 0.1);
+            border: 1px solid rgba(79, 209, 197, 0.3);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .rate-limit-info {
+            background: rgba(246, 213, 92, 0.1);
+            border: 1px solid rgba(246, 213, 92, 0.3);
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: relative;
+                top: 0;
+                height: auto;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1>ROOTUIP API Documentation</h1>
+            </div>
+            <div class="api-version">
+                API Version: 1.0.0
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="nav-section">
+                <div class="nav-title">Getting Started</div>
+                <a href="#overview" class="nav-item active">Overview</a>
+                <a href="#authentication" class="nav-item">Authentication</a>
+                <a href="#rate-limits" class="nav-item">Rate Limits</a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">ML Endpoints</div>
+                <a href="#predict-risk" class="nav-item">Predict D&D Risk</a>
+                <a href="#process-document" class="nav-item">Process Document</a>
+                <a href="#batch-process" class="nav-item">Batch Processing</a>
+                <a href="#ml-metrics" class="nav-item">ML Metrics</a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Authentication</div>
+                <a href="#auth-login" class="nav-item">Login</a>
+                <a href="#auth-register" class="nav-item">Register</a>
+                <a href="#auth-refresh" class="nav-item">Refresh Token</a>
+                <a href="#auth-mfa" class="nav-item">MFA Setup</a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">System</div>
+                <a href="#health" class="nav-item">Health Check</a>
+                <a href="#metrics" class="nav-item">System Metrics</a>
+                <a href="#validation" class="nav-item">Validation Report</a>
+            </div>
+        </aside>
+
+        <main class="content">
+            <!-- Overview Section -->
+            <section id="overview" class="endpoint">
+                <h2 style="font-size: 2rem; margin-bottom: 1rem;">API Overview</h2>
+                <p class="endpoint-description">
+                    The ROOTUIP API provides programmatic access to our AI-powered logistics platform,
+                    enabling 94% prevention of Detention & Demurrage fees through advanced ML predictions.
+                </p>
+                
+                <div class="auth-section">
+                    <div class="auth-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4fd1c5" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <h3>Base URL & Authentication</h3>
+                    </div>
+                    <div class="code-block">
+                        <pre>Base URL: https://api.rootuip.com/v1
+Authentication: Bearer {JWT_TOKEN}
+
+Headers:
+Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
+Content-Type: application/json</pre>
+                    </div>
+                </div>
+
+                <div class="rate-limit-info">
+                    <strong>Rate Limits:</strong> 1000 requests per minute per API key.
+                    Exceeded limits return HTTP 429 with retry-after header.
+                </div>
+            </section>
+
+            <!-- ML Prediction Endpoint -->
+            <section id="predict-risk" class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/ml/predict-dd-risk</span>
+                </div>
+                <p class="endpoint-description">
+                    Predicts Detention & Demurrage risk for a shipment with 94% accuracy.
+                    Returns risk score, timeline predictions, and actionable recommendations.
+                </p>
+
+                <div class="parameters">
+                    <h4>Request Body Parameters</h4>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>containerNumber</td>
+                                <td>string</td>
+                                <td class="param-required">Required</td>
+                                <td>Container identification number</td>
+                            </tr>
+                            <tr>
+                                <td>destinationPort</td>
+                                <td>string</td>
+                                <td class="param-required">Required</td>
+                                <td>Destination port name</td>
+                            </tr>
+                            <tr>
+                                <td>carrier</td>
+                                <td>string</td>
+                                <td class="param-required">Required</td>
+                                <td>Shipping carrier name</td>
+                            </tr>
+                            <tr>
+                                <td>transitTime</td>
+                                <td>integer</td>
+                                <td class="param-required">Required</td>
+                                <td>Estimated transit time in days</td>
+                            </tr>
+                            <tr>
+                                <td>cargoValue</td>
+                                <td>number</td>
+                                <td class="param-required">Required</td>
+                                <td>Cargo value in USD</td>
+                            </tr>
+                            <tr>
+                                <td>hazmat</td>
+                                <td>boolean</td>
+                                <td class="param-optional">Optional</td>
+                                <td>Hazardous materials flag</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-container">
+                    <div class="tab active" onclick="showTab('predict-request')">Request Example</div>
+                    <div class="tab" onclick="showTab('predict-response')">Response Example</div>
+                    <div class="tab" onclick="showTab('predict-curl')">cURL</div>
+                </div>
+
+                <div id="predict-request" class="code-block">
+                    <pre>{
+  "shipmentData": {
+    "containerNumber": "MSKU1234567",
+    "destinationPort": "Los Angeles",
+    "carrier": "Maersk",
+    "transitTime": 14,
+    "cargoValue": 50000,
+    "hazmat": false,
+    "eta": "2025-07-12T10:00:00Z"
+  }
+}</pre>
+                </div>
+
+                <div id="predict-response" class="code-block" style="display: none;">
+                    <pre>{
+  "success": true,
+  "processingTime": 125,
+  "riskScore": 0.36,
+  "riskLevel": "Medium-Low",
+  "confidence": 0.85,
+  "preventionRate": 0.94,
+  "projections": [
+    {
+      "date": "2025-06-28",
+      "riskScore": 0.36,
+      "confidence": 0.94,
+      "factors": {
+        "portCongestion": "Low",
+        "customsAvailability": "Limited",
+        "carrierOperations": "Normal"
+      }
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "action": "Request expedited customs clearance",
+      "impact": "Reduces detention risk by 40%",
+      "timeframe": "Within 24 hours"
+    }
+  ],
+  "riskFactors": [
+    {
+      "name": "Port Congestion",
+      "impact": 0.22,
+      "value": 0.3
+    },
+    {
+      "name": "Documentation",
+      "impact": 0.18,
+      "value": 0.95
+    }
+  ]
+}</pre>
+                </div>
+
+                <div id="predict-curl" class="code-block" style="display: none;">
+                    <pre>curl -X POST https://api.rootuip.com/v1/ml/predict-dd-risk \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "shipmentData": {
+      "containerNumber": "MSKU1234567",
+      "destinationPort": "Los Angeles",
+      "carrier": "Maersk",
+      "transitTime": 14,
+      "cargoValue": 50000
+    }
+  }'</pre>
+                </div>
+            </section>
+
+            <!-- Document Processing Endpoint -->
+            <section id="process-document" class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/ml/process-document</span>
+                </div>
+                <p class="endpoint-description">
+                    Processes shipping documents using OCR and AI to extract entities and classify document types.
+                    Supports PDF, images (JPEG, PNG), and text files up to 50MB.
+                </p>
+
+                <div class="parameters">
+                    <h4>Request Parameters</h4>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>document</td>
+                                <td>file</td>
+                                <td class="param-required">Required</td>
+                                <td>Document file (multipart/form-data)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="code-block">
+                    <pre>curl -X POST https://api.rootuip.com/v1/ml/process-document \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -F "document=@/path/to/bill-of-lading.pdf"</pre>
+                </div>
+            </section>
+
+            <!-- Health Check Endpoint -->
+            <section id="health" class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/health</span>
+                </div>
+                <p class="endpoint-description">
+                    Returns the health status of all system components. No authentication required.
+                </p>
+
+                <div class="code-block">
+                    <pre>{
+  "status": "healthy",
+  "service": "ml-system",
+  "timestamp": "2025-06-28T15:00:00.000Z",
+  "components": {
+    "documentProcessor": "online",
+    "ddPrediction": "online",
+    "performanceTracker": "online",
+    "database": "connected",
+    "cache": "ready"
+  }
+}</pre>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Tab switching
+        function showTab(tabId) {
+            // Hide all code blocks
+            document.querySelectorAll('.code-block').forEach(block => {
+                if (block.id && block.id.includes('predict-')) {
+                    block.style.display = 'none';
+                }
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).style.display = 'block';
+            
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.nav-item').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active state
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Scroll to section
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Copy code functionality
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.addEventListener('click', function() {
+                const code = this.querySelector('pre').textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    // Show copied notification
+                    const notification = document.createElement('div');
+                    notification.textContent = 'Copied to clipboard!';
+                    notification.style.cssText = `
+                        position: fixed;
+                        bottom: 2rem;
+                        right: 2rem;
+                        background: #4fd1c5;
+                        color: #0a0e27;
+                        padding: 1rem 1.5rem;
+                        border-radius: 6px;
+                        font-weight: 600;
+                        z-index: 1000;
+                    `;
+                    document.body.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

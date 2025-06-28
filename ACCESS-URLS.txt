@@ -1,0 +1,24 @@
+ROOTUIP Platform Access URLs
+============================
+
+The platform is deployed but nginx is redirecting to HTTPS.
+You need to either:
+
+1. Install SSL certificates first:
+   sudo /home/iii/ROOTUIP/setup-ssl-certificates.sh
+
+2. Or access via direct IP (may still redirect):
+   http://145.223.73.4/system-monitor.html
+   http://145.223.73.4/api-docs.html
+   http://145.223.73.4/ml-demo.html
+
+3. Or test locally on the server:
+   curl http://localhost/system-monitor.html
+   curl http://localhost/api-docs.html
+
+Files are correctly placed in: /home/iii/ROOTUIP/ROOTUIP/
+
+After SSL setup, access at:
+- https://rootuip.com/system-monitor.html
+- https://rootuip.com/api-docs.html
+- https://rootuip.com/ml-demo.html

@@ -1,0 +1,38 @@
+#!/bin/bash
+
+echo "NGINX Configuration Update Instructions"
+echo "======================================="
+echo ""
+echo "To fix the 404 errors and make all services accessible via app.rootuip.com,"
+echo "you need to update the nginx configuration. Here's what to do:"
+echo ""
+echo "1. Copy the nginx configuration:"
+echo "   sudo cp /home/iii/ROOTUIP/nginx-complete.conf /etc/nginx/sites-available/app.rootuip.com"
+echo ""
+echo "2. Test the configuration:"
+echo "   sudo nginx -t"
+echo ""
+echo "3. If the test passes, reload nginx:"
+echo "   sudo systemctl reload nginx"
+echo ""
+echo "4. The following URLs should then work:"
+echo "   - https://app.rootuip.com/ (Main dashboard)"
+echo "   - https://app.rootuip.com/ml-demo.html (ML System Demo)"
+echo "   - https://app.rootuip.com/login.html (Login page)"
+echo "   - https://app.rootuip.com/simple-login.html (Simple login)"
+echo "   - https://app.rootuip.com/enterprise-security-dashboard.html"
+echo "   - https://app.rootuip.com/monitoring-dashboard.html"
+echo "   - https://app.rootuip.com/ml/health (ML API health check)"
+echo "   - https://app.rootuip.com/auth/health (Auth API health check)"
+echo ""
+echo "All services are running:"
+echo "- Static Server: Port 3000 (serving HTML files)"
+echo "- Demo App: Port 3001 (Next.js app)"
+echo "- Enterprise Auth: Port 3003"
+echo "- ML System: Port 3004"
+echo ""
+echo "To test locally before updating nginx:"
+curl -s http://localhost:3000/health | jq
+curl -s http://localhost:3000/ml-demo.html | head -n 5
+curl -s http://localhost:3000/ml/health | jq
+curl -s http://localhost:3000/auth/health | jq

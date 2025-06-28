@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Compliance Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e27;
+            color: #e0e6ed;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1f3a 0%, #2d3561 100%);
+            padding: 2rem;
+            border-bottom: 2px solid rgba(79, 209, 197, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #4fd1c5, #63b3ed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #a0aec0;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Compliance Score Card */
+        .compliance-score-card {
+            background: #1a1f3a;
+            border: 1px solid rgba(79, 209, 197, 0.3);
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .compliance-score-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(79, 209, 197, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .score-display {
+            font-size: 5rem;
+            font-weight: 700;
+            margin: 2rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .score-display.compliant {
+            color: #48bb78;
+        }
+
+        .score-display.needs-improvement {
+            color: #f6ad55;
+        }
+
+        .score-display.non-compliant {
+            color: #f56565;
+        }
+
+        .compliance-status {
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        /* Framework Selection */
+        .framework-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .framework-btn {
+            background: rgba(45, 55, 72, 0.5);
+            border: 1px solid rgba(79, 209, 197, 0.3);
+            color: #e0e6ed;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .framework-btn:hover {
+            background: rgba(79, 209, 197, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(79, 209, 197, 0.3);
+        }
+
+        .framework-btn.active {
+            background: linear-gradient(45deg, #4fd1c5, #63b3ed);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric-card {
+            background: #1a1f3a;
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(79, 209, 197, 0.2);
+        }
+
+        .metric-title {
+            color: #a0aec0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4fd1c5;
+        }
+
+        .metric-subtitle {
+            color: #718096;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Controls Assessment */
+        .controls-section {
+            background: #1a1f3a;
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .controls-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: #4fd1c5;
+        }
+
+        .control-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(79, 209, 197, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        .control-item:hover {
+            background: rgba(79, 209, 197, 0.05);
+        }
+
+        .control-name {
+            font-weight: 600;
+            color: #e0e6ed;
+        }
+
+        .control-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .control-status.compliant {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+        }
+
+        .control-status.partial {
+            background: rgba(246, 173, 85, 0.2);
+            color: #f6ad55;
+        }
+
+        .control-status.non-compliant {
+            background: rgba(245, 101, 101, 0.2);
+            color: #f56565;
+        }
+
+        /* Report Actions */
+        .report-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #4fd1c5, #63b3ed);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(79, 209, 197, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(45, 55, 72, 0.8);
+            border: 1px solid rgba(79, 209, 197, 0.3);
+        }
+
+        /* Recommendations */
+        .recommendations {
+            background: #1a1f3a;
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .recommendation-item {
+            padding: 1.5rem;
+            border-left: 4px solid #4fd1c5;
+            background: rgba(79, 209, 197, 0.05);
+            margin-bottom: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .recommendation-priority {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .priority-high {
+            background: rgba(245, 101, 101, 0.2);
+            color: #f56565;
+        }
+
+        .priority-medium {
+            background: rgba(246, 173, 85, 0.2);
+            color: #f6ad55;
+        }
+
+        .priority-low {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(79, 209, 197, 0.2);
+            border-top-color: #4fd1c5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 2rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .score-display {
+                font-size: 3rem;
+            }
+            
+            .framework-selector {
+                justify-content: center;
+            }
+            
+            .report-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>Compliance Dashboard</h1>
+            <p>Enterprise Security & Regulatory Compliance Monitoring</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Framework Selector -->
+        <div class="framework-selector">
+            <button class="framework-btn active" data-framework="SOC2">SOC 2 Type II</button>
+            <button class="framework-btn" data-framework="ISO27001">ISO 27001</button>
+            <button class="framework-btn" data-framework="GDPR">GDPR</button>
+            <button class="framework-btn" data-framework="HIPAA">HIPAA</button>
+        </div>
+
+        <!-- Compliance Score -->
+        <div class="compliance-score-card">
+            <div class="compliance-status" id="complianceStatus">CALCULATING...</div>
+            <div class="score-display" id="complianceScore">--</div>
+            <p>Last Assessment: <span id="lastAssessment">--</span></p>
+        </div>
+
+        <!-- Report Actions -->
+        <div class="report-actions">
+            <button class="btn" onclick="generateReport('pdf')">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/>
+                </svg>
+                Download PDF Report
+            </button>
+            <button class="btn btn-secondary" onclick="generateReport('json')">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/>
+                </svg>
+                Export JSON Data
+            </button>
+            <button class="btn btn-secondary" onclick="refreshCompliance()">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"/>
+                </svg>
+                Refresh
+            </button>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-title">MFA Adoption</div>
+                <div class="metric-value" id="mfaAdoption">--</div>
+                <div class="metric-subtitle">Multi-Factor Authentication Coverage</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Password Compliance</div>
+                <div class="metric-value" id="passwordCompliance">--</div>
+                <div class="metric-subtitle">Policy Adherence Rate</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Auth Failure Rate</div>
+                <div class="metric-value" id="authFailureRate">--</div>
+                <div class="metric-subtitle">Failed Login Attempts</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Active Sessions</div>
+                <div class="metric-value" id="activeSessions">--</div>
+                <div class="metric-subtitle">Current User Sessions</div>
+            </div>
+        </div>
+
+        <!-- Compliance Trend Chart -->
+        <div class="controls-section">
+            <h2>Compliance Score Trend</h2>
+            <div class="chart-container">
+                <canvas id="complianceTrendChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Controls Assessment -->
+        <div class="controls-section" id="controlsSection">
+            <h2>Controls Assessment</h2>
+            <div id="controlsList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="recommendations" id="recommendationsSection">
+            <h2 style="margin-bottom: 2rem; color: #4fd1c5;">Priority Recommendations</h2>
+            <div id="recommendationsList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentFramework = 'SOC2';
+        let authToken = localStorage.getItem('authToken');
+        let complianceData = null;
+
+        // Check auth
+        if (!authToken) {
+            window.location.href = '/login.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFrameworkSelector();
+            loadComplianceStatus();
+            setupComplianceTrendChart();
+        });
+
+        // Framework selector
+        function setupFrameworkSelector() {
+            document.querySelectorAll('.framework-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.framework-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFramework = this.dataset.framework;
+                    loadComplianceStatus();
+                });
+            });
+        }
+
+        // Load compliance status
+        async function loadComplianceStatus() {
+            try {
+                const response = await fetch('/auth/compliance/status', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load compliance status');
+                }
+
+                const data = await response.json();
+                updateComplianceUI(data);
+                
+                // Load detailed report
+                loadDetailedReport();
+                
+            } catch (error) {
+                console.error('Failed to load compliance status:', error);
+                showError('Failed to load compliance data');
+            }
+        }
+
+        function updateComplianceUI(data) {
+            const score = parseInt(data.complianceScore);
+            
+            // Update score display
+            const scoreElement = document.getElementById('complianceScore');
+            scoreElement.textContent = data.complianceScore;
+            scoreElement.className = 'score-display';
+            
+            if (score >= 80) {
+                scoreElement.classList.add('compliant');
+            } else if (score >= 60) {
+                scoreElement.classList.add('needs-improvement');
+            } else {
+                scoreElement.classList.add('non-compliant');
+            }
+            
+            // Update status
+            document.getElementById('complianceStatus').textContent = data.status;
+            document.getElementById('lastAssessment').textContent = 
+                new Date(data.lastAssessment).toLocaleString();
+            
+            // Update metrics
+            document.getElementById('mfaAdoption').textContent = data.keyMetrics.mfaAdoption;
+            document.getElementById('passwordCompliance').textContent = data.keyMetrics.passwordCompliance;
+            document.getElementById('authFailureRate').textContent = data.keyMetrics.authFailureRate;
+            
+            // Mock active sessions for demo
+            document.getElementById('activeSessions').textContent = '247';
+        }
+
+        async function loadDetailedReport() {
+            try {
+                const response = await fetch(`/auth/compliance/report?framework=${currentFramework}&format=json`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load detailed report');
+                }
+
+                const report = await response.json();
+                complianceData = report;
+                
+                updateControlsAssessment(report.controlsAssessment);
+                updateRecommendations(report.recommendations);
+                
+            } catch (error) {
+                console.error('Failed to load detailed report:', error);
+                
+                // Use demo data
+                const demoControls = {
+                    'CC6.1': { control: 'Logical Access', status: 'COMPLIANT' },
+                    'CC6.2': { control: 'User Registration', status: 'COMPLIANT' },
+                    'CC6.3': { control: 'User Deprovisioning', status: 'NEEDS_IMPROVEMENT' },
+                    'CC6.6': { control: 'Password Management', status: 'COMPLIANT' },
+                    'CC6.7': { control: 'Access Restrictions', status: 'COMPLIANT' },
+                    'CC6.8': { control: 'Privileged Access', status: 'NEEDS_IMPROVEMENT' }
+                };
+                
+                const demoRecommendations = [
+                    {
+                        priority: 'HIGH',
+                        title: 'Increase MFA Adoption',
+                        description: 'Current MFA adoption is 78%. Target: 90%+'
+                    },
+                    {
+                        priority: 'MEDIUM',
+                        title: 'Implement Automated Deprovisioning',
+                        description: 'Automate user access removal within 24 hours of termination'
+                    },
+                    {
+                        priority: 'LOW',
+                        title: 'Enhance Password Rotation',
+                        description: 'Implement 60-day password rotation for privileged accounts'
+                    }
+                ];
+                
+                updateControlsAssessment(demoControls);
+                updateRecommendations(demoRecommendations);
+            }
+        }
+
+        function updateControlsAssessment(controls) {
+            const controlsList = document.getElementById('controlsList');
+            
+            if (!controls || Object.keys(controls).length === 0) {
+                controlsList.innerHTML = '<p style="color: #718096;">No controls data available</p>';
+                return;
+            }
+            
+            controlsList.innerHTML = Object.entries(controls).map(([key, control]) => {
+                const statusClass = control.status === 'COMPLIANT' ? 'compliant' : 
+                                  control.status === 'PARTIAL' ? 'partial' : 'non-compliant';
+                
+                return `
+                    <div class="control-item">
+                        <div>
+                            <div class="control-name">${key} - ${control.control}</div>
+                        </div>
+                        <div class="control-status ${statusClass}">${control.status}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateRecommendations(recommendations) {
+            const recommendationsList = document.getElementById('recommendationsList');
+            
+            if (!recommendations || recommendations.length === 0) {
+                recommendationsList.innerHTML = '<p style="color: #718096;">No recommendations at this time</p>';
+                return;
+            }
+            
+            recommendationsList.innerHTML = recommendations.map(rec => `
+                <div class="recommendation-item">
+                    <span class="recommendation-priority priority-${rec.priority.toLowerCase()}">${rec.priority}</span>
+                    <h3 style="margin: 0.5rem 0; color: #e0e6ed;">${rec.title}</h3>
+                    <p style="color: #a0aec0; margin: 0;">${rec.description}</p>
+                </div>
+            `).join('');
+        }
+
+        function setupComplianceTrendChart() {
+            const ctx = document.getElementById('complianceTrendChart').getContext('2d');
+            
+            // Mock trend data
+            const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+            const data = [72, 75, 78, 82, 85, 89];
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Compliance Score',
+                        data: data,
+                        borderColor: '#4fd1c5',
+                        backgroundColor: 'rgba(79, 209, 197, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                color: '#a0aec0',
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(160, 174, 192, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#a0aec0'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function generateReport(format) {
+            try {
+                const response = await fetch(`/auth/compliance/report?framework=${currentFramework}&format=${format}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate report');
+                }
+
+                if (format === 'pdf') {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `compliance-report-${currentFramework}-${Date.now()}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } else {
+                    const data = await response.json();
+                    const dataStr = JSON.stringify(data, null, 2);
+                    const blob = new Blob([dataStr], { type: 'application/json' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `compliance-report-${currentFramework}-${Date.now()}.json`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                }
+                
+                showNotification('Report generated successfully', 'success');
+                
+            } catch (error) {
+                console.error('Failed to generate report:', error);
+                showNotification('Failed to generate report', 'error');
+            }
+        }
+
+        function refreshCompliance() {
+            loadComplianceStatus();
+            showNotification('Compliance data refreshed', 'success');
+        }
+
+        function showNotification(message, type = 'info') {
+            // Simple notification (you can enhance this)
+            console.log(`${type}: ${message}`);
+        }
+
+        function showError(message) {
+            console.error(message);
+        }
+    </script>
+</body>
+</html>

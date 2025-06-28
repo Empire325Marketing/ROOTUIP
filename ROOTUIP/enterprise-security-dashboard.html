@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Security Dashboard - ROOTUIP</title>
+    <style>
+        :root {
+            --primary: #00D4AA;
+            --secondary: #1a1a2e;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --success: #28a745;
+            --info: #17a2b8;
+            --light: #f8f9fa;
+            --dark: #343a40;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--secondary);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .stat-card h3 {
+            font-size: 0.875rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .stat-change.positive {
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            color: #666;
+            white-space: nowrap;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tab:hover {
+            color: var(--primary);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        /* Content Panels */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tables */
+        .table-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .table-header h2 {
+            font-size: 1.25rem;
+            color: var(--secondary);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #666;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #00B894;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.15s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        /* Filters */
+        .filters {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        /* Charts */
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            height: 400px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .tabs {
+                gap: 0.5rem;
+            }
+
+            .tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-card {
+                overflow-x: auto;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Security Indicators */
+        .security-score {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) var(--score), #e0e0e0 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .score-value {
+            z-index: 1;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e0e0e0;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 0.5rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid white;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 1rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .timeline-time {
+            font-size: 0.75rem;
+            color: #999;
+            margin-bottom: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>🔒 Enterprise Security Dashboard</h1>
+            <div class="user-info">
+                <span id="userEmail"></span>
+                <button class="btn btn-sm" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Security Score -->
+        <div class="security-score">
+            <div class="score-circle" style="--score: 85%">
+                <div class="score-value">85</div>
+            </div>
+            <div>
+                <h3>Security Score</h3>
+                <p>Your organization's security posture is <strong>Good</strong></p>
+                <p class="text-muted">Last updated: <span id="lastUpdated"></span></p>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Active Users</h3>
+                <div class="stat-value" id="activeUsers">0</div>
+                <div class="stat-change positive">+12% from last month</div>
+            </div>
+            <div class="stat-card">
+                <h3>MFA Adoption</h3>
+                <div class="stat-value" id="mfaAdoption">0%</div>
+                <div class="stat-change positive">+5% from last month</div>
+            </div>
+            <div class="stat-card">
+                <h3>Failed Logins (24h)</h3>
+                <div class="stat-value" id="failedLogins">0</div>
+                <div class="stat-change negative">+2 from yesterday</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Sessions</h3>
+                <div class="stat-value" id="activeSessions">0</div>
+                <div class="stat-change">No change</div>
+            </div>
+            <div class="stat-card">
+                <h3>API Keys</h3>
+                <div class="stat-value" id="apiKeys">0</div>
+                <div class="stat-change positive">+3 this week</div>
+            </div>
+            <div class="stat-card">
+                <h3>Security Events</h3>
+                <div class="stat-value" id="securityEvents">0</div>
+                <div class="stat-change negative">+15 today</div>
+            </div>
+        </div>
+
+        <!-- Main Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('users')">User Management</button>
+            <button class="tab" onclick="showTab('sessions')">Active Sessions</button>
+            <button class="tab" onclick="showTab('audit')">Audit Logs</button>
+            <button class="tab" onclick="showTab('api-keys')">API Keys</button>
+            <button class="tab" onclick="showTab('policies')">Security Policies</button>
+            <button class="tab" onclick="showTab('sso')">SSO Configuration</button>
+            <button class="tab" onclick="showTab('compliance')">Compliance</button>
+        </div>
+
+        <!-- Tab Contents -->
+        <!-- Users Tab -->
+        <div id="users" class="tab-content active">
+            <div class="table-card">
+                <div class="table-header">
+                    <h2>User Management</h2>
+                    <div class="table-actions">
+                        <button class="btn btn-primary" onclick="showInviteModal()">
+                            <span>➕</span> Invite User
+                        </button>
+                        <button class="btn btn-secondary" onclick="showBulkInviteModal()">
+                            <span>📁</span> Bulk Import
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <select class="form-control" id="userStatusFilter">
+                            <option value="">All</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="locked">Locked</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Role</label>
+                        <select class="form-control" id="userRoleFilter">
+                            <option value="">All</option>
+                            <option value="admin">Admin</option>
+                            <option value="operations">Operations</option>
+                            <option value="viewer">Viewer</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>MFA Status</label>
+                        <select class="form-control" id="userMfaFilter">
+                            <option value="">All</option>
+                            <option value="enabled">Enabled</option>
+                            <option value="disabled">Disabled</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="loadUsers()">Apply Filters</button>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>MFA</th>
+                            <th>Last Login</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr>
+                            <td colspan="7" class="loading">
+                                <div class="spinner"></div>
+                                Loading users...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Sessions Tab -->
+        <div id="sessions" class="tab-content">
+            <div class="table-card">
+                <div class="table-header">
+                    <h2>Active Sessions</h2>
+                    <div class="table-actions">
+                        <button class="btn btn-danger" onclick="revokeAllSessions()">
+                            <span>🚫</span> Revoke All Sessions
+                        </button>
+                    </div>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>IP Address</th>
+                            <th>Device</th>
+                            <th>Location</th>
+                            <th>Started</th>
+                            <th>Expires</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sessionsTableBody">
+                        <tr>
+                            <td colspan="7" class="loading">Loading sessions...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Audit Logs Tab -->
+        <div id="audit" class="tab-content">
+            <div class="table-card">
+                <div class="table-header">
+                    <h2>Audit Logs</h2>
+                    <div class="table-actions">
+                        <button class="btn btn-secondary" onclick="exportAuditLogs()">
+                            <span>📥</span> Export
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Action</label>
+                        <select class="form-control" id="auditActionFilter">
+                            <option value="">All</option>
+                            <option value="USER_LOGIN">Login</option>
+                            <option value="USER_LOGOUT">Logout</option>
+                            <option value="LOGIN_FAILED">Failed Login</option>
+                            <option value="PASSWORD_CHANGED">Password Change</option>
+                            <option value="MFA_ENABLED">MFA Enabled</option>
+                            <option value="API_KEY_CREATED">API Key Created</option>
+                            <option value="ACCESS_DENIED">Access Denied</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Start Date</label>
+                        <input type="datetime-local" class="form-control" id="auditStartDate">
+                    </div>
+                    <div class="filter-group">
+                        <label>End Date</label>
+                        <input type="datetime-local" class="form-control" id="auditEndDate">
+                    </div>
+                    <button class="btn btn-primary" onclick="loadAuditLogs()">Apply Filters</button>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Resource</th>
+                            <th>IP Address</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="auditTableBody">
+                        <tr>
+                            <td colspan="6" class="loading">Loading audit logs...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- API Keys Tab -->
+        <div id="api-keys" class="tab-content">
+            <div class="table-card">
+                <div class="table-header">
+                    <h2>API Key Management</h2>
+                    <div class="table-actions">
+                        <button class="btn btn-primary" onclick="showCreateAPIKeyModal()">
+                            <span>🔑</span> Create API Key
+                        </button>
+                    </div>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Created By</th>
+                            <th>Created</th>
+                            <th>Last Used</th>
+                            <th>Rate Limit</th>
+                            <th>Expires</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="apiKeysTableBody">
+                        <tr>
+                            <td colspan="8" class="loading">Loading API keys...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Policies Tab -->
+        <div id="policies" class="tab-content">
+            <div class="table-card">
+                <h2>Password Policy</h2>
+                <form id="passwordPolicyForm">
+                    <div class="form-group">
+                        <label>Minimum Length</label>
+                        <input type="number" class="form-control" id="minLength" min="8" max="32" value="12">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="requireUppercase" checked>
+                            Require Uppercase Letters
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="requireLowercase" checked>
+                            Require Lowercase Letters
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="requireNumbers" checked>
+                            Require Numbers
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="requireSpecial" checked>
+                            Require Special Characters
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Password History (prevent reuse)</label>
+                        <input type="number" class="form-control" id="passwordHistory" min="0" max="24" value="5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Maximum Password Age (days)</label>
+                        <input type="number" class="form-control" id="maxAge" min="0" max="365" value="90">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Account Lockout Threshold</label>
+                        <input type="number" class="form-control" id="lockoutThreshold" min="3" max="10" value="5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Lockout Duration (minutes)</label>
+                        <input type="number" class="form-control" id="lockoutDuration" min="5" max="60" value="30">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Update Password Policy</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- SSO Tab -->
+        <div id="sso" class="tab-content">
+            <div class="table-card">
+                <h2>Single Sign-On Configuration</h2>
+                
+                <div style="margin-bottom: 2rem;">
+                    <h3>Service Provider Metadata</h3>
+                    <div class="form-group">
+                        <label>Entity ID</label>
+                        <input type="text" class="form-control" value="https://app.rootuip.com" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>ACS URL</label>
+                        <input type="text" class="form-control" value="https://app.rootuip.com/auth/sso/callback" readonly>
+                    </div>
+                    <button class="btn btn-secondary" onclick="downloadSSOMetadata()">Download Metadata XML</button>
+                </div>
+                
+                <form id="ssoForm">
+                    <h3>Identity Provider Configuration</h3>
+                    <div class="form-group">
+                        <label>SSO Provider</label>
+                        <select class="form-control" id="ssoProvider">
+                            <option value="">Select Provider</option>
+                            <option value="saml">SAML 2.0</option>
+                            <option value="oidc">OpenID Connect</option>
+                            <option value="oauth2">OAuth 2.0</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Entity ID</label>
+                        <input type="text" class="form-control" id="entityId" placeholder="https://your-idp.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>SSO URL</label>
+                        <input type="url" class="form-control" id="ssoUrl" placeholder="https://your-idp.com/sso">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>X.509 Certificate</label>
+                        <textarea class="form-control" id="x509Cert" rows="5" placeholder="Paste your certificate here"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="ssoEnabled">
+                            Enable SSO
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Save SSO Configuration</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Compliance Tab -->
+        <div id="compliance" class="tab-content">
+            <div class="table-card">
+                <h2>Compliance Dashboard</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                    <div>
+                        <h3>SOC 2 Readiness</h3>
+                        <div style="margin-top: 1rem;">
+                            <div style="margin-bottom: 0.5rem;">
+                                <strong>Access Control</strong>
+                                <div style="background: #e0e0e0; height: 10px; border-radius: 5px; margin-top: 0.25rem;">
+                                    <div style="background: var(--success); width: 100%; height: 100%; border-radius: 5px;"></div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <strong>Audit Logging</strong>
+                                <div style="background: #e0e0e0; height: 10px; border-radius: 5px; margin-top: 0.25rem;">
+                                    <div style="background: var(--success); width: 100%; height: 100%; border-radius: 5px;"></div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <strong>Data Encryption</strong>
+                                <div style="background: #e0e0e0; height: 10px; border-radius: 5px; margin-top: 0.25rem;">
+                                    <div style="background: var(--success); width: 95%; height: 100%; border-radius: 5px;"></div>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <strong>Incident Response</strong>
+                                <div style="background: #e0e0e0; height: 10px; border-radius: 5px; margin-top: 0.25rem;">
+                                    <div style="background: var(--warning); width: 80%; height: 100%; border-radius: 5px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3>GDPR Compliance</h3>
+                        <ul style="list-style: none; padding: 0; margin-top: 1rem;">
+                            <li>✅ Data Subject Rights</li>
+                            <li>✅ Consent Management</li>
+                            <li>✅ Data Portability</li>
+                            <li>✅ Right to Erasure</li>
+                            <li>⚠️ Privacy by Design</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>Recent Security Events</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-time">2 hours ago</div>
+                            <strong>Password Policy Updated</strong>
+                            <p>Minimum length increased to 12 characters</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-time">1 day ago</div>
+                            <strong>MFA Enabled</strong>
+                            <p>15 users enabled two-factor authentication</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-time">3 days ago</div>
+                            <strong>Security Audit Completed</strong>
+                            <p>Monthly security audit completed successfully</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem;">
+                    <button class="btn btn-primary" onclick="generateComplianceReport()">
+                        <span>📊</span> Generate Compliance Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Invite User Modal -->
+    <div id="inviteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Invite User</h2>
+                <button class="close-modal" onclick="closeModal('inviteModal')">×</button>
+            </div>
+            
+            <form id="inviteForm" onsubmit="inviteUser(event)">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" class="form-control" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Role</label>
+                    <select class="form-control" name="role" required>
+                        <option value="">Select Role</option>
+                        <option value="admin">Administrator</option>
+                        <option value="operations">Operations</option>
+                        <option value="viewer">Viewer</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Department</label>
+                    <input type="text" class="form-control" name="department">
+                </div>
+                
+                <div class="form-group">
+                    <label>Welcome Message</label>
+                    <textarea class="form-control" name="message" rows="3"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Send Invitation</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create API Key Modal -->
+    <div id="apiKeyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create API Key</h2>
+                <button class="close-modal" onclick="closeModal('apiKeyModal')">×</button>
+            </div>
+            
+            <form id="apiKeyForm" onsubmit="createAPIKey(event)">
+                <div class="form-group">
+                    <label>Key Name</label>
+                    <input type="text" class="form-control" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Permissions</label>
+                    <div>
+                        <label>
+                            <input type="checkbox" name="permissions" value="users.read"> Read Users
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <input type="checkbox" name="permissions" value="users.write"> Write Users
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <input type="checkbox" name="permissions" value="audit.read"> Read Audit Logs
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Rate Limit (requests per hour)</label>
+                    <input type="number" class="form-control" name="rateLimit" value="1000" min="1" max="10000">
+                </div>
+                
+                <div class="form-group">
+                    <label>Expires In (days)</label>
+                    <input type="number" class="form-control" name="expiresIn" min="1" max="365">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Create API Key</button>
+            </form>
+            
+            <div id="apiKeyResult" style="display: none; margin-top: 2rem;">
+                <h3>API Key Created</h3>
+                <p>Copy this key now. You won't be able to see it again.</p>
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 4px; word-break: break-all; font-family: monospace;">
+                    <span id="generatedApiKey"></span>
+                </div>
+                <button class="btn btn-primary" onclick="copyApiKey()">Copy to Clipboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_BASE = '/auth';
+        let authToken = localStorage.getItem('authToken');
+        let currentUser = null;
+
+        // Initialize
+        async function init() {
+            if (!authToken) {
+                window.location.href = '/simple-login.html';
+                return;
+            }
+
+            try {
+                const response = await apiCall('/verify');
+                currentUser = response.user;
+                document.getElementById('userEmail').textContent = currentUser.email;
+                document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+                
+                // Load initial data
+                loadStats();
+                loadUsers();
+            } catch (error) {
+                console.error('Auth verification failed:', error);
+                window.location.href = '/simple-login.html';
+            }
+        }
+
+        // API Helper
+        async function apiCall(endpoint, options = {}) {
+            const response = await fetch(`${API_BASE}${endpoint}`, {
+                ...options,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`,
+                    ...options.headers
+                }
+            });
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    window.location.href = '/simple-login.html';
+                }
+                throw new Error(`API call failed: ${response.statusText}`);
+            }
+
+            return response.json();
+        }
+
+        // Tab Management
+        function showTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+
+            // Load tab data
+            switch(tabName) {
+                case 'users':
+                    loadUsers();
+                    break;
+                case 'sessions':
+                    loadSessions();
+                    break;
+                case 'audit':
+                    loadAuditLogs();
+                    break;
+                case 'api-keys':
+                    loadAPIKeys();
+                    break;
+                case 'policies':
+                    loadPasswordPolicy();
+                    break;
+                case 'sso':
+                    loadSSOConfig();
+                    break;
+            }
+        }
+
+        // Load Stats
+        async function loadStats() {
+            try {
+                // Simulated stats - replace with real API calls
+                document.getElementById('activeUsers').textContent = '247';
+                document.getElementById('mfaAdoption').textContent = '73%';
+                document.getElementById('failedLogins').textContent = '12';
+                document.getElementById('activeSessions').textContent = '189';
+                document.getElementById('apiKeys').textContent = '23';
+                document.getElementById('securityEvents').textContent = '47';
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+            }
+        }
+
+        // Load Users
+        async function loadUsers() {
+            try {
+                const tbody = document.getElementById('usersTableBody');
+                tbody.innerHTML = '<tr><td colspan="7" class="loading"><div class="spinner"></div>Loading users...</td></tr>';
+
+                const users = await apiCall('/users');
+                
+                tbody.innerHTML = users.map(user => `
+                    <tr>
+                        <td>${user.first_name} ${user.last_name}</td>
+                        <td>${user.email}</td>
+                        <td><span class="badge badge-info">${user.role_name || 'User'}</span></td>
+                        <td>${user.mfa_enabled ? '✅' : '❌'}</td>
+                        <td>${user.last_login_at ? new Date(user.last_login_at).toLocaleString() : 'Never'}</td>
+                        <td>
+                            <span class="badge badge-${user.is_active ? 'success' : 'danger'}">
+                                ${user.is_active ? 'Active' : 'Inactive'}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary" onclick="editUser('${user.id}')">Edit</button>
+                            ${user.is_active 
+                                ? `<button class="btn btn-sm btn-danger" onclick="deactivateUser('${user.id}')">Deactivate</button>`
+                                : `<button class="btn btn-sm btn-success" onclick="activateUser('${user.id}')">Activate</button>`
+                            }
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load users:', error);
+                tbody.innerHTML = '<tr><td colspan="7" class="error">Failed to load users</td></tr>';
+            }
+        }
+
+        // Load Sessions
+        async function loadSessions() {
+            try {
+                const tbody = document.getElementById('sessionsTableBody');
+                tbody.innerHTML = '<tr><td colspan="7" class="loading">Loading sessions...</td></tr>';
+
+                const sessions = await apiCall('/sessions');
+                
+                tbody.innerHTML = sessions.map(session => `
+                    <tr>
+                        <td>${session.user_email || 'Unknown'}</td>
+                        <td>${session.ip_address || 'Unknown'}</td>
+                        <td>${parseUserAgent(session.user_agent)}</td>
+                        <td>${getLocationFromIP(session.ip_address)}</td>
+                        <td>${new Date(session.created_at).toLocaleString()}</td>
+                        <td>${new Date(session.expires_at).toLocaleString()}</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" onclick="revokeSession('${session.id}')">Revoke</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load sessions:', error);
+                tbody.innerHTML = '<tr><td colspan="7" class="error">Failed to load sessions</td></tr>';
+            }
+        }
+
+        // Load Audit Logs
+        async function loadAuditLogs() {
+            try {
+                const tbody = document.getElementById('auditTableBody');
+                tbody.innerHTML = '<tr><td colspan="6" class="loading">Loading audit logs...</td></tr>';
+
+                const params = new URLSearchParams({
+                    action: document.getElementById('auditActionFilter').value,
+                    startDate: document.getElementById('auditStartDate').value,
+                    endDate: document.getElementById('auditEndDate').value
+                });
+
+                const result = await apiCall(`/audit-logs?${params}`);
+                
+                tbody.innerHTML = result.logs.map(log => `
+                    <tr>
+                        <td>${new Date(log.created_at).toLocaleString()}</td>
+                        <td>${log.user_email || 'System'}</td>
+                        <td><span class="badge badge-info">${log.action}</span></td>
+                        <td>${log.resource_type || '-'} ${log.resource_id || ''}</td>
+                        <td>${log.ip_address || '-'}</td>
+                        <td>${JSON.stringify(log.details || {})}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load audit logs:', error);
+                tbody.innerHTML = '<tr><td colspan="6" class="error">Failed to load audit logs</td></tr>';
+            }
+        }
+
+        // Load API Keys
+        async function loadAPIKeys() {
+            try {
+                const tbody = document.getElementById('apiKeysTableBody');
+                tbody.innerHTML = '<tr><td colspan="8" class="loading">Loading API keys...</td></tr>';
+
+                const apiKeys = await apiCall('/api-keys');
+                
+                tbody.innerHTML = apiKeys.map(key => `
+                    <tr>
+                        <td>${key.name}</td>
+                        <td>${key.created_by_email || 'Unknown'}</td>
+                        <td>${new Date(key.created_at).toLocaleDateString()}</td>
+                        <td>${key.last_used_at ? new Date(key.last_used_at).toLocaleDateString() : 'Never'}</td>
+                        <td>${key.rate_limit}/hour</td>
+                        <td>${key.expires_at ? new Date(key.expires_at).toLocaleDateString() : 'Never'}</td>
+                        <td>
+                            <span class="badge badge-${key.is_active ? 'success' : 'danger'}">
+                                ${key.is_active ? 'Active' : 'Revoked'}
+                            </span>
+                        </td>
+                        <td>
+                            ${key.is_active 
+                                ? `<button class="btn btn-sm btn-danger" onclick="revokeAPIKey('${key.id}')">Revoke</button>`
+                                : '-'
+                            }
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load API keys:', error);
+                tbody.innerHTML = '<tr><td colspan="8" class="error">Failed to load API keys</td></tr>';
+            }
+        }
+
+        // Modal Management
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function showInviteModal() {
+            showModal('inviteModal');
+        }
+
+        function showCreateAPIKeyModal() {
+            showModal('apiKeyModal');
+        }
+
+        // User Actions
+        async function inviteUser(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            try {
+                await apiCall('/users/invite', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        email: formData.get('email'),
+                        roleId: formData.get('role'),
+                        metadata: {
+                            department: formData.get('department'),
+                            message: formData.get('message')
+                        }
+                    })
+                });
+                
+                alert('Invitation sent successfully!');
+                closeModal('inviteModal');
+                loadUsers();
+            } catch (error) {
+                alert('Failed to send invitation: ' + error.message);
+            }
+        }
+
+        async function createAPIKey(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            try {
+                const permissions = {};
+                formData.getAll('permissions').forEach(perm => {
+                    const [resource, action] = perm.split('.');
+                    if (!permissions[resource]) permissions[resource] = {};
+                    permissions[resource][action] = true;
+                });
+                
+                const result = await apiCall('/api-keys', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        name: formData.get('name'),
+                        permissions,
+                        rateLimit: parseInt(formData.get('rateLimit')),
+                        expiresIn: formData.get('expiresIn') ? parseInt(formData.get('expiresIn')) : null
+                    })
+                });
+                
+                document.getElementById('generatedApiKey').textContent = result.apiKey;
+                document.getElementById('apiKeyResult').style.display = 'block';
+                event.target.style.display = 'none';
+            } catch (error) {
+                alert('Failed to create API key: ' + error.message);
+            }
+        }
+
+        function copyApiKey() {
+            const apiKey = document.getElementById('generatedApiKey').textContent;
+            navigator.clipboard.writeText(apiKey).then(() => {
+                alert('API key copied to clipboard!');
+                closeModal('apiKeyModal');
+                loadAPIKeys();
+            });
+        }
+
+        // Helper Functions
+        function parseUserAgent(ua) {
+            if (!ua) return 'Unknown';
+            // Simple parser - enhance as needed
+            if (ua.includes('Chrome')) return 'Chrome';
+            if (ua.includes('Firefox')) return 'Firefox';
+            if (ua.includes('Safari')) return 'Safari';
+            return 'Other';
+        }
+
+        function getLocationFromIP(ip) {
+            // In production, use a geolocation service
+            return 'United States';
+        }
+
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userRole');
+            window.location.href = '/simple-login.html';
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>

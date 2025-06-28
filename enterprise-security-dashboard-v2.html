@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Enterprise Security Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e27;
+            color: #e0e6ed;
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: #1a1f3a;
+            padding: 2rem 0;
+            border-right: 1px solid rgba(79, 209, 197, 0.2);
+        }
+
+        .logo {
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid rgba(79, 209, 197, 0.2);
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(45deg, #4fd1c5, #63b3ed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            padding: 2rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            color: #a0aec0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: rgba(79, 209, 197, 0.1);
+            color: #4fd1c5;
+        }
+
+        .nav-item.active {
+            background: rgba(79, 209, 197, 0.2);
+            color: #4fd1c5;
+            border-left: 3px solid #4fd1c5;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h2 {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #4fd1c5, #63b3ed);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(79, 209, 197, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(45, 55, 72, 0.8);
+            border: 1px solid rgba(79, 209, 197, 0.3);
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: #1a1f3a;
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(79, 209, 197, 0.2);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4fd1c5;
+            margin: 0.5rem 0;
+        }
+
+        .metric-label {
+            color: #a0aec0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .trend-up {
+            color: #48bb78;
+        }
+
+        .trend-down {
+            color: #f56565;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: #1a1f3a;
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(79, 209, 197, 0.1);
+        }
+
+        .data-table th {
+            background: rgba(79, 209, 197, 0.1);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table tr:hover {
+            background: rgba(79, 209, 197, 0.05);
+        }
+
+        /* Status Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+        }
+
+        .badge-warning {
+            background: rgba(245, 101, 101, 0.2);
+            color: #f56565;
+        }
+
+        .badge-info {
+            background: rgba(79, 209, 197, 0.2);
+            color: #4fd1c5;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(45, 55, 72, 0.5);
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            color: #e0e6ed;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #4fd1c5;
+            background: rgba(45, 55, 72, 0.8);
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1a1f3a;
+            border: 1px solid rgba(79, 209, 197, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #a0aec0;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1rem 0;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(79, 209, 197, 0.2);
+            border-top-color: #4fd1c5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>ROOTUIP</h1>
+                <p style="color: #a0aec0; font-size: 0.9rem; margin-top: 0.5rem;">Enterprise Security</p>
+            </div>
+            
+            <nav class="nav-menu">
+                <a class="nav-item active" data-section="overview">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 3h7v7H3V3zm0 9h7v7H3v-7zm9-9h7v7h-7V3zm0 9h7v7h-7v-7z"/>
+                    </svg>
+                    Overview
+                </a>
+                <a class="nav-item" data-section="users">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                    </svg>
+                    User Management
+                </a>
+                <a class="nav-item" data-section="mfa">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z"/>
+                    </svg>
+                    MFA Settings
+                </a>
+                <a class="nav-item" data-section="api-keys">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"/>
+                    </svg>
+                    API Keys
+                </a>
+                <a class="nav-item" data-section="audit">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"/>
+                    </svg>
+                    Audit Logs
+                </a>
+                <a class="nav-item" data-section="compliance">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"/>
+                    </svg>
+                    Compliance
+                </a>
+                <a class="nav-item" data-section="settings">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"/>
+                    </svg>
+                    Settings
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Overview Section -->
+            <section id="overview-section" class="content-view active">
+                <div class="header">
+                    <h2>Security Dashboard</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" onclick="refreshDashboard()">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 0.5rem;">
+                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"/>
+                            </svg>
+                            Refresh
+                        </button>
+                        <button class="btn" onclick="generateReport()">Generate Report</button>
+                    </div>
+                </div>
+
+                <!-- Security Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Active Users</div>
+                        <div class="metric-value" id="activeUsers">-</div>
+                        <div class="metric-trend trend-up">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"/>
+                            </svg>
+                            12% from last month
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label">MFA Adoption</div>
+                        <div class="metric-value" id="mfaAdoption">-</div>
+                        <div class="metric-trend trend-up">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"/>
+                            </svg>
+                            8% improvement
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label">Failed Login Attempts</div>
+                        <div class="metric-value" id="failedLogins">-</div>
+                        <div class="metric-trend trend-down">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z"/>
+                            </svg>
+                            23% decrease
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label">Active API Keys</div>
+                        <div class="metric-value" id="activeApiKeys">-</div>
+                        <div class="metric-trend">
+                            <span style="color: #a0aec0;">No change</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Chart -->
+                <div class="content-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Security Activity (Last 7 Days)</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="content-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Recent Security Events</h3>
+                        <button class="btn btn-secondary" onclick="viewAllLogs()">View All</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>IP Address</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentEvents">
+                            <tr>
+                                <td colspan="5" class="loading">
+                                    <div class="spinner"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- User Management Section -->
+            <section id="users-section" class="content-view" style="display: none;">
+                <div class="header">
+                    <h2>User Management</h2>
+                    <div class="header-actions">
+                        <button class="btn" onclick="showInviteModal()">Invite User</button>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Active Users</h3>
+                        <input type="search" class="form-control" style="width: 300px;" placeholder="Search users..." onkeyup="searchUsers(this.value)">
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>MFA</th>
+                                <th>Last Login</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersList">
+                            <!-- Users will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Other sections would follow similar patterns -->
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="inviteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Invite New User</h3>
+                <button class="close-btn" onclick="closeModal('inviteModal')">&times;</button>
+            </div>
+            <form onsubmit="inviteUser(event)">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="inviteEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-control" id="inviteRole" required>
+                        <option value="">Select Role</option>
+                        <option value="admin">Admin</option>
+                        <option value="operations">Operations</option>
+                        <option value="viewer">Viewer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Department</label>
+                    <input type="text" class="form-control" id="inviteDepartment">
+                </div>
+                <button type="submit" class="btn">Send Invitation</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let authToken = localStorage.getItem('authToken');
+        let currentUser = null;
+        let dashboardData = {};
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!authToken) {
+                window.location.href = '/login.html';
+                return;
+            }
+            
+            initializeNavigation();
+            loadDashboard();
+        });
+
+        // Navigation
+        function initializeNavigation() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const section = this.dataset.section;
+                    switchSection(section);
+                });
+            });
+        }
+
+        function switchSection(section) {
+            // Update nav
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${section}"]`).classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.content-view').forEach(view => {
+                view.style.display = 'none';
+            });
+            
+            const sectionElement = document.getElementById(`${section}-section`);
+            if (sectionElement) {
+                sectionElement.style.display = 'block';
+                
+                // Load section-specific data
+                switch(section) {
+                    case 'users':
+                        loadUsers();
+                        break;
+                    case 'audit':
+                        loadAuditLogs();
+                        break;
+                    case 'api-keys':
+                        loadApiKeys();
+                        break;
+                }
+            }
+        }
+
+        // Dashboard Data Loading
+        async function loadDashboard() {
+            try {
+                const response = await fetch('/auth/security-dashboard', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load dashboard');
+                }
+                
+                const data = await response.json();
+                dashboardData = data.metrics;
+                updateDashboardUI();
+                
+            } catch (error) {
+                console.error('Dashboard load error:', error);
+                showNotification('Failed to load dashboard data', 'error');
+            }
+        }
+
+        function updateDashboardUI() {
+            // Update metrics
+            document.getElementById('activeUsers').textContent = dashboardData.activeUsers || '0';
+            document.getElementById('mfaAdoption').textContent = 
+                dashboardData.mfaEnabledUsers && dashboardData.activeUsers
+                    ? Math.round((dashboardData.mfaEnabledUsers / dashboardData.activeUsers) * 100) + '%'
+                    : '0%';
+            document.getElementById('failedLogins').textContent = dashboardData.failedLoginsLast24h || '0';
+            document.getElementById('activeApiKeys').textContent = dashboardData.activeApiKeys || '0';
+            
+            // Update activity chart
+            if (dashboardData.recentActivityByType) {
+                updateActivityChart(dashboardData.recentActivityByType);
+            }
+            
+            // Load recent events
+            loadRecentEvents();
+        }
+
+        function updateActivityChart(activityData) {
+            const ctx = document.getElementById('activityChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: activityData.map(item => item.action),
+                    datasets: [{
+                        label: 'Activity Count',
+                        data: activityData.map(item => item.count),
+                        backgroundColor: 'rgba(79, 209, 197, 0.6)',
+                        borderColor: 'rgba(79, 209, 197, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#a0aec0'
+                            },
+                            grid: {
+                                color: 'rgba(160, 174, 192, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#a0aec0'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function loadRecentEvents() {
+            try {
+                const response = await fetch('/auth/audit-logs?limit=10', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                const tbody = document.getElementById('recentEvents');
+                
+                if (data.logs && data.logs.length > 0) {
+                    tbody.innerHTML = data.logs.map(log => `
+                        <tr>
+                            <td>${new Date(log.created_at).toLocaleString()}</td>
+                            <td>${log.user_email || 'System'}</td>
+                            <td>${log.action}</td>
+                            <td>${log.ip_address || '-'}</td>
+                            <td>
+                                <span class="badge ${log.action.includes('FAILED') ? 'badge-warning' : 'badge-success'}">
+                                    ${log.action.includes('FAILED') ? 'Failed' : 'Success'}
+                                </span>
+                            </td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No recent events</td></tr>';
+                }
+                
+            } catch (error) {
+                console.error('Failed to load recent events:', error);
+            }
+        }
+
+        // User Management
+        async function loadUsers() {
+            try {
+                const response = await fetch('/auth/users', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                const tbody = document.getElementById('usersList');
+                
+                if (data.users && data.users.length > 0) {
+                    tbody.innerHTML = data.users.map(user => `
+                        <tr>
+                            <td>${user.first_name} ${user.last_name}</td>
+                            <td>${user.email}</td>
+                            <td>${user.role_name}</td>
+                            <td>
+                                <span class="badge ${user.mfa_enabled ? 'badge-success' : 'badge-warning'}">
+                                    ${user.mfa_enabled ? 'Enabled' : 'Disabled'}
+                                </span>
+                            </td>
+                            <td>${user.last_login_at ? new Date(user.last_login_at).toLocaleDateString() : 'Never'}</td>
+                            <td>
+                                <span class="badge ${user.is_active ? 'badge-success' : 'badge-warning'}">
+                                    ${user.is_active ? 'Active' : 'Inactive'}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="editUser('${user.id}')">Edit</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+                
+            } catch (error) {
+                console.error('Failed to load users:', error);
+            }
+        }
+
+        // Modal Functions
+        function showInviteModal() {
+            document.getElementById('inviteModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        async function inviteUser(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('inviteEmail').value;
+            const roleId = document.getElementById('inviteRole').value;
+            const department = document.getElementById('inviteDepartment').value;
+            
+            try {
+                const response = await fetch('/auth/invite', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email,
+                        roleId,
+                        metadata: { department }
+                    })
+                });
+                
+                if (response.ok) {
+                    showNotification('Invitation sent successfully', 'success');
+                    closeModal('inviteModal');
+                    loadUsers();
+                } else {
+                    const error = await response.json();
+                    showNotification(error.error || 'Failed to send invitation', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Invite error:', error);
+                showNotification('Failed to send invitation', 'error');
+            }
+        }
+
+        // Utility Functions
+        function refreshDashboard() {
+            loadDashboard();
+        }
+
+        function generateReport() {
+            // Implement compliance report generation
+            showNotification('Generating compliance report...', 'info');
+        }
+
+        function showNotification(message, type = 'info') {
+            // Implement notification system
+            console.log(`${type}: ${message}`);
+        }
+
+        // Mock data for demo
+        if (!authToken) {
+            // Demo mode
+            dashboardData = {
+                activeUsers: 156,
+                mfaEnabledUsers: 142,
+                failedLoginsLast24h: 23,
+                activeApiKeys: 12,
+                activeSessions: 89,
+                recentActivityByType: [
+                    { action: 'LOGIN_SUCCESS', count: 234 },
+                    { action: 'API_CALL', count: 1829 },
+                    { action: 'USER_UPDATED', count: 45 },
+                    { action: 'LOGIN_FAILED', count: 23 },
+                    { action: 'MFA_VERIFIED', count: 142 }
+                ]
+            };
+            updateDashboardUI();
+        }
+    </script>
+</body>
+</html>

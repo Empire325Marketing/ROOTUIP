@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Dashboard - ROOTUIP Enterprise</title>
+    <style>
+        :root {
+            --primary: #00D4AA;
+            --secondary: #1a1a2e;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --success: #28a745;
+            --info: #17a2b8;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: var(--secondary);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 18px;
+            color: var(--secondary);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .filter-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .filter-section h3 {
+            margin-top: 0;
+            font-size: 16px;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .mfa-setup {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .qr-code {
+            margin: 20px 0;
+        }
+
+        .backup-codes {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .backup-codes code {
+            display: block;
+            margin: 5px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔒 Security Dashboard</h1>
+    </div>
+
+    <div class="container">
+        <!-- Security Overview -->
+        <div class="dashboard-grid">
+            <div class="card">
+                <h2>Active Sessions</h2>
+                <div class="stat">
+                    <span>Current Sessions</span>
+                    <span class="stat-value" id="active-sessions">0</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Security Events</h2>
+                <div class="stat">
+                    <span>Last 24 Hours</span>
+                    <span class="stat-value" id="security-events">0</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>MFA Adoption</h2>
+                <div class="stat">
+                    <span>Users with MFA</span>
+                    <span class="stat-value" id="mfa-adoption">0%</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>API Keys</h2>
+                <div class="stat">
+                    <span>Active Keys</span>
+                    <span class="stat-value" id="api-keys">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('users')">User Management</button>
+            <button class="tab" onclick="showTab('audit')">Audit Logs</button>
+            <button class="tab" onclick="showTab('sessions')">Active Sessions</button>
+            <button class="tab" onclick="showTab('api-keys')">API Keys</button>
+            <button class="tab" onclick="showTab('policies')">Security Policies</button>
+            <button class="tab" onclick="showTab('sso')">SSO Configuration</button>
+        </div>
+
+        <!-- Users Tab -->
+        <div id="users" class="tab-content active">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>User Management</h2>
+                    <div>
+                        <button class="btn btn-primary" onclick="showInviteModal()">Invite User</button>
+                        <button class="btn btn-secondary" onclick="showBulkInviteModal()">Bulk Invite</button>
+                    </div>
+                </div>
+                
+                <table id="users-table">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>MFA</th>
+                            <th>Last Login</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="7" class="loading">Loading users...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Audit Logs Tab -->
+        <div id="audit" class="tab-content">
+            <div class="card">
+                <h2>Audit Logs</h2>
+                
+                <div class="filter-section">
+                    <h3>Filters</h3>
+                    <div class="filter-grid">
+                        <div class="form-group">
+                            <label>User</label>
+                            <select id="audit-user-filter">
+                                <option value="">All Users</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Action</label>
+                            <select id="audit-action-filter">
+                                <option value="">All Actions</option>
+                                <option value="USER_LOGIN">Login</option>
+                                <option value="USER_LOGOUT">Logout</option>
+                                <option value="USER_REGISTERED">Registration</option>
+                                <option value="PASSWORD_CHANGED">Password Change</option>
+                                <option value="MFA_ENABLED">MFA Enabled</option>
+                                <option value="API_KEY_CREATED">API Key Created</option>
+                                <option value="ACCESS_DENIED">Access Denied</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date Range</label>
+                            <input type="date" id="audit-start-date">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <input type="date" id="audit-end-date">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="loadAuditLogs()">Apply Filters</button>
+                </div>
+                
+                <table id="audit-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Resource</th>
+                            <th>IP Address</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6" class="loading">Loading audit logs...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Sessions Tab -->
+        <div id="sessions" class="tab-content">
+            <div class="card">
+                <h2>Active Sessions</h2>
+                
+                <table id="sessions-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>IP Address</th>
+                            <th>User Agent</th>
+                            <th>Created</th>
+                            <th>Expires</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6" class="loading">Loading sessions...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- API Keys Tab -->
+        <div id="api-keys" class="tab-content">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>API Key Management</h2>
+                    <button class="btn btn-primary" onclick="showCreateAPIKeyModal()">Create API Key</button>
+                </div>
+                
+                <table id="api-keys-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Created By</th>
+                            <th>Created</th>
+                            <th>Last Used</th>
+                            <th>Expires</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="7" class="loading">Loading API keys...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Security Policies Tab -->
+        <div id="policies" class="tab-content">
+            <div class="card">
+                <h2>Password Policy</h2>
+                
+                <form id="password-policy-form">
+                    <div class="form-group">
+                        <label>Minimum Length</label>
+                        <input type="number" id="min-length" min="8" max="32" value="12">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="require-uppercase" checked>
+                            Require Uppercase Letters
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="require-lowercase" checked>
+                            Require Lowercase Letters
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="require-numbers" checked>
+                            Require Numbers
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="require-special" checked>
+                            Require Special Characters
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Password History (prevent reuse)</label>
+                        <input type="number" id="password-history" min="0" max="24" value="5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Maximum Password Age (days)</label>
+                        <input type="number" id="max-age" min="0" max="365" value="90">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Update Password Policy</button>
+                </form>
+            </div>
+            
+            <div class="card" style="margin-top: 20px;">
+                <h2>Session Policy</h2>
+                
+                <form id="session-policy-form">
+                    <div class="form-group">
+                        <label>Session Timeout (minutes)</label>
+                        <input type="number" id="session-timeout" min="5" max="1440" value="15">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Maximum Failed Login Attempts</label>
+                        <input type="number" id="max-attempts" min="3" max="10" value="5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Account Lockout Duration (minutes)</label>
+                        <input type="number" id="lockout-duration" min="5" max="60" value="30">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Update Session Policy</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- SSO Configuration Tab -->
+        <div id="sso" class="tab-content">
+            <div class="card">
+                <h2>Single Sign-On Configuration</h2>
+                
+                <div class="alert alert-info">
+                    SSO integration allows your users to authenticate using your corporate identity provider.
+                </div>
+                
+                <form id="sso-form">
+                    <div class="form-group">
+                        <label>SSO Provider</label>
+                        <select id="sso-provider">
+                            <option value="">Select Provider</option>
+                            <option value="saml">SAML 2.0</option>
+                            <option value="oidc">OpenID Connect</option>
+                            <option value="oauth2">OAuth 2.0</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Entity ID</label>
+                        <input type="text" id="entity-id" placeholder="https://your-idp.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>SSO URL</label>
+                        <input type="url" id="sso-url" placeholder="https://your-idp.com/sso">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>X.509 Certificate</label>
+                        <textarea id="x509-cert" rows="5" placeholder="Paste your certificate here"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Save SSO Configuration</button>
+                </form>
+                
+                <div style="margin-top: 30px;">
+                    <h3>Service Provider Metadata</h3>
+                    <p>Share this information with your identity provider:</p>
+                    <div class="form-group">
+                        <label>Entity ID</label>
+                        <input type="text" value="https://app.rootuip.com" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>ACS URL</label>
+                        <input type="text" value="https://app.rootuip.com/sso/callback" readonly>
+                    </div>
+                    <button class="btn btn-secondary" onclick="downloadMetadata()">Download Metadata XML</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Invite User Modal -->
+    <div id="invite-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('invite-modal')">&times;</span>
+            <h2>Invite User</h2>
+            
+            <form id="invite-form">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="invite-email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Role</label>
+                    <select id="invite-role" required>
+                        <option value="viewer">Viewer (Read-only)</option>
+                        <option value="operator">Operator</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Send Invitation</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MFA Setup Modal -->
+    <div id="mfa-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('mfa-modal')">&times;</span>
+            <h2>Enable Two-Factor Authentication</h2>
+            
+            <div class="mfa-setup">
+                <p>Scan this QR code with your authenticator app:</p>
+                <div class="qr-code" id="qr-code"></div>
+                
+                <p>Or enter this code manually:</p>
+                <code id="mfa-secret"></code>
+                
+                <form id="mfa-verify-form" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <label>Enter 6-digit code from your app</label>
+                        <input type="text" id="mfa-code" pattern="[0-9]{6}" maxlength="6" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Verify and Enable MFA</button>
+                </form>
+                
+                <div id="backup-codes" class="backup-codes" style="display: none;">
+                    <h3>Backup Codes</h3>
+                    <p>Save these codes in a secure location. Each code can only be used once.</p>
+                    <div id="backup-codes-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API base URL
+        const API_BASE = '/auth';
+        let authToken = localStorage.getItem('authToken');
+
+        // Tab switching
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            // Load data for the selected tab
+            switch(tabName) {
+                case 'users':
+                    loadUsers();
+                    break;
+                case 'audit':
+                    loadAuditLogs();
+                    break;
+                case 'sessions':
+                    loadSessions();
+                    break;
+                case 'api-keys':
+                    loadAPIKeys();
+                    break;
+                case 'policies':
+                    loadPolicies();
+                    break;
+            }
+        }
+
+        // API call helper
+        async function apiCall(endpoint, options = {}) {
+            const response = await fetch(`${API_BASE}${endpoint}`, {
+                ...options,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`,
+                    ...options.headers
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`API call failed: ${response.statusText}`);
+            }
+            
+            return response.json();
+        }
+
+        // Load users
+        async function loadUsers() {
+            try {
+                const users = await apiCall('/users');
+                const tbody = document.querySelector('#users-table tbody');
+                
+                tbody.innerHTML = users.map(user => `
+                    <tr>
+                        <td>${user.email}</td>
+                        <td>${user.first_name} ${user.last_name}</td>
+                        <td><span class="badge badge-info">${user.role}</span></td>
+                        <td>${user.mfa_enabled ? '✅' : '❌'}</td>
+                        <td>${user.last_login ? new Date(user.last_login).toLocaleString() : 'Never'}</td>
+                        <td><span class="badge badge-${user.status === 'active' ? 'success' : 'danger'}">${user.status}</span></td>
+                        <td>
+                            <button class="btn btn-secondary" onclick="editUser('${user.id}')">Edit</button>
+                            ${user.status === 'active' ? 
+                                `<button class="btn btn-danger" onclick="deactivateUser('${user.id}')">Deactivate</button>` :
+                                `<button class="btn btn-success" onclick="activateUser('${user.id}')">Activate</button>`
+                            }
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load users:', error);
+            }
+        }
+
+        // Load audit logs
+        async function loadAuditLogs() {
+            try {
+                const params = new URLSearchParams({
+                    userId: document.getElementById('audit-user-filter').value,
+                    action: document.getElementById('audit-action-filter').value,
+                    startDate: document.getElementById('audit-start-date').value,
+                    endDate: document.getElementById('audit-end-date').value
+                });
+                
+                const result = await apiCall(`/security/audit-logs?${params}`);
+                const tbody = document.querySelector('#audit-table tbody');
+                
+                tbody.innerHTML = result.logs.map(log => `
+                    <tr>
+                        <td>${new Date(log.created_at).toLocaleString()}</td>
+                        <td>${log.user_email || 'System'}</td>
+                        <td><span class="badge badge-info">${log.action}</span></td>
+                        <td>${log.resource_type || '-'} ${log.resource_id || ''}</td>
+                        <td>${log.ip_address || '-'}</td>
+                        <td>${JSON.stringify(log.details || {})}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load audit logs:', error);
+            }
+        }
+
+        // Load active sessions
+        async function loadSessions() {
+            try {
+                const sessions = await apiCall('/security/active-sessions');
+                const tbody = document.querySelector('#sessions-table tbody');
+                
+                tbody.innerHTML = sessions.map(session => `
+                    <tr>
+                        <td>${session.user_email}</td>
+                        <td>${session.ip_address}</td>
+                        <td>${session.user_agent}</td>
+                        <td>${new Date(session.created_at).toLocaleString()}</td>
+                        <td>${new Date(session.expires_at).toLocaleString()}</td>
+                        <td>
+                            <button class="btn btn-danger" onclick="revokeSession('${session.id}')">Revoke</button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                document.getElementById('active-sessions').textContent = sessions.length;
+            } catch (error) {
+                console.error('Failed to load sessions:', error);
+            }
+        }
+
+        // Modal functions
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showInviteModal() {
+            showModal('invite-modal');
+        }
+
+        // Initialize dashboard
+        window.addEventListener('load', () => {
+            if (!authToken) {
+                window.location.href = '/login.html';
+                return;
+            }
+            
+            // Load initial data
+            loadUsers();
+            loadDashboardStats();
+        });
+
+        async function loadDashboardStats() {
+            // This would load real stats from the API
+            // For now, showing placeholder data
+            document.getElementById('active-sessions').textContent = '12';
+            document.getElementById('security-events').textContent = '47';
+            document.getElementById('mfa-adoption').textContent = '73%';
+            document.getElementById('api-keys').textContent = '8';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Service Monitoring Dashboard</title>
+    <style>
+        :root {
+            --primary: #00D4AA;
+            --secondary: #1a1a2e;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+        
+        .header {
+            background: var(--secondary);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .metric-card h3 {
+            font-size: 0.875rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-value.success { color: var(--success); }
+        .metric-value.warning { color: var(--warning); }
+        .metric-value.danger { color: var(--danger); }
+        
+        .metric-trend {
+            font-size: 0.875rem;
+            color: #666;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .alert-box {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-box.high {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-box.medium {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        
+        .endpoint-table {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .endpoint-table th,
+        .endpoint-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .endpoint-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-badge.healthy {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-badge.degraded {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-badge.down {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .refresh-info {
+            text-align: right;
+            color: #666;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+        
+        #responseTimeChart {
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Auth Service Monitoring Dashboard</h1>
+    </div>
+    
+    <div class="container">
+        <div class="refresh-info">
+            Auto-refresh: <span id="countdown">30</span>s | Last update: <span id="lastUpdate">Never</span>
+        </div>
+        
+        <div id="alerts"></div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>Service Status</h3>
+                <div class="metric-value" id="serviceStatus">
+                    <span class="status-badge healthy">Healthy</span>
+                </div>
+                <div class="metric-trend" id="uptime">Uptime: 0s</div>
+            </div>
+            
+            <div class="metric-card">
+                <h3>Total Requests</h3>
+                <div class="metric-value" id="totalRequests">0</div>
+                <div class="metric-trend" id="requestsPerMin">0 req/min</div>
+            </div>
+            
+            <div class="metric-card">
+                <h3>Error Rate</h3>
+                <div class="metric-value" id="errorRate">0%</div>
+                <div class="metric-trend" id="totalErrors">0 errors</div>
+            </div>
+            
+            <div class="metric-card">
+                <h3>Avg Response Time</h3>
+                <div class="metric-value" id="avgResponseTime">0ms</div>
+                <div class="metric-trend">Target: <1000ms</div>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h2>Response Time Trend</h2>
+            <canvas id="responseTimeChart"></canvas>
+        </div>
+        
+        <h2 style="margin-bottom: 1rem;">Endpoint Performance</h2>
+        <table class="endpoint-table">
+            <thead>
+                <tr>
+                    <th>Endpoint</th>
+                    <th>Requests</th>
+                    <th>Error Rate</th>
+                    <th>Avg Response Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="endpointStats">
+                <tr>
+                    <td colspan="5" style="text-align: center; color: #666;">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let chart;
+        let countdown = 30;
+        
+        function formatUptime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = Math.floor(seconds % 60);
+            
+            if (hours > 0) {
+                return `${hours}h ${minutes}m ${secs}s`;
+            } else if (minutes > 0) {
+                return `${minutes}m ${secs}s`;
+            } else {
+                return `${secs}s`;
+            }
+        }
+        
+        function updateMetrics(data) {
+            // Update timestamp
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+            
+            // Update metrics
+            document.getElementById('uptime').textContent = `Uptime: ${formatUptime(data.uptime)}`;
+            document.getElementById('totalRequests').textContent = data.totalRequests.toLocaleString();
+            document.getElementById('requestsPerMin').textContent = `${data.requestsPerMinute} req/min`;
+            
+            // Update error rate with color coding
+            const errorRateEl = document.getElementById('errorRate');
+            const errorRate = parseFloat(data.errorRate);
+            errorRateEl.textContent = data.errorRate;
+            errorRateEl.className = 'metric-value';
+            if (errorRate > 5) {
+                errorRateEl.classList.add('danger');
+            } else if (errorRate > 2) {
+                errorRateEl.classList.add('warning');
+            } else {
+                errorRateEl.classList.add('success');
+            }
+            document.getElementById('totalErrors').textContent = `${data.totalErrors} errors`;
+            
+            // Update response time with color coding
+            const avgResponseTimeEl = document.getElementById('avgResponseTime');
+            const avgResponseTime = parseFloat(data.avgResponseTime);
+            avgResponseTimeEl.textContent = data.avgResponseTime;
+            avgResponseTimeEl.className = 'metric-value';
+            if (avgResponseTime > 1000) {
+                avgResponseTimeEl.classList.add('danger');
+            } else if (avgResponseTime > 500) {
+                avgResponseTimeEl.classList.add('warning');
+            } else {
+                avgResponseTimeEl.classList.add('success');
+            }
+            
+            // Update alerts
+            const alertsContainer = document.getElementById('alerts');
+            alertsContainer.innerHTML = '';
+            if (data.alerts && data.alerts.length > 0) {
+                data.alerts.forEach(alert => {
+                    const alertBox = document.createElement('div');
+                    alertBox.className = `alert-box ${alert.severity}`;
+                    alertBox.textContent = alert.message;
+                    alertsContainer.appendChild(alertBox);
+                });
+            }
+            
+            // Update endpoint stats
+            const endpointStatsEl = document.getElementById('endpointStats');
+            if (data.endpointStats && data.endpointStats.length > 0) {
+                endpointStatsEl.innerHTML = data.endpointStats.map(stat => {
+                    const errorRate = parseFloat(stat.errorRate);
+                    const responseTime = parseFloat(stat.avgResponseTime);
+                    let status = 'healthy';
+                    if (errorRate > 10 || responseTime > 2000) {
+                        status = 'down';
+                    } else if (errorRate > 5 || responseTime > 1000) {
+                        status = 'degraded';
+                    }
+                    
+                    return `
+                        <tr>
+                            <td><code>${stat.endpoint}</code></td>
+                            <td>${stat.requests.toLocaleString()}</td>
+                            <td>${stat.errorRate}</td>
+                            <td>${stat.avgResponseTime}</td>
+                            <td><span class="status-badge ${status}">${status}</span></td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+        
+        async function fetchMetrics() {
+            try {
+                // In production, this would fetch from the monitoring API
+                // For now, we'll use mock data
+                const mockData = {
+                    uptime: 3600,
+                    totalRequests: 15234,
+                    totalErrors: 23,
+                    errorRate: "0.15%",
+                    avgResponseTime: "125.34ms",
+                    requestsPerMinute: "253.90",
+                    statusCodes: {
+                        "200": 15189,
+                        "401": 23,
+                        "500": 22
+                    },
+                    endpointStats: [
+                        {
+                            endpoint: "/auth/health",
+                            requests: 7200,
+                            errors: 0,
+                            errorRate: "0.00%",
+                            avgResponseTime: "25.12ms"
+                        },
+                        {
+                            endpoint: "/auth/login",
+                            requests: 4567,
+                            errors: 15,
+                            errorRate: "0.33%",
+                            avgResponseTime: "185.45ms"
+                        },
+                        {
+                            endpoint: "/auth/verify",
+                            requests: 3467,
+                            errors: 8,
+                            errorRate: "0.23%",
+                            avgResponseTime: "95.78ms"
+                        }
+                    ],
+                    alerts: []
+                };
+                
+                updateMetrics(mockData);
+            } catch (error) {
+                console.error('Failed to fetch metrics:', error);
+            }
+        }
+        
+        // Initialize chart
+        const ctx = document.getElementById('responseTimeChart').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Response Time (ms)',
+                    data: [],
+                    borderColor: '#00D4AA',
+                    backgroundColor: 'rgba(0, 212, 170, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+        // Update countdown
+        setInterval(() => {
+            countdown--;
+            if (countdown <= 0) {
+                countdown = 30;
+                fetchMetrics();
+            }
+            document.getElementById('countdown').textContent = countdown;
+        }, 1000);
+        
+        // Initial fetch
+        fetchMetrics();
+    </script>
+</body>
+</html>
