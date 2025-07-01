@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UIP Platform - Dashboard Hub</title>
-    <link rel="icon" type="image/svg+xml" href="/brand/logo-icon.svg">
+    <title>ROOTUIP - Next-Gen Container Intelligence Platform</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/rootuip-logo.svg">
     <style>
         * {
             margin: 0;
@@ -12,368 +12,705 @@
             box-sizing: border-box;
         }
 
+        :root {
+            /* Modern color palette */
+            --primary: #0A0E27;
+            --primary-light: #161B3D;
+            --accent: #6366F1;
+            --accent-bright: #818CF8;
+            --accent-glow: #6366F120;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --text-primary: #F9FAFB;
+            --text-secondary: #9CA3AF;
+            --text-muted: #6B7280;
+            --bg-dark: #030712;
+            --bg-card: #111827;
+            --bg-hover: #1F2937;
+            --border: #374151;
+            --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            --gradient-dark: linear-gradient(180deg, #0A0E27 0%, #030712 100%);
+            --gradient-card: linear-gradient(135deg, #111827 0%, #1F2937 100%);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 50px rgba(99, 102, 241, 0.3);
+        }
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        .hub-container {
-            max-width: 1200px;
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .navbar-container {
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 40px 20px;
-            min-height: 100vh;
+            padding: 0 2rem;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .header {
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+
+        .btn-outline:hover {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 10rem 2rem 5rem;
             text-align: center;
-            margin-bottom: 50px;
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-dark);
         }
 
-        .logo-container {
-            margin-bottom: 20px;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, var(--accent-glow) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
+            z-index: 0;
         }
 
-        .main-title {
-            font-size: 3rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .subtitle {
-            font-size: 1.3rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 30px;
-        }
-
-        .description {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.8);
-            max-width: 600px;
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
             margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--accent-glow);
+            border: 1px solid var(--accent);
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            color: var(--accent-bright);
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #F9FAFB 0%, #9CA3AF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
             line-height: 1.6;
         }
 
-        .dashboards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .dashboard-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
-        }
-
-        .card-header {
+        .hero-buttons {
             display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
+            gap: 1rem;
             justify-content: center;
-            font-size: 1.5rem;
-            color: white;
+            margin-bottom: 4rem;
         }
 
-        .card-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #2d3748;
-            margin: 0;
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--bg-card);
+            border-radius: 1rem;
+            border: 1px solid var(--border);
         }
 
-        .card-description {
-            color: #718096;
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-
-        .card-features {
-            list-style: none;
-            margin-bottom: 25px;
-        }
-
-        .card-features li {
-            color: #4a5568;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .card-features li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #48bb78;
-            font-weight: bold;
-        }
-
-        .card-action {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .card-action:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .quick-access {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(10px);
+        .stat {
             text-align: center;
         }
 
-        .quick-access h2 {
-            color: #2d3748;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
         }
 
-        .quick-links {
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 2rem;
+            background: var(--bg-dark);
+            position: relative;
+        }
+
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--gradient-card);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 3rem;
+            height: 3rem;
+            background: var(--gradient-primary);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Integration Section */
+        .integrations {
+            padding: 5rem 2rem;
+            background: var(--primary-light);
+            text-align: center;
+        }
+
+        .integration-logos {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            align-items: center;
+            gap: 3rem;
+            margin-top: 3rem;
             flex-wrap: wrap;
         }
 
-        .quick-link {
-            background: #f7fafc;
-            color: #4a5568;
-            padding: 12px 20px;
-            border-radius: 8px;
+        .integration-logo {
+            width: 120px;
+            height: 40px;
+            background: var(--bg-card);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-weight: 600;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .integration-logo:hover {
+            opacity: 1;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 5rem 2rem;
+            background: var(--gradient-primary);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(180deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn-cta {
+            background: var(--bg-dark);
+            color: var(--accent);
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+
+        .btn-cta:hover {
+            background: var(--text-primary);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            background: var(--primary);
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
             text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: 500;
+            transition: color 0.2s;
         }
 
-        .quick-link:hover {
-            background: #edf2f7;
-            transform: translateY(-2px);
+        .footer-link:hover {
+            color: var(--text-primary);
         }
 
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .hub-container {
-                padding: 20px 15px;
+            .nav-links {
+                display: none;
             }
 
-            .main-title {
-                font-size: 2.2rem;
+            .hero-title {
+                font-size: 2.5rem;
             }
 
-            .subtitle {
-                font-size: 1.1rem;
+            .hero-subtitle {
+                font-size: 1.125rem;
             }
 
-            .dashboards-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .quick-links {
+            .hero-buttons {
                 flex-direction: column;
                 align-items: center;
             }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        [data-animate] {
+            opacity: 0;
+        }
+
+        [data-animate].animated {
+            animation: fadeInUp 0.8s ease-out forwards;
         }
     </style>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<!-- Google Analytics 4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ROOTUIP2025"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-ROOTUIP2025');
-</script>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ROOTUIP2025"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-ROOTUIP2025');
+    </script>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
 </head>
 <body>
-    <div class="hub-container">
-        <div class="header">
-            <div class="logo-container" id="logo-container"></div>
-            <h1 class="main-title">UIP Platform</h1>
-            <p class="subtitle">Comprehensive Monitoring & Analytics Hub</p>
-            <p class="description">
-                Access your complete suite of business intelligence dashboards, operational monitoring tools, 
-                and customer onboarding systems. Real-time insights for freight intelligence excellence.
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="logo">ROOTUIP</a>
+            <ul class="nav-links">
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#integrations" class="nav-link">Integrations</a></li>
+                <li><a href="/roi-calculator.html" class="nav-link">ROI Calculator</a></li>
+                <li><a href="https://demo.rootuip.com" class="nav-link">Demo</a></li>
+                <li><a href="https://app.rootuip.com" class="btn btn-outline">Login</a></li>
+                <li><a href="/enterprise-demo-interface.html" class="btn btn-primary">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">🚀 Trusted by Fortune 500 Companies</div>
+            <h1 class="hero-title" data-animate>The Future of Container Intelligence</h1>
+            <p class="hero-subtitle" data-animate>
+                AI-powered platform that tracks shipments in real-time, predicts delays, 
+                and saves millions in detention fees. Join the logistics revolution.
             </p>
-        </div>
-
-        <div class="dashboards-grid">
-            <a href="/platform/monitoring/index.html" class="dashboard-card">
-                <div class="card-header">
-                    <div class="card-icon">🎛️</div>
-                    <h2 class="card-title">System Monitoring</h2>
+            <div class="hero-buttons" data-animate>
+                <a href="/enterprise-demo-interface.html" class="btn btn-primary">Book Enterprise Demo</a>
+                <a href="/roi-calculator.html" class="btn btn-outline">Calculate Your Savings</a>
+            </div>
+            <div class="stats-bar" data-animate>
+                <div class="stat">
+                    <div class="stat-value">$50M+</div>
+                    <div class="stat-label">Annual Savings</div>
                 </div>
-                <p class="card-description">
-                    Real-time system health monitoring with comprehensive performance metrics and service status tracking.
-                </p>
-                <ul class="card-features">
-                    <li>System uptime & performance metrics</li>
-                    <li>Service health monitoring</li>
-                    <li>Real-time alerts & notifications</li>
-                    <li>Infrastructure capacity tracking</li>
-                </ul>
-                <div class="card-action">
-                    Open Dashboard →
+                <div class="stat">
+                    <div class="stat-value">500+</div>
+                    <div class="stat-label">Carriers</div>
                 </div>
-            </a>
-
-            <a href="/platform/monitoring/business-metrics.html" class="dashboard-card">
-                <div class="card-header">
-                    <div class="card-icon">💰</div>
-                    <h2 class="card-title">Business Intelligence</h2>
+                <div class="stat">
+                    <div class="stat-value">99.9%</div>
+                    <div class="stat-label">Uptime</div>
                 </div>
-                <p class="card-description">
-                    Executive-level business metrics, KPI tracking, and AI-powered insights for strategic decision making.
-                </p>
-                <ul class="card-features">
-                    <li>Revenue & growth analytics</li>
-                    <li>Customer success metrics</li>
-                    <li>AI-powered business insights</li>
-                    <li>Goal tracking & forecasting</li>
-                </ul>
-                <div class="card-action">
-                    View Metrics →
+                <div class="stat">
+                    <div class="stat-value">< 100ms</div>
+                    <div class="stat-label">Response Time</div>
                 </div>
-            </a>
-
-            <a href="/platform/monitoring/user-analytics.html" class="dashboard-card">
-                <div class="card-header">
-                    <div class="card-icon">👥</div>
-                    <h2 class="card-title">User Analytics</h2>
-                </div>
-                <p class="card-description">
-                    Deep user behavior analysis, segmentation, and engagement tracking to optimize platform experience.
-                </p>
-                <ul class="card-features">
-                    <li>User behavior & engagement</li>
-                    <li>Feature adoption analysis</li>
-                    <li>User journey mapping</li>
-                    <li>Segmentation & targeting</li>
-                </ul>
-                <div class="card-action">
-                    Analyze Users →
-                </div>
-            </a>
-
-            <a href="/platform/monitoring/operational-intelligence.html" class="dashboard-card">
-                <div class="card-header">
-                    <div class="card-icon">🚨</div>
-                    <h2 class="card-title">Operational Intelligence</h2>
-                </div>
-                <p class="card-description">
-                    Advanced operational monitoring with intelligent automation, alert management, and capacity planning.
-                </p>
-                <ul class="card-features">
-                    <li>Intelligent alert management</li>
-                    <li>Automated incident response</li>
-                    <li>Capacity planning tools</li>
-                    <li>Emergency procedures</li>
-                </ul>
-                <div class="card-action">
-                    Manage Operations →
-                </div>
-            </a>
-
-            <a href="/platform/monitoring/automated-reporting.html" class="dashboard-card">
-                <div class="card-header">
-                    <div class="card-icon">📊</div>
-                    <h2 class="card-title">Automated Reporting</h2>
-                </div>
-                <p class="card-description">
-                    Comprehensive reporting suite with automated generation, scheduling, and multi-format export capabilities.
-                </p>
-                <ul class="card-features">
-                    <li>Scheduled report generation</li>
-                    <li>Executive report templates</li>
-                    <li>Multi-format data export</li>
-                    <li>Automated delivery system</li>
-                </ul>
-                <div class="card-action">
-                    Create Reports →
-                </div>
-            </a>
-
-            <a href="/customer-onboarding/index.html" class="dashboard-card">
-                <div class="card-header">
-                    <div class="card-icon">🚀</div>
-                    <h2 class="card-title">Customer Onboarding</h2>
-                </div>
-                <p class="card-description">
-                    Comprehensive customer onboarding experience with guided setup, training, and success tracking.
-                </p>
-                <ul class="card-features">
-                    <li>6-milestone onboarding journey</li>
-                    <li>Integration wizard & training</li>
-                    <li>Success team management</li>
-                    <li>Progress tracking & analytics</li>
-                </ul>
-                <div class="card-action">
-                    Start Onboarding →
-                </div>
-            </a>
-        </div>
-
-        <div class="quick-access">
-            <h2>Quick Access Links</h2>
-            <div class="quick-links">
-                <a href="/customer-onboarding/integration-wizard.html" class="quick-link">Integration Wizard</a>
-                <a href="/customer-onboarding/training-portal.html" class="quick-link">Training Portal</a>
-                <a href="/customer-onboarding/support-center.html" class="quick-link">Support Center</a>
-                <a href="/customer-onboarding/success-metrics.html" class="quick-link">Success Metrics</a>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">FEATURES</div>
+                <h2 class="section-title" data-animate>Built for Enterprise Scale</h2>
+                <p class="section-subtitle" data-animate>Everything you need to dominate logistics</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card" data-animate>
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Real-Time Tracking</h3>
+                    <p class="feature-description">
+                        Track containers across 500+ carriers with millisecond precision. 
+                        Get instant alerts on delays, customs holds, and route changes.
+                    </p>
+                </div>
+
+                <div class="feature-card" data-animate>
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title">AI Predictions</h3>
+                    <p class="feature-description">
+                        Machine learning models predict delays with 97% accuracy. 
+                        Reduce detention and demurrage fees by up to 85%.
+                    </p>
+                </div>
+
+                <div class="feature-card" data-animate>
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Executive Analytics</h3>
+                    <p class="feature-description">
+                        C-suite dashboards with real-time KPIs, cost analysis, and 
+                        performance metrics. Export board-ready reports instantly.
+                    </p>
+                </div>
+
+                <div class="feature-card" data-animate>
+                    <div class="feature-icon">🔐</div>
+                    <h3 class="feature-title">Bank-Grade Security</h3>
+                    <p class="feature-description">
+                        SOC 2 Type II certified with end-to-end encryption, SAML SSO, 
+                        and role-based access control. GDPR and CCPA compliant.
+                    </p>
+                </div>
+
+                <div class="feature-card" data-animate>
+                    <div class="feature-icon">🔌</div>
+                    <h3 class="feature-title">Instant Integration</h3>
+                    <p class="feature-description">
+                        REST APIs, webhooks, and pre-built connectors for SAP, Oracle, 
+                        and major TMS platforms. Deploy in days, not months.
+                    </p>
+                </div>
+
+                <div class="feature-card" data-animate>
+                    <div class="feature-icon">🌍</div>
+                    <h3 class="feature-title">Global Coverage</h3>
+                    <p class="feature-description">
+                        Track shipments across 190+ countries with multi-language support. 
+                        Local compliance and customs integration included.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integration Section -->
+    <section class="integrations" id="integrations">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">INTEGRATIONS</div>
+                <h2 class="section-title" data-animate>Connects With Your Stack</h2>
+                <p class="section-subtitle" data-animate>Seamless integration with enterprise systems</p>
+            </div>
+            <div class="integration-logos" data-animate>
+                <div class="integration-logo">MAERSK</div>
+                <div class="integration-logo">SAP</div>
+                <div class="integration-logo">ORACLE</div>
+                <div class="integration-logo">SALESFORCE</div>
+                <div class="integration-logo">MICROSOFT</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Save Millions?</h2>
+            <p class="cta-subtitle">Join industry leaders transforming their supply chains</p>
+            <a href="/enterprise-demo-interface.html" class="btn btn-cta">Schedule Your Demo</a>
+            <p style="margin-top: 1rem; opacity: 0.8;">No credit card required • 14-day free trial</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Terms of Service</a>
+            <a href="#" class="footer-link">Security</a>
+            <a href="#" class="footer-link">API Docs</a>
+            <a href="#" class="footer-link">Contact</a>
+        </div>
+        <p class="footer-copy">© 2025 ROOTUIP Inc. All rights reserved.</p>
+    </footer>
 
     <script>
-        // Simple logo placeholder - replace with actual logo component if available
-        document.getElementById('logo-container').innerHTML = `
-            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto; color: white; font-size: 2rem; font-weight: bold;">
-                UIP
-            </div>
-        `;
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('[data-animate]').forEach(el => {
+            observer.observe(el);
+        });
     </script>
 </body>
 </html>

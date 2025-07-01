@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Business Continuity Dashboard - Disaster Recovery & SLA Monitoring</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/rootuip-logo.svg">
+    <link rel="stylesheet" href="/assets/css/rootuip-design-system.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        /* Business Continuity Specific Styles */
+        .bc-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            min-height: 100vh;
+            background: var(--rootuip-gray-900);
+            color: white;
+        }
+        
+        /* Header */
+        .bc-header {
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: var(--space-4) var(--space-6);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .bc-header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Status Banner */
+        .status-banner {
+            background: var(--rootuip-accent);
+            color: white;
+            padding: var(--space-2) 0;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .status-banner.warning {
+            background: var(--rootuip-warning);
+        }
+        
+        .status-banner.critical {
+            background: var(--rootuip-danger);
+            animation: pulse 2s infinite;
+        }
+        
+        /* Main Grid */
+        .bc-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: var(--space-6);
+            padding: var(--space-6);
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        /* SLA Metrics */
+        .sla-metrics {
+            display: grid;
+            gap: var(--space-4);
+        }
+        
+        .sla-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sla-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--rootuip-accent);
+        }
+        
+        .sla-card.warning::before {
+            background: var(--rootuip-warning);
+        }
+        
+        .sla-card.critical::before {
+            background: var(--rootuip-danger);
+        }
+        
+        .sla-value {
+            font-size: var(--text-4xl);
+            font-weight: 700;
+            margin-bottom: var(--space-2);
+        }
+        
+        .sla-label {
+            font-size: var(--text-sm);
+            opacity: 0.8;
+            margin-bottom: var(--space-3);
+        }
+        
+        .sla-target {
+            font-size: var(--text-xs);
+            opacity: 0.6;
+        }
+        
+        /* World Map */
+        .world-map-container {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            height: 600px;
+            position: relative;
+        }
+        
+        #worldMap {
+            height: 100%;
+            border-radius: var(--radius-md);
+            background: #0a0a0a;
+        }
+        
+        .region-status {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: var(--space-3);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        /* Recovery Procedures */
+        .recovery-procedures {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+        }
+        
+        .procedure-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            margin-bottom: var(--space-3);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .procedure-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+        
+        .procedure-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-2);
+        }
+        
+        .procedure-name {
+            font-weight: 600;
+        }
+        
+        .procedure-duration {
+            font-size: var(--text-sm);
+            opacity: 0.6;
+        }
+        
+        .procedure-steps {
+            font-size: var(--text-sm);
+            opacity: 0.8;
+        }
+        
+        /* Backup Status */
+        .backup-status {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+        }
+        
+        .backup-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-4);
+            margin-top: var(--space-4);
+        }
+        
+        .backup-item {
+            text-align: center;
+        }
+        
+        .backup-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto var(--space-3);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+            position: relative;
+        }
+        
+        .backup-status-dot {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--rootuip-accent);
+            border: 3px solid var(--rootuip-gray-900);
+        }
+        
+        .backup-status-dot.warning {
+            background: var(--rootuip-warning);
+        }
+        
+        .backup-status-dot.error {
+            background: var(--rootuip-danger);
+        }
+        
+        .backup-name {
+            font-weight: 500;
+            margin-bottom: var(--space-1);
+        }
+        
+        .backup-time {
+            font-size: var(--text-xs);
+            opacity: 0.6;
+        }
+        
+        /* Incident Timeline */
+        .incident-timeline {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: var(--space-4);
+            margin-bottom: var(--space-4);
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .timeline-item:last-child {
+            border-bottom: none;
+        }
+        
+        .timeline-time {
+            font-size: var(--text-sm);
+            opacity: 0.6;
+            min-width: 60px;
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-title {
+            font-weight: 500;
+            margin-bottom: var(--space-1);
+        }
+        
+        .timeline-description {
+            font-size: var(--text-sm);
+            opacity: 0.8;
+        }
+        
+        /* Action Buttons */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-3);
+            margin-top: var(--space-6);
+        }
+        
+        .action-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-weight: 500;
+        }
+        
+        .action-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .action-button.primary {
+            background: var(--rootuip-primary);
+            border-color: var(--rootuip-primary);
+        }
+        
+        .action-button.danger {
+            background: var(--rootuip-danger);
+            border-color: var(--rootuip-danger);
+        }
+        
+        /* Loading States */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .loading-overlay.active {
+            display: flex;
+        }
+        
+        .loading-content {
+            text-align: center;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--rootuip-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto var(--space-4);
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .bc-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .backup-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="bc-layout">
+        <!-- Status Banner -->
+        <div class="status-banner" id="statusBanner">
+            <span id="statusText">✅ All Systems Operational - 99.99% Uptime SLA Met</span>
+        </div>
+        
+        <!-- Header -->
+        <header class="bc-header">
+            <div class="bc-header-content">
+                <div>
+                    <h1 class="text-2xl font-bold mb-1">Business Continuity Command Center</h1>
+                    <p class="text-sm opacity-80">Disaster Recovery & SLA Monitoring</p>
+                </div>
+                <div class="flex gap-4">
+                    <button class="btn btn-secondary" onclick="testFailover()">Test Failover</button>
+                    <button class="btn btn-danger" onclick="emergencyFailover()">Emergency Failover</button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="bc-grid">
+            <!-- Left Column - SLA Metrics -->
+            <div>
+                <h2 class="text-xl font-bold mb-4">SLA Compliance</h2>
+                
+                <div class="sla-metrics">
+                    <div class="sla-card" id="uptimeCard">
+                        <div class="sla-value">99.993%</div>
+                        <div class="sla-label">Service Uptime</div>
+                        <div class="sla-target">Target: 99.99%</div>
+                        <canvas id="uptimeSparkline" height="40"></canvas>
+                    </div>
+                    
+                    <div class="sla-card" id="responseCard">
+                        <div class="sla-value">145ms</div>
+                        <div class="sla-label">Avg Response Time</div>
+                        <div class="sla-target">Target: <200ms</div>
+                        <canvas id="responseSparkline" height="40"></canvas>
+                    </div>
+                    
+                    <div class="sla-card" id="errorCard">
+                        <div class="sla-value">0.008%</div>
+                        <div class="sla-label">Error Rate</div>
+                        <div class="sla-target">Target: <0.01%</div>
+                        <canvas id="errorSparkline" height="40"></canvas>
+                    </div>
+                    
+                    <div class="sla-card">
+                        <div class="sla-value">2.5min</div>
+                        <div class="sla-label">RTO Achievement</div>
+                        <div class="sla-target">Target: <5min</div>
+                    </div>
+                    
+                    <div class="sla-card">
+                        <div class="sla-value">45sec</div>
+                        <div class="sla-label">RPO Achievement</div>
+                        <div class="sla-target">Target: <1min</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Center Column - World Map & Backup Status -->
+            <div>
+                <!-- Backup Status -->
+                <div class="backup-status">
+                    <h2 class="text-xl font-bold mb-4">Backup Status</h2>
+                    <div class="backup-grid">
+                        <div class="backup-item">
+                            <div class="backup-icon">
+                                <span>🗄️</span>
+                                <div class="backup-status-dot"></div>
+                            </div>
+                            <div class="backup-name">PostgreSQL</div>
+                            <div class="backup-time">5 min ago</div>
+                        </div>
+                        <div class="backup-item">
+                            <div class="backup-icon">
+                                <span>💾</span>
+                                <div class="backup-status-dot"></div>
+                            </div>
+                            <div class="backup-name">Redis</div>
+                            <div class="backup-time">12 min ago</div>
+                        </div>
+                        <div class="backup-item">
+                            <div class="backup-icon">
+                                <span>📄</span>
+                                <div class="backup-status-dot"></div>
+                            </div>
+                            <div class="backup-name">Documents</div>
+                            <div class="backup-time">28 min ago</div>
+                        </div>
+                        <div class="backup-item">
+                            <div class="backup-icon">
+                                <span>⚙️</span>
+                                <div class="backup-status-dot"></div>
+                            </div>
+                            <div class="backup-name">Config</div>
+                            <div class="backup-time">2 hours ago</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- World Map -->
+                <div class="world-map-container">
+                    <h2 class="text-xl font-bold mb-4">Global Infrastructure Status</h2>
+                    <div id="worldMap"></div>
+                </div>
+            </div>
+            
+            <!-- Right Column - Recovery & Timeline -->
+            <div>
+                <!-- Recovery Procedures -->
+                <div class="recovery-procedures mb-6">
+                    <h2 class="text-xl font-bold mb-4">Recovery Procedures</h2>
+                    
+                    <div class="procedure-item" onclick="executeProcedure('database-failure')">
+                        <div class="procedure-header">
+                            <span class="procedure-name">Database Failover</span>
+                            <span class="procedure-duration">~8 min</span>
+                        </div>
+                        <div class="procedure-steps">6 automated steps</div>
+                    </div>
+                    
+                    <div class="procedure-item" onclick="executeProcedure('region-failure')">
+                        <div class="procedure-header">
+                            <span class="procedure-name">Region Failover</span>
+                            <span class="procedure-duration">~25 min</span>
+                        </div>
+                        <div class="procedure-steps">6 automated steps</div>
+                    </div>
+                    
+                    <div class="procedure-item" onclick="executeProcedure('service-degradation')">
+                        <div class="procedure-header">
+                            <span class="procedure-name">Service Degradation</span>
+                            <span class="procedure-duration">~4 min</span>
+                        </div>
+                        <div class="procedure-steps">5 automated steps</div>
+                    </div>
+                    
+                    <div class="procedure-item" onclick="executeProcedure('data-corruption')">
+                        <div class="procedure-header">
+                            <span class="procedure-name">Data Recovery</span>
+                            <span class="procedure-duration">~45 min</span>
+                        </div>
+                        <div class="procedure-steps">6 automated steps</div>
+                    </div>
+                </div>
+                
+                <!-- Incident Timeline -->
+                <div class="incident-timeline">
+                    <h2 class="text-xl font-bold mb-4">Incident Timeline</h2>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-time">14:32</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Backup Completed</div>
+                            <div class="timeline-description">PostgreSQL full backup completed successfully</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-time">14:15</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Health Check Passed</div>
+                            <div class="timeline-description">All regions reporting healthy status</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-time">13:45</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">SLA Target Met</div>
+                            <div class="timeline-description">Monthly uptime exceeds 99.99% target</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-time">12:00</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Failover Test Scheduled</div>
+                            <div class="timeline-description">Quarterly DR test planned for next week</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Action Grid -->
+        <div class="container" style="max-width: 1600px; margin: 0 auto; padding: 0 var(--space-6);">
+            <div class="action-grid">
+                <button class="action-button" onclick="showBackupDetails()">
+                    <span>📊</span> View Backup Details
+                </button>
+                <button class="action-button" onclick="scheduleMaintenane()">
+                    <span>📅</span> Schedule Maintenance
+                </button>
+                <button class="action-button" onclick="viewComplianceReport()">
+                    <span>📋</span> Compliance Report
+                </button>
+                <button class="action-button" onclick="configureAlerts()">
+                    <span>🔔</span> Configure Alerts
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p class="text-xl">Executing Recovery Procedure...</p>
+            <p class="text-sm opacity-60 mt-2" id="loadingStatus">Initializing...</p>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize world map
+        const map = L.map('worldMap', {
+            center: [20, 0],
+            zoom: 2,
+            zoomControl: false,
+            attributionControl: false
+        });
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: ''
+        }).addTo(map);
+
+        // Add region markers
+        const regions = [
+            { name: 'US-East-1', coords: [38.7, -77.0], status: 'active', services: 12 },
+            { name: 'US-West-2', coords: [45.5, -122.6], status: 'standby', services: 12 },
+            { name: 'EU-West-1', coords: [53.4, -6.2], status: 'standby', services: 12 },
+            { name: 'AP-Southeast-1', coords: [1.3, 103.8], status: 'inactive', services: 0 }
+        ];
+
+        regions.forEach(region => {
+            const color = region.status === 'active' ? '#00c853' : 
+                         region.status === 'standby' ? '#fbbc04' : '#666';
+            
+            const marker = L.circleMarker(region.coords, {
+                radius: 15,
+                fillColor: color,
+                color: color,
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map);
+
+            marker.bindTooltip(`
+                <strong>${region.name}</strong><br>
+                Status: ${region.status}<br>
+                Services: ${region.services}
+            `, { permanent: false, direction: 'top' });
+
+            // Add pulsing effect for active region
+            if (region.status === 'active') {
+                L.circleMarker(region.coords, {
+                    radius: 25,
+                    fillColor: color,
+                    color: color,
+                    weight: 1,
+                    opacity: 0.3,
+                    fillOpacity: 0.1,
+                    className: 'pulse-marker'
+                }).addTo(map);
+            }
+        });
+
+        // Initialize sparkline charts
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { display: false },
+                y: { display: false }
+            },
+            elements: {
+                point: { radius: 0 },
+                line: { borderWidth: 2 }
+            }
+        };
+
+        // Uptime sparkline
+        new Chart(document.getElementById('uptimeSparkline'), {
+            type: 'line',
+            data: {
+                labels: Array(20).fill(''),
+                datasets: [{
+                    data: [99.99, 99.98, 99.99, 100, 100, 99.99, 99.98, 99.99, 100, 99.99, 99.98, 99.99, 100, 100, 99.99, 99.99, 99.98, 99.99, 100, 99.993],
+                    borderColor: '#00c853',
+                    fill: false
+                }]
+            },
+            options: chartOptions
+        });
+
+        // Response time sparkline
+        new Chart(document.getElementById('responseSparkline'), {
+            type: 'line',
+            data: {
+                labels: Array(20).fill(''),
+                datasets: [{
+                    data: [120, 135, 125, 140, 155, 130, 125, 145, 160, 140, 135, 150, 165, 145, 140, 155, 135, 130, 150, 145],
+                    borderColor: '#1a73e8',
+                    fill: false
+                }]
+            },
+            options: chartOptions
+        });
+
+        // Error rate sparkline
+        new Chart(document.getElementById('errorSparkline'), {
+            type: 'line',
+            data: {
+                labels: Array(20).fill(''),
+                datasets: [{
+                    data: [0.005, 0.006, 0.008, 0.007, 0.009, 0.006, 0.005, 0.007, 0.008, 0.009, 0.007, 0.006, 0.008, 0.007, 0.009, 0.006, 0.007, 0.008, 0.009, 0.008],
+                    borderColor: '#fbbc04',
+                    fill: false
+                }]
+            },
+            options: chartOptions
+        });
+
+        // Functions
+        function executeProcedure(procedureType) {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingStatus = document.getElementById('loadingStatus');
+            
+            loadingOverlay.classList.add('active');
+            
+            // Simulate procedure execution
+            const steps = [
+                'Detecting failures...',
+                'Verifying replicas...',
+                'Initiating failover...',
+                'Updating connections...',
+                'Validating services...',
+                'Recovery complete!'
+            ];
+            
+            let currentStep = 0;
+            const interval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    loadingStatus.textContent = steps[currentStep];
+                    currentStep++;
+                } else {
+                    clearInterval(interval);
+                    loadingOverlay.classList.remove('active');
+                    alert(`${procedureType} recovery procedure completed successfully!`);
+                }
+            }, 2000);
+        }
+
+        function testFailover() {
+            if (confirm('This will initiate a test failover to the standby region. Continue?')) {
+                executeProcedure('test-failover');
+            }
+        }
+
+        function emergencyFailover() {
+            if (confirm('⚠️ WARNING: This will initiate an emergency failover. This action should only be taken during a critical incident. Continue?')) {
+                executeProcedure('emergency-failover');
+            }
+        }
+
+        function showBackupDetails() {
+            console.log('Showing backup details...');
+        }
+
+        function scheduleMaintenane() {
+            console.log('Opening maintenance scheduler...');
+        }
+
+        function viewComplianceReport() {
+            console.log('Generating compliance report...');
+        }
+
+        function configureAlerts() {
+            console.log('Opening alert configuration...');
+        }
+
+        // Real-time updates
+        setInterval(() => {
+            // Update metrics
+            const uptime = (99.99 + Math.random() * 0.01).toFixed(3);
+            document.querySelector('#uptimeCard .sla-value').textContent = uptime + '%';
+            
+            const responseTime = Math.floor(140 + Math.random() * 20);
+            document.querySelector('#responseCard .sla-value').textContent = responseTime + 'ms';
+            
+            const errorRate = (0.005 + Math.random() * 0.005).toFixed(3);
+            document.querySelector('#errorCard .sla-value').textContent = errorRate + '%';
+            
+            // Update backup times
+            document.querySelectorAll('.backup-time').forEach((el, index) => {
+                const times = ['5 min ago', '12 min ago', '28 min ago', '2 hours ago'];
+                el.textContent = times[index];
+            });
+        }, 5000);
+
+        // WebSocket connection for real-time events
+        function connectWebSocket() {
+            const ws = new WebSocket('wss://api.rootuip.com/dr/events');
+            
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                
+                // Update timeline
+                const timeline = document.querySelector('.incident-timeline');
+                const newItem = document.createElement('div');
+                newItem.className = 'timeline-item';
+                newItem.innerHTML = `
+                    <div class="timeline-time">${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">${data.title}</div>
+                        <div class="timeline-description">${data.description}</div>
+                    </div>
+                `;
+                
+                timeline.insertBefore(newItem, timeline.firstChild.nextSibling);
+            };
+            
+            ws.onerror = () => {
+                console.error('WebSocket connection failed');
+                setTimeout(connectWebSocket, 5000); // Reconnect after 5 seconds
+            };
+        }
+        
+        // Initialize WebSocket connection
+        // connectWebSocket();
+    </script>
+</body>
+</html>

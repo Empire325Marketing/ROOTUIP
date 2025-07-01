@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Knowledge Base | Enterprise Support</title>
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml">
+    <style>
+        :root {
+            --color-primary: #0F3460;
+            --color-secondary: #16213E;
+            --color-success: #00D46A;
+            --color-warning: #FF6B35;
+            --color-danger: #ef4444;
+            --color-info: #3b82f6;
+            --color-background: #f8fafc;
+            --color-surface: white;
+            --color-text: #1e293b;
+            --color-text-secondary: #64748b;
+            --color-border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .header-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: var(--color-surface);
+            padding: 2rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1rem;
+            border: 2px solid var(--color-border);
+            border-radius: 12px;
+            font-size: 1.125rem;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .search-button {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .search-button:hover {
+            background: var(--color-secondary);
+        }
+
+        .popular-searches {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .popular-label {
+            font-weight: 600;
+            color: var(--color-text-secondary);
+        }
+
+        .popular-tag {
+            background: var(--color-background);
+            color: var(--color-text);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            border: 1px solid var(--color-border);
+        }
+
+        .popular-tag:hover {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--color-surface);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .sidebar-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+
+        .category-list {
+            list-style: none;
+        }
+
+        .category-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .category-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            color: var(--color-text);
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .category-link:hover,
+        .category-link.active {
+            background: var(--color-background);
+        }
+
+        .category-count {
+            background: var(--color-border);
+            color: var(--color-text-secondary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .support-contact {
+            background: var(--color-background);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .support-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .support-description {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .support-button {
+            background: var(--color-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .support-button:hover {
+            background: var(--color-secondary);
+        }
+
+        /* Content Area */
+        .content-area {
+            background: var(--color-surface);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Article Grid */
+        .article-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .article-card {
+            background: var(--color-background);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            border-color: var(--color-primary);
+            box-shadow: 0 4px 12px rgba(15, 52, 96, 0.1);
+        }
+
+        .article-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .article-category {
+            background: var(--color-primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .article-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+
+        .star {
+            color: #fbbf24;
+        }
+
+        .article-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+        }
+
+        .article-excerpt {
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+
+        .article-tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: var(--color-border);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        /* Featured Articles */
+        .featured-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .view-all-link {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .view-all-link:hover {
+            text-decoration: underline;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .featured-card {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+
+        .featured-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .featured-description {
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .featured-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .featured-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Search Results */
+        .search-results {
+            display: none;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .search-summary {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--color-background);
+            border-radius: 8px;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .results-count {
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: var(--color-text-secondary);
+        }
+
+        .no-results-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+            
+            .header-title {
+                font-size: 2rem;
+            }
+            
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .popular-searches {
+                justify-content: center;
+            }
+        }
+
+        /* Loading States */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            color: var(--color-text-secondary);
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--color-border);
+            border-top: 3px solid var(--color-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="header-title">ROOTUIP Knowledge Base</h1>
+            <p class="header-subtitle">Find answers, guides, and solutions for your ocean freight optimization needs</p>
+        </div>
+    </header>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search for articles, guides, troubleshooting..." id="searchInput">
+                <button class="search-button" onclick="performSearch()">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="popular-searches">
+                <span class="popular-label">Popular:</span>
+                <a href="#" class="popular-tag" onclick="searchFor('container tracking')">Container Tracking</a>
+                <a href="#" class="popular-tag" onclick="searchFor('api integration')">API Integration</a>
+                <a href="#" class="popular-tag" onclick="searchFor('alert setup')">Alert Setup</a>
+                <a href="#" class="popular-tag" onclick="searchFor('billing')">Billing</a>
+                <a href="#" class="popular-tag" onclick="searchFor('user management')">User Management</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Categories</h3>
+                <ul class="category-list">
+                    <li class="category-item">
+                        <a href="#" class="category-link active" onclick="filterByCategory('getting-started')">
+                            <span>Getting Started</span>
+                            <span class="category-count">12</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#" class="category-link" onclick="filterByCategory('platform-basics')">
+                            <span>Platform Basics</span>
+                            <span class="category-count">28</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#" class="category-link" onclick="filterByCategory('container-tracking')">
+                            <span>Container Tracking</span>
+                            <span class="category-count">45</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#" class="category-link" onclick="filterByCategory('alerts-notifications')">
+                            <span>Alerts & Notifications</span>
+                            <span class="category-count">18</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#" class="category-link" onclick="filterByCategory('integrations')">
+                            <span>Integrations</span>
+                            <span class="category-count">23</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#" class="category-link" onclick="filterByCategory('reporting')">
+                            <span>Reporting & Analytics</span>
+                            <span class="category-count">32</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#" class="category-link" onclick="filterByCategory('troubleshooting')">
+                            <span>Troubleshooting</span>
+                            <span class="category-count">41</span>
+                        </a>
+                    </li>
+                    <li class="category-item">
+                        <a href="#" class="category-link" onclick="filterByCategory('billing')">
+                            <span>Billing & Account</span>
+                            <span class="category-count">15</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="support-contact">
+                    <h4 class="support-title">Need More Help?</h4>
+                    <p class="support-description">Can't find what you're looking for? Our support team is here to help.</p>
+                    <a href="#" class="support-button" onclick="openSupportTicket()">Contact Support</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content-area">
+            <!-- Default Content -->
+            <div id="default-content">
+                <!-- Featured Articles -->
+                <section class="featured-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Featured Articles</h2>
+                        <a href="#" class="view-all-link">
+                            View All
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="featured-grid">
+                        <div class="featured-card">
+                            <h3 class="featured-title">Quick Start Guide</h3>
+                            <p class="featured-description">Get up and running with ROOTUIP in 15 minutes. Complete setup guide for new users.</p>
+                            <a href="#" class="featured-link" onclick="viewArticle('quick-start')">
+                                Read Guide
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="featured-card">
+                            <h3 class="featured-title">API Integration Guide</h3>
+                            <p class="featured-description">Connect ROOTUIP with your existing systems using our comprehensive API documentation.</p>
+                            <a href="#" class="featured-link" onclick="viewArticle('api-integration')">
+                                View Documentation
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Recent Articles -->
+                <section>
+                    <div class="section-header">
+                        <h2 class="section-title">Recent Articles</h2>
+                        <a href="#" class="view-all-link">
+                            View All
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="article-grid">
+                        <div class="article-card" onclick="viewArticle('container-tracking-optimization')">
+                            <div class="article-header">
+                                <span class="article-category">Container Tracking</span>
+                                <div class="article-rating">
+                                    <span class="star">★</span>
+                                    <span>4.8</span>
+                                </div>
+                            </div>
+                            <h3 class="article-title">Optimizing Container Tracking for Maximum Efficiency</h3>
+                            <p class="article-excerpt">Learn advanced techniques to streamline your container tracking workflow and reduce detention costs by up to 85%.</p>
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <span class="tag">Best Practices</span>
+                                    <span class="tag">Optimization</span>
+                                </div>
+                                <span>Updated 2 days ago</span>
+                            </div>
+                        </div>
+
+                        <div class="article-card" onclick="viewArticle('alert-configuration')">
+                            <div class="article-header">
+                                <span class="article-category">Alerts</span>
+                                <div class="article-rating">
+                                    <span class="star">★</span>
+                                    <span>4.6</span>
+                                </div>
+                            </div>
+                            <h3 class="article-title">Setting Up Proactive Alerts and Notifications</h3>
+                            <p class="article-excerpt">Configure intelligent alerts to prevent issues before they impact your operations. Complete guide with examples.</p>
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <span class="tag">Configuration</span>
+                                    <span class="tag">Automation</span>
+                                </div>
+                                <span>Updated 5 days ago</span>
+                            </div>
+                        </div>
+
+                        <div class="article-card" onclick="viewArticle('reporting-dashboards')">
+                            <div class="article-header">
+                                <span class="article-category">Reporting</span>
+                                <div class="article-rating">
+                                    <span class="star">★</span>
+                                    <span>4.9</span>
+                                </div>
+                            </div>
+                            <h3 class="article-title">Creating Custom Dashboards and Reports</h3>
+                            <p class="article-excerpt">Build powerful dashboards that provide real-time insights into your ocean freight operations and performance metrics.</p>
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <span class="tag">Dashboards</span>
+                                    <span class="tag">Analytics</span>
+                                </div>
+                                <span>Updated 1 week ago</span>
+                            </div>
+                        </div>
+
+                        <div class="article-card" onclick="viewArticle('user-management')">
+                            <div class="article-header">
+                                <span class="article-category">Account</span>
+                                <div class="article-rating">
+                                    <span class="star">★</span>
+                                    <span>4.7</span>
+                                </div>
+                            </div>
+                            <h3 class="article-title">Managing Users, Roles, and Permissions</h3>
+                            <p class="article-excerpt">Complete guide to setting up your team with appropriate access levels and security configurations.</p>
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <span class="tag">Security</span>
+                                    <span class="tag">Administration</span>
+                                </div>
+                                <span>Updated 1 week ago</span>
+                            </div>
+                        </div>
+
+                        <div class="article-card" onclick="viewArticle('api-troubleshooting')">
+                            <div class="article-header">
+                                <span class="article-category">Troubleshooting</span>
+                                <div class="article-rating">
+                                    <span class="star">★</span>
+                                    <span>4.5</span>
+                                </div>
+                            </div>
+                            <h3 class="article-title">Common API Integration Issues and Solutions</h3>
+                            <p class="article-excerpt">Troubleshoot the most common API integration problems with step-by-step solutions and debugging tips.</p>
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <span class="tag">API</span>
+                                    <span class="tag">Debugging</span>
+                                </div>
+                                <span>Updated 2 weeks ago</span>
+                            </div>
+                        </div>
+
+                        <div class="article-card" onclick="viewArticle('mobile-app-guide')">
+                            <div class="article-header">
+                                <span class="article-category">Mobile</span>
+                                <div class="article-rating">
+                                    <span class="star">★</span>
+                                    <span>4.8</span>
+                                </div>
+                            </div>
+                            <h3 class="article-title">ROOTUIP Mobile App Complete Guide</h3>
+                            <p class="article-excerpt">Get the most out of the ROOTUIP mobile app with this comprehensive guide covering all features and use cases.</p>
+                            <div class="article-meta">
+                                <div class="article-tags">
+                                    <span class="tag">Mobile</span>
+                                    <span class="tag">Guide</span>
+                                </div>
+                                <span>Updated 3 weeks ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Search Results -->
+            <div id="search-results" class="search-results">
+                <div class="search-summary">
+                    <div class="results-count">Found 0 articles</div>
+                    <div>for "<span id="search-query"></span>"</div>
+                </div>
+                <div id="search-results-container">
+                    <!-- Search results will be inserted here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Sample articles data
+        const articles = [
+            {
+                id: 'quick-start',
+                title: 'Quick Start Guide',
+                category: 'Getting Started',
+                excerpt: 'Get up and running with ROOTUIP in 15 minutes. Complete setup guide for new users.',
+                tags: ['Setup', 'Beginner'],
+                rating: 4.9,
+                updated: '1 day ago'
+            },
+            {
+                id: 'container-tracking-optimization',
+                title: 'Optimizing Container Tracking for Maximum Efficiency',
+                category: 'Container Tracking',
+                excerpt: 'Learn advanced techniques to streamline your container tracking workflow and reduce detention costs by up to 85%.',
+                tags: ['Best Practices', 'Optimization'],
+                rating: 4.8,
+                updated: '2 days ago'
+            },
+            {
+                id: 'alert-configuration',
+                title: 'Setting Up Proactive Alerts and Notifications',
+                category: 'Alerts',
+                excerpt: 'Configure intelligent alerts to prevent issues before they impact your operations. Complete guide with examples.',
+                tags: ['Configuration', 'Automation'],
+                rating: 4.6,
+                updated: '5 days ago'
+            },
+            {
+                id: 'api-integration',
+                title: 'API Integration Guide',
+                category: 'Integrations',
+                excerpt: 'Connect ROOTUIP with your existing systems using our comprehensive API documentation.',
+                tags: ['API', 'Integration'],
+                rating: 4.9,
+                updated: '1 week ago'
+            },
+            {
+                id: 'reporting-dashboards',
+                title: 'Creating Custom Dashboards and Reports',
+                category: 'Reporting',
+                excerpt: 'Build powerful dashboards that provide real-time insights into your ocean freight operations and performance metrics.',
+                tags: ['Dashboards', 'Analytics'],
+                rating: 4.9,
+                updated: '1 week ago'
+            },
+            {
+                id: 'user-management',
+                title: 'Managing Users, Roles, and Permissions',
+                category: 'Account',
+                excerpt: 'Complete guide to setting up your team with appropriate access levels and security configurations.',
+                tags: ['Security', 'Administration'],
+                rating: 4.7,
+                updated: '1 week ago'
+            }
+        ];
+
+        // Search functionality
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (query) {
+                searchArticles(query);
+            }
+        }
+
+        function searchFor(query) {
+            document.getElementById('searchInput').value = query;
+            searchArticles(query);
+        }
+
+        function searchArticles(query) {
+            const results = articles.filter(article => 
+                article.title.toLowerCase().includes(query.toLowerCase()) ||
+                article.excerpt.toLowerCase().includes(query.toLowerCase()) ||
+                article.category.toLowerCase().includes(query.toLowerCase()) ||
+                article.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
+            );
+
+            displaySearchResults(query, results);
+        }
+
+        function displaySearchResults(query, results) {
+            document.getElementById('default-content').style.display = 'none';
+            document.getElementById('search-results').classList.add('active');
+            
+            document.getElementById('search-query').textContent = query;
+            document.querySelector('.results-count').textContent = `Found ${results.length} article${results.length !== 1 ? 's' : ''}`;
+            
+            const container = document.getElementById('search-results-container');
+            
+            if (results.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <h3 class="no-results-title">No articles found</h3>
+                        <p>Try different keywords or browse our categories</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = results.map(article => `
+                    <div class="article-card" onclick="viewArticle('${article.id}')">
+                        <div class="article-header">
+                            <span class="article-category">${article.category}</span>
+                            <div class="article-rating">
+                                <span class="star">★</span>
+                                <span>${article.rating}</span>
+                            </div>
+                        </div>
+                        <h3 class="article-title">${article.title}</h3>
+                        <p class="article-excerpt">${article.excerpt}</p>
+                        <div class="article-meta">
+                            <div class="article-tags">
+                                ${article.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                            </div>
+                            <span>Updated ${article.updated}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Category filtering
+        function filterByCategory(category) {
+            // Update active category
+            document.querySelectorAll('.category-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Filter articles by category
+            const categoryMap = {
+                'getting-started': 'Getting Started',
+                'platform-basics': 'Platform Basics',
+                'container-tracking': 'Container Tracking',
+                'alerts-notifications': 'Alerts',
+                'integrations': 'Integrations',
+                'reporting': 'Reporting',
+                'troubleshooting': 'Troubleshooting',
+                'billing': 'Account'
+            };
+            
+            const categoryName = categoryMap[category];
+            if (categoryName) {
+                const filtered = articles.filter(article => article.category === categoryName);
+                displaySearchResults(`Category: ${categoryName}`, filtered);
+            }
+        }
+
+        // Article viewing
+        function viewArticle(articleId) {
+            showNotification(`Opening article: ${articleId}`, 'info');
+            // In production, navigate to article page
+        }
+
+        // Support functions
+        function openSupportTicket() {
+            showNotification('Opening support ticket form...', 'info');
+            // In production, open support ticket modal or page
+        }
+
+        // Enter key search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Clear search when input is empty
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            if (e.target.value === '') {
+                document.getElementById('default-content').style.display = 'block';
+                document.getElementById('search-results').classList.remove('active');
+            }
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const colors = {
+                info: '#3b82f6',
+                success: '#10b981',
+                warning: '#f59e0b',
+                error: '#ef4444'
+            };
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${colors[type]};
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                max-width: 400px;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

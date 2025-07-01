@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Outreach Tracker - ROOTUIP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #1e293b;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+
+        .outreach-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #3b82f6;
+        }
+
+        .company-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .company-card {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            align-items: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .company-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .company-info h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-badge {
+            background: #0f172a;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+
+        .pitch-angle {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            font-style: italic;
+        }
+
+        .status-section {
+            display: flex;
+            gap: 0.5rem;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .status-badge.not-contacted {
+            background: #334155;
+            color: #94a3b8;
+        }
+
+        .status-badge.contacted {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .status-badge.responded {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .status-badge.demo-scheduled {
+            background: #10b981;
+            color: white;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #2563eb;
+        }
+
+        .action-btn.secondary {
+            background: #475569;
+        }
+
+        .templates-section {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .template-box {
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .template-box:hover {
+            background: #1e293b;
+        }
+
+        .copy-indicator {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #10b981;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .copy-indicator.show {
+            opacity: 1;
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Enterprise Outreach Tracker</h1>
+        <p>Fortune 500 Campaign - $500K+ Annual Contracts</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value" id="total-outreach">0</div>
+            <div class="stat-label">Total Outreach</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="responses">0</div>
+            <div class="stat-label">Responses</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="demos">0</div>
+            <div class="stat-label">Demos Scheduled</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="pipeline-value">$0</div>
+            <div class="stat-label">Pipeline Value</div>
+        </div>
+    </div>
+
+    <div class="outreach-section">
+        <h2 class="section-title">Week 1: Retail Giants</h2>
+        <div class="company-grid" id="retail-companies">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+
+    <div class="outreach-section">
+        <h2 class="section-title">Week 2: Logistics Leaders</h2>
+        <div class="company-grid" id="logistics-companies">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+
+    <div class="templates-section">
+        <h2 class="section-title">Quick Copy Templates</h2>
+        
+        <h3 style="margin: 1rem 0; font-size: 1.125rem;">LinkedIn Connection Request</h3>
+        <div class="template-box" onclick="copyTemplate(this)">
+            <div class="copy-indicator">Copied!</div>
+Hi [Name], I saw your role in managing [Company]'s supply chain operations. We're helping similar Fortune 500 companies prevent multi-million dollar vessel losses with AI-powered container tracking. Would love to connect and share insights from the industry.
+        </div>
+
+        <h3 style="margin: 1rem 0; font-size: 1.125rem;">CEO Email - $14M Loss Prevention</h3>
+        <div class="template-box" onclick="copyTemplate(this)">
+            <div class="copy-indicator">Copied!</div>
+Subject: Preventing $14M Vessel Losses at [Company] with AI
+
+Hi [Name],
+
+I noticed [Company] manages over [X] containers monthly across global shipping lanes. 
+
+Our AI platform recently helped Maersk prevent a $14M vessel loss by predicting equipment failure 72 hours in advance.
+
+For [Company], this could mean:
+• $5M+ annual savings on demurrage/detention
+• 70% reduction in shipment delays
+• Real-time visibility across all containers
+
+Worth a 15-minute call to explore how this applies to [Company]'s operations?
+
+[Your Name]
+CEO, ROOTUIP
+        </div>
+
+        <h3 style="margin: 1rem 0; font-size: 1.125rem;">ROI Calculator Follow-up</h3>
+        <div class="template-box" onclick="copyTemplate(this)">
+            <div class="copy-indicator">Copied!</div>
+Subject: [Company] - Your Custom ROI Analysis Ready
+
+Hi [Name],
+
+I've prepared a custom ROI analysis for [Company] based on your container volume.
+
+Key findings:
+• Annual Savings: $[X]M
+• ROI: [X]%
+• Payback Period: [X] months
+
+You can view your personalized analysis here:
+https://app.rootuip.com/roi-calculator?company=[Company]
+
+Happy to walk through the numbers on a quick call if helpful.
+
+[Your Name]
+        </div>
+    </div>
+
+    <script>
+        // Company data
+        const retailCompanies = [
+            {
+                id: 'walmart',
+                name: 'Walmart',
+                contact: 'Doug McMillon',
+                title: 'CEO',
+                linkedin: '/in/dougmcmillon',
+                pitch: 'Prevent $14M vessel losses with AI tracking',
+                containerVolume: 50000,
+                status: 'not-contacted'
+            },
+            {
+                id: 'target',
+                name: 'Target',
+                contact: 'Brian Cornell',
+                title: 'CEO',
+                linkedin: '/in/brian-cornell',
+                pitch: 'Real-time visibility for 50K+ containers',
+                containerVolume: 35000,
+                status: 'not-contacted'
+            },
+            {
+                id: 'homedepot',
+                name: 'Home Depot',
+                contact: 'Ted Decker',
+                title: 'CEO',
+                linkedin: '/in/ted-decker',
+                pitch: 'Reduce supply chain delays by 70%',
+                containerVolume: 40000,
+                status: 'not-contacted'
+            },
+            {
+                id: 'costco',
+                name: 'Costco',
+                contact: 'Craig Jelinek',
+                title: 'CEO',
+                linkedin: '/in/craig-jelinek',
+                pitch: 'Save $5M annually on demurrage fees',
+                containerVolume: 30000,
+                status: 'not-contacted'
+            }
+        ];
+
+        const logisticsCompanies = [
+            {
+                id: 'fedex',
+                name: 'FedEx',
+                contact: 'Raj Subramaniam',
+                title: 'CEO',
+                linkedin: '/in/rajsubramaniam',
+                pitch: 'AI-powered tracking for global operations',
+                containerVolume: 100000,
+                status: 'not-contacted'
+            },
+            {
+                id: 'ups',
+                name: 'UPS',
+                contact: 'Carol Tomé',
+                title: 'CEO',
+                linkedin: '/in/caroltome',
+                pitch: 'Predictive analytics for fleet optimization',
+                containerVolume: 80000,
+                status: 'not-contacted'
+            },
+            {
+                id: 'xpo',
+                name: 'XPO Logistics',
+                contact: 'Mario Harik',
+                title: 'CIO',
+                linkedin: '/in/marioharik',
+                pitch: 'Enterprise-grade container visibility',
+                containerVolume: 45000,
+                status: 'not-contacted'
+            },
+            {
+                id: 'jbhunt',
+                name: 'J.B. Hunt',
+                contact: 'Shelley Simpson',
+                title: 'CEO',
+                linkedin: '/in/shelleysimpson',
+                pitch: 'Reduce detention costs by 80%',
+                containerVolume: 25000,
+                status: 'not-contacted'
+            }
+        ];
+
+        // Load saved status from localStorage
+        function loadStatus() {
+            const saved = localStorage.getItem('outreachStatus');
+            if (saved) {
+                const status = JSON.parse(saved);
+                retailCompanies.forEach(company => {
+                    if (status[company.id]) {
+                        company.status = status[company.id];
+                    }
+                });
+                logisticsCompanies.forEach(company => {
+                    if (status[company.id]) {
+                        company.status = status[company.id];
+                    }
+                });
+            }
+        }
+
+        // Save status to localStorage
+        function saveStatus() {
+            const status = {};
+            [...retailCompanies, ...logisticsCompanies].forEach(company => {
+                status[company.id] = company.status;
+            });
+            localStorage.setItem('outreachStatus', JSON.stringify(status));
+            updateStats();
+        }
+
+        // Update statistics
+        function updateStats() {
+            const allCompanies = [...retailCompanies, ...logisticsCompanies];
+            
+            const contacted = allCompanies.filter(c => c.status !== 'not-contacted').length;
+            const responded = allCompanies.filter(c => c.status === 'responded' || c.status === 'demo-scheduled').length;
+            const demos = allCompanies.filter(c => c.status === 'demo-scheduled').length;
+            
+            // Calculate pipeline value (average deal size $500K)
+            const pipelineValue = demos * 500000 + responded * 250000;
+            
+            document.getElementById('total-outreach').textContent = contacted;
+            document.getElementById('responses').textContent = responded;
+            document.getElementById('demos').textContent = demos;
+            document.getElementById('pipeline-value').textContent = `$${(pipelineValue / 1000000).toFixed(1)}M`;
+        }
+
+        // Create company card
+        function createCompanyCard(company) {
+            const card = document.createElement('div');
+            card.className = 'company-card';
+            card.innerHTML = `
+                <div class="company-info">
+                    <h3>${company.name}</h3>
+                    <div class="contact-info">
+                        <span class="contact-badge">${company.contact}</span>
+                        <span class="contact-badge">${company.title}</span>
+                        <span class="contact-badge">${company.containerVolume.toLocaleString()} containers/mo</span>
+                    </div>
+                    <div class="pitch-angle">"${company.pitch}"</div>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="openLinkedIn('${company.linkedin}')">LinkedIn</button>
+                        <button class="action-btn secondary" onclick="generateEmail('${company.id}')">Generate Email</button>
+                        <button class="action-btn secondary" onclick="openROI('${company.name}', ${company.containerVolume})">ROI Calculator</button>
+                    </div>
+                </div>
+                <div class="status-section">
+                    <div class="status-badge ${company.status}" onclick="updateStatus('${company.id}')">
+                        ${formatStatus(company.status)}
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        // Format status text
+        function formatStatus(status) {
+            const statusMap = {
+                'not-contacted': 'Not Contacted',
+                'contacted': 'Contacted',
+                'responded': 'Responded',
+                'demo-scheduled': 'Demo Scheduled'
+            };
+            return statusMap[status] || status;
+        }
+
+        // Update company status
+        function updateStatus(companyId) {
+            const allCompanies = [...retailCompanies, ...logisticsCompanies];
+            const company = allCompanies.find(c => c.id === companyId);
+            
+            if (company) {
+                const statuses = ['not-contacted', 'contacted', 'responded', 'demo-scheduled'];
+                const currentIndex = statuses.indexOf(company.status);
+                company.status = statuses[(currentIndex + 1) % statuses.length];
+                saveStatus();
+                renderCompanies();
+            }
+        }
+
+        // Open LinkedIn profile
+        function openLinkedIn(profile) {
+            window.open(`https://www.linkedin.com${profile}`, '_blank');
+        }
+
+        // Generate personalized email
+        function generateEmail(companyId) {
+            const allCompanies = [...retailCompanies, ...logisticsCompanies];
+            const company = allCompanies.find(c => c.id === companyId);
+            
+            if (company) {
+                const email = `Subject: Preventing $14M Vessel Losses at ${company.name} with AI\n\nHi ${company.contact.split(' ')[0]},\n\nI noticed ${company.name} manages over ${company.containerVolume.toLocaleString()} containers monthly across global shipping lanes.\n\nOur AI platform recently helped Maersk prevent a $14M vessel loss by predicting equipment failure 72 hours in advance.\n\nFor ${company.name}, this could mean:\n• $${Math.round(company.containerVolume * 100 / 1000000)}M+ annual savings on demurrage/detention\n• 70% reduction in shipment delays\n• Real-time visibility across all containers\n\nWorth a 15-minute call to explore how this applies to ${company.name}'s operations?\n\n[Your Name]\nCEO, ROOTUIP`;
+                
+                alert('Email template generated! Copy from below:\n\n' + email);
+            }
+        }
+
+        // Open ROI calculator
+        function openROI(companyName, volume) {
+            const url = `enterprise-roi-calculator.html?company=${encodeURIComponent(companyName)}&volume=${volume}`;
+            window.open(url, '_blank');
+        }
+
+        // Copy template to clipboard
+        function copyTemplate(element) {
+            const text = element.textContent.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                const indicator = element.querySelector('.copy-indicator');
+                indicator.classList.add('show');
+                setTimeout(() => {
+                    indicator.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        // Render companies
+        function renderCompanies() {
+            const retailContainer = document.getElementById('retail-companies');
+            const logisticsContainer = document.getElementById('logistics-companies');
+            
+            retailContainer.innerHTML = '';
+            logisticsContainer.innerHTML = '';
+            
+            retailCompanies.forEach(company => {
+                retailContainer.appendChild(createCompanyCard(company));
+            });
+            
+            logisticsCompanies.forEach(company => {
+                logisticsContainer.appendChild(createCompanyCard(company));
+            });
+        }
+
+        // Initialize
+        loadStatus();
+        renderCompanies();
+        updateStats();
+
+        // Auto-save every 30 seconds
+        setInterval(saveStatus, 30000);
+    </script>
+</body>
+</html>

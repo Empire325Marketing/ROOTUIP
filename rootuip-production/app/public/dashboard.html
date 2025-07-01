@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Dashboard - Container Intelligence Command Center</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/rootuip-logo.svg">
+    <link rel="stylesheet" href="/assets/css/rootuip-design-system.css">
+    <style>
+        /* Dashboard Specific Styles */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+            background: var(--rootuip-gray-50);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--rootuip-white);
+            border-right: 1px solid var(--rootuip-gray-200);
+            padding: var(--space-6);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .sidebar-logo {
+            margin-bottom: var(--space-8);
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+        }
+        
+        .sidebar-item {
+            margin-bottom: var(--space-2);
+        }
+        
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            color: var(--rootuip-gray-700);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+            font-weight: 500;
+        }
+        
+        .sidebar-link:hover {
+            background: var(--rootuip-gray-100);
+            color: var(--rootuip-primary);
+        }
+        
+        .sidebar-link.active {
+            background: var(--rootuip-primary);
+            color: white;
+        }
+        
+        .sidebar-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Main Content */
+        .dashboard-main {
+            padding: var(--space-6);
+            overflow-y: auto;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-6);
+        }
+        
+        .dashboard-title {
+            font-size: var(--text-3xl);
+            font-weight: 700;
+            color: var(--rootuip-gray-900);
+        }
+        
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+        
+        .metric-card {
+            background: var(--rootuip-white);
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--rootuip-gray-200);
+            transition: all var(--transition-base);
+        }
+        
+        .metric-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-3);
+        }
+        
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--rootuip-gray-100);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xl);
+        }
+        
+        .metric-value {
+            font-size: var(--text-3xl);
+            font-weight: 700;
+            color: var(--rootuip-gray-900);
+            margin-bottom: var(--space-1);
+        }
+        
+        .metric-label {
+            font-size: var(--text-sm);
+            color: var(--rootuip-gray-600);
+            margin-bottom: var(--space-2);
+        }
+        
+        .metric-change {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-1);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-full);
+        }
+        
+        .metric-change.positive {
+            color: var(--rootuip-accent);
+            background: rgba(0, 200, 83, 0.1);
+        }
+        
+        .metric-change.negative {
+            color: var(--rootuip-danger);
+            background: rgba(234, 67, 53, 0.1);
+        }
+        
+        /* Charts Section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+        
+        .chart-container {
+            background: var(--rootuip-white);
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--rootuip-gray-200);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-4);
+        }
+        
+        .chart-title {
+            font-size: var(--text-xl);
+            font-weight: 600;
+            color: var(--rootuip-gray-900);
+        }
+        
+        .chart-actions {
+            display: flex;
+            gap: var(--space-2);
+        }
+        
+        .chart-action {
+            padding: var(--space-2) var(--space-3);
+            font-size: var(--text-sm);
+            color: var(--rootuip-gray-600);
+            background: var(--rootuip-gray-100);
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .chart-action:hover {
+            background: var(--rootuip-gray-200);
+        }
+        
+        .chart-action.active {
+            background: var(--rootuip-primary);
+            color: white;
+        }
+        
+        /* Activity Feed */
+        .activity-feed {
+            background: var(--rootuip-white);
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--rootuip-gray-200);
+        }
+        
+        .activity-item {
+            display: flex;
+            gap: var(--space-4);
+            padding: var(--space-4) 0;
+            border-bottom: 1px solid var(--rootuip-gray-100);
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .activity-icon.success {
+            background: rgba(0, 200, 83, 0.1);
+            color: var(--rootuip-accent);
+        }
+        
+        .activity-icon.warning {
+            background: rgba(251, 188, 4, 0.1);
+            color: var(--rootuip-warning);
+        }
+        
+        .activity-icon.info {
+            background: rgba(26, 115, 232, 0.1);
+            color: var(--rootuip-primary);
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 500;
+            color: var(--rootuip-gray-900);
+            margin-bottom: var(--space-1);
+        }
+        
+        .activity-description {
+            font-size: var(--text-sm);
+            color: var(--rootuip-gray-600);
+            margin-bottom: var(--space-1);
+        }
+        
+        .activity-time {
+            font-size: var(--text-xs);
+            color: var(--rootuip-gray-500);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/assets/images/rootuip-logo.svg" alt="ROOTUIP" height="40">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link active">
+                            <span class="sidebar-icon">📊</span>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="/container-tracking-interface.html" class="sidebar-link">
+                            <span class="sidebar-icon">🚢</span>
+                            <span>Container Tracking</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <span class="sidebar-icon">📈</span>
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <span class="sidebar-icon">📅</span>
+                            <span>Schedule</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <span class="sidebar-icon">💰</span>
+                            <span>Billing</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <span class="sidebar-icon">🔔</span>
+                            <span>Alerts</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <span class="sidebar-icon">📄</span>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <span class="sidebar-icon">⚙️</span>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="mt-auto pt-8">
+                <div class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="sidebar-icon">🏢</span>
+                        <span>Maersk Corporation</span>
+                    </a>
+                </div>
+                <div class="sidebar-item">
+                    <a href="/logout" class="sidebar-link">
+                        <span class="sidebar-icon">🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Header -->
+            <div class="dashboard-header">
+                <div>
+                    <h1 class="dashboard-title">Container Intelligence Dashboard</h1>
+                    <p class="text-gray-600">Welcome back, Sarah. Here's your real-time overview.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button class="btn btn-secondary">Export Report</button>
+                    <button class="btn btn-primary">Add Container</button>
+                </div>
+            </div>
+            
+            <!-- Metrics -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon">🚢</div>
+                    </div>
+                    <div class="metric-value">1,847</div>
+                    <div class="metric-label">Active Containers</div>
+                    <div class="metric-change positive">
+                        <span>↑</span>
+                        <span>12.5%</span>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon">⏱️</div>
+                    </div>
+                    <div class="metric-value">98.7%</div>
+                    <div class="metric-label">On-Time Delivery</div>
+                    <div class="metric-change positive">
+                        <span>↑</span>
+                        <span>2.3%</span>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon">💰</div>
+                    </div>
+                    <div class="metric-value">$124K</div>
+                    <div class="metric-label">Fees Saved (MTD)</div>
+                    <div class="metric-change positive">
+                        <span>↑</span>
+                        <span>45.8%</span>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon">⚠️</div>
+                    </div>
+                    <div class="metric-value">23</div>
+                    <div class="metric-label">At-Risk Shipments</div>
+                    <div class="metric-change negative">
+                        <span>↑</span>
+                        <span>8 new</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Container Volume Trends</h3>
+                        <div class="chart-actions">
+                            <button class="chart-action">Day</button>
+                            <button class="chart-action active">Week</button>
+                            <button class="chart-action">Month</button>
+                            <button class="chart-action">Year</button>
+                        </div>
+                    </div>
+                    <div style="height: 300px; display: flex; align-items: center; justify-content: center; color: var(--rootuip-gray-400);">
+                        <canvas id="volumeChart" width="100%" height="300"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Route Performance</h3>
+                    </div>
+                    <div style="height: 300px;">
+                        <canvas id="routeChart" width="100%" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Activity Feed -->
+            <div class="activity-feed">
+                <div class="chart-header">
+                    <h3 class="chart-title">Recent Activity</h3>
+                    <button class="btn btn-sm btn-secondary">View All</button>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon success">✓</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Container MSKU2847593 delivered</div>
+                        <div class="activity-description">Successfully delivered to Port of Los Angeles - 2 days early</div>
+                        <div class="activity-time">5 minutes ago</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon warning">!</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Delay alert for HLCU8374652</div>
+                        <div class="activity-description">Weather conditions causing 12-hour delay at Port of Singapore</div>
+                        <div class="activity-time">23 minutes ago</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon info">i</div>
+                    <div class="activity-content">
+                        <div class="activity-title">New ML prediction available</div>
+                        <div class="activity-description">85% probability of congestion at Port of Shanghai next week</div>
+                        <div class="activity-time">1 hour ago</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon success">✓</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Monthly report generated</div>
+                        <div class="activity-description">December 2024 performance report is ready for download</div>
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Volume Chart
+        const volumeCtx = document.getElementById('volumeChart').getContext('2d');
+        new Chart(volumeCtx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Containers',
+                    data: [245, 268, 252, 284, 301, 289, 312],
+                    borderColor: '#1a73e8',
+                    backgroundColor: 'rgba(26, 115, 232, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            borderDash: [3, 3]
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Route Performance Chart
+        const routeCtx = document.getElementById('routeChart').getContext('2d');
+        new Chart(routeCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['On Time', 'Delayed', 'Early'],
+                datasets: [{
+                    data: [78, 15, 7],
+                    backgroundColor: [
+                        '#00c853',
+                        '#fbbc04',
+                        '#1a73e8'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

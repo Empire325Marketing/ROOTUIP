@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Integration Platform</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f35 100%);
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            background: rgba(26, 31, 53, 0.9);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #2a3f5f;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .nav-tabs {
+            background: rgba(15, 20, 32, 0.8);
+            padding: 0 2rem;
+            border-bottom: 1px solid #2a3f5f;
+        }
+        
+        .nav-tabs ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .nav-tabs li {
+            padding: 1rem 0;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            color: #a0a0a0;
+            font-weight: 500;
+        }
+        
+        .nav-tabs li.active {
+            color: #00d4ff;
+            border-bottom-color: #00d4ff;
+        }
+        
+        .nav-tabs li:hover {
+            color: #00d4ff;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        }
+        
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        }
+        
+        .card {
+            background: rgba(26, 31, 53, 0.8);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(42, 63, 95, 0.5);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .integration-item {
+            background: rgba(15, 20, 32, 0.6);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(42, 63, 95, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .integration-item:hover {
+            background: rgba(15, 20, 32, 0.8);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+        
+        .integration-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .integration-name {
+            font-weight: 600;
+            color: #ffffff;
+        }
+        
+        .integration-type {
+            font-size: 0.85rem;
+            color: #a0a0a0;
+        }
+        
+        .integration-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .status-connected {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+        
+        .status-disconnected {
+            background: rgba(255, 56, 56, 0.2);
+            color: #ff3838;
+        }
+        
+        .status-connecting {
+            background: rgba(255, 170, 0, 0.2);
+            color: #ffaa00;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: #00d4ff;
+            color: var(--text-primary);
+        }
+        
+        .btn-primary:hover {
+            background: #00b8e6;
+            transform: translateY(-1px);
+        }
+        
+        .btn-danger {
+            background: #ff3838;
+            color: #fff;
+        }
+        
+        .btn-danger:hover {
+            background: #e62e2e;
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .metric-card {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #00d4ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .metric-label {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
+        }
+        
+        .activity-log {
+            max-height: 400px;
+            overflow-y: auto;
+            background: rgba(15, 20, 32, 0.6);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .activity-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(42, 63, 95, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-description {
+            font-size: 0.85rem;
+            color: #a0a0a0;
+        }
+        
+        .activity-time {
+            font-size: 0.8rem;
+            color: #606060;
+            white-space: nowrap;
+            margin-left: 1rem;
+        }
+        
+        .activity-success {
+            color: #00ff00;
+        }
+        
+        .activity-error {
+            color: #ff3838;
+        }
+        
+        .activity-info {
+            color: #00d4ff;
+        }
+        
+        .provider-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .provider-card {
+            background: rgba(15, 20, 32, 0.6);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid rgba(42, 63, 95, 0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .provider-card:hover {
+            background: rgba(15, 20, 32, 0.8);
+            border-color: rgba(0, 212, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .provider-logo {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .provider-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .provider-status {
+            font-size: 0.85rem;
+        }
+        
+        .scrollbar-custom::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .scrollbar-custom::-webkit-scrollbar-track {
+            background: rgba(15, 20, 32, 0.6);
+            border-radius: 4px;
+        }
+        
+        .scrollbar-custom::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.3);
+            border-radius: 4px;
+        }
+        
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 212, 255, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-tabs ul {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .grid-3, .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .integration-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>
+                🔗 ROOTUIP Integration Platform
+            </h1>
+            <div class="system-status">
+                <div class="status-indicator"></div>
+                <span>All Systems Operational</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="nav-tabs">
+        <ul>
+            <li class="active" data-tab="overview">Overview</li>
+            <li data-tab="logistics">Logistics</li>
+            <li data-tab="enterprise">Enterprise</li>
+            <li data-tab="communications">Communications</li>
+            <li data-tab="monitoring">Monitoring</li>
+            <li data-tab="settings">Settings</li>
+        </ul>
+    </div>
+    
+    <div class="container">
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="grid grid-3">
+                <div class="card metric-card">
+                    <div class="metric-value" id="totalIntegrations">0</div>
+                    <div class="metric-label">Total Integrations</div>
+                </div>
+                <div class="card metric-card">
+                    <div class="metric-value" id="connectedIntegrations">0</div>
+                    <div class="metric-label">Connected</div>
+                </div>
+                <div class="card metric-card">
+                    <div class="metric-value" id="totalRequests">0</div>
+                    <div class="metric-label">Total Requests</div>
+                </div>
+            </div>
+            
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">📊 Request Volume</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="requestChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">📈 Success Rate</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="successChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🔄 Recent Activity</div>
+                </div>
+                <div class="activity-log scrollbar-custom" id="activityLog">
+                    <!-- Activity items will be added here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Logistics Tab -->
+        <div id="logistics" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🚛 Logistics Integrations</div>
+                    <button class="btn btn-primary" onclick="showAddIntegration('logistics')">
+                        + Add Integration
+                    </button>
+                </div>
+                <div id="logisticsIntegrations">
+                    <!-- Logistics integrations will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📦 Available Providers</div>
+                </div>
+                <div class="provider-grid">
+                    <div class="provider-card" data-provider="customs" data-type="chrobinson">
+                        <div class="provider-logo">🏛️</div>
+                        <div class="provider-name">C.H. Robinson</div>
+                        <div class="provider-status">Customs Brokerage</div>
+                    </div>
+                    <div class="provider-card" data-provider="freight" data-type="flexport">
+                        <div class="provider-logo">📦</div>
+                        <div class="provider-name">Flexport</div>
+                        <div class="provider-status">Freight Forwarding</div>
+                    </div>
+                    <div class="provider-card" data-provider="freight" data-type="freightos">
+                        <div class="provider-logo">🚢</div>
+                        <div class="provider-name">Freightos</div>
+                        <div class="provider-status">Ocean Freight</div>
+                    </div>
+                    <div class="provider-card" data-provider="warehouse" data-type="shipbob">
+                        <div class="provider-logo">🏭</div>
+                        <div class="provider-name">ShipBob</div>
+                        <div class="provider-status">Warehousing</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Enterprise Tab -->
+        <div id="enterprise" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">💼 Enterprise Systems</div>
+                    <button class="btn btn-primary" onclick="showAddIntegration('enterprise')">
+                        + Add Integration
+                    </button>
+                </div>
+                <div id="enterpriseIntegrations">
+                    <!-- Enterprise integrations will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🏢 Supported Systems</div>
+                </div>
+                <div class="provider-grid">
+                    <div class="provider-card" data-provider="erp" data-type="sap">
+                        <div class="provider-logo">💼</div>
+                        <div class="provider-name">SAP S/4HANA</div>
+                        <div class="provider-status">ERP System</div>
+                    </div>
+                    <div class="provider-card" data-provider="erp" data-type="oracle">
+                        <div class="provider-logo">🔷</div>
+                        <div class="provider-name">Oracle ERP</div>
+                        <div class="provider-status">Enterprise Planning</div>
+                    </div>
+                    <div class="provider-card" data-provider="bi" data-type="powerbi">
+                        <div class="provider-logo">📊</div>
+                        <div class="provider-name">Power BI</div>
+                        <div class="provider-status">Business Intelligence</div>
+                    </div>
+                    <div class="provider-card" data-provider="crm" data-type="salesforce">
+                        <div class="provider-logo">☁️</div>
+                        <div class="provider-name">Salesforce</div>
+                        <div class="provider-status">CRM Platform</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Communications Tab -->
+        <div id="communications" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📱 Communication Integrations</div>
+                    <button class="btn btn-primary" onclick="showAddIntegration('communications')">
+                        + Add Integration
+                    </button>
+                </div>
+                <div id="communicationsIntegrations">
+                    <!-- Communications integrations will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">💬 Available Platforms</div>
+                </div>
+                <div class="provider-grid">
+                    <div class="provider-card" data-provider="whatsapp" data-type="business">
+                        <div class="provider-logo">💬</div>
+                        <div class="provider-name">WhatsApp Business</div>
+                        <div class="provider-status">Messaging</div>
+                    </div>
+                    <div class="provider-card" data-provider="teams" data-type="microsoft">
+                        <div class="provider-logo">👥</div>
+                        <div class="provider-name">Microsoft Teams</div>
+                        <div class="provider-status">Collaboration</div>
+                    </div>
+                    <div class="provider-card" data-provider="email" data-type="outlook">
+                        <div class="provider-logo">📧</div>
+                        <div class="provider-name">Outlook</div>
+                        <div class="provider-status">Email Platform</div>
+                    </div>
+                    <div class="provider-card" data-provider="zoom" data-type="meetings">
+                        <div class="provider-logo">📹</div>
+                        <div class="provider-name">Zoom</div>
+                        <div class="provider-status">Video Conferencing</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Monitoring Tab -->
+        <div id="monitoring" class="tab-content">
+            <div class="grid grid-3">
+                <div class="card metric-card">
+                    <div class="metric-value" id="successRate">0%</div>
+                    <div class="metric-label">Success Rate</div>
+                </div>
+                <div class="card metric-card">
+                    <div class="metric-value" id="avgResponseTime">0ms</div>
+                    <div class="metric-label">Avg Response Time</div>
+                </div>
+                <div class="card metric-card">
+                    <div class="metric-value" id="queueSize">0</div>
+                    <div class="metric-label">Queue Size</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">⚠️ Recent Errors</div>
+                </div>
+                <div class="activity-log scrollbar-custom" id="errorLog">
+                    <!-- Error items will be added here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Tab -->
+        <div id="settings" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">⚙️ Integration Settings</div>
+                </div>
+                <div class="settings-form">
+                    <p>Settings panel coming soon...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize dashboard
+        let socket = null;
+        let requestChart = null;
+        let successChart = null;
+        
+        // Tab navigation
+        document.querySelectorAll('.nav-tabs li').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Update active tab
+                document.querySelectorAll('.nav-tabs li').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show corresponding content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+        
+        // Initialize charts
+        function initializeCharts() {
+            // Request volume chart
+            const requestCtx = document.getElementById('requestChart').getContext('2d');
+            requestChart = new Chart(requestCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Requests',
+                        data: [],
+                        borderColor: '#00d4ff',
+                        backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(42, 63, 95, 0.3)' },
+                            ticks: { color: '#a0a0a0' }
+                        },
+                        y: {
+                            grid: { color: 'rgba(42, 63, 95, 0.3)' },
+                            ticks: { color: '#a0a0a0' }
+                        }
+                    }
+                }
+            });
+            
+            // Success rate chart
+            const successCtx = document.getElementById('successChart').getContext('2d');
+            successChart = new Chart(successCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Success', 'Failed'],
+                    datasets: [{
+                        data: [95, 5],
+                        backgroundColor: ['#00ff88', '#ff3838'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#a0a0a0' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Initialize Socket.IO
+        function initializeSocket() {
+            try {
+                socket = io();
+                
+                socket.on('connect', () => {
+                    console.log('Connected to integration platform');
+                    loadDashboardData();
+                });
+                
+                socket.on('metrics:update', (metrics) => {
+                    updateMetrics(metrics);
+                });
+                
+                socket.on('integration:registered', (data) => {
+                    addActivityItem('Integration Registered', `${data.name} has been registered`, 'info');
+                });
+                
+                socket.on('integration:connected', (data) => {
+                    addActivityItem('Integration Connected', `${data.name} is now online`, 'success');
+                });
+                
+                socket.on('request:success', (data) => {
+                    addActivityItem('Request Success', `${data.integrationId}: ${data.operation}`, 'success');
+                });
+                
+                socket.on('request:error', (data) => {
+                    addActivityItem('Request Failed', `${data.integrationId}: ${data.error}`, 'error');
+                    addErrorItem(data);
+                });
+                
+            } catch (error) {
+                console.error('Socket connection failed:', error);
+            }
+        }
+        
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                // Load integrations
+                const integrationsResponse = await fetch('/api/integrations');
+                const integrationsData = await integrationsResponse.json();
+                updateIntegrationsList(integrationsData.integrations);
+                
+                // Load metrics
+                const metricsResponse = await fetch('/api/metrics');
+                const metricsData = await metricsResponse.json();
+                updateMetrics(metricsData);
+                
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+            }
+        }
+        
+        // Update metrics display
+        function updateMetrics(metrics) {
+            document.getElementById('totalIntegrations').textContent = metrics.integrations.length;
+            document.getElementById('connectedIntegrations').textContent = 
+                metrics.integrations.filter(i => i.status === 'connected').length;
+            document.getElementById('totalRequests').textContent = metrics.overall.totalRequests;
+            document.getElementById('successRate').textContent = metrics.overall.successRate;
+            document.getElementById('avgResponseTime').textContent = metrics.overall.averageResponseTime + 'ms';
+            document.getElementById('queueSize').textContent = metrics.overall.queueSize;
+            
+            // Update charts
+            if (requestChart) {
+                updateRequestChart(metrics);
+            }
+            
+            if (successChart) {
+                updateSuccessChart(metrics);
+            }
+        }
+        
+        // Update integrations list
+        function updateIntegrationsList(integrations) {
+            const categories = ['logistics', 'enterprise', 'communications'];
+            
+            categories.forEach(category => {
+                const container = document.getElementById(category + 'Integrations');
+                if (!container) return;
+                
+                container.innerHTML = '';
+                
+                const categoryIntegrations = integrations.filter(i => i.category === category);
+                
+                if (categoryIntegrations.length === 0) {
+                    container.innerHTML = '<p style="color: #a0a0a0; text-align: center; padding: 2rem;">No integrations configured</p>';
+                    return;
+                }
+                
+                categoryIntegrations.forEach(integration => {
+                    const item = createIntegrationItem(integration);
+                    container.appendChild(item);
+                });
+            });
+        }
+        
+        // Create integration item
+        function createIntegrationItem(integration) {
+            const item = document.createElement('div');
+            item.className = 'integration-item';
+            
+            const statusClass = `status-${integration.status || 'disconnected'}`;
+            
+            item.innerHTML = `
+                <div class="integration-info">
+                    <div class="integration-name">${integration.name}</div>
+                    <div class="integration-type">${integration.type}</div>
+                </div>
+                <div class="integration-status">
+                    <span class="status-badge ${statusClass}">${integration.status || 'disconnected'}</span>
+                    <button class="btn btn-secondary" onclick="toggleIntegration('${integration.id}', '${integration.status}')">
+                        ${integration.status === 'connected' ? 'Disconnect' : 'Connect'}
+                    </button>
+                    <button class="btn btn-danger" onclick="removeIntegration('${integration.id}')">Remove</button>
+                </div>
+            `;
+            
+            return item;
+        }
+        
+        // Add activity item
+        function addActivityItem(title, description, type) {
+            const log = document.getElementById('activityLog');
+            const item = document.createElement('div');
+            item.className = `activity-item activity-${type}`;
+            
+            item.innerHTML = `
+                <div class="activity-content">
+                    <div class="activity-title">${title}</div>
+                    <div class="activity-description">${description}</div>
+                </div>
+                <div class="activity-time">${new Date().toLocaleTimeString()}</div>
+            `;
+            
+            log.insertBefore(item, log.firstChild);
+            
+            // Keep only last 20 items
+            while (log.children.length > 20) {
+                log.removeChild(log.lastChild);
+            }
+        }
+        
+        // Add error item
+        function addErrorItem(error) {
+            const log = document.getElementById('errorLog');
+            const item = document.createElement('div');
+            item.className = 'activity-item activity-error';
+            
+            item.innerHTML = `
+                <div class="activity-content">
+                    <div class="activity-title">Integration Error</div>
+                    <div class="activity-description">${error.integrationId}: ${error.error}</div>
+                </div>
+                <div class="activity-time">${new Date().toLocaleTimeString()}</div>
+            `;
+            
+            log.insertBefore(item, log.firstChild);
+            
+            // Keep only last 10 errors
+            while (log.children.length > 10) {
+                log.removeChild(log.lastChild);
+            }
+        }
+        
+        // Update request chart
+        function updateRequestChart(metrics) {
+            // Generate time labels for last 24 hours
+            const labels = [];
+            const now = new Date();
+            for (let i = 23; i >= 0; i--) {
+                const time = new Date(now - i * 3600000);
+                labels.push(time.getHours() + ':00');
+            }
+            
+            // Generate sample data (in production, use real metrics)
+            const data = Array.from({length: 24}, () => Math.floor(Math.random() * 100));
+            
+            requestChart.data.labels = labels;
+            requestChart.data.datasets[0].data = data;
+            requestChart.update();
+        }
+        
+        // Update success chart
+        function updateSuccessChart(metrics) {
+            const successRate = parseFloat(metrics.overall.successRate) || 95;
+            const failureRate = 100 - successRate;
+            
+            successChart.data.datasets[0].data = [successRate, failureRate];
+            successChart.update();
+        }
+        
+        // Toggle integration connection
+        async function toggleIntegration(id, currentStatus) {
+            try {
+                const action = currentStatus === 'connected' ? 'disconnect' : 'connect';
+                const response = await fetch(`/api/integrations/${id}/${action}`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    addActivityItem(
+                        `Integration ${action}ed`,
+                        `Successfully ${action}ed integration`,
+                        'success'
+                    );
+                    loadDashboardData();
+                } else {
+                    throw new Error(`Failed to ${action} integration`);
+                }
+            } catch (error) {
+                addActivityItem('Error', error.message, 'error');
+            }
+        }
+        
+        // Remove integration
+        async function removeIntegration(id) {
+            if (!confirm('Are you sure you want to remove this integration?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/integrations/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    addActivityItem('Integration Removed', 'Integration successfully removed', 'info');
+                    loadDashboardData();
+                } else {
+                    throw new Error('Failed to remove integration');
+                }
+            } catch (error) {
+                addActivityItem('Error', error.message, 'error');
+            }
+        }
+        
+        // Show add integration dialog
+        function showAddIntegration(category) {
+            // Placeholder for add integration functionality
+            alert(`Add ${category} integration functionality coming soon!`);
+        }
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeCharts();
+            initializeSocket();
+            
+            // Add some sample activity items
+            setTimeout(() => {
+                addActivityItem('System Started', 'Integration platform is online', 'success');
+                addActivityItem('Health Check', 'All integrations are healthy', 'info');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

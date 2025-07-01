@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Customer Intelligence - Predictive Analytics & Health Scoring</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/rootuip-logo.svg">
+    <link rel="stylesheet" href="/assets/css/rootuip-design-system.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <style>
+        /* Customer Intelligence Specific Styles */
+        .intel-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            min-height: 100vh;
+            background: var(--rootuip-gray-50);
+        }
+        
+        /* Header Section */
+        .intel-header {
+            background: var(--rootuip-white);
+            border-bottom: 1px solid var(--rootuip-gray-200);
+            padding: var(--space-6);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .header-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: var(--space-6);
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Customer Segments */
+        .segments-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-4);
+            margin-bottom: var(--space-8);
+        }
+        
+        .segment-card {
+            background: var(--rootuip-white);
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--rootuip-gray-200);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        
+        .segment-card:hover,
+        .segment-card.active {
+            border-color: var(--rootuip-primary);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .segment-card.active {
+            background: var(--rootuip-primary);
+            color: white;
+        }
+        
+        .segment-icon {
+            font-size: var(--text-3xl);
+            margin-bottom: var(--space-3);
+        }
+        
+        .segment-count {
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            margin-bottom: var(--space-1);
+        }
+        
+        .segment-label {
+            font-size: var(--text-sm);
+            opacity: 0.8;
+        }
+        
+        /* Customer Health Matrix */
+        .health-matrix {
+            background: var(--rootuip-white);
+            padding: var(--space-8);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--space-8);
+        }
+        
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr 1fr;
+            gap: 0;
+            margin-top: var(--space-6);
+        }
+        
+        .matrix-cell {
+            border: 1px solid var(--rootuip-gray-200);
+            padding: var(--space-4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+        }
+        
+        .matrix-header {
+            background: var(--rootuip-gray-50);
+            font-weight: 600;
+            font-size: var(--text-sm);
+        }
+        
+        .matrix-value-cell {
+            background: var(--rootuip-white);
+            position: relative;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .matrix-value-cell:hover {
+            background: var(--rootuip-gray-50);
+            z-index: 1;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .risk-low { background: rgba(0, 200, 83, 0.1); }
+        .risk-medium { background: rgba(251, 188, 4, 0.1); }
+        .risk-high { background: rgba(234, 67, 53, 0.1); }
+        
+        /* Churn Prediction */
+        .churn-prediction {
+            background: var(--rootuip-white);
+            padding: var(--space-8);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--space-8);
+        }
+        
+        .prediction-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-6);
+            margin-top: var(--space-6);
+        }
+        
+        .prediction-card {
+            border: 2px solid var(--rootuip-gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            text-align: center;
+        }
+        
+        .prediction-score {
+            font-size: var(--text-5xl);
+            font-weight: 700;
+            margin-bottom: var(--space-2);
+        }
+        
+        .prediction-card.high-risk {
+            border-color: var(--rootuip-danger);
+            background: rgba(234, 67, 53, 0.05);
+        }
+        
+        .prediction-card.medium-risk {
+            border-color: var(--rootuip-warning);
+            background: rgba(251, 188, 4, 0.05);
+        }
+        
+        .prediction-card.low-risk {
+            border-color: var(--rootuip-accent);
+            background: rgba(0, 200, 83, 0.05);
+        }
+        
+        /* Customer Journey Timeline */
+        .journey-timeline {
+            background: var(--rootuip-white);
+            padding: var(--space-8);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .timeline-container {
+            position: relative;
+            padding: var(--space-6) 0;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--rootuip-gray-300);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: var(--space-6);
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            left: 20px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--rootuip-primary);
+            border: 3px solid white;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .timeline-content {
+            background: var(--rootuip-gray-50);
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+        }
+        
+        .timeline-date {
+            font-size: var(--text-sm);
+            color: var(--rootuip-gray-600);
+            margin-bottom: var(--space-2);
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: var(--space-1);
+        }
+        
+        /* Action Recommendations */
+        .recommendations {
+            background: var(--rootuip-white);
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            margin-top: var(--space-6);
+        }
+        
+        .recommendation-item {
+            display: flex;
+            gap: var(--space-4);
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--rootuip-gray-100);
+        }
+        
+        .recommendation-item:last-child {
+            border-bottom: none;
+        }
+        
+        .recommendation-priority {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .priority-high {
+            background: var(--rootuip-danger);
+            color: white;
+        }
+        
+        .priority-medium {
+            background: var(--rootuip-warning);
+            color: white;
+        }
+        
+        .priority-low {
+            background: var(--rootuip-primary);
+            color: white;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .segments-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .prediction-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .matrix-grid {
+                overflow-x: auto;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="intel-layout">
+        <!-- Header -->
+        <header class="intel-header">
+            <div class="header-grid">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Customer Intelligence & Health Analytics</h1>
+                    <p class="text-gray-600">Predictive analytics, health scoring, and churn prevention insights</p>
+                </div>
+                <div class="flex gap-3">
+                    <button class="btn btn-secondary" onclick="exportAnalytics()">
+                        <span>📊</span> Export Report
+                    </button>
+                    <button class="btn btn-primary" onclick="runPredictions()">
+                        <span>🤖</span> Run ML Predictions
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="container py-8">
+            <!-- Customer Segments -->
+            <div class="segments-grid">
+                <div class="segment-card active" onclick="filterSegment('all')">
+                    <div class="segment-icon">🏢</div>
+                    <div class="segment-count">156</div>
+                    <div class="segment-label">All Customers</div>
+                </div>
+                <div class="segment-card" onclick="filterSegment('enterprise')">
+                    <div class="segment-icon">🏆</div>
+                    <div class="segment-count">38</div>
+                    <div class="segment-label">Enterprise</div>
+                </div>
+                <div class="segment-card" onclick="filterSegment('growing')">
+                    <div class="segment-icon">📈</div>
+                    <div class="segment-count">72</div>
+                    <div class="segment-label">Growing</div>
+                </div>
+                <div class="segment-card" onclick="filterSegment('at-risk')">
+                    <div class="segment-icon">⚠️</div>
+                    <div class="segment-count">12</div>
+                    <div class="segment-label">At Risk</div>
+                </div>
+            </div>
+            
+            <!-- Customer Health Matrix -->
+            <div class="health-matrix">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Customer Health Matrix</h2>
+                    <div class="flex gap-3">
+                        <span class="flex items-center gap-2">
+                            <span class="w-4 h-4 bg-green-100 rounded"></span>
+                            <span class="text-sm">Low Risk</span>
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <span class="w-4 h-4 bg-yellow-100 rounded"></span>
+                            <span class="text-sm">Medium Risk</span>
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <span class="w-4 h-4 bg-red-100 rounded"></span>
+                            <span class="text-sm">High Risk</span>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="matrix-grid">
+                    <!-- Headers -->
+                    <div class="matrix-cell matrix-header"></div>
+                    <div class="matrix-cell matrix-header">Low Engagement</div>
+                    <div class="matrix-cell matrix-header">Medium Engagement</div>
+                    <div class="matrix-cell matrix-header">High Engagement</div>
+                    
+                    <!-- Low Value -->
+                    <div class="matrix-cell matrix-header">Low Value</div>
+                    <div class="matrix-cell matrix-value-cell risk-medium" onclick="showCustomers('low-low')">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold">23</div>
+                            <div class="text-sm text-gray-600">Monitor</div>
+                        </div>
+                    </div>
+                    <div class="matrix-cell matrix-value-cell risk-low" onclick="showCustomers('low-medium')">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold">45</div>
+                            <div class="text-sm text-gray-600">Nurture</div>
+                        </div>
+                    </div>
+                    <div class="matrix-cell matrix-value-cell risk-low" onclick="showCustomers('low-high')">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold">18</div>
+                            <div class="text-sm text-gray-600">Upsell</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Medium Value -->
+                    <div class="matrix-cell matrix-header">Medium Value</div>
+                    <div class="matrix-cell matrix-value-cell risk-high" onclick="showCustomers('medium-low')">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold">8</div>
+                            <div class="text-sm text-gray-600">Re-engage</div>
+                        </div>
+                    </div>
+                    <div class="matrix-cell matrix-value-cell risk-medium" onclick="showCustomers('medium-medium')">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold">34</div>
+                            <div class="text-sm text-gray-600">Maintain</div>
+                        </div>
+                    </div>
+                    <div class="matrix-cell matrix-value-cell risk-low" onclick="showCustomers('medium-high')">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold">28</div>
+                            <div class="text-sm text-gray-600">Expand</div>
+                        </div>
+                    </div>
+                    
+                    <!-- High Value -->
+                    <div class="matrix-cell matrix-header">High Value</div>
+                    <div class="matrix-cell matrix-value-cell risk-high" onclick="showCustomers('high-low')">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold">4</div>
+                            <div class="text-sm text-gray-600">Critical</div>
+                        </div>
+                    </div>
+                    <div class="matrix-cell matrix-value-cell risk-medium" onclick="showCustomers('high-medium')">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold">12</div>
+                            <div class="text-sm text-gray-600">Retain</div>
+                        </div>
+                    </div>
+                    <div class="matrix-cell matrix-value-cell risk-low" onclick="showCustomers('high-high')">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold">38</div>
+                            <div class="text-sm text-gray-600">Champions</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Churn Prediction -->
+            <div class="churn-prediction">
+                <h2 class="text-2xl font-bold mb-2">AI-Powered Churn Prediction</h2>
+                <p class="text-gray-600 mb-6">Machine learning analysis of customer behavior patterns</p>
+                
+                <div class="prediction-cards">
+                    <div class="prediction-card high-risk">
+                        <div class="prediction-score text-red-600">12</div>
+                        <div class="text-lg font-semibold mb-2">High Risk</div>
+                        <div class="text-sm text-gray-600">90%+ churn probability</div>
+                        <button class="btn btn-danger btn-sm mt-4">Take Action</button>
+                    </div>
+                    
+                    <div class="prediction-card medium-risk">
+                        <div class="prediction-score text-yellow-600">28</div>
+                        <div class="text-lg font-semibold mb-2">Medium Risk</div>
+                        <div class="text-sm text-gray-600">50-90% churn probability</div>
+                        <button class="btn btn-warning btn-sm mt-4">Review</button>
+                    </div>
+                    
+                    <div class="prediction-card low-risk">
+                        <div class="prediction-score text-green-600">116</div>
+                        <div class="text-lg font-semibold mb-2">Low Risk</div>
+                        <div class="text-sm text-gray-600"><50% churn probability</div>
+                        <button class="btn btn-success btn-sm mt-4">Monitor</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts Grid -->
+            <div class="grid grid-cols-2 gap-6 mb-8">
+                <!-- Health Score Distribution -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Health Score Distribution</h3>
+                    </div>
+                    <canvas id="healthDistributionChart" height="300"></canvas>
+                </div>
+                
+                <!-- Revenue at Risk -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Revenue at Risk Analysis</h3>
+                    </div>
+                    <canvas id="revenueRiskChart" height="300"></canvas>
+                </div>
+            </div>
+            
+            <!-- Customer Journey Timeline -->
+            <div class="journey-timeline">
+                <h2 class="text-2xl font-bold mb-6">Customer Journey Analysis</h2>
+                
+                <div class="timeline-container">
+                    <div class="timeline-line"></div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2 days ago</div>
+                            <div class="timeline-title">Support Ticket Escalated</div>
+                            <div class="text-sm text-gray-600">Integration issues reported by technical team</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--rootuip-warning);"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">1 week ago</div>
+                            <div class="timeline-title">Usage Drop Detected</div>
+                            <div class="text-sm text-gray-600">Container tracking volume decreased by 35%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--rootuip-accent);"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2 weeks ago</div>
+                            <div class="timeline-title">Renewal Discussion</div>
+                            <div class="text-sm text-gray-600">Contract renewal meeting scheduled</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">1 month ago</div>
+                            <div class="timeline-title">Feature Request</div>
+                            <div class="text-sm text-gray-600">Requested custom reporting capabilities</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Recommendations -->
+            <div class="recommendations">
+                <h3 class="text-xl font-bold mb-4">Recommended Actions</h3>
+                
+                <div class="recommendation-item">
+                    <div class="recommendation-priority priority-high">1</div>
+                    <div class="flex-1">
+                        <div class="font-semibold">Schedule Executive Business Review - Maersk Corporation</div>
+                        <div class="text-sm text-gray-600">Health score dropped 15% in last 30 days. $1.2M ARR at risk.</div>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-primary">Schedule Meeting</button>
+                            <button class="btn btn-sm btn-secondary ml-2">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="recommendation-item">
+                    <div class="recommendation-priority priority-medium">2</div>
+                    <div class="flex-1">
+                        <div class="font-semibold">Upsell Opportunity - DHL Global</div>
+                        <div class="text-sm text-gray-600">High engagement, approaching volume limits. Potential $200K expansion.</div>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-primary">Create Proposal</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="recommendation-item">
+                    <div class="recommendation-priority priority-low">3</div>
+                    <div class="flex-1">
+                        <div class="font-semibold">Success Story Campaign - Top Performers</div>
+                        <div class="text-sm text-gray-600">Feature 5 champion customers in marketing materials.</div>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-secondary">View List</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Initialize charts
+        Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Inter", sans-serif';
+        
+        // Health Score Distribution
+        const healthCtx = document.getElementById('healthDistributionChart').getContext('2d');
+        const healthChart = new Chart(healthCtx, {
+            type: 'bar',
+            data: {
+                labels: ['0-20', '21-40', '41-60', '61-80', '81-100'],
+                datasets: [{
+                    label: 'Number of Customers',
+                    data: [4, 8, 23, 67, 54],
+                    backgroundColor: [
+                        'rgba(234, 67, 53, 0.8)',
+                        'rgba(251, 188, 4, 0.8)',
+                        'rgba(251, 188, 4, 0.6)',
+                        'rgba(26, 115, 232, 0.8)',
+                        'rgba(0, 200, 83, 0.8)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        // Revenue at Risk
+        const riskCtx = document.getElementById('revenueRiskChart').getContext('2d');
+        const riskChart = new Chart(riskCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Safe ($6.2M)', 'Low Risk ($1.8M)', 'Medium Risk ($350K)', 'High Risk ($150K)'],
+                datasets: [{
+                    data: [6200000, 1800000, 350000, 150000],
+                    backgroundColor: [
+                        'rgba(0, 200, 83, 0.8)',
+                        'rgba(26, 115, 232, 0.8)',
+                        'rgba(251, 188, 4, 0.8)',
+                        'rgba(234, 67, 53, 0.8)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.parsed;
+                                return context.label + ': $' + (value / 1000000).toFixed(2) + 'M';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Functions
+        function filterSegment(segment) {
+            document.querySelectorAll('.segment-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.target.closest('.segment-card').classList.add('active');
+            
+            console.log('Filtering by segment:', segment);
+            // Implement segment filtering
+        }
+        
+        function showCustomers(segment) {
+            console.log('Showing customers in segment:', segment);
+            // Implement customer list modal
+        }
+        
+        async function runPredictions() {
+            console.log('Running ML predictions...');
+            
+            // Simulate ML processing
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳</span> Processing...';
+            
+            // Simulate TensorFlow.js prediction
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<span>🤖</span> Run ML Predictions';
+                
+                // Update UI with new predictions
+                alert('ML predictions updated successfully!');
+            }, 2000);
+        }
+        
+        function exportAnalytics() {
+            console.log('Exporting customer intelligence report...');
+            // Implement export functionality
+        }
+    </script>
+</body>
+</html>

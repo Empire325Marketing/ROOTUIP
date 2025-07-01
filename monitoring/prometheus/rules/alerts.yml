@@ -1,0 +1,188 @@
+groups:
+  - name: rootuip_critical
+    interval: 30s
+    rules:
+      # Service Down Alerts
+      - alert: ServiceDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: critical
+          team: backend
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+          description: "{{ $labels.job }} on {{ $labels.instance }} has been down for more than 2 minutes."
+
+      # High Response Time
+      - alert: HighResponseTime
+        expr: http_request_duration_seconds{quantile="0.95"} > 2
+        for: 5m
+        labels:
+          severity: warning
+          team: backend
+        annotations:
+          summary: "High response time on {{ $labels.job }}"
+          description: "95th percentile response time is {{ $value }}s (threshold: 2s)"
+
+      # Database Connection Pool Exhaustion
+      - alert: DatabaseConnectionPoolExhausted
+        expr: pg_stat_database_numbackends / pg_settings_max_connections > 0.9
+        for: 5m
+        labels:
+          severity: critical
+          team: database
+        annotations:
+          summary: "PostgreSQL connection pool near exhaustion"
+          description: "Database connection usage is at {{ $value | humanizePercentage }}"
+
+      # High CPU Usage
+      - alert: HighCPUUsage
+        expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 85
+        for: 10m
+        labels:
+          severity: warning
+          team: infrastructure
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU usage is {{ $value | humanize }}%"
+
+      # High Memory Usage
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 90
+        for: 10m
+        labels:
+          severity: warning
+          team: infrastructure
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory usage is {{ $value | humanize }}%"
+
+      # Disk Space Low
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) * 100 < 15
+        for: 5m
+        labels:
+          severity: critical
+          team: infrastructure
+        annotations:
+          summary: "Low disk space on {{ $labels.instance }}"
+          description: "Disk space available: {{ $value | humanize }}%"
+
+  - name: rootuip_business
+    interval: 1m
+    rules:
+      # Failed Demo Bookings
+      - alert: HighDemoBookingFailureRate
+        expr: rate(demo_booking_failures_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+          team: business
+        annotations:
+          summary: "High demo booking failure rate"
+          description: "Demo booking failures: {{ $value | humanize }} per second"
+
+      # ROI Calculator Errors
+      - alert: ROICalculatorErrors
+        expr: rate(roi_calculator_errors_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          team: frontend
+        annotations:
+          summary: "ROI Calculator experiencing errors"
+          description: "Error rate: {{ $value | humanize }} per second"
+
+      # Authentication Failures
+      - alert: HighAuthenticationFailureRate
+        expr: rate(auth_failures_total[5m]) > 0.2
+        for: 5m
+        labels:
+          severity: critical
+          team: security
+        annotations:
+          summary: "High authentication failure rate"
+          description: "Auth failures: {{ $value | humanize }} per second"
+
+      # ML Service Performance
+      - alert: MLServiceSlowPredictions
+        expr: histogram_quantile(0.95, rate(ml_prediction_duration_seconds_bucket[5m])) > 1
+        for: 5m
+        labels:
+          severity: warning
+          team: ml
+        annotations:
+          summary: "ML predictions running slow"
+          description: "95th percentile prediction time: {{ $value | humanize }}s"
+
+      # D&D Prevention Rate Drop
+      - alert: DDPreventionRateDrop
+        expr: dd_prevention_rate < 90
+        for: 10m
+        labels:
+          severity: critical
+          team: ml
+        annotations:
+          summary: "D&D prevention rate below target"
+          description: "Current prevention rate: {{ $value }}% (target: 94%)"
+
+  - name: rootuip_security
+    interval: 30s
+    rules:
+      # Suspicious Login Activity
+      - alert: SuspiciousLoginActivity
+        expr: rate(failed_login_attempts_total[5m]) > 1
+        for: 2m
+        labels:
+          severity: critical
+          team: security
+        annotations:
+          summary: "Suspicious login activity detected"
+          description: "Failed login rate: {{ $value | humanize }} per second from {{ $labels.source_ip }}"
+
+      # Brute Force Attack
+      - alert: PotentialBruteForceAttack
+        expr: sum by (source_ip) (rate(failed_login_attempts_total[5m])) > 5
+        for: 1m
+        labels:
+          severity: critical
+          team: security
+        annotations:
+          summary: "Potential brute force attack from {{ $labels.source_ip }}"
+          description: "{{ $value | humanize }} failed attempts per second"
+
+      # Unauthorized API Access
+      - alert: UnauthorizedAPIAccess
+        expr: rate(unauthorized_api_requests_total[5m]) > 0.5
+        for: 2m
+        labels:
+          severity: critical
+          team: security
+        annotations:
+          summary: "High rate of unauthorized API requests"
+          description: "Unauthorized requests: {{ $value | humanize }} per second"
+
+  - name: rootuip_backup
+    interval: 5m
+    rules:
+      # Backup Failure
+      - alert: BackupFailed
+        expr: backup_last_success_timestamp < time() - 86400
+        for: 1h
+        labels:
+          severity: critical
+          team: infrastructure
+        annotations:
+          summary: "Daily backup has not completed successfully"
+          description: "Last successful backup was {{ $value | humanizeDuration }} ago"
+
+      # Backup Size Anomaly
+      - alert: BackupSizeAnomaly
+        expr: abs(backup_size_bytes - avg_over_time(backup_size_bytes[7d])) / avg_over_time(backup_size_bytes[7d]) > 0.3
+        for: 30m
+        labels:
+          severity: warning
+          team: infrastructure
+        annotations:
+          summary: "Backup size anomaly detected"
+          description: "Backup size deviates {{ $value | humanizePercentage }} from 7-day average"

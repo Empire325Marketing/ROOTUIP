@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Workflow Builder - Visual Automation Designer</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/rootuip-logo.svg">
+    <link rel="stylesheet" href="/assets/css/rootuip-design-system.css">
+    <style>
+        /* Workflow Builder Styles */
+        .builder-container {
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            height: 100vh;
+            background: var(--rootuip-gray-50);
+        }
+        
+        /* Left Panel - Components */
+        .components-panel {
+            background: var(--bg-dark);
+            border-right: 1px solid var(--rootuip-border);
+            padding: var(--space-4);
+            overflow-y: auto;
+        }
+        
+        .panel-header {
+            font-size: var(--text-lg);
+            font-weight: 600;
+            margin-bottom: var(--space-4);
+            padding-bottom: var(--space-3);
+            border-bottom: 1px solid var(--rootuip-border);
+        }
+        
+        .component-category {
+            margin-bottom: var(--space-6);
+        }
+        
+        .category-title {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--rootuip-text-secondary);
+            text-transform: uppercase;
+            margin-bottom: var(--space-3);
+        }
+        
+        .component-item {
+            background: var(--rootuip-gray-50);
+            border: 1px solid var(--rootuip-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-3);
+            margin-bottom: var(--space-2);
+            cursor: move;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .component-item:hover {
+            background: var(--rootuip-primary-light);
+            border-color: var(--rootuip-primary);
+            transform: translateX(4px);
+        }
+        
+        .component-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--bg-dark);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-lg);
+        }
+        
+        .component-info {
+            flex: 1;
+        }
+        
+        .component-name {
+            font-weight: 500;
+            font-size: var(--text-sm);
+        }
+        
+        .component-desc {
+            font-size: var(--text-xs);
+            color: var(--rootuip-text-secondary);
+        }
+        
+        /* Center Panel - Canvas */
+        .canvas-panel {
+            position: relative;
+            overflow: auto;
+            background: var(--rootuip-gray-100);
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(0, 0, 0, .02) 25%, rgba(0, 0, 0, .02) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, .02) 75%, rgba(0, 0, 0, .02) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(0, 0, 0, .02) 25%, rgba(0, 0, 0, .02) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, .02) 75%, rgba(0, 0, 0, .02) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+        }
+        
+        .canvas-header {
+            position: sticky;
+            top: 0;
+            background: var(--bg-dark);
+            border-bottom: 1px solid var(--rootuip-border);
+            padding: var(--space-4);
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .workflow-title {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .workflow-name {
+            font-size: var(--text-xl);
+            font-weight: 600;
+            padding: var(--space-2) var(--space-3);
+            border: 1px solid transparent;
+            border-radius: var(--radius-md);
+            cursor: text;
+        }
+        
+        .workflow-name:hover {
+            border-color: var(--rootuip-border);
+        }
+        
+        .workflow-name:focus {
+            outline: none;
+            border-color: var(--rootuip-primary);
+            background: var(--bg-dark);
+        }
+        
+        .canvas-actions {
+            display: flex;
+            gap: var(--space-2);
+        }
+        
+        .canvas-content {
+            position: relative;
+            min-height: calc(100vh - 80px);
+            padding: var(--space-8);
+        }
+        
+        /* Workflow Nodes */
+        .workflow-node {
+            position: absolute;
+            background: var(--bg-dark);
+            border: 2px solid var(--rootuip-gray-300);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            min-width: 280px;
+            cursor: move;
+            transition: all var(--transition-fast);
+        }
+        
+        .workflow-node:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .workflow-node.selected {
+            border-color: var(--rootuip-primary);
+        }
+        
+        .workflow-node.trigger {
+            border-color: var(--rootuip-accent);
+        }
+        
+        .workflow-node.condition {
+            border-color: var(--rootuip-warning);
+        }
+        
+        .node-header {
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--rootuip-gray-200);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .node-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--rootuip-gray-100);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xl);
+        }
+        
+        .trigger .node-icon { background: var(--rootuip-accent-light); }
+        .action .node-icon { background: var(--rootuip-primary-light); }
+        .condition .node-icon { background: var(--rootuip-warning-light); }
+        
+        .node-title {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .node-actions {
+            display: flex;
+            gap: var(--space-1);
+        }
+        
+        .node-action-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--rootuip-text-secondary);
+            transition: all var(--transition-fast);
+        }
+        
+        .node-action-btn:hover {
+            background: var(--rootuip-gray-100);
+            color: var(--rootuip-text);
+        }
+        
+        .node-content {
+            padding: var(--space-4);
+        }
+        
+        .node-description {
+            font-size: var(--text-sm);
+            color: var(--rootuip-text-secondary);
+            margin-bottom: var(--space-3);
+        }
+        
+        .node-config {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+        
+        .config-item {
+            font-size: var(--text-sm);
+            padding: var(--space-2) var(--space-3);
+            background: var(--rootuip-gray-50);
+            border-radius: var(--radius-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .config-label {
+            color: var(--rootuip-text-secondary);
+        }
+        
+        .config-value {
+            font-weight: 500;
+        }
+        
+        /* Connection Ports */
+        .node-port {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: var(--bg-dark);
+            border: 2px solid var(--rootuip-primary);
+            border-radius: 50%;
+            cursor: crosshair;
+            z-index: 5;
+        }
+        
+        .node-port:hover {
+            transform: scale(1.2);
+        }
+        
+        .port-input {
+            top: 50%;
+            left: -8px;
+            transform: translateY(-50%);
+        }
+        
+        .port-output {
+            top: 50%;
+            right: -8px;
+            transform: translateY(-50%);
+        }
+        
+        .port-condition-true {
+            bottom: -8px;
+            left: 30%;
+            transform: translateX(-50%);
+        }
+        
+        .port-condition-false {
+            bottom: -8px;
+            right: 30%;
+            transform: translateX(50%);
+        }
+        
+        /* Connections */
+        .connection-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .connection-path {
+            fill: none;
+            stroke: var(--rootuip-primary);
+            stroke-width: 2;
+            stroke-dasharray: 5, 5;
+            animation: dash 20s linear infinite;
+        }
+        
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -100;
+            }
+        }
+        
+        .connection-path.active {
+            stroke: var(--rootuip-accent);
+            stroke-width: 3;
+            stroke-dasharray: none;
+        }
+        
+        /* Right Panel - Properties */
+        .properties-panel {
+            background: var(--bg-dark);
+            border-left: 1px solid var(--rootuip-border);
+            padding: var(--space-4);
+            overflow-y: auto;
+        }
+        
+        .property-section {
+            margin-bottom: var(--space-6);
+        }
+        
+        .property-title {
+            font-size: var(--text-base);
+            font-weight: 600;
+            margin-bottom: var(--space-3);
+        }
+        
+        .property-field {
+            margin-bottom: var(--space-4);
+        }
+        
+        .property-label {
+            display: block;
+            font-size: var(--text-sm);
+            font-weight: 500;
+            margin-bottom: var(--space-2);
+            color: var(--rootuip-text);
+        }
+        
+        .property-input,
+        .property-select,
+        .property-textarea {
+            width: 100%;
+            padding: var(--space-2) var(--space-3);
+            border: 1px solid var(--rootuip-gray-300);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+        }
+        
+        .property-input:focus,
+        .property-select:focus,
+        .property-textarea:focus {
+            outline: none;
+            border-color: var(--rootuip-primary);
+        }
+        
+        .property-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .condition-builder {
+            background: var(--rootuip-gray-50);
+            border-radius: var(--radius-md);
+            padding: var(--space-3);
+        }
+        
+        .condition-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: var(--space-2);
+            align-items: center;
+            margin-bottom: var(--space-2);
+        }
+        
+        .condition-operator {
+            font-size: var(--text-sm);
+            font-weight: 500;
+            color: var(--rootuip-text-secondary);
+        }
+        
+        .add-condition-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-3);
+            background: var(--bg-dark);
+            border: 1px dashed var(--rootuip-gray-400);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .add-condition-btn:hover {
+            border-color: var(--rootuip-primary);
+            background: var(--rootuip-primary-light);
+        }
+        
+        /* Workflow Controls */
+        .workflow-controls {
+            position: fixed;
+            bottom: var(--space-4);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-dark);
+            border-radius: var(--radius-lg);
+            padding: var(--space-3);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            gap: var(--space-3);
+            z-index: 100;
+        }
+        
+        .control-btn {
+            padding: var(--space-3) var(--space-4);
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            transition: all var(--transition-fast);
+        }
+        
+        .control-btn.play {
+            background: var(--rootuip-accent);
+            color: white;
+        }
+        
+        .control-btn.play:hover {
+            background: var(--rootuip-accent-dark);
+        }
+        
+        .control-btn.pause {
+            background: var(--rootuip-warning);
+            color: white;
+        }
+        
+        .control-btn.stop {
+            background: var(--rootuip-danger);
+            color: white;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: var(--space-8);
+        }
+        
+        .empty-icon {
+            width: 120px;
+            height: 120px;
+            background: var(--rootuip-gray-200);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-5xl);
+            margin-bottom: var(--space-6);
+        }
+        
+        .empty-title {
+            font-size: var(--text-2xl);
+            font-weight: 600;
+            margin-bottom: var(--space-3);
+        }
+        
+        .empty-description {
+            font-size: var(--text-lg);
+            color: var(--rootuip-text-secondary);
+            margin-bottom: var(--space-6);
+            max-width: 400px;
+        }
+        
+        /* Test Runner */
+        .test-runner {
+            position: fixed;
+            bottom: var(--space-4);
+            right: var(--space-4);
+            width: 400px;
+            background: var(--bg-dark);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            display: none;
+            z-index: 200;
+        }
+        
+        .test-runner.active {
+            display: block;
+        }
+        
+        .test-header {
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--rootuip-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .test-content {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: var(--space-4);
+        }
+        
+        .test-log {
+            font-family: monospace;
+            font-size: var(--text-sm);
+            line-height: 1.6;
+        }
+        
+        .log-entry {
+            padding: var(--space-2);
+            border-left: 3px solid var(--rootuip-gray-300);
+            margin-bottom: var(--space-2);
+        }
+        
+        .log-entry.success {
+            border-color: var(--rootuip-accent);
+            background: var(--rootuip-accent-light);
+        }
+        
+        .log-entry.error {
+            border-color: var(--rootuip-danger);
+            background: var(--rootuip-danger-light);
+        }
+        
+        .log-entry.info {
+            border-color: var(--rootuip-primary);
+            background: var(--rootuip-primary-light);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .builder-container {
+                grid-template-columns: 250px 1fr 300px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .builder-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .components-panel,
+            .properties-panel {
+                display: none;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="builder-container">
+        <!-- Components Panel -->
+        <div class="components-panel">
+            <h2 class="panel-header">Workflow Components</h2>
+            
+            <!-- Triggers -->
+            <div class="component-category">
+                <h3 class="category-title">Triggers</h3>
+                
+                <div class="component-item" draggable="true" data-component="trigger-customer-created">
+                    <div class="component-icon">🎯</div>
+                    <div class="component-info">
+                        <div class="component-name">Customer Created</div>
+                        <div class="component-desc">When new customer signs up</div>
+                    </div>
+                </div>
+                
+                <div class="component-item" draggable="true" data-component="trigger-health-change">
+                    <div class="component-icon">💓</div>
+                    <div class="component-info">
+                        <div class="component-name">Health Score Change</div>
+                        <div class="component-desc">When health score updates</div>
+                    </div>
+                </div>
+                
+                <div class="component-item" draggable="true" data-component="trigger-time-based">
+                    <div class="component-icon">⏰</div>
+                    <div class="component-info">
+                        <div class="component-name">Time-Based</div>
+                        <div class="component-desc">Schedule or interval</div>
+                    </div>
+                </div>
+                
+                <div class="component-item" draggable="true" data-component="trigger-event">
+                    <div class="component-icon">⚡</div>
+                    <div class="component-info">
+                        <div class="component-name">Custom Event</div>
+                        <div class="component-desc">API or webhook trigger</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="component-category">
+                <h3 class="category-title">Actions</h3>
+                
+                <div class="component-item" draggable="true" data-component="action-send-email">
+                    <div class="component-icon">✉️</div>
+                    <div class="component-info">
+                        <div class="component-name">Send Email</div>
+                        <div class="component-desc">Send templated email</div>
+                    </div>
+                </div>
+                
+                <div class="component-item" draggable="true" data-component="action-create-task">
+                    <div class="component-icon">📋</div>
+                    <div class="component-info">
+                        <div class="component-name">Create Task</div>
+                        <div class="component-desc">Assign task to team</div>
+                    </div>
+                </div>
+                
+                <div class="component-item" draggable="true" data-component="action-update-property">
+                    <div class="component-icon">🏷️</div>
+                    <div class="component-info">
+                        <div class="component-name">Update Property</div>
+                        <div class="component-desc">Change customer data</div>
+                    </div>
+                </div>
+                
+                <div class="component-item" draggable="true" data-component="action-slack-message">
+                    <div class="component-icon">💬</div>
+                    <div class="component-info">
+                        <div class="component-name">Slack Message</div>
+                        <div class="component-desc">Send Slack notification</div>
+                    </div>
+                </div>
+                
+                <div class="component-item" draggable="true" data-component="action-api-call">
+                    <div class="component-icon">🔌</div>
+                    <div class="component-info">
+                        <div class="component-name">API Call</div>
+                        <div class="component-desc">External API request</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Conditions -->
+            <div class="component-category">
+                <h3 class="category-title">Conditions</h3>
+                
+                <div class="component-item" draggable="true" data-component="condition-if-else">
+                    <div class="component-icon">🔀</div>
+                    <div class="component-info">
+                        <div class="component-name">If/Else</div>
+                        <div class="component-desc">Conditional branch</div>
+                    </div>
+                </div>
+                
+                <div class="component-item" draggable="true" data-component="condition-switch">
+                    <div class="component-icon">🎛️</div>
+                    <div class="component-info">
+                        <div class="component-name">Switch</div>
+                        <div class="component-desc">Multiple branches</div>
+                    </div>
+                </div>
+                
+                <div class="component-item" draggable="true" data-component="condition-wait">
+                    <div class="component-icon">⏸️</div>
+                    <div class="component-info">
+                        <div class="component-name">Wait</div>
+                        <div class="component-desc">Delay execution</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Canvas Panel -->
+        <div class="canvas-panel">
+            <div class="canvas-header">
+                <div class="workflow-title">
+                    <span style="font-size: var(--text-2xl);">📊</span>
+                    <input type="text" class="workflow-name" value="New Customer Onboarding" />
+                </div>
+                <div class="canvas-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="zoomIn()">
+                        <span>🔍</span> Zoom In
+                    </button>
+                    <button class="btn btn-secondary btn-sm" onclick="zoomOut()">
+                        <span>🔍</span> Zoom Out
+                    </button>
+                    <button class="btn btn-secondary btn-sm" onclick="fitToScreen()">
+                        <span>📐</span> Fit
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="saveWorkflow()">
+                        <span>💾</span> Save
+                    </button>
+                </div>
+            </div>
+            
+            <div class="canvas-content" id="workflowCanvas">
+                <!-- SVG for connections -->
+                <svg class="connection-svg" id="connectionSvg"></svg>
+                
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon">🎯</div>
+                    <h2 class="empty-title">Start Building Your Workflow</h2>
+                    <p class="empty-description">
+                        Drag components from the left panel to begin creating your automated workflow
+                    </p>
+                    <button class="btn btn-primary" onclick="loadTemplate()">
+                        Use Template
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Properties Panel -->
+        <div class="properties-panel">
+            <h2 class="panel-header">Properties</h2>
+            
+            <div id="propertiesContent">
+                <!-- Workflow Properties (default) -->
+                <div class="property-section">
+                    <h3 class="property-title">Workflow Settings</h3>
+                    
+                    <div class="property-field">
+                        <label class="property-label">Workflow Name</label>
+                        <input type="text" class="property-input" value="New Customer Onboarding" />
+                    </div>
+                    
+                    <div class="property-field">
+                        <label class="property-label">Description</label>
+                        <textarea class="property-textarea">Automated onboarding process for new enterprise customers</textarea>
+                    </div>
+                    
+                    <div class="property-field">
+                        <label class="property-label">Category</label>
+                        <select class="property-select">
+                            <option>Customer Success</option>
+                            <option>Sales</option>
+                            <option>Support</option>
+                            <option>Operations</option>
+                        </select>
+                    </div>
+                    
+                    <div class="property-field">
+                        <label class="property-label">Status</label>
+                        <select class="property-select">
+                            <option>Active</option>
+                            <option>Draft</option>
+                            <option>Paused</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="property-section">
+                    <h3 class="property-title">Execution Settings</h3>
+                    
+                    <div class="property-field">
+                        <label class="property-label">Max Execution Time</label>
+                        <input type="number" class="property-input" value="3600" />
+                        <span class="property-hint">seconds</span>
+                    </div>
+                    
+                    <div class="property-field">
+                        <label class="property-label">Retry on Failure</label>
+                        <select class="property-select">
+                            <option>Yes - 3 attempts</option>
+                            <option>Yes - 5 attempts</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Workflow Controls -->
+    <div class="workflow-controls">
+        <button class="control-btn play" onclick="testWorkflow()">
+            <span>▶️</span> Test Run
+        </button>
+        <button class="control-btn" onclick="validateWorkflow()">
+            <span>✓</span> Validate
+        </button>
+        <button class="control-btn" onclick="showHistory()">
+            <span>📊</span> History
+        </button>
+    </div>
+    
+    <!-- Test Runner -->
+    <div class="test-runner" id="testRunner">
+        <div class="test-header">
+            <h3>Test Execution</h3>
+            <button class="btn btn-sm" onclick="closeTestRunner()">✕</button>
+        </div>
+        <div class="test-content">
+            <div class="test-log" id="testLog">
+                <div class="log-entry info">
+                    <strong>[INFO]</strong> Starting workflow test...
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Workflow Builder Logic
+        let workflowNodes = [];
+        let connections = [];
+        let selectedNode = null;
+        let isDragging = false;
+        let dragOffset = { x: 0, y: 0 };
+        let nodeIdCounter = 1;
+        
+        // Initialize drag and drop
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeDragDrop();
+            initializeCanvas();
+            loadWorkflowData();
+        });
+        
+        function initializeDragDrop() {
+            // Component drag start
+            document.querySelectorAll('.component-item').forEach(item => {
+                item.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('component', item.dataset.component);
+                    e.dataTransfer.effectAllowed = 'copy';
+                });
+            });
+            
+            // Canvas drop
+            const canvas = document.getElementById('workflowCanvas');
+            
+            canvas.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'copy';
+            });
+            
+            canvas.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const component = e.dataTransfer.getData('component');
+                if (component) {
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    createNode(component, x, y);
+                }
+            });
+        }
+        
+        function createNode(componentType, x, y) {
+            const nodeId = `node_${nodeIdCounter++}`;
+            const nodeData = getNodeData(componentType);
+            
+            const node = {
+                id: nodeId,
+                type: nodeData.type,
+                component: componentType,
+                name: nodeData.name,
+                icon: nodeData.icon,
+                x: x - 140, // Center the node
+                y: y - 50,
+                config: nodeData.defaultConfig || {}
+            };
+            
+            workflowNodes.push(node);
+            renderNode(node);
+            
+            // Hide empty state
+            document.getElementById('emptyState').style.display = 'none';
+        }
+        
+        function getNodeData(componentType) {
+            const nodeTypes = {
+                'trigger-customer-created': {
+                    type: 'trigger',
+                    name: 'Customer Created',
+                    icon: '🎯',
+                    defaultConfig: { event: 'customer.created' }
+                },
+                'trigger-health-change': {
+                    type: 'trigger',
+                    name: 'Health Score Change',
+                    icon: '💓',
+                    defaultConfig: { threshold: 60, direction: 'below' }
+                },
+                'trigger-time-based': {
+                    type: 'trigger',
+                    name: 'Time-Based',
+                    icon: '⏰',
+                    defaultConfig: { schedule: 'daily', time: '09:00' }
+                },
+                'action-send-email': {
+                    type: 'action',
+                    name: 'Send Email',
+                    icon: '✉️',
+                    defaultConfig: { template: 'welcome_email' }
+                },
+                'action-create-task': {
+                    type: 'action',
+                    name: 'Create Task',
+                    icon: '📋',
+                    defaultConfig: { assignTo: 'csm', priority: 'medium' }
+                },
+                'condition-if-else': {
+                    type: 'condition',
+                    name: 'If/Else',
+                    icon: '🔀',
+                    defaultConfig: { condition: 'health_score > 80' }
+                }
+            };
+            
+            return nodeTypes[componentType] || {
+                type: 'action',
+                name: 'Unknown',
+                icon: '❓'
+            };
+        }
+        
+        function renderNode(node) {
+            const nodeEl = document.createElement('div');
+            nodeEl.className = `workflow-node ${node.type}`;
+            nodeEl.id = node.id;
+            nodeEl.style.left = node.x + 'px';
+            nodeEl.style.top = node.y + 'px';
+            
+            nodeEl.innerHTML = `
+                <div class="node-header">
+                    <div class="node-icon">${node.icon}</div>
+                    <div class="node-title">${node.name}</div>
+                    <div class="node-actions">
+                        <button class="node-action-btn" onclick="editNode('${node.id}')">⚙️</button>
+                        <button class="node-action-btn" onclick="deleteNode('${node.id}')">🗑️</button>
+                    </div>
+                </div>
+                <div class="node-content">
+                    <div class="node-description">${getNodeDescription(node)}</div>
+                    ${renderNodeConfig(node)}
+                </div>
+                ${renderNodePorts(node)}
+            `;
+            
+            // Add drag functionality
+            nodeEl.addEventListener('mousedown', startNodeDrag);
+            nodeEl.addEventListener('click', () => selectNode(node.id));
+            
+            document.getElementById('workflowCanvas').appendChild(nodeEl);
+        }
+        
+        function getNodeDescription(node) {
+            const descriptions = {
+                'trigger-customer-created': 'Triggered when a new customer account is created',
+                'action-send-email': 'Sends an automated email to the customer',
+                'condition-if-else': 'Branches workflow based on condition'
+            };
+            
+            return descriptions[node.component] || 'Configure this component';
+        }
+        
+        function renderNodeConfig(node) {
+            let html = '<div class="node-config">';
+            
+            Object.entries(node.config).forEach(([key, value]) => {
+                html += `
+                    <div class="config-item">
+                        <span class="config-label">${formatLabel(key)}:</span>
+                        <span class="config-value">${value}</span>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+        
+        function renderNodePorts(node) {
+            let ports = '';
+            
+            if (node.type !== 'trigger') {
+                ports += '<div class="node-port port-input"></div>';
+            }
+            
+            if (node.type === 'condition') {
+                ports += '<div class="node-port port-condition-true"></div>';
+                ports += '<div class="node-port port-condition-false"></div>';
+            } else {
+                ports += '<div class="node-port port-output"></div>';
+            }
+            
+            return ports;
+        }
+        
+        function formatLabel(key) {
+            return key.replace(/_/g, ' ')
+                      .replace(/([A-Z])/g, ' $1')
+                      .replace(/^./, str => str.toUpperCase());
+        }
+        
+        function startNodeDrag(e) {
+            if (e.target.closest('.node-actions')) return;
+            
+            isDragging = true;
+            const node = e.currentTarget;
+            const rect = node.getBoundingClientRect();
+            const canvasRect = document.getElementById('workflowCanvas').getBoundingClientRect();
+            
+            dragOffset = {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+            
+            document.addEventListener('mousemove', dragNode);
+            document.addEventListener('mouseup', stopNodeDrag);
+        }
+        
+        function dragNode(e) {
+            if (!isDragging) return;
+            
+            const canvas = document.getElementById('workflowCanvas');
+            const canvasRect = canvas.getBoundingClientRect();
+            
+            const x = e.clientX - canvasRect.left - dragOffset.x;
+            const y = e.clientY - canvasRect.top - dragOffset.y;
+            
+            const node = document.querySelector('.workflow-node:hover');
+            if (node) {
+                node.style.left = x + 'px';
+                node.style.top = y + 'px';
+                
+                // Update node position in data
+                const nodeData = workflowNodes.find(n => n.id === node.id);
+                if (nodeData) {
+                    nodeData.x = x;
+                    nodeData.y = y;
+                }
+                
+                // Update connections
+                updateConnections();
+            }
+        }
+        
+        function stopNodeDrag() {
+            isDragging = false;
+            document.removeEventListener('mousemove', dragNode);
+            document.removeEventListener('mouseup', stopNodeDrag);
+        }
+        
+        function selectNode(nodeId) {
+            // Remove previous selection
+            document.querySelectorAll('.workflow-node').forEach(n => {
+                n.classList.remove('selected');
+            });
+            
+            // Add selection
+            const node = document.getElementById(nodeId);
+            if (node) {
+                node.classList.add('selected');
+                selectedNode = workflowNodes.find(n => n.id === nodeId);
+                showNodeProperties(selectedNode);
+            }
+        }
+        
+        function showNodeProperties(node) {
+            const propertiesContent = document.getElementById('propertiesContent');
+            
+            propertiesContent.innerHTML = `
+                <div class="property-section">
+                    <h3 class="property-title">${node.name} Properties</h3>
+                    
+                    <div class="property-field">
+                        <label class="property-label">Node Name</label>
+                        <input type="text" class="property-input" value="${node.name}" 
+                               onchange="updateNodeProperty('${node.id}', 'name', this.value)" />
+                    </div>
+                    
+                    ${renderNodeProperties(node)}
+                </div>
+            `;
+        }
+        
+        function renderNodeProperties(node) {
+            let html = '';
+            
+            if (node.component === 'action-send-email') {
+                html += `
+                    <div class="property-field">
+                        <label class="property-label">Email Template</label>
+                        <select class="property-select" onchange="updateNodeConfig('${node.id}', 'template', this.value)">
+                            <option value="welcome_email">Welcome Email</option>
+                            <option value="onboarding_checklist">Onboarding Checklist</option>
+                            <option value="training_reminder">Training Reminder</option>
+                            <option value="success_review">Success Review</option>
+                        </select>
+                    </div>
+                    
+                    <div class="property-field">
+                        <label class="property-label">Send To</label>
+                        <select class="property-select" onchange="updateNodeConfig('${node.id}', 'recipient', this.value)">
+                            <option value="primary_contact">Primary Contact</option>
+                            <option value="all_users">All Users</option>
+                            <option value="admins">Admins Only</option>
+                        </select>
+                    </div>
+                `;
+            } else if (node.component === 'condition-if-else') {
+                html += `
+                    <div class="property-field">
+                        <label class="property-label">Condition</label>
+                        <div class="condition-builder">
+                            <div class="condition-row">
+                                <select class="property-select">
+                                    <option>Health Score</option>
+                                    <option>Contract Value</option>
+                                    <option>User Count</option>
+                                    <option>Days Since Signup</option>
+                                </select>
+                                <span class="condition-operator">is</span>
+                                <select class="property-select">
+                                    <option>Greater than</option>
+                                    <option>Less than</option>
+                                    <option>Equal to</option>
+                                    <option>Between</option>
+                                </select>
+                            </div>
+                            <div class="condition-row">
+                                <input type="number" class="property-input" placeholder="Value" />
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            return html;
+        }
+        
+        function updateNodeProperty(nodeId, property, value) {
+            const node = workflowNodes.find(n => n.id === nodeId);
+            if (node) {
+                node[property] = value;
+                // Re-render node
+                const nodeEl = document.getElementById(nodeId);
+                nodeEl.querySelector('.node-title').textContent = value;
+            }
+        }
+        
+        function updateNodeConfig(nodeId, key, value) {
+            const node = workflowNodes.find(n => n.id === nodeId);
+            if (node) {
+                node.config[key] = value;
+                // Re-render node config
+                const nodeEl = document.getElementById(nodeId);
+                nodeEl.querySelector('.node-config').innerHTML = renderNodeConfig(node);
+            }
+        }
+        
+        function deleteNode(nodeId) {
+            if (confirm('Delete this node?')) {
+                // Remove from data
+                workflowNodes = workflowNodes.filter(n => n.id !== nodeId);
+                
+                // Remove from DOM
+                const nodeEl = document.getElementById(nodeId);
+                if (nodeEl) nodeEl.remove();
+                
+                // Remove connections
+                connections = connections.filter(c => c.from !== nodeId && c.to !== nodeId);
+                updateConnections();
+                
+                // Show empty state if no nodes
+                if (workflowNodes.length === 0) {
+                    document.getElementById('emptyState').style.display = 'flex';
+                }
+            }
+        }
+        
+        function testWorkflow() {
+            const testRunner = document.getElementById('testRunner');
+            const testLog = document.getElementById('testLog');
+            
+            testRunner.classList.add('active');
+            testLog.innerHTML = '';
+            
+            // Simulate workflow execution
+            addTestLog('info', 'Starting workflow test...');
+            
+            setTimeout(() => {
+                addTestLog('success', 'Trigger: Customer Created event received');
+            }, 500);
+            
+            setTimeout(() => {
+                addTestLog('info', 'Action: Sending welcome email...');
+            }, 1000);
+            
+            setTimeout(() => {
+                addTestLog('success', 'Email sent successfully to test@example.com');
+            }, 1500);
+            
+            setTimeout(() => {
+                addTestLog('info', 'Condition: Checking health score...');
+            }, 2000);
+            
+            setTimeout(() => {
+                addTestLog('success', 'Workflow test completed successfully!');
+            }, 2500);
+        }
+        
+        function addTestLog(type, message) {
+            const testLog = document.getElementById('testLog');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.innerHTML = `<strong>[${type.toUpperCase()}]</strong> ${message}`;
+            testLog.appendChild(entry);
+            testLog.scrollTop = testLog.scrollHeight;
+        }
+        
+        function closeTestRunner() {
+            document.getElementById('testRunner').classList.remove('active');
+        }
+        
+        function saveWorkflow() {
+            const workflowData = {
+                name: document.querySelector('.workflow-name').value,
+                nodes: workflowNodes,
+                connections: connections,
+                created: new Date().toISOString()
+            };
+            
+            console.log('Saving workflow:', workflowData);
+            
+            // In real app, this would save to API
+            localStorage.setItem('currentWorkflow', JSON.stringify(workflowData));
+            
+            alert('Workflow saved successfully!');
+        }
+        
+        function loadWorkflowData() {
+            const saved = localStorage.getItem('currentWorkflow');
+            if (saved) {
+                const data = JSON.parse(saved);
+                workflowNodes = data.nodes || [];
+                connections = data.connections || [];
+                
+                if (data.name) {
+                    document.querySelector('.workflow-name').value = data.name;
+                }
+                
+                // Render nodes
+                workflowNodes.forEach(node => renderNode(node));
+                
+                if (workflowNodes.length > 0) {
+                    document.getElementById('emptyState').style.display = 'none';
+                }
+            }
+        }
+        
+        function loadTemplate() {
+            // Load a pre-built template
+            workflowNodes = [
+                {
+                    id: 'node_1',
+                    type: 'trigger',
+                    component: 'trigger-customer-created',
+                    name: 'Customer Created',
+                    icon: '🎯',
+                    x: 100,
+                    y: 200,
+                    config: { event: 'customer.created' }
+                },
+                {
+                    id: 'node_2',
+                    type: 'action',
+                    component: 'action-send-email',
+                    name: 'Send Welcome Email',
+                    icon: '✉️',
+                    x: 400,
+                    y: 200,
+                    config: { template: 'welcome_email', recipient: 'primary_contact' }
+                },
+                {
+                    id: 'node_3',
+                    type: 'condition',
+                    component: 'condition-if-else',
+                    name: 'Check Contract Value',
+                    icon: '🔀',
+                    x: 700,
+                    y: 200,
+                    config: { condition: 'contract_value > 100000' }
+                }
+            ];
+            
+            // Clear canvas and render template
+            document.getElementById('workflowCanvas').querySelectorAll('.workflow-node').forEach(n => n.remove());
+            workflowNodes.forEach(node => renderNode(node));
+            document.getElementById('emptyState').style.display = 'none';
+        }
+        
+        function initializeCanvas() {
+            // Initialize connection drawing
+            // This would include logic for drawing SVG paths between nodes
+        }
+        
+        function updateConnections() {
+            // Update SVG connections between nodes
+        }
+        
+        function validateWorkflow() {
+            let isValid = true;
+            let errors = [];
+            
+            // Check for trigger
+            const triggers = workflowNodes.filter(n => n.type === 'trigger');
+            if (triggers.length === 0) {
+                errors.push('Workflow must have at least one trigger');
+                isValid = false;
+            }
+            
+            // Check for orphaned nodes
+            // Check for circular dependencies
+            
+            if (isValid) {
+                alert('✓ Workflow is valid!');
+            } else {
+                alert('⚠️ Validation errors:\n' + errors.join('\n'));
+            }
+        }
+        
+        function showHistory() {
+            console.log('Show workflow execution history');
+        }
+        
+        function zoomIn() {
+            // Implement zoom functionality
+        }
+        
+        function zoomOut() {
+            // Implement zoom functionality
+        }
+        
+        function fitToScreen() {
+            // Implement fit to screen functionality
+        }
+    </script>
+</body>
+</html>

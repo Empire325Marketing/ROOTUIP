@@ -1,8 +1,53 @@
 {
+  "name": "rootuip-platform",
+  "version": "2.0.0",
+  "description": "Enterprise Container Intelligence Platform - Unified",
+  "main": "integration-gateway.js",
+  "scripts": {
+    "start": "pm2 start ecosystem.config.js",
+    "dev": "pm2 start ecosystem.config.js --watch",
+    "stop": "pm2 stop all",
+    "restart": "pm2 restart all",
+    "logs": "pm2 logs",
+    "setup": "npm install && pm2 install pm2-logrotate",
+    "test": "echo \"No tests configured\" && exit 0"
+  },
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "@slack/web-api": "^7.9.3",
+    "axios": "^1.4.0",
+    "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
-    "express": "^5.1.0",
-    "http-proxy-middleware": "^3.0.5",
-    "iconv-lite": "^0.6.3"
+    "compression": "^1.7.4",
+    "connect-redis": "^7.1.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.6.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.11.2",
+    "express-session": "^1.17.3",
+    "express-validator": "^7.2.1",
+    "form-data": "^4.0.3",
+    "helmet": "^7.2.0",
+    "http-proxy-middleware": "^2.0.6",
+    "ioredis": "^5.3.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "node-2fa": "^2.0.3",
+    "node-cron": "^3.0.2",
+    "nodemailer": "^7.0.4",
+    "passport": "^0.6.0",
+    "passport-saml": "^3.2.4",
+    "pg": "^8.11.0",
+    "qrcode": "^1.5.4",
+    "redis": "^4.6.5",
+    "socket.io": "^4.6.1",
+    "speakeasy": "^2.0.0",
+    "uuid": "^9.0.1",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise ROI Calculator - ROOTUIP Container Tracking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .input-section, .results-section {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #3b82f6;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 0.75rem;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            color: #e2e8f0;
+            font-size: 1rem;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .roi-metric {
+            background: #0f172a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid #334155;
+        }
+
+        .roi-metric h3 {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+        }
+
+        .roi-metric .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #10b981;
+        }
+
+        .roi-metric.highlight {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, #1e293b 0%, #1e3a8a 100%);
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .cta-section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-form input {
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .cta-form button {
+            grid-column: 1 / -1;
+            padding: 1rem;
+            background: #0f172a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.125rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cta-form button:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+        }
+
+        .savings-breakdown {
+            margin-top: 2rem;
+            background: #0f172a;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .savings-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #334155;
+        }
+
+        .savings-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .cta-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="hero">
+                <h1>Enterprise ROI Calculator</h1>
+                <p>Discover how ROOTUIP's container tracking platform can transform your logistics operations and deliver measurable returns</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="calculator-grid">
+            <div class="input-section">
+                <h2 class="section-title">Your Business Details</h2>
+                
+                <div class="input-group">
+                    <label for="company-name">Company Name</label>
+                    <input type="text" id="company-name" placeholder="Enter your company name">
+                </div>
+
+                <div class="input-group">
+                    <label for="industry">Industry</label>
+                    <select id="industry">
+                        <option value="shipping">Shipping & Logistics</option>
+                        <option value="manufacturing">Manufacturing</option>
+                        <option value="retail">Retail & E-commerce</option>
+                        <option value="automotive">Automotive</option>
+                        <option value="pharmaceutical">Pharmaceutical</option>
+                        <option value="food">Food & Beverage</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="containers">Monthly Container Volume</label>
+                    <input type="number" id="containers" placeholder="e.g. 5000" value="5000">
+                </div>
+
+                <div class="input-group">
+                    <label for="avg-container-value">Average Container Value ($)</label>
+                    <input type="number" id="avg-container-value" placeholder="e.g. 50000" value="50000">
+                </div>
+
+                <div class="input-group">
+                    <label for="current-delays">Current Delay Rate (%)</label>
+                    <input type="number" id="current-delays" placeholder="e.g. 15" value="15" min="0" max="100">
+                </div>
+
+                <div class="input-group">
+                    <label for="manual-tracking-hours">Hours Spent on Manual Tracking (per month)</label>
+                    <input type="number" id="manual-tracking-hours" placeholder="e.g. 200" value="200">
+                </div>
+
+                <div class="input-group">
+                    <label for="labor-cost">Average Labor Cost per Hour ($)</label>
+                    <input type="number" id="labor-cost" placeholder="e.g. 75" value="75">
+                </div>
+            </div>
+
+            <div class="results-section">
+                <h2 class="section-title">Your Projected ROI</h2>
+                
+                <div class="roi-metric highlight">
+                    <h3>ANNUAL SAVINGS</h3>
+                    <div class="value" id="annual-savings">$0</div>
+                </div>
+
+                <div class="roi-metric">
+                    <h3>ROI PERCENTAGE</h3>
+                    <div class="value" id="roi-percentage">0%</div>
+                </div>
+
+                <div class="roi-metric">
+                    <h3>PAYBACK PERIOD</h3>
+                    <div class="value" id="payback-period">0 months</div>
+                </div>
+
+                <div class="savings-breakdown">
+                    <h3 style="margin-bottom: 1rem; color: #3b82f6;">Savings Breakdown</h3>
+                    <div class="savings-item">
+                        <span>Reduced Delays & Demurrage</span>
+                        <span id="delay-savings">$0</span>
+                    </div>
+                    <div class="savings-item">
+                        <span>Labor Cost Reduction</span>
+                        <span id="labor-savings">$0</span>
+                    </div>
+                    <div class="savings-item">
+                        <span>Improved Asset Utilization</span>
+                        <span id="utilization-savings">$0</span>
+                    </div>
+                    <div class="savings-item">
+                        <span>Reduced Insurance Premiums</span>
+                        <span id="insurance-savings">$0</span>
+                    </div>
+                    <div class="savings-item">
+                        <span>Total Annual Savings</span>
+                        <span id="total-savings">$0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Ready to Transform Your Logistics Operations?</h2>
+            <p style="margin-bottom: 2rem;">Get a personalized demo and detailed ROI analysis for your enterprise</p>
+            
+            <form class="cta-form" id="lead-form">
+                <input type="text" name="firstName" placeholder="First Name" required>
+                <input type="text" name="lastName" placeholder="Last Name" required>
+                <input type="email" name="email" placeholder="Business Email" required>
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+                <input type="text" name="company" placeholder="Company Name" required>
+                <input type="text" name="title" placeholder="Job Title" required>
+                <button type="submit">Get Enterprise Demo</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ROI Calculation Engine
+        function calculateROI() {
+            const containers = parseInt(document.getElementById('containers').value) || 0;
+            const containerValue = parseInt(document.getElementById('avg-container-value').value) || 0;
+            const delayRate = parseInt(document.getElementById('current-delays').value) || 0;
+            const manualHours = parseInt(document.getElementById('manual-tracking-hours').value) || 0;
+            const laborCost = parseInt(document.getElementById('labor-cost').value) || 0;
+
+            // Calculate savings
+            const annualContainers = containers * 12;
+            const delayedContainers = annualContainers * (delayRate / 100);
+            
+            // Delay savings (reduce delays by 70%)
+            const delaySavings = delayedContainers * containerValue * 0.02 * 0.7; // 2% of value saved per delayed container
+            
+            // Labor savings (80% reduction in manual tracking)
+            const laborSavings = manualHours * laborCost * 12 * 0.8;
+            
+            // Asset utilization improvement (15% better utilization)
+            const utilizationSavings = annualContainers * containerValue * 0.001; // 0.1% improvement
+            
+            // Insurance savings (10% reduction)
+            const insuranceSavings = annualContainers * containerValue * 0.0001; // 0.01% of total value
+            
+            const totalSavings = delaySavings + laborSavings + utilizationSavings + insuranceSavings;
+            
+            // Platform cost (tiered pricing)
+            let platformCost;
+            if (containers < 1000) {
+                platformCost = 50000; // $50K/year
+            } else if (containers < 5000) {
+                platformCost = 150000; // $150K/year
+            } else if (containers < 10000) {
+                platformCost = 300000; // $300K/year
+            } else {
+                platformCost = 500000; // $500K/year enterprise
+            }
+            
+            const netSavings = totalSavings - platformCost;
+            const roiPercentage = ((netSavings / platformCost) * 100).toFixed(0);
+            const paybackMonths = (platformCost / (totalSavings / 12)).toFixed(1);
+
+            // Update UI
+            document.getElementById('annual-savings').textContent = `$${netSavings.toLocaleString()}`;
+            document.getElementById('roi-percentage').textContent = `${roiPercentage}%`;
+            document.getElementById('payback-period').textContent = `${paybackMonths} months`;
+            
+            document.getElementById('delay-savings').textContent = `$${Math.round(delaySavings).toLocaleString()}`;
+            document.getElementById('labor-savings').textContent = `$${Math.round(laborSavings).toLocaleString()}`;
+            document.getElementById('utilization-savings').textContent = `$${Math.round(utilizationSavings).toLocaleString()}`;
+            document.getElementById('insurance-savings').textContent = `$${Math.round(insuranceSavings).toLocaleString()}`;
+            document.getElementById('total-savings').textContent = `$${Math.round(totalSavings).toLocaleString()}`;
+
+            // Track in analytics
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'roi_calculated', {
+                    'event_category': 'engagement',
+                    'event_label': 'roi_calculator',
+                    'value': Math.round(netSavings)
+                });
+            }
+
+            if (typeof mixpanel !== 'undefined') {
+                mixpanel.track('ROI Calculated', {
+                    containers: containers,
+                    industry: document.getElementById('industry').value,
+                    annual_savings: netSavings,
+                    roi_percentage: roiPercentage
+                });
+            }
+        }
+
+        // Auto-calculate on input change
+        document.querySelectorAll('input[type="number"], select').forEach(input => {
+            input.addEventListener('input', calculateROI);
+        });
+
+        // Lead form submission
+        document.getElementById('lead-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            // Add ROI data
+            data.containers = document.getElementById('containers').value;
+            data.industry = document.getElementById('industry').value;
+            data.annual_savings = document.getElementById('annual-savings').textContent;
+            data.roi_percentage = document.getElementById('roi-percentage').textContent;
+            
+            // Send to backend for processing
+            try {
+                const response = await fetch('/api/enterprise-leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    // Track conversion
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'generate_lead', {
+                            'event_category': 'engagement',
+                            'event_label': 'roi_calculator_lead'
+                        });
+                    }
+                    
+                    // Show success message
+                    e.target.innerHTML = '<p style="color: #10b981; font-size: 1.5rem;">Thank you! Our enterprise team will contact you within 24 hours.</p>';
+                }
+            } catch (error) {
+                console.error('Lead submission error:', error);
+            }
+        });
+
+        // Initial calculation
+        calculateROI();
+
+        // Analytics tracking
+        const analyticsScript = document.createElement('script');
+        analyticsScript.async = true;
+        analyticsScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-PM3MT7XSM2';
+        document.head.appendChild(analyticsScript);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-PM3MT7XSM2');
+
+        // Mixpanel tracking
+        (function(f,b){if(!b.__SV){var e,g,i,h;window.mixpanel=b;b._i=[];b.init=function(e,f,c){function g(a,d){var b=d.split(".");2==b.length&&(a=a[b[0]],d=b[1]);a[d]=function(){a.push([d].concat(Array.prototype.slice.call(arguments,0)))}}var a=b;"undefined"!==typeof c?a=b[c]=[]:c="mixpanel";a.people=a.people||[];a.toString=function(a){var d="mixpanel";"mixpanel"!==c&&(d+="."+c);a||(d+=" (stub)");return d};a.people.toString=function(){return a.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");
+        for(h=0;h<i.length;h++)g(a,i[h]);var j="set set_once union unset remove delete".split(" ");a.get_group=function(){function b(c){d[c]=function(){call2_args=arguments;call2=[c].concat(Array.prototype.slice.call(call2_args,0));a.push([e,call2])}}for(var d={},e=["get_group"].concat(Array.prototype.slice.call(arguments,0)),c=0;c<j.length;c++)b(j[c]);return d};b._i.push([e,f,c])};b.__SV=1.2;e=f.createElement("script");e.type="text/javascript";e.async=!0;e.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===f.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";g=f.getElementsByTagName("script")[0];g.parentNode.insertBefore(e,g)}})(document,window.mixpanel||[]);
+        mixpanel.init('1b472f2de0a81debfb0e9f67efa0c2fe');
+    </script>
+</body>
+</html>

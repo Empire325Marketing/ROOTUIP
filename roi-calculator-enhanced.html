@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROI Calculator | Save $500K+ Per Vessel - ROOTUIP</title>
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/assets/css/brand-guidelines.css">
+    <style>
+        /* ROI Calculator Styles */
+        .calculator-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .calculator-form {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .results-panel {
+            background: linear-gradient(135deg, #0F3460 0%, #16213E 100%);
+            border-radius: 12px;
+            padding: 40px;
+            color: white;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+        
+        .form-step {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .progress-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+        
+        .progress-step {
+            flex: 1;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-step.completed {
+            background: var(--color-success);
+        }
+        
+        .progress-step.active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: var(--color-success);
+            animation: fillProgress 0.5s ease-out forwards;
+        }
+        
+        @keyframes fillProgress {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--color-text);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(15, 52, 96, 0.1);
+        }
+        
+        .input-helper {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin-top: 4px;
+        }
+        
+        .range-slider {
+            width: 100%;
+            margin: 16px 0;
+        }
+        
+        .range-value {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--color-text-secondary);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+        }
+        
+        .btn-calculator {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0a2540;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15, 52, 96, 0.2);
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: var(--color-text);
+        }
+        
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* Results Styles */
+        .result-headline {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            opacity: 0.9;
+        }
+        
+        .savings-amount {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--color-success);
+            margin: 16px 0;
+        }
+        
+        .roi-percentage {
+            font-size: 32px;
+            font-weight: 600;
+            color: white;
+            margin: 8px 0;
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 32px 0;
+        }
+        
+        .metric-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .chart-container {
+            margin: 32px 0;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        
+        .cta-section {
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .cta-button {
+            display: block;
+            width: 100%;
+            padding: 16px 24px;
+            background: var(--color-success);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+        
+        .cta-button:hover {
+            background: #00c25e;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 212, 106, 0.3);
+        }
+        
+        /* Exit Intent Modal */
+        .exit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            animation: fadeIn 0.3s;
+        }
+        
+        .exit-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .exit-content {
+            background: var(--bg-dark);
+            max-width: 500px;
+            padding: 48px;
+            border-radius: 16px;
+            text-align: center;
+            position: relative;
+            animation: slideUp 0.3s;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .exit-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: #f3f4f6;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Chatbot Widget */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+        }
+        
+        .chatbot-button {
+            width: 64px;
+            height: 64px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(15, 52, 96, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .chatbot-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(15, 52, 96, 0.4);
+        }
+        
+        .chatbot-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 380px;
+            height: 500px;
+            background: var(--bg-dark);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            display: none;
+            flex-direction: column;
+        }
+        
+        .chatbot-window.open {
+            display: flex;
+            animation: slideUp 0.3s;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-panel {
+                position: relative;
+                top: 0;
+            }
+            
+            .savings-amount {
+                font-size: 36px;
+            }
+            
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="rootuip-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <svg class="logo" width="160" height="40" viewBox="0 0 160 40">
+                        <defs>
+                            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#0F3460;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#16213E;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M5 20 Q 10 10, 20 20 T 40 20 L 40 35 L 5 35 Z" fill="url(#waveGradient)"/>
+                        <rect x="15" y="15" width="10" height="15" fill="#FF6B35" rx="1"/>
+                        <text x="50" y="26" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="#0F3460">ROOTUIP</text>
+                    </svg>
+                </div>
+                <nav class="main-nav">
+                    <a href="#" class="nav-link">Features</a>
+                    <a href="#" class="nav-link">Pricing</a>
+                    <a href="#" class="nav-link">Resources</a>
+                    <a href="#" class="btn btn-primary">Get Demo</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="text-center" style="padding: 60px 0 40px;">
+                <h1 class="display-1" style="margin-bottom: 16px;">
+                    Calculate Your Ocean Freight Savings
+                </h1>
+                <p class="lead" style="font-size: 24px; color: var(--color-text-secondary);">
+                    See how much you can save on detention & demurrage with ROOTUIP
+                </p>
+                <div class="value-badges" style="display: flex; gap: 24px; justify-content: center; margin-top: 32px;">
+                    <div class="value-badge">
+                        <span style="font-size: 20px;">💰</span>
+                        Average Savings: $500K+ Per Vessel
+                    </div>
+                    <div class="value-badge">
+                        <span style="font-size: 20px;">⏱️</span>
+                        ROI in 3.2 Months
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section class="calculator-container">
+        <div class="calculator-grid">
+            <!-- Input Form -->
+            <div class="calculator-form">
+                <div class="progress-bar">
+                    <div class="progress-step active" data-step="1"></div>
+                    <div class="progress-step" data-step="2"></div>
+                    <div class="progress-step" data-step="3"></div>
+                    <div class="progress-step" data-step="4"></div>
+                </div>
+
+                <form id="roi-form">
+                    <!-- Step 1: Basic Info -->
+                    <div class="form-step active" data-step="1">
+                        <h2 style="margin-bottom: 24px;">Let's start with your contact info</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Work Email*</label>
+                            <input type="email" class="form-input" name="email" required 
+                                   placeholder="you@company.com">
+                            <span class="input-helper">We'll send your personalized ROI report here</span>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="form-group">
+                                <label class="form-label">First Name*</label>
+                                <input type="text" class="form-input" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Last Name*</label>
+                                <input type="text" class="form-input" name="lastName" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-calculator btn-primary" onclick="nextStep()">
+                                Continue →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Company Info -->
+                    <div class="form-step" data-step="2">
+                        <h2 style="margin-bottom: 24px;">Tell us about your company</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Company Name*</label>
+                            <input type="text" class="form-input" name="company" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Your Role</label>
+                            <select class="form-input" name="role">
+                                <option value="">Select your role</option>
+                                <option value="executive">C-Level Executive</option>
+                                <option value="vp_director">VP/Director</option>
+                                <option value="manager">Manager</option>
+                                <option value="analyst">Analyst</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Annual Revenue</label>
+                            <select class="form-input" name="annualRevenue">
+                                <option value="">Select range</option>
+                                <option value="<$50M">Less than $50M</option>
+                                <option value="$50M-$250M">$50M - $250M</option>
+                                <option value="$250M-$1B">$250M - $1B</option>
+                                <option value="$1B+">Over $1B</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-calculator btn-secondary" onclick="prevStep()">
+                                ← Back
+                            </button>
+                            <button type="button" class="btn-calculator btn-primary" onclick="nextStep()">
+                                Continue →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Shipping Volume -->
+                    <div class="form-step" data-step="3">
+                        <h2 style="margin-bottom: 24px;">Your shipping volume</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Number of Vessels/Year*</label>
+                            <input type="number" class="form-input" name="vesselCount" required 
+                                   placeholder="e.g., 50" min="1" onchange="updateResults()">
+                            <span class="input-helper">How many vessels do you manage annually?</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Annual Container Volume (TEUs)*</label>
+                            <input type="number" class="form-input" name="containerVolume" required 
+                                   placeholder="e.g., 100000" min="100" onchange="updateResults()">
+                            <span class="input-helper">Total twenty-foot equivalent units per year</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Average Detention Days per Container</label>
+                            <input type="range" class="range-slider" name="avgDetentionDays" 
+                                   min="0" max="14" value="5" onchange="updateResults()">
+                            <div class="range-value">
+                                <span>0 days</span>
+                                <span id="detention-value">5 days</span>
+                                <span>14 days</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-calculator btn-secondary" onclick="prevStep()">
+                                ← Back
+                            </button>
+                            <button type="button" class="btn-calculator btn-primary" onclick="nextStep()">
+                                Continue →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Current Situation -->
+                    <div class="form-step" data-step="4">
+                        <h2 style="margin-bottom: 24px;">Current challenges & timeline</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Estimated Annual D&D Costs</label>
+                            <input type="number" class="form-input" name="currentCosts" 
+                                   placeholder="e.g., 5000000" onchange="updateResults()">
+                            <span class="input-helper">Your current detention & demurrage expenses (optional)</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Implementation Timeline*</label>
+                            <select class="form-input" name="timeline" required>
+                                <option value="">Select timeline</option>
+                                <option value="immediate">Immediate (Within 30 days)</option>
+                                <option value="1-3months">1-3 months</option>
+                                <option value="3-6months">3-6 months</option>
+                                <option value="6months+">6+ months</option>
+                                <option value="exploring">Just exploring</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Biggest Challenge</label>
+                            <select class="form-input" name="challenge">
+                                <option value="">Select main pain point</option>
+                                <option value="visibility">Lack of real-time visibility</option>
+                                <option value="costs">High detention & demurrage costs</option>
+                                <option value="manual">Manual tracking processes</option>
+                                <option value="integration">System integration issues</option>
+                                <option value="reporting">Inadequate reporting</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-calculator btn-secondary" onclick="prevStep()">
+                                ← Back
+                            </button>
+                            <button type="submit" class="btn-calculator btn-primary">
+                                Calculate My ROI →
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="results-panel">
+                <div id="results-content">
+                    <h3 class="result-headline">Your Potential Annual Savings</h3>
+                    
+                    <div class="savings-amount" id="annual-savings">$0</div>
+                    
+                    <div class="metric-grid">
+                        <div class="metric-box">
+                            <div class="metric-label">ROI</div>
+                            <div class="metric-value" id="roi-percentage">0%</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-label">Payback Period</div>
+                            <div class="metric-value" id="payback-period">0 mo</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-label">Cost Reduction</div>
+                            <div class="metric-value" id="cost-reduction">0%</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-label">5-Year Value</div>
+                            <div class="metric-value" id="five-year-value">$0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="savings-chart" width="400" height="200"></canvas>
+                    </div>
+                    
+                    <div class="cta-section">
+                        <p style="margin-bottom: 16px; opacity: 0.9;">
+                            Ready to capture these savings?
+                        </p>
+                        <a href="#" class="cta-button" onclick="scheduleDemo()">
+                            Get Your Custom Demo
+                        </a>
+                        <p style="margin-top: 16px; font-size: 14px; opacity: 0.7;">
+                            See exactly how ROOTUIP works for your fleet
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Exit Intent Modal -->
+    <div class="exit-modal" id="exit-modal">
+        <div class="exit-content">
+            <button class="exit-close" onclick="closeExitModal()">×</button>
+            <h2 style="font-size: 32px; margin-bottom: 16px;">Wait! Don't Miss Out</h2>
+            <p style="font-size: 18px; color: var(--color-text-secondary); margin-bottom: 24px;">
+                Get our exclusive ROI guide showing how enterprises save $14M per vessel annually
+            </p>
+            <div style="background: #f0f9ff; padding: 24px; border-radius: 8px; margin-bottom: 24px;">
+                <p style="font-weight: 600; margin-bottom: 8px;">What you'll learn:</p>
+                <ul style="text-align: left; margin: 0; padding-left: 24px;">
+                    <li>Hidden costs in your current system</li>
+                    <li>Quick wins to reduce D&D by 50%</li>
+                    <li>Case study: Maersk's $127M savings</li>
+                </ul>
+            </div>
+            <form id="exit-form" onsubmit="handleExitForm(event)">
+                <input type="email" class="form-input" placeholder="Enter your email" required style="margin-bottom: 16px;">
+                <button type="submit" class="btn-calculator btn-primary" style="width: 100%;">
+                    Send Me the Guide
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget">
+        <button class="chatbot-button" onclick="toggleChat()">
+            💬
+        </button>
+        <div class="chatbot-window" id="chat-window">
+            <div style="background: var(--color-primary); color: white; padding: 16px; border-radius: 12px 12px 0 0;">
+                <h4 style="margin: 0;">Hi! I'm here to help 👋</h4>
+                <p style="font-size: 14px; margin: 4px 0 0; opacity: 0.9;">Ask me about ROI or container tracking</p>
+            </div>
+            <div style="flex: 1; padding: 16px; overflow-y: auto;" id="chat-messages">
+                <!-- Chat messages will appear here -->
+            </div>
+            <div style="padding: 16px; border-top: 1px solid #e5e7eb;">
+                <input type="text" class="form-input" placeholder="Type your message..." 
+                       onkeypress="handleChatInput(event)" style="margin: 0;">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Progressive form handling
+        let currentStep = 1;
+        const totalSteps = 4;
+        let formData = {};
+        let leadId = null;
+
+        function nextStep() {
+            if (validateStep(currentStep)) {
+                saveStepData(currentStep);
+                
+                // Progressive profiling
+                if (currentStep === 1) {
+                    submitProgressiveProfile(1);
+                }
+                
+                currentStep++;
+                showStep(currentStep);
+                updateProgress();
+            }
+        }
+
+        function prevStep() {
+            currentStep--;
+            showStep(currentStep);
+            updateProgress();
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.form-step').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelector(`[data-step="${step}"]`).classList.add('active');
+        }
+
+        function updateProgress() {
+            document.querySelectorAll('.progress-step').forEach((el, index) => {
+                if (index < currentStep) {
+                    el.classList.add('completed');
+                } else if (index === currentStep - 1) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('completed', 'active');
+                }
+            });
+        }
+
+        function validateStep(step) {
+            const activeStep = document.querySelector(`.form-step[data-step="${step}"]`);
+            const requiredFields = activeStep.querySelectorAll('[required]');
+            let valid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    field.classList.add('error');
+                    valid = false;
+                } else {
+                    field.classList.remove('error');
+                }
+            });
+            
+            return valid;
+        }
+
+        function saveStepData(step) {
+            const activeStep = document.querySelector(`.form-step[data-step="${step}"]`);
+            const inputs = activeStep.querySelectorAll('input, select');
+            
+            inputs.forEach(input => {
+                if (input.value) {
+                    formData[input.name] = input.value;
+                }
+            });
+        }
+
+        // ROI Calculation
+        function updateResults() {
+            const vesselCount = parseInt(formData.vesselCount || 0);
+            const containerVolume = parseInt(formData.containerVolume || 0);
+            const avgDetentionDays = parseFloat(formData.avgDetentionDays || 5);
+            const currentCosts = parseFloat(formData.currentCosts || 0);
+            
+            if (vesselCount && containerVolume) {
+                const results = calculateROI({
+                    vesselCount,
+                    containerVolume,
+                    avgDetentionDays,
+                    currentCosts
+                });
+                
+                displayResults(results);
+            }
+        }
+
+        function calculateROI(params) {
+            const avgCostPerDay = 350; // $150 detention + $200 demurrage
+            const estimatedCosts = params.currentCosts || 
+                (params.containerVolume * params.avgDetentionDays * avgCostPerDay);
+            
+            const reductionRate = 0.775; // 77.5% average reduction
+            const annualSavings = estimatedCosts * reductionRate;
+            const annualInvestment = 500000 * params.vesselCount;
+            const netSavings = annualSavings - annualInvestment;
+            const roiPercentage = ((netSavings / annualInvestment) * 100).toFixed(1);
+            const paybackPeriod = (annualInvestment / annualSavings * 12).toFixed(1);
+            
+            return {
+                currentCosts: estimatedCosts,
+                annualSavings,
+                annualInvestment,
+                netSavings,
+                roiPercentage,
+                paybackPeriod,
+                costReduction: (reductionRate * 100).toFixed(0),
+                fiveYearValue: netSavings * 5
+            };
+        }
+
+        function displayResults(results) {
+            document.getElementById('annual-savings').textContent = 
+                '$' + formatNumber(Math.round(results.annualSavings));
+            document.getElementById('roi-percentage').textContent = 
+                results.roiPercentage + '%';
+            document.getElementById('payback-period').textContent = 
+                results.paybackPeriod + ' mo';
+            document.getElementById('cost-reduction').textContent = 
+                results.costReduction + '%';
+            document.getElementById('five-year-value').textContent = 
+                '$' + formatNumber(Math.round(results.fiveYearValue));
+            
+            updateChart(results);
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(0) + 'K';
+            }
+            return num.toString();
+        }
+
+        // Form submission
+        document.getElementById('roi-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            saveStepData(currentStep);
+            
+            try {
+                const response = await fetch('/api/lead-gen/roi-calculator', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Track conversion
+                    gtag('event', 'conversion', {
+                        'send_to': 'AW-XXXXXX/XXXXXX',
+                        'value': result.roi.annualSavings,
+                        'currency': 'USD'
+                    });
+                    
+                    // Show success state
+                    showSuccessState(result);
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+            }
+        });
+
+        // Progressive profiling
+        async function submitProgressiveProfile(step) {
+            try {
+                const response = await fetch('/api/lead-gen/progressive-profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        step,
+                        leadId,
+                        ...formData
+                    })
+                });
+                
+                const result = await response.json();
+                leadId = result.leadId;
+                
+            } catch (error) {
+                console.error('Progressive profile error:', error);
+            }
+        }
+
+        // Exit intent detection
+        let exitIntentShown = false;
+        
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY <= 0 && !exitIntentShown && currentStep > 1) {
+                showExitModal();
+                exitIntentShown = true;
+            }
+        });
+
+        function showExitModal() {
+            document.getElementById('exit-modal').classList.add('show');
+            
+            // Track exit intent
+            fetch('/api/lead-gen/exit-intent', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: formData.email,
+                    currentPage: 'roi-calculator',
+                    timeOnPage: Math.round((Date.now() - pageLoadTime) / 1000),
+                    scrollDepth: getScrollDepth()
+                })
+            });
+        }
+
+        function closeExitModal() {
+            document.getElementById('exit-modal').classList.remove('show');
+        }
+
+        // Chatbot functionality
+        let chatOpen = false;
+        
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            document.getElementById('chat-window').classList.toggle('open');
+            
+            if (chatOpen && !document.getElementById('chat-messages').children.length) {
+                addChatMessage('bot', 'Hi! I can help you calculate your ROI or answer questions about ROOTUIP. What would you like to know?');
+            }
+        }
+
+        function handleChatInput(e) {
+            if (e.key === 'Enter') {
+                const input = e.target;
+                const message = input.value.trim();
+                
+                if (message) {
+                    addChatMessage('user', message);
+                    input.value = '';
+                    
+                    // Process message
+                    processChatMessage(message);
+                }
+            }
+        }
+
+        function addChatMessage(sender, message) {
+            const messagesDiv = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.style.margin = '8px 0';
+            messageDiv.style.padding = '8px 12px';
+            messageDiv.style.borderRadius = '8px';
+            messageDiv.style.maxWidth = '80%';
+            
+            if (sender === 'bot') {
+                messageDiv.style.background = '#f3f4f6';
+                messageDiv.style.marginRight = 'auto';
+            } else {
+                messageDiv.style.background = '#0F3460';
+                messageDiv.style.color = 'white';
+                messageDiv.style.marginLeft = 'auto';
+            }
+            
+            messageDiv.textContent = message;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        async function processChatMessage(message) {
+            // Simple keyword-based responses
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('roi') || lowerMessage.includes('save')) {
+                addChatMessage('bot', 'Most of our customers save between $300K-$800K per vessel annually. Would you like me to calculate your specific ROI?');
+            } else if (lowerMessage.includes('demo')) {
+                addChatMessage('bot', 'I\'d be happy to schedule a demo for you! Click here to pick a time that works: [Schedule Demo]');
+            } else if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
+                addChatMessage('bot', 'ROOTUIP pricing starts at $500K per vessel annually. Given the average savings of $2M+, most customers see ROI within 3-4 months.');
+            } else {
+                addChatMessage('bot', 'I can help you with ROI calculations, scheduling demos, or answering questions about our platform. What interests you most?');
+            }
+        }
+
+        // Initialize
+        const pageLoadTime = Date.now();
+        
+        // Update detention days display
+        document.querySelector('[name="avgDetentionDays"]').addEventListener('input', (e) => {
+            document.getElementById('detention-value').textContent = e.target.value + ' days';
+            formData.avgDetentionDays = e.target.value;
+            updateResults();
+        });
+
+        // Initialize chart
+        const ctx = document.getElementById('savings-chart').getContext('2d');
+        let savingsChart;
+
+        function updateChart(results) {
+            const data = {
+                labels: ['Current Costs', 'With ROOTUIP', 'Your Savings'],
+                datasets: [{
+                    data: [
+                        results.currentCosts,
+                        results.currentCosts - results.annualSavings,
+                        results.annualSavings
+                    ],
+                    backgroundColor: ['#FF6B35', '#0F3460', '#00D46A']
+                }]
+            };
+
+            if (savingsChart) {
+                savingsChart.destroy();
+            }
+
+            savingsChart = new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + formatNumber(value);
+                                },
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function getScrollDepth() {
+            const scrolled = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            return Math.round((scrolled / (documentHeight - viewportHeight)) * 100);
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

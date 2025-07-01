@@ -1,0 +1,20 @@
+[Unit]
+Description=ROOTUIP PM2 Process Manager
+After=network.target
+
+[Service]
+Type=forking
+User=rootuip
+LimitNOFILE=infinity
+LimitNPROC=infinity
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+Environment=PM2_HOME=/home/rootuip/.pm2
+PIDFile=/home/rootuip/.pm2/pm2.pid
+Restart=on-failure
+
+ExecStart=/usr/local/bin/pm2 resurrect
+ExecReload=/usr/local/bin/pm2 reload all
+ExecStop=/usr/local/bin/pm2 kill
+
+[Install]
+WantedBy=multi-user.target

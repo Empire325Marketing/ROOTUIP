@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Compliance Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f6fa;
+            color: #2c3e50;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .compliance-status {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .overall-score {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        
+        .score-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .score-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        /* Navigation */
+        .nav-tabs {
+            background: var(--bg-dark);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 0 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .nav-tabs ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-tabs li {
+            padding: 1rem 0;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tabs li.active {
+            color: #3498db;
+            border-bottom-color: #3498db;
+        }
+        
+        .nav-tabs li:hover {
+            color: #3498db;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .card-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3498db;
+            margin: 1rem 0;
+        }
+        
+        .card-subtitle {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        /* Framework Cards */
+        .framework-card {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+        
+        .framework-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .framework-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .framework-score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: #f0f0f0;
+        }
+        
+        .score-high { color: #27ae60; background: #e8f8f5; }
+        .score-medium { color: #f39c12; background: #fef9e7; }
+        .score-low { color: #e74c3c; background: #fdedec; }
+        
+        /* Progress Bars */
+        .progress-bar {
+            background: #ecf0f1;
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Controls List */
+        .controls-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .control-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .control-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-implemented { background: #d4edda; color: #155724; }
+        .status-partial { background: var(--bg-dark)3cd; color: #856404; }
+        .status-not-implemented { background: #f8d7da; color: #721c24; }
+        
+        /* Audit Trail */
+        .audit-trail {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .audit-entry {
+            padding: 1rem;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .audit-entry:last-child {
+            border-bottom: none;
+        }
+        
+        .audit-timestamp {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+        }
+        
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
+        }
+        
+        /* Alerts */
+        .alerts-panel {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+        
+        .alert-item {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .alert-critical {
+            background: #fee;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .alert-warning {
+            background: var(--bg-dark)bf0;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .alert-info {
+            background: #e3f2fd;
+            border-left: 4px solid #3498db;
+        }
+        
+        /* Status Indicators */
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+        
+        .status-green { background: #27ae60; }
+        .status-yellow { background: #f39c12; }
+        .status-red { background: #e74c3c; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .compliance-status {
+                width: 100%;
+                justify-content: space-around;
+            }
+            
+            .nav-tabs ul {
+                overflow-x: auto;
+                gap: 1rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1>🛡️ ROOTUIP Compliance Dashboard</h1>
+            <div class="compliance-status">
+                <div class="overall-score">
+                    <div class="score-value" id="overallScore">--</div>
+                    <div class="score-label">Overall Compliance</div>
+                </div>
+                <div class="overall-score">
+                    <div class="score-value" id="riskScore">--</div>
+                    <div class="score-label">Risk Score</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <div class="nav-tabs">
+        <ul>
+            <li class="active" data-tab="overview">Overview</li>
+            <li data-tab="frameworks">Frameworks</li>
+            <li data-tab="security">Security</li>
+            <li data-tab="audit">Audit Trail</li>
+            <li data-tab="reports">Reports</li>
+        </ul>
+    </div>
+    
+    <!-- Container -->
+    <div class="container">
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content">
+            <!-- Alerts Panel -->
+            <div class="alerts-panel">
+                <h3>Active Alerts</h3>
+                <div id="alertsList">
+                    <!-- Alerts will be populated here -->
+                </div>
+            </div>
+            
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- SOC 2 Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">SOC 2 Type II</h3>
+                        <span class="status-indicator status-green"></span>
+                    </div>
+                    <div class="card-value" id="soc2Score">--</div>
+                    <div class="card-subtitle">Compliance Score</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="soc2Progress" style="width: 0%"></div>
+                    </div>
+                    <p>Last Assessment: <span id="soc2LastAssessment">--</span></p>
+                </div>
+                
+                <!-- GDPR Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">GDPR</h3>
+                        <span class="status-indicator status-green"></span>
+                    </div>
+                    <div class="card-value" id="gdprScore">--</div>
+                    <div class="card-subtitle">Compliance Score</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="gdprProgress" style="width: 0%"></div>
+                    </div>
+                    <p>Data Subjects: <span id="gdprDataSubjects">--</span></p>
+                </div>
+                
+                <!-- ISO 27001 Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">ISO 27001</h3>
+                        <span class="status-indicator status-yellow"></span>
+                    </div>
+                    <div class="card-value" id="iso27001Score">--</div>
+                    <div class="card-subtitle">Readiness Score</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="iso27001Progress" style="width: 0%"></div>
+                    </div>
+                    <p>Controls: <span id="iso27001Controls">--</span></p>
+                </div>
+            </div>
+            
+            <!-- Metrics Grid -->
+            <div class="dashboard-grid">
+                <!-- Audit Logs Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Audit Logs</h3>
+                    </div>
+                    <div class="card-value" id="auditLogCount">--</div>
+                    <div class="card-subtitle">Total Logs Collected</div>
+                    <p>Storage: <span id="auditStorage">--</span></p>
+                </div>
+                
+                <!-- Security Incidents Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Security Incidents</h3>
+                    </div>
+                    <div class="card-value" id="incidentCount">--</div>
+                    <div class="card-subtitle">Open Incidents</div>
+                    <p>MTTR: <span id="mttr">--</span></p>
+                </div>
+                
+                <!-- Vulnerabilities Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Vulnerabilities</h3>
+                    </div>
+                    <div class="card-value" id="vulnerabilityCount">--</div>
+                    <div class="card-subtitle">Open Vulnerabilities</div>
+                    <p>Critical: <span id="criticalVulns">--</span></p>
+                </div>
+            </div>
+            
+            <!-- Compliance Trend Chart -->
+            <div class="card">
+                <h3 class="card-title">Compliance Trend</h3>
+                <div class="chart-container">
+                    <canvas id="complianceTrendChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Frameworks Tab -->
+        <div id="frameworks" class="tab-content" style="display: none;">
+            <!-- Framework cards will be populated here -->
+            <div id="frameworksList"></div>
+        </div>
+        
+        <!-- Security Tab -->
+        <div id="security" class="tab-content" style="display: none;">
+            <!-- Security content will be populated here -->
+            <div id="securityContent"></div>
+        </div>
+        
+        <!-- Audit Trail Tab -->
+        <div id="audit" class="tab-content" style="display: none;">
+            <div class="audit-trail">
+                <h3>Recent Audit Events</h3>
+                <div id="auditTrail">
+                    <!-- Audit entries will be populated here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Reports Tab -->
+        <div id="reports" class="tab-content" style="display: none;">
+            <div class="card">
+                <h3 class="card-title">Generate Compliance Report</h3>
+                <div style="margin-top: 1rem;">
+                    <button onclick="generateReport('compliance')" class="btn">Compliance Report</button>
+                    <button onclick="generateReport('security')" class="btn">Security Report</button>
+                    <button onclick="generateReport('audit')" class="btn">Audit Report</button>
+                    <button onclick="generateReport('executive')" class="btn">Executive Summary</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Socket.IO connection
+        const socket = io();
+        
+        // Dashboard state
+        let dashboardData = {
+            frameworks: {},
+            security: {},
+            audit: {},
+            alerts: []
+        };
+        
+        // Tab navigation
+        document.querySelectorAll('.nav-tabs li').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Update active tab
+                document.querySelectorAll('.nav-tabs li').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show corresponding content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.style.display = 'none';
+                });
+                document.getElementById(tab.dataset.tab).style.display = 'block';
+            });
+        });
+        
+        // Socket event handlers
+        socket.on('connect', () => {
+            console.log('Connected to compliance server');
+            loadDashboardData();
+        });
+        
+        socket.on('compliance:update', (data) => {
+            updateComplianceMetrics(data);
+        });
+        
+        socket.on('assessment:completed', (assessment) => {
+            updateFrameworkScore(assessment.frameworkId, assessment.overallScore);
+            addAuditEntry(`Assessment completed for ${assessment.frameworkName}`);
+        });
+        
+        socket.on('incident:created', (incident) => {
+            addAlert({
+                type: incident.severity,
+                message: `Security Incident: ${incident.title}`,
+                timestamp: new Date()
+            });
+            updateSecurityMetrics();
+        });
+        
+        socket.on('vulnerability:critical', (vuln) => {
+            addAlert({
+                type: 'critical',
+                message: `Critical Vulnerability: ${vuln.finding.title}`,
+                timestamp: new Date()
+            });
+        });
+        
+        socket.on('audit:logged', (audit) => {
+            updateAuditMetrics();
+        });
+        
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                // Load compliance data
+                const complianceResponse = await fetch('/api/compliance/status');
+                const complianceData = await complianceResponse.json();
+                updateComplianceMetrics(complianceData);
+                
+                // Load security data
+                const securityResponse = await fetch('/api/security/status');
+                const securityData = await securityResponse.json();
+                updateSecurityMetrics(securityData);
+                
+                // Load audit data
+                const auditResponse = await fetch('/api/audit/status');
+                const auditData = await auditResponse.json();
+                updateAuditMetrics(auditData);
+                
+                // Initialize charts
+                initializeCharts();
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+        
+        // Update compliance metrics
+        function updateComplianceMetrics(data) {
+            // Overall score
+            const overallScore = calculateOverallScore(data);
+            document.getElementById('overallScore').textContent = `${overallScore.toFixed(0)}%`;
+            
+            // Framework scores
+            if (data.frameworks) {
+                // SOC 2
+                if (data.frameworks.SOC2_TYPE_II) {
+                    const soc2 = data.frameworks.SOC2_TYPE_II;
+                    document.getElementById('soc2Score').textContent = `${soc2.complianceScore.toFixed(0)}%`;
+                    document.getElementById('soc2Progress').style.width = `${soc2.complianceScore}%`;
+                    document.getElementById('soc2LastAssessment').textContent = 
+                        soc2.lastAssessment ? new Date(soc2.lastAssessment).toLocaleDateString() : 'Never';
+                }
+                
+                // GDPR
+                if (data.frameworks.GDPR) {
+                    const gdpr = data.frameworks.GDPR;
+                    document.getElementById('gdprScore').textContent = `${gdpr.complianceScore.toFixed(0)}%`;
+                    document.getElementById('gdprProgress').style.width = `${gdpr.complianceScore}%`;
+                }
+            }
+            
+            dashboardData.frameworks = data.frameworks || {};
+        }
+        
+        // Update security metrics
+        function updateSecurityMetrics(data) {
+            if (!data) return;
+            
+            // ISO 27001
+            if (data.iso27001ReadinessScore !== undefined) {
+                document.getElementById('iso27001Score').textContent = `${data.iso27001ReadinessScore.toFixed(0)}%`;
+                document.getElementById('iso27001Progress').style.width = `${data.iso27001ReadinessScore}%`;
+            }
+            
+            // Incidents
+            if (data.incidentsOpen !== undefined) {
+                document.getElementById('incidentCount').textContent = data.incidentsOpen;
+            }
+            
+            // Vulnerabilities
+            if (data.vulnerabilitiesOpen !== undefined) {
+                document.getElementById('vulnerabilityCount').textContent = data.vulnerabilitiesOpen;
+                document.getElementById('criticalVulns').textContent = data.vulnerabilitiesCritical || 0;
+            }
+            
+            // Risk score
+            const riskScore = calculateRiskScore(data);
+            document.getElementById('riskScore').textContent = riskScore.toFixed(0);
+            
+            dashboardData.security = data;
+        }
+        
+        // Update audit metrics
+        function updateAuditMetrics(data) {
+            if (!data) return;
+            
+            if (data.totalLogs !== undefined) {
+                document.getElementById('auditLogCount').textContent = formatNumber(data.totalLogs);
+            }
+            
+            if (data.storageUsed !== undefined) {
+                document.getElementById('auditStorage').textContent = data.storageUsed;
+            }
+            
+            dashboardData.audit = data;
+        }
+        
+        // Calculate overall compliance score
+        function calculateOverallScore(data) {
+            if (!data.frameworks) return 0;
+            
+            const scores = Object.values(data.frameworks)
+                .map(f => f.complianceScore)
+                .filter(s => s > 0);
+            
+            return scores.length > 0 ? 
+                scores.reduce((a, b) => a + b, 0) / scores.length : 0;
+        }
+        
+        // Calculate risk score
+        function calculateRiskScore(data) {
+            let risk = 100;
+            
+            // Deduct for open incidents
+            risk -= (data.incidentsOpen || 0) * 5;
+            
+            // Deduct for vulnerabilities
+            risk -= (data.vulnerabilitiesCritical || 0) * 10;
+            risk -= (data.vulnerabilitiesOpen || 0) * 2;
+            
+            // Deduct for low compliance
+            const complianceScore = calculateOverallScore(dashboardData);
+            if (complianceScore < 80) {
+                risk -= (80 - complianceScore);
+            }
+            
+            return Math.max(0, risk);
+        }
+        
+        // Add alert
+        function addAlert(alert) {
+            const alertsList = document.getElementById('alertsList');
+            
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert-item alert-${alert.type}`;
+            alertDiv.innerHTML = `
+                <div>
+                    <strong>${alert.message}</strong>
+                    <div class="audit-timestamp">${new Date(alert.timestamp).toLocaleString()}</div>
+                </div>
+            `;
+            
+            alertsList.insertBefore(alertDiv, alertsList.firstChild);
+            
+            // Keep only last 10 alerts
+            while (alertsList.children.length > 10) {
+                alertsList.removeChild(alertsList.lastChild);
+            }
+        }
+        
+        // Add audit entry
+        function addAuditEntry(message) {
+            const auditTrail = document.getElementById('auditTrail');
+            
+            const entry = document.createElement('div');
+            entry.className = 'audit-entry';
+            entry.innerHTML = `
+                <div>${message}</div>
+                <div class="audit-timestamp">${new Date().toLocaleString()}</div>
+            `;
+            
+            auditTrail.insertBefore(entry, auditTrail.firstChild);
+            
+            // Keep only last 20 entries
+            while (auditTrail.children.length > 20) {
+                auditTrail.removeChild(auditTrail.lastChild);
+            }
+        }
+        
+        // Initialize charts
+        function initializeCharts() {
+            const ctx = document.getElementById('complianceTrendChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: generateDateLabels(30),
+                    datasets: [{
+                        label: 'SOC 2',
+                        data: generateTrendData(30, 85, 95),
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'GDPR',
+                        data: generateTrendData(30, 80, 90),
+                        borderColor: '#2ecc71',
+                        backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'ISO 27001',
+                        data: generateTrendData(30, 70, 85),
+                        borderColor: '#f39c12',
+                        backgroundColor: 'rgba(243, 156, 18, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Generate date labels
+        function generateDateLabels(days) {
+            const labels = [];
+            for (let i = days - 1; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+            }
+            return labels;
+        }
+        
+        // Generate trend data
+        function generateTrendData(points, min, max) {
+            const data = [];
+            let current = min;
+            
+            for (let i = 0; i < points; i++) {
+                current += (Math.random() - 0.3) * 5;
+                current = Math.max(min, Math.min(max, current));
+                data.push(current);
+            }
+            
+            return data;
+        }
+        
+        // Format number
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        // Generate report
+        async function generateReport(type) {
+            try {
+                const response = await fetch(`/api/compliance/report/${type}`);
+                const report = await response.json();
+                
+                // Download report
+                const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${type}_report_${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                
+                addAlert({
+                    type: 'info',
+                    message: `${type} report generated successfully`,
+                    timestamp: new Date()
+                });
+                
+            } catch (error) {
+                console.error('Error generating report:', error);
+                addAlert({
+                    type: 'critical',
+                    message: `Failed to generate ${type} report`,
+                    timestamp: new Date()
+                });
+            }
+        }
+        
+        // Button styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .btn {
+                background: #3498db;
+                color: white;
+                border: none;
+                padding: 0.75rem 1.5rem;
+                border-radius: 8px;
+                font-size: 1rem;
+                cursor: pointer;
+                margin-right: 0.5rem;
+                transition: all 0.3s ease;
+            }
+            
+            .btn:hover {
+                background: #2980b9;
+                transform: translateY(-2px);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

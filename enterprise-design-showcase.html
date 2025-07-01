@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Enterprise Design Showcase</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/assets/css/enterprise-design-system.css" rel="stylesheet">
+    <link href="/assets/css/enterprise-enhancements.css" rel="stylesheet">
+    <style>
+        body {
+            padding: var(--space-8);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .showcase-section {
+            margin-bottom: var(--space-16);
+        }
+        .showcase-title {
+            font-size: var(--text-4xl);
+            font-weight: var(--font-extrabold);
+            margin-bottom: var(--space-8);
+            background: var(--enterprise-gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .showcase-subtitle {
+            font-size: var(--text-2xl);
+            font-weight: var(--font-bold);
+            margin-bottom: var(--space-6);
+            color: var(--enterprise-dark);
+        }
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <h1 class="showcase-title">ROOTUIP Enterprise Design System</h1>
+    <p class="text-lg text-muted mb-8">Premium UI/UX for $500K+ Annual Contracts</p>
+
+    <!-- Color Palette -->
+    <section class="showcase-section">
+        <h2 class="showcase-subtitle">Premium Color Palette</h2>
+        <div class="component-grid">
+            <div class="card">
+                <div style="height: 100px; background: var(--enterprise-primary); border-radius: var(--radius-md);"></div>
+                <h4 class="mt-4">Primary Blue</h4>
+                <p class="text-mono text-sm text-muted">#1E40AF</p>
+                <p class="text-sm">Trust & Reliability</p>
+            </div>
+            <div class="card">
+                <div style="height: 100px; background: var(--enterprise-success); border-radius: var(--radius-md);"></div>
+                <h4 class="mt-4">Success Green</h4>
+                <p class="text-mono text-sm text-muted">#059669</p>
+                <p class="text-sm">Savings & Profit</p>
+            </div>
+            <div class="card">
+                <div style="height: 100px; background: var(--enterprise-danger); border-radius: var(--radius-md);"></div>
+                <h4 class="mt-4">Alert Red</h4>
+                <p class="text-mono text-sm text-muted">#DC2626</p>
+                <p class="text-sm">Urgency & Risks</p>
+            </div>
+            <div class="card">
+                <div style="height: 100px; background: var(--enterprise-dark); border-radius: var(--radius-md);"></div>
+                <h4 class="mt-4">Charcoal</h4>
+                <p class="text-mono text-sm text-muted">#1F2937</p>
+                <p class="text-sm">Sophistication</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Typography -->
+    <section class="showcase-section">
+        <h2 class="showcase-subtitle">Typography System</h2>
+        <div class="card">
+            <h1>Heading 1 - Inter Extra Bold</h1>
+            <h2>Heading 2 - Inter Bold</h2>
+            <h3>Heading 3 - Inter Semi Bold</h3>
+            <h4>Heading 4 - Inter Semi Bold</h4>
+            <h5>Heading 5 - Inter Medium</h5>
+            <h6>Heading 6 - Inter Medium</h6>
+            <p>Body text - Inter Regular. Professional and clean typography that ensures excellent readability across all devices.</p>
+            <p class="text-mono">Monospace - JetBrains Mono for data: $1,234,567.89</p>
+        </div>
+    </section>
+
+    <!-- Buttons -->
+    <section class="showcase-section">
+        <h2 class="showcase-subtitle">Premium Buttons</h2>
+        <div class="card">
+            <div class="flex gap-4 flex-wrap">
+                <button class="btn btn-primary">
+                    <i class="fas fa-check"></i>
+                    Primary Action
+                </button>
+                <button class="btn btn-secondary">
+                    <i class="fas fa-download"></i>
+                    Secondary Action
+                </button>
+                <button class="btn btn-success">
+                    <i class="fas fa-save"></i>
+                    Success Action
+                </button>
+                <button class="btn btn-ghost">
+                    <i class="fas fa-times"></i>
+                    Ghost Button
+                </button>
+            </div>
+            <div class="flex gap-4 flex-wrap mt-4">
+                <button class="btn btn-primary btn-sm">Small Button</button>
+                <button class="btn btn-primary">Regular Button</button>
+                <button class="btn btn-primary btn-lg">Large Button</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cards & Metrics -->
+    <section class="showcase-section">
+        <h2 class="showcase-subtitle">Premium Cards & Metrics</h2>
+        <div class="component-grid">
+            <div class="metric-card">
+                <div class="metric-value">$3.2M</div>
+                <div class="metric-label">Revenue at Risk</div>
+                <div class="metric-change negative">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>Requires attention</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value text-success">94.7%</div>
+                <div class="metric-label">On-Time Delivery</div>
+                <div class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>2.3% improvement</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value text-primary">12,487</div>
+                <div class="metric-label">Active Containers</div>
+                <div class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>12% growth</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Forms -->
+    <section class="showcase-section">
+        <h2 class="showcase-subtitle">Enterprise Forms</h2>
+        <div class="card" style="max-width: 600px;">
+            <h3 class="mb-6">Track New Container</h3>
+            <div class="form-group">
+                <label class="form-label">Container Number</label>
+                <input type="text" class="form-control" placeholder="Enter container ID (e.g., MSKU1234567)">
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" placeholder="Carrier Name" value="Maersk">
+                <label class="form-label">Carrier</label>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                    Track Container
+                </button>
+                <button class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tables -->
+    <section class="showcase-section">
+        <h2 class="showcase-subtitle">Premium Tables</h2>
+        <div class="card p-0">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Container ID</th>
+                        <th>Carrier</th>
+                        <th>Status</th>
+                        <th>Risk Score</th>
+                        <th>Value</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-mono">MSKU7654321</td>
+                        <td>Maersk</td>
+                        <td><span class="badge badge-danger">Delayed</span></td>
+                        <td class="text-danger font-semibold">0.87</td>
+                        <td class="font-mono">$487,230</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm">View</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-mono">CMAU8901234</td>
+                        <td>CMA CGM</td>
+                        <td><span class="badge badge-success">On Track</span></td>
+                        <td class="text-success font-semibold">0.12</td>
+                        <td class="font-mono">$325,100</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm">View</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Badges & Tags -->
+    <section class="showcase-section">
+        <h2 class="showcase-subtitle">Badges & Tags</h2>
+        <div class="card">
+            <div class="flex gap-3 flex-wrap mb-6">
+                <span class="badge badge-primary">Primary</span>
+                <span class="badge badge-success">Success</span>
+                <span class="badge badge-danger">Danger</span>
+                <span class="badge badge-warning">Warning</span>
+                <span class="badge badge-enterprise">
+                    <i class="fas fa-star"></i>
+                    Enterprise
+                </span>
+            </div>
+            <div class="flex gap-4">
+                <div class="security-indicator">
+                    <i class="fas fa-shield-alt"></i>
+                    SOC 2 Compliant
+                </div>
+                <div class="security-indicator">
+                    <i class="fas fa-lock"></i>
+                    Bank-Grade Security
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Badges -->
+    <section class="showcase-section">
+        <h2 class="showcase-subtitle">Enterprise Trust Indicators</h2>
+        <div class="trust-badges">
+            <div class="trust-badge">
+                <i class="fas fa-shield-alt fa-2x text-success"></i>
+                <span>SOC 2 Type II</span>
+            </div>
+            <div class="trust-badge">
+                <i class="fas fa-lock fa-2x text-success"></i>
+                <span>256-bit Encryption</span>
+            </div>
+            <div class="trust-badge">
+                <i class="fas fa-certificate fa-2x text-success"></i>
+                <span>ISO 27001</span>
+            </div>
+            <div class="trust-badge">
+                <i class="fas fa-check-circle fa-2x text-success"></i>
+                <span>99.9% Uptime</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading States -->
+    <section class="showcase-section">
+        <h2 class="showcase-subtitle">Premium Loading States</h2>
+        <div class="component-grid">
+            <div class="card">
+                <div class="loading-premium">
+                    <div class="loading-spinner-premium"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="skeleton-premium" style="height: 20px; width: 200px; margin-bottom: 12px;"></div>
+                <div class="skeleton-premium" style="height: 20px; width: 150px; margin-bottom: 12px;"></div>
+                <div class="skeleton-premium" style="height: 60px; width: 100%;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Animations -->
+    <section class="showcase-section">
+        <h2 class="showcase-subtitle">Premium Animations</h2>
+        <div class="component-grid">
+            <div class="card animate-pulse">
+                <h4>Pulse Animation</h4>
+                <p>For drawing attention to important elements</p>
+            </div>
+            <div class="card animate-slide-up">
+                <h4>Slide Up Animation</h4>
+                <p>For smooth entry animations</p>
+            </div>
+            <div class="card animate-fade-in">
+                <h4>Fade In Animation</h4>
+                <p>For subtle content reveals</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="text-center mt-16 mb-8">
+        <h2 class="text-2xl font-bold mb-4">Ready for Enterprise Deployment</h2>
+        <p class="text-lg text-muted mb-6">This premium design system positions ROOTUIP alongside Salesforce, Stripe, and Notion</p>
+        <button class="btn btn-primary btn-lg">
+            <i class="fas fa-rocket"></i>
+            Launch Enterprise Platform
+        </button>
+    </div>
+</body>
+</html>

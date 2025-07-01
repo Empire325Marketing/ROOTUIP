@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Enterprise Demo - Experience the Future of Container Intelligence</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/rootuip-logo.svg">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/driver.js/dist/driver.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/driver.js/dist/driver.min.css">
+    <style>
+        :root {
+            --bg-primary: #0A0E27;
+            --bg-secondary: #141832;
+            --bg-tertiary: #1E2341;
+            --accent-primary: #6366F1;
+            --accent-secondary: #818CF8;
+            --text-primary: #F3F4F6;
+            --text-secondary: #9CA3AF;
+            --text-tertiary: #6B7280;
+            --border-color: rgba(99, 102, 241, 0.2);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --success: #34D399;
+            --warning: #FBBF24;
+            --danger: #F87171;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(129, 140, 248, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Demo Environment Specific Styles */
+        .demo-layout {
+            min-height: 100vh;
+            background: var(--bg-primary);
+        }
+        
+        /* Demo Banner */
+        .demo-banner {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            color: white;
+            padding: 0.75rem 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .demo-banner-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .demo-timer {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 1rem;
+            border-radius: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Enhanced Demo Header */
+        .demo-header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .demo-header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .company-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .company-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--glass-border);
+            border-color: var(--accent-primary);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #10B981);
+            color: white;
+            box-shadow: 0 2px 8px rgba(52, 211, 153, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 211, 153, 0.4);
+        }
+
+        /* Main Layout */
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 250px 1fr 300px;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sidebar */
+        .demo-sidebar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            height: fit-content;
+        }
+
+        .demo-sidebar h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .scenario-list {
+            list-style: none;
+        }
+
+        .scenario-item {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .scenario-item:hover {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            transform: translateX(5px);
+        }
+
+        .scenario-item.active {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Main Content */
+        .demo-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .demo-screen {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            min-height: 600px;
+        }
+
+        .demo-screen h2 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Interactive Elements */
+        .metric-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: var(--bg-tertiary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
+            border-color: var(--accent-primary);
+        }
+
+        .metric-card.highlighted {
+            background: rgba(99, 102, 241, 0.1);
+            border: 2px solid var(--accent-primary);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+
+        .metric-change {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .positive {
+            color: var(--success);
+        }
+
+        .negative {
+            color: var(--danger);
+        }
+
+        /* Charts */
+        .chart-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            margin-bottom: 2rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .chart-header h3 {
+            color: var(--text-primary);
+        }
+
+        /* Right Panel */
+        .demo-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .insights-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+        }
+
+        .insights-panel h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .insight-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .insight-item:hover {
+            transform: translateX(-5px);
+            border-color: var(--accent-primary);
+        }
+
+        .insight-icon {
+            font-size: 1.5rem;
+        }
+
+        .insight-content h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .insight-content p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* ROI Calculator */
+        .roi-calculator {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+        }
+
+        .roi-input {
+            margin-bottom: 1rem;
+        }
+
+        .roi-input label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .roi-input input {
+            width: 100%;
+            padding: 0.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .roi-input input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background: rgba(99, 102, 241, 0.1);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .roi-results {
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.1), rgba(16, 185, 129, 0.1));
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .roi-results h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .roi-metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .roi-value {
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        /* Integration Demo */
+        .integration-demo {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 2rem;
+            align-items: center;
+            padding: 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .system-box {
+            background: var(--bg-tertiary);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .system-box:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+        }
+
+        .system-box h3 {
+            color: var(--text-primary);
+        }
+
+        .data-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .flow-arrow {
+            font-size: 2rem;
+            color: var(--accent-primary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+        }
+
+        /* Comparison View */
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .comparison-side {
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .comparison-side h3 {
+            margin-bottom: 1rem;
+        }
+
+        .comparison-side ul {
+            padding-left: 1.5rem;
+        }
+
+        .comparison-side li {
+            margin-bottom: 0.5rem;
+        }
+
+        .before-side {
+            background: rgba(248, 113, 113, 0.1);
+            border: 2px solid var(--danger);
+        }
+
+        .after-side {
+            background: rgba(52, 211, 153, 0.1);
+            border: 2px solid var(--success);
+        }
+
+        /* Workflow Visualization */
+        .workflow-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+        }
+
+        .workflow-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .workflow-step::after {
+            content: '→';
+            position: absolute;
+            right: -1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--text-tertiary);
+        }
+
+        .workflow-step:last-child::after {
+            display: none;
+        }
+
+        .step-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .step-icon.active {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border-color: var(--accent-primary);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .workflow-step h4 {
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .workflow-step p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content h2 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Progress Bar */
+        .demo-progress {
+            margin-top: 1rem;
+        }
+
+        .demo-progress p {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            width: 0%;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--bg-secondary);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+
+        #toastTitle {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        #toastMessage {
+            color: var(--text-secondary);
+        }
+
+        /* Loading States */
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--glass-border);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Animation */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-sidebar {
+                order: -1;
+            }
+
+            .demo-panel {
+                order: 1;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Demo Header -->
+    <header class="demo-header">
+        <div class="header-content">
+            <div class="company-info">
+                <div class="company-logo" id="companyLogo">GL</div>
+                <div>
+                    <h1 style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary);" id="companyName">Global Logistics Corp</h1>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary);">Enterprise Demo Environment</p>
+                </div>
+            </div>
+            <div class="demo-controls">
+                <div class="demo-timer">
+                    <span id="demoTimer">00:00</span> / 20:00
+                </div>
+                <button class="btn btn-secondary" onclick="toggleGuidedTour()">
+                    <span>🎯</span> Guided Tour
+                </button>
+                <button class="btn btn-primary" onclick="startLiveDemo()">
+                    <span>▶️</span> Start Demo
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Demo Container -->
+    <div class="demo-container">
+        <!-- Sidebar - Scenario Selection -->
+        <aside class="demo-sidebar">
+            <h3>Demo Scenarios</h3>
+            <ul class="scenario-list" id="scenarioList">
+                <li class="scenario-item active" onclick="loadScenario('overview')">
+                    📊 Executive Overview
+                </li>
+                <li class="scenario-item" onclick="loadScenario('tracking')">
+                    🚢 Container Tracking
+                </li>
+                <li class="scenario-item" onclick="loadScenario('workflow')">
+                    🔄 Workflow Comparison
+                </li>
+                <li class="scenario-item" onclick="loadScenario('integration')">
+                    🔌 Integration Demo
+                </li>
+                <li class="scenario-item" onclick="loadScenario('roi')">
+                    💰 ROI Calculator
+                </li>
+                <li class="scenario-item" onclick="loadScenario('analytics')">
+                    📈 Advanced Analytics
+                </li>
+            </ul>
+            
+            <div class="demo-progress">
+                <p>Demo Progress</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Demo Screen -->
+        <main class="demo-main">
+            <div class="demo-screen" id="demoScreen">
+                <!-- Executive Overview (Default) -->
+                <div id="overviewScenario" class="scenario-content">
+                    <h2>Real-Time Operations Dashboard</h2>
+                    
+                    <div class="metric-cards">
+                        <div class="metric-card" onclick="highlightMetric(this, 'containers')">
+                            <div class="metric-value">12,847</div>
+                            <div class="metric-label">Active Containers</div>
+                            <div class="metric-change positive">↑ 8% vs last month</div>
+                        </div>
+                        <div class="metric-card" onclick="highlightMetric(this, 'visibility')">
+                            <div class="metric-value">35%</div>
+                            <div class="metric-label">Visibility Gap</div>
+                            <div class="metric-change negative">↓ Manual tracking required</div>
+                        </div>
+                        <div class="metric-card" onclick="highlightMetric(this, 'delays')">
+                            <div class="metric-value">$2.4M</div>
+                            <div class="metric-label">Monthly Detention Fees</div>
+                            <div class="metric-change negative">↑ 15% vs target</div>
+                        </div>
+                        <div class="metric-card" onclick="highlightMetric(this, 'satisfaction')">
+                            <div class="metric-value">72%</div>
+                            <div class="metric-label">Customer Satisfaction</div>
+                            <div class="metric-change negative">↓ 5 points YoY</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Operational Performance Trends</h3>
+                            <select class="btn btn-secondary" onchange="updateChart(this.value)">
+                                <option value="delays">Delays & Detention</option>
+                                <option value="visibility">Visibility Coverage</option>
+                                <option value="costs">Operational Costs</option>
+                            </select>
+                        </div>
+                        <canvas id="performanceChart" height="100"></canvas>
+                    </div>
+                </div>
+
+                <!-- Container Tracking Scenario -->
+                <div id="trackingScenario" class="scenario-content" style="display: none;">
+                    <h2>Real-Time Container Tracking</h2>
+                    
+                    <div class="comparison-container">
+                        <div class="comparison-side before-side">
+                            <h3>Current State: Manual Tracking</h3>
+                            <ul style="margin-top: 1rem;">
+                                <li>Login to 8+ carrier portals</li>
+                                <li>Manual data entry into spreadsheets</li>
+                                <li>48-hour delay in status updates</li>
+                                <li>No predictive capabilities</li>
+                                <li>15% of containers "lost" at any time</li>
+                            </ul>
+                            <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-tertiary); border-radius: 6px;">
+                                <p style="font-weight: 600;">Time per container: 45 minutes</p>
+                                <p style="color: var(--text-secondary);">Manual effort: 120 FTE hours/day</p>
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-side after-side">
+                            <h3>With ROOTUIP: Automated Tracking</h3>
+                            <ul style="margin-top: 1rem;">
+                                <li>Single unified dashboard</li>
+                                <li>Real-time updates every 5 minutes</li>
+                                <li>AI-powered ETA predictions</li>
+                                <li>Proactive exception alerts</li>
+                                <li>100% visibility across all carriers</li>
+                            </ul>
+                            <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-tertiary); border-radius: 6px;">
+                                <p style="font-weight: 600;">Time per container: 0 minutes</p>
+                                <p style="color: var(--text-secondary);">Fully automated process</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="btn btn-success" onclick="simulateLiveTracking()">
+                            See Live Tracking Demo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Workflow Comparison -->
+                <div id="workflowScenario" class="scenario-content" style="display: none;">
+                    <h2>Workflow Transformation</h2>
+                    
+                    <div class="workflow-steps" id="currentWorkflow">
+                        <div class="workflow-step">
+                            <div class="step-icon">📧</div>
+                            <h4>Email from Carrier</h4>
+                            <p>Manual processing</p>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-icon">🔍</div>
+                            <h4>Search Portals</h4>
+                            <p>15 min average</p>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-icon">📝</div>
+                            <h4>Update Spreadsheet</h4>
+                            <p>Error-prone</p>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-icon">📞</div>
+                            <h4>Call Customer</h4>
+                            <p>If delay detected</p>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-icon">📊</div>
+                            <h4>Update Reports</h4>
+                            <p>End of day</p>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin: 2rem 0;">
+                        <button class="btn btn-primary" onclick="transformWorkflow()">
+                            Transform with ROOTUIP →
+                        </button>
+                    </div>
+
+                    <div class="workflow-steps" id="newWorkflow" style="display: none;">
+                        <div class="workflow-step">
+                            <div class="step-icon active">🤖</div>
+                            <h4>Auto-Ingestion</h4>
+                            <p>Real-time API</p>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-icon active">⚡</div>
+                            <h4>AI Processing</h4>
+                            <p>< 1 second</p>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-icon active">🔔</div>
+                            <h4>Smart Alerts</h4>
+                            <p>Predictive</p>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-icon active">📱</div>
+                            <h4>Auto-Notify</h4>
+                            <p>Customers informed</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integration Demo -->
+                <div id="integrationScenario" class="scenario-content" style="display: none;">
+                    <h2>Seamless Integration with Your Systems</h2>
+                    
+                    <div class="integration-demo">
+                        <div class="system-box">
+                            <h3>Your SAP System</h3>
+                            <div style="margin: 1rem 0;">
+                                <div style="width: 100px; height: 100px; margin: 0 auto; background: var(--glass-bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">📊</div>
+                            </div>
+                            <p>Purchase Orders</p>
+                            <p>Shipment Data</p>
+                        </div>
+                        
+                        <div class="data-flow">
+                            <span class="flow-arrow">→</span>
+                            <span style="color: var(--text-secondary);">Real-time sync</span>
+                            <span class="flow-arrow">←</span>
+                        </div>
+                        
+                        <div class="system-box">
+                            <h3>ROOTUIP Platform</h3>
+                            <div style="margin: 1rem 0;">
+                                <div style="width: 100px; height: 100px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border-radius: 8px; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">R</div>
+                            </div>
+                            <p>Live Tracking</p>
+                            <p>Status Updates</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; text-align: center;">
+                        <button class="btn btn-primary" onclick="testIntegration()">
+                            Test Live Integration
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ROI Calculator -->
+                <div id="roiScenario" class="scenario-content" style="display: none;">
+                    <h2>ROI Calculator - Your Actual Data</h2>
+                    
+                    <div class="roi-calculator">
+                        <div class="roi-input">
+                            <label>Monthly Container Volume</label>
+                            <input type="number" id="roiVolume" value="12847" onchange="calculateROI()">
+                        </div>
+                        <div class="roi-input">
+                            <label>Average Delay Hours per Container</label>
+                            <input type="number" id="roiDelayHours" value="48" onchange="calculateROI()">
+                        </div>
+                        <div class="roi-input">
+                            <label>Detention Fee per Hour ($)</label>
+                            <input type="number" id="roiDetentionFee" value="75" onchange="calculateROI()">
+                        </div>
+                        
+                        <div class="roi-results" id="roiResults">
+                            <h4>Projected Annual Savings</h4>
+                            <div class="roi-metric">
+                                <span>Detention Fee Reduction</span>
+                                <span class="roi-value">$8,424,000</span>
+                            </div>
+                            <div class="roi-metric">
+                                <span>Labor Cost Savings</span>
+                                <span class="roi-value">$2,160,000</span>
+                            </div>
+                            <div class="roi-metric">
+                                <span>Error Reduction Savings</span>
+                                <span class="roi-value">$1,250,000</span>
+                            </div>
+                            <hr style="margin: 1rem 0; border-color: var(--glass-border);">
+                            <div class="roi-metric" style="font-size: 1.125rem;">
+                                <span><strong>Total Annual Savings</strong></span>
+                                <span class="roi-value"><strong>$11,834,000</strong></span>
+                            </div>
+                            <div class="roi-metric" style="margin-top: 1rem;">
+                                <span>ROI Payback Period</span>
+                                <span class="roi-value">4.8 months</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Panel - Insights & Actions -->
+        <aside class="demo-panel">
+            <!-- Real-time Insights -->
+            <div class="insights-panel">
+                <h3>Live Insights</h3>
+                <div id="insightsList">
+                    <div class="insight-item">
+                        <span class="insight-icon">💡</span>
+                        <div class="insight-content">
+                            <h4>Visibility Gap Impact</h4>
+                            <p>35% blind spots causing $2.4M in monthly fees</p>
+                        </div>
+                    </div>
+                    <div class="insight-item">
+                        <span class="insight-icon">⚡</span>
+                        <div class="insight-content">
+                            <h4>Quick Win Available</h4>
+                            <p>Automate top 5 routes for 40% effort reduction</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="insights-panel">
+                <h3>Try It Yourself</h3>
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 0.75rem;" onclick="openSandbox()">
+                    🧪 Access Sandbox
+                </button>
+                <button class="btn btn-secondary" style="width: 100%; margin-bottom: 0.75rem;" onclick="viewAPIDemo()">
+                    🔌 View API Demo
+                </button>
+                <button class="btn btn-secondary" style="width: 100%; margin-bottom: 0.75rem;" onclick="downloadProposal()">
+                    📄 Download Proposal
+                </button>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="insights-panel">
+                <h3>Next Steps</h3>
+                <ol style="padding-left: 1.5rem; font-size: 0.875rem; color: var(--text-secondary);">
+                    <li style="margin-bottom: 0.5rem;">Technical evaluation (1 week)</li>
+                    <li style="margin-bottom: 0.5rem;">Security review</li>
+                    <li style="margin-bottom: 0.5rem;">Pilot program (30 days)</li>
+                    <li style="margin-bottom: 0.5rem;">Full implementation (6-8 weeks)</li>
+                </ol>
+                <button class="btn btn-success" style="width: 100%; margin-top: 1rem;" onclick="scheduleFollowUp()">
+                    📅 Schedule Follow-up
+                </button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast">
+        <span class="toast-icon" id="toastIcon">✓</span>
+        <div>
+            <h4 id="toastTitle">Success</h4>
+            <p id="toastMessage">Action completed</p>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="sandboxModal" class="modal">
+        <div class="modal-content">
+            <h2>Sandbox Environment Ready</h2>
+            <p>Your technical evaluation environment has been created:</p>
+            <div style="background: var(--glass-bg); padding: 1rem; border-radius: 8px; margin: 1rem 0; border: 1px solid var(--glass-border);">
+                <p><strong>API Endpoint:</strong> https://sandbox.rootuip.com/gl-corp</p>
+                <p><strong>API Key:</strong> sk_sandbox_abc123...</p>
+                <p><strong>Documentation:</strong> <a href="#" style="color: var(--accent-primary);">View API Docs</a></p>
+            </div>
+            <button class="btn btn-primary" onclick="closeModal('sandboxModal')">Got it</button>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let demoTimer = 0;
+        let demoInterval;
+        let currentScenario = 'overview';
+        let demoProgress = 0;
+        let guidedTour;
+        let environmentData = {};
+
+        // Configure Chart.js for dark theme
+        Chart.defaults.color = '#9CA3AF';
+        Chart.defaults.borderColor = 'rgba(99, 102, 241, 0.2)';
+
+        // Initialize demo
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDemo();
+            setupCharts();
+        });
+
+        async function initializeDemo() {
+            // Load environment data (in real implementation, this would come from the server)
+            environmentData = {
+                company: 'Global Logistics Corp',
+                industry: 'logistics',
+                monthlyVolume: 12847,
+                painPoints: ['Lack of visibility', 'Manual processes', 'High detention fees'],
+                currentSystems: ['SAP', 'Excel', 'Email']
+            };
+
+            // Customize UI based on environment
+            document.getElementById('companyName').textContent = environmentData.company;
+            document.getElementById('companyLogo').textContent = environmentData.company.charAt(0);
+        }
+
+        function startLiveDemo() {
+            // Start timer
+            demoInterval = setInterval(() => {
+                demoTimer++;
+                updateTimer();
+                updateProgress();
+            }, 1000);
+
+            // Enable guided tour
+            showToast('Demo Started', 'Follow along with our guided experience', '🚀');
+            
+            // Track demo start
+            trackDemoEvent('demo_started', { scenario: currentScenario });
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(demoTimer / 60);
+            const seconds = demoTimer % 60;
+            document.getElementById('demoTimer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateProgress() {
+            const maxTime = 20 * 60; // 20 minutes
+            const progress = (demoTimer / maxTime) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function loadScenario(scenario) {
+            // Hide all scenarios
+            document.querySelectorAll('.scenario-content').forEach(el => {
+                el.style.display = 'none';
+            });
+
+            // Show selected scenario
+            document.getElementById(scenario + 'Scenario').style.display = 'block';
+
+            // Update active state
+            document.querySelectorAll('.scenario-item').forEach(el => {
+                el.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            currentScenario = scenario;
+            
+            // Track scenario change
+            trackDemoEvent('scenario_changed', { scenario });
+
+            // Show relevant insights
+            updateInsights(scenario);
+        }
+
+        function highlightMetric(element, metric) {
+            // Remove previous highlights
+            document.querySelectorAll('.metric-card').forEach(card => {
+                card.classList.remove('highlighted');
+            });
+
+            // Highlight selected metric
+            element.classList.add('highlighted');
+
+            // Show insight
+            showInsight(metric);
+
+            // Track interaction
+            trackDemoEvent('metric_highlighted', { metric });
+        }
+
+        function showInsight(metric) {
+            const insights = {
+                'containers': {
+                    icon: '📊',
+                    title: 'Volume Growth Challenge',
+                    message: '8% growth but visibility hasn\'t scaled'
+                },
+                'visibility': {
+                    icon: '👁️',
+                    title: 'Critical Gap',
+                    message: '35% of containers require manual tracking'
+                },
+                'delays': {
+                    icon: '💰',
+                    title: 'Cost Reduction Opportunity',
+                    message: 'Could save $1.8M monthly with automation'
+                },
+                'satisfaction': {
+                    icon: '😟',
+                    title: 'Customer Impact',
+                    message: 'Delays directly affecting NPS scores'
+                }
+            };
+
+            const insight = insights[metric];
+            addInsight(insight.icon, insight.title, insight.message);
+        }
+
+        function addInsight(icon, title, message) {
+            const insightHtml = `
+                <div class="insight-item" style="animation: slideIn 0.3s ease;">
+                    <span class="insight-icon">${icon}</span>
+                    <div class="insight-content">
+                        <h4>${title}</h4>
+                        <p>${message}</p>
+                    </div>
+                </div>
+            `;
+
+            const insightsList = document.getElementById('insightsList');
+            insightsList.insertAdjacentHTML('afterbegin', insightHtml);
+
+            // Keep only last 5 insights
+            if (insightsList.children.length > 5) {
+                insightsList.removeChild(insightsList.lastChild);
+            }
+        }
+
+        function simulateLiveTracking() {
+            showToast('Live Tracking Active', 'Showing real-time container updates', '🚢');
+            
+            // Simulate live updates
+            let updateCount = 0;
+            const liveInterval = setInterval(() => {
+                addInsight('📍', 'Container Update', `MSKU${Math.floor(Math.random() * 9000000 + 1000000)} - Status: ${['Departed', 'In Transit', 'Arrived'][Math.floor(Math.random() * 3)]}`);
+                updateCount++;
+                
+                if (updateCount >= 5) {
+                    clearInterval(liveInterval);
+                    addInsight('✅', 'Demo Complete', '5 containers updated in real-time');
+                }
+            }, 2000);
+
+            trackDemoEvent('live_tracking_demo', { updates: 5 });
+        }
+
+        function transformWorkflow() {
+            document.getElementById('currentWorkflow').style.display = 'none';
+            document.getElementById('newWorkflow').style.display = 'flex';
+            
+            // Animate the transformation
+            document.querySelectorAll('#newWorkflow .step-icon').forEach((icon, index) => {
+                setTimeout(() => {
+                    icon.classList.add('active');
+                }, index * 500);
+            });
+
+            addInsight('🔄', 'Workflow Transformed', '80% reduction in processing time');
+            trackDemoEvent('workflow_transformed', { steps: 5 });
+        }
+
+        function calculateROI() {
+            const volume = parseInt(document.getElementById('roiVolume').value) || 0;
+            const delayHours = parseInt(document.getElementById('roiDelayHours').value) || 0;
+            const detentionFee = parseInt(document.getElementById('roiDetentionFee').value) || 0;
+
+            // Calculate savings
+            const annualContainers = volume * 12;
+            const delayedContainers = annualContainers * 0.15; // 15% delayed
+            const currentDetentionFees = delayedContainers * delayHours * detentionFee;
+            
+            // With ROOTUIP (65% reduction in delays, 80% fewer delayed containers)
+            const newDelayedContainers = annualContainers * 0.03; // 3% delayed
+            const newDelayHours = delayHours * 0.35; // 65% reduction
+            const newDetentionFees = newDelayedContainers * newDelayHours * detentionFee;
+            
+            const detentionSavings = currentDetentionFees - newDetentionFees;
+            const laborSavings = volume * 12 * 50 * 0.8; // $50 per container, 80% automation
+            const errorSavings = annualContainers * 0.05 * 250; // 5% error rate, $250 per error
+
+            // Update display
+            document.getElementById('roiResults').innerHTML = `
+                <h4>Projected Annual Savings</h4>
+                <div class="roi-metric">
+                    <span>Detention Fee Reduction</span>
+                    <span class="roi-value">$${detentionSavings.toLocaleString()}</span>
+                </div>
+                <div class="roi-metric">
+                    <span>Labor Cost Savings</span>
+                    <span class="roi-value">$${laborSavings.toLocaleString()}</span>
+                </div>
+                <div class="roi-metric">
+                    <span>Error Reduction Savings</span>
+                    <span class="roi-value">$${errorSavings.toLocaleString()}</span>
+                </div>
+                <hr style="margin: 1rem 0; border-color: var(--glass-border);">
+                <div class="roi-metric" style="font-size: 1.125rem;">
+                    <span><strong>Total Annual Savings</strong></span>
+                    <span class="roi-value"><strong>$${(detentionSavings + laborSavings + errorSavings).toLocaleString()}</strong></span>
+                </div>
+                <div class="roi-metric" style="margin-top: 1rem;">
+                    <span>ROI Payback Period</span>
+                    <span class="roi-value">${((480000 / (detentionSavings + laborSavings + errorSavings)) * 12).toFixed(1)} months</span>
+                </div>
+            `;
+
+            trackDemoEvent('roi_calculated', { 
+                volume, 
+                totalSavings: detentionSavings + laborSavings + errorSavings 
+            });
+        }
+
+        function testIntegration() {
+            showToast('Testing Integration', 'Connecting to SAP system...', '🔌');
+            
+            setTimeout(() => {
+                addInsight('✅', 'Integration Success', 'Retrieved 50 shipments in 127ms');
+                showToast('Integration Test Passed', 'SAP connection verified', '✅');
+            }, 2000);
+
+            trackDemoEvent('integration_tested', { system: 'SAP' });
+        }
+
+        function openSandbox() {
+            document.getElementById('sandboxModal').style.display = 'flex';
+            trackDemoEvent('sandbox_requested', {});
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showToast(title, message, icon = '✓') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastTitle').textContent = title;
+            document.getElementById('toastMessage').textContent = message;
+            document.getElementById('toastIcon').textContent = icon;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 5000);
+        }
+
+        function toggleGuidedTour() {
+            if (!guidedTour) {
+                guidedTour = driver({
+                    showProgress: true,
+                    steps: [
+                        {
+                            element: '.metric-cards',
+                            popover: {
+                                title: 'Current Performance Metrics',
+                                description: 'These are your actual operational metrics. Click any card to see how ROOTUIP can improve it.',
+                                position: 'bottom'
+                            }
+                        },
+                        {
+                            element: '.scenario-list',
+                            popover: {
+                                title: 'Demo Scenarios',
+                                description: 'Explore different aspects of the platform tailored to your needs.',
+                                position: 'right'
+                            }
+                        },
+                        {
+                            element: '.demo-controls',
+                            popover: {
+                                title: 'Demo Controls',
+                                description: 'Start the timed demo when you\'re ready for the full experience.',
+                                position: 'bottom'
+                            }
+                        }
+                    ]
+                });
+                guidedTour.drive();
+            }
+        }
+
+        function setupCharts() {
+            const ctx = document.getElementById('performanceChart');
+            if (!ctx) return;
+
+            const chart = new Chart(ctx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Detention Fees ($M)',
+                        data: [1.8, 1.9, 2.1, 2.2, 2.3, 2.4],
+                        borderColor: '#F87171',
+                        backgroundColor: 'rgba(248, 113, 113, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'With ROOTUIP (Projected)',
+                        data: [null, null, null, null, null, 0.6],
+                        borderColor: '#34D399',
+                        backgroundColor: 'rgba(52, 211, 153, 0.1)',
+                        borderDash: [5, 5],
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#9CA3AF'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                color: '#9CA3AF'
+                            },
+                            grid: {
+                                color: 'rgba(99, 102, 241, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#9CA3AF'
+                            },
+                            grid: {
+                                color: 'rgba(99, 102, 241, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChart(metric) {
+            // Update chart based on selected metric
+            trackDemoEvent('chart_updated', { metric });
+        }
+
+        function trackDemoEvent(eventType, data) {
+            // In production, this would send to analytics
+            console.log('Demo Event:', eventType, data);
+            
+            // Also send to backend for follow-up
+            fetch('/api/demo/interact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    demoId: environmentData.demoId || 'demo-123',
+                    eventData: { type: eventType, data }
+                })
+            }).catch(console.error);
+        }
+
+        function viewAPIDemo() {
+            window.open('/api/sandbox/demo-123/documentation', '_blank');
+            trackDemoEvent('api_docs_viewed', {});
+        }
+
+        function downloadProposal() {
+            showToast('Generating Proposal', 'Your custom proposal is being prepared...', '📄');
+            trackDemoEvent('proposal_requested', {});
+            
+            setTimeout(() => {
+                showToast('Proposal Ready', 'Download started', '✅');
+            }, 3000);
+        }
+
+        function scheduleFollowUp() {
+            showToast('Calendar Opened', 'Select a time that works for you', '📅');
+            trackDemoEvent('followup_scheduled', {});
+        }
+
+        function updateInsights(scenario) {
+            const scenarioInsights = {
+                'tracking': [
+                    { icon: '🚢', title: 'Carrier Coverage', message: 'Connect to 500+ carriers globally' },
+                    { icon: '⏱️', title: 'Time Savings', message: '45 minutes → 0 minutes per container' }
+                ],
+                'workflow': [
+                    { icon: '🔄', title: 'Process Efficiency', message: '80% reduction in manual tasks' },
+                    { icon: '⚡', title: 'Speed Improvement', message: '48 hours → 5 minutes for updates' }
+                ],
+                'roi': [
+                    { icon: '💰', title: 'Quick ROI', message: 'Payback period under 6 months' },
+                    { icon: '📈', title: 'Scaling Benefits', message: 'Savings increase with volume' }
+                ]
+            };
+
+            const insights = scenarioInsights[scenario];
+            if (insights) {
+                insights.forEach(insight => {
+                    addInsight(insight.icon, insight.title, insight.message);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

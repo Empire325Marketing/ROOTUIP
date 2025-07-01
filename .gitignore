@@ -18,6 +18,7 @@ yarn-error.log*
 .env.development
 .env.production
 auth/.env
+.env.pilot
 
 # IDE
 .vscode/

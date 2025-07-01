@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Executive Demo - ROOTUIP</title>
+    <meta name="description" content="Schedule a personalized executive demo of ROOTUIP's enterprise container tracking platform.">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Calendly inline widget -->
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+    
+    <!-- Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .demo-feature {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .demo-feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .calendly-inline-widget {
+            min-width: 320px;
+            height: 630px;
+        }
+        
+        @media (max-width: 768px) {
+            .calendly-inline-widget {
+                height: 700px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <img src="/assets/rootuip-logo.png" alt="ROOTUIP" class="h-8 w-auto">
+                    <span class="ml-3 text-xl font-bold text-gray-900">ROOTUIP</span>
+                </div>
+                <nav class="flex space-x-8">
+                    <a href="/" class="text-gray-700 hover:text-blue-600">Home</a>
+                    <a href="/platform" class="text-gray-700 hover:text-blue-600">Platform</a>
+                    <a href="/roi-calculator" class="text-gray-700 hover:text-blue-600">ROI Calculator</a>
+                    <a href="/case-studies" class="text-gray-700 hover:text-blue-600">Case Studies</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-16">
+        <div class="max-w-4xl mx-auto text-center px-4">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                Schedule Your Executive Demo
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 opacity-90">
+                See how ROOTUIP can transform your container operations in a personalized 45-minute session
+            </p>
+            
+            <div class="bg-white bg-opacity-20 rounded-lg p-6 inline-block">
+                <div class="flex items-center justify-center space-x-8 text-center">
+                    <div>
+                        <div class="text-2xl font-bold">45 Min</div>
+                        <div class="text-sm opacity-80">Demo Duration</div>
+                    </div>
+                    <div class="w-px h-10 bg-white opacity-30"></div>
+                    <div>
+                        <div class="text-2xl font-bold">C-Level</div>
+                        <div class="text-sm opacity-80">Executives</div>
+                    </div>
+                    <div class="w-px h-10 bg-white opacity-30"></div>
+                    <div>
+                        <div class="text-2xl font-bold">Live</div>
+                        <div class="text-sm opacity-80">Platform Demo</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Information -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">What You'll Experience</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Our executive demos are tailored specifically for your company's needs and challenges
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <div class="demo-feature bg-white rounded-xl card-shadow p-8 text-center">
+                    <div class="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-chart-line text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Live ROI Analysis</h3>
+                    <p class="text-gray-600">
+                        See your actual container data analyzed in real-time, with personalized savings calculations and ROI projections based on your current operations.
+                    </p>
+                </div>
+                
+                <div class="demo-feature bg-white rounded-xl card-shadow p-8 text-center">
+                    <div class="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-shipping-fast text-2xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Container Tracking</h3>
+                    <p class="text-gray-600">
+                        Experience our AI-powered tracking system with live container data from major carriers including Maersk, MSC, CMA CGM, and Hapag-Lloyd.
+                    </p>
+                </div>
+                
+                <div class="demo-feature bg-white rounded-xl card-shadow p-8 text-center">
+                    <div class="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-exclamation-triangle text-2xl text-purple-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Predictive Alerts</h3>
+                    <p class="text-gray-600">
+                        See how our machine learning algorithms predict detention and demurrage risks days in advance, allowing proactive intervention.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Booking Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- Demo Details -->
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-8">Executive Demo Details</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fas fa-clock text-blue-600 text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Duration: 45 Minutes</h4>
+                                <p class="text-gray-600">Comprehensive walkthrough of the platform with Q&A</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-green-100 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fas fa-users text-green-600 text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Who Should Attend</h4>
+                                <ul class="text-gray-600">
+                                    <li>• VP Supply Chain / Logistics</li>
+                                    <li>• Director of Operations</li>
+                                    <li>• IT Decision Makers</li>
+                                    <li>• Finance Leadership</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-purple-100 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fas fa-laptop text-purple-600 text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">What You'll Need</h4>
+                                <p class="text-gray-600">
+                                    Just a computer with internet access. We'll handle the rest and can use your actual container data for the demo.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-orange-100 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fas fa-gift text-orange-600 text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Demo Deliverables</h4>
+                                <ul class="text-gray-600">
+                                    <li>• Personalized ROI report</li>
+                                    <li>• Implementation timeline</li>
+                                    <li>• Custom pricing proposal</li>
+                                    <li>• Technical integration guide</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial -->
+                    <div class="mt-12 bg-gray-50 rounded-lg p-6">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <img src="/assets/testimonial-avatar.png" alt="Customer" class="w-12 h-12 rounded-full">
+                            <div>
+                                <h5 class="font-semibold text-gray-900">Jennifer Martinez</h5>
+                                <p class="text-sm text-gray-600">VP Supply Chain, Fortune 500 Retailer</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 italic">
+                            "The ROOTUIP demo was eye-opening. We could see our exact container data and the potential savings immediately. Within 30 days of implementation, we had already prevented $2.3M in detention charges."
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Calendar Widget -->
+                <div class="bg-white rounded-xl card-shadow p-8">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Select Your Preferred Time</h3>
+                    
+                    <!-- Calendly Inline Widget -->
+                    <div id="calendly-container">
+                        <div class="calendly-inline-widget" 
+                             data-url="https://calendly.com/rootuip-sales/executive-demo?hide_event_type_details=1&hide_gdpr_banner=1"
+                             data-auto-load="false">
+                        </div>
+                    </div>
+                    
+                    <!-- Fallback for manual booking -->
+                    <div id="manual-booking" style="display: none;" class="text-center">
+                        <p class="text-gray-600 mb-6">
+                            Prefer to schedule manually? No problem!
+                        </p>
+                        <a href="mailto:sales@rootuip.com?subject=Executive Demo Request&body=I'd like to schedule an executive demo of ROOTUIP. Please contact me to arrange a time."
+                           class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 inline-block">
+                            <i class="fas fa-envelope mr-2"></i>
+                            Email Us to Schedule
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preparation Checklist -->
+    <section class="py-16 bg-gray-100">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Prepare for Your Demo</h2>
+                <p class="text-xl text-gray-600">
+                    Get the most out of your demo session with these preparation tips
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-clipboard-list text-blue-600 mr-2"></i>
+                        Information to Have Ready
+                    </h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2 text-sm"></i>
+                            Annual container volume
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2 text-sm"></i>
+                            Current D&D costs (if known)
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2 text-sm"></i>
+                            Primary trade lanes
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2 text-sm"></i>
+                            Main shipping carriers
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2 text-sm"></i>
+                            Current tracking tools used
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-lightbulb text-yellow-600 mr-2"></i>
+                        Questions to Consider
+                    </h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-center">
+                            <i class="fas fa-question-circle text-blue-500 mr-2 text-sm"></i>
+                            What are your biggest operational pain points?
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-question-circle text-blue-500 mr-2 text-sm"></i>
+                            How do you currently track containers?
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-question-circle text-blue-500 mr-2 text-sm"></i>
+                            What would ideal visibility look like?
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-question-circle text-blue-500 mr-2 text-sm"></i>
+                            What's your implementation timeline?
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-question-circle text-blue-500 mr-2 text-sm"></i>
+                            Who else needs to be involved in decisions?
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Indicators -->
+    <section class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-12">Trusted by Industry Leaders</h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 opacity-60">
+                <div class="flex items-center justify-center">
+                    <img src="/assets/walmart-logo.png" alt="Walmart" class="h-12 w-auto">
+                </div>
+                <div class="flex items-center justify-center">
+                    <img src="/assets/target-logo.png" alt="Target" class="h-12 w-auto">
+                </div>
+                <div class="flex items-center justify-center">
+                    <img src="/assets/amazon-logo.png" alt="Amazon" class="h-12 w-auto">
+                </div>
+                <div class="flex items-center justify-center">
+                    <img src="/assets/homedepot-logo.png" alt="Home Depot" class="h-12 w-auto">
+                </div>
+                <div class="flex items-center justify-center">
+                    <img src="/assets/apple-logo.png" alt="Apple" class="h-12 w-auto">
+                </div>
+            </div>
+            
+            <div class="mt-12 grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-blue-600 mb-2">$2.8M</div>
+                    <div class="text-gray-600">Average Annual Savings</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-green-600 mb-2">85%</div>
+                    <div class="text-gray-600">Reduction in D&D Costs</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-purple-600 mb-2">45 Days</div>
+                    <div class="text-gray-600">Average Implementation</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">ROOTUIP</h3>
+                    <p class="text-gray-400">AI-powered container tracking and detention/demurrage prevention for Fortune 500 companies.</p>
+                </div>
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Platform</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/features" class="hover:text-white">Features</a></li>
+                        <li><a href="/integrations" class="hover:text-white">Integrations</a></li>
+                        <li><a href="/security" class="hover:text-white">Security</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/case-studies" class="hover:text-white">Case Studies</a></li>
+                        <li><a href="/whitepapers" class="hover:text-white">Whitepapers</a></li>
+                        <li><a href="/webinars" class="hover:text-white">Webinars</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>sales@rootuip.com</li>
+                        <li>1-800-ROOTUIP</li>
+                        <li>support@rootuip.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 ROOTUIP. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Calendly widget
+        function initializeCalendly() {
+            try {
+                if (typeof Calendly !== 'undefined') {
+                    Calendly.initInlineWidget({
+                        url: 'https://calendly.com/rootuip-sales/executive-demo?hide_event_type_details=1&hide_gdpr_banner=1',
+                        parentElement: document.querySelector('.calendly-inline-widget'),
+                        prefill: getUrlParams(),
+                        utm: {
+                            utmCampaign: 'executive_demo',
+                            utmSource: 'website',
+                            utmMedium: 'scheduling_page'
+                        }
+                    });
+                } else {
+                    showManualBooking();
+                }
+            } catch (error) {
+                console.error('Calendly initialization failed:', error);
+                showManualBooking();
+            }
+        }
+        
+        function getUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const prefill = {};
+            
+            // Pre-fill from URL parameters
+            if (urlParams.get('name')) {
+                prefill.name = urlParams.get('name');
+            }
+            if (urlParams.get('email')) {
+                prefill.email = urlParams.get('email');
+            }
+            if (urlParams.get('company')) {
+                prefill.company = urlParams.get('company');
+            }
+            
+            return prefill;
+        }
+        
+        function showManualBooking() {
+            document.getElementById('calendly-container').style.display = 'none';
+            document.getElementById('manual-booking').style.display = 'block';
+        }
+        
+        // Track demo scheduling events
+        function trackDemoScheduled(eventData) {
+            // Google Analytics
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'demo_scheduled', {
+                    'event_category': 'engagement',
+                    'event_label': 'executive_demo',
+                    'value': 1
+                });
+            }
+            
+            // Send to our analytics endpoint
+            fetch('/api/analytics/demo-scheduled', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    eventData,
+                    timestamp: new Date().toISOString(),
+                    source: 'demo_page'
+                })
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+        
+        // Listen for Calendly events
+        window.addEventListener('message', function(e) {
+            if (e.data.event && e.data.event.indexOf('calendly') === 0) {
+                switch (e.data.event) {
+                    case 'calendly.event_scheduled':
+                        trackDemoScheduled(e.data.payload);
+                        
+                        // Show success message
+                        showSuccessMessage();
+                        break;
+                    case 'calendly.profile_page_viewed':
+                        // Track when user views available times
+                        if (typeof gtag !== 'undefined') {
+                            gtag('event', 'demo_calendar_viewed', {
+                                'event_category': 'engagement'
+                            });
+                        }
+                        break;
+                }
+            }
+        });
+        
+        function showSuccessMessage() {
+            const successHtml = `
+                <div class="text-center py-12">
+                    <div class="bg-green-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-check-circle text-3xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Demo Scheduled Successfully!</h3>
+                    <p class="text-gray-600 mb-6">
+                        You'll receive a calendar invitation and pre-demo preparation materials via email.
+                    </p>
+                    <div class="space-y-2 text-sm text-gray-600">
+                        <p>✅ Calendar invitation sent</p>
+                        <p>✅ Demo preparation guide emailed</p>
+                        <p>✅ Technical requirements shared</p>
+                    </div>
+                    <div class="mt-8">
+                        <a href="/case-studies" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 mr-4">
+                            View Case Studies
+                        </a>
+                        <a href="/roi-calculator" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                            Calculate ROI
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('calendly-container').innerHTML = successHtml;
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Try to initialize Calendly after a short delay
+            setTimeout(initializeCalendly, 1000);
+        });
+        
+        // Track page view
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_view', {
+                'page_title': 'Schedule Executive Demo',
+                'page_location': window.location.href
+            });
+        }
+    </script>
+</body>
+</html>

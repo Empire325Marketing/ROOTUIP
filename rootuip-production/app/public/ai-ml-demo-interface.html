@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP AI/ML Demo Platform - Real-Time Processing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .demo-card {
+            background: var(--bg-dark);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .demo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+
+        .demo-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .upload-zone {
+            border: 3px dashed #e0e0e0;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-zone:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .upload-zone.dragover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .processing-indicator {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results-panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .confidence-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 8px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            background: linear-gradient(90deg, #e74c3c, #f39c12, #27ae60);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: var(--bg-dark);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .optimization-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .control-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .control-group input, .control-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .gpu-status {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .gpu-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: var(--bg-dark);
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .real-time-feed {
+            background: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            border-radius: 10px;
+            height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 2px 0;
+        }
+
+        .log-timestamp {
+            color: #888;
+            margin-right: 10px;
+        }
+
+        .roi-calculator {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 30px;
+        }
+
+        .roi-result {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .performance-graph {
+            background: var(--bg-dark);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 ROOTUIP AI/ML Demo Platform</h1>
+            <p>Real-Time Document Processing • D&D Prediction • Route Optimization</p>
+        </div>
+
+        <div class="gpu-status">
+            <span class="gpu-indicator"></span>
+            <strong>RunPod 4080ti GPU Acceleration Active</strong> - Processing at 12.8 TFLOPS
+        </div>
+
+        <div class="demo-grid">
+            <!-- Document Processing Demo -->
+            <div class="demo-card">
+                <h3><span class="icon">📄</span>Document Processing Engine</h3>
+                
+                <div class="upload-zone" id="documentUpload">
+                    <div>
+                        <h4>Drop Bill of Lading or Upload Document</h4>
+                        <p>Supports PDF, PNG, JPG, TIFF</p>
+                        <input type="file" id="documentFile" style="display: none;" accept=".pdf,.png,.jpg,.jpeg,.tiff">
+                        <button class="btn" onclick="document.getElementById('documentFile').click()">Choose File</button>
+                    </div>
+                </div>
+
+                <div class="processing-indicator" id="docProcessing">
+                    <div class="spinner"></div>
+                    <p>Processing with Tesseract.js OCR + GPU Acceleration...</p>
+                </div>
+
+                <div class="results-panel" id="docResults">
+                    <h4>Extraction Results</h4>
+                    <div class="metric-grid">
+                        <div class="metric-card">
+                            <div class="metric-value" id="docConfidence">0%</div>
+                            <div class="metric-label">Confidence</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="docFields">0</div>
+                            <div class="metric-label">Fields Extracted</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="docTime">0s</div>
+                            <div class="metric-label">Process Time</div>
+                        </div>
+                    </div>
+                    <div id="extractedData"></div>
+                </div>
+            </div>
+
+            <!-- D&D Prediction Engine -->
+            <div class="demo-card">
+                <h3><span class="icon">⚠️</span>D&D Risk Prediction</h3>
+                
+                <div class="control-group">
+                    <label>Container Number:</label>
+                    <input type="text" id="containerNumber" placeholder="MSKU1234567" value="MSKU7654321">
+                </div>
+                
+                <div class="control-group">
+                    <label>Port of Discharge:</label>
+                    <select id="podPort">
+                        <option value="USNYC">New York (USNYC)</option>
+                        <option value="USLAX">Los Angeles (USLAX)</option>
+                        <option value="USBAL">Baltimore (USBAL)</option>
+                        <option value="USSAV">Savannah (USSAV)</option>
+                    </select>
+                </div>
+
+                <button class="btn" onclick="runDDPrediction()">Analyze D&D Risk</button>
+
+                <div class="processing-indicator" id="ddProcessing">
+                    <div class="spinner"></div>
+                    <p>Running 14-day prediction model...</p>
+                </div>
+
+                <div class="results-panel" id="ddResults">
+                    <h4>Risk Assessment</h4>
+                    <div class="metric-grid">
+                        <div class="metric-card">
+                            <div class="metric-value" id="riskScore">0</div>
+                            <div class="metric-label">Risk Score</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="ddProbability">0%</div>
+                            <div class="metric-label">D&D Probability</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="potentialCost">$0</div>
+                            <div class="metric-label">Potential Cost</div>
+                        </div>
+                    </div>
+                    <div id="recommendations"></div>
+                </div>
+            </div>
+
+            <!-- Route Optimization -->
+            <div class="demo-card">
+                <h3><span class="icon">🗺️</span>Route Optimization</h3>
+                
+                <div class="optimization-controls">
+                    <div class="control-group">
+                        <label>Origin Port:</label>
+                        <select id="originPort">
+                            <option value="CNSHG">Shanghai (CNSHG)</option>
+                            <option value="CNNGB">Ningbo (CNNGB)</option>
+                            <option value="CNSZX">Shenzhen (CNSZX)</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Destination:</label>
+                        <select id="destPort">
+                            <option value="USNYC">New York (USNYC)</option>
+                            <option value="USLAX">Los Angeles (USLAX)</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Container Count:</label>
+                        <input type="number" id="containerCount" value="50" min="1" max="1000">
+                    </div>
+                    <div class="control-group">
+                        <label>Priority:</label>
+                        <select id="priority">
+                            <option value="cost">Cost Optimization</option>
+                            <option value="time">Time Optimization</option>
+                            <option value="carbon">Carbon Footprint</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="optimizeRoute()">Optimize Route</button>
+
+                <div class="processing-indicator" id="routeProcessing">
+                    <div class="spinner"></div>
+                    <p>Running genetic algorithm optimization...</p>
+                </div>
+
+                <div class="results-panel" id="routeResults">
+                    <h4>Optimization Results</h4>
+                    <div class="metric-grid">
+                        <div class="metric-card">
+                            <div class="metric-value" id="savings">0%</div>
+                            <div class="metric-label">Cost Savings</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="transitTime">0</div>
+                            <div class="metric-label">Transit Days</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="carbonReduction">0%</div>
+                            <div class="metric-label">Carbon Reduction</div>
+                        </div>
+                    </div>
+                    <div id="routeDetails"></div>
+                </div>
+            </div>
+
+            <!-- Real-Time Processing Monitor -->
+            <div class="demo-card">
+                <h3><span class="icon">📊</span>Real-Time Processing Monitor</h3>
+                
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value" id="processingSpeed">0</div>
+                        <div class="metric-label">Docs/Minute</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="accuracy">0%</div>
+                        <div class="metric-label">Accuracy</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="gpuUtilization">0%</div>
+                        <div class="metric-label">GPU Usage</div>
+                    </div>
+                </div>
+
+                <div class="real-time-feed" id="processingFeed">
+                    <div class="log-entry">
+                        <span class="log-timestamp">[15:42:33]</span>
+                        System initialized - GPU acceleration ready
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROI Calculator -->
+        <div class="roi-calculator">
+            <h3>🎯 Real-Time ROI Calculator</h3>
+            <div class="optimization-controls">
+                <div class="control-group">
+                    <label>Monthly Shipments:</label>
+                    <input type="number" id="monthlyShipments" value="1000" min="1">
+                </div>
+                <div class="control-group">
+                    <label>Average D&D Cost per Container:</label>
+                    <input type="number" id="avgDDCost" value="2500" min="0">
+                </div>
+                <div class="control-group">
+                    <label>Current D&D Rate (%):</label>
+                    <input type="number" id="currentDDRate" value="15" min="0" max="100">
+                </div>
+            </div>
+            <button class="btn" onclick="calculateROI()" style="background: rgba(255,255,255,0.2);">Calculate ROI</button>
+            <div class="roi-result" id="roiResult">Calculate your savings potential</div>
+        </div>
+
+        <!-- Performance Graph -->
+        <div class="performance-graph" id="performanceGraph">
+            <div style="text-align: center;">
+                <h4>Performance Analytics Dashboard</h4>
+                <p>Real-time processing metrics and trend analysis</p>
+                <canvas id="metricsChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Real-time processing simulation
+        let processingMetrics = {
+            docsPerMinute: 0,
+            accuracy: 0,
+            gpuUtilization: 0
+        };
+
+        // Initialize real-time monitoring
+        function initializeRealTimeMonitoring() {
+            setInterval(() => {
+                // Simulate real-time metrics
+                processingMetrics.docsPerMinute = Math.floor(Math.random() * 50) + 120;
+                processingMetrics.accuracy = Math.floor(Math.random() * 5) + 95;
+                processingMetrics.gpuUtilization = Math.floor(Math.random() * 30) + 70;
+
+                document.getElementById('processingSpeed').textContent = processingMetrics.docsPerMinute;
+                document.getElementById('accuracy').textContent = processingMetrics.accuracy + '%';
+                document.getElementById('gpuUtilization').textContent = processingMetrics.gpuUtilization + '%';
+
+                // Add log entry
+                addLogEntry(`Processing batch: ${processingMetrics.docsPerMinute} docs/min, GPU: ${processingMetrics.gpuUtilization}%`);
+            }, 2000);
+        }
+
+        function addLogEntry(message) {
+            const feed = document.getElementById('processingFeed');
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<span class="log-timestamp">[${timestamp}]</span>${message}`;
+            feed.appendChild(entry);
+            feed.scrollTop = feed.scrollHeight;
+
+            // Keep only last 20 entries
+            while (feed.children.length > 20) {
+                feed.removeChild(feed.firstChild);
+            }
+        }
+
+        // Document processing simulation
+        document.getElementById('documentFile').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                processDocument(e.target.files[0]);
+            }
+        });
+
+        function processDocument(file) {
+            const processing = document.getElementById('docProcessing');
+            const results = document.getElementById('docResults');
+
+            processing.style.display = 'block';
+            results.style.display = 'none';
+
+            // Simulate processing time
+            setTimeout(() => {
+                const confidence = Math.floor(Math.random() * 20) + 80;
+                const fields = Math.floor(Math.random() * 15) + 25;
+                const time = (Math.random() * 2 + 0.5).toFixed(1);
+
+                document.getElementById('docConfidence').textContent = confidence + '%';
+                document.getElementById('docFields').textContent = fields;
+                document.getElementById('docTime').textContent = time + 's';
+
+                // Show extracted data
+                document.getElementById('extractedData').innerHTML = `
+                    <h5>Extracted Fields:</h5>
+                    <p><strong>Container:</strong> MSKU${Math.floor(Math.random() * 9000000) + 1000000}</p>
+                    <p><strong>Vessel:</strong> MSC GULSUN</p>
+                    <p><strong>Voyage:</strong> ${Math.floor(Math.random() * 900) + 100}E</p>
+                    <p><strong>POL:</strong> Shanghai, China</p>
+                    <p><strong>POD:</strong> Los Angeles, USA</p>
+                    <p><strong>ETD:</strong> ${new Date(Date.now() + Math.random() * 7 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                `;
+
+                processing.style.display = 'none';
+                results.style.display = 'block';
+
+                addLogEntry(`Document processed: ${file.name} - ${confidence}% confidence`);
+            }, 3000);
+        }
+
+        // D&D Prediction
+        function runDDPrediction() {
+            const processing = document.getElementById('ddProcessing');
+            const results = document.getElementById('ddResults');
+
+            processing.style.display = 'block';
+            results.style.display = 'none';
+
+            setTimeout(() => {
+                const riskScore = Math.floor(Math.random() * 40) + 30;
+                const probability = Math.floor(Math.random() * 25) + 10;
+                const cost = Math.floor(Math.random() * 3000) + 1500;
+
+                document.getElementById('riskScore').textContent = riskScore;
+                document.getElementById('ddProbability').textContent = probability + '%';
+                document.getElementById('potentialCost').textContent = '$' + cost.toLocaleString();
+
+                // Show recommendations
+                const recommendations = [
+                    'Schedule earlier pickup appointment',
+                    'Notify consignee 48 hours in advance',
+                    'Consider alternative discharge terminals',
+                    'Arrange pre-gate inspection'
+                ];
+
+                document.getElementById('recommendations').innerHTML = `
+                    <h5>AI Recommendations:</h5>
+                    <ul>
+                        ${recommendations.slice(0, Math.floor(Math.random() * 2) + 2).map(rec => `<li>${rec}</li>`).join('')}
+                    </ul>
+                `;
+
+                processing.style.display = 'none';
+                results.style.display = 'block';
+
+                addLogEntry(`D&D risk analysis complete: ${probability}% probability, $${cost} potential cost`);
+            }, 2500);
+        }
+
+        // Route Optimization
+        function optimizeRoute() {
+            const processing = document.getElementById('routeProcessing');
+            const results = document.getElementById('routeResults');
+
+            processing.style.display = 'block';
+            results.style.display = 'none';
+
+            setTimeout(() => {
+                const savings = Math.floor(Math.random() * 20) + 15;
+                const transitTime = Math.floor(Math.random() * 5) + 18;
+                const carbonReduction = Math.floor(Math.random() * 15) + 8;
+
+                document.getElementById('savings').textContent = savings + '%';
+                document.getElementById('transitTime').textContent = transitTime;
+                document.getElementById('carbonReduction').textContent = carbonReduction + '%';
+
+                document.getElementById('routeDetails').innerHTML = `
+                    <h5>Optimized Route:</h5>
+                    <p><strong>Recommended Service:</strong> Transpacific Express</p>
+                    <p><strong>Carrier:</strong> MSC Mediterranean Shipping</p>
+                    <p><strong>Transshipment:</strong> Direct service (no transshipment)</p>
+                    <p><strong>Total Cost:</strong> $${(3200 * (100 - savings) / 100).toLocaleString()}</p>
+                `;
+
+                processing.style.display = 'none';
+                results.style.display = 'block';
+
+                addLogEntry(`Route optimization complete: ${savings}% cost savings, ${transitTime} days transit`);
+            }, 4000);
+        }
+
+        // ROI Calculator
+        function calculateROI() {
+            const shipments = parseInt(document.getElementById('monthlyShipments').value);
+            const avgCost = parseInt(document.getElementById('avgDDCost').value);
+            const currentRate = parseInt(document.getElementById('currentDDRate').value);
+
+            const currentCosts = shipments * (currentRate / 100) * avgCost * 12;
+            const optimizedRate = Math.max(currentRate * 0.3, 2); // 70% reduction
+            const optimizedCosts = shipments * (optimizedRate / 100) * avgCost * 12;
+            const savings = currentCosts - optimizedCosts;
+            const roiPercentage = ((savings / 50000) * 100).toFixed(0); // Assuming $50k platform cost
+
+            document.getElementById('roiResult').innerHTML = `
+                <div>Annual Savings: $${savings.toLocaleString()}</div>
+                <div style="font-size: 1.5rem; margin-top: 10px;">ROI: ${roiPercentage}%</div>
+            `;
+
+            addLogEntry(`ROI calculated: $${savings.toLocaleString()} annual savings, ${roiPercentage}% ROI`);
+        }
+
+        // Drag and drop functionality
+        const uploadZone = document.getElementById('documentUpload');
+        
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            
+            if (e.dataTransfer.files.length > 0) {
+                processDocument(e.dataTransfer.files[0]);
+            }
+        });
+
+        // Initialize the demo
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeRealTimeMonitoring();
+            addLogEntry('ROOTUIP AI/ML Demo Platform initialized');
+            addLogEntry('RunPod 4080ti GPU acceleration activated');
+            addLogEntry('All processing engines ready for demonstration');
+        });
+    </script>
+</body>
+</html>

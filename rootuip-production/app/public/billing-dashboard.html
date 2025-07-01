@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Financial Dashboard - Billing & Revenue Analytics</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/rootuip-logo.svg">
+    <link rel="stylesheet" href="/assets/css/rootuip-design-system.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
+    <style>
+        /* Financial Dashboard Styles */
+        .financial-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+            background: var(--rootuip-gray-50);
+        }
+        
+        /* Sidebar */
+        .financial-sidebar {
+            background: var(--rootuip-gray-900);
+            color: white;
+            padding: var(--space-6);
+            overflow-y: auto;
+        }
+        
+        .financial-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-8);
+            font-size: var(--text-xl);
+            font-weight: 700;
+        }
+        
+        .nav-section {
+            margin-bottom: var(--space-6);
+        }
+        
+        .nav-title {
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--rootuip-gray-400);
+            margin-bottom: var(--space-3);
+            letter-spacing: 0.05em;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            margin-bottom: var(--space-1);
+        }
+        
+        .nav-item:hover {
+            background: var(--rootuip-gray-800);
+        }
+        
+        .nav-item.active {
+            background: var(--rootuip-primary);
+        }
+        
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* Main Content */
+        .financial-main {
+            padding: var(--space-6);
+            overflow-y: auto;
+        }
+        
+        .financial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-8);
+        }
+        
+        .financial-title {
+            font-size: var(--text-3xl);
+            font-weight: 700;
+            color: var(--rootuip-gray-900);
+        }
+        
+        .financial-controls {
+            display: flex;
+            gap: var(--space-4);
+        }
+        
+        .period-selector {
+            padding: var(--space-2) var(--space-4);
+            border: 1px solid var(--rootuip-border);
+            border-radius: var(--radius-md);
+            background: var(--bg-dark);
+            font-size: var(--text-sm);
+        }
+        
+        .export-button {
+            padding: var(--space-2) var(--space-4);
+            background: var(--rootuip-success);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: var(--text-sm);
+            transition: background var(--transition-fast);
+        }
+        
+        .export-button:hover {
+            background: var(--rootuip-success-dark);
+        }
+        
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+        
+        .kpi-card {
+            background: var(--bg-dark);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--rootuip-border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--rootuip-primary);
+        }
+        
+        .kpi-card.success::before {
+            background: var(--rootuip-success);
+        }
+        
+        .kpi-card.warning::before {
+            background: var(--rootuip-warning);
+        }
+        
+        .kpi-card.danger::before {
+            background: var(--rootuip-error);
+        }
+        
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-4);
+        }
+        
+        .kpi-title {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--rootuip-gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .kpi-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--rootuip-gray-400);
+        }
+        
+        .kpi-value {
+            font-size: var(--text-3xl);
+            font-weight: 700;
+            color: var(--rootuip-gray-900);
+            margin-bottom: var(--space-2);
+        }
+        
+        .kpi-change {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            font-weight: 500;
+        }
+        
+        .kpi-change.positive {
+            color: var(--rootuip-success);
+        }
+        
+        .kpi-change.negative {
+            color: var(--rootuip-error);
+        }
+        
+        .kpi-change-icon {
+            width: 16px;
+            height: 16px;
+        }
+        
+        /* Chart Containers */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-6);
+            margin-bottom: var(--space-6);
+        }
+        
+        .chart-container {
+            background: var(--bg-dark);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--rootuip-border);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-4);
+        }
+        
+        .chart-title {
+            font-size: var(--text-lg);
+            font-weight: 600;
+            color: var(--rootuip-gray-900);
+        }
+        
+        .chart-controls {
+            display: flex;
+            gap: var(--space-2);
+        }
+        
+        .chart-control {
+            padding: var(--space-1) var(--space-3);
+            background: transparent;
+            border: 1px solid var(--rootuip-border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: var(--text-xs);
+            transition: all var(--transition-fast);
+        }
+        
+        .chart-control.active {
+            background: var(--rootuip-primary);
+            color: white;
+            border-color: var(--rootuip-primary);
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 350px;
+        }
+        
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-dark);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--rootuip-border);
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: var(--space-4);
+            text-align: left;
+            border-bottom: 1px solid var(--rootuip-border);
+        }
+        
+        .data-table th {
+            background: var(--rootuip-gray-50);
+            font-weight: 600;
+            color: var(--rootuip-gray-900);
+            font-size: var(--text-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .data-table tbody tr:hover {
+            background: var(--rootuip-gray-50);
+        }
+        
+        .status-badge {
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-full);
+            font-size: var(--text-xs);
+            font-weight: 600;
+        }
+        
+        .status-badge.active {
+            background: var(--rootuip-success-light);
+            color: var(--rootuip-success-dark);
+        }
+        
+        .status-badge.pending {
+            background: var(--rootuip-warning-light);
+            color: var(--rootuip-warning-dark);
+        }
+        
+        .status-badge.failed {
+            background: var(--rootuip-error-light);
+            color: var(--rootuip-error-dark);
+        }
+        
+        /* Revenue Breakdown */
+        .revenue-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+        
+        .revenue-item {
+            text-align: center;
+            padding: var(--space-4);
+            background: var(--bg-dark);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--rootuip-border);
+        }
+        
+        .revenue-amount {
+            font-size: var(--text-xl);
+            font-weight: 700;
+            color: var(--rootuip-gray-900);
+            margin-bottom: var(--space-1);
+        }
+        
+        .revenue-label {
+            font-size: var(--text-xs);
+            color: var(--rootuip-gray-600);
+            text-transform: uppercase;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .financial-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .financial-sidebar {
+                display: none;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+        
+        /* Loading States */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: var(--rootuip-gray-600);
+        }
+        
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--rootuip-gray-200);
+            border-top: 2px solid var(--rootuip-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: var(--space-3);
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="financial-layout">
+        <!-- Sidebar -->
+        <div class="financial-sidebar">
+            <div class="financial-logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
+                    <path d="M16 2L3 9v14l13 7 13-7V9L16 2z"/>
+                </svg>
+                ROOTUIP Finance
+            </div>
+            
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-title">Overview</div>
+                    <div class="nav-item active" data-view="dashboard">
+                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                        </svg>
+                        Dashboard
+                    </div>
+                    <div class="nav-item" data-view="revenue">
+                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                        </svg>
+                        Revenue
+                    </div>
+                    <div class="nav-item" data-view="subscriptions">
+                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Subscriptions
+                    </div>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-title">Billing</div>
+                    <div class="nav-item" data-view="invoices">
+                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4z"/>
+                        </svg>
+                        Invoices
+                    </div>
+                    <div class="nav-item" data-view="payments">
+                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/>
+                            <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"/>
+                        </svg>
+                        Payments
+                    </div>
+                    <div class="nav-item" data-view="usage">
+                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 102 0V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm2.5 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm3.5-1.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+                        </svg>
+                        Usage
+                    </div>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-title">Analytics</div>
+                    <div class="nav-item" data-view="customers">
+                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                        </svg>
+                        Customers
+                    </div>
+                    <div class="nav-item" data-view="churn">
+                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"/>
+                        </svg>
+                        Churn Analysis
+                    </div>
+                    <div class="nav-item" data-view="forecasting">
+                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3z"/>
+                        </svg>
+                        Forecasting
+                    </div>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-title">Integrations</div>
+                    <div class="nav-item" data-view="accounting">
+                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                        </svg>
+                        Accounting
+                    </div>
+                </div>
+            </nav>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="financial-main">
+            <div class="financial-header">
+                <h1 class="financial-title">Financial Dashboard</h1>
+                <div class="financial-controls">
+                    <select class="period-selector" id="periodSelector">
+                        <option value="1m">Last Month</option>
+                        <option value="3m">Last 3 Months</option>
+                        <option value="6m">Last 6 Months</option>
+                        <option value="12m" selected>Last 12 Months</option>
+                        <option value="ytd">Year to Date</option>
+                    </select>
+                    <button class="export-button" onclick="exportFinancialData()">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20" style="margin-right: 8px;">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/>
+                        </svg>
+                        Export
+                    </button>
+                </div>
+            </div>
+            
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-card success">
+                    <div class="kpi-header">
+                        <h3 class="kpi-title">Monthly Recurring Revenue</h3>
+                        <svg class="kpi-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                        </svg>
+                    </div>
+                    <div class="kpi-value" id="mrrValue">$127,450</div>
+                    <div class="kpi-change positive">
+                        <svg class="kpi-change-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"/>
+                        </svg>
+                        +12.3% from last month
+                    </div>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <h3 class="kpi-title">Annual Recurring Revenue</h3>
+                        <svg class="kpi-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"/>
+                        </svg>
+                    </div>
+                    <div class="kpi-value" id="arrValue">$1,529,400</div>
+                    <div class="kpi-change positive">
+                        <svg class="kpi-change-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"/>
+                        </svg>
+                        +18.5% YoY growth
+                    </div>
+                </div>
+                
+                <div class="kpi-card warning">
+                    <div class="kpi-header">
+                        <h3 class="kpi-title">Customer Churn Rate</h3>
+                        <svg class="kpi-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"/>
+                        </svg>
+                    </div>
+                    <div class="kpi-value" id="churnValue">3.2%</div>
+                    <div class="kpi-change positive">
+                        <svg class="kpi-change-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z"/>
+                        </svg>
+                        -0.8% from last month
+                    </div>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <h3 class="kpi-title">Customer Lifetime Value</h3>
+                        <svg class="kpi-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                        </svg>
+                    </div>
+                    <div class="kpi-value" id="clvValue">$24,580</div>
+                    <div class="kpi-change positive">
+                        <svg class="kpi-change-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"/>
+                        </svg>
+                        +5.2% improvement
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Revenue Breakdown -->
+            <div class="chart-container" style="margin-bottom: var(--space-6);">
+                <div class="chart-header">
+                    <h3 class="chart-title">Revenue Breakdown</h3>
+                </div>
+                <div class="revenue-breakdown">
+                    <div class="revenue-item">
+                        <div class="revenue-amount" id="subscriptionRevenue">$95,250</div>
+                        <div class="revenue-label">Subscription Revenue</div>
+                    </div>
+                    <div class="revenue-item">
+                        <div class="revenue-amount" id="usageRevenue">$18,750</div>
+                        <div class="revenue-label">Usage Revenue</div>
+                    </div>
+                    <div class="revenue-item">
+                        <div class="revenue-amount" id="setupRevenue">$8,500</div>
+                        <div class="revenue-label">Setup Fees</div>
+                    </div>
+                    <div class="revenue-item">
+                        <div class="revenue-amount" id="servicesRevenue">$4,950</div>
+                        <div class="revenue-label">Professional Services</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts Grid -->
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Revenue Trends</h3>
+                        <div class="chart-controls">
+                            <button class="chart-control active" data-metric="mrr">MRR</button>
+                            <button class="chart-control" data-metric="arr">ARR</button>
+                            <button class="chart-control" data-metric="usage">Usage</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Customer Acquisition</h3>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="customerChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Invoices Table -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">Recent Invoices</h3>
+                    <button class="chart-control" onclick="viewAllInvoices()">View All</button>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Invoice #</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoiceTableBody">
+                        <tr>
+                            <td>INV-202406-001</td>
+                            <td>Maersk Line</td>
+                            <td>$49,900.00</td>
+                            <td>Jun 28, 2024</td>
+                            <td><span class="status-badge active">Paid</span></td>
+                            <td>
+                                <button class="chart-control" onclick="viewInvoice('INV-202406-001')">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>INV-202406-002</td>
+                            <td>MSC Mediterranean</td>
+                            <td>$99.00</td>
+                            <td>Jun 27, 2024</td>
+                            <td><span class="status-badge pending">Pending</span></td>
+                            <td>
+                                <button class="chart-control" onclick="viewInvoice('INV-202406-002')">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>INV-202406-003</td>
+                            <td>CMA CGM Group</td>
+                            <td>$199.00</td>
+                            <td>Jun 26, 2024</td>
+                            <td><span class="status-badge active">Paid</span></td>
+                            <td>
+                                <button class="chart-control" onclick="viewInvoice('INV-202406-003')">View</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Financial Dashboard JavaScript
+        class FinancialDashboard {
+            constructor() {
+                this.charts = new Map();
+                this.currentPeriod = '12m';
+                this.currentView = 'dashboard';
+                
+                this.initializeCharts();
+                this.setupEventListeners();
+                this.loadFinancialData();
+            }
+            
+            initializeCharts() {
+                this.createRevenueChart();
+                this.createCustomerChart();
+            }
+            
+            createRevenueChart() {
+                const ctx = document.getElementById('revenueChart');
+                if (!ctx) return;
+                
+                const chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: this.generateMonthLabels(),
+                        datasets: [{
+                            label: 'MRR',
+                            data: this.generateMRRData(),
+                            borderColor: '#1a73e8',
+                            backgroundColor: 'rgba(26, 115, 232, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    borderDash: [2, 2]
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return '$' + (value / 1000).toFixed(0) + 'K';
+                                    }
+                                }
+                            }
+                        },
+                        elements: {
+                            point: {
+                                radius: 4,
+                                hoverRadius: 8
+                            }
+                        }
+                    }
+                });
+                
+                this.charts.set('revenue', chart);
+            }
+            
+            createCustomerChart() {
+                const ctx = document.getElementById('customerChart');
+                if (!ctx) return;
+                
+                const chart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['New Customers', 'Existing Customers', 'Churned'],
+                        datasets: [{
+                            data: [45, 142, 8],
+                            backgroundColor: [
+                                '#34a853',
+                                '#1a73e8',
+                                '#ea4335'
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    usePointStyle: true
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                this.charts.set('customer', chart);
+            }
+            
+            generateMonthLabels() {
+                const labels = [];
+                const now = new Date();
+                
+                for (let i = 11; i >= 0; i--) {
+                    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                    labels.push(date.toLocaleDateString('en-US', { month: 'short' }));
+                }
+                
+                return labels;
+            }
+            
+            generateMRRData() {
+                // Generate realistic MRR growth data
+                const baseValue = 95000;
+                const data = [];
+                
+                for (let i = 0; i < 12; i++) {
+                    const growth = (i * 0.08) + (Math.random() * 0.1); // 8% base growth + randomness
+                    const value = baseValue * (1 + growth);
+                    data.push(Math.round(value));
+                }
+                
+                return data;
+            }
+            
+            setupEventListeners() {
+                // Navigation
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        this.switchView(e.currentTarget.dataset.view);
+                    });
+                });
+                
+                // Chart controls
+                document.querySelectorAll('.chart-control[data-metric]').forEach(control => {
+                    control.addEventListener('click', (e) => {
+                        this.switchMetric(e.currentTarget.dataset.metric);
+                    });
+                });
+                
+                // Period selector
+                document.getElementById('periodSelector').addEventListener('change', (e) => {
+                    this.changePeriod(e.target.value);
+                });
+            }
+            
+            switchView(view) {
+                // Update active nav item
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelector(`[data-view="${view}"]`).classList.add('active');
+                
+                this.currentView = view;
+                this.loadViewData(view);
+            }
+            
+            switchMetric(metric) {
+                // Update active control
+                document.querySelectorAll('.chart-control[data-metric]').forEach(control => {
+                    control.classList.remove('active');
+                });
+                document.querySelector(`[data-metric="${metric}"]`).classList.add('active');
+                
+                this.updateRevenueChart(metric);
+            }
+            
+            updateRevenueChart(metric) {
+                const chart = this.charts.get('revenue');
+                if (!chart) return;
+                
+                const datasets = {
+                    'mrr': {
+                        label: 'Monthly Recurring Revenue',
+                        data: this.generateMRRData(),
+                        borderColor: '#1a73e8',
+                        backgroundColor: 'rgba(26, 115, 232, 0.1)'
+                    },
+                    'arr': {
+                        label: 'Annual Recurring Revenue',
+                        data: this.generateMRRData().map(v => v * 12),
+                        borderColor: '#34a853',
+                        backgroundColor: 'rgba(52, 168, 83, 0.1)'
+                    },
+                    'usage': {
+                        label: 'Usage Revenue',
+                        data: this.generateUsageData(),
+                        borderColor: '#9932cc',
+                        backgroundColor: 'rgba(153, 50, 204, 0.1)'
+                    }
+                };
+                
+                chart.data.datasets[0] = datasets[metric];
+                chart.update();
+            }
+            
+            generateUsageData() {
+                const data = [];
+                const baseValue = 15000;
+                
+                for (let i = 0; i < 12; i++) {
+                    const seasonal = Math.sin((i / 12) * 2 * Math.PI) * 0.3; // Seasonal variation
+                    const growth = (i * 0.05) + seasonal + (Math.random() * 0.2);
+                    const value = baseValue * (1 + growth);
+                    data.push(Math.round(value));
+                }
+                
+                return data;
+            }
+            
+            changePeriod(period) {
+                this.currentPeriod = period;
+                this.loadFinancialData();
+                
+                // Update chart data based on period
+                const chart = this.charts.get('revenue');
+                if (chart) {
+                    chart.data.labels = this.generateLabelsForPeriod(period);
+                    chart.data.datasets[0].data = this.generateDataForPeriod(period);
+                    chart.update();
+                }
+            }
+            
+            generateLabelsForPeriod(period) {
+                const labels = [];
+                const now = new Date();
+                
+                let count, interval, format;
+                
+                switch (period) {
+                    case '1m':
+                        count = 30;
+                        interval = 'day';
+                        format = { day: 'numeric' };
+                        break;
+                    case '3m':
+                        count = 12;
+                        interval = 'week';
+                        format = { month: 'short', day: 'numeric' };
+                        break;
+                    case '6m':
+                        count = 6;
+                        interval = 'month';
+                        format = { month: 'short' };
+                        break;
+                    case '12m':
+                        count = 12;
+                        interval = 'month';
+                        format = { month: 'short' };
+                        break;
+                    case 'ytd':
+                        count = now.getMonth() + 1;
+                        interval = 'month';
+                        format = { month: 'short' };
+                        break;
+                    default:
+                        return this.generateMonthLabels();
+                }
+                
+                for (let i = count - 1; i >= 0; i--) {
+                    let date;
+                    if (interval === 'day') {
+                        date = new Date(now.getTime() - (i * 24 * 60 * 60 * 1000));
+                    } else if (interval === 'week') {
+                        date = new Date(now.getTime() - (i * 7 * 24 * 60 * 60 * 1000));
+                    } else {
+                        date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                    }
+                    
+                    labels.push(date.toLocaleDateString('en-US', format));
+                }
+                
+                return labels;
+            }
+            
+            generateDataForPeriod(period) {
+                const counts = {
+                    '1m': 30,
+                    '3m': 12,
+                    '6m': 6,
+                    '12m': 12,
+                    'ytd': new Date().getMonth() + 1
+                };
+                
+                const count = counts[period] || 12;
+                return this.generateMRRData().slice(0, count);
+            }
+            
+            loadViewData(view) {
+                console.log(`Loading data for view: ${view}`);
+                // In a real application, this would load specific data for each view
+            }
+            
+            loadFinancialData() {
+                // Simulate loading financial data
+                this.updateKPIs();
+                this.updateRevenueBreakdown();
+                this.updateInvoiceTable();
+            }
+            
+            updateKPIs() {
+                // Update KPI values with animation
+                this.animateValue('mrrValue', 127450, '$', ',');
+                this.animateValue('arrValue', 1529400, '$', ',');
+                this.animateValue('churnValue', 3.2, '', '', '%');
+                this.animateValue('clvValue', 24580, '$', ',');
+            }
+            
+            updateRevenueBreakdown() {
+                document.getElementById('subscriptionRevenue').textContent = '$95,250';
+                document.getElementById('usageRevenue').textContent = '$18,750';
+                document.getElementById('setupRevenue').textContent = '$8,500';
+                document.getElementById('servicesRevenue').textContent = '$4,950';
+            }
+            
+            updateInvoiceTable() {
+                // In a real application, this would fetch and display actual invoice data
+            }
+            
+            animateValue(elementId, targetValue, prefix = '', thousands = '', suffix = '') {
+                const element = document.getElementById(elementId);
+                if (!element) return;
+                
+                const startValue = 0;
+                const duration = 1000;
+                const increment = targetValue / (duration / 16);
+                let currentValue = startValue;
+                
+                const timer = setInterval(() => {
+                    currentValue += increment;
+                    
+                    if (currentValue >= targetValue) {
+                        currentValue = targetValue;
+                        clearInterval(timer);
+                    }
+                    
+                    let displayValue = Math.floor(currentValue);
+                    if (thousands) {
+                        displayValue = displayValue.toLocaleString();
+                    }
+                    
+                    element.textContent = prefix + displayValue + suffix;
+                }, 16);
+            }
+        }
+        
+        // Global functions
+        function exportFinancialData() {
+            // Simulate data export
+            const data = {
+                period: dashboard.currentPeriod,
+                mrr: 127450,
+                arr: 1529400,
+                churnRate: 3.2,
+                clv: 24580,
+                exportedAt: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `rootuip-financial-data-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        function viewAllInvoices() {
+            dashboard.switchView('invoices');
+        }
+        
+        function viewInvoice(invoiceNumber) {
+            alert(`Viewing invoice: ${invoiceNumber}`);
+            // In a real application, this would open the invoice details
+        }
+        
+        // Initialize dashboard
+        let dashboard;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            dashboard = new FinancialDashboard();
+        });
+    </script>
+</body>
+</html>

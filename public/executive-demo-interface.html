@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Demo Interface - ROOTUIP Enterprise</title>
+    
+    <!-- Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/assets/css/enterprise-design-system.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: var(--enterprise-gray-50);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .demo-header {
+            background: var(--enterprise-gradient-primary);
+            color: white;
+            padding: var(--space-8) 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .demo-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .demo-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+            text-align: center;
+        }
+        
+        .demo-title {
+            font-size: var(--text-5xl);
+            font-weight: var(--font-black);
+            margin-bottom: var(--space-4);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .demo-subtitle {
+            font-size: var(--text-xl);
+            opacity: 0.9;
+            margin-bottom: var(--space-8);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .demo-badge {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius-full);
+            padding: var(--space-3) var(--space-6);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-6);
+        }
+        
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-10) var(--space-6);
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--space-8);
+            margin-bottom: var(--space-10);
+        }
+        
+        .demo-viewer {
+            background: var(--enterprise-white);
+            border: 2px solid var(--enterprise-gray-200);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .viewer-header {
+            background: var(--enterprise-gray-100);
+            border-bottom: 1px solid var(--enterprise-gray-200);
+            padding: var(--space-4) var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: between;
+        }
+        
+        .viewer-controls {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .control-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--enterprise-gray-400);
+        }
+        
+        .control-dot.close { background: var(--enterprise-danger); }
+        .control-dot.minimize { background: var(--enterprise-warning); }
+        .control-dot.maximize { background: var(--enterprise-success); }
+        
+        .viewer-title {
+            flex: 1;
+            text-align: center;
+            font-size: var(--text-sm);
+            color: var(--enterprise-gray-600);
+            font-weight: var(--font-medium);
+        }
+        
+        .viewer-content {
+            padding: 0;
+            min-height: 600px;
+            background: var(--enterprise-white);
+        }
+        
+        .demo-controls {
+            background: var(--enterprise-white);
+            border: 2px solid var(--enterprise-primary);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            height: fit-content;
+        }
+        
+        .controls-header {
+            text-align: center;
+            margin-bottom: var(--space-6);
+        }
+        
+        .controls-header h3 {
+            font-size: var(--text-2xl);
+            font-weight: var(--font-bold);
+            color: var(--enterprise-dark);
+            margin-bottom: var(--space-2);
+        }
+        
+        .scenario-selector {
+            margin-bottom: var(--space-6);
+        }
+        
+        .scenario-option {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-4);
+            background: var(--enterprise-gray-50);
+            border: 2px solid var(--enterprise-gray-200);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-3);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        
+        .scenario-option:hover,
+        .scenario-option.active {
+            border-color: var(--enterprise-primary);
+            background: var(--enterprise-primary-subtle);
+        }
+        
+        .scenario-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--enterprise-primary);
+            color: white;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-lg);
+        }
+        
+        .scenario-info h4 {
+            font-size: var(--text-base);
+            font-weight: var(--font-semibold);
+            color: var(--enterprise-dark);
+            margin-bottom: var(--space-1);
+        }
+        
+        .scenario-info p {
+            font-size: var(--text-sm);
+            color: var(--enterprise-gray-600);
+            margin: 0;
+        }
+        
+        .demo-actions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+        
+        .action-button {
+            padding: var(--space-4);
+            background: var(--enterprise-white);
+            border: 2px solid var(--enterprise-primary);
+            border-radius: var(--radius-lg);
+            color: var(--enterprise-primary);
+            font-weight: var(--font-semibold);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+        }
+        
+        .action-button:hover {
+            background: var(--enterprise-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .action-button.primary {
+            background: var(--enterprise-primary);
+            color: white;
+        }
+        
+        .action-button.primary:hover {
+            background: var(--enterprise-primary-dark);
+        }
+        
+        .metrics-panel {
+            margin-top: var(--space-6);
+            padding: var(--space-4);
+            background: var(--enterprise-gray-50);
+            border-radius: var(--radius-lg);
+        }
+        
+        .metrics-header {
+            font-size: var(--text-lg);
+            font-weight: var(--font-bold);
+            color: var(--enterprise-dark);
+            margin-bottom: var(--space-4);
+            text-align: center;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3);
+        }
+        
+        .metric-item {
+            text-align: center;
+            padding: var(--space-3);
+            background: var(--enterprise-white);
+            border-radius: var(--radius-md);
+        }
+        
+        .metric-value {
+            font-size: var(--text-2xl);
+            font-weight: var(--font-bold);
+            color: var(--enterprise-primary);
+            margin-bottom: var(--space-1);
+        }
+        
+        .metric-label {
+            font-size: var(--text-xs);
+            color: var(--enterprise-gray-600);
+            font-weight: var(--font-medium);
+        }
+        
+        .features-showcase {
+            background: var(--enterprise-white);
+            border: 1px solid var(--enterprise-gray-200);
+            border-radius: var(--radius-xl);
+            padding: var(--space-8);
+            margin-bottom: var(--space-10);
+        }
+        
+        .showcase-header {
+            text-align: center;
+            margin-bottom: var(--space-8);
+        }
+        
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-6);
+        }
+        
+        .feature-card {
+            padding: var(--space-6);
+            background: var(--enterprise-gray-50);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            transition: all var(--transition-base);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            background: var(--enterprise-primary-subtle);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--enterprise-primary);
+            color: white;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+            margin: 0 auto var(--space-4);
+        }
+        
+        .testimonials {
+            background: var(--enterprise-white);
+            border: 2px solid var(--enterprise-success);
+            border-radius: var(--radius-xl);
+            padding: var(--space-8);
+        }
+        
+        .testimonials-header {
+            text-align: center;
+            margin-bottom: var(--space-8);
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-6);
+        }
+        
+        .testimonial-card {
+            padding: var(--space-6);
+            background: var(--enterprise-gray-50);
+            border-radius: var(--radius-lg);
+            position: relative;
+        }
+        
+        .testimonial-quote {
+            font-size: var(--text-lg);
+            font-style: italic;
+            color: var(--enterprise-gray-700);
+            margin-bottom: var(--space-4);
+            line-height: 1.6;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--enterprise-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: var(--font-bold);
+        }
+        
+        .author-info h5 {
+            font-size: var(--text-base);
+            font-weight: var(--font-semibold);
+            color: var(--enterprise-dark);
+            margin-bottom: var(--space-1);
+        }
+        
+        .author-info p {
+            font-size: var(--text-sm);
+            color: var(--enterprise-gray-600);
+            margin: 0;
+        }
+        
+        @media (max-width: 1024px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .showcase-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .demo-title {
+                font-size: var(--text-3xl);
+            }
+            
+            .main-content {
+                padding: var(--space-6) var(--space-4);
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Demo Header -->
+    <div class="demo-header">
+        <div class="demo-content">
+            <div class="demo-badge">
+                <i class="fas fa-play-circle"></i>
+                <span>Live Interactive Demo</span>
+            </div>
+            <h1 class="demo-title">Executive Demo Interface</h1>
+            <p class="demo-subtitle">Experience ROOTUIP's enterprise platform with real-time data and Fortune 500-grade functionality</p>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <!-- Demo Grid -->
+        <div class="demo-grid">
+            <!-- Demo Viewer -->
+            <div class="demo-viewer">
+                <div class="viewer-header">
+                    <div class="viewer-controls">
+                        <div class="control-dot close"></div>
+                        <div class="control-dot minimize"></div>
+                        <div class="control-dot maximize"></div>
+                    </div>
+                    <div class="viewer-title">ROOTUIP Enterprise Platform Demo</div>
+                    <div style="width: 60px;"></div>
+                </div>
+                <div class="viewer-content">
+                    <iframe 
+                        id="demo-iframe" 
+                        src="/app.html" 
+                        width="100%" 
+                        height="600" 
+                        frameborder="0">
+                    </iframe>
+                </div>
+            </div>
+            
+            <!-- Demo Controls -->
+            <div class="demo-controls">
+                <div class="controls-header">
+                    <h3>Demo Scenarios</h3>
+                    <p>Experience different Fortune 500 use cases</p>
+                </div>
+                
+                <div class="scenario-selector">
+                    <div class="scenario-option active" onclick="loadScenario('executive')">
+                        <div class="scenario-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="scenario-info">
+                            <h4>Executive Dashboard</h4>
+                            <p>C-suite financial impact view</p>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-option" onclick="loadScenario('tracking')">
+                        <div class="scenario-icon">
+                            <i class="fas fa-ship"></i>
+                        </div>
+                        <div class="scenario-info">
+                            <h4>Container Tracking</h4>
+                            <p>Real-time monitoring & alerts</p>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-option" onclick="loadScenario('analytics')">
+                        <div class="scenario-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="scenario-info">
+                            <h4>Analytics Dashboard</h4>
+                            <p>Performance metrics & insights</p>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-option" onclick="loadScenario('roi')">
+                        <div class="scenario-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <div class="scenario-info">
+                            <h4>ROI Calculator</h4>
+                            <p>Custom savings analysis</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-actions">
+                    <button class="action-button primary" onclick="startGuidedTour()">
+                        <i class="fas fa-route"></i>
+                        Start Guided Tour
+                    </button>
+                    <button class="action-button" onclick="generateDemoData()">
+                        <i class="fas fa-database"></i>
+                        Generate Sample Data
+                    </button>
+                    <button class="action-button" onclick="triggerAlert()">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Trigger Risk Alert
+                    </button>
+                    <button class="action-button" onclick="showROICalculation()">
+                        <i class="fas fa-dollar-sign"></i>
+                        Show Savings Impact
+                    </button>
+                </div>
+                
+                <div class="metrics-panel">
+                    <div class="metrics-header">Live Demo Metrics</div>
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <div class="metric-value">$25.4M</div>
+                            <div class="metric-label">Annual Savings</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">94.2%</div>
+                            <div class="metric-label">AI Accuracy</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">45,892</div>
+                            <div class="metric-label">Containers</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-value">15ms</div>
+                            <div class="metric-label">Response Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Features Showcase -->
+        <div class="features-showcase">
+            <div class="showcase-header">
+                <h2>Enterprise Features Demonstration</h2>
+                <p>See how Fortune 500 companies leverage ROOTUIP's advanced capabilities</p>
+            </div>
+            <div class="showcase-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4>AI-Powered Predictions</h4>
+                    <p>Machine learning algorithms predict delays with 94.2% accuracy, enabling proactive intervention.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-check"></i>
+                    </div>
+                    <h4>Enterprise Security</h4>
+                    <p>SOC 2 Type II certified with role-based access control and audit trails for compliance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h4>Seamless Integration</h4>
+                    <p>Connect with existing ERP, WMS, and TMS systems via REST APIs and webhook notifications.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h4>Mobile-First Design</h4>
+                    <p>Responsive interface optimized for executives and operations teams on any device.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h4>Real-Time Monitoring</h4>
+                    <p>Live container tracking with instant alerts for potential detention and demurrage charges.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h4>Executive Reporting</h4>
+                    <p>Automated reports with financial impact analysis and KPI tracking for board presentations.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Customer Testimonials -->
+        <div class="testimonials">
+            <div class="testimonials-header">
+                <h2>Fortune 500 Success Stories</h2>
+                <p>See how industry leaders achieve measurable results with ROOTUIP</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">
+                        "ROOTUIP's predictive analytics helped us prevent $18M in detention charges last year. The ROI was immediate and continues to grow."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JM</div>
+                        <div class="author-info">
+                            <h5>Jennifer Martinez</h5>
+                            <p>VP Supply Chain, Fortune 100 Retailer</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">
+                        "Implementation was seamless and the team was exceptional. We've achieved zero production line stops since deployment."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">DT</div>
+                        <div class="author-info">
+                            <h5>David Thompson</h5>
+                            <p>COO, Global Manufacturing</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">
+                        "The executive dashboard gives me complete visibility into our supply chain risk. Board presentations have never been easier."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SC</div>
+                        <div class="author-info">
+                            <h5>Sarah Chen</h5>
+                            <p>CEO, Consumer Goods Leader</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">
+                        "ROOTUIP's platform integrates perfectly with our existing systems. The technical architecture is enterprise-grade."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MR</div>
+                        <div class="author-info">
+                            <h5>Michael Rodriguez</h5>
+                            <p>CTO, Automotive OEM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Demo scenario management
+        function loadScenario(scenario) {
+            // Update active scenario
+            document.querySelectorAll('.scenario-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Load different demo content based on scenario
+            const iframe = document.getElementById('demo-iframe');
+            const scenarios = {
+                'executive': '/app.html',
+                'tracking': '/container-tracking-interface.html',
+                'analytics': '/analytics-revenue-dashboard.html',
+                'roi': '/roi-calculator-premium.html'
+            };
+            
+            iframe.src = scenarios[scenario] || '/app.html';
+            
+            // Show notification
+            showNotification(`Loaded ${scenario.charAt(0).toUpperCase() + scenario.slice(1)} Demo Scenario`, 'success');
+        }
+        
+        function startGuidedTour() {
+            showNotification('Starting Executive Guided Tour...', 'info');
+            
+            // Simulate guided tour steps
+            setTimeout(() => {
+                showNotification('Tour Step 1: Executive Dashboard Overview', 'info');
+            }, 1000);
+            
+            setTimeout(() => {
+                showNotification('Tour Step 2: Financial Impact Metrics', 'info');
+            }, 3000);
+            
+            setTimeout(() => {
+                showNotification('Tour Step 3: AI-Powered Predictions', 'info');
+            }, 5000);
+            
+            setTimeout(() => {
+                showNotification('Guided Tour Complete! Ready for Q&A', 'success');
+            }, 7000);
+        }
+        
+        function generateDemoData() {
+            showNotification('Generating live demo data...', 'info');
+            
+            // Simulate data generation
+            setTimeout(() => {
+                updateMetrics();
+                showNotification('Demo data refreshed with latest scenarios', 'success');
+            }, 2000);
+        }
+        
+        function triggerAlert() {
+            showNotification('High-Risk Container Alert Triggered', 'warning');
+            
+            // Simulate alert in iframe
+            setTimeout(() => {
+                showNotification('Alert: Container TCLU1234567 detention risk detected', 'danger');
+            }, 1000);
+        }
+        
+        function showROICalculation() {
+            showNotification('Calculating ROI for current scenario...', 'info');
+            
+            setTimeout(() => {
+                showNotification('ROI Analysis: $25.4M annual savings potential identified', 'success');
+            }, 2000);
+        }
+        
+        function updateMetrics() {
+            // Animate metric updates
+            const metrics = document.querySelectorAll('.metric-value');
+            metrics.forEach(metric => {
+                metric.style.transform = 'scale(1.1)';
+                metric.style.color = 'var(--enterprise-success)';
+                
+                setTimeout(() => {
+                    metric.style.transform = 'scale(1)';
+                    metric.style.color = 'var(--enterprise-primary)';
+                }, 500);
+            });
+        }
+        
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${getIconForType(type)}"></i>
+                <span>${message}</span>
+            `;
+            
+            // Style notification
+            Object.assign(notification.style, {
+                position: 'fixed',
+                top: '20px',
+                right: '20px',
+                padding: '12px 20px',
+                borderRadius: '8px',
+                color: 'white',
+                fontWeight: '500',
+                zIndex: '10000',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                minWidth: '300px',
+                backgroundColor: getColorForType(type),
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                transform: 'translateX(400px)',
+                transition: 'transform 0.3s ease'
+            });
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after delay
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 4000);
+        }
+        
+        function getIconForType(type) {
+            const icons = {
+                'info': 'info-circle',
+                'success': 'check-circle',
+                'warning': 'exclamation-triangle',
+                'danger': 'exclamation-circle'
+            };
+            return icons[type] || 'info-circle';
+        }
+        
+        function getColorForType(type) {
+            const colors = {
+                'info': '#1E40AF',
+                'success': '#059669',
+                'warning': '#D97706',
+                'danger': '#DC2626'
+            };
+            return colors[type] || '#1E40AF';
+        }
+        
+        // Initialize demo on load
+        document.addEventListener('DOMContentLoaded', function() {
+            showNotification('Executive Demo Interface Ready', 'success');
+            
+            // Update metrics periodically to show "live" data
+            setInterval(updateMetrics, 30000);
+        });
+        
+        // Track demo engagement
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'demo_interaction') {
+                console.log('Demo interaction:', event.data);
+                
+                // Send analytics
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'demo_interaction', {
+                        'interaction_type': event.data.action,
+                        'demo_scenario': event.data.scenario,
+                        'event_category': 'executive_demo'
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

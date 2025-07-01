@@ -5,6 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - ROOTUIP Enterprise</title>
     <style>
+        :root {
+            --bg-primary: #0A0E27;
+            --bg-secondary: #141832;
+            --bg-tertiary: #1E2341;
+            --accent-primary: #6366F1;
+            --accent-secondary: #818CF8;
+            --text-primary: #F3F4F6;
+            --text-secondary: #9CA3AF;
+            --text-tertiary: #6B7280;
+            --border-color: rgba(99, 102, 241, 0.2);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --success: #34D399;
+            --warning: #FBBF24;
+            --danger: #F87171;
+            --input-bg: rgba(30, 35, 65, 0.5);
+            --input-border: rgba(99, 102, 241, 0.3);
+            --input-focus: rgba(99, 102, 241, 0.5);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,134 +33,296 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #0c0c1e 100%);
+            background: var(--bg-primary);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #333;
+            color: var(--text-primary);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(129, 140, 248, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--accent-secondary);
+            opacity: 0.5;
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
         }
         
         .login-container {
             width: 100%;
-            max-width: 400px;
+            max-width: 440px;
             margin: 0 20px;
+            position: relative;
+            z-index: 10;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .login-card {
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                        inset 0 1px 0 var(--glass-border);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Glowing border effect */
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary), var(--accent-primary));
+            border-radius: 24px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+            filter: blur(10px);
+        }
+
+        .login-card:hover::before {
+            opacity: 0.3;
         }
         
         .logo {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
         
         .logo h1 {
-            color: #1a1a2e;
-            font-size: 32px;
+            font-size: 42px;
             font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
         }
         
         .logo .tagline {
-            color: #00D4AA;
-            font-size: 14px;
-            margin-top: 5px;
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 600;
-            color: #333;
+            color: var(--text-primary);
             font-size: 14px;
+            letter-spacing: 0.3px;
         }
         
         .form-group input {
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 14px 18px;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            border-radius: 12px;
             font-size: 16px;
-            transition: all 0.3s;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-tertiary);
         }
         
         .form-group input:focus {
             outline: none;
-            border-color: #00D4AA;
-            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+            border-color: var(--accent-primary);
+            background: rgba(99, 102, 241, 0.05);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1),
+                        0 0 20px rgba(99, 102, 241, 0.2);
         }
         
         .mfa-section {
             display: none;
-            margin-top: 20px;
-            padding: 20px;
-            background: #f5f7fa;
-            border-radius: 6px;
+            margin-top: 24px;
+            padding: 24px;
+            background: var(--glass-bg);
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .mfa-section h3 {
-            font-size: 16px;
-            margin-bottom: 10px;
-            color: #1a1a2e;
+            font-size: 17px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .mfa-section p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
         }
         
         .btn {
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             border: none;
-            border-radius: 6px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         
         .btn-primary {
-            background: #00D4AA;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
         }
         
         .btn-primary:hover {
-            background: #00B894;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
         }
         
         .btn-primary:disabled {
-            background: #ccc;
+            background: var(--bg-tertiary);
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
+            opacity: 0.6;
+        }
+
+        /* Button shimmer effect */
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
         }
         
         .alert {
-            padding: 12px 16px;
-            border-radius: 6px;
+            padding: 14px 18px;
+            border-radius: 12px;
             margin-bottom: 20px;
             font-size: 14px;
+            backdrop-filter: blur(10px);
+            animation: alertSlide 0.3s ease-out;
+        }
+
+        @keyframes alertSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: rgba(248, 113, 113, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(248, 113, 113, 0.2);
         }
         
         .alert-info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
+            background: rgba(52, 211, 153, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(52, 211, 153, 0.2);
         }
         
         .divider {
-            margin: 30px 0;
+            margin: 32px 0;
             text-align: center;
             position: relative;
         }
@@ -152,62 +334,91 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: #e0e0e0;
+            background: var(--glass-border);
         }
         
         .divider span {
-            background: white;
-            padding: 0 15px;
+            background: var(--bg-secondary);
+            padding: 0 20px;
             position: relative;
-            color: #999;
+            color: var(--text-tertiary);
             font-size: 14px;
+            font-weight: 500;
         }
         
         .links {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 32px;
         }
         
         .links a {
-            color: #00D4AA;
+            color: var(--accent-secondary);
             text-decoration: none;
             font-size: 14px;
-            transition: color 0.3s;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
         }
         
         .links a:hover {
-            color: #00B894;
-            text-decoration: underline;
+            color: var(--accent-primary);
+        }
+
+        .links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+
+        .links a:hover::after {
+            width: 100%;
         }
         
         .enterprise-badge {
             text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 1px solid var(--glass-border);
         }
         
         .enterprise-badge .badge {
-            display: inline-block;
-            padding: 6px 12px;
-            background: #f0f0f0;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #666;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .enterprise-badge .badge:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.2);
         }
         
         .loading {
             display: none;
             text-align: center;
-            margin: 20px 0;
+            margin: 24px 0;
         }
         
         .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #00D4AA;
+            border: 3px solid var(--glass-border);
+            border-top: 3px solid var(--accent-primary);
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 36px;
+            height: 36px;
             animation: spin 1s linear infinite;
             margin: 0 auto;
         }
@@ -216,9 +427,67 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .loading p {
+            margin-top: 12px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 32px 24px;
+            }
+
+            .logo h1 {
+                font-size: 36px;
+            }
+
+            .form-group input {
+                padding: 12px 16px;
+            }
+
+            .btn {
+                padding: 14px;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
+        }
     </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
 </head>
 <body>
+    <!-- Floating particles -->
+    <div class="particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 9s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 12s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 15s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 18s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 21s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 24s;"></div>
+    </div>
+
     <div class="login-container">
         <div class="login-card">
             <div class="logo">
@@ -232,21 +501,19 @@
             <form id="login-form">
                 <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required placeholder="admin@company.com">
+                    <input type="email" id="email" name="email" required placeholder="admin@company.com" autocomplete="email">
                 </div>
                 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                    <input type="password" id="password" name="password" required placeholder="Enter your password" autocomplete="current-password">
                 </div>
                 
                 <div id="mfa-section" class="mfa-section">
                     <h3>Two-Factor Authentication</h3>
-                    <p style="margin-bottom: 10px; font-size: 14px; color: #666;">
-                        Enter the 6-digit code from your authenticator app
-                    </p>
+                    <p>Enter the 6-digit code from your authenticator app</p>
                     <div class="form-group">
-                        <input type="text" id="mfa-code" name="mfaCode" pattern="[0-9]{6}" maxlength="6" placeholder="000000">
+                        <input type="text" id="mfa-code" name="mfaCode" pattern="[0-9]{6}" maxlength="6" placeholder="000000" autocomplete="one-time-code">
                     </div>
                 </div>
                 
@@ -266,12 +533,17 @@
             </div>
             
             <div class="enterprise-badge">
-                <span class="badge">🔒 Enterprise-Grade Security</span>
+                <span class="badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                    </svg>
+                    Enterprise-Grade Security
+                </span>
             </div>
             
             <div class="loading" id="loading">
                 <div class="spinner"></div>
-                <p style="margin-top: 10px; color: #666;">Authenticating...</p>
+                <p>Authenticating...</p>
             </div>
         </div>
     </div>
@@ -317,6 +589,7 @@
             
             loading.style.display = 'block';
             loginBtn.disabled = true;
+            loginBtn.textContent = 'Signing in...';
             
             try {
                 const response = await fetch('/auth/login', {
@@ -354,14 +627,15 @@
                         }
                     }, 1000);
                 } else {
-                    showError(data.error || 'Login failed');
+                    showError(data.error || 'Login failed. Please check your credentials.');
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                showError('Network error. Please try again.');
+                showError('Network error. Please check your connection and try again.');
             } finally {
                 loading.style.display = 'none';
                 loginBtn.disabled = false;
+                loginBtn.textContent = 'Sign In';
             }
         });
         
@@ -373,6 +647,26 @@
             const value = e.target.value;
             if (value.length === 6 && /^\d{6}$/.test(value)) {
                 form.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Add subtle animation to form inputs
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // Add keyboard shortcut for demo account
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'd') {
+                e.preventDefault();
+                showDemo();
             }
         });
     </script>

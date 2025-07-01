@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Technical Architecture - Enterprise-Grade Infrastructure</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .header h1 {
+            color: #0f0f23;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .architecture-overview {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .overview-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .architecture-diagram {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .diagram-container {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            position: relative;
+            min-height: 500px;
+        }
+
+        .layer {
+            background: var(--bg-dark);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid;
+            position: relative;
+        }
+
+        .layer.ui {
+            border-left-color: #3498db;
+        }
+
+        .layer.api {
+            border-left-color: #e74c3c;
+        }
+
+        .layer.processing {
+            border-left-color: #f39c12;
+        }
+
+        .layer.data {
+            border-left-color: #27ae60;
+        }
+
+        .layer.infrastructure {
+            border-left-color: #9b59b6;
+        }
+
+        .layer-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .layer-components {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .component {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            border: 2px solid #e9ecef;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .ai-capabilities {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .capability-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .capability-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+
+        .capability-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #f1c40f;
+        }
+
+        .capability-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .capability-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metric {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.75rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .security-compliance {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .security-section {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+        }
+
+        .security-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .security-list {
+            list-style: none;
+        }
+
+        .security-list li {
+            margin-bottom: 0.75rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .security-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .scalability-section {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .scale-demo {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .scale-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .scale-metric {
+            background: var(--bg-dark);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+        }
+
+        .scale-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .scale-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .performance-benchmarks {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .benchmark-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .benchmark-card {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .benchmark-value {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .benchmark-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .benchmark-comparison {
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .export-section {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .export-btn.secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        }
+
+        @media (max-width: 1024px) {
+            .overview-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .security-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .scale-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .benchmark-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .overview-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .scale-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-microchip"></i> ROOTUIP Technical Architecture</h1>
+        <p>Enterprise-Grade Infrastructure & AI Capabilities</p>
+    </div>
+
+    <div class="container">
+        <!-- Architecture Overview -->
+        <div class="architecture-overview">
+            <h2><i class="fas fa-sitemap"></i> System Architecture Overview</h2>
+            <p>Cloud-native, microservices-based platform designed for Fortune 500 scale and security requirements</p>
+            
+            <div class="overview-stats">
+                <div class="stat-card">
+                    <div class="stat-number">99.99%</div>
+                    <div class="stat-label">Uptime SLA</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">&lt;100ms</div>
+                    <div class="stat-label">API Response Time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10M+</div>
+                    <div class="stat-label">Containers/Day</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">SOC 2</div>
+                    <div class="stat-label">Type II Certified</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Architecture Diagram -->
+        <div class="architecture-diagram">
+            <h2><i class="fas fa-layer-group"></i> Multi-Tier Architecture</h2>
+            
+            <div class="diagram-container">
+                <div class="layer ui">
+                    <div class="layer-title">
+                        <i class="fas fa-desktop"></i>
+                        Presentation Layer
+                    </div>
+                    <div class="layer-components">
+                        <div class="component">React Dashboard</div>
+                        <div class="component">Mobile Apps</div>
+                        <div class="component">RESTful APIs</div>
+                        <div class="component">GraphQL Gateway</div>
+                    </div>
+                </div>
+
+                <div class="layer api">
+                    <div class="layer-title">
+                        <i class="fas fa-exchange-alt"></i>
+                        API Gateway Layer
+                    </div>
+                    <div class="layer-components">
+                        <div class="component">Rate Limiting</div>
+                        <div class="component">Authentication</div>
+                        <div class="component">Load Balancing</div>
+                        <div class="component">API Versioning</div>
+                    </div>
+                </div>
+
+                <div class="layer processing">
+                    <div class="layer-title">
+                        <i class="fas fa-cogs"></i>
+                        Processing Layer
+                    </div>
+                    <div class="layer-components">
+                        <div class="component">AI/ML Engine</div>
+                        <div class="component">Data Processing</div>
+                        <div class="component">Business Logic</div>
+                        <div class="component">Event Streaming</div>
+                    </div>
+                </div>
+
+                <div class="layer data">
+                    <div class="layer-title">
+                        <i class="fas fa-database"></i>
+                        Data Layer
+                    </div>
+                    <div class="layer-components">
+                        <div class="component">PostgreSQL</div>
+                        <div class="component">Redis Cache</div>
+                        <div class="component">Time Series DB</div>
+                        <div class="component">Data Lake</div>
+                    </div>
+                </div>
+
+                <div class="layer infrastructure">
+                    <div class="layer-title">
+                        <i class="fas fa-cloud"></i>
+                        Infrastructure Layer
+                    </div>
+                    <div class="layer-components">
+                        <div class="component">AWS/Azure</div>
+                        <div class="component">Kubernetes</div>
+                        <div class="component">Docker Containers</div>
+                        <div class="component">CDN Network</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI/ML Capabilities -->
+        <div class="ai-capabilities">
+            <h2><i class="fas fa-brain"></i> AI/ML Capabilities</h2>
+            
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <div class="capability-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="capability-title">Computer Vision</div>
+                    <div class="capability-description">Advanced OCR and document processing with neural networks</div>
+                    <div class="capability-metrics">
+                        <div class="metric">
+                            <div class="metric-value">94.2%</div>
+                            <div class="metric-label">Accuracy</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">1.3s</div>
+                            <div class="metric-label">Processing</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="capability-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="capability-title">Predictive Analytics</div>
+                    <div class="capability-description">14-day forecasting with ensemble machine learning models</div>
+                    <div class="capability-metrics">
+                        <div class="metric">
+                            <div class="metric-value">89.7%</div>
+                            <div class="metric-label">Precision</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">14</div>
+                            <div class="metric-label">Days Ahead</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="capability-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="capability-title">Intelligent Automation</div>
+                    <div class="capability-description">Automated decision-making and workflow optimization</div>
+                    <div class="capability-metrics">
+                        <div class="metric">
+                            <div class="metric-value">75%</div>
+                            <div class="metric-label">Automation</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">24/7</div>
+                            <div class="metric-label">Monitoring</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security & Compliance -->
+        <div class="security-compliance">
+            <h2><i class="fas fa-shield-alt"></i> Security & Compliance</h2>
+            
+            <div class="security-grid">
+                <div class="security-section">
+                    <div class="security-title">
+                        <i class="fas fa-lock"></i>
+                        Data Security
+                    </div>
+                    <ul class="security-list">
+                        <li>AES-256 encryption at rest and in transit</li>
+                        <li>Zero-trust network architecture</li>
+                        <li>Multi-factor authentication (MFA)</li>
+                        <li>Role-based access control (RBAC)</li>
+                        <li>End-to-end audit logging</li>
+                        <li>Data tokenization and masking</li>
+                        <li>Regular penetration testing</li>
+                    </ul>
+                </div>
+
+                <div class="security-section">
+                    <div class="security-title">
+                        <i class="fas fa-certificate"></i>
+                        Compliance Standards
+                    </div>
+                    <ul class="security-list">
+                        <li>SOC 2 Type II certified</li>
+                        <li>ISO 27001 compliant</li>
+                        <li>GDPR data protection ready</li>
+                        <li>HIPAA security standards</li>
+                        <li>PCI DSS Level 1 merchant</li>
+                        <li>FedRAMP moderate ready</li>
+                        <li>CCPA compliance framework</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scalability Demonstration -->
+        <div class="scalability-section">
+            <h2><i class="fas fa-expand-arrows-alt"></i> Enterprise Scalability</h2>
+            <p>Designed to handle Fortune 500 workloads with linear scaling and high availability</p>
+            
+            <div class="scale-demo">
+                <h3>Auto-Scaling Performance</h3>
+                <div class="scale-metrics">
+                    <div class="scale-metric">
+                        <div class="scale-value">10M</div>
+                        <div class="scale-label">Containers/Day</div>
+                    </div>
+                    <div class="scale-metric">
+                        <div class="scale-value">100K</div>
+                        <div class="scale-label">Concurrent Users</div>
+                    </div>
+                    <div class="scale-metric">
+                        <div class="scale-value">500TB</div>
+                        <div class="scale-label">Data Processing</div>
+                    </div>
+                    <div class="scale-metric">
+                        <div class="scale-value">99.99%</div>
+                        <div class="scale-label">Availability</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Benchmarks -->
+        <div class="performance-benchmarks">
+            <h2><i class="fas fa-tachometer-alt"></i> Performance Benchmarks</h2>
+            
+            <div class="benchmark-grid">
+                <div class="benchmark-card">
+                    <div class="benchmark-value">&lt;100ms</div>
+                    <div class="benchmark-label">API Response Time</div>
+                    <div class="benchmark-comparison">3x faster than industry average</div>
+                </div>
+
+                <div class="benchmark-card">
+                    <div class="benchmark-value">15M</div>
+                    <div class="benchmark-label">API Calls/Hour</div>
+                    <div class="benchmark-comparison">10x higher throughput capacity</div>
+                </div>
+
+                <div class="benchmark-card">
+                    <div class="benchmark-value">0.2s</div>
+                    <div class="benchmark-label">Cold Start Time</div>
+                    <div class="benchmark-comparison">5x faster container startup</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Section -->
+        <div class="export-section">
+            <h2><i class="fas fa-download"></i> Technical Documentation</h2>
+            <p>Comprehensive technical materials for IT teams and architects</p>
+            <br>
+            <button class="export-btn" onclick="exportSystemArchitecture()">
+                <i class="fas fa-sitemap"></i> System Architecture Document
+            </button>
+            <button class="export-btn" onclick="exportAPIDocumentation()">
+                <i class="fas fa-code"></i> API Documentation
+            </button>
+            <button class="export-btn secondary" onclick="exportSecurityAudit()">
+                <i class="fas fa-shield-alt"></i> Security Audit Report
+            </button>
+            <button class="export-btn secondary" onclick="exportDeploymentGuide()">
+                <i class="fas fa-rocket"></i> Deployment Guide
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function exportSystemArchitecture() {
+            alert(`🏗️ System Architecture Document Generated!\n\n📋 Comprehensive Technical Overview (75 pages):\n\n🔧 Architecture Patterns\n• Microservices design principles\n• Event-driven architecture\n• CQRS and Event Sourcing\n• API-first development\n\n☁️ Cloud Infrastructure\n• Multi-region deployment strategy\n• Auto-scaling configuration\n• Disaster recovery planning\n• Cost optimization techniques\n\n🤖 AI/ML Architecture\n• Model serving infrastructure\n• Training pipeline automation\n• MLOps best practices\n• GPU cluster management\n\n📊 Data Architecture\n• Data lake design patterns\n• Real-time streaming architecture\n• ETL/ELT pipeline design\n• Data governance framework\n\n🔐 Security Architecture\n• Zero-trust network design\n• Identity and access management\n• Encryption key management\n• Threat detection systems\n\nIncludes technical diagrams and code samples!`);
+        }
+
+        function exportAPIDocumentation() {
+            alert(`📚 API Documentation Generated!\n\n🔗 Complete Developer Guide (150+ pages):\n\n📖 API Reference\n• RESTful API endpoints (200+)\n• GraphQL schema definitions\n• WebSocket real-time events\n• Authentication mechanisms\n\n💻 Code Examples\n• SDK integration guides\n• Sample applications\n• Postman collections\n• Interactive API explorer\n\n🔧 Integration Patterns\n• Webhook configurations\n• Batch processing APIs\n• Real-time streaming\n• Error handling strategies\n\n📊 Performance Guidelines\n• Rate limiting details\n• Caching strategies\n• Optimization techniques\n• Monitoring best practices\n\n🛠️ Developer Tools\n• API testing frameworks\n• Debugging utilities\n• Performance profilers\n• Documentation generators\n\nIncludes OpenAPI 3.0 specifications!`);
+        }
+
+        function exportSecurityAudit() {
+            alert(`🛡️ Security Audit Report Generated!\n\n🔒 Enterprise Security Assessment (45 pages):\n\n📋 Security Controls Assessment\n• 150+ security controls evaluated\n• NIST Cybersecurity Framework mapping\n• Risk assessment methodology\n• Vulnerability management program\n\n🔍 Penetration Testing Results\n• External network testing\n• Web application security\n• API security assessment\n• Social engineering resistance\n\n📊 Compliance Verification\n• SOC 2 Type II audit results\n• ISO 27001 certification status\n• GDPR compliance assessment\n• Industry-specific requirements\n\n🚨 Threat Detection Capabilities\n• SIEM integration details\n• Anomaly detection algorithms\n• Incident response procedures\n• Security monitoring coverage\n\n📈 Security Metrics\n• Mean time to detection (MTTD)\n• Mean time to response (MTTR)\n• Security training effectiveness\n• Compliance score tracking\n\nIncludes third-party audit certificates!`);
+        }
+
+        function exportDeploymentGuide() {
+            alert(`🚀 Deployment Guide Generated!\n\n📋 Enterprise Deployment Manual (60 pages):\n\n⚙️ Infrastructure Setup\n• Cloud provider configuration\n• Network architecture setup\n• Security group configurations\n• Load balancer deployment\n\n🐳 Container Orchestration\n• Kubernetes cluster setup\n• Helm chart configurations\n• Service mesh deployment\n• Monitoring stack installation\n\n🔧 Configuration Management\n• Environment variable setup\n• Secret management configuration\n• Database migration procedures\n• Cache configuration optimization\n\n📊 Monitoring & Observability\n• Prometheus metrics setup\n• Grafana dashboard deployment\n• Log aggregation configuration\n• Distributed tracing setup\n\n🔄 CI/CD Pipeline\n• GitLab/GitHub Actions setup\n• Automated testing configuration\n• Blue-green deployment strategy\n• Rollback procedures\n\n📈 Performance Tuning\n• JVM optimization parameters\n• Database performance tuning\n• Cache configuration optimization\n• Network performance settings\n\nIncludes infrastructure-as-code templates!`);
+        }
+
+        // Add interactive hover effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const components = document.querySelectorAll('.component');
+            
+            components.forEach(component => {
+                component.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                    this.style.boxShadow = '0 6px 20px rgba(0,0,0,0.15)';
+                });
+                
+                component.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+
+            // Add fade-in animation for cards
+            const cards = document.querySelectorAll('.capability-card, .security-section, .benchmark-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, index * 200);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Analytics Dashboard - ROOTUIP</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <style>
+        body {
+            background: #030712;
+            color: #F9FAFB;
+        }
+        
+        .glassmorphic {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #1F2937 0%, #111827 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 350px;
+        }
+        
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .nav-tab:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+        
+        .nav-tab.active {
+            background: rgba(99, 102, 241, 0.2);
+            border-bottom: 2px solid #6366F1;
+        }
+        
+        .revenue-positive {
+            color: #10B981;
+        }
+        
+        .revenue-negative {
+            color: #EF4444;
+        }
+        
+        .kpi-trend {
+            display: inline-block;
+            font-size: 0.875rem;
+            margin-left: 0.5rem;
+        }
+        
+        .cohort-cell {
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        .retention-high {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10B981;
+        }
+        
+        .retention-medium {
+            background: rgba(251, 191, 36, 0.2);
+            color: #F59E0B;
+        }
+        
+        .retention-low {
+            background: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+        }
+        
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-count {
+            animation: countUp 0.5s ease-out;
+        }
+        
+        .loading-skeleton {
+            background: linear-gradient(90deg, #1F2937 0%, #374151 50%, #1F2937 100%);
+            background-size: 200% 100%;
+            animation: skeleton 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes skeleton {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="glassmorphic p-6 mb-8">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h1 class="text-3xl font-bold mb-2">Financial Analytics</h1>
+                        <p class="text-gray-400">Real-time revenue metrics and insights</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <select class="glassmorphic px-4 py-2 rounded-lg text-sm">
+                            <option>Last 30 Days</option>
+                            <option>Last Quarter</option>
+                            <option>Year to Date</option>
+                            <option>All Time</option>
+                        </select>
+                        <button class="glassmorphic px-4 py-2 rounded-lg hover:bg-gray-700 transition">
+                            <i class="fas fa-download mr-2"></i>
+                            Export Report
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Navigation Tabs -->
+                <div class="flex space-x-4">
+                    <div class="nav-tab active" onclick="showTab('overview')">Overview</div>
+                    <div class="nav-tab" onclick="showTab('revenue')">Revenue</div>
+                    <div class="nav-tab" onclick="showTab('customers')">Customers</div>
+                    <div class="nav-tab" onclick="showTab('cohorts')">Cohorts</div>
+                    <div class="nav-tab" onclick="showTab('forecasting')">Forecasting</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="max-w-7xl mx-auto px-6">
+            <!-- Overview Tab -->
+            <div id="overview-tab" class="tab-content">
+                <!-- Key Metrics -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="metric-card p-6 rounded-xl animate-count">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-400 text-sm">Monthly Recurring Revenue</p>
+                                <h3 class="text-3xl font-bold mt-2">$12.4M</h3>
+                                <span class="kpi-trend revenue-positive">
+                                    <i class="fas fa-arrow-up"></i> 18.2%
+                                </span>
+                            </div>
+                            <div class="bg-green-500 bg-opacity-20 p-3 rounded-lg">
+                                <i class="fas fa-chart-line text-green-500 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-sm text-gray-400">
+                            <span>vs last month: +$1.9M</span>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card p-6 rounded-xl animate-count" style="animation-delay: 0.1s">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-400 text-sm">Annual Run Rate</p>
+                                <h3 class="text-3xl font-bold mt-2">$148.8M</h3>
+                                <span class="kpi-trend revenue-positive">
+                                    <i class="fas fa-arrow-up"></i> 24.5%
+                                </span>
+                            </div>
+                            <div class="bg-indigo-500 bg-opacity-20 p-3 rounded-lg">
+                                <i class="fas fa-calendar-alt text-indigo-500 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-sm text-gray-400">
+                            <span>Projected: $175M by Q4</span>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card p-6 rounded-xl animate-count" style="animation-delay: 0.2s">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-400 text-sm">Net Revenue Retention</p>
+                                <h3 class="text-3xl font-bold mt-2">118%</h3>
+                                <span class="kpi-trend revenue-positive">
+                                    <i class="fas fa-arrow-up"></i> 3.2%
+                                </span>
+                            </div>
+                            <div class="bg-purple-500 bg-opacity-20 p-3 rounded-lg">
+                                <i class="fas fa-percentage text-purple-500 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-sm text-gray-400">
+                            <span>Expansion revenue strong</span>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card p-6 rounded-xl animate-count" style="animation-delay: 0.3s">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-400 text-sm">Monthly Churn Rate</p>
+                                <h3 class="text-3xl font-bold mt-2">0.8%</h3>
+                                <span class="kpi-trend revenue-positive">
+                                    <i class="fas fa-arrow-down"></i> 0.3%
+                                </span>
+                            </div>
+                            <div class="bg-yellow-500 bg-opacity-20 p-3 rounded-lg">
+                                <i class="fas fa-user-minus text-yellow-500 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-sm text-gray-400">
+                            <span>Best in class retention</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="glassmorphic p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold mb-4">MRR Growth Trend</h3>
+                        <div class="chart-container">
+                            <canvas id="mrrChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="glassmorphic p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold mb-4">Revenue by Customer Segment</h3>
+                        <div class="chart-container">
+                            <canvas id="segmentChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Metrics -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="glassmorphic p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold mb-4">Top Customers by ARR</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded bg-indigo-500 bg-opacity-20 flex items-center justify-center mr-3">
+                                        <span class="text-sm font-bold">M</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">Maersk</p>
+                                        <p class="text-sm text-gray-400">50 vessels</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-semibold">$23.5M</p>
+                                    <p class="text-xs text-gray-400">15.8% of ARR</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded bg-green-500 bg-opacity-20 flex items-center justify-center mr-3">
+                                        <span class="text-sm font-bold">C</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">CMA CGM</p>
+                                        <p class="text-sm text-gray-400">35 vessels</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-semibold">$16.2M</p>
+                                    <p class="text-xs text-gray-400">10.9% of ARR</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded bg-purple-500 bg-opacity-20 flex items-center justify-center mr-3">
+                                        <span class="text-sm font-bold">H</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">Hapag-Lloyd</p>
+                                        <p class="text-sm text-gray-400">28 vessels</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-semibold">$12.8M</p>
+                                    <p class="text-xs text-gray-400">8.6% of ARR</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glassmorphic p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold mb-4">Payment Status</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span>Collected</span>
+                                    <span class="font-medium">$11.2M / $12.4M</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 90.3%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span>Pending</span>
+                                    <span class="font-medium">$0.8M</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 6.5%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span>Overdue</span>
+                                    <span class="font-medium">$0.4M</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2">
+                                    <div class="bg-red-500 h-2 rounded-full" style="width: 3.2%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="pt-4 border-t border-gray-700">
+                                <p class="text-sm text-gray-400">Average collection time: 8.2 days</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glassmorphic p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold mb-4">Sales Performance</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-400">New Deals Closed</span>
+                                <span class="font-semibold">12</span>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-400">Total Contract Value</span>
+                                <span class="font-semibold">$45.2M</span>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-400">Average Deal Size</span>
+                                <span class="font-semibold">$3.8M</span>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-400">Sales Cycle</span>
+                                <span class="font-semibold">47 days</span>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-400">Win Rate</span>
+                                <span class="font-semibold revenue-positive">68%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Revenue Tab (Hidden by default) -->
+            <div id="revenue-tab" class="tab-content hidden">
+                <div class="glassmorphic p-6 rounded-xl mb-8">
+                    <h3 class="text-xl font-semibold mb-4">Revenue Recognition Schedule</h3>
+                    <div class="chart-container" style="height: 400px">
+                        <canvas id="revenueRecognitionChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="glassmorphic p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold mb-4">Deferred Revenue</h3>
+                        <div class="space-y-4">
+                            <div class="metric-card p-4 rounded-lg">
+                                <p class="text-sm text-gray-400">Total Deferred</p>
+                                <p class="text-2xl font-bold">$87.4M</p>
+                                <p class="text-sm text-gray-400 mt-2">To be recognized over next 24 months</p>
+                            </div>
+                            
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span>Next 3 months</span>
+                                    <span>$21.8M</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Next 6 months</span>
+                                    <span>$43.7M</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Next 12 months</span>
+                                    <span>$65.5M</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glassmorphic p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold mb-4">Revenue by Product</h3>
+                        <canvas id="productRevenueChart" height="250"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Customers Tab (Hidden by default) -->
+            <div id="customers-tab" class="tab-content hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="metric-card p-6 rounded-xl">
+                        <p class="text-gray-400 text-sm">Total Customers</p>
+                        <h3 class="text-3xl font-bold mt-2">247</h3>
+                        <span class="kpi-trend revenue-positive">
+                            <i class="fas fa-arrow-up"></i> 12 new this month
+                        </span>
+                    </div>
+                    
+                    <div class="metric-card p-6 rounded-xl">
+                        <p class="text-gray-400 text-sm">Average Contract Value</p>
+                        <h3 class="text-3xl font-bold mt-2">$602K</h3>
+                        <span class="kpi-trend revenue-positive">
+                            <i class="fas fa-arrow-up"></i> 8.3%
+                        </span>
+                    </div>
+                    
+                    <div class="metric-card p-6 rounded-xl">
+                        <p class="text-gray-400 text-sm">Customer Lifetime Value</p>
+                        <h3 class="text-3xl font-bold mt-2">$7.5M</h3>
+                        <span class="kpi-trend revenue-positive">
+                            <i class="fas fa-arrow-up"></i> 15.2%
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="glassmorphic p-6 rounded-xl">
+                    <h3 class="text-lg font-semibold mb-4">Customer Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="customerDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cohorts Tab (Hidden by default) -->
+            <div id="cohorts-tab" class="tab-content hidden">
+                <div class="glassmorphic p-6 rounded-xl">
+                    <h3 class="text-lg font-semibold mb-4">Revenue Retention Cohorts</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="text-left">
+                                    <th class="pb-4">Cohort</th>
+                                    <th class="pb-4 text-center">Month 1</th>
+                                    <th class="pb-4 text-center">Month 3</th>
+                                    <th class="pb-4 text-center">Month 6</th>
+                                    <th class="pb-4 text-center">Month 12</th>
+                                    <th class="pb-4 text-center">Month 18</th>
+                                    <th class="pb-4 text-center">Month 24</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-2">Q1 2023</td>
+                                    <td class="cohort-cell retention-high">100%</td>
+                                    <td class="cohort-cell retention-high">98%</td>
+                                    <td class="cohort-cell retention-high">102%</td>
+                                    <td class="cohort-cell retention-high">115%</td>
+                                    <td class="cohort-cell retention-high">118%</td>
+                                    <td class="cohort-cell retention-high">124%</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2">Q2 2023</td>
+                                    <td class="cohort-cell retention-high">100%</td>
+                                    <td class="cohort-cell retention-high">97%</td>
+                                    <td class="cohort-cell retention-high">105%</td>
+                                    <td class="cohort-cell retention-high">112%</td>
+                                    <td class="cohort-cell retention-high">116%</td>
+                                    <td class="cohort-cell">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2">Q3 2023</td>
+                                    <td class="cohort-cell retention-high">100%</td>
+                                    <td class="cohort-cell retention-high">99%</td>
+                                    <td class="cohort-cell retention-high">108%</td>
+                                    <td class="cohort-cell retention-high">119%</td>
+                                    <td class="cohort-cell">-</td>
+                                    <td class="cohort-cell">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2">Q4 2023</td>
+                                    <td class="cohort-cell retention-high">100%</td>
+                                    <td class="cohort-cell retention-high">101%</td>
+                                    <td class="cohort-cell retention-high">110%</td>
+                                    <td class="cohort-cell">-</td>
+                                    <td class="cohort-cell">-</td>
+                                    <td class="cohort-cell">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2">Q1 2024</td>
+                                    <td class="cohort-cell retention-high">100%</td>
+                                    <td class="cohort-cell retention-high">98%</td>
+                                    <td class="cohort-cell">-</td>
+                                    <td class="cohort-cell">-</td>
+                                    <td class="cohort-cell">-</td>
+                                    <td class="cohort-cell">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Forecasting Tab (Hidden by default) -->
+            <div id="forecasting-tab" class="tab-content hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="glassmorphic p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold mb-4">Revenue Forecast</h3>
+                        <div class="chart-container">
+                            <canvas id="forecastChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="glassmorphic p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold mb-4">Scenario Analysis</h3>
+                        <div class="space-y-4">
+                            <div class="metric-card p-4 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-medium">Conservative</span>
+                                    <span class="text-sm text-gray-400">85% confidence</span>
+                                </div>
+                                <p class="text-2xl font-bold">$165M ARR</p>
+                                <p class="text-sm text-gray-400">5% growth rate</p>
+                            </div>
+                            
+                            <div class="metric-card p-4 rounded-lg border-2 border-indigo-500">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-medium">Base Case</span>
+                                    <span class="text-sm text-gray-400">70% confidence</span>
+                                </div>
+                                <p class="text-2xl font-bold">$185M ARR</p>
+                                <p class="text-sm text-gray-400">12% growth rate</p>
+                            </div>
+                            
+                            <div class="metric-card p-4 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-medium">Optimistic</span>
+                                    <span class="text-sm text-gray-400">40% confidence</span>
+                                </div>
+                                <p class="text-2xl font-bold">$210M ARR</p>
+                                <p class="text-sm text-gray-400">20% growth rate</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glassmorphic p-6 rounded-xl">
+                    <h3 class="text-lg font-semibold mb-4">Key Growth Drivers</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="metric-card p-4 rounded-lg">
+                            <h4 class="font-medium mb-2">New Customer Acquisition</h4>
+                            <p class="text-xl font-bold">+15-20</p>
+                            <p class="text-sm text-gray-400">Enterprise customers per quarter</p>
+                        </div>
+                        
+                        <div class="metric-card p-4 rounded-lg">
+                            <h4 class="font-medium mb-2">Expansion Revenue</h4>
+                            <p class="text-xl font-bold">18-22%</p>
+                            <p class="text-sm text-gray-400">Annual expansion rate</p>
+                        </div>
+                        
+                        <div class="metric-card p-4 rounded-lg">
+                            <h4 class="font-medium mb-2">Product Adoption</h4>
+                            <p class="text-xl font-bold">2.3x</p>
+                            <p class="text-sm text-gray-400">Feature usage growth</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize charts
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#F9FAFB'
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: '#9CA3AF'
+                    }
+                },
+                y: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: '#9CA3AF'
+                    }
+                }
+            }
+        };
+        
+        // MRR Growth Chart
+        const mrrCtx = document.getElementById('mrrChart').getContext('2d');
+        new Chart(mrrCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'MRR',
+                    data: [8.2, 8.7, 9.1, 9.4, 9.8, 10.2, 10.5, 10.9, 11.3, 11.8, 12.1, 12.4],
+                    borderColor: '#6366F1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'New MRR',
+                    data: [0.4, 0.5, 0.4, 0.3, 0.4, 0.4, 0.3, 0.4, 0.4, 0.5, 0.3, 0.3],
+                    borderColor: '#10B981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                ...chartOptions,
+                scales: {
+                    ...chartOptions.scales,
+                    y: {
+                        ...chartOptions.scales.y,
+                        ticks: {
+                            ...chartOptions.scales.y.ticks,
+                            callback: function(value) {
+                                return '$' + value + 'M';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Revenue by Segment Chart
+        const segmentCtx = document.getElementById('segmentChart').getContext('2d');
+        new Chart(segmentCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Enterprise Shipping', 'Freight Forwarders', 'Port Operators', 'Logistics Providers', 'Other'],
+                datasets: [{
+                    data: [45, 25, 15, 10, 5],
+                    backgroundColor: [
+                        'rgba(99, 102, 241, 0.8)',
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(251, 191, 36, 0.8)',
+                        'rgba(239, 68, 68, 0.8)',
+                        'rgba(168, 85, 247, 0.8)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: '#F9FAFB',
+                            padding: 15
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Revenue Recognition Chart
+        const revenueRecCtx = document.getElementById('revenueRecognitionChart')?.getContext('2d');
+        if (revenueRecCtx) {
+            new Chart(revenueRecCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Q1 2024', 'Q2 2024', 'Q3 2024', 'Q4 2024', 'Q1 2025', 'Q2 2025'],
+                    datasets: [{
+                        label: 'Recognized Revenue',
+                        data: [28.5, 31.2, 34.8, 37.1, 39.5, 42.3],
+                        backgroundColor: 'rgba(99, 102, 241, 0.8)'
+                    }, {
+                        label: 'Deferred Revenue',
+                        data: [15.2, 14.8, 13.9, 12.5, 11.2, 9.8],
+                        backgroundColor: 'rgba(251, 191, 36, 0.8)'
+                    }]
+                },
+                options: {
+                    ...chartOptions,
+                    scales: {
+                        ...chartOptions.scales,
+                        x: {
+                            ...chartOptions.scales.x,
+                            stacked: true
+                        },
+                        y: {
+                            ...chartOptions.scales.y,
+                            stacked: true,
+                            ticks: {
+                                ...chartOptions.scales.y.ticks,
+                                callback: function(value) {
+                                    return '$' + value + 'M';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+        
+        // Initialize forecast chart for forecasting tab
+        const forecastCtx = document.getElementById('forecastChart')?.getContext('2d');
+        if (forecastCtx) {
+            new Chart(forecastCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Q1 24', 'Q2 24', 'Q3 24', 'Q4 24', 'Q1 25', 'Q2 25', 'Q3 25', 'Q4 25'],
+                    datasets: [{
+                        label: 'Actual',
+                        data: [115, 125, 135, 148, null, null, null, null],
+                        borderColor: '#6366F1',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Conservative',
+                        data: [null, null, null, 148, 155, 160, 162, 165],
+                        borderColor: '#9CA3AF',
+                        borderDash: [5, 5],
+                        tension: 0.4
+                    }, {
+                        label: 'Base Case',
+                        data: [null, null, null, 148, 158, 168, 177, 185],
+                        borderColor: '#10B981',
+                        borderDash: [5, 5],
+                        tension: 0.4
+                    }, {
+                        label: 'Optimistic',
+                        data: [null, null, null, 148, 162, 178, 194, 210],
+                        borderColor: '#F59E0B',
+                        borderDash: [5, 5],
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    ...chartOptions,
+                    scales: {
+                        ...chartOptions.scales,
+                        y: {
+                            ...chartOptions.scales.y,
+                            ticks: {
+                                ...chartOptions.scales.y.ticks,
+                                callback: function(value) {
+                                    return '$' + value + 'M';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Animate numbers on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-count');
+                }
+            });
+        });
+        
+        document.querySelectorAll('.metric-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

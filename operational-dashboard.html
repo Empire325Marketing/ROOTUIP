@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Operational Dashboard</title>
+    <meta name="description" content="Real-time operational monitoring dashboard for ROOTUIP platform infrastructure and business metrics.">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .status-healthy {
+            background-color: #10b981;
+        }
+        
+        .status-warning {
+            background-color: #f59e0b;
+        }
+        
+        .status-critical {
+            background-color: #ef4444;
+        }
+        
+        .metric-card {
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        
+        .system-status {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin: 0.25rem 0;
+        }
+        
+        .alert-item {
+            border-left: 4px solid;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .alert-critical {
+            border-left-color: #ef4444;
+            background-color: #fef2f2;
+        }
+        
+        .alert-warning {
+            border-left-color: #f59e0b;
+            background-color: #fefbf2;
+        }
+        
+        .alert-info {
+            border-left-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        
+        .realtime-indicator {
+            position: relative;
+        }
+        
+        .realtime-indicator::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -1rem;
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <img src="/assets/rootuip-logo.png" alt="ROOTUIP" class="h-8 w-auto">
+                    <span class="ml-3 text-xl font-bold text-gray-900">ROOTUIP</span>
+                    <span class="ml-4 px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">Operations Center</span>
+                </div>
+                <nav class="flex items-center space-x-6">
+                    <div class="realtime-indicator text-sm text-green-600 font-medium">
+                        Live Data
+                    </div>
+                    <div id="last-updated" class="text-sm text-gray-500">
+                        Updated: --:--:--
+                    </div>
+                    <button onclick="toggleFullscreen()" class="text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- System Health Overview -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">System Health Overview</h2>
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="metric-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-green-100">
+                            <i class="fas fa-heart-pulse text-2xl text-green-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Overall Health</p>
+                            <p class="text-2xl font-bold text-gray-900" id="overall-health">98.5%</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-600">
+                                <i class="fas fa-arrow-up mr-1"></i>
+                                +0.2%
+                            </span>
+                            <span class="text-gray-500 ml-2">vs last hour</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100">
+                            <i class="fas fa-server text-2xl text-blue-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">System Uptime</p>
+                            <p class="text-2xl font-bold text-gray-900" id="system-uptime">99.98%</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center text-sm">
+                            <span class="text-blue-600">
+                                <i class="fas fa-clock mr-1"></i>
+                                127 days
+                            </span>
+                            <span class="text-gray-500 ml-2">current streak</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-purple-100">
+                            <i class="fas fa-tachometer-alt text-2xl text-purple-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Response Time</p>
+                            <p class="text-2xl font-bold text-gray-900" id="response-time">247ms</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-600">
+                                <i class="fas fa-arrow-down mr-1"></i>
+                                -15ms
+                            </span>
+                            <span class="text-gray-500 ml-2">vs last hour</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-orange-100">
+                            <i class="fas fa-exclamation-triangle text-2xl text-orange-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Active Alerts</p>
+                            <p class="text-2xl font-bold text-gray-900" id="active-alerts">3</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center text-sm">
+                            <span class="text-orange-600">
+                                <i class="fas fa-minus mr-1"></i>
+                                2 resolved
+                            </span>
+                            <span class="text-gray-500 ml-2">last hour</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Infrastructure & Business Metrics Grid -->
+        <div class="grid lg:grid-cols-2 gap-8 mb-8">
+            <!-- System Performance -->
+            <section class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">System Performance</h3>
+                <div class="chart-container">
+                    <canvas id="performance-chart"></canvas>
+                </div>
+            </section>
+
+            <!-- API Health -->
+            <section class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">API Health & Throughput</h3>
+                <div class="chart-container">
+                    <canvas id="api-chart"></canvas>
+                </div>
+            </section>
+        </div>
+
+        <!-- Service Status Grid -->
+        <div class="grid lg:grid-cols-3 gap-8 mb-8">
+            <!-- Core Services -->
+            <section class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Core Services</h3>
+                <div id="core-services" class="space-y-2">
+                    <!-- Services will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Carrier Connections -->
+            <section class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Carrier Connections</h3>
+                <div id="carrier-status" class="space-y-2">
+                    <!-- Carrier status will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Data Quality -->
+            <section class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Data Quality</h3>
+                <div id="data-quality" class="space-y-4">
+                    <!-- Data quality metrics will be populated by JavaScript -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Business Metrics -->
+        <div class="grid lg:grid-cols-2 gap-8 mb-8">
+            <!-- Customer Activity -->
+            <section class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Customer Activity</h3>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                        <div class="text-2xl font-bold text-blue-600" id="active-users">1,247</div>
+                        <div class="text-sm text-gray-600">Active Users</div>
+                    </div>
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <div class="text-2xl font-bold text-green-600" id="containers-tracked">15,839</div>
+                        <div class="text-sm text-gray-600">Containers Tracked</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="activity-chart"></canvas>
+                </div>
+            </section>
+
+            <!-- Revenue Metrics -->
+            <section class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Revenue Impact</h3>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="text-center p-4 bg-purple-50 rounded-lg">
+                        <div class="text-2xl font-bold text-purple-600" id="cost-savings">$2.4M</div>
+                        <div class="text-sm text-gray-600">Cost Savings (MTD)</div>
+                    </div>
+                    <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                        <div class="text-2xl font-bold text-yellow-600" id="prevented-charges">$847K</div>
+                        <div class="text-sm text-gray-600">Prevented D&D</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="revenue-chart"></canvas>
+                </div>
+            </section>
+        </div>
+
+        <!-- Alerts and Incidents -->
+        <section class="bg-white p-6 rounded-lg shadow-lg mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Recent Alerts & Incidents</h3>
+                <div class="flex space-x-2">
+                    <button onclick="filterAlerts('all')" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm hover:bg-gray-300">
+                        All
+                    </button>
+                    <button onclick="filterAlerts('critical')" class="px-3 py-1 bg-red-100 text-red-700 rounded-md text-sm hover:bg-red-200">
+                        Critical
+                    </button>
+                    <button onclick="filterAlerts('warning')" class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-md text-sm hover:bg-yellow-200">
+                        Warning
+                    </button>
+                </div>
+            </div>
+            <div id="alerts-list" class="max-h-96 overflow-y-auto">
+                <!-- Alerts will be populated by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Sample data - in production this would come from real APIs
+        let dashboardData = {
+            systemHealth: {
+                overall: 98.5,
+                uptime: 99.98,
+                responseTime: 247,
+                activeAlerts: 3
+            },
+            
+            services: [
+                { name: 'API Gateway', status: 'healthy', responseTime: 145 },
+                { name: 'Container Tracking', status: 'healthy', responseTime: 230 },
+                { name: 'Database', status: 'healthy', responseTime: 15 },
+                { name: 'Redis Cache', status: 'warning', responseTime: 89 },
+                { name: 'Background Jobs', status: 'healthy', responseTime: 0 }
+            ],
+            
+            carriers: [
+                { name: 'Maersk', status: 'healthy', lastSync: '2 min ago' },
+                { name: 'MSC', status: 'healthy', lastSync: '1 min ago' },
+                { name: 'CMA CGM', status: 'warning', lastSync: '15 min ago' },
+                { name: 'Hapag-Lloyd', status: 'healthy', lastSync: '3 min ago' }
+            ],
+            
+            dataQuality: {
+                completeness: 94.2,
+                accuracy: 97.8,
+                freshness: 91.5
+            },
+            
+            businessMetrics: {
+                activeUsers: 1247,
+                containersTracked: 15839,
+                costSavings: 2400000,
+                preventedCharges: 847000
+            },
+            
+            alerts: [
+                {
+                    id: 1,
+                    severity: 'warning',
+                    title: 'CMA CGM API Response Slow',
+                    description: 'Average response time increased to 3.2s',
+                    timestamp: '2024-02-05T14:23:00Z',
+                    status: 'active'
+                },
+                {
+                    id: 2,
+                    severity: 'info',
+                    title: 'Scheduled Maintenance Complete',
+                    description: 'Database maintenance completed successfully',
+                    timestamp: '2024-02-05T12:00:00Z',
+                    status: 'resolved'
+                },
+                {
+                    id: 3,
+                    severity: 'critical',
+                    title: 'High Memory Usage',
+                    description: 'Application server memory usage at 89%',
+                    timestamp: '2024-02-05T13:45:00Z',
+                    status: 'active'
+                }
+            ]
+        };
+
+        // Chart instances
+        let performanceChart, apiChart, activityChart, revenueChart;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+            startRealTimeUpdates();
+        });
+
+        function initializeDashboard() {
+            updateSystemHealth();
+            renderServices();
+            renderCarrierStatus();
+            renderDataQuality();
+            updateBusinessMetrics();
+            renderAlerts();
+            initializeCharts();
+            updateTimestamp();
+        }
+
+        function updateSystemHealth() {
+            const health = dashboardData.systemHealth;
+            
+            document.getElementById('overall-health').textContent = health.overall + '%';
+            document.getElementById('system-uptime').textContent = health.uptime + '%';
+            document.getElementById('response-time').textContent = health.responseTime + 'ms';
+            document.getElementById('active-alerts').textContent = health.activeAlerts;
+        }
+
+        function renderServices() {
+            const container = document.getElementById('core-services');
+            const services = dashboardData.services;
+            
+            container.innerHTML = services.map(service => `
+                <div class="system-status ${getStatusClass(service.status)}">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full ${getStatusColor(service.status)} mr-3"></div>
+                            <span class="font-medium text-white">${service.name}</span>
+                        </div>
+                        <span class="text-white text-sm">${service.responseTime > 0 ? service.responseTime + 'ms' : 'OK'}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderCarrierStatus() {
+            const container = document.getElementById('carrier-status');
+            const carriers = dashboardData.carriers;
+            
+            container.innerHTML = carriers.map(carrier => `
+                <div class="system-status ${getStatusClass(carrier.status)}">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full ${getStatusColor(carrier.status)} mr-3"></div>
+                            <span class="font-medium text-white">${carrier.name}</span>
+                        </div>
+                        <span class="text-white text-sm">${carrier.lastSync}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderDataQuality() {
+            const container = document.getElementById('data-quality');
+            const quality = dashboardData.dataQuality;
+            
+            container.innerHTML = `
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-sm">
+                            <span>Completeness</span>
+                            <span>${quality.completeness}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full" style="width: ${quality.completeness}%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm">
+                            <span>Accuracy</span>
+                            <span>${quality.accuracy}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-green-600 h-2 rounded-full" style="width: ${quality.accuracy}%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm">
+                            <span>Freshness</span>
+                            <span>${quality.freshness}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-purple-600 h-2 rounded-full" style="width: ${quality.freshness}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateBusinessMetrics() {
+            const metrics = dashboardData.businessMetrics;
+            
+            document.getElementById('active-users').textContent = metrics.activeUsers.toLocaleString();
+            document.getElementById('containers-tracked').textContent = metrics.containersTracked.toLocaleString();
+            document.getElementById('cost-savings').textContent = '$' + (metrics.costSavings / 1000000).toFixed(1) + 'M';
+            document.getElementById('prevented-charges').textContent = '$' + (metrics.preventedCharges / 1000).toFixed(0) + 'K';
+        }
+
+        function renderAlerts() {
+            const container = document.getElementById('alerts-list');
+            const alerts = dashboardData.alerts;
+            
+            container.innerHTML = alerts.map(alert => `
+                <div class="alert-item alert-${alert.severity}">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium mr-2 ${getSeverityClass(alert.severity)}">
+                                    ${alert.severity.toUpperCase()}
+                                </span>
+                                <h4 class="font-medium text-gray-900">${alert.title}</h4>
+                            </div>
+                            <p class="text-gray-600 text-sm mt-1">${alert.description}</p>
+                            <p class="text-gray-500 text-xs mt-2">${formatTimestamp(alert.timestamp)}</p>
+                        </div>
+                        <span class="px-2 py-1 rounded text-xs ${alert.status === 'active' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">
+                            ${alert.status}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function initializeCharts() {
+            // Performance Chart
+            const performanceCtx = document.getElementById('performance-chart').getContext('2d');
+            performanceChart = new Chart(performanceCtx, {
+                type: 'line',
+                data: {
+                    labels: generateTimeLabels(24),
+                    datasets: [{
+                        label: 'CPU Usage (%)',
+                        data: generateRandomData(24, 20, 80),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Memory Usage (%)',
+                        data: generateRandomData(24, 40, 90),
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // API Chart
+            const apiCtx = document.getElementById('api-chart').getContext('2d');
+            apiChart = new Chart(apiCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['API Gateway', 'Container API', 'User API', 'Reports API'],
+                    datasets: [{
+                        label: 'Requests/min',
+                        data: [1250, 890, 567, 234],
+                        backgroundColor: ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Activity Chart
+            const activityCtx = document.getElementById('activity-chart').getContext('2d');
+            activityChart = new Chart(activityCtx, {
+                type: 'line',
+                data: {
+                    labels: generateTimeLabels(7, 'days'),
+                    datasets: [{
+                        label: 'Daily Active Users',
+                        data: generateRandomData(7, 800, 1500),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenue-chart').getContext('2d');
+            revenueChart = new Chart(revenueCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Detention Prevented', 'Demurrage Saved', 'Efficiency Gains'],
+                    datasets: [{
+                        data: [45, 35, 20],
+                        backgroundColor: ['#10b981', '#3b82f6', '#8b5cf6']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function startRealTimeUpdates() {
+            // Update dashboard every 30 seconds
+            setInterval(() => {
+                updateDashboardData();
+                updateTimestamp();
+            }, 30000);
+
+            // Update charts every minute
+            setInterval(() => {
+                updateCharts();
+            }, 60000);
+        }
+
+        function updateDashboardData() {
+            // Simulate real-time data updates
+            dashboardData.systemHealth.responseTime = Math.floor(Math.random() * 100) + 200;
+            dashboardData.businessMetrics.activeUsers += Math.floor(Math.random() * 20) - 10;
+            dashboardData.businessMetrics.containersTracked += Math.floor(Math.random() * 50);
+            
+            updateSystemHealth();
+            updateBusinessMetrics();
+            
+            // Randomly update service status
+            if (Math.random() < 0.1) {
+                const randomService = dashboardData.services[Math.floor(Math.random() * dashboardData.services.length)];
+                randomService.responseTime = Math.floor(Math.random() * 200) + 50;
+                renderServices();
+            }
+        }
+
+        function updateCharts() {
+            // Add new data points to charts
+            const now = new Date();
+            
+            // Update performance chart
+            performanceChart.data.labels.push(now.toLocaleTimeString());
+            performanceChart.data.datasets[0].data.push(Math.random() * 60 + 20);
+            performanceChart.data.datasets[1].data.push(Math.random() * 50 + 40);
+            
+            // Keep only last 24 data points
+            if (performanceChart.data.labels.length > 24) {
+                performanceChart.data.labels.shift();
+                performanceChart.data.datasets[0].data.shift();
+                performanceChart.data.datasets[1].data.shift();
+            }
+            
+            performanceChart.update('none');
+        }
+
+        function updateTimestamp() {
+            const now = new Date();
+            document.getElementById('last-updated').textContent = 
+                `Updated: ${now.toLocaleTimeString()}`;
+        }
+
+        // Utility functions
+        function getStatusClass(status) {
+            const classes = {
+                'healthy': 'status-healthy',
+                'warning': 'status-warning',
+                'critical': 'status-critical'
+            };
+            return classes[status] || 'bg-gray-500';
+        }
+
+        function getStatusColor(status) {
+            const colors = {
+                'healthy': 'bg-green-400',
+                'warning': 'bg-yellow-400',
+                'critical': 'bg-red-400'
+            };
+            return colors[status] || 'bg-gray-400';
+        }
+
+        function getSeverityClass(severity) {
+            const classes = {
+                'critical': 'bg-red-100 text-red-800',
+                'warning': 'bg-yellow-100 text-yellow-800',
+                'info': 'bg-blue-100 text-blue-800'
+            };
+            return classes[severity] || 'bg-gray-100 text-gray-800';
+        }
+
+        function formatTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000 / 60); // minutes
+            
+            if (diff < 1) return 'Just now';
+            if (diff < 60) return `${diff} min ago`;
+            if (diff < 1440) return `${Math.floor(diff / 60)} hour(s) ago`;
+            return date.toLocaleDateString();
+        }
+
+        function generateTimeLabels(count, unit = 'hours') {
+            const labels = [];
+            const now = new Date();
+            
+            for (let i = count - 1; i >= 0; i--) {
+                const date = new Date(now);
+                if (unit === 'hours') {
+                    date.setHours(date.getHours() - i);
+                    labels.push(date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }));
+                } else if (unit === 'days') {
+                    date.setDate(date.getDate() - i);
+                    labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+                }
+            }
+            
+            return labels;
+        }
+
+        function generateRandomData(count, min, max) {
+            return Array.from({ length: count }, () => 
+                Math.floor(Math.random() * (max - min + 1)) + min
+            );
+        }
+
+        function filterAlerts(severity) {
+            const alerts = severity === 'all' ? 
+                dashboardData.alerts : 
+                dashboardData.alerts.filter(alert => alert.severity === severity);
+            
+            const container = document.getElementById('alerts-list');
+            container.innerHTML = alerts.map(alert => `
+                <div class="alert-item alert-${alert.severity}">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center">
+                                <span class="px-2 py-1 rounded text-xs font-medium mr-2 ${getSeverityClass(alert.severity)}">
+                                    ${alert.severity.toUpperCase()}
+                                </span>
+                                <h4 class="font-medium text-gray-900">${alert.title}</h4>
+                            </div>
+                            <p class="text-gray-600 text-sm mt-1">${alert.description}</p>
+                            <p class="text-gray-500 text-xs mt-2">${formatTimestamp(alert.timestamp)}</p>
+                        </div>
+                        <span class="px-2 py-1 rounded text-xs ${alert.status === 'active' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">
+                            ${alert.status}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleFullscreen() {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            } else {
+                document.documentElement.requestFullscreen();
+            }
+        }
+
+        // Auto-refresh data every 30 seconds
+        setInterval(() => {
+            // In production, this would fetch fresh data from APIs
+            console.log('Refreshing dashboard data...');
+        }, 30000);
+    </script>
+</body>
+</html>

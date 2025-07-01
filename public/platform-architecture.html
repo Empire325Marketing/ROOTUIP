@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Platform Architecture - Enterprise Technical Overview</title>
+    
+    <!-- Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/assets/css/enterprise-design-system.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: var(--enterprise-gray-50);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .architecture-header {
+            background: var(--enterprise-gradient-primary);
+            color: white;
+            padding: var(--space-12) 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .architecture-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="circuit" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M20,0 L20,20 M0,20 L40,20 M30,10 L40,10 M10,30 L10,40" stroke="rgba(255,255,255,0.1)" stroke-width="1" fill="none"/><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.2)"/><circle cx="10" cy="30" r="1.5" fill="rgba(255,255,255,0.15)"/></pattern></defs><rect width="100" height="100" fill="url(%23circuit)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+            text-align: center;
+        }
+        
+        .architecture-title {
+            font-size: var(--text-6xl);
+            font-weight: var(--font-black);
+            margin-bottom: var(--space-4);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .architecture-subtitle {
+            font-size: var(--text-2xl);
+            opacity: 0.9;
+            margin-bottom: var(--space-8);
+            font-weight: var(--font-medium);
+        }
+        
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-10) var(--space-6);
+        }
+        
+        .architecture-overview {
+            background: var(--enterprise-white);
+            border: 2px solid var(--enterprise-primary);
+            border-radius: var(--radius-xl);
+            padding: var(--space-8);
+            margin-bottom: var(--space-10);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .overview-header {
+            text-align: center;
+            margin-bottom: var(--space-8);
+        }
+        
+        .overview-title {
+            font-size: var(--text-4xl);
+            font-weight: var(--font-bold);
+            color: var(--enterprise-dark);
+            margin-bottom: var(--space-4);
+        }
+        
+        .architecture-diagram {
+            background: var(--enterprise-gray-50);
+            border: 2px solid var(--enterprise-gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            margin: var(--space-8) 0;
+            position: relative;
+        }
+        
+        .diagram-layers {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-6);
+        }
+        
+        .architecture-layer {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-6);
+            background: var(--enterprise-white);
+            border: 2px solid var(--enterprise-gray-300);
+            border-radius: var(--radius-lg);
+            position: relative;
+            transition: all var(--transition-base);
+        }
+        
+        .architecture-layer:hover {
+            border-color: var(--enterprise-primary);
+            transform: translateX(8px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .layer-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .layer-icon.presentation { background: var(--enterprise-primary); }
+        .layer-icon.api { background: var(--enterprise-success); }
+        .layer-icon.business { background: var(--enterprise-warning); }
+        .layer-icon.data { background: var(--enterprise-danger); }
+        .layer-icon.infrastructure { background: var(--enterprise-gray-600); }
+        
+        .layer-content {
+            flex: 1;
+        }
+        
+        .layer-title {
+            font-size: var(--text-xl);
+            font-weight: var(--font-bold);
+            color: var(--enterprise-dark);
+            margin-bottom: var(--space-2);
+        }
+        
+        .layer-description {
+            color: var(--enterprise-gray-600);
+            margin-bottom: var(--space-3);
+        }
+        
+        .layer-technologies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+        }
+        
+        .tech-badge {
+            padding: var(--space-1) var(--space-3);
+            background: var(--enterprise-gray-100);
+            border: 1px solid var(--enterprise-gray-300);
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+            font-weight: var(--font-medium);
+            color: var(--enterprise-gray-700);
+        }
+        
+        .layer-flow {
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--enterprise-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: var(--text-sm);
+        }
+        
+        .layer-flow::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -30px;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 2px;
+            background: var(--enterprise-primary);
+        }
+        
+        .architecture-layer:last-child .layer-flow::after {
+            display: none;
+        }
+        
+        .technical-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--space-8);
+            margin-bottom: var(--space-10);
+        }
+        
+        .spec-card {
+            background: var(--enterprise-white);
+            border: 2px solid var(--enterprise-gray-200);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            transition: all var(--transition-base);
+        }
+        
+        .spec-card:hover {
+            border-color: var(--enterprise-primary);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .spec-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-6);
+        }
+        
+        .spec-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--enterprise-primary);
+            color: white;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xl);
+        }
+        
+        .spec-title {
+            font-size: var(--text-xl);
+            font-weight: var(--font-bold);
+            color: var(--enterprise-dark);
+        }
+        
+        .spec-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .spec-list li {
+            padding: var(--space-3) 0;
+            border-bottom: 1px solid var(--enterprise-gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .spec-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .spec-label {
+            font-weight: var(--font-medium);
+            color: var(--enterprise-gray-700);
+        }
+        
+        .spec-value {
+            font-weight: var(--font-bold);
+            color: var(--enterprise-dark);
+        }
+        
+        .security-section {
+            background: var(--enterprise-white);
+            border: 3px solid var(--enterprise-success);
+            border-radius: var(--radius-xl);
+            padding: var(--space-8);
+            margin-bottom: var(--space-10);
+        }
+        
+        .security-header {
+            text-align: center;
+            margin-bottom: var(--space-8);
+        }
+        
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+        }
+        
+        .security-feature {
+            padding: var(--space-6);
+            background: var(--enterprise-success-subtle);
+            border: 1px solid var(--enterprise-success);
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+        
+        .security-feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--enterprise-success);
+            color: white;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+            margin: 0 auto var(--space-4);
+        }
+        
+        .compliance-badges {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+            margin-top: var(--space-8);
+        }
+        
+        .compliance-badge {
+            padding: var(--space-4);
+            background: var(--enterprise-white);
+            border: 2px solid var(--enterprise-primary);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .compliance-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--enterprise-primary);
+            color: white;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-lg);
+        }
+        
+        .integration-flow {
+            background: var(--enterprise-white);
+            border: 2px solid var(--enterprise-gray-200);
+            border-radius: var(--radius-xl);
+            padding: var(--space-8);
+            margin-bottom: var(--space-10);
+        }
+        
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-4);
+            margin: var(--space-8) 0;
+            overflow-x: auto;
+            padding: var(--space-4);
+        }
+        
+        .flow-node {
+            min-width: 150px;
+            padding: var(--space-4);
+            background: var(--enterprise-gray-50);
+            border: 2px solid var(--enterprise-gray-300);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            position: relative;
+        }
+        
+        .flow-node.primary {
+            background: var(--enterprise-primary-subtle);
+            border-color: var(--enterprise-primary);
+        }
+        
+        .flow-node:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: var(--text-xl);
+            color: var(--enterprise-primary);
+            font-weight: bold;
+        }
+        
+        .performance-metrics {
+            background: var(--enterprise-gradient-subtle);
+            border: 2px solid var(--enterprise-primary);
+            border-radius: var(--radius-xl);
+            padding: var(--space-8);
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-6);
+            margin-top: var(--space-6);
+        }
+        
+        .metric-card {
+            padding: var(--space-6);
+            background: var(--enterprise-white);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            border: 1px solid var(--enterprise-gray-200);
+        }
+        
+        .metric-value {
+            font-size: var(--text-4xl);
+            font-weight: var(--font-black);
+            color: var(--enterprise-primary);
+            margin-bottom: var(--space-2);
+        }
+        
+        .metric-label {
+            font-size: var(--text-base);
+            color: var(--enterprise-gray-600);
+            font-weight: var(--font-medium);
+        }
+        
+        @media (max-width: 1024px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .flow-diagram {
+                flex-direction: column;
+            }
+            
+            .flow-node:not(:last-child)::after {
+                content: '↓';
+                right: 50%;
+                top: auto;
+                bottom: -20px;
+                transform: translateX(50%);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .architecture-title {
+                font-size: var(--text-4xl);
+            }
+            
+            .architecture-layer {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .layer-flow {
+                position: static;
+                transform: none;
+                margin-top: var(--space-4);
+            }
+            
+            .layer-flow::after {
+                display: none;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Architecture Header -->
+    <div class="architecture-header">
+        <div class="header-content">
+            <h1 class="architecture-title">Platform Architecture</h1>
+            <p class="architecture-subtitle">Enterprise-grade technical infrastructure designed for Fortune 500 scale and security</p>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <!-- Architecture Overview -->
+        <div class="architecture-overview">
+            <div class="overview-header">
+                <h2 class="overview-title">Cloud-Native Microservices Architecture</h2>
+                <p>Scalable, secure, and enterprise-ready platform built on modern cloud technologies</p>
+            </div>
+            
+            <div class="architecture-diagram">
+                <div class="diagram-layers">
+                    <div class="architecture-layer">
+                        <div class="layer-icon presentation">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <div class="layer-content">
+                            <div class="layer-title">Presentation Layer</div>
+                            <div class="layer-description">Modern web interface with responsive design and mobile optimization</div>
+                            <div class="layer-technologies">
+                                <span class="tech-badge">React 18</span>
+                                <span class="tech-badge">TypeScript</span>
+                                <span class="tech-badge">Chart.js</span>
+                                <span class="tech-badge">Progressive Web App</span>
+                            </div>
+                        </div>
+                        <div class="layer-flow">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="architecture-layer">
+                        <div class="layer-icon api">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        <div class="layer-content">
+                            <div class="layer-title">API Gateway & Integration Layer</div>
+                            <div class="layer-description">Secure API management with rate limiting, authentication, and monitoring</div>
+                            <div class="layer-technologies">
+                                <span class="tech-badge">Kong Gateway</span>
+                                <span class="tech-badge">OAuth 2.0</span>
+                                <span class="tech-badge">JWT</span>
+                                <span class="tech-badge">GraphQL</span>
+                            </div>
+                        </div>
+                        <div class="layer-flow">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="architecture-layer">
+                        <div class="layer-icon business">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div class="layer-content">
+                            <div class="layer-title">Business Logic & AI/ML Layer</div>
+                            <div class="layer-description">Core application services with machine learning capabilities</div>
+                            <div class="layer-technologies">
+                                <span class="tech-badge">Node.js</span>
+                                <span class="tech-badge">Python</span>
+                                <span class="tech-badge">TensorFlow</span>
+                                <span class="tech-badge">Docker</span>
+                                <span class="tech-badge">Kubernetes</span>
+                            </div>
+                        </div>
+                        <div class="layer-flow">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="architecture-layer">
+                        <div class="layer-icon data">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="layer-content">
+                            <div class="layer-title">Data & Storage Layer</div>
+                            <div class="layer-description">High-performance databases with real-time analytics and caching</div>
+                            <div class="layer-technologies">
+                                <span class="tech-badge">PostgreSQL</span>
+                                <span class="tech-badge">Redis</span>
+                                <span class="tech-badge">MongoDB</span>
+                                <span class="tech-badge">Apache Kafka</span>
+                            </div>
+                        </div>
+                        <div class="layer-flow">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="architecture-layer">
+                        <div class="layer-icon infrastructure">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <div class="layer-content">
+                            <div class="layer-title">Infrastructure & Security Layer</div>
+                            <div class="layer-description">Multi-cloud deployment with enterprise-grade security and monitoring</div>
+                            <div class="layer-technologies">
+                                <span class="tech-badge">AWS</span>
+                                <span class="tech-badge">Azure</span>
+                                <span class="tech-badge">Terraform</span>
+                                <span class="tech-badge">Prometheus</span>
+                                <span class="tech-badge">ELK Stack</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Technical Specifications -->
+        <div class="technical-specs">
+            <div class="spec-card">
+                <div class="spec-header">
+                    <div class="spec-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <div class="spec-title">Performance Metrics</div>
+                </div>
+                <ul class="spec-list">
+                    <li>
+                        <span class="spec-label">API Response Time</span>
+                        <span class="spec-value">&lt; 100ms</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">Uptime SLA</span>
+                        <span class="spec-value">99.99%</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">Data Processing</span>
+                        <span class="spec-value">10M+ records/day</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">Concurrent Users</span>
+                        <span class="spec-value">10,000+</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">Data Retention</span>
+                        <span class="spec-value">7 years</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="spec-card">
+                <div class="spec-header">
+                    <div class="spec-icon">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
+                    <div class="spec-title">Scalability Features</div>
+                </div>
+                <ul class="spec-list">
+                    <li>
+                        <span class="spec-label">Auto-scaling</span>
+                        <span class="spec-value">Kubernetes HPA</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">Load Balancing</span>
+                        <span class="spec-value">Multi-region</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">CDN</span>
+                        <span class="spec-value">CloudFlare</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">Database Sharding</span>
+                        <span class="spec-value">Horizontal</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">Caching Strategy</span>
+                        <span class="spec-value">Multi-layer</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="spec-card">
+                <div class="spec-header">
+                    <div class="spec-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="spec-title">AI/ML Capabilities</div>
+                </div>
+                <ul class="spec-list">
+                    <li>
+                        <span class="spec-label">Prediction Accuracy</span>
+                        <span class="spec-value">94.2%</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">Model Training</span>
+                        <span class="spec-value">Real-time</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">Data Sources</span>
+                        <span class="spec-value">50+ carriers</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">ML Framework</span>
+                        <span class="spec-value">TensorFlow</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">Model Updates</span>
+                        <span class="spec-value">Weekly</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="spec-card">
+                <div class="spec-header">
+                    <div class="spec-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="spec-title">Development Stack</div>
+                </div>
+                <ul class="spec-list">
+                    <li>
+                        <span class="spec-label">Frontend</span>
+                        <span class="spec-value">React + TypeScript</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">Backend</span>
+                        <span class="spec-value">Node.js + Python</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">Database</span>
+                        <span class="spec-value">PostgreSQL + Redis</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">Deployment</span>
+                        <span class="spec-value">Docker + K8s</span>
+                    </li>
+                    <li>
+                        <span class="spec-label">CI/CD</span>
+                        <span class="spec-value">GitLab + Terraform</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Security Section -->
+        <div class="security-section">
+            <div class="security-header">
+                <h2 class="overview-title">Enterprise Security & Compliance</h2>
+                <p>Bank-grade security with comprehensive compliance certifications</p>
+            </div>
+            
+            <div class="security-grid">
+                <div class="security-feature">
+                    <div class="security-feature-icon">
+                        <i class="fas fa-shield-check"></i>
+                    </div>
+                    <h4>SOC 2 Type II</h4>
+                    <p>Annual security audits ensuring enterprise-grade controls and processes</p>
+                </div>
+                
+                <div class="security-feature">
+                    <div class="security-feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h4>End-to-End Encryption</h4>
+                    <p>AES-256 encryption for data at rest and TLS 1.3 for data in transit</p>
+                </div>
+                
+                <div class="security-feature">
+                    <div class="security-feature-icon">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <h4>Role-Based Access</h4>
+                    <p>Granular permission system with multi-factor authentication and SSO</p>
+                </div>
+                
+                <div class="security-feature">
+                    <div class="security-feature-icon">
+                        <i class="fas fa-file-shield"></i>
+                    </div>
+                    <h4>Audit Trails</h4>
+                    <p>Comprehensive logging and monitoring with 7-year data retention</p>
+                </div>
+            </div>
+            
+            <div class="compliance-badges">
+                <div class="compliance-badge">
+                    <div class="compliance-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div>
+                        <strong>SOC 2 Type II</strong>
+                        <div>Annual Certification</div>
+                    </div>
+                </div>
+                
+                <div class="compliance-badge">
+                    <div class="compliance-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div>
+                        <strong>ISO 27001</strong>
+                        <div>Information Security</div>
+                    </div>
+                </div>
+                
+                <div class="compliance-badge">
+                    <div class="compliance-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div>
+                        <strong>GDPR</strong>
+                        <div>Data Protection</div>
+                    </div>
+                </div>
+                
+                <div class="compliance-badge">
+                    <div class="compliance-icon">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <div>
+                        <strong>HIPAA Ready</strong>
+                        <div>Healthcare Compliance</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Integration Flow -->
+        <div class="integration-flow">
+            <div class="overview-header">
+                <h2 class="overview-title">Enterprise Integration Architecture</h2>
+                <p>Seamless connectivity with existing enterprise systems</p>
+            </div>
+            
+            <div class="flow-diagram">
+                <div class="flow-node">
+                    <h4>Carrier APIs</h4>
+                    <p>Maersk, MSC, CMA CGM</p>
+                </div>
+                
+                <div class="flow-node primary">
+                    <h4>ROOTUIP Platform</h4>
+                    <p>AI Processing & Analytics</p>
+                </div>
+                
+                <div class="flow-node">
+                    <h4>ERP Systems</h4>
+                    <p>SAP, Oracle, Microsoft</p>
+                </div>
+                
+                <div class="flow-node">
+                    <h4>WMS/TMS</h4>
+                    <p>Manhattan, Blue Yonder</p>
+                </div>
+                
+                <div class="flow-node">
+                    <h4>BI Tools</h4>
+                    <p>Tableau, Power BI</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Performance Metrics -->
+        <div class="performance-metrics">
+            <div class="overview-header">
+                <h2 class="overview-title">Real-World Performance</h2>
+                <p>Proven enterprise-scale performance metrics from Fortune 500 deployments</p>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">15ms</div>
+                    <div class="metric-label">Average Response</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">99.99%</div>
+                    <div class="metric-label">Platform Uptime</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">50M+</div>
+                    <div class="metric-label">API Calls/Month</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">24/7</div>
+                    <div class="metric-label">Monitoring</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate architecture layers on scroll
+            const observerOptions = {
+                threshold: 0.2,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateX(0)';
+                        }, index * 200);
+                    }
+                });
+            }, observerOptions);
+            
+            // Animate layers
+            const layers = document.querySelectorAll('.architecture-layer');
+            layers.forEach((layer, index) => {
+                layer.style.opacity = '0';
+                layer.style.transform = 'translateX(-30px)';
+                layer.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(layer);
+            });
+            
+            // Animate spec cards
+            const specCards = document.querySelectorAll('.spec-card');
+            specCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+                observer.observe(card);
+            });
+            
+            // Animate metrics with counting
+            const metricObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateMetricValue(entry.target);
+                        metricObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            const metricValues = document.querySelectorAll('.metric-value');
+            metricValues.forEach(metric => {
+                metricObserver.observe(metric);
+            });
+            
+            // Add hover effects to layer icons
+            const layerIcons = document.querySelectorAll('.layer-icon');
+            layerIcons.forEach(icon => {
+                icon.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.1) rotate(5deg)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                icon.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1) rotate(0deg)';
+                });
+            });
+        });
+        
+        function animateMetricValue(element) {
+            const finalValue = element.textContent;
+            const isPercentage = finalValue.includes('%');
+            const hasMS = finalValue.includes('ms');
+            const hasSlash = finalValue.includes('/');
+            
+            if (hasSlash || finalValue.includes('24/7')) {
+                // Don't animate complex values
+                return;
+            }
+            
+            let numericValue = parseInt(finalValue.replace(/[^0-9]/g, ''));
+            if (isNaN(numericValue)) return;
+            
+            let current = 0;
+            const increment = numericValue / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= numericValue) {
+                    current = numericValue;
+                    clearInterval(timer);
+                }
+                
+                let displayValue = Math.floor(current);
+                if (finalValue.includes('M+')) {
+                    displayValue = displayValue + 'M+';
+                } else if (isPercentage) {
+                    displayValue = displayValue + '%';
+                } else if (hasMS) {
+                    displayValue = displayValue + 'ms';
+                } else {
+                    displayValue = displayValue.toLocaleString();
+                }
+                
+                element.textContent = displayValue;
+            }, 30);
+        }
+        
+        // Track engagement
+        document.addEventListener('click', function(event) {
+            if (event.target.closest('.architecture-layer')) {
+                const layerTitle = event.target.closest('.architecture-layer').querySelector('.layer-title').textContent;
+                
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'architecture_layer_click', {
+                        'layer_name': layerTitle,
+                        'event_category': 'technical_architecture'
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Dark Theme Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #030712;
+            color: #F9FAFB;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #9CA3AF;
+            font-size: 1.25rem;
+            margin-bottom: 3rem;
+        }
+
+        .pages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .page-card {
+            background: linear-gradient(135deg, #111827 0%, #1F2937 100%);
+            border: 1px solid #374151;
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .page-card:hover {
+            transform: translateY(-4px);
+            border-color: #6366F1;
+            box-shadow: 0 0 50px rgba(99, 102, 241, 0.3);
+        }
+
+        .page-icon {
+            width: 3rem;
+            height: 3rem;
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-description {
+            color: #9CA3AF;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .status-live {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10B981;
+            border: 1px solid #10B981;
+        }
+
+        .status-beta {
+            background: rgba(99, 102, 241, 0.2);
+            color: #6366F1;
+            border: 1px solid #6366F1;
+        }
+
+        .cta {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 3rem;
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            border-radius: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(180deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: white;
+            color: #6366F1;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ROOTUIP Dark Theme Showcase</h1>
+        <p class="subtitle">Experience the new modern dark UI across all platform pages</p>
+
+        <div class="pages-grid">
+            <a href="https://rootuip.com" class="page-card">
+                <div class="page-icon">🏠</div>
+                <h3 class="page-title">Homepage</h3>
+                <p class="page-description">The main landing page with stunning dark theme, glassmorphic effects, and smooth animations.</p>
+                <span class="status status-live">LIVE</span>
+            </a>
+
+            <a href="https://rootuip.com/roi-calculator.html" class="page-card">
+                <div class="page-icon">💰</div>
+                <h3 class="page-title">ROI Calculator</h3>
+                <p class="page-description">Calculate your savings with our dark-themed interactive calculator featuring real-time updates.</p>
+                <span class="status status-live">LIVE</span>
+            </a>
+
+            <a href="https://demo.rootuip.com" class="page-card">
+                <div class="page-icon">🚀</div>
+                <h3 class="page-title">AI/ML Demo</h3>
+                <p class="page-description">Experience our AI-powered features with neural network visualizations and dark UI.</p>
+                <span class="status status-live">LIVE</span>
+            </a>
+
+            <a href="https://rootuip.com/enterprise-demo-interface.html" class="page-card">
+                <div class="page-icon">🏢</div>
+                <h3 class="page-title">Enterprise Demo</h3>
+                <p class="page-description">Personalized enterprise demonstrations with company branding and dark theme.</p>
+                <span class="status status-live">LIVE</span>
+            </a>
+
+            <a href="https://rootuip.com/login.html" class="page-card">
+                <div class="page-icon">🔐</div>
+                <h3 class="page-title">Login Portal</h3>
+                <p class="page-description">Secure authentication with glassmorphic login card and floating particles.</p>
+                <span class="status status-live">LIVE</span>
+            </a>
+
+            <a href="https://app.rootuip.com" class="page-card">
+                <div class="page-icon">📊</div>
+                <h3 class="page-title">Dashboard</h3>
+                <p class="page-description">Full-featured dashboard with dark sidebar, real-time charts, and analytics.</p>
+                <span class="status status-beta">BETA</span>
+            </a>
+
+            <a href="https://rootuip.com/container-tracking-interface.html" class="page-card">
+                <div class="page-icon">📦</div>
+                <h3 class="page-title">Container Tracking</h3>
+                <p class="page-description">Real-time container tracking with dark map visualizations.</p>
+                <span class="status status-beta">BETA</span>
+            </a>
+
+            <a href="https://rootuip.com/api-playground.html" class="page-card">
+                <div class="page-icon">🔌</div>
+                <h3 class="page-title">API Playground</h3>
+                <p class="page-description">Interactive API testing environment with dark code editor.</p>
+                <span class="status status-beta">BETA</span>
+            </a>
+
+            <a href="https://status.rootuip.com" class="page-card">
+                <div class="page-icon">🟢</div>
+                <h3 class="page-title">Status Page</h3>
+                <p class="page-description">System status monitoring with dark theme and real-time updates.</p>
+                <span class="status status-beta">COMING SOON</span>
+            </a>
+        </div>
+
+        <div class="cta">
+            <div class="cta-content">
+                <h2>Experience the New ROOTUIP</h2>
+                <p>Our platform has been completely redesigned with a modern dark theme for better usability and aesthetics</p>
+                <a href="https://rootuip.com" class="btn">Explore Now</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

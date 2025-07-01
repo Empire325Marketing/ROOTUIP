@@ -1,0 +1,65 @@
+{
+  "id": "report_1751301705540_4pfxzh18j",
+  "timestamp": "2025-06-30T16:41:45.540Z",
+  "period": {
+    "start": "2025-06-29T16:41:45.540Z",
+    "end": "2025-06-30T16:41:45.540Z"
+  },
+  "summary": {
+    "overall_health": {
+      "score": 70,
+      "status": "good"
+    },
+    "key_metrics": {
+      "avg_response_time": 149.77071474434499,
+      "total_requests": 168307616.09112385,
+      "error_rate": 0.009937872954764388,
+      "avg_cpu_usage": 59.96610611374901,
+      "avg_memory_usage": 64.95550529216408
+    },
+    "incidents": 0,
+    "alerts_triggered": 9099
+  },
+  "trends": {
+    "response_time_trend": "stable",
+    "throughput_trend": "decreasing",
+    "error_rate_trend": "decreasing",
+    "resource_trend": "decreasing"
+  },
+  "capacity": {
+    "current_capacity": {
+      "containers": 1000000,
+      "concurrent_users": 10000,
+      "api_calls_per_minute": 100000
+    },
+    "peak_usage": {
+      "containers": 850000,
+      "concurrent_users": 9999,
+      "api_calls_per_minute": 85000
+    },
+    "headroom": {
+      "containers": "15%",
+      "concurrent_users": "15%",
+      "api_calls_per_minute": "15%"
+    },
+    "scaling_recommendations": [
+      "Consider adding more application servers"
+    ]
+  },
+  "recommendations": [],
+  "sla_compliance": {
+    "uptime": {
+      "percentage": "100.00",
+      "downtime_minutes": 0
+    },
+    "response_time": {
+      "percentage": "100.00",
+      "violations": 0
+    },
+    "error_rate": {
+      "percentage": "51.34",
+      "violations": 9100
+    },
+    "overall": false
+  }
+}

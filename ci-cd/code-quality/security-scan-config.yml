@@ -1,0 +1,132 @@
+# Security scanning configuration for ROOTUIP CI/CD pipeline
+
+# Trivy configuration
+trivy:
+  scan-type: 'fs'
+  format: 'sarif'
+  severity: 'CRITICAL,HIGH,MEDIUM'
+  ignore-unfixed: false
+  timeout: '10m'
+  exit-code: 1
+  
+  # Skip specific vulnerabilities (with justification)
+  ignorelist:
+    # Example: Skip development dependencies vulnerabilities
+    - CVE-2021-44906  # Development-only package
+  
+  security-checks: 'vuln,config,secret'
+  
+  # Custom security policies
+  policy-bundle: '.trivyignore'
+
+# Snyk configuration
+snyk:
+  severity-threshold: 'high'
+  fail-on: 'upgradable'
+  monitor: true
+  project-name: 'ROOTUIP Platform'
+  
+  # Package manager specific settings
+  package-manager: 'npm'
+  dev: false  # Don't include dev dependencies in production scans
+  
+  # Custom policies
+  policy-path: 'ci-cd/security/.snyk'
+
+# OWASP ZAP configuration
+zap:
+  target: 'https://staging.rootuip.com'
+  rules-file: 'ci-cd/security/zap-rules.tsv'
+  baseline-file: 'ci-cd/security/zap-baseline.json'
+  
+  # Scan configuration
+  cmd-options: '-a -j -l WARN'
+  fail-action: true
+  
+  # Authentication
+  auth-script: 'ci-cd/security/zap-auth.js'
+  
+  # Custom context
+  context-file: 'ci-cd/security/zap-context.xml'
+
+# CodeQL configuration
+codeql:
+  languages: ['javascript', 'typescript']
+  queries: 'security-and-quality'
+  
+  # Custom query packs
+  packs:
+    - 'codeql/javascript-queries'
+    - 'github/codeql-javascript-security-queries'
+  
+  # Configuration file
+  config-file: 'ci-cd/security/codeql-config.yml'
+
+# Security checklist
+security-requirements:
+  authentication:
+    - multi-factor-authentication
+    - session-management
+    - password-policies
+  
+  authorization:
+    - role-based-access-control
+    - principle-of-least-privilege
+    - resource-level-permissions
+  
+  data-protection:
+    - encryption-at-rest
+    - encryption-in-transit
+    - data-classification
+    - pii-protection
+  
+  infrastructure:
+    - network-segmentation
+    - firewall-rules
+    - intrusion-detection
+    - security-monitoring
+  
+  application:
+    - input-validation
+    - output-encoding
+    - sql-injection-prevention
+    - xss-prevention
+    - csrf-protection
+  
+  compliance:
+    - gdpr-compliance
+    - sox-compliance
+    - iso27001-compliance
+    - pci-dss-compliance
+
+# Security gates
+quality-gates:
+  critical-vulnerabilities: 0
+  high-vulnerabilities: 5
+  medium-vulnerabilities: 20
+  security-rating: 'A'
+  
+  # Mandatory checks
+  mandatory-checks:
+    - dependency-scan
+    - secrets-scan
+    - static-analysis
+    - dynamic-analysis
+    - license-compliance
+
+# Notification settings
+notifications:
+  security-alerts:
+    channels:
+      - slack: '#security-alerts'
+      - email: 'security-team@rootuip.com'
+    
+    triggers:
+      - critical-vulnerability-found
+      - security-gate-failed
+      - new-security-issue
+  
+  reports:
+    daily-summary: true
+    weekly-report: true
+    monthly-compliance-report: true

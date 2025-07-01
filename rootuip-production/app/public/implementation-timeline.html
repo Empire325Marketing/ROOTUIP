@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Enterprise Implementation Timeline - Fortune 500 Deployment Strategy</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .timeline-overview {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .overview-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .overview-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent);
+            pointer-events: none;
+        }
+
+        .overview-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .overview-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .timeline-container {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .phase-timeline {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #3498db, #2980b9);
+            border-radius: 2px;
+        }
+
+        .phase-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .phase-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .phase-content {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 45%;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .phase-item:nth-child(even) .phase-content {
+            margin-left: auto;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .phase-number {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .phase-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .phase-duration {
+            background: #e74c3c;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .phase-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .phase-deliverables {
+            margin-bottom: 1.5rem;
+        }
+
+        .deliverables-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .deliverable-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background: var(--bg-dark);
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .deliverable-icon {
+            color: #27ae60;
+            font-size: 0.8rem;
+        }
+
+        .phase-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metric-item {
+            background: var(--bg-dark);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #ecf0f1;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #3498db;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 2rem;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            background: #3498db;
+            border: 4px solid white;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .risk-mitigation {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .risk-category {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .risk-title {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .risk-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--bg-dark);
+            border-radius: 8px;
+            border-left: 3px solid #f39c12;
+        }
+
+        .risk-description {
+            font-weight: 600;
+            color: #e74c3c;
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-mitigation-strategy {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .success-metrics {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .success-metric {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .success-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .success-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .resource-allocation {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .resource-card {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+        }
+
+        .resource-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .resource-list {
+            list-style: none;
+        }
+
+        .resource-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .resource-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        .export-section {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+        }
+
+        .export-btn.secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        }
+
+        @media (max-width: 1024px) {
+            .overview-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .resource-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .risk-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .phase-item {
+                flex-direction: column !important;
+            }
+            
+            .phase-content {
+                width: 100% !important;
+                margin: 0 !important;
+            }
+            
+            .timeline-line {
+                left: 2rem;
+            }
+            
+            .timeline-dot {
+                left: 2rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-project-diagram"></i> ROOTUIP Enterprise Implementation</h1>
+        <p>Fortune 500 Deployment Strategy & Timeline</p>
+    </div>
+
+    <div class="container">
+        <!-- Implementation Overview -->
+        <div class="timeline-overview">
+            <h2><i class="fas fa-clock"></i> Implementation Overview</h2>
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <div class="overview-number">12</div>
+                    <div class="overview-label">Month Timeline</div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-number">4</div>
+                    <div class="overview-label">Deployment Phases</div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-number">6</div>
+                    <div class="overview-label">Months to Full ROI</div>
+                </div>
+                <div class="overview-card">
+                    <div class="overview-number">99.9%</div>
+                    <div class="overview-label">Uptime Guarantee</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase Timeline -->
+        <div class="timeline-container">
+            <h2><i class="fas fa-road"></i> Phase-by-Phase Deployment Roadmap</h2>
+            
+            <div class="phase-timeline">
+                <div class="timeline-line"></div>
+                
+                <!-- Phase 1 -->
+                <div class="phase-item">
+                    <div class="timeline-dot"></div>
+                    <div class="phase-content">
+                        <div class="phase-header">
+                            <div class="phase-number">1</div>
+                            <div class="phase-title">Foundation & Setup</div>
+                            <div class="phase-duration">Months 1-3</div>
+                        </div>
+                        
+                        <div class="phase-description">
+                            Establish infrastructure, train core team, and launch pilot program with select trade lanes to validate system performance and gather initial feedback.
+                        </div>
+                        
+                        <div class="phase-deliverables">
+                            <div class="deliverables-title">
+                                <i class="fas fa-check-circle"></i>
+                                Key Deliverables
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Cloud infrastructure provisioning (AWS/Azure)
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Team training (40 hours per person)
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Pilot program with 2-3 major trade lanes
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Initial carrier API integrations (Maersk, MSC)
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Security audit and compliance certification
+                            </div>
+                        </div>
+                        
+                        <div class="phase-metrics">
+                            <div class="metric-item">
+                                <div class="metric-value">5K</div>
+                                <div class="metric-label">Containers Tracked</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value">85%</div>
+                                <div class="metric-label">Accuracy Target</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value">15</div>
+                                <div class="metric-label">Team Members Trained</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="phase-item">
+                    <div class="timeline-dot"></div>
+                    <div class="phase-content">
+                        <div class="phase-header">
+                            <div class="phase-number">2</div>
+                            <div class="phase-title">Core System Deployment</div>
+                            <div class="phase-duration">Months 4-6</div>
+                        </div>
+                        
+                        <div class="phase-description">
+                            Deploy core AI/ML capabilities, integrate with existing ERP systems, and expand to additional carriers and trade routes while maintaining operational excellence.
+                        </div>
+                        
+                        <div class="phase-deliverables">
+                            <div class="deliverables-title">
+                                <i class="fas fa-cogs"></i>
+                                Core Capabilities
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                AI/ML prediction engine deployment
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                ERP system integration (SAP/Oracle)
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Multi-carrier expansion (5+ carriers)
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Real-time dashboard deployment
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Mobile app rollout for field teams
+                            </div>
+                        </div>
+                        
+                        <div class="phase-metrics">
+                            <div class="metric-item">
+                                <div class="metric-value">25K</div>
+                                <div class="metric-label">Containers Tracked</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value">90%</div>
+                                <div class="metric-label">Accuracy Target</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value">50</div>
+                                <div class="metric-label">Users Onboarded</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="phase-item">
+                    <div class="timeline-dot"></div>
+                    <div class="phase-content">
+                        <div class="phase-header">
+                            <div class="phase-number">3</div>
+                            <div class="phase-title">Optimization & Scale</div>
+                            <div class="phase-duration">Months 7-9</div>
+                        </div>
+                        
+                        <div class="phase-description">
+                            Fine-tune AI models, optimize performance, and scale operations globally while implementing advanced analytics and reporting capabilities.
+                        </div>
+                        
+                        <div class="phase-deliverables">
+                            <div class="deliverables-title">
+                                <i class="fas fa-chart-line"></i>
+                                Advanced Features
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                AI model optimization (94%+ accuracy)
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Global operations scaling
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Advanced analytics and BI integration
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Automated workflows and alerts
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Performance optimization (sub-second response)
+                            </div>
+                        </div>
+                        
+                        <div class="phase-metrics">
+                            <div class="metric-item">
+                                <div class="metric-value">100K</div>
+                                <div class="metric-label">Containers Tracked</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value">94%</div>
+                                <div class="metric-label">Accuracy Achieved</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value">150</div>
+                                <div class="metric-label">Global Users</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 4 -->
+                <div class="phase-item">
+                    <div class="timeline-dot"></div>
+                    <div class="phase-content">
+                        <div class="phase-header">
+                            <div class="phase-number">4</div>
+                            <div class="phase-title">Enterprise Mastery</div>
+                            <div class="phase-duration">Months 10-12</div>
+                        </div>
+                        
+                        <div class="phase-description">
+                            Achieve full enterprise deployment with complete carrier coverage, advanced AI capabilities, and comprehensive ROI validation. Establish center of excellence.
+                        </div>
+                        
+                        <div class="phase-deliverables">
+                            <div class="deliverables-title">
+                                <i class="fas fa-trophy"></i>
+                                Enterprise Excellence
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Full enterprise rollout (all regions)
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Complete carrier ecosystem (10+ carriers)
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Advanced AI features (predictive routing)
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                ROI validation and business case closure
+                            </div>
+                            <div class="deliverable-item">
+                                <i class="fas fa-check deliverable-icon"></i>
+                                Center of excellence establishment
+                            </div>
+                        </div>
+                        
+                        <div class="phase-metrics">
+                            <div class="metric-item">
+                                <div class="metric-value">500K+</div>
+                                <div class="metric-label">Containers Tracked</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value">96%</div>
+                                <div class="metric-label">Accuracy Achieved</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value">300+</div>
+                                <div class="metric-label">Enterprise Users</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Risk Mitigation -->
+        <div class="risk-mitigation">
+            <h2><i class="fas fa-shield-alt"></i> Risk Mitigation Strategies</h2>
+            <div class="risk-grid">
+                <div class="risk-category">
+                    <div class="risk-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Technical Risks
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-description">API Integration Delays</div>
+                        <div class="risk-mitigation-strategy">
+                            <strong>Mitigation:</strong> Pre-tested integration patterns, carrier relationships, fallback data sources, and parallel development tracks.
+                        </div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-description">Data Quality Issues</div>
+                        <div class="risk-mitigation-strategy">
+                            <strong>Mitigation:</strong> Multi-source validation, AI-powered data cleansing, automated quality checks, and manual review processes.
+                        </div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-description">Performance Bottlenecks</div>
+                        <div class="risk-mitigation-strategy">
+                            <strong>Mitigation:</strong> Cloud-native architecture, auto-scaling infrastructure, performance monitoring, and load testing protocols.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="risk-category">
+                    <div class="risk-title">
+                        <i class="fas fa-users"></i>
+                        Organizational Risks
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-description">User Adoption Resistance</div>
+                        <div class="risk-mitigation-strategy">
+                            <strong>Mitigation:</strong> Comprehensive training programs, change management support, early wins demonstration, and executive sponsorship.
+                        </div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-description">Resource Constraints</div>
+                        <div class="risk-mitigation-strategy">
+                            <strong>Mitigation:</strong> Dedicated project team, clear resource planning, cross-training initiatives, and vendor support augmentation.
+                        </div>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-description">Process Integration Challenges</div>
+                        <div class="risk-mitigation-strategy">
+                            <strong>Mitigation:</strong> Process mapping workshops, gradual rollout approach, workflow optimization, and business process consulting.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Metrics -->
+        <div class="success-metrics">
+            <h2><i class="fas fa-bullseye"></i> Success Metrics & KPIs</h2>
+            <div class="metrics-grid">
+                <div class="success-metric">
+                    <div class="success-value">94%</div>
+                    <div class="success-label">AI Prediction Accuracy</div>
+                </div>
+                <div class="success-metric">
+                    <div class="success-value">6</div>
+                    <div class="success-label">Months to Full ROI</div>
+                </div>
+                <div class="success-metric">
+                    <div class="success-value">75%</div>
+                    <div class="success-label">Delay Reduction</div>
+                </div>
+                <div class="success-metric">
+                    <div class="success-value">$25M</div>
+                    <div class="success-label">Annual Savings</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resource Allocation -->
+        <div class="resource-allocation">
+            <h2><i class="fas fa-user-friends"></i> Resource Allocation</h2>
+            <div class="resource-grid">
+                <div class="resource-card">
+                    <div class="resource-title">
+                        <i class="fas fa-building"></i>
+                        Your Team
+                    </div>
+                    <ul class="resource-list">
+                        <li>Executive Sponsor (10% time)</li>
+                        <li>Project Manager (100% time)</li>
+                        <li>IT Lead (50% time)</li>
+                        <li>Operations SMEs (25% time)</li>
+                        <li>Data Analyst (75% time)</li>
+                        <li>Change Management Lead (50% time)</li>
+                    </ul>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-title">
+                        <i class="fas fa-handshake"></i>
+                        ROOTUIP Team
+                    </div>
+                    <ul class="resource-list">
+                        <li>Implementation Manager</li>
+                        <li>Solutions Architect</li>
+                        <li>Technical Lead Engineer</li>
+                        <li>Data Integration Specialist</li>
+                        <li>Training Coordinator</li>
+                        <li>Customer Success Manager</li>
+                    </ul>
+                </div>
+
+                <div class="resource-card">
+                    <div class="resource-title">
+                        <i class="fas fa-tools"></i>
+                        Infrastructure
+                    </div>
+                    <ul class="resource-list">
+                        <li>Cloud Infrastructure (AWS/Azure)</li>
+                        <li>API Gateway Services</li>
+                        <li>Database Systems (PostgreSQL)</li>
+                        <li>Monitoring & Analytics Tools</li>
+                        <li>Security & Compliance Tools</li>
+                        <li>Training Environment</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Section -->
+        <div class="export-section">
+            <h2><i class="fas fa-download"></i> Executive Materials</h2>
+            <p>Download comprehensive implementation materials for stakeholder communication</p>
+            <br>
+            <button class="export-btn" onclick="exportProjectPlan()">
+                <i class="fas fa-project-diagram"></i> Full Project Plan (PDF)
+            </button>
+            <button class="export-btn" onclick="exportGanttChart()">
+                <i class="fas fa-calendar-alt"></i> Gantt Chart & Timeline
+            </button>
+            <button class="export-btn secondary" onclick="exportResourcePlan()">
+                <i class="fas fa-users"></i> Resource Allocation Plan
+            </button>
+            <button class="export-btn secondary" onclick="exportRiskRegister()">
+                <i class="fas fa-shield-alt"></i> Risk Register & Mitigation
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function exportProjectPlan() {
+            alert(`📋 Comprehensive Project Plan Generated!\n\n📑 45-Page Implementation Guide:\n\n✅ Executive Summary\n• Business case and objectives\n• Success criteria and metrics\n• Investment and ROI overview\n\n📅 Detailed Timeline\n• 12-month phase breakdown\n• Critical path analysis\n• Milestone dependencies\n• Resource scheduling\n\n👥 Team Structure\n• Roles and responsibilities\n• RACI matrix\n• Communication protocols\n• Escalation procedures\n\n🔧 Technical Architecture\n• System integration overview\n• Data flow diagrams\n• Security architecture\n• Infrastructure requirements\n\n📊 Success Metrics\n• KPI definitions and targets\n• Measurement methodology\n• Reporting cadence\n• Review processes\n\nReady for board presentation!`);
+        }
+
+        function exportGanttChart() {
+            alert(`📊 Interactive Gantt Chart Generated!\n\n🎯 Project Timeline Visualization:\n\n📅 12-Month Schedule\n• Phase-by-phase breakdown\n• Task dependencies mapped\n• Critical path highlighted\n• Resource allocation timeline\n\n⚡ Key Milestones\n• Phase gate reviews\n• Go-live dates\n• ROI measurement points\n• Risk assessment checkpoints\n\n👥 Resource Planning\n• Team availability tracking\n• Skills requirement mapping\n• Training schedule integration\n• Vendor engagement timeline\n\n📈 Progress Tracking\n• Completion percentage indicators\n• Variance analysis\n• Risk flag notifications\n• Executive dashboard views\n\nExported in Microsoft Project and PDF formats!`);
+        }
+
+        function exportResourcePlan() {
+            alert(`👥 Resource Allocation Plan Generated!\n\n🏢 Comprehensive Staffing Strategy:\n\n📋 Role Definitions\n• Detailed job descriptions\n• Required skills and experience\n• Time commitment expectations\n• Performance criteria\n\n📊 Capacity Planning\n• FTE allocation by phase\n• Peak resource requirements\n• Skills gap analysis\n• Training recommendations\n\n💰 Cost Analysis\n• Internal resource costs\n• External consultant needs\n• Training investment\n• Opportunity cost assessment\n\n📅 Scheduling Matrix\n• Resource availability calendar\n• Conflict identification\n• Backfill planning\n• Cross-training schedule\n\n🎯 Success Metrics\n• Team productivity KPIs\n• Knowledge transfer metrics\n• Stakeholder satisfaction\n• Resource utilization rates\n\nIncludes budget and ROI calculations!`);
+        }
+
+        function exportRiskRegister() {
+            alert(`🛡️ Enterprise Risk Register Generated!\n\n⚠️ Comprehensive Risk Management:\n\n📊 Risk Assessment Matrix\n• 25+ identified risks\n• Probability and impact ratings\n• Risk heat map visualization\n• Priority ranking system\n\n🔧 Mitigation Strategies\n• Preventive measures\n• Contingency plans\n• Response procedures\n• Recovery protocols\n\n👥 Risk Ownership\n• Assigned risk owners\n• Escalation procedures\n• Review schedules\n• Reporting requirements\n\n📈 Monitoring Framework\n• Risk indicator tracking\n• Early warning systems\n• Regular assessment cycles\n• Lessons learned capture\n\n🎯 Categories Covered\n• Technical implementation risks\n• Organizational change risks\n• External dependency risks\n• Security and compliance risks\n\nIncludes insurance recommendations!`);
+        }
+
+        // Add smooth scrolling for better UX
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add intersection observer for timeline animations
+            const timelineItems = document.querySelectorAll('.phase-item');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            timelineItems.forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(50px)';
+                item.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(item);
+            });
+        });
+    </script>
+</body>
+</html>

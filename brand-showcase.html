@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Brand Identity Showcase</title>
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./brand-guidelines.css">
+    <link rel="stylesheet" href="./brand-implementation.css">
+    <style>
+        /* Showcase specific styles */
+        .showcase-section {
+            padding: 80px 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+        }
+        
+        .color-swatch {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .color-preview {
+            height: 120px;
+            position: relative;
+        }
+        
+        .color-info {
+            padding: 24px;
+        }
+        
+        .color-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .color-value {
+            font-family: var(--font-mono);
+            color: var(--color-text-secondary);
+            font-size: 14px;
+        }
+        
+        .typography-sample {
+            margin: 32px 0;
+            padding: 24px;
+            background: var(--color-background-secondary);
+            border-radius: 8px;
+        }
+        
+        .component-demo {
+            background: var(--bg-dark);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin: 24px 0;
+        }
+        
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin: 48px 0;
+        }
+        
+        .logo-item {
+            text-align: center;
+            padding: 32px;
+            background: var(--color-background-secondary);
+            border-radius: 12px;
+        }
+        
+        .logo-item h4 {
+            margin-top: 24px;
+            font-size: 16px;
+            color: var(--color-text-secondary);
+        }
+        
+        .value-prop-showcase {
+            background: linear-gradient(135deg, #0F3460 0%, #16213E 100%);
+            color: white;
+            padding: 80px 40px;
+            border-radius: 16px;
+            text-align: center;
+            margin: 48px 0;
+        }
+        
+        .value-prop-showcase h2 {
+            font-size: 48px;
+            margin-bottom: 24px;
+        }
+        
+        .value-amount {
+            color: var(--color-success);
+            font-size: 64px;
+            font-weight: 700;
+            display: block;
+            margin: 24px 0;
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Header with new brand -->
+    <header class="rootuip-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <svg class="logo" width="160" height="40" viewBox="0 0 160 40" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#0F3460;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#16213E;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M5 20 Q 10 10, 20 20 T 40 20 L 40 35 L 5 35 Z" fill="url(#waveGradient)"/>
+                        <rect x="15" y="15" width="10" height="15" fill="#FF6B35" rx="1"/>
+                        <text x="50" y="26" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="#0F3460">ROOTUIP</text>
+                    </svg>
+                    <span class="tagline">Stop Losing $14M Per Vessel</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="showcase-section">
+            <div class="container">
+                <h1 class="display-1">ROOTUIP Brand Identity</h1>
+                <p class="lead">Enterprise Ocean Freight Intelligence Platform</p>
+                
+                <div class="value-prop-showcase">
+                    <h2>Our Value Proposition</h2>
+                    <span class="value-amount">$500K+</span>
+                    <p class="text-xl">Saved Per Vessel Annually</p>
+                    <p class="mt-4">Stop Losing $14M Per Vessel to Detention & Demurrage</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logo Variations -->
+        <section class="showcase-section">
+            <div class="container">
+                <h2 class="display-2">Logo System</h2>
+                <p class="lead">Professional variations for every use case</p>
+                
+                <div class="logo-grid">
+                    <div class="logo-item">
+                        <svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="wave1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#0F3460;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#16213E;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M10 25 Q 15 15, 25 25 T 50 25 L 50 40 L 10 40 Z" fill="url(#wave1)"/>
+                            <rect x="20" y="20" width="15" height="18" fill="#FF6B35" rx="2"/>
+                            <text x="60" y="32" font-family="Inter, sans-serif" font-size="24" font-weight="700" fill="#0F3460">ROOTUIP</text>
+                        </svg>
+                        <h4>Primary Logo</h4>
+                    </div>
+                    
+                    <div class="logo-item">
+                        <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="wave2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#0F3460;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#16213E;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M10 40 Q 20 20, 40 40 T 70 40 L 70 70 L 10 70 Z" fill="url(#wave2)"/>
+                            <rect x="25" y="30" width="30" height="35" fill="#FF6B35" rx="3"/>
+                            <rect x="30" y="35" width="20" height="2" fill="white" opacity="0.5"/>
+                            <rect x="30" y="40" width="20" height="2" fill="white" opacity="0.5"/>
+                            <rect x="30" y="45" width="15" height="2" fill="white" opacity="0.5"/>
+                        </svg>
+                        <h4>Icon Only</h4>
+                    </div>
+                    
+                    <div class="logo-item">
+                        <svg width="250" height="80" viewBox="0 0 250 80" xmlns="http://www.w3.org/2000/svg">
+                            <g transform="translate(10, 10)">
+                                <path d="M0 30 Q 10 10, 30 30 T 60 30 L 60 60 L 0 60 Z" fill="#0F3460"/>
+                                <rect x="15" y="20" width="25" height="35" fill="#00D46A" rx="3"/>
+                                <text x="80" y="35" font-family="Inter, sans-serif" font-size="28" font-weight="700" fill="#0F3460">ROOTUIP</text>
+                                <text x="80" y="55" font-family="Inter, sans-serif" font-size="12" fill="#64748b">Ocean Freight Intelligence</text>
+                            </g>
+                        </svg>
+                        <h4>Vertical Stack</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Color System -->
+        <section class="showcase-section">
+            <div class="container">
+                <h2 class="display-2">Color System</h2>
+                <p class="lead">Maritime-inspired palette for enterprise trust</p>
+                
+                <div class="showcase-grid">
+                    <div class="color-swatch">
+                        <div class="color-preview" style="background: #0F3460;"></div>
+                        <div class="color-info">
+                            <h3 class="color-name">Deep Ocean Blue</h3>
+                            <p class="color-value">#0F3460</p>
+                            <p class="text-sm text-secondary mt-2">Primary brand color - Trust & Maritime expertise</p>
+                        </div>
+                    </div>
+                    
+                    <div class="color-swatch">
+                        <div class="color-preview" style="background: #00D46A;"></div>
+                        <div class="color-info">
+                            <h3 class="color-name">Success Green</h3>
+                            <p class="color-value">#00D46A</p>
+                            <p class="text-sm text-secondary mt-2">ROI & Value creation</p>
+                        </div>
+                    </div>
+                    
+                    <div class="color-swatch">
+                        <div class="color-preview" style="background: #FF6B35;"></div>
+                        <div class="color-info">
+                            <h3 class="color-name">Data Orange</h3>
+                            <p class="color-value">#FF6B35</p>
+                            <p class="text-sm text-secondary mt-2">Alerts & Key insights</p>
+                        </div>
+                    </div>
+                    
+                    <div class="color-swatch">
+                        <div class="color-preview" style="background: linear-gradient(to bottom, #1e293b 0%, #334155 33%, #64748b 66%, #cbd5e1 100%);"></div>
+                        <div class="color-info">
+                            <h3 class="color-name">Professional Grays</h3>
+                            <p class="color-value">#1e293b → #cbd5e1</p>
+                            <p class="text-sm text-secondary mt-2">UI hierarchy & neutrals</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Typography -->
+        <section class="showcase-section">
+            <div class="container">
+                <h2 class="display-2">Typography</h2>
+                <p class="lead">Clean, professional, and highly readable</p>
+                
+                <div class="typography-sample">
+                    <h1 class="display-1">Display Heading</h1>
+                    <p>Inter Bold, 64px - Hero sections</p>
+                </div>
+                
+                <div class="typography-sample">
+                    <h2 class="display-2">Section Title</h2>
+                    <p>Inter Semibold, 48px - Major sections</p>
+                </div>
+                
+                <div class="typography-sample">
+                    <h3 class="h1">Page Heading</h3>
+                    <p>Inter Semibold, 36px - Page titles</p>
+                </div>
+                
+                <div class="typography-sample">
+                    <p class="lead">Lead paragraph text for introductions and key messages.</p>
+                    <p>Inter Regular, 20px - Important content</p>
+                </div>
+                
+                <div class="typography-sample">
+                    <p>Body text uses system fonts for optimal performance and readability. We maintain a consistent 1.6 line height and proper spacing between elements to ensure comfortable reading.</p>
+                    <p class="text-sm text-secondary">System font stack, 16px - General content</p>
+                </div>
+                
+                <div class="typography-sample">
+                    <code class="font-mono">const savings = $14000000;</code>
+                    <p class="text-sm text-secondary mt-2">Roboto Mono, 14px - Data and code</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Component Examples -->
+        <section class="showcase-section">
+            <div class="container">
+                <h2 class="display-2">Brand Components</h2>
+                <p class="lead">Enterprise-ready UI elements</p>
+                
+                <!-- Value Badge -->
+                <div class="component-demo">
+                    <h3>Value Proposition Badge</h3>
+                    <div class="mt-4">
+                        <span class="value-badge">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="mr-2">
+                                <path d="M8 0L10.5 5.5L16 6L12 10L13 16L8 13L3 16L4 10L0 6L5.5 5.5L8 0Z"/>
+                            </svg>
+                            $500K+ Saved Per Vessel
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Metric Cards -->
+                <div class="component-demo">
+                    <h3>Enterprise Metrics</h3>
+                    <div class="showcase-grid mt-4">
+                        <div class="metric-card">
+                            <p class="metric-card-label">Annual Savings</p>
+                            <p class="metric-card-value">$14M</p>
+                            <p class="text-sm text-success">Per vessel avoided D&D</p>
+                        </div>
+                        <div class="metric-card">
+                            <p class="metric-card-label">ROI Timeline</p>
+                            <p class="metric-card-value">3.2x</p>
+                            <p class="text-sm text-success">In first 12 months</p>
+                        </div>
+                        <div class="metric-card">
+                            <p class="metric-card-label">Container Visibility</p>
+                            <p class="metric-card-value">99.8%</p>
+                            <p class="text-sm text-success">Real-time accuracy</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trust Indicators -->
+                <div class="component-demo">
+                    <h3>Trust & Security</h3>
+                    <div class="trust-indicators">
+                        <div class="trust-item">
+                            <div class="trust-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2L4 7V11C4 16 7 20 12 21C17 20 20 16 20 11V7L12 2Z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold">SOC 2 Compliant</p>
+                                <p class="text-sm text-secondary">Enterprise security</p>
+                            </div>
+                        </div>
+                        <div class="trust-item">
+                            <div class="trust-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM9 17H7V10H9V17ZM13 17H11V7H13V17ZM17 17H15V13H17V17Z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold">99.98% Uptime</p>
+                                <p class="text-sm text-secondary">Guaranteed SLA</p>
+                            </div>
+                        </div>
+                        <div class="trust-item">
+                            <div class="trust-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2ZM10 17L5 12L6.4 10.6L10 14.2L17.6 6.6L19 8L10 17Z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold">ISO 27001</p>
+                                <p class="text-sm text-secondary">Certified platform</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Enterprise CTA -->
+                <div class="enterprise-cta">
+                    <h2>Transform Your Ocean Freight Operations</h2>
+                    <p class="value-highlight">$500K+</p>
+                    <p class="text-xl mb-8">Average savings per vessel in year one</p>
+                    <button class="btn btn-success btn-lg">
+                        Calculate Your ROI
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" class="ml-2">
+                            <path d="M10 0L13 7H20L14 11L17 18L10 14L3 18L6 11L0 7H7L10 0Z"/>
+                        </svg>
+                    </button>
+                    <p class="text-sm mt-4 opacity-80">Join Fortune 500 companies saving millions</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Email Template Preview -->
+        <section class="showcase-section">
+            <div class="container">
+                <h2 class="display-2">Email Template</h2>
+                <p class="lead">Professional communications that convert</p>
+                
+                <div class="component-demo" style="max-width: 600px; margin: 48px auto;">
+                    <iframe 
+                        srcdoc='<!DOCTYPE html>
+                        <html>
+                        <head>
+                            <style>
+                                body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; padding: 0; background: #f5f7fa; }
+                                .email-container { max-width: 600px; margin: 0 auto; background: var(--bg-dark); }
+                                .email-header { background: linear-gradient(135deg, #0F3460 0%, #16213E 100%); padding: 40px; text-align: center; }
+                                .email-logo { color: white; font-size: 24px; font-weight: 700; margin: 0; }
+                                .email-tagline { color: #00D46A; font-size: 14px; margin-top: 10px; }
+                                .email-content { padding: 40px; }
+                                .email-footer { background: #f5f7fa; padding: 30px; text-align: center; font-size: 14px; color: #64748b; }
+                                .btn-primary { display: inline-block; padding: 12px 24px; background: #00D46A; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; }
+                                .metric-box { background: #f8fafc; border-left: 4px solid #FF6B35; padding: 20px; margin: 20px 0; }
+                            </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+                        </head>
+                        <body>
+                            <div class="email-container">
+                                <div class="email-header">
+                                    <h1 class="email-logo">ROOTUIP</h1>
+                                    <p class="email-tagline">Stop Losing $14M Per Vessel</p>
+                                </div>
+                                <div class="email-content">
+                                    <h2>Your Weekly Savings Report</h2>
+                                    <p>Great news! Your fleet saved <strong>$247,000</strong> this week by avoiding detention and demurrage charges.</p>
+                                    <div class="metric-box">
+                                        <strong>Key Metrics This Week:</strong><br>
+                                        • 142 containers tracked<br>
+                                        • 23 D&D events prevented<br>
+                                        • 98.7% on-time delivery<br>
+                                        • $1.74M saved year-to-date
+                                    </div>
+                                    <p>Your proactive container management is delivering exceptional results.</p>
+                                    <p style="text-align: center; margin-top: 30px;">
+                                        <a href="#" class="btn-primary">View Full Dashboard</a>
+                                    </p>
+                                </div>
+                                <div class="email-footer">
+                                    <p>ROOTUIP - Ocean Freight Intelligence Platform</p>
+                                    <p>Enterprise Solution • $500K+ Saved Per Vessel</p>
+                                </div>
+                            </div>
+                        </body>
+                        </html>'
+                        style="width: 100%; height: 600px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="rootuip-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <svg class="footer-logo" width="120" height="30" viewBox="0 0 120 30">
+                        <path d="M5 15 Q 10 7.5, 20 15 T 40 15 L 40 25 L 5 25 Z" fill="#0F3460" opacity="0.8"/>
+                        <rect x="15" y="10" width="10" height="12" fill="#00D46A" rx="1"/>
+                        <text x="45" y="20" font-family="Inter, sans-serif" font-size="16" font-weight="600" fill="#0F3460">ROOTUIP</text>
+                    </svg>
+                    <p class="footer-tagline">Ocean Freight Intelligence Platform</p>
+                    <p class="footer-value">$500K+ Saved Per Vessel Annually</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ROOTUIP. Enterprise Ocean Freight Intelligence.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROI Calculator Demo - ROOTUIP</title>
+    
+    <!-- Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/assets/css/enterprise-design-system.css" rel="stylesheet">
+    <link href="/assets/css/roi-calculator-premium.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: var(--enterprise-gray-50);
+            margin: 0;
+            padding: var(--space-6);
+        }
+        
+        .demo-header {
+            text-align: center;
+            margin-bottom: var(--space-8);
+            padding: var(--space-6);
+            background: var(--enterprise-white);
+            border-radius: var(--radius-xl);
+            border: 2px solid var(--enterprise-primary);
+        }
+        
+        .demo-title {
+            font-size: var(--text-4xl);
+            font-weight: var(--font-black);
+            color: var(--enterprise-dark);
+            margin-bottom: var(--space-3);
+        }
+        
+        .demo-subtitle {
+            font-size: var(--text-xl);
+            color: var(--enterprise-gray-600);
+            margin-bottom: var(--space-4);
+        }
+        
+        .demo-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-4);
+            margin-top: var(--space-6);
+        }
+        
+        .demo-feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-4);
+            background: var(--enterprise-primary-subtle);
+            border-radius: var(--radius-lg);
+        }
+        
+        .demo-feature i {
+            font-size: var(--text-2xl);
+            color: var(--enterprise-primary);
+        }
+        
+        .demo-feature span {
+            font-weight: var(--font-semibold);
+            color: var(--enterprise-dark);
+            text-align: center;
+        }
+        
+        .demo-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-4);
+            margin: var(--space-8) 0;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--enterprise-white);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-2xl);
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: var(--space-4);
+            }
+            
+            .demo-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="demo-header">
+        <h1 class="demo-title">ROI Calculator Demo</h1>
+        <p class="demo-subtitle">Fortune 500 Lead Generation Tool - Calculate $25M+ Annual Savings</p>
+        
+        <div class="demo-features">
+            <div class="demo-feature">
+                <i class="fas fa-calculator"></i>
+                <span>Progressive Form with Real-time Calculations</span>
+            </div>
+            <div class="demo-feature">
+                <i class="fas fa-industry"></i>
+                <span>Industry-Specific Calculations & Messaging</span>
+            </div>
+            <div class="demo-feature">
+                <i class="fas fa-chart-line"></i>
+                <span>Lead Scoring & CRM Integration</span>
+            </div>
+        </div>
+        
+        <div class="demo-links">
+            <a href="/roi-calculator-premium.html" class="btn btn-primary btn-lg">
+                <i class="fas fa-external-link-alt"></i>
+                View Full Calculator
+            </a>
+            <a href="/index.html" class="btn btn-secondary">
+                <i class="fas fa-home"></i>
+                Back to Platform
+            </a>
+        </div>
+    </div>
+
+    <div class="demo-container">
+        <div id="roi-calculator-content">
+            <!-- ROI Calculator will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Success Metrics Banner -->
+    <div style="margin-top: var(--space-8); text-align: center; padding: var(--space-6); background: var(--enterprise-white); border-radius: var(--radius-xl); border: 2px solid var(--enterprise-success);">
+        <h3 style="color: var(--enterprise-success); margin-bottom: var(--space-4);">
+            <i class="fas fa-trophy"></i>
+            Conversion Optimization Results
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-6);">
+            <div>
+                <div style="font-size: var(--text-3xl); font-weight: var(--font-black); color: var(--enterprise-success);">47%</div>
+                <div style="color: var(--enterprise-gray-600);">Conversion Rate</div>
+            </div>
+            <div>
+                <div style="font-size: var(--text-3xl); font-weight: var(--font-black); color: var(--enterprise-primary);">$850K</div>
+                <div style="color: var(--enterprise-gray-600);">Avg Deal Size</div>
+            </div>
+            <div>
+                <div style="font-size: var(--text-3xl); font-weight: var(--font-black); color: var(--enterprise-warning);">3.2 min</div>
+                <div style="color: var(--enterprise-gray-600);">Completion Time</div>
+            </div>
+            <div>
+                <div style="font-size: var(--text-3xl); font-weight: var(--font-black); color: var(--enterprise-danger);">89%</div>
+                <div style="color: var(--enterprise-gray-600);">Lead Quality Score</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Implementation Features -->
+    <div style="margin-top: var(--space-8); padding: var(--space-8); background: var(--enterprise-white); border-radius: var(--radius-xl);">
+        <h3 style="text-align: center; margin-bottom: var(--space-8); color: var(--enterprise-dark);">
+            Implementation Features
+        </h3>
+        
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-8);">
+            <div>
+                <h4 style="color: var(--enterprise-primary); margin-bottom: var(--space-4);">
+                    <i class="fas fa-cogs"></i>
+                    Technical Integration
+                </h4>
+                <ul style="color: var(--enterprise-gray-700); line-height: 1.8;">
+                    <li>HubSpot CRM auto-sync with lead scoring</li>
+                    <li>Salesforce Web-to-Lead integration</li>
+                    <li>SendGrid automated email sequences</li>
+                    <li>Slack real-time sales notifications</li>
+                    <li>Google Analytics 4 conversion tracking</li>
+                    <li>Mixpanel behavioral analytics</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 style="color: var(--enterprise-success); margin-bottom: var(--space-4);">
+                    <i class="fas fa-chart-bar"></i>
+                    Lead Generation Features
+                </h4>
+                <ul style="color: var(--enterprise-gray-700); line-height: 1.8;">
+                    <li>Progressive profiling with smart forms</li>
+                    <li>Industry-specific calculation algorithms</li>
+                    <li>Real-time ROI visualization</li>
+                    <li>Personalized email report generation</li>
+                    <li>Calendly demo booking integration</li>
+                    <li>Lead qualification scoring (0-400 points)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="margin-top: var(--space-8); padding: var(--space-6); background: var(--enterprise-primary-subtle); border-radius: var(--radius-lg); text-align: center;">
+            <h4 style="color: var(--enterprise-primary); margin-bottom: var(--space-3);">
+                Ready to Implement?
+            </h4>
+            <p style="color: var(--enterprise-gray-700); margin-bottom: var(--space-4);">
+                This ROI calculator can be customized for any industry and integrated with your existing sales stack in under 48 hours.
+            </p>
+            <div style="display: flex; justify-content: center; gap: var(--space-4);">
+                <a href="mailto:sales@rootuip.com" class="btn btn-primary">
+                    <i class="fas fa-envelope"></i>
+                    Request Implementation
+                </a>
+                <a href="/enterprise-demo-interface.html" class="btn btn-secondary">
+                    <i class="fas fa-play"></i>
+                    Watch Demo Video
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/assets/js/roi-calculator-premium.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Insert calculator content
+            const container = document.getElementById('roi-calculator-content');
+            if (container) {
+                container.innerHTML = getROICalculatorContent();
+                ROICalculator.initROICalculator();
+            }
+        });
+        
+        // Demo mode enhancements
+        const originalSubmitLeadData = window.submitLeadData;
+        window.submitLeadData = async function() {
+            // In demo mode, show success without actually submitting
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve(true);
+                }, 1000);
+            });
+        };
+        
+        // Add demo watermark
+        setTimeout(() => {
+            const demoWatermark = document.createElement('div');
+            demoWatermark.innerHTML = '<i class="fas fa-eye"></i> DEMO MODE';
+            demoWatermark.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--enterprise-warning);
+                color: white;
+                padding: 8px 16px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: bold;
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            `;
+            document.body.appendChild(demoWatermark);
+        }, 1000);
+    </script>
+</body>
+</html>

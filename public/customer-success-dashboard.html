@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Success Dashboard - ROOTUIP</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-dark);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a365d;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            color: #3182ce;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        /* Metrics */
+        .metric-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1a365d;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: #718096;
+        }
+
+        .metric-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            margin-top: 0.5rem;
+        }
+
+        .metric-change.positive {
+            background: #d4f8e8;
+            color: #047857;
+        }
+
+        .metric-change.negative {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Health Score */
+        .health-score-container {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .health-score-circle {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .health-score-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .health-status {
+            font-size: 1.125rem;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            display: inline-block;
+        }
+
+        .health-status.healthy {
+            background: #d4f8e8;
+            color: #047857;
+        }
+
+        .health-status.at-risk {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .health-status.critical {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Customer List */
+        .customer-list {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .list-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e2e8f0;
+            background: var(--bg-dark);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            background: #f7fafc;
+        }
+
+        .filter-btn.active {
+            background: #3182ce;
+            color: white;
+            border-color: #3182ce;
+        }
+
+        .customer-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            align-items: center;
+            gap: 1rem;
+            transition: background 0.3s;
+        }
+
+        .customer-item:hover {
+            background: #f7fafc;
+        }
+
+        .customer-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .customer-info p {
+            font-size: 0.875rem;
+            color: #718096;
+        }
+
+        .health-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .health-badge.high {
+            background: #d4f8e8;
+            color: #047857;
+        }
+
+        .health-badge.medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .health-badge.low {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #718096;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .tab:hover {
+            color: #2d3748;
+        }
+
+        .tab.active {
+            color: #3182ce;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #3182ce;
+        }
+
+        /* Actions */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #3182ce;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            background: var(--bg-dark);
+            width: 90%;
+            max-width: 600px;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #718096;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #3182ce;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .alert-success {
+            background: #d4f8e8;
+            color: #047857;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0.5rem;
+            bottom: 0.5rem;
+            width: 2px;
+            background: #e2e8f0;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: #3182ce;
+            border: 3px solid white;
+        }
+
+        .timeline-content {
+            background: var(--bg-dark);
+            padding: 1rem;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-date {
+            font-size: 0.875rem;
+            color: #718096;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #3182ce;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .customer-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">ROOTUIP Customer Success</div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#dashboard" class="active">Dashboard</a></li>
+                    <li><a href="#customers">Customers</a></li>
+                    <li><a href="#health">Health Monitor</a></li>
+                    <li><a href="#support">Support</a></li>
+                    <li><a href="#retention">Retention</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Dashboard Overview -->
+        <section id="dashboard">
+            <h1 style="font-size: 2rem; margin-bottom: 2rem;">Customer Success Overview</h1>
+            
+            <!-- Metrics Grid -->
+            <div class="dashboard-grid">
+                <!-- Total Customers -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Total Customers</h2>
+                        <div class="card-icon" style="background: #e0e7ff;">👥</div>
+                    </div>
+                    <div class="metric-value" id="totalCustomers">156</div>
+                    <div class="metric-label">Enterprise Accounts</div>
+                    <div class="metric-change positive">↑ 12% from last month</div>
+                </div>
+
+                <!-- Average Health Score -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Avg Health Score</h2>
+                        <div class="card-icon" style="background: #d4f8e8;">💚</div>
+                    </div>
+                    <div class="metric-value" id="avgHealthScore">87</div>
+                    <div class="metric-label">Out of 100</div>
+                    <div class="metric-change positive">↑ 5 points</div>
+                </div>
+
+                <!-- Churn Risk -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">At-Risk Accounts</h2>
+                        <div class="card-icon" style="background: #fee2e2;">⚠️</div>
+                    </div>
+                    <div class="metric-value" id="atRiskAccounts">8</div>
+                    <div class="metric-label">Require Attention</div>
+                    <div class="metric-change negative">↑ 2 this week</div>
+                </div>
+
+                <!-- Revenue at Risk -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Revenue at Risk</h2>
+                        <div class="card-icon" style="background: #fef3c7;">💰</div>
+                    </div>
+                    <div class="metric-value" id="revenueAtRisk">$2.4M</div>
+                    <div class="metric-label">Potential Churn</div>
+                    <div class="metric-change negative">↑ $500K</div>
+                </div>
+
+                <!-- NPS Score -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">NPS Score</h2>
+                        <div class="card-icon" style="background: #e0e7ff;">⭐</div>
+                    </div>
+                    <div class="metric-value" id="npsScore">72</div>
+                    <div class="metric-label">Net Promoter Score</div>
+                    <div class="metric-change positive">↑ 8 points</div>
+                </div>
+
+                <!-- Expansion Revenue -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Expansion Revenue</h2>
+                        <div class="card-icon" style="background: #d4f8e8;">📈</div>
+                    </div>
+                    <div class="metric-value" id="expansionRevenue">$850K</div>
+                    <div class="metric-label">This Quarter</div>
+                    <div class="metric-change positive">↑ 23% QoQ</div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="dashboard-grid" style="margin-top: 2rem;">
+                <!-- Health Score Distribution -->
+                <div class="card">
+                    <h3 class="card-title">Health Score Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="healthDistributionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Revenue by Health -->
+                <div class="card">
+                    <h3 class="card-title">Revenue by Health Status</h3>
+                    <div class="chart-container">
+                        <canvas id="revenueByHealthChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Adoption Trends -->
+                <div class="card">
+                    <h3 class="card-title">Feature Adoption Trends</h3>
+                    <div class="chart-container">
+                        <canvas id="adoptionTrendsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Customer List -->
+        <section id="customers" style="margin-top: 3rem;">
+            <div class="customer-list">
+                <div class="list-header">
+                    <h2 class="list-title">Customer Accounts</h2>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="openNewCustomerModal()">+ New Customer</button>
+                        <button class="btn btn-secondary" onclick="exportCustomers()">Export</button>
+                    </div>
+                </div>
+                
+                <!-- Filter Tabs -->
+                <div class="tabs" style="padding: 0 1.5rem;">
+                    <button class="tab active" onclick="filterCustomers('all')">All Customers</button>
+                    <button class="tab" onclick="filterCustomers('healthy')">Healthy</button>
+                    <button class="tab" onclick="filterCustomers('at-risk')">At Risk</button>
+                    <button class="tab" onclick="filterCustomers('critical')">Critical</button>
+                    <button class="tab" onclick="filterCustomers('new')">New (< 90 days)</button>
+                </div>
+
+                <!-- Customer Items -->
+                <div id="customerListContainer">
+                    <!-- Sample Customer -->
+                    <div class="customer-item">
+                        <div class="customer-info">
+                            <h3>Acme Corporation</h3>
+                            <p>Contract: $750K • 250 Users</p>
+                        </div>
+                        <div>
+                            <span class="health-badge high">Health: 92</span>
+                        </div>
+                        <div>
+                            <p style="font-size: 0.875rem;">Last Activity: 2 hours ago</p>
+                        </div>
+                        <div>
+                            <p style="font-size: 0.875rem;">CSM: Sarah Johnson</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm" onclick="viewCustomerDetails('acme')">View</button>
+                            <button class="btn btn-secondary btn-sm" onclick="scheduleEBR('acme')">EBR</button>
+                        </div>
+                    </div>
+
+                    <!-- More customers would be dynamically loaded -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- New Customer Modal -->
+    <div id="newCustomerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">New Customer Onboarding</h2>
+                <button class="close-btn" onclick="closeModal('newCustomerModal')">&times;</button>
+            </div>
+            
+            <form id="newCustomerForm">
+                <div class="form-group">
+                    <label class="form-label">Company Name</label>
+                    <input type="text" class="form-input" name="companyName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Contract Value</label>
+                    <input type="number" class="form-input" name="contractValue" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Primary Contact</label>
+                    <input type="email" class="form-input" name="primaryContact" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Number of Users</label>
+                    <input type="number" class="form-input" name="userCount" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Industry</label>
+                    <select class="form-select" name="industry" required>
+                        <option value="">Select Industry</option>
+                        <option value="technology">Technology</option>
+                        <option value="finance">Finance</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="retail">Retail</option>
+                        <option value="manufacturing">Manufacturing</option>
+                    </select>
+                </div>
+                
+                <div class="action-buttons">
+                    <button type="submit" class="btn btn-primary">Start Onboarding</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('newCustomerModal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:3008/api';
+
+        // Initialize Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            initializeCharts();
+            setupEventListeners();
+        });
+
+        // Load Dashboard Data
+        async function loadDashboardData() {
+            try {
+                // In a real app, this would fetch from the API
+                // For demo, we'll use sample data
+                updateMetrics();
+                loadCustomerList();
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        // Update Metrics
+        function updateMetrics() {
+            // These would be fetched from the API
+            document.getElementById('totalCustomers').textContent = '156';
+            document.getElementById('avgHealthScore').textContent = '87';
+            document.getElementById('atRiskAccounts').textContent = '8';
+            document.getElementById('revenueAtRisk').textContent = '$2.4M';
+            document.getElementById('npsScore').textContent = '72';
+            document.getElementById('expansionRevenue').textContent = '$850K';
+        }
+
+        // Initialize Charts
+        function initializeCharts() {
+            // Health Score Distribution
+            const healthCtx = document.getElementById('healthDistributionChart').getContext('2d');
+            new Chart(healthCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Healthy (80-100)', 'Good (60-79)', 'At Risk (40-59)', 'Critical (0-39)'],
+                    datasets: [{
+                        data: [65, 25, 8, 2],
+                        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Revenue by Health
+            const revenueCtx = document.getElementById('revenueByHealthChart').getContext('2d');
+            new Chart(revenueCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Healthy', 'Good', 'At Risk', 'Critical'],
+                    datasets: [{
+                        label: 'Revenue (Millions)',
+                        data: [48.5, 18.7, 6.2, 1.5],
+                        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value + 'M';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Adoption Trends
+            const adoptionCtx = document.getElementById('adoptionTrendsChart').getContext('2d');
+            new Chart(adoptionCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Core Features',
+                        data: [65, 68, 72, 75, 78, 82],
+                        borderColor: '#3b82f6',
+                        tension: 0.1
+                    }, {
+                        label: 'Advanced Features',
+                        data: [42, 45, 48, 52, 55, 58],
+                        borderColor: '#10b981',
+                        tension: 0.1
+                    }, {
+                        label: 'Integrations',
+                        data: [28, 32, 35, 38, 42, 45],
+                        borderColor: '#f59e0b',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load Customer List
+        function loadCustomerList() {
+            // Sample customers - would be loaded from API
+            const customers = [
+                { id: 'acme', name: 'Acme Corporation', contract: 750000, users: 250, health: 92, lastActivity: '2 hours ago', csm: 'Sarah Johnson' },
+                { id: 'tech', name: 'TechGlobal Inc', contract: 1200000, users: 500, health: 45, lastActivity: '5 days ago', csm: 'Mike Chen' },
+                { id: 'retail', name: 'RetailMax', contract: 600000, users: 180, health: 78, lastActivity: '1 day ago', csm: 'Lisa Wong' }
+            ];
+
+            const container = document.getElementById('customerListContainer');
+            container.innerHTML = customers.map(customer => `
+                <div class="customer-item">
+                    <div class="customer-info">
+                        <h3>${customer.name}</h3>
+                        <p>Contract: $${(customer.contract/1000).toFixed(0)}K • ${customer.users} Users</p>
+                    </div>
+                    <div>
+                        <span class="health-badge ${getHealthClass(customer.health)}">Health: ${customer.health}</span>
+                    </div>
+                    <div>
+                        <p style="font-size: 0.875rem;">Last Activity: ${customer.lastActivity}</p>
+                    </div>
+                    <div>
+                        <p style="font-size: 0.875rem;">CSM: ${customer.csm}</p>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary btn-sm" onclick="viewCustomerDetails('${customer.id}')">View</button>
+                        <button class="btn btn-secondary btn-sm" onclick="scheduleEBR('${customer.id}')">EBR</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Helper Functions
+        function getHealthClass(score) {
+            if (score >= 80) return 'high';
+            if (score >= 60) return 'medium';
+            return 'low';
+        }
+
+        function openNewCustomerModal() {
+            document.getElementById('newCustomerModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function filterCustomers(filter) {
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter customers (would be implemented with actual data)
+            console.log('Filtering by:', filter);
+        }
+
+        function viewCustomerDetails(customerId) {
+            // Navigate to customer detail view
+            console.log('Viewing customer:', customerId);
+        }
+
+        function scheduleEBR(customerId) {
+            // Open EBR scheduling modal
+            console.log('Scheduling EBR for:', customerId);
+        }
+
+        function exportCustomers() {
+            // Export customer data
+            console.log('Exporting customer data...');
+        }
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // New Customer Form
+            document.getElementById('newCustomerForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const customerData = Object.fromEntries(formData);
+                
+                try {
+                    const response = await axios.post(`${API_BASE_URL}/onboarding/create`, {
+                        customerId: generateCustomerId(),
+                        ...customerData
+                    });
+                    
+                    if (response.data.success) {
+                        alert('Customer onboarding initiated successfully!');
+                        closeModal('newCustomerModal');
+                        loadCustomerList();
+                    }
+                } catch (error) {
+                    console.error('Error creating customer:', error);
+                    alert('Failed to create customer. Please try again.');
+                }
+            });
+
+            // Close modals on outside click
+            window.onclick = function(event) {
+                if (event.target.classList.contains('modal')) {
+                    event.target.style.display = 'none';
+                }
+            };
+        }
+
+        function generateCustomerId() {
+            return 'cust_' + Date.now();
+        }
+    </script>
+</body>
+</html>

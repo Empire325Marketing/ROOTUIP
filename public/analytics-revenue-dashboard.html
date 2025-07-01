@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Revenue & Analytics Dashboard - ROOTUIP</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .date-range {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .date-range select {
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        .metric-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-change {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .metric-change.positive {
+            color: #10b981;
+        }
+
+        .metric-change.negative {
+            color: #ef4444;
+        }
+
+        .charts-section {
+            padding: 0 2rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .chart-container {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .chart-container.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #e2e8f0;
+        }
+
+        .pipeline-stage {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #334155;
+        }
+
+        .pipeline-stage:hover {
+            border-color: #3b82f6;
+        }
+
+        .stage-info {
+            flex: 1;
+        }
+
+        .stage-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .stage-details {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+
+        .stage-value {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+
+        .customer-table {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 0 2rem 2rem;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 2px solid #334155;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        .health-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .health-badge.healthy {
+            background: #10b981;
+            color: white;
+        }
+
+        .health-badge.needs-attention {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .health-badge.at-risk {
+            background: #ef4444;
+            color: white;
+        }
+
+        .action-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #2563eb;
+        }
+
+        @media (max-width: 768px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">Enterprise Revenue Dashboard</h1>
+        <div class="date-range">
+            <select id="date-range">
+                <option value="30">Last 30 Days</option>
+                <option value="90">Last Quarter</option>
+                <option value="180">Last 6 Months</option>
+                <option value="365">Last Year</option>
+            </select>
+            <button class="action-btn" onclick="exportReport()">Export Report</button>
+        </div>
+    </div>
+
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-label">Annual Recurring Revenue</div>
+            <div class="metric-value" id="arr">$0</div>
+            <div class="metric-change positive">
+                <span>↑</span>
+                <span id="arr-change">+0%</span>
+            </div>
+        </div>
+        
+        <div class="metric-card">
+            <div class="metric-label">Monthly Recurring Revenue</div>
+            <div class="metric-value" id="mrr">$0</div>
+            <div class="metric-change positive">
+                <span>↑</span>
+                <span id="mrr-change">+0%</span>
+            </div>
+        </div>
+        
+        <div class="metric-card">
+            <div class="metric-label">Customer Lifetime Value</div>
+            <div class="metric-value" id="ltv">$0</div>
+            <div class="metric-change positive">
+                <span>↑</span>
+                <span id="ltv-change">+0%</span>
+            </div>
+        </div>
+        
+        <div class="metric-card">
+            <div class="metric-label">Pipeline Value</div>
+            <div class="metric-value" id="pipeline">$0</div>
+            <div class="metric-change positive">
+                <span>↑</span>
+                <span id="pipeline-change">+0%</span>
+            </div>
+        </div>
+        
+        <div class="metric-card">
+            <div class="metric-label">Win Rate</div>
+            <div class="metric-value" id="win-rate">0%</div>
+            <div class="metric-change positive">
+                <span>↑</span>
+                <span id="win-rate-change">+0%</span>
+            </div>
+        </div>
+        
+        <div class="metric-card">
+            <div class="metric-label">Average Deal Size</div>
+            <div class="metric-value" id="avg-deal">$0</div>
+            <div class="metric-change positive">
+                <span>↑</span>
+                <span id="deal-change">+0%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="charts-section">
+        <div class="chart-container">
+            <h2 class="chart-title">Revenue Growth</h2>
+            <canvas id="revenue-chart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <h2 class="chart-title">Customer Acquisition</h2>
+            <canvas id="acquisition-chart"></canvas>
+        </div>
+        
+        <div class="chart-container full-width">
+            <h2 class="chart-title">Sales Pipeline</h2>
+            <div id="pipeline-stages">
+                <div class="pipeline-stage">
+                    <div class="stage-info">
+                        <div class="stage-name">Qualified Leads</div>
+                        <div class="stage-details"><span id="qualified-count">0</span> opportunities</div>
+                    </div>
+                    <div class="stage-value" id="qualified-value">$0</div>
+                </div>
+                
+                <div class="pipeline-stage">
+                    <div class="stage-info">
+                        <div class="stage-name">Demo Scheduled</div>
+                        <div class="stage-details"><span id="demo-count">0</span> opportunities</div>
+                    </div>
+                    <div class="stage-value" id="demo-value">$0</div>
+                </div>
+                
+                <div class="pipeline-stage">
+                    <div class="stage-info">
+                        <div class="stage-name">Proposal Sent</div>
+                        <div class="stage-details"><span id="proposal-count">0</span> opportunities</div>
+                    </div>
+                    <div class="stage-value" id="proposal-value">$0</div>
+                </div>
+                
+                <div class="pipeline-stage">
+                    <div class="stage-info">
+                        <div class="stage-name">Contract Negotiation</div>
+                        <div class="stage-details"><span id="contract-count">0</span> opportunities</div>
+                    </div>
+                    <div class="stage-value" id="contract-value">$0</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h2 class="chart-title">Lead Sources</h2>
+            <canvas id="sources-chart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <h2 class="chart-title">Customer Health Distribution</h2>
+            <canvas id="health-chart"></canvas>
+        </div>
+    </div>
+
+    <div class="customer-table">
+        <h2 class="chart-title">Top Enterprise Customers</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>ARR</th>
+                    <th>Container Volume</th>
+                    <th>Health Score</th>
+                    <th>Next Renewal</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="customer-list">
+                <!-- Populated dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Initialize Google Analytics
+        const analyticsScript = document.createElement('script');
+        analyticsScript.async = true;
+        analyticsScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-PM3MT7XSM2';
+        document.head.appendChild(analyticsScript);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-PM3MT7XSM2');
+
+        // Initialize Mixpanel
+        (function(f,b){if(!b.__SV){var e,g,i,h;window.mixpanel=b;b._i=[];b.init=function(e,f,c){function g(a,d){var b=d.split(".");2==b.length&&(a=a[b[0]],d=b[1]);a[d]=function(){a.push([d].concat(Array.prototype.slice.call(arguments,0)))}}var a=b;"undefined"!==typeof c?a=b[c]=[]:c="mixpanel";a.people=a.people||[];a.toString=function(a){var d="mixpanel";"mixpanel"!==c&&(d+="."+c);a||(d+=" (stub)");return d};a.people.toString=function(){return a.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");
+        for(h=0;h<i.length;h++)g(a,i[h]);var j="set set_once union unset remove delete".split(" ");a.get_group=function(){function b(c){d[c]=function(){call2_args=arguments;call2=[c].concat(Array.prototype.slice.call(call2_args,0));a.push([e,call2])}}for(var d={},e=["get_group"].concat(Array.prototype.slice.call(arguments,0)),c=0;c<j.length;c++)b(j[c]);return d};b._i.push([e,f,c])};b.__SV=1.2;e=f.createElement("script");e.type="text/javascript";e.async=!0;e.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===f.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";g=f.getElementsByTagName("script")[0];g.parentNode.insertBefore(e,g)}})(document,window.mixpanel||[]);
+        mixpanel.init('1b472f2de0a81debfb0e9f67efa0c2fe');
+
+        // Chart configurations
+        const chartColors = {
+            primary: '#3b82f6',
+            secondary: '#8b5cf6',
+            success: '#10b981',
+            warning: '#f59e0b',
+            danger: '#ef4444',
+            grid: '#334155',
+            text: '#94a3b8'
+        };
+
+        // Initialize Revenue Chart
+        const revenueCtx = document.getElementById('revenue-chart').getContext('2d');
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'MRR',
+                    data: [850000, 920000, 1050000, 1200000, 1380000, 1550000],
+                    borderColor: chartColors.primary,
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'Target',
+                    data: [800000, 900000, 1000000, 1150000, 1300000, 1500000],
+                    borderColor: chartColors.secondary,
+                    borderDash: [5, 5],
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: chartColors.text }
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: { color: chartColors.grid },
+                        ticks: { 
+                            color: chartColors.text,
+                            callback: value => '$' + (value/1000000).toFixed(1) + 'M'
+                        }
+                    },
+                    x: {
+                        grid: { color: chartColors.grid },
+                        ticks: { color: chartColors.text }
+                    }
+                }
+            }
+        });
+
+        // Initialize Acquisition Chart
+        const acquisitionCtx = document.getElementById('acquisition-chart').getContext('2d');
+        const acquisitionChart = new Chart(acquisitionCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'New Customers',
+                    data: [8, 12, 15, 18, 22, 28],
+                    backgroundColor: chartColors.primary
+                }, {
+                    label: 'Churned',
+                    data: [2, 1, 3, 2, 1, 2],
+                    backgroundColor: chartColors.danger
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: chartColors.text }
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: { color: chartColors.grid },
+                        ticks: { color: chartColors.text }
+                    },
+                    x: {
+                        grid: { color: chartColors.grid },
+                        ticks: { color: chartColors.text }
+                    }
+                }
+            }
+        });
+
+        // Initialize Lead Sources Chart
+        const sourcesCtx = document.getElementById('sources-chart').getContext('2d');
+        const sourcesChart = new Chart(sourcesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Direct Sales', 'Partner Referral', 'Marketing', 'Events', 'Other'],
+                datasets: [{
+                    data: [35, 25, 20, 15, 5],
+                    backgroundColor: [
+                        chartColors.primary,
+                        chartColors.secondary,
+                        chartColors.success,
+                        chartColors.warning,
+                        chartColors.danger
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: chartColors.text }
+                    }
+                }
+            }
+        });
+
+        // Initialize Health Chart
+        const healthCtx = document.getElementById('health-chart').getContext('2d');
+        const healthChart = new Chart(healthCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Healthy', 'Needs Attention', 'At Risk'],
+                datasets: [{
+                    data: [65, 25, 10],
+                    backgroundColor: [
+                        chartColors.success,
+                        chartColors.warning,
+                        chartColors.danger
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: chartColors.text }
+                    }
+                }
+            }
+        });
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                // Fetch revenue metrics
+                const response = await fetch('/api/analytics/revenue-metrics');
+                const data = await response.json();
+                
+                // Update metric cards
+                document.getElementById('arr').textContent = `$${(data.arr / 1000000).toFixed(1)}M`;
+                document.getElementById('mrr').textContent = `$${(data.mrr / 1000000).toFixed(1)}M`;
+                document.getElementById('ltv').textContent = `$${Math.round(data.ltv / 1000)}K`;
+                document.getElementById('pipeline').textContent = `$${(data.pipeline / 1000000).toFixed(1)}M`;
+                document.getElementById('win-rate').textContent = `${data.winRate}%`;
+                document.getElementById('avg-deal').textContent = `$${Math.round(data.avgDealSize / 1000)}K`;
+                
+                // Update changes
+                document.getElementById('arr-change').textContent = `+${data.arrGrowth}%`;
+                document.getElementById('mrr-change').textContent = `+${data.mrrGrowth}%`;
+                
+                // Update pipeline stages
+                updatePipelineStages(data.pipelineStages);
+                
+                // Update customer table
+                updateCustomerTable(data.topCustomers);
+                
+                // Track dashboard view
+                gtag('event', 'dashboard_view', {
+                    'event_category': 'engagement',
+                    'event_label': 'revenue_dashboard'
+                });
+                
+                mixpanel.track('Dashboard Viewed', {
+                    dashboard_type: 'revenue',
+                    arr: data.arr,
+                    mrr: data.mrr
+                });
+                
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+            }
+        }
+
+        function updatePipelineStages(stages) {
+            if (!stages) return;
+            
+            // Update qualified leads
+            if (stages.qualified) {
+                document.getElementById('qualified-count').textContent = stages.qualified.count;
+                document.getElementById('qualified-value').textContent = `$${(stages.qualified.value / 1000000).toFixed(1)}M`;
+            }
+            
+            // Update demo scheduled
+            if (stages.demo) {
+                document.getElementById('demo-count').textContent = stages.demo.count;
+                document.getElementById('demo-value').textContent = `$${(stages.demo.value / 1000000).toFixed(1)}M`;
+            }
+            
+            // Update proposal sent
+            if (stages.proposal) {
+                document.getElementById('proposal-count').textContent = stages.proposal.count;
+                document.getElementById('proposal-value').textContent = `$${(stages.proposal.value / 1000000).toFixed(1)}M`;
+            }
+            
+            // Update contract negotiation
+            if (stages.contract) {
+                document.getElementById('contract-count').textContent = stages.contract.count;
+                document.getElementById('contract-value').textContent = `$${(stages.contract.value / 1000000).toFixed(1)}M`;
+            }
+        }
+
+        function updateCustomerTable(customers) {
+            if (!customers) return;
+            
+            const tbody = document.getElementById('customer-list');
+            tbody.innerHTML = '';
+            
+            customers.forEach(customer => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${customer.name}</td>
+                    <td>$${(customer.arr / 1000).toFixed(0)}K</td>
+                    <td>${customer.containerVolume.toLocaleString()}/mo</td>
+                    <td><span class="health-badge ${customer.healthStatus}">${customer.healthScore}%</span></td>
+                    <td>${new Date(customer.renewalDate).toLocaleDateString()}</td>
+                    <td><button class="action-btn" onclick="viewCustomer('${customer.id}')">View Details</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function viewCustomer(customerId) {
+            window.location.href = `/customer/${customerId}`;
+        }
+
+        function exportReport() {
+            // Track export action
+            gtag('event', 'export_report', {
+                'event_category': 'engagement',
+                'event_label': 'revenue_dashboard'
+            });
+            
+            // Generate and download report
+            window.location.href = '/api/analytics/export-revenue-report';
+        }
+
+        // Refresh data periodically
+        setInterval(loadDashboardData, 60000); // Every minute
+
+        // Initial load
+        loadDashboardData();
+
+        // Mock data for demo
+        const mockData = {
+            arr: 18600000,
+            mrr: 1550000,
+            ltv: 450000,
+            pipeline: 4200000,
+            winRate: 42,
+            avgDealSize: 285000,
+            arrGrowth: 24,
+            mrrGrowth: 18,
+            pipelineStages: {
+                qualified: { count: 45, value: 1800000 },
+                demo: { count: 28, value: 1200000 },
+                proposal: { count: 15, value: 800000 },
+                contract: { count: 8, value: 400000 }
+            },
+            topCustomers: [
+                { id: '1', name: 'Maersk Line', arr: 500000, containerVolume: 15000, healthScore: 92, healthStatus: 'healthy', renewalDate: '2024-09-15' },
+                { id: '2', name: 'MSC Shipping', arr: 450000, containerVolume: 12000, healthScore: 88, healthStatus: 'healthy', renewalDate: '2024-10-01' },
+                { id: '3', name: 'CMA CGM', arr: 400000, containerVolume: 10000, healthScore: 75, healthStatus: 'needs-attention', renewalDate: '2024-08-20' },
+                { id: '4', name: 'Hapag-Lloyd', arr: 350000, containerVolume: 8000, healthScore: 95, healthStatus: 'healthy', renewalDate: '2024-11-30' },
+                { id: '5', name: 'ONE Line', arr: 300000, containerVolume: 7000, healthScore: 58, healthStatus: 'at-risk', renewalDate: '2024-07-15' }
+            ]
+        };
+
+        // Use mock data for demo
+        setTimeout(() => {
+            document.getElementById('arr').textContent = `$${(mockData.arr / 1000000).toFixed(1)}M`;
+            document.getElementById('mrr').textContent = `$${(mockData.mrr / 1000000).toFixed(1)}M`;
+            document.getElementById('ltv').textContent = `$${Math.round(mockData.ltv / 1000)}K`;
+            document.getElementById('pipeline').textContent = `$${(mockData.pipeline / 1000000).toFixed(1)}M`;
+            document.getElementById('win-rate').textContent = `${mockData.winRate}%`;
+            document.getElementById('avg-deal').textContent = `$${Math.round(mockData.avgDealSize / 1000)}K`;
+            document.getElementById('arr-change').textContent = `+${mockData.arrGrowth}%`;
+            document.getElementById('mrr-change').textContent = `+${mockData.mrrGrowth}%`;
+            updatePipelineStages(mockData.pipelineStages);
+            updateCustomerTable(mockData.topCustomers);
+        }, 1000);
+    </script>
+</body>
+</html>

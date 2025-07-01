@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Enterprise ROI Calculator - Fortune 500 Value Proposition</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <style>
+        /* ROI Calculator Specific Styles */
+        .calculator-hero {
+            background: linear-gradient(135deg, var(--rootuip-primary) 0%, var(--rootuip-primary-dark) 100%);
+            color: white;
+            padding: var(--space-16) 0;
+            text-align: center;
+        }
+        
+        .calculator-hero h1 {
+            font-size: var(--text-5xl);
+            font-weight: 700;
+            margin-bottom: var(--space-4);
+            color: white;
+        }
+        
+        .calculator-hero p {
+            font-size: var(--text-xl);
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Calculator Container */
+        .calculator-container {
+            max-width: 1200px;
+            margin: -60px auto 0;
+            padding: 0 var(--space-6);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .calculator-card {
+            background: var(--rootuip-white);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-2xl);
+            padding: var(--space-10);
+            border: 1px solid var(--rootuip-gray-200);
+        }
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-title p {
+            font-size: 1.25rem;
+            color: var(--text-light);
+        }
+
+        /* Calculator Layout */
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .calculator-section {
+            background: var(--bg-dark);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-icon {
+            font-size: 1.75rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .form-helper {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-addon {
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .range-input {
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+
+        .range-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Results Section */
+        .results-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 10px;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .results-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .savings-display {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .savings-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric-card {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        /* Breakdown Section */
+        .breakdown-section {
+            background: var(--bg-dark);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .breakdown-chart {
+            position: relative;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .donut-chart {
+            width: 250px;
+            height: 250px;
+            position: relative;
+        }
+
+        .chart-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .chart-center-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .chart-center-label {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        .breakdown-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 5px;
+        }
+
+        .breakdown-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breakdown-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--light);
+            padding: 3rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .cta-button-primary {
+            background: var(--success);
+            color: white;
+        }
+
+        .cta-button-primary:hover {
+            background: #008741;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,166,81,0.3);
+        }
+
+        .cta-button-secondary {
+            background: var(--bg-dark);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .cta-button-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Additional Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: var(--bg-dark);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Report Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--bg-dark);
+            padding: 3rem;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .close-modal {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            background: none;
+            border: none;
+        }
+
+        .close-modal:hover {
+            color: var(--text-dark);
+        }
+
+        /* Loading State */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .breakdown-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title h1 {
+                font-size: 2rem;
+            }
+            
+            .savings-display {
+                font-size: 3rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .cta-section {
+                display: none;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <a href="/" class="logo">ROOTUIP</a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#results" class="nav-link">Results</a>
+                <a href="/contact" class="nav-link">Contact Sales</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Title -->
+        <div class="page-title">
+            <h1>Calculate Your D&D Savings with ROOTUIP</h1>
+            <p>See how AI-powered prevention can save your fleet millions annually</p>
+        </div>
+
+        <!-- Calculator Form -->
+        <div class="calculator-grid">
+            <!-- Fleet Information -->
+            <div class="calculator-section">
+                <h2 class="section-title">
+                    <span class="section-icon">🚢</span>
+                    Fleet Information
+                </h2>
+                
+                <div class="form-group">
+                    <label class="form-label">Number of Vessels</label>
+                    <input type="number" class="form-input" id="vessels" value="25" min="1" max="500">
+                    <p class="form-helper">Include owned and chartered vessels</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Annual Container Volume (TEUs)</label>
+                    <input type="number" class="form-input" id="containers" value="250000" min="1000" step="1000">
+                    <p class="form-helper">Total twenty-foot equivalent units per year</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Primary Trade Routes</label>
+                    <select class="form-input" id="tradeRoutes">
+                        <option value="global">Global (All Routes)</option>
+                        <option value="transpacific">Trans-Pacific</option>
+                        <option value="transatlantic">Trans-Atlantic</option>
+                        <option value="asia-europe">Asia-Europe</option>
+                        <option value="intra-asia">Intra-Asia</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Average Container Value ($)</label>
+                    <input type="number" class="form-input" id="containerValue" value="50000" min="1000">
+                    <p class="form-helper">Helps calculate business impact</p>
+                </div>
+            </div>
+
+            <!-- Current D&D Situation -->
+            <div class="calculator-section">
+                <h2 class="section-title">
+                    <span class="section-icon">💰</span>
+                    Current D&D Exposure
+                </h2>
+
+                <div class="form-group">
+                    <label class="form-label">Average D&D Cost per Container ($)</label>
+                    <input type="number" class="form-input" id="ddPerContainer" value="750" min="100">
+                    <p class="form-helper">Industry average: $500-1,000</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Current D&D Prevention Rate</label>
+                    <div class="input-group">
+                        <input type="range" class="range-input" id="currentRate" min="0" max="100" value="35">
+                        <span class="range-value" id="currentRateValue">35%</span>
+                    </div>
+                    <p class="form-helper">Percentage of charges currently avoided</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Average Demurrage Days</label>
+                    <input type="number" class="form-input" id="demurrageDays" value="5" min="0" max="30">
+                    <p class="form-helper">Days containers sit at port</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Average Detention Days</label>
+                    <input type="number" class="form-input" id="detentionDays" value="7" min="0" max="30">
+                    <p class="form-helper">Days containers held beyond free time</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Options -->
+        <details class="calculator-section" style="margin-bottom: 2rem;">
+            <summary style="cursor: pointer; font-weight: 600; color: var(--primary); margin-bottom: 1rem;">
+                Advanced Options ⚙️
+            </summary>
+            
+            <div class="calculator-grid" style="margin-top: 1.5rem;">
+                <div>
+                    <div class="form-group">
+                        <label class="form-label">Peak Season Multiplier</label>
+                        <select class="form-input" id="peakMultiplier">
+                            <option value="1">No peak season impact</option>
+                            <option value="1.5" selected>1.5x during peak (3 months)</option>
+                            <option value="2">2x during peak</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Port Congestion Level</label>
+                        <select class="form-input" id="congestion">
+                            <option value="low">Low (Major ports only)</option>
+                            <option value="medium" selected>Medium (Some delays)</option>
+                            <option value="high">High (Frequent delays)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-group">
+                        <label class="form-label">Current Technology Stack</label>
+                        <select class="form-input" id="techStack">
+                            <option value="manual">Manual tracking</option>
+                            <option value="basic" selected>Basic visibility tools</option>
+                            <option value="advanced">Advanced TMS</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Team Size (Operations)</label>
+                        <input type="number" class="form-input" id="teamSize" value="50" min="1">
+                        <p class="form-helper">For productivity calculations</p>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Calculate Button -->
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <button class="cta-button cta-button-primary" onclick="calculateROI()" style="font-size: 1.25rem; padding: 1rem 3rem;">
+                Calculate My Savings →
+            </button>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="results" style="display: none;">
+            <h2 class="results-title">Your Annual Savings with ROOTUIP</h2>
+            
+            <div class="savings-display" id="annualSavings">$0</div>
+            <p class="savings-subtitle" id="savingsSubtitle">That's $0 prevented every single day</p>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="roiPercent">0%</div>
+                    <div class="metric-label">First Year ROI</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="paybackMonths">0</div>
+                    <div class="metric-label">Months to Payback</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="chargesPrevented">0</div>
+                    <div class="metric-label">Charges Prevented</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="productivityGain">0%</div>
+                    <div class="metric-label">Team Productivity Gain</div>
+                </div>
+            </div>
+
+            <button class="cta-button" style="background: var(--bg-dark); color: var(--primary);" onclick="showDetailedReport()">
+                Get Detailed Report PDF
+            </button>
+        </div>
+
+        <!-- Breakdown Section -->
+        <div class="breakdown-section" id="breakdown" style="display: none;">
+            <h2 class="section-title">
+                <span class="section-icon">📊</span>
+                Savings Breakdown
+            </h2>
+            
+            <div class="breakdown-grid">
+                <div class="breakdown-chart">
+                    <canvas id="savingsChart" width="300" height="300"></canvas>
+                </div>
+                
+                <div class="breakdown-details">
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">
+                            <span class="breakdown-indicator" style="background: var(--success);"></span>
+                            <span>Demurrage Prevention</span>
+                        </div>
+                        <span class="breakdown-value" id="demurrageSavings">$0</span>
+                    </div>
+                    
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">
+                            <span class="breakdown-indicator" style="background: var(--primary);"></span>
+                            <span>Detention Prevention</span>
+                        </div>
+                        <span class="breakdown-value" id="detentionSavings">$0</span>
+                    </div>
+                    
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">
+                            <span class="breakdown-indicator" style="background: var(--warning);"></span>
+                            <span>Operational Efficiency</span>
+                        </div>
+                        <span class="breakdown-value" id="efficiencySavings">$0</span>
+                    </div>
+                    
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">
+                            <span class="breakdown-indicator" style="background: #6c757d;"></span>
+                            <span>Platform Investment</span>
+                        </div>
+                        <span class="breakdown-value" id="platformCost">-$0</span>
+                    </div>
+                    
+                    <div class="breakdown-item" style="background: var(--primary); color: white;">
+                        <div class="breakdown-label">
+                            <strong>Net Annual Savings</strong>
+                        </div>
+                        <span class="breakdown-value" id="netSavings">$0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section" id="ctaSection" style="display: none;">
+            <h2 class="cta-title">Ready to Save <span id="ctaSavings">$0</span> Annually?</h2>
+            <p class="cta-subtitle">Join Fortune 500 companies already preventing millions in D&D charges</p>
+            
+            <div class="cta-buttons">
+                <a href="#" class="cta-button cta-button-primary" onclick="bookDemo(); return false;">
+                    Book Personalized Demo
+                </a>
+                <a href="#" class="cta-button cta-button-secondary" onclick="startTrial(); return false;">
+                    Start 30-Day Trial
+                </a>
+            </div>
+        </div>
+
+        <!-- Additional Features -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title">94.2% Accuracy</h3>
+                <p>Industry-leading AI predictions 14 days in advance</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Real-Time Tracking</h3>
+                <p>Live updates from all major shipping lines</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h3 class="feature-title">Enterprise Security</h3>
+                <p>SOC 2 Type II certified with Microsoft SSO</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="modal" id="reportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Get Your Detailed ROI Report</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <form id="reportForm">
+                <div class="form-group">
+                    <label class="form-label">Work Email*</label>
+                    <input type="email" class="form-input" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Full Name*</label>
+                    <input type="text" class="form-input" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Company*</label>
+                    <input type="text" class="form-input" name="company" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Title*</label>
+                    <input type="text" class="form-input" name="title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-input" name="phone">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">How did you hear about us?</label>
+                    <select class="form-input" name="source">
+                        <option value="">Select...</option>
+                        <option value="search">Google/Search</option>
+                        <option value="referral">Referral</option>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="event">Trade Show/Event</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="cta-button cta-button-primary" style="width: 100%; margin-top: 1rem;">
+                    Email My ROI Report
+                </button>
+                
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.875rem; color: var(--text-light);">
+                    We'll send your personalized 10-page ROI analysis immediately
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize range slider
+        const currentRateSlider = document.getElementById('currentRate');
+        const currentRateValue = document.getElementById('currentRateValue');
+        
+        currentRateSlider.addEventListener('input', function() {
+            currentRateValue.textContent = this.value + '%';
+        });
+
+        // Global variables for calculations
+        let calculatedData = null;
+
+        // Calculate ROI
+        async function calculateROI() {
+            // Show loading state
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span class="loading"></span> Calculating...';
+            button.disabled = true;
+
+            // Get form values
+            const data = {
+                vessels: parseInt(document.getElementById('vessels').value),
+                annual_containers: parseInt(document.getElementById('containers').value),
+                container_value: parseInt(document.getElementById('containerValue').value),
+                avg_dd_per_container: parseInt(document.getElementById('ddPerContainer').value),
+                current_prevention_rate: parseInt(document.getElementById('currentRate').value) / 100,
+                demurrage_days: parseInt(document.getElementById('demurrageDays').value),
+                detention_days: parseInt(document.getElementById('detentionDays').value),
+                trade_routes: document.getElementById('tradeRoutes').value,
+                peak_multiplier: parseFloat(document.getElementById('peakMultiplier').value),
+                congestion: document.getElementById('congestion').value,
+                tech_stack: document.getElementById('techStack').value,
+                team_size: parseInt(document.getElementById('teamSize').value)
+            };
+
+            try {
+                // Call API
+                const response = await fetch('/api/calculate-roi', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Calculation failed');
+                }
+
+                calculatedData = await response.json();
+                displayResults(calculatedData);
+
+                // Track calculation
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'roi_calculated', {
+                        'value': calculatedData.annual_savings,
+                        'currency': 'USD'
+                    });
+                }
+
+            } catch (error) {
+                console.error('ROI calculation error:', error);
+                // Use local calculation as fallback
+                calculatedData = calculateLocally(data);
+                displayResults(calculatedData);
+            }
+
+            // Reset button
+            button.innerHTML = originalText;
+            button.disabled = false;
+        }
+
+        // Local calculation fallback
+        function calculateLocally(data) {
+            const rootuip_prevention_rate = 0.942;
+            const platform_cost_monthly = 50000;
+            const platform_cost_annual = platform_cost_monthly * 12;
+
+            // Calculate exposure
+            const total_dd_exposure = data.annual_containers * data.avg_dd_per_container;
+            
+            // Apply multipliers
+            let adjusted_exposure = total_dd_exposure;
+            if (data.peak_multiplier > 1) {
+                adjusted_exposure *= (1 + (data.peak_multiplier - 1) * 0.25); // 3 months peak
+            }
+            if (data.congestion === 'high') {
+                adjusted_exposure *= 1.2;
+            } else if (data.congestion === 'medium') {
+                adjusted_exposure *= 1.1;
+            }
+
+            // Current vs ROOTUIP
+            const current_prevented = adjusted_exposure * data.current_prevention_rate;
+            const current_losses = adjusted_exposure - current_prevented;
+            const rootuip_prevented = adjusted_exposure * rootuip_prevention_rate;
+            const rootuip_losses = adjusted_exposure - rootuip_prevented;
+
+            // Savings breakdown
+            const dd_savings = current_losses - rootuip_losses;
+            const demurrage_portion = dd_savings * (data.demurrage_days / (data.demurrage_days + data.detention_days));
+            const detention_portion = dd_savings - demurrage_portion;
+
+            // Operational efficiency
+            const hours_saved_per_container = data.tech_stack === 'manual' ? 0.5 : 0.25;
+            const hourly_rate = 75;
+            const efficiency_savings = data.annual_containers * hours_saved_per_container * hourly_rate;
+
+            // Total savings
+            const gross_savings = dd_savings + efficiency_savings;
+            const net_savings = gross_savings - platform_cost_annual;
+
+            // Calculate metrics
+            const roi_percentage = (net_savings / platform_cost_annual) * 100;
+            const payback_months = platform_cost_annual / (net_savings / 12);
+            const charges_prevented = Math.floor((rootuip_prevented - current_prevented) / data.avg_dd_per_container);
+            const productivity_gain = Math.round((hours_saved_per_container * data.annual_containers) / (data.team_size * 2000) * 100);
+
+            return {
+                annual_savings: net_savings,
+                gross_savings: gross_savings,
+                demurrage_savings: demurrage_portion,
+                detention_savings: detention_portion,
+                efficiency_savings: efficiency_savings,
+                platform_cost: platform_cost_annual,
+                roi_percentage: roi_percentage,
+                payback_months: payback_months,
+                charges_prevented: charges_prevented,
+                productivity_gain: productivity_gain,
+                daily_savings: net_savings / 365,
+                per_vessel_savings: data.vessels > 0 ? net_savings / data.vessels : 0
+            };
+        }
+
+        // Display results
+        function displayResults(data) {
+            // Show results sections
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('breakdown').style.display = 'block';
+            document.getElementById('ctaSection').style.display = 'block';
+
+            // Update values
+            document.getElementById('annualSavings').textContent = formatCurrency(data.annual_savings);
+            document.getElementById('savingsSubtitle').textContent = `That's ${formatCurrency(data.daily_savings)} prevented every single day`;
+            document.getElementById('roiPercent').textContent = Math.round(data.roi_percentage) + '%';
+            document.getElementById('paybackMonths').textContent = data.payback_months.toFixed(1);
+            document.getElementById('chargesPrevented').textContent = data.charges_prevented.toLocaleString();
+            document.getElementById('productivityGain').textContent = data.productivity_gain + '%';
+
+            // Update breakdown
+            document.getElementById('demurrageSavings').textContent = formatCurrency(data.demurrage_savings);
+            document.getElementById('detentionSavings').textContent = formatCurrency(data.detention_savings);
+            document.getElementById('efficiencySavings').textContent = formatCurrency(data.efficiency_savings);
+            document.getElementById('platformCost').textContent = '-' + formatCurrency(data.platform_cost);
+            document.getElementById('netSavings').textContent = formatCurrency(data.annual_savings);
+
+            // Update CTA
+            document.getElementById('ctaSavings').textContent = formatCurrency(data.annual_savings);
+
+            // Draw chart
+            drawSavingsChart(data);
+
+            // Smooth scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Format currency
+        function formatCurrency(value) {
+            if (value >= 1000000) {
+                return '$' + (value / 1000000).toFixed(1) + 'M';
+            } else if (value >= 1000) {
+                return '$' + (value / 1000).toFixed(0) + 'K';
+            } else {
+                return '$' + value.toFixed(0);
+            }
+        }
+
+        // Draw savings chart
+        function drawSavingsChart(data) {
+            const canvas = document.getElementById('savingsChart');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Calculate percentages
+            const total = data.demurrage_savings + data.detention_savings + data.efficiency_savings;
+            const demurragePercent = (data.demurrage_savings / total) * 100;
+            const detentionPercent = (data.detention_savings / total) * 100;
+            const efficiencyPercent = (data.efficiency_savings / total) * 100;
+            
+            // Draw donut chart
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 100;
+            const innerRadius = 60;
+            
+            let currentAngle = -Math.PI / 2;
+            
+            // Demurrage
+            drawSegment(ctx, centerX, centerY, radius, innerRadius, currentAngle, demurragePercent / 100 * 2 * Math.PI, '#00a651');
+            currentAngle += demurragePercent / 100 * 2 * Math.PI;
+            
+            // Detention
+            drawSegment(ctx, centerX, centerY, radius, innerRadius, currentAngle, detentionPercent / 100 * 2 * Math.PI, '#003f7f');
+            currentAngle += detentionPercent / 100 * 2 * Math.PI;
+            
+            // Efficiency
+            drawSegment(ctx, centerX, centerY, radius, innerRadius, currentAngle, efficiencyPercent / 100 * 2 * Math.PI, '#ffb000');
+            
+            // Center text
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 24px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(formatCurrency(total), centerX, centerY - 10);
+            ctx.font = '14px Arial';
+            ctx.fillText('Total Savings', centerX, centerY + 15);
+        }
+
+        function drawSegment(ctx, x, y, outerRadius, innerRadius, startAngle, angle, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, outerRadius, startAngle, startAngle + angle);
+            ctx.arc(x, y, innerRadius, startAngle + angle, startAngle, true);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // Show detailed report modal
+        function showDetailedReport() {
+            document.getElementById('reportModal').style.display = 'flex';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('reportModal').style.display = 'none';
+        }
+
+        // Book demo
+        function bookDemo() {
+            if (calculatedData) {
+                // Include ROI data in URL
+                const params = new URLSearchParams({
+                    savings: calculatedData.annual_savings,
+                    vessels: document.getElementById('vessels').value,
+                    source: 'roi_calculator'
+                });
+                window.location.href = `/book-demo?${params.toString()}`;
+            } else {
+                window.location.href = '/book-demo';
+            }
+        }
+
+        // Start trial
+        function startTrial() {
+            if (calculatedData) {
+                const params = new URLSearchParams({
+                    savings: calculatedData.annual_savings,
+                    source: 'roi_calculator'
+                });
+                window.location.href = `/start-trial?${params.toString()}`;
+            } else {
+                window.location.href = '/start-trial';
+            }
+        }
+
+        // Handle report form submission
+        document.getElementById('reportForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const leadData = Object.fromEntries(formData);
+            
+            // Add calculation data
+            if (calculatedData) {
+                leadData.fleet_size = document.getElementById('vessels').value;
+                leadData.annual_containers = document.getElementById('containers').value;
+                leadData.calculated_savings = calculatedData.annual_savings;
+                leadData.roi_percentage = calculatedData.roi_percentage;
+            }
+            
+            leadData.source = 'roi_calculator_detailed';
+            
+            try {
+                const response = await fetch('/api/leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(leadData)
+                });
+                
+                if (response.ok) {
+                    // Show success
+                    e.target.innerHTML = `
+                        <div style="text-align: center; padding: 2rem;">
+                            <div style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;">✓</div>
+                            <h3 style="color: var(--primary); margin-bottom: 1rem;">Report Sent!</h3>
+                            <p>Check your email for your detailed ROI analysis.</p>
+                            <p style="margin-top: 1rem;">A specialist will contact you within 24 hours.</p>
+                        </div>
+                    `;
+                    
+                    setTimeout(closeModal, 5000);
+                }
+            } catch (error) {
+                console.error('Lead capture error:', error);
+            }
+        });
+
+        // Auto-save form progress
+        let autoSaveTimer;
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('input', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(() => {
+                    localStorage.setItem('roi_calculator_data', JSON.stringify(getFormData()));
+                }, 1000);
+            });
+        });
+
+        // Restore saved data
+        window.addEventListener('load', () => {
+            const savedData = localStorage.getItem('roi_calculator_data');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = data[key];
+                        if (element.type === 'range') {
+                            document.getElementById(key + 'Value').textContent = data[key] + '%';
+                        }
+                    }
+                });
+            }
+        });
+
+        // Get form data
+        function getFormData() {
+            const fields = ['vessels', 'containers', 'containerValue', 'ddPerContainer', 'currentRate', 
+                          'demurrageDays', 'detentionDays', 'tradeRoutes', 'peakMultiplier', 
+                          'congestion', 'techStack', 'teamSize'];
+            const data = {};
+            fields.forEach(field => {
+                const element = document.getElementById(field);
+                if (element) {
+                    data[field] = element.value;
+                }
+            });
+            return data;
+        }
+    </script>
+</body>
+</html>

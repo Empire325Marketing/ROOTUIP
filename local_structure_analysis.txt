@@ -1,0 +1,1098 @@
+=== ROOTUIP Local Project Structure Analysis ===
+Path: /home/iii/ROOTUIP
+Date: Sun Jun 29 08:54:24 PM EDT 2025
+
+=== Project Statistics ===
+JavaScript files: 395
+HTML files: 247
+JSON files: 39
+Shell scripts: 131
+Markdown docs: 94
+
+=== Main Categories ===
+
+1. CORE SERVICES:
+   - API Gateway: api-gateway-new.js
+   - Authentication: enterprise-auth-system.js
+   - Database: api-gateway-database.js
+
+2. ML/AI SYSTEMS:
+/home/iii/ROOTUIP/ai-ml-api.js
+/home/iii/ROOTUIP/ai-ml/dd-risk-predictor.js
+/home/iii/ROOTUIP/ai-ml/document-processor-simulator.js
+/home/iii/ROOTUIP/aiml_system_complete.js
+/home/iii/ROOTUIP/js/ai-ml-demo.js
+/home/iii/ROOTUIP/minified/js/ai-ml-demo.min.js
+/home/iii/ROOTUIP/ml_system/dd-prediction-engine.js
+/home/iii/ROOTUIP/ml_system/dd-prediction-model.js
+/home/iii/ROOTUIP/ml_system/document-processor.js
+/home/iii/ROOTUIP/ml_system/ml-core/feature-engineering.js
+/home/iii/ROOTUIP/ml_system/ml-core/neural-network.js
+/home/iii/ROOTUIP/ml_system/ml-core/training-data-generator.js
+/home/iii/ROOTUIP/ml_system/ml-processing-server.js
+/home/iii/ROOTUIP/ml_system/ml-server.js
+/home/iii/ROOTUIP/ml_system/ocr-processor.js
+/home/iii/ROOTUIP/ml_system/performance-tracker-enhanced.js
+/home/iii/ROOTUIP/ml_system/performance-tracker.js
+/home/iii/ROOTUIP/ml_system/validation-report-generator.js
+/home/iii/ROOTUIP/ROOTUIP/ai-ml/automation/rule-engine.js
+/home/iii/ROOTUIP/ROOTUIP/ai-ml/document-processing/ocr-engine.js
+/home/iii/ROOTUIP/ROOTUIP/ai-ml/predictive-analytics/risk-engine.js
+
+3. BILLING & FINANCIAL:
+/home/iii/ROOTUIP/billing/accounting-integration.js
+/home/iii/ROOTUIP/billing/enterprise-billing.js
+/home/iii/ROOTUIP/billing/financial-reporting.js
+/home/iii/ROOTUIP/billing/subscription-management.js
+
+4. INTEGRATIONS:
+/home/iii/ROOTUIP/integrations/carriers/generic-adapter.js
+/home/iii/ROOTUIP/integrations/carriers/maersk-adapter.js
+/home/iii/ROOTUIP/integrations/carriers/msc-adapter.js
+/home/iii/ROOTUIP/integrations/communications/whatsapp-business-integration.js
+/home/iii/ROOTUIP/integrations/core/integration-manager.js
+/home/iii/ROOTUIP/integrations/enterprise/sap-erp-integration.js
+/home/iii/ROOTUIP/integrations/integration-api.js
+/home/iii/ROOTUIP/integrations/integration-framework.js
+/home/iii/ROOTUIP/integrations/integration-server.js
+/home/iii/ROOTUIP/integrations/integration-service.js
+/home/iii/ROOTUIP/integrations/logistics/customs-broker-integration.js
+/home/iii/ROOTUIP/integrations/logistics/freight-forwarder-integration.js
+
+5. MONITORING & ANALYTICS:
+/home/iii/ROOTUIP/analytics/advanced-analytics-platform.js
+/home/iii/ROOTUIP/analytics/business-intelligence-dashboard.js
+/home/iii/ROOTUIP/analytics/google-analytics-setup.js
+/home/iii/ROOTUIP/analytics/predictive-ml-models.js
+/home/iii/ROOTUIP/analytics/risk-opportunity-analyzer.js
+/home/iii/ROOTUIP/analytics-tracking-system.js
+/home/iii/ROOTUIP/build/js/analytics.js
+/home/iii/ROOTUIP/build/platform/js/predictive-analytics.js
+/home/iii/ROOTUIP/business-process-monitoring.js
+/home/iii/ROOTUIP/enterprise-monitoring-system.js
+/home/iii/ROOTUIP/health-monitoring-system.js
+/home/iii/ROOTUIP/monitoring/alert-manager.js
+/home/iii/ROOTUIP/monitoring/alert-rules.js
+/home/iii/ROOTUIP/monitoring-dashboards.js
+/home/iii/ROOTUIP/monitoring/error-tracking.js
+/home/iii/ROOTUIP/monitoring/ha-monitoring-system.js
+/home/iii/ROOTUIP/monitoring/health-monitor.js
+/home/iii/ROOTUIP/monitoring/performance-monitor.js
+/home/iii/ROOTUIP/monitoring-stack.js
+/home/iii/ROOTUIP/monitoring/start-monitoring.js
+/home/iii/ROOTUIP/multi-tenancy/resource-allocation-analytics.js
+/home/iii/ROOTUIP/notification-system/notification-analytics.js
+/home/iii/ROOTUIP/operational-analytics-system.js
+/home/iii/ROOTUIP/partner-marketplace/analytics/analytics-platform.js
+/home/iii/ROOTUIP/predictive-monitoring.js
+/home/iii/ROOTUIP/ROOTUIP/ai-ml/predictive-analytics/risk-engine.js
+/home/iii/ROOTUIP/ROOTUIP/js/analytics-config.js
+/home/iii/ROOTUIP/ROOTUIP/js/analytics-ga4.js
+/home/iii/ROOTUIP/ROOTUIP/js/heatmap-analytics.js
+/home/iii/ROOTUIP/ROOTUIP/minified/js/analytics-config.min.js
+/home/iii/ROOTUIP/ROOTUIP/minified/js/analytics-ga4.min.js
+/home/iii/ROOTUIP/ROOTUIP/minified/js/heatmap-analytics.min.js
+/home/iii/ROOTUIP/ROOTUIP/platform/js/predictive-analytics.js
+/home/iii/ROOTUIP/ROOTUIP/platform/js/predictive-analytics.min.js
+/home/iii/ROOTUIP/ROOTUIP/server/routes/analytics.js
+/home/iii/ROOTUIP/security-monitoring-service.js
+
+6. DEPLOYMENT & INFRASTRUCTURE:
+/home/iii/ROOTUIP/build/platform/js/ml-infrastructure.js
+/home/iii/ROOTUIP/deployment/zero-downtime-deployment.js
+/home/iii/ROOTUIP/infrastructure/high-availability-architecture.js
+/home/iii/ROOTUIP/infrastructure_system_complete.js
+/home/iii/ROOTUIP/multi-region-infrastructure.js
+/home/iii/ROOTUIP/ROOTUIP/platform/js/ml-infrastructure.js
+/home/iii/ROOTUIP/ROOTUIP/platform/js/ml-infrastructure.min.js
+/home/iii/ROOTUIP/test-infrastructure.js
+
+7. COMPLIANCE & SECURITY:
+/home/iii/ROOTUIP/auth-enterprise/compliance-reporter.js
+/home/iii/ROOTUIP/auth-enterprise/tests/compliance-reporter.test.js
+/home/iii/ROOTUIP/compliance/audit-logging-system.js
+/home/iii/ROOTUIP/compliance/automated-compliance-checking.js
+/home/iii/ROOTUIP/compliance/compliance-management-framework.js
+/home/iii/ROOTUIP/compliance/compliance-server.js
+/home/iii/ROOTUIP/compliance/security-compliance-system.js
+/home/iii/ROOTUIP/gdpr-compliance-system.js
+/home/iii/ROOTUIP/middleware/security-config.js
+/home/iii/ROOTUIP/regional-compliance-framework.js
+/home/iii/ROOTUIP/security/data-protection-system.js
+/home/iii/ROOTUIP/security/ddos-protection.js
+/home/iii/ROOTUIP/security/dependency-checker.js
+/home/iii/ROOTUIP/security/intrusion-detection-system.js
+/home/iii/ROOTUIP/security-monitoring-service.js
+/home/iii/ROOTUIP/security/scan-scheduler.js
+/home/iii/ROOTUIP/security/security-orchestration.js
+/home/iii/ROOTUIP/security/security-scanner.js
+/home/iii/ROOTUIP/security/security-server.js
+/home/iii/ROOTUIP/security/vulnerability-scanner.js
+/home/iii/ROOTUIP/security/web-application-firewall.js
+/home/iii/ROOTUIP/security/zero-trust-identity.js
+
+8. USER INTERFACES (HTML):
+/home/iii/ROOTUIP/roi-calculator-gui.html
+/home/iii/ROOTUIP/enhanced-login.html
+/home/iii/ROOTUIP/platform-navigator.html
+/home/iii/ROOTUIP/security/security-dashboard.html
+/home/iii/ROOTUIP/api-docs/index.html
+/home/iii/ROOTUIP/web-push.html
+/home/iii/ROOTUIP/enterprise-compliance-dashboard.html
+/home/iii/ROOTUIP/success/support/index.html
+/home/iii/ROOTUIP/success/health/index.html
+/home/iii/ROOTUIP/success/onboarding/index.html
+/home/iii/ROOTUIP/ml-demonstration-interface.html
+/home/iii/ROOTUIP/investor-dashboard.html
+/home/iii/ROOTUIP/container-tracking-interface.html
+/home/iii/ROOTUIP/monitoring-dashboard.html
+/home/iii/ROOTUIP/container-tracking-executive.html
+/home/iii/ROOTUIP/enterprise-outreach-tracker.html
+/home/iii/ROOTUIP/simple-login.html
+/home/iii/ROOTUIP/enterprise-lead-dashboard.html
+/home/iii/ROOTUIP/landing-page.html
+/home/iii/ROOTUIP/training-portal.html
+   ... and 247 more HTML files
+
+9. DEPLOYMENT SCRIPTS:
+/home/iii/ROOTUIP/assets/icons/deploy_pwa_rsync.sh
+/home/iii/ROOTUIP/assets/icons/deploy_pwa.sh
+/home/iii/ROOTUIP/deploy-auth-enterprise.sh
+/home/iii/ROOTUIP/deploy-auth-local.sh
+/home/iii/ROOTUIP/deploy-auth-system.sh
+/home/iii/ROOTUIP/deploy_automatic.sh
+/home/iii/ROOTUIP/deploy_bulletproof.sh
+/home/iii/ROOTUIP/deploy-complete-pwa.sh
+/home/iii/ROOTUIP/deploy-enterprise-auth.sh
+/home/iii/ROOTUIP/deploy-everything.sh
+/home/iii/ROOTUIP/deploy_fixes.sh
+/home/iii/ROOTUIP/deploy-gui-files.sh
+/home/iii/ROOTUIP/deploy_helper.sh
+/home/iii/ROOTUIP/deploy_infrastructure.sh
+/home/iii/ROOTUIP/deploy-integrations.sh
+/home/iii/ROOTUIP/deployment-package/deploy-via-curl.sh
+/home/iii/ROOTUIP/deploy-minified.sh
+/home/iii/ROOTUIP/deploy-on-server.sh
+/home/iii/ROOTUIP/deploy_on_vps.sh
+/home/iii/ROOTUIP/deploy-pwa-now.sh
+/home/iii/ROOTUIP/deploy-pwa.sh
+/home/iii/ROOTUIP/deploy-pwa-when-ready.sh
+/home/iii/ROOTUIP/deploy-rootuip-production.sh
+/home/iii/ROOTUIP/deploy-systemd-services.sh
+/home/iii/ROOTUIP/deploy-to-domain.sh
+/home/iii/ROOTUIP/deploy-to-production.sh
+/home/iii/ROOTUIP/deploy_to_production.sh
+/home/iii/ROOTUIP/deploy_to_rootuip.sh
+/home/iii/ROOTUIP/deploy_to_server.sh
+/home/iii/ROOTUIP/deploy_to_vps.sh
+/home/iii/ROOTUIP/deploy-white-label-to-vps.sh
+/home/iii/ROOTUIP/ROOTUIP/deploy-minified.sh
+/home/iii/ROOTUIP/scripts/deployment-validation.sh
+
+=== Directory Structure (Top Level) ===
+/home/iii/ROOTUIP
+├── ai-ml
+├── analytics
+├── api-docs
+├── assets
+│   ├── css
+│   ├── icons
+│   └── images
+├── auth
+│   ├── node_modules
+│   └── sso
+├── auth-enterprise
+│   ├── logs
+│   ├── sessions
+│   └── tests
+├── backups
+├── billing
+├── blockchain
+├── brand
+├── build
+│   ├── brand
+│   ├── css
+│   ├── docs
+│   ├── images
+│   ├── investor-relations
+│   ├── js
+│   ├── platform
+│   ├── sales-toolkit
+│   └── templates
+├── certificates
+├── ci-cd
+│   ├── approval-workflows
+│   ├── code-quality
+│   ├── config
+│   ├── release-management
+│   ├── scripts
+│   └── templates
+├── compliance
+├── customer-onboarding
+├── deployment
+│   └── auth
+├── deployment-package
+├── disaster-recovery
+├── document-intelligence
+├── edi-processing
+├── hooks
+├── infrastructure
+│   ├── cloud
+│   ├── data
+│   ├── deploy
+│   ├── integration
+│   ├── monitoring
+│   └── security
+├── innovation
+│   ├── processes
+│   ├── research
+│   ├── roadmap
+│   ├── scouting
+│   └── vision
+├── integrations
+│   ├── carriers
+│   ├── communications
+│   ├── core
+│   ├── enterprise
+│   ├── logistics
+│   └── node_modules
+├── international
+│   ├── localization
+│   ├── market-entry
+│   ├── operations
+│   ├── sales
+│   └── support
+├── js
+├── locales
+│   ├── ar-SA
+│   ├── de-DE
+│   ├── en-US
+│   └── ja-JP
+├── logs
+├── marketing
+│   ├── blog
+│   └── leads
+├── middleware
+├── minified
+│   ├── css
+│   └── js
+├── ml-system
+│   ├── data
+│   ├── prediction_history
+│   ├── __pycache__
+│   └── reports
+├── ml_system
+│   ├── data
+│   ├── logs
+│   ├── ml-core
+│   ├── models
+│   ├── node_modules
+│   ├── prediction_history
+│   ├── processed
+│   ├── __pycache__
+│   ├── reports
+│   └── uploads
+├── mobile
+│   ├── android
+│   ├── ios
+│   └── react-native
+├── mock-data
+├── models
+├── monitoring
+│   ├── alerts
+│   └── logs
+├── multi-tenancy
+├── nginx
+├── node_modules
+│   ├── abbrev
+│   ├── abort-controller
+│   ├── accepts
+│   ├── acorn
+│   ├── acorn-jsx
+│   ├── adm-zip
+│   ├── afinn-165
+│   ├── afinn-165-financialmarketnews
+│   ├── agent-base
+│   ├── ajv
+│   ├── @ampproject
+│   ├── ansi-escapes
+│   ├── ansi-regex
+│   ├── ansi-styles
+│   ├── anymatch
+│   ├── apparatus
+│   ├── append-field
+│   ├── aproba
+│   ├── are-we-there-yet
+│   ├── argparse
+│   ├── async
+│   ├── asynckit
+│   ├── axios
+│   ├── @babel
+│   ├── babel-jest
+│   ├── babel-plugin-istanbul
+│   ├── babel-plugin-jest-hoist
+│   ├── babel-preset-current-node-syntax
+│   ├── babel-preset-jest
+│   ├── balanced-match
+│   ├── base64-js
+│   ├── basic-auth
+│   ├── @bcoe
+│   ├── bcrypt
+│   ├── bcryptjs
+│   ├── binary-extensions
+│   ├── bmp-js
+│   ├── body-parser
+│   ├── bottleneck
+│   ├── brace-expansion
+│   ├── braces
+│   ├── brain.js
+│   ├── brotli
+│   ├── browserslist
+│   ├── bser
+│   ├── bson
+│   ├── buffer
+│   ├── buffer-equal-constant-time
+│   ├── buffer-from
+│   ├── bull
+│   ├── busboy
+│   ├── bytes
+│   ├── call-bind-apply-helpers
+│   ├── call-bound
+│   ├── callsites
+│   ├── camel-case
+│   ├── camelcase
+│   ├── caniuse-lite
+│   ├── chalk
+│   ├── char-regex
+│   ├── cheminfo-types
+│   ├── chokidar
+│   ├── chownr
+│   ├── ci-info
+│   ├── cjs-module-lexer
+│   ├── clean-css
+│   ├── cliui
+│   ├── clone
+│   ├── cluster-key-slot
+│   ├── co
+│   ├── collect-v8-coverage
+│   ├── color
+│   ├── color-convert
+│   ├── color-name
+│   ├── @colors
+│   ├── colorspace
+│   ├── color-string
+│   ├── color-support
+│   ├── combined-stream
+│   ├── commander
+│   ├── compressible
+│   ├── compression
+│   ├── concat-map
+│   ├── concat-stream
+│   ├── concurrently
+│   ├── connect-redis
+│   ├── console-control-strings
+│   ├── content-disposition
+│   ├── content-type
+│   ├── convert-source-map
+│   ├── cookie
+│   ├── cookie-signature
+│   ├── core-js
+│   ├── cors
+│   ├── corser
+│   ├── create-jest
+│   ├── cron-parser
+│   ├── cross-spawn
+│   ├── crypto-js
+│   ├── @dabh
+│   ├── date-fns
+│   ├── debug
+│   ├── dedent
+│   ├── deep-is
+│   ├── deepmerge
+│   ├── delayed-stream
+│   ├── delegates
+│   ├── denque
+│   ├── depd
+│   ├── detect-libc
+│   ├── detect-newline
+│   ├── dfa
+│   ├── diff-sequences
+│   ├── doctrine
+│   ├── dot-case
+│   ├── dotenv
+│   ├── dunder-proto
+│   ├── ecdsa-sig-formatter
+│   ├── ee-first
+│   ├── electron-to-chromium
+│   ├── emittery
+│   ├── @emnapi
+│   ├── emoji-regex
+│   ├── enabled
+│   ├── encodeurl
+│   ├── entities
+│   ├── error-ex
+│   ├── es6-promise
+│   ├── es6-promisify
+│   ├── escalade
+│   ├── escape-html
+│   ├── escape-string-regexp
+│   ├── es-define-property
+│   ├── es-errors
+│   ├── @eslint
+│   ├── eslint
+│   ├── @eslint-community
+│   ├── eslint-scope
+│   ├── eslint-visitor-keys
+│   ├── es-object-atoms
+│   ├── espree
+│   ├── esprima
+│   ├── esquery
+│   ├── esrecurse
+│   ├── es-set-tostringtag
+│   ├── estraverse
+│   ├── esutils
+│   ├── etag
+│   ├── eventemitter3
+│   ├── events
+│   ├── event-target-shim
+│   ├── execa
+│   ├── exit
+│   ├── expect
+│   ├── express
+│   ├── express-rate-limit
+│   ├── express-session
+│   ├── fast-deep-equal
+│   ├── fast-json-stable-stringify
+│   ├── fast-levenshtein
+│   ├── fastq
+│   ├── fb-watchman
+│   ├── fecha
+│   ├── file-entry-cache
+│   ├── fill-range
+│   ├── finalhandler
+│   ├── find-up
+│   ├── flat-cache
+│   ├── flatted
+│   ├── fn.name
+│   ├── follow-redirects
+│   ├── fontkit
+│   ├── form-data
+│   ├── formdata-node
+│   ├── forwarded
+│   ├── fresh
+│   ├── fs-minipass
+│   ├── fs.realpath
+│   ├── function-bind
+│   ├── gauge
+│   ├── generic-pool
+│   ├── gensync
+│   ├── get-caller-file
+│   ├── get-intrinsic
+│   ├── get-package-type
+│   ├── get-port
+│   ├── get-proto
+│   ├── get-stream
+│   ├── glob
+│   ├── globals
+│   ├── glob-parent
+│   ├── google-protobuf
+│   ├── gopd
+│   ├── graceful-fs
+│   ├── graphemer
+│   ├── handlebars
+│   ├── @hapi
+│   ├── has-flag
+│   ├── hasown
+│   ├── has-symbols
+│   ├── has-tostringtag
+│   ├── has-unicode
+│   ├── he
+│   ├── helmet
+│   ├── html-encoding-sniffer
+│   ├── html-escaper
+│   ├── html-minifier-terser
+│   ├── http-errors
+│   ├── http-proxy
+│   ├── http-proxy-middleware
+│   ├── http-server
+│   ├── https-proxy-agent
+│   ├── @hubspot
+│   ├── human-signals
+│   ├── @humanwhocodes
+│   ├── iconv-lite
+│   ├── idb-keyval
+│   ├── ieee754
+│   ├── ignore
+│   ├── ignore-by-default
+│   ├── @img
+│   ├── import-fresh
+│   ├── import-local
+│   ├── imurmurhash
+│   ├── inflight
+│   ├── inherits
+│   ├── intercom-client
+│   ├── @ioredis
+│   ├── ioredis
+│   ├── ipaddr.js
+│   ├── is-any-array
+│   ├── is-arrayish
+│   ├── is-binary-path
+│   ├── is-core-module
+│   ├── isexe
+│   ├── is-extglob
+│   ├── is-fullwidth-code-point
+│   ├── is-generator-fn
+│   ├── is-glob
+│   ├── is-number
+│   ├── is-path-inside
+│   ├── is-plain-object
+│   ├── is-promise
+│   ├── is-stream
+│   ├── @istanbuljs
+│   ├── istanbul-lib-coverage
+│   ├── istanbul-lib-instrument
+│   ├── istanbul-lib-report
+│   ├── istanbul-lib-source-maps
+│   ├── istanbul-reports
+│   ├── is-url
+│   ├── @jest
+│   ├── jest
+│   ├── jest-changed-files
+│   ├── jest-circus
+│   ├── jest-cli
+│   ├── jest-config
+│   ├── jest-diff
+│   ├── jest-docblock
+│   ├── jest-each
+│   ├── jest-environment-node
+│   ├── jest-get-type
+│   ├── jest-haste-map
+│   ├── jest-leak-detector
+│   ├── jest-matcher-utils
+│   ├── jest-message-util
+│   ├── jest-mock
+│   ├── jest-pnp-resolver
+│   ├── jest-regex-util
+│   ├── jest-resolve
+│   ├── jest-resolve-dependencies
+│   ├── jest-runner
+│   ├── jest-runtime
+│   ├── jest-snapshot
+│   ├── jest-util
+│   ├── jest-validate
+│   ├── jest-watcher
+│   ├── jest-worker
+│   ├── joi
+│   ├── jpeg-exif
+│   ├── @jridgewell
+│   ├── js-base64
+│   ├── jsesc
+│   ├── json5
+│   ├── json-buffer
+│   ├── json-parse-even-better-errors
+│   ├── json-schema-traverse
+│   ├── json-stable-stringify-without-jsonify
+│   ├── jsonwebtoken
+│   ├── js-tokens
+│   ├── js-yaml
+│   ├── jwa
+│   ├── jws
+│   ├── kareem
+│   ├── keyv
+│   ├── kleur
+│   ├── kuler
+│   ├── leven
+│   ├── levn
+│   ├── linebreak
+│   ├── lines-and-columns
+│   ├── locate-path
+│   ├── lodash
+│   ├── lodash.defaults
+│   ├── lodash.includes
+│   ├── lodash.isarguments
+│   ├── lodash.isboolean
+│   ├── lodash.isinteger
+│   ├── lodash.isnumber
+│   ├── lodash.isplainobject
+│   ├── lodash.isstring
+│   ├── lodash.merge
+│   ├── lodash.once
+│   ├── logform
+│   ├── long
+│   ├── long-timeout
+│   ├── lower-case
+│   ├── lru-cache
+│   ├── luxon
+│   ├── make-dir
+│   ├── makeerror
+│   ├── @mapbox
+│   ├── math-intrinsics
+│   ├── median-quickselect
+│   ├── media-typer
+│   ├── memjs
+│   ├── memory-pager
+│   ├── merge-descriptors
+│   ├── merge-stream
+│   ├── micromatch
+│   ├── mime
+│   ├── mime-db
+│   ├── mime-types
+│   ├── mimic-fn
+│   ├── minimatch
+│   ├── minimist
+│   ├── minipass
+│   ├── minizlib
+│   ├── mixpanel
+│   ├── mkdirp
+│   ├── ml-array-max
+│   ├── ml-array-median
+│   ├── ml-array-min
+│   ├── ml-array-rescale
+│   ├── ml-distance-euclidean
+│   ├── ml-kernel
+│   ├── ml-kernel-gaussian
+│   ├── ml-kernel-polynomial
+│   ├── ml-kernel-sigmoid
+│   ├── ml-matrix
+│   ├── ml-regression
+│   ├── ml-regression-base
+│   ├── ml-regression-exponential
+│   ├── ml-regression-multivariate-linear
+│   ├── ml-regression-polynomial
+│   ├── ml-regression-power
+│   ├── ml-regression-robust-polynomial
+│   ├── ml-regression-simple-linear
+│   ├── ml-regression-theil-sen
+│   ├── mongodb
+│   ├── mongodb-connection-string-url
+│   ├── @mongodb-js
+│   ├── mongoose
+│   ├── morgan
+│   ├── mpath
+│   ├── mquery
+│   ├── ms
+│   ├── msgpackr
+│   ├── @msgpackr-extract
+│   ├── msgpackr-extract
+│   ├── multer
+│   ├── natural
+│   ├── natural-compare
+│   ├── negotiator
+│   ├── neo-async
+│   ├── no-case
+│   ├── node-addon-api
+│   ├── node-cron
+│   ├── node-ensure
+│   ├── node-fetch
+│   ├── node-gyp-build-optional-packages
+│   ├── node-int64
+│   ├── @nodelib
+│   ├── nodemailer
+│   ├── nodemon
+│   ├── node-releases
+│   ├── node-schedule
+│   ├── nopt
+│   ├── normalize-path
+│   ├── npmlog
+│   ├── npm-run-path
+│   ├── object-assign
+│   ├── object-inspect
+│   ├── once
+│   ├── one-time
+│   ├── onetime
+│   ├── on-finished
+│   ├── on-headers
+│   ├── @oozcitak
+│   ├── opencollective-postinstall
+│   ├── opener
+│   ├── optionator
+│   ├── pako
+│   ├── param-case
+│   ├── parent-module
+│   ├── parse-json
+│   ├── parseurl
+│   ├── pascal-case
+│   ├── passport
+│   ├── passport-saml
+│   ├── passport-strategy
+│   ├── path-exists
+│   ├── path-is-absolute
+│   ├── path-key
+│   ├── path-parse
+│   ├── path-to-regexp
+│   ├── pause
+│   ├── pdfkit
+│   ├── pdf-parse
+│   ├── pg
+│   ├── pg-cloudflare
+│   ├── pg-connection-string
+│   ├── pg-int8
+│   ├── pgpass
+│   ├── pg-pool
+│   ├── pg-protocol
+│   ├── pg-types
+│   ├── picocolors
+│   ├── picomatch
+│   ├── pirates
+│   ├── pkg-dir
+│   ├── p-limit
+│   ├── p-locate
+│   ├── png-js
+│   ├── portfinder
+│   ├── postgres-array
+│   ├── postgres-bytea
+│   ├── postgres-date
+│   ├── postgres-interval
+│   ├── prelude-ls
+│   ├── pretty-format
+│   ├── process
+│   ├── progress
+│   ├── prompts
+│   ├── proxy-addr
+│   ├── proxy-from-env
+│   ├── pstree.remy
+│   ├── p-try
+│   ├── punycode
+│   ├── pure-rand
+│   ├── qs
+│   ├── queue-microtask
+│   ├── random-bytes
+│   ├── range-parser
+│   ├── raw-body
+│   ├── react-is
+│   ├── readable-stream
+│   ├── readdirp
+│   ├── @redis
+│   ├── redis
+│   ├── redis-errors
+│   ├── redis-parser
+│   ├── regenerator-runtime
+│   ├── regression
+│   ├── relateurl
+│   ├── require-directory
+│   ├── requires-port
+│   ├── resolve
+│   ├── resolve-cwd
+│   ├── resolve.exports
+│   ├── resolve-from
+│   ├── response-time
+│   ├── restructure
+│   ├── reusify
+│   ├── rimraf
+│   ├── router
+│   ├── run-parallel
+│   ├── rxjs
+│   ├── safe-buffer
+│   ├── safer-buffer
+│   ├── safe-stable-stringify
+│   ├── saml2-js
+│   ├── sax
+│   ├── secure-compare
+│   ├── seedrandom
+│   ├── semver
+│   ├── send
+│   ├── @sendgrid
+│   ├── serve-static
+│   ├── set-blocking
+│   ├── setprototypeof
+│   ├── sharp
+│   ├── shebang-command
+│   ├── shebang-regex
+│   ├── shell-quote
+│   ├── side-channel
+│   ├── side-channel-list
+│   ├── side-channel-map
+│   ├── side-channel-weakmap
+│   ├── @sideway
+│   ├── sift
+│   ├── signal-exit
+│   ├── simple-statistics
+│   ├── simple-swizzle
+│   ├── simple-update-notifier
+│   ├── @sinclair
+│   ├── @sinonjs
+│   ├── sisteransi
+│   ├── slash
+│   ├── sorted-array-functions
+│   ├── source-map
+│   ├── source-map-support
+│   ├── sparse-bitfield
+│   ├── spawn-command
+│   ├── split2
+│   ├── sprintf-js
+│   ├── stack-trace
+│   ├── stack-utils
+│   ├── standard-as-callback
+│   ├── statuses
+│   ├── stopwords-iso
+│   ├── streamsearch
+│   ├── string_decoder
+│   ├── string-length
+│   ├── string-width
+│   ├── strip-ansi
+│   ├── strip-bom
+│   ├── strip-final-newline
+│   ├── strip-json-comments
+│   ├── supports-color
+│   ├── supports-preserve-symlinks-flag
+│   ├── @swc
+│   ├── sylvester
+│   ├── tar
+│   ├── @tensorflow
+│   ├── terser
+│   ├── tesseract.js
+│   ├── tesseract.js-core
+│   ├── test-exclude
+│   ├── text-hex
+│   ├── text-table
+│   ├── thaw.js
+│   ├── tiny-inflate
+│   ├── tmpl
+│   ├── toidentifier
+│   ├── to-regex-range
+│   ├── touch
+│   ├── tr46
+│   ├── tree-kill
+│   ├── triple-beam
+│   ├── tslib
+│   ├── type-check
+│   ├── typedarray
+│   ├── type-detect
+│   ├── type-fest
+│   ├── type-is
+│   ├── @types
+│   ├── uglify-js
+│   ├── uid-safe
+│   ├── undefsafe
+│   ├── underscore
+│   ├── undici-types
+│   ├── @ungap
+│   ├── unicode-properties
+│   ├── unicode-trie
+│   ├── union
+│   ├── unpipe
+│   ├── update-browserslist-db
+│   ├── uri-js
+│   ├── url-join
+│   ├── util-deprecate
+│   ├── utils-merge
+│   ├── uuid
+│   ├── v8-to-istanbul
+│   ├── vary
+│   ├── walker
+│   ├── wasm-feature-detect
+│   ├── @webgpu
+│   ├── webidl-conversions
+│   ├── whatwg-encoding
+│   ├── whatwg-url
+│   ├── which
+│   ├── wide-align
+│   ├── winston
+│   ├── winston-transport
+│   ├── wordnet-db
+│   ├── word-wrap
+│   ├── wordwrap
+│   ├── wrap-ansi
+│   ├── wrappy
+│   ├── write-file-atomic
+│   ├── ws
+│   ├── xml2js
+│   ├── xmlbuilder
+│   ├── xmlbuilder2
+│   ├── xml-crypto
+│   ├── @xmldom
+│   ├── xml-encryption
+│   ├── xpath
+│   ├── xtend
+│   ├── y18n
+│   ├── yallist
+│   ├── yargs
+│   ├── yargs-parser
+│   ├── yocto-queue
+│   └── zlibjs
+├── notification-system
+│   └── templates
+├── partner-marketplace
+│   ├── analytics
+│   ├── certification
+│   ├── core
+│   ├── developer-platform
+│   ├── integrations
+│   ├── revenue
+│   └── ui
+├── partner-platform
+├── platform
+│   ├── admin
+│   ├── api
+│   ├── css
+│   ├── customer
+│   ├── enterprise
+│   └── monitoring
+├── public
+├── pwa
+├── quality-control
+├── ROOTUIP
+│   ├── ai-ml
+│   ├── api
+│   ├── auth
+│   ├── brand
+│   ├── config
+│   ├── css
+│   ├── customer-portal
+│   ├── docs
+│   ├── images
+│   ├── infrastructure
+│   ├── integrations
+│   ├── investor-relations
+│   ├── js
+│   ├── lead-generation
+│   ├── minified
+│   ├── platform
+│   ├── sales-enablement
+│   ├── sales-toolkit
+│   ├── scripts
+│   ├── server
+│   ├── templates
+│   ├── tests
+│   └── workflows
+├── sales
+│   ├── crm
+│   ├── demo
+│   └── enablement
+├── scripts
+├── security
+│   ├── reports
+│   ├── scans
+│   └── scripts
+├── sre-system
+│   ├── automation
+│   ├── chaos-engineering
+│   ├── incident-response
+│   ├── monitoring
+│   └── service-level
+├── success
+│   ├── health
+│   ├── onboarding
+│   └── support
+├── systemd
+├── ux-enhancements
+│   ├── accessibility
+│   ├── collaboration
+│   ├── feedback
+│   └── personalization
+├── white-label
+└── xml-processing
+
+792 directories
+
+=== Services That Need Deployment ===
+
+1. MAIN API SERVICES:
+   - api-gateway-new.js (Main API Gateway)
+   - enterprise-auth-system.js (Authentication)
+   - real-time-dashboard-server.js (Dashboard)
+
+2. BUSINESS SERVICES:
+   - business-operations-server.js
+   - customer-support-system.js
+   - sales-crm-system.js
+
+3. ML/AI SERVICES:
+   - ml_system/ml-server.js
+   - ai-ml-api.js
+   - ml_system/document-processor.js
+
+4. INTEGRATION SERVICES:
+   - integrations/integration-server.js
+   - hubspot-crm-integration.js
+
+5. MONITORING SERVICES:
+   - monitoring/health-monitor.js
+   - performance-monitor.js
+
+=== Database Requirements ===
+Files requiring database setup:
+/home/iii/ROOTUIP/analytics-tracking-system.js
+/home/iii/ROOTUIP/api-gateway-database.js
+/home/iii/ROOTUIP/auth-service-simple.js
+/home/iii/ROOTUIP/customer-success-platform.js
+/home/iii/ROOTUIP/customer-support-system.js
+/home/iii/ROOTUIP/disaster-recovery-automation.js
+/home/iii/ROOTUIP/email-automation-system.js
+/home/iii/ROOTUIP/enterprise-auth-saml.js
+/home/iii/ROOTUIP/enterprise-crm-integration.js
+/home/iii/ROOTUIP/enterprise-demo-environment.js
+
+=== Environment Variables Needed ===
+Checking for required environment variables:
+process.env.ALERT_EMAIL
+process.env.ALERT_WEBHOOK
+process.env.ALLOWED_ORIGINS
+process.env.API_URL
+process.env.APP_URL
+process.env.APP_VERSION
+process.env.AWS_ACCESS_KEY_ID
+process.env.AWS_REGION
+process.env.AWS_SECRET_ACCESS_KEY
+process.env.BACKUP_BUCKET
+process.env.BACKUP_ENCRYPTION_KEY
+process.env.BASE_URL
+process.env.BUSINESS_OPS_PORT
+process.env.CLOUDFLARE_ZONE_ID
+process.env.CORS_ORIGIN
+process.env.DATABASE_URL
+process.env.DATABASE_URL_SECONDARY
+process.env.DATABASE_URL_TERTIARY
+process.env.DOCUMENTS_PATH
+process.env.DR_NOTIFICATION_EMAIL
+
+=== Package Dependencies ===
+Main package.json dependencies:
+  "dependencies": {
+    "@hubspot/api-client": "^13.0.0",
+    "@sendgrid/mail": "^7.7.0",
+    "@tensorflow/tfjs-node": "^4.22.0",
+    "axios": "^1.5.1",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
+    "brain.js": "^2.0.0-beta.24",
+    "bull": "^4.11.4",
+    "clean-css": "^5.3.3",
+    "compression": "^1.7.4",
+    "connect-redis": "^9.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.0",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.1",
+    "express-session": "^1.18.1",
+    "handlebars": "^4.7.8",
+    "helmet": "^7.2.0",
+    "html-minifier-terser": "^7.2.0",
+    "http-proxy-middleware": "^3.0.5",
+
+=== Deployment Plan Summary ===
+
+PHASE 1 - Core Infrastructure:
+  1. PostgreSQL database setup
+  2. Redis cache setup
+  3. Environment configuration
+  4. SSL certificates
+
+PHASE 2 - Core Services:
+  1. API Gateway (port 3000)
+  2. Auth Service (port 3001)
+  3. Static file serving (nginx)
+
+PHASE 3 - Business Services:
+  1. ML Processing Service
+  2. Integration Service
+  3. Real-time Dashboard
+  4. Monitoring System
+
+PHASE 4 - User Interfaces:
+  1. Main website (landing page)
+  2. Customer dashboard
+  3. Admin interfaces
+  4. API documentation
+
+Analysis complete. Ready for deployment planning.

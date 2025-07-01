@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Executive Analytics - Business Intelligence Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/rootuip-logo.svg">
+    <link rel="stylesheet" href="/assets/css/rootuip-design-system.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <style>
+        /* Executive Dashboard Specific Styles */
+        .executive-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+            background: var(--rootuip-gray-50);
+        }
+        
+        /* Enhanced Sidebar */
+        .exec-sidebar {
+            background: var(--rootuip-gray-900);
+            color: white;
+            padding: var(--space-6);
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+        
+        /* Main Content */
+        .exec-main {
+            padding: var(--space-8);
+            overflow-y: auto;
+        }
+        
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+        
+        .kpi-card {
+            background: var(--rootuip-white);
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--rootuip-gray-200);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--rootuip-primary);
+        }
+        
+        .kpi-card.success::before {
+            background: var(--rootuip-accent);
+        }
+        
+        .kpi-card.warning::before {
+            background: var(--rootuip-warning);
+        }
+        
+        .kpi-card.danger::before {
+            background: var(--rootuip-danger);
+        }
+        
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-4);
+        }
+        
+        .kpi-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--rootuip-gray-100);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+        }
+        
+        .kpi-value {
+            font-size: var(--text-4xl);
+            font-weight: 700;
+            color: var(--rootuip-gray-900);
+            margin-bottom: var(--space-2);
+        }
+        
+        .kpi-label {
+            font-size: var(--text-sm);
+            color: var(--rootuip-gray-600);
+            margin-bottom: var(--space-3);
+        }
+        
+        .kpi-trend {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            font-weight: 500;
+        }
+        
+        .trend-up {
+            color: var(--rootuip-accent);
+        }
+        
+        .trend-down {
+            color: var(--rootuip-danger);
+        }
+        
+        /* Chart Containers */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+        
+        .chart-container {
+            background: var(--rootuip-white);
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--rootuip-gray-200);
+        }
+        
+        .chart-container.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-6);
+        }
+        
+        .chart-title {
+            font-size: var(--text-xl);
+            font-weight: 600;
+            color: var(--rootuip-gray-900);
+        }
+        
+        .chart-controls {
+            display: flex;
+            gap: var(--space-2);
+        }
+        
+        .time-selector {
+            display: flex;
+            background: var(--rootuip-gray-100);
+            border-radius: var(--radius-md);
+            padding: 2px;
+        }
+        
+        .time-option {
+            padding: var(--space-2) var(--space-3);
+            border: none;
+            background: none;
+            color: var(--rootuip-gray-600);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+        }
+        
+        .time-option.active {
+            background: var(--rootuip-white);
+            color: var(--rootuip-primary);
+            box-shadow: var(--shadow-xs);
+        }
+        
+        /* Data Table */
+        .data-table-container {
+            background: var(--rootuip-white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--rootuip-gray-200);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            padding: var(--space-6);
+            border-bottom: 1px solid var(--rootuip-gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .advanced-table {
+            width: 100%;
+        }
+        
+        .advanced-table th {
+            background: var(--rootuip-gray-50);
+            padding: var(--space-4);
+            text-align: left;
+            font-weight: 600;
+            font-size: var(--text-sm);
+            color: var(--rootuip-gray-700);
+            border-bottom: 1px solid var(--rootuip-gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .advanced-table td {
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--rootuip-gray-100);
+        }
+        
+        .advanced-table tr:hover {
+            background: var(--rootuip-gray-50);
+        }
+        
+        /* Health Score Indicator */
+        .health-score {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+            font-weight: 500;
+        }
+        
+        .health-score.excellent {
+            background: rgba(0, 200, 83, 0.1);
+            color: var(--rootuip-accent);
+        }
+        
+        .health-score.good {
+            background: rgba(26, 115, 232, 0.1);
+            color: var(--rootuip-primary);
+        }
+        
+        .health-score.fair {
+            background: rgba(251, 188, 4, 0.1);
+            color: var(--rootuip-warning);
+        }
+        
+        .health-score.poor {
+            background: rgba(234, 67, 53, 0.1);
+            color: var(--rootuip-danger);
+        }
+        
+        /* Export Controls */
+        .export-controls {
+            display: flex;
+            gap: var(--space-3);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .executive-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .exec-sidebar {
+                display: none;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="executive-layout">
+        <!-- Executive Sidebar -->
+        <aside class="exec-sidebar">
+            <div class="sidebar-logo mb-8">
+                <img src="/assets/images/rootuip-logo.svg" alt="ROOTUIP" height="40" style="filter: brightness(0) invert(1);">
+            </div>
+            
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-section-title">Executive Views</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <span class="nav-icon">📊</span>
+                                <span>Business Overview</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#revenue" class="nav-link">
+                                <span class="nav-icon">💰</span>
+                                <span>Revenue Analytics</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#customers" class="nav-link">
+                                <span class="nav-icon">👥</span>
+                                <span>Customer Intelligence</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#operations" class="nav-link">
+                                <span class="nav-icon">⚙️</span>
+                                <span>Operational Metrics</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Reports</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" onclick="openReportBuilder()">
+                                <span class="nav-icon">📝</span>
+                                <span>Report Builder</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <span class="nav-icon">📅</span>
+                                <span>Scheduled Reports</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <span class="nav-icon">📑</span>
+                                <span>Compliance Reports</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Export</div>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <button class="nav-link" onclick="exportDashboardPDF()">
+                                <span class="nav-icon">📄</span>
+                                <span>Export as PDF</span>
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" onclick="exportDashboardExcel()">
+                                <span class="nav-icon">📊</span>
+                                <span>Export as Excel</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="exec-main">
+            <!-- Header -->
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h1 class="text-4xl font-bold mb-2">Executive Analytics Dashboard</h1>
+                        <p class="text-gray-600">Real-time business intelligence and performance metrics</p>
+                    </div>
+                    <div class="export-controls">
+                        <button class="btn btn-secondary" onclick="refreshData()">
+                            <span>🔄</span> Refresh
+                        </button>
+                        <button class="btn btn-primary" onclick="exportDashboardPDF()">
+                            <span>📄</span> Export Report
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Date Range Selector -->
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-600">Viewing:</span>
+                    <div class="time-selector">
+                        <button class="time-option" onclick="setTimeRange('day')">Today</button>
+                        <button class="time-option active" onclick="setTimeRange('week')">7 Days</button>
+                        <button class="time-option" onclick="setTimeRange('month')">30 Days</button>
+                        <button class="time-option" onclick="setTimeRange('quarter')">Quarter</button>
+                        <button class="time-option" onclick="setTimeRange('year')">Year</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- KPI Grid -->
+            <div class="kpi-grid">
+                <div class="kpi-card success">
+                    <div class="kpi-header">
+                        <div>
+                            <div class="kpi-value">$8.5M</div>
+                            <div class="kpi-label">Annual Recurring Revenue</div>
+                            <div class="kpi-trend trend-up">
+                                <span>↑</span>
+                                <span>24.5%</span>
+                                <span class="text-gray-500">vs last month</span>
+                            </div>
+                        </div>
+                        <div class="kpi-icon">💰</div>
+                    </div>
+                    <canvas id="arrSparkline" height="50"></canvas>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div>
+                            <div class="kpi-value">156</div>
+                            <div class="kpi-label">Enterprise Customers</div>
+                            <div class="kpi-trend trend-up">
+                                <span>↑</span>
+                                <span>12 new</span>
+                                <span class="text-gray-500">this month</span>
+                            </div>
+                        </div>
+                        <div class="kpi-icon">🏢</div>
+                    </div>
+                    <canvas id="customersSparkline" height="50"></canvas>
+                </div>
+                
+                <div class="kpi-card warning">
+                    <div class="kpi-header">
+                        <div>
+                            <div class="kpi-value">94.8%</div>
+                            <div class="kpi-label">Customer Health Score</div>
+                            <div class="kpi-trend trend-down">
+                                <span>↓</span>
+                                <span>1.2%</span>
+                                <span class="text-gray-500">needs attention</span>
+                            </div>
+                        </div>
+                        <div class="kpi-icon">❤️</div>
+                    </div>
+                    <canvas id="healthSparkline" height="50"></canvas>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div>
+                            <div class="kpi-value">$450K</div>
+                            <div class="kpi-label">Cost Savings Generated</div>
+                            <div class="kpi-trend trend-up">
+                                <span>↑</span>
+                                <span>45%</span>
+                                <span class="text-gray-500">efficiency gain</span>
+                            </div>
+                        </div>
+                        <div class="kpi-icon">💎</div>
+                    </div>
+                    <canvas id="savingsSparkline" height="50"></canvas>
+                </div>
+            </div>
+            
+            <!-- Revenue & Growth Charts -->
+            <div class="chart-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Revenue Growth & Projections</h3>
+                        <div class="chart-controls">
+                            <button class="btn btn-sm btn-secondary" onclick="drillDown('revenue')">Drill Down</button>
+                        </div>
+                    </div>
+                    <canvas id="revenueChart" height="300"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Customer Segments</h3>
+                    </div>
+                    <canvas id="segmentChart" height="300"></canvas>
+                </div>
+            </div>
+            
+            <!-- Container Volume Analytics -->
+            <div class="chart-container full-width mb-6">
+                <div class="chart-header">
+                    <h3 class="chart-title">Container Volume Analytics</h3>
+                    <div class="chart-controls">
+                        <select class="form-control" onchange="updateVolumeChart(this.value)">
+                            <option value="daily">Daily</option>
+                            <option value="weekly" selected>Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+                </div>
+                <canvas id="volumeChart" height="250"></canvas>
+            </div>
+            
+            <!-- Customer Health & Churn Analysis -->
+            <div class="data-table-container mb-6">
+                <div class="table-header">
+                    <h3 class="chart-title">Customer Health & Churn Risk Analysis</h3>
+                    <button class="btn btn-sm btn-primary" onclick="exportCustomerHealth()">Export</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="advanced-table">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>ARR</th>
+                                <th>Health Score</th>
+                                <th>Container Volume</th>
+                                <th>Engagement</th>
+                                <th>Churn Risk</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerHealthTable">
+                            <tr>
+                                <td><strong>Maersk Corporation</strong></td>
+                                <td>$1.2M</td>
+                                <td><span class="health-score excellent">98% Excellent</span></td>
+                                <td>45,234</td>
+                                <td>Daily</td>
+                                <td><span class="status status-success">Low</span></td>
+                                <td><button class="btn btn-sm btn-secondary">View Details</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>DHL Global</strong></td>
+                                <td>$950K</td>
+                                <td><span class="health-score good">92% Good</span></td>
+                                <td>38,456</td>
+                                <td>Daily</td>
+                                <td><span class="status status-success">Low</span></td>
+                                <td><button class="btn btn-sm btn-secondary">View Details</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>FedEx Logistics</strong></td>
+                                <td>$800K</td>
+                                <td><span class="health-score fair">78% Fair</span></td>
+                                <td>28,123</td>
+                                <td>Weekly</td>
+                                <td><span class="status status-warning">Medium</span></td>
+                                <td><button class="btn btn-sm btn-primary">Take Action</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Operational Performance -->
+            <div class="chart-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">D&D Prevention Success Rate</h3>
+                    </div>
+                    <canvas id="preventionChart" height="300"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">API Performance</h3>
+                    </div>
+                    <canvas id="apiChart" height="300"></canvas>
+                </div>
+            </div>
+            
+            <!-- Carrier Performance Benchmarking -->
+            <div class="chart-container full-width">
+                <div class="chart-header">
+                    <h3 class="chart-title">Carrier Performance Benchmarking</h3>
+                    <div class="chart-controls">
+                        <select class="form-control">
+                            <option>All Carriers</option>
+                            <option>Top 10 Carriers</option>
+                            <option>By Region</option>
+                        </select>
+                    </div>
+                </div>
+                <canvas id="carrierBenchmark" height="250"></canvas>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Report Builder Modal (hidden by default) -->
+    <div id="reportBuilderModal" class="hidden">
+        <!-- Report builder implementation -->
+    </div>
+    
+    <script>
+        // Chart.js defaults
+        Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Inter", sans-serif';
+        Chart.defaults.color = '#6b7280';
+        
+        // Initialize all charts
+        let charts = {};
+        
+        // ARR Sparkline
+        const arrCtx = document.getElementById('arrSparkline').getContext('2d');
+        charts.arrSparkline = new Chart(arrCtx, {
+            type: 'line',
+            data: {
+                labels: ['', '', '', '', '', '', ''],
+                datasets: [{
+                    data: [6.8, 7.1, 7.3, 7.8, 8.0, 8.3, 8.5],
+                    borderColor: '#00c853',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { display: false },
+                    y: { display: false }
+                }
+            }
+        });
+        
+        // Revenue Growth Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        charts.revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Actual Revenue',
+                    data: [5.2, 5.8, 6.1, 6.4, 6.8, 7.1, 7.5, 7.8, 8.0, 8.3, 8.5, null],
+                    borderColor: '#1a73e8',
+                    backgroundColor: 'rgba(26, 115, 232, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: 'Projected Revenue',
+                    data: [null, null, null, null, null, null, null, null, null, 8.3, 8.8, 9.2],
+                    borderColor: '#1a73e8',
+                    borderDash: [5, 5],
+                    borderWidth: 3,
+                    fill: false,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': $' + context.parsed.y + 'M';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value + 'M';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Customer Segments Chart
+        const segmentCtx = document.getElementById('segmentChart').getContext('2d');
+        charts.segmentChart = new Chart(segmentCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Enterprise', 'Mid-Market', 'SMB', 'Startup'],
+                datasets: [{
+                    data: [65, 20, 10, 5],
+                    backgroundColor: [
+                        '#1a73e8',
+                        '#00c853',
+                        '#fbbc04',
+                        '#ea4335'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '% of revenue';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Container Volume Chart
+        const volumeCtx = document.getElementById('volumeChart').getContext('2d');
+        charts.volumeChart = new Chart(volumeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+                datasets: [{
+                    label: 'Containers Tracked',
+                    data: [145000, 152000, 148000, 165000, 172000, 178000, 185000, 192000],
+                    backgroundColor: '#1a73e8',
+                    borderRadius: 4
+                }, {
+                    label: 'D&D Prevented',
+                    data: [12000, 13500, 14200, 15800, 16500, 17200, 18500, 19200],
+                    backgroundColor: '#00c853',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // D&D Prevention Success Rate
+        const preventionCtx = document.getElementById('preventionChart').getContext('2d');
+        charts.preventionChart = new Chart(preventionCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Maersk', 'MSC', 'CMA CGM', 'Hapag-Lloyd', 'ONE', 'Evergreen'],
+                datasets: [{
+                    label: 'Prevention Rate %',
+                    data: [92, 88, 85, 90, 87, 89],
+                    borderColor: '#1a73e8',
+                    backgroundColor: 'rgba(26, 115, 232, 0.2)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#1a73e8',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#1a73e8'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // API Performance Chart
+        const apiCtx = document.getElementById('apiChart').getContext('2d');
+        charts.apiChart = new Chart(apiCtx, {
+            type: 'line',
+            data: {
+                labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+                datasets: [{
+                    label: 'Response Time (ms)',
+                    data: [45, 42, 48, 125, 89, 52, 47],
+                    borderColor: '#fbbc04',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.4,
+                    yAxisID: 'y'
+                }, {
+                    label: 'Uptime %',
+                    data: [100, 100, 100, 99.8, 100, 100, 100],
+                    borderColor: '#00c853',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.4,
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Response Time (ms)'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        min: 99,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Uptime %'
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Carrier Benchmark Chart
+        const carrierCtx = document.getElementById('carrierBenchmark').getContext('2d');
+        charts.carrierBenchmark = new Chart(carrierCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Maersk', 'MSC', 'CMA CGM', 'Hapag-Lloyd', 'ONE', 'Evergreen', 'Yang Ming', 'HMM'],
+                datasets: [{
+                    label: 'On-Time Performance',
+                    data: [94, 91, 88, 92, 90, 89, 87, 85],
+                    backgroundColor: '#1a73e8'
+                }, {
+                    label: 'Documentation Accuracy',
+                    data: [96, 93, 90, 94, 92, 91, 88, 87],
+                    backgroundColor: '#00c853'
+                }, {
+                    label: 'Cost Efficiency',
+                    data: [88, 85, 87, 89, 86, 84, 82, 83],
+                    backgroundColor: '#fbbc04'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: false
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Utility Functions
+        function setTimeRange(range) {
+            document.querySelectorAll('.time-option').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            refreshData();
+        }
+        
+        function refreshData() {
+            // Simulate data refresh
+            console.log('Refreshing dashboard data...');
+            // Update all charts with new data
+        }
+        
+        function drillDown(metric) {
+            console.log('Drilling down into:', metric);
+            // Implement drill-down functionality
+        }
+        
+        function exportDashboardPDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('l', 'mm', 'a4');
+            
+            pdf.setFontSize(20);
+            pdf.text('ROOTUIP Executive Analytics Report', 20, 20);
+            
+            pdf.setFontSize(12);
+            pdf.text('Generated: ' + new Date().toLocaleString(), 20, 30);
+            
+            // Add KPIs
+            pdf.setFontSize(16);
+            pdf.text('Key Performance Indicators', 20, 45);
+            
+            pdf.setFontSize(12);
+            pdf.text('Annual Recurring Revenue: $8.5M (+24.5%)', 20, 55);
+            pdf.text('Enterprise Customers: 156 (+12)', 20, 62);
+            pdf.text('Customer Health Score: 94.8% (-1.2%)', 20, 69);
+            pdf.text('Cost Savings Generated: $450K (+45%)', 20, 76);
+            
+            // Save the PDF
+            pdf.save('rootuip-executive-report.pdf');
+        }
+        
+        function exportDashboardExcel() {
+            console.log('Exporting to Excel...');
+            // Implement Excel export
+        }
+        
+        function exportCustomerHealth() {
+            console.log('Exporting customer health data...');
+            // Implement customer health export
+        }
+        
+        function openReportBuilder() {
+            console.log('Opening report builder...');
+            // Implement report builder modal
+        }
+        
+        function updateVolumeChart(timeframe) {
+            console.log('Updating volume chart:', timeframe);
+            // Update volume chart based on timeframe
+        }
+    </script>
+</body>
+</html>

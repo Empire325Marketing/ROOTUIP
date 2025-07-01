@@ -1,0 +1,88 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  # System logs
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: varlogs
+          __path__: /var/log/*log
+
+  # ROOTUIP Application logs
+  - job_name: rootuip
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: rootuip
+          __path__: /app/logs/*.log
+    pipeline_stages:
+      - json:
+          expressions:
+            level: level
+            timestamp: timestamp
+            message: message
+      - labels:
+          level:
+      - timestamp:
+          source: timestamp
+          format: RFC3339
+
+  # Auth service logs
+  - job_name: auth
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: auth-service
+          __path__: /app/logs/auth/*.log
+
+  # ML service logs
+  - job_name: ml
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: ml-service
+          __path__: /app/logs/ml/*.log
+
+  # Nginx access logs
+  - job_name: nginx
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx
+          __path__: /var/log/nginx/access.log
+    pipeline_stages:
+      - regex:
+          expression: '^(?P<remote_addr>\\S+) - (?P<user>\\S+) \\[(?P<timestamp>[^\\]]+)\\] "(?P<method>\\S+) (?P<path>\\S+) (?P<protocol>\\S+)" (?P<status>\\d+) (?P<bytes>\\d+) "(?P<referer>[^"]*)" "(?P<user_agent>[^"]*)"'
+      - labels:
+          method:
+          status:
+      - metrics:
+          http_nginx_response_time:
+            type: Histogram
+            description: "Nginx response time"
+            source: response_time
+            config:
+              buckets: [0.1, 0.3, 0.5, 1, 3, 5, 10]
+
+  # PostgreSQL logs
+  - job_name: postgresql
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: postgresql
+          __path__: /var/log/postgresql/*.log

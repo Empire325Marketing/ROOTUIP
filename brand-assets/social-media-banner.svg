@@ -1,0 +1,69 @@
+<svg width="1500" height="500" viewBox="0 0 1500 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- ROOTUIP Social Media Banner (Twitter, LinkedIn Header) -->
+  <defs>
+    <linearGradient id="bannerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0F3460;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1e4d8b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0F3460;stop-opacity:1" />
+    </linearGradient>
+    
+    <pattern id="wavePatternBanner" x="0" y="0" width="200" height="100" patternUnits="userSpaceOnUse">
+      <path d="M0,50 Q50,25 100,50 T200,50" stroke="#FFFFFF" stroke-width="1" fill="none" opacity="0.1"/>
+    </pattern>
+    
+    <filter id="bannerShadow">
+      <feDropShadow dx="0" dy="10" stdDeviation="20" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1500" height="500" fill="url(#bannerGradient)"/>
+  <rect width="1500" height="500" fill="url(#wavePatternBanner)"/>
+  
+  <!-- Left side - Logo -->
+  <g transform="translate(150, 250)">
+    <!-- Wave emblem -->
+    <circle cx="0" cy="0" r="100" fill="#FFFFFF" opacity="0.1"/>
+    <path d="M-80,0 Q-40,-40 0,0 T80,0" 
+          stroke="#FFFFFF" 
+          stroke-width="12" 
+          fill="none" 
+          stroke-linecap="round"
+          filter="url(#bannerShadow)"/>
+    <path d="M-60,20 Q-30,-20 0,20 T60,20" 
+          stroke="#00D46A" 
+          stroke-width="10" 
+          fill="none" 
+          stroke-linecap="round"/>
+    
+    <!-- Container -->
+    <rect x="30" y="-40" width="30" height="40" fill="#FF6B35" rx="3"/>
+    <rect x="30" y="-48" width="30" height="6" fill="#FF6B35" rx="2"/>
+  </g>
+  
+  <!-- Center - Company name -->
+  <text x="750" y="220" font-family="Arial, sans-serif" font-size="90" font-weight="bold" text-anchor="middle" fill="#FFFFFF">
+    ROOTUIP
+  </text>
+  
+  <!-- Tagline -->
+  <text x="750" y="280" font-family="Arial, sans-serif" font-size="28" text-anchor="middle" fill="#FFFFFF" opacity="0.9" letter-spacing="4">
+    OCEAN FREIGHT INTELLIGENCE PLATFORM
+  </text>
+  
+  <!-- Right side - Value prop -->
+  <g transform="translate(1200, 250)">
+    <rect x="-100" y="-40" width="200" height="80" fill="#00D46A" rx="40" opacity="0.9"/>
+    <text x="0" y="8" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#FFFFFF">
+      $500K VALUE
+    </text>
+    <text x="0" y="32" font-family="Arial, sans-serif" font-size="18" text-anchor="middle" fill="#FFFFFF">
+      PER VESSEL
+    </text>
+  </g>
+  
+  <!-- Bottom wave decoration -->
+  <path d="M0,450 Q375,400 750,450 T1500,450 L1500,500 L0,500 Z" 
+        fill="#FFFFFF" 
+        opacity="0.1"/>
+</svg>

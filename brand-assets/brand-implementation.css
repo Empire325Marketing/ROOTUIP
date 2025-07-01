@@ -1,0 +1,363 @@
+/**
+ * ROOTUIP Brand Implementation Styles
+ * Ready-to-use CSS classes for consistent brand application
+ */
+
+/* ============================================
+   LOGO IMPLEMENTATIONS
+   ============================================ */
+
+.rootuip-header {
+    background-color: var(--rootuip-white);
+    border-bottom: 1px solid var(--rootuip-gray-200);
+    padding: var(--rootuip-space-4) 0;
+    box-shadow: var(--rootuip-shadow-sm);
+}
+
+.rootuip-header-dark {
+    background-color: var(--rootuip-primary);
+    border-bottom: 1px solid var(--rootuip-primary-dark);
+}
+
+.rootuip-logo-container {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rootuip-space-4);
+}
+
+.rootuip-logo {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.rootuip-logo img,
+.rootuip-logo svg {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+
+/* Logo size variants */
+.rootuip-logo-xs { height: 24px; }
+.rootuip-logo-sm { height: 32px; }
+.rootuip-logo-md { height: 48px; }
+.rootuip-logo-lg { height: 60px; }
+.rootuip-logo-xl { height: 80px; }
+
+/* ============================================
+   ENTERPRISE HEADERS
+   ============================================ */
+
+.rootuip-enterprise-header {
+    background: linear-gradient(135deg, var(--rootuip-primary) 0%, var(--rootuip-primary-light) 100%);
+    color: var(--rootuip-white);
+    padding: var(--rootuip-space-6) 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.rootuip-enterprise-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,50 Q25,40 50,50 T100,50' stroke='%23FFFFFF' stroke-width='0.5' fill='none' opacity='0.1'/%3E%3C/svg%3E");
+    opacity: 0.3;
+}
+
+.rootuip-enterprise-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* ============================================
+   VALUE PROPOSITION BADGES
+   ============================================ */
+
+.rootuip-value-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--rootuip-space-2);
+    background-color: var(--rootuip-success);
+    color: var(--rootuip-white);
+    padding: var(--rootuip-space-2) var(--rootuip-space-4);
+    border-radius: var(--rootuip-radius-full);
+    font-weight: var(--rootuip-font-semibold);
+    font-size: var(--rootuip-text-sm);
+}
+
+.rootuip-value-badge-large {
+    padding: var(--rootuip-space-3) var(--rootuip-space-6);
+    font-size: var(--rootuip-text-base);
+}
+
+.rootuip-value-badge-outline {
+    background-color: transparent;
+    border: 2px solid var(--rootuip-success);
+    color: var(--rootuip-success);
+}
+
+/* ============================================
+   HERO SECTIONS
+   ============================================ */
+
+.rootuip-hero {
+    background: linear-gradient(180deg, var(--rootuip-gray-100) 0%, var(--rootuip-white) 100%);
+    padding: var(--rootuip-space-16) 0;
+    text-align: center;
+    position: relative;
+}
+
+.rootuip-hero-ocean {
+    background: linear-gradient(180deg, var(--rootuip-primary) 0%, var(--rootuip-primary-light) 50%, var(--rootuip-white) 100%);
+    color: var(--rootuip-white);
+}
+
+.rootuip-hero-ocean .rootuip-heading {
+    color: var(--rootuip-white);
+}
+
+.rootuip-hero-title {
+    font-size: var(--rootuip-text-5xl);
+    font-weight: var(--rootuip-font-bold);
+    line-height: var(--rootuip-leading-tight);
+    margin-bottom: var(--rootuip-space-4);
+}
+
+.rootuip-hero-subtitle {
+    font-size: var(--rootuip-text-xl);
+    color: var(--rootuip-gray-600);
+    margin-bottom: var(--rootuip-space-8);
+}
+
+/* ============================================
+   NAVIGATION STYLES
+   ============================================ */
+
+.rootuip-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--rootuip-space-8);
+}
+
+.rootuip-nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: var(--rootuip-space-6);
+}
+
+.rootuip-nav-link {
+    color: var(--rootuip-gray-700);
+    text-decoration: none;
+    font-weight: var(--rootuip-font-medium);
+    transition: color var(--rootuip-transition-fast);
+    position: relative;
+}
+
+.rootuip-nav-link:hover {
+    color: var(--rootuip-primary);
+}
+
+.rootuip-nav-link-active {
+    color: var(--rootuip-primary);
+}
+
+.rootuip-nav-link-active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--rootuip-success);
+}
+
+/* ============================================
+   CARD PATTERNS
+   ============================================ */
+
+.rootuip-metric-card {
+    background: var(--rootuip-white);
+    border: 1px solid var(--rootuip-gray-200);
+    border-radius: var(--rootuip-radius-xl);
+    padding: var(--rootuip-space-6);
+    transition: all var(--rootuip-transition-base);
+}
+
+.rootuip-metric-card:hover {
+    box-shadow: var(--rootuip-shadow-lg);
+    transform: translateY(-2px);
+}
+
+.rootuip-metric-value {
+    font-size: var(--rootuip-text-3xl);
+    font-weight: var(--rootuip-font-bold);
+    color: var(--rootuip-primary);
+    margin-bottom: var(--rootuip-space-2);
+}
+
+.rootuip-metric-label {
+    font-size: var(--rootuip-text-sm);
+    color: var(--rootuip-gray-600);
+    text-transform: uppercase;
+    letter-spacing: var(--rootuip-tracking-wide);
+}
+
+/* ============================================
+   FOOTER STYLES
+   ============================================ */
+
+.rootuip-footer {
+    background-color: var(--rootuip-primary);
+    color: var(--rootuip-white);
+    padding: var(--rootuip-space-12) 0 var(--rootuip-space-8);
+    margin-top: var(--rootuip-space-20);
+}
+
+.rootuip-footer-logo {
+    margin-bottom: var(--rootuip-space-6);
+}
+
+.rootuip-footer-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--rootuip-space-8);
+    margin-bottom: var(--rootuip-space-8);
+}
+
+.rootuip-footer-section h4 {
+    color: var(--rootuip-success);
+    font-size: var(--rootuip-text-lg);
+    margin-bottom: var(--rootuip-space-4);
+}
+
+.rootuip-footer-link {
+    color: var(--rootuip-gray-300);
+    text-decoration: none;
+    display: block;
+    padding: var(--rootuip-space-1) 0;
+    transition: color var(--rootuip-transition-fast);
+}
+
+.rootuip-footer-link:hover {
+    color: var(--rootuip-white);
+}
+
+/* ============================================
+   TRUST INDICATORS
+   ============================================ */
+
+.rootuip-trust-bar {
+    background-color: var(--rootuip-gray-100);
+    padding: var(--rootuip-space-4) 0;
+    border-top: 1px solid var(--rootuip-gray-200);
+    border-bottom: 1px solid var(--rootuip-gray-200);
+}
+
+.rootuip-trust-items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--rootuip-space-8);
+    flex-wrap: wrap;
+}
+
+.rootuip-trust-item {
+    display: flex;
+    align-items: center;
+    gap: var(--rootuip-space-2);
+    color: var(--rootuip-gray-600);
+    font-size: var(--rootuip-text-sm);
+}
+
+.rootuip-trust-icon {
+    width: 20px;
+    height: 20px;
+    fill: var(--rootuip-success);
+}
+
+/* ============================================
+   CTA SECTIONS
+   ============================================ */
+
+.rootuip-cta-section {
+    background: linear-gradient(135deg, var(--rootuip-primary) 0%, var(--rootuip-primary-light) 100%);
+    color: var(--rootuip-white);
+    padding: var(--rootuip-space-16) 0;
+    text-align: center;
+    border-radius: var(--rootuip-radius-2xl);
+    margin: var(--rootuip-space-16) 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.rootuip-cta-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0, 212, 106, 0.1) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.3; }
+}
+
+.rootuip-cta-content {
+    position: relative;
+    z-index: 1;
+}
+
+.rootuip-cta-title {
+    font-size: var(--rootuip-text-4xl);
+    margin-bottom: var(--rootuip-space-4);
+}
+
+.rootuip-cta-value {
+    font-size: var(--rootuip-text-5xl);
+    font-weight: var(--rootuip-font-bold);
+    color: var(--rootuip-success);
+    margin-bottom: var(--rootuip-space-8);
+}
+
+/* ============================================
+   RESPONSIVE UTILITIES
+   ============================================ */
+
+@media (max-width: 768px) {
+    .rootuip-hero-title {
+        font-size: var(--rootuip-text-3xl);
+    }
+    
+    .rootuip-nav {
+        flex-direction: column;
+        gap: var(--rootuip-space-4);
+    }
+    
+    .rootuip-nav-list {
+        flex-direction: column;
+        width: 100%;
+        gap: var(--rootuip-space-2);
+    }
+    
+    .rootuip-footer-links {
+        grid-template-columns: 1fr;
+        gap: var(--rootuip-space-6);
+    }
+    
+    .rootuip-cta-title {
+        font-size: var(--rootuip-text-2xl);
+    }
+    
+    .rootuip-cta-value {
+        font-size: var(--rootuip-text-3xl);
+    }
+}

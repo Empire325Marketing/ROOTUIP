@@ -105,7 +105,7 @@
         }
 
         .metric-card {
-            background: white;
+            background: var(--bg-dark);
             border-radius: 12px;
             padding: 1.5rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -156,7 +156,7 @@
         }
 
         .chart-card {
-            background: white;
+            background: var(--bg-dark);
             border-radius: 12px;
             padding: 1.5rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -182,7 +182,7 @@
 
         /* Active Shipments Table */
         .shipments-section {
-            background: white;
+            background: var(--bg-dark);
             border-radius: 12px;
             padding: 1.5rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -310,7 +310,7 @@
             padding: 0.5rem 1rem;
             border: 1px solid #e2e8f0;
             border-radius: 6px;
-            background: white;
+            background: var(--bg-dark);
             color: #1e293b;
         }
 
@@ -323,7 +323,7 @@
         }
 
         .action-card {
-            background: white;
+            background: var(--bg-dark);
             border: 2px solid #e2e8f0;
             border-radius: 12px;
             padding: 1.5rem;
@@ -389,6 +389,7 @@
   gtag('js', new Date());
   gtag('config', 'G-ROOTUIP2025');
 </script>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
 </head>
 <body>
     <!-- Header -->
@@ -864,7 +865,7 @@
             
             const alertsList = document.getElementById('alertsList');
             alertsList.innerHTML = alerts.map(alert => `
-                <div style="padding: 1rem; border-left: 4px solid ${getAlertColor(alert.type)}; background: white; margin-bottom: 1rem; border-radius: 4px;">
+                <div style="padding: 1rem; border-left: 4px solid ${getAlertColor(alert.type)}; background: var(--bg-dark); margin-bottom: 1rem; border-radius: 4px;">
                     <div style="font-weight: 600; margin-bottom: 0.25rem;">${alert.title}</div>
                     <div style="color: #64748b; font-size: 0.875rem; margin-bottom: 0.5rem;">${alert.message}</div>
                     <div style="color: #94a3b8; font-size: 0.75rem;">${alert.time}</div>

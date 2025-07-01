@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Mobile Responsiveness Test</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/assets/css/rootuip-design-system.css" rel="stylesheet">
+    <link href="/assets/css/mobile-responsive.css" rel="stylesheet">
+    <link href="/assets/css/production-polish.css" rel="stylesheet">
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .device-info {
+            background: var(--rootuip-primary);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .viewport-info {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        .test-grid {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        @media (min-width: 768px) {
+            .test-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .test-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Mobile Menu Toggle (visible only on mobile) -->
+    <header class="app-header">
+        <div class="header-content">
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">ROOTUIP</div>
+        </div>
+    </header>
+
+    <!-- Mobile Sidebar -->
+    <aside class="app-sidebar" id="mobileSidebar">
+        <div class="sidebar-header">
+            <h3>Navigation</h3>
+            <button onclick="toggleMobileMenu()" class="close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav>
+            <a href="#" class="nav-link">Dashboard</a>
+            <a href="#" class="nav-link">Containers</a>
+            <a href="#" class="nav-link">Analytics</a>
+            <a href="#" class="nav-link">Settings</a>
+        </nav>
+    </aside>
+    <div class="mobile-sidebar-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- Main Content -->
+    <main class="app-main">
+        <div class="test-container">
+            <div class="device-info">
+                <h1>ROOTUIP Mobile Responsiveness Test</h1>
+                <div class="viewport-info" id="viewportInfo">
+                    <!-- Viewport info will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Test Components -->
+            <h2>Responsive Components Test</h2>
+            
+            <!-- Cards Grid -->
+            <div class="test-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Dashboard Card</h3>
+                        <span class="badge badge-success">Active</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="dashboard-card-value">1,234</div>
+                        <div class="dashboard-card-label">Total Containers</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Analytics Card</h3>
+                        <span class="badge badge-warning">Warning</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="dashboard-card-value">89%</div>
+                        <div class="dashboard-card-label">On-Time Delivery</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Performance Card</h3>
+                        <span class="badge badge-danger">Critical</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="dashboard-card-value">$2.3M</div>
+                        <div class="dashboard-card-label">Revenue at Risk</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Responsive Table -->
+            <h3>Responsive Table Test</h3>
+            <div class="card">
+                <table class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Container ID</th>
+                            <th>Status</th>
+                            <th>Location</th>
+                            <th>ETA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Container ID">MSKU1234567</td>
+                            <td data-label="Status"><span class="badge badge-success">In Transit</span></td>
+                            <td data-label="Location">Pacific Ocean</td>
+                            <td data-label="ETA">Dec 25, 2024</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Container ID">MSKU7654321</td>
+                            <td data-label="Status"><span class="badge badge-warning">Delayed</span></td>
+                            <td data-label="Location">Port of LA</td>
+                            <td data-label="ETA">Dec 23, 2024</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Touch-Friendly Buttons -->
+            <h3>Touch-Friendly Elements</h3>
+            <div class="btn-group">
+                <button class="btn btn-primary">
+                    <i class="fas fa-search"></i> Search
+                </button>
+                <button class="btn btn-secondary">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+                <button class="btn btn-success">
+                    <i class="fas fa-download"></i> Export
+                </button>
+            </div>
+
+            <!-- Mobile-Specific Features -->
+            <h3>Mobile Features</h3>
+            <div class="card">
+                <div class="card-body">
+                    <p class="hide-mobile">This text is hidden on mobile devices.</p>
+                    <p class="show-mobile" style="display: none;">This text only appears on mobile devices.</p>
+                    <p class="desktop-only">This is desktop-only content.</p>
+                </div>
+            </div>
+
+            <!-- Loading States -->
+            <h3>Loading States</h3>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-title"></div>
+        </div>
+    </main>
+
+    <!-- Offline Indicator -->
+    <div class="offline-indicator" id="offlineIndicator">
+        <i class="fas fa-wifi-slash"></i> You are currently offline
+    </div>
+
+    <!-- Demo Mode Banner -->
+    <div class="demo-mode-banner">
+        <i class="fas fa-info-circle"></i>
+        <span>Demo Mode - Testing Mobile Responsiveness</span>
+    </div>
+
+    <script>
+        // Display viewport information
+        function updateViewportInfo() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const devicePixelRatio = window.devicePixelRatio || 1;
+            let deviceType = 'Desktop';
+            
+            if (width < 640) {
+                deviceType = 'Mobile';
+            } else if (width < 1024) {
+                deviceType = 'Tablet';
+            }
+            
+            document.getElementById('viewportInfo').innerHTML = `
+                <strong>Device Type:</strong> ${deviceType}<br>
+                <strong>Viewport:</strong> ${width} x ${height}px<br>
+                <strong>Pixel Ratio:</strong> ${devicePixelRatio}x<br>
+                <strong>Touch Support:</strong> ${('ontouchstart' in window) ? 'Yes' : 'No'}
+            `;
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('mobileSidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
+        }
+
+        // Test offline indicator
+        function testOfflineIndicator() {
+            const indicator = document.getElementById('offlineIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize
+        updateViewportInfo();
+        window.addEventListener('resize', updateViewportInfo);
+
+        // Simulate offline mode after 5 seconds
+        setTimeout(testOfflineIndicator, 5000);
+
+        // Performance monitoring
+        if ('PerformanceObserver' in window) {
+            console.log('Performance monitoring available');
+        }
+    </script>
+</body>
+</html>

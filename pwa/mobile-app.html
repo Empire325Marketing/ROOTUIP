@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0066CC">
+    <meta name="description" content="ROOTUIP - Enterprise Container Tracking Platform">
+    
+    <title>ROOTUIP Mobile</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- iOS meta tags -->
+    <link rel="apple-touch-icon" href="/images/icon-192x192.png">
+    <link rel="apple-touch-startup-image" href="/images/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
+    
+    <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            touch-action: manipulation;
+        }
+        
+        /* App Shell */
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header */
+        .app-header {
+            background: #0066CC;
+            color: white;
+            padding: env(safe-area-inset-top) 0 0 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+        }
+        
+        .app-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .icon-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .icon-button:active {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding-bottom: env(safe-area-inset-bottom);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Dashboard Cards */
+        .dashboard-section {
+            padding: 16px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .metric-card {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0066CC, #0052A3);
+        }
+        
+        .metric-label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            line-height: 1;
+        }
+        
+        .metric-change {
+            font-size: 12px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .positive { color: #4CAF50; }
+        .negative { color: #F44336; }
+        
+        /* Search Bar */
+        .search-container {
+            padding: 16px;
+            background: var(--bg-dark);
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 12px 16px;
+            gap: 12px;
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            background: none;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        /* Container List */
+        .container-list {
+            padding: 16px;
+        }
+        
+        .container-card {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .container-card:active {
+            transform: scale(0.98);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        
+        .container-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .status-transit { background: #E3F2FD; color: #2196F3; }
+        .status-delivered { background: #E8F5E9; color: #4CAF50; }
+        .status-delayed { background: #FFEBEE; color: #F44336; }
+        
+        .container-info {
+            flex: 1;
+        }
+        
+        .container-id {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .container-details {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .container-arrow {
+            color: #999;
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            background: var(--bg-dark);
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+            position: sticky;
+            bottom: 0;
+        }
+        
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            border: none;
+            background: none;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .nav-item.active {
+            color: #0066CC;
+        }
+        
+        .nav-item:active {
+            transform: scale(0.95);
+        }
+        
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: calc(80px + env(safe-area-inset-bottom));
+            right: 16px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #0066CC;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,102,204,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 10;
+        }
+        
+        .fab:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(0,102,204,0.3);
+        }
+        
+        /* Offline Indicator */
+        .offline-banner {
+            background: #FF5722;
+            color: white;
+            padding: 8px 16px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .offline-banner.show {
+            display: block;
+        }
+        
+        /* Loading States */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Pull to Refresh */
+        .pull-to-refresh {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+        
+        .pull-to-refresh.active {
+            transform: translateX(-50%) translateY(80px);
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #0066CC;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Install Prompt */
+        .install-prompt {
+            position: fixed;
+            bottom: calc(100px + env(safe-area-inset-bottom));
+            left: 16px;
+            right: 16px;
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            display: none;
+            z-index: 20;
+        }
+        
+        .install-prompt.show {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .install-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .install-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 16px;
+        }
+        
+        .install-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .install-button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .install-button:active {
+            opacity: 0.8;
+        }
+        
+        .install-button.primary {
+            background: #0066CC;
+            color: white;
+        }
+        
+        .install-button.secondary {
+            background: #f5f5f5;
+            color: #666;
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Offline Banner -->
+        <div class="offline-banner" id="offlineBanner">
+            <span class="material-icons" style="font-size: 16px; vertical-align: middle;">cloud_off</span>
+            You're offline - Some features may be limited
+        </div>
+        
+        <!-- Pull to Refresh -->
+        <div class="pull-to-refresh" id="pullToRefresh">
+            <div class="spinner"></div>
+        </div>
+        
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">ROOTUIP</h1>
+                <div class="header-actions">
+                    <button class="icon-button" onclick="showNotifications()">
+                        <span class="material-icons">notifications</span>
+                    </button>
+                    <button class="icon-button" onclick="showProfile()">
+                        <span class="material-icons">account_circle</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Dashboard View -->
+            <div id="dashboardView" class="view">
+                <div class="dashboard-section">
+                    <h2 class="section-title">Overview</h2>
+                    <div class="metric-grid">
+                        <div class="metric-card">
+                            <div class="metric-label">Total Containers</div>
+                            <div class="metric-value">847K</div>
+                            <div class="metric-change positive">
+                                <span class="material-icons" style="font-size: 16px;">trending_up</span>
+                                <span>+5.2%</span>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Active Shipments</div>
+                            <div class="metric-value">42.1K</div>
+                            <div class="metric-change positive">
+                                <span class="material-icons" style="font-size: 16px;">trending_up</span>
+                                <span>+2.8%</span>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">On-Time Delivery</div>
+                            <div class="metric-value">94.2%</div>
+                            <div class="metric-change negative">
+                                <span class="material-icons" style="font-size: 16px;">trending_down</span>
+                                <span>-0.5%</span>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Alerts</div>
+                            <div class="metric-value">8</div>
+                            <div class="metric-change">
+                                <span style="color: #FF5722;">3 critical</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h2 class="section-title">Recent Containers</h2>
+                    <div class="container-list" id="containerList">
+                        <!-- Containers will be loaded here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Search View -->
+            <div id="searchView" class="view" style="display: none;">
+                <div class="search-container">
+                    <div class="search-bar">
+                        <span class="material-icons" style="color: #666;">search</span>
+                        <input type="text" class="search-input" placeholder="Search container ID..." id="searchInput">
+                        <button class="icon-button" style="background: #0066CC; width: 36px; height: 36px;" onclick="scanQRCode()">
+                            <span class="material-icons" style="font-size: 20px;">qr_code_scanner</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="container-list" id="searchResults">
+                    <!-- Search results will appear here -->
+                </div>
+            </div>
+        </main>
+        
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="showView('dashboard')">
+                <span class="material-icons nav-icon">dashboard</span>
+                <span class="nav-label">Dashboard</span>
+            </button>
+            <button class="nav-item" onclick="showView('search')">
+                <span class="material-icons nav-icon">search</span>
+                <span class="nav-label">Search</span>
+            </button>
+            <button class="nav-item" onclick="showView('scan')">
+                <span class="material-icons nav-icon">qr_code_scanner</span>
+                <span class="nav-label">Scan</span>
+            </button>
+            <button class="nav-item" onclick="showView('alerts')">
+                <span class="material-icons nav-icon">notifications</span>
+                <span class="nav-label">Alerts</span>
+            </button>
+            <button class="nav-item" onclick="showView('more')">
+                <span class="material-icons nav-icon">more_horiz</span>
+                <span class="nav-label">More</span>
+            </button>
+        </nav>
+        
+        <!-- Floating Action Button -->
+        <button class="fab" onclick="quickTrack()">
+            <span class="material-icons">add_location</span>
+        </button>
+        
+        <!-- Install Prompt -->
+        <div class="install-prompt" id="installPrompt">
+            <div class="install-title">Install ROOTUIP App</div>
+            <div class="install-text">Add to your home screen for quick access and offline features</div>
+            <div class="install-buttons">
+                <button class="install-button secondary" onclick="dismissInstall()">Not now</button>
+                <button class="install-button primary" onclick="installPWA()">Install</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registered');
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New service worker available
+                                    showUpdatePrompt();
+                                }
+                            });
+                        });
+                    })
+                    .catch(err => console.error('ServiceWorker registration failed:', err));
+            });
+        }
+        
+        // PWA Install Prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallPrompt();
+        });
+        
+        function showInstallPrompt() {
+            const prompt = document.getElementById('installPrompt');
+            prompt.classList.add('show');
+        }
+        
+        function installPWA() {
+            const prompt = document.getElementById('installPrompt');
+            prompt.classList.remove('show');
+            
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+        
+        function dismissInstall() {
+            const prompt = document.getElementById('installPrompt');
+            prompt.classList.remove('show');
+        }
+        
+        // Network Status
+        window.addEventListener('online', () => {
+            document.getElementById('offlineBanner').classList.remove('show');
+            syncData();
+        });
+        
+        window.addEventListener('offline', () => {
+            document.getElementById('offlineBanner').classList.add('show');
+        });
+        
+        // Pull to Refresh
+        let startY = 0;
+        let currentY = 0;
+        let refreshing = false;
+        
+        const mainContent = document.getElementById('mainContent');
+        const pullToRefresh = document.getElementById('pullToRefresh');
+        
+        mainContent.addEventListener('touchstart', (e) => {
+            if (mainContent.scrollTop === 0) {
+                startY = e.touches[0].pageY;
+            }
+        });
+        
+        mainContent.addEventListener('touchmove', (e) => {
+            if (!refreshing && mainContent.scrollTop === 0) {
+                currentY = e.touches[0].pageY;
+                const pullDistance = currentY - startY;
+                
+                if (pullDistance > 0 && pullDistance < 150) {
+                    e.preventDefault();
+                    pullToRefresh.style.transform = `translateX(-50%) translateY(${pullDistance}px)`;
+                    
+                    if (pullDistance > 80) {
+                        pullToRefresh.classList.add('active');
+                    }
+                }
+            }
+        });
+        
+        mainContent.addEventListener('touchend', () => {
+            if (pullToRefresh.classList.contains('active') && !refreshing) {
+                refresh();
+            } else {
+                pullToRefresh.style.transform = 'translateX(-50%)';
+                pullToRefresh.classList.remove('active');
+            }
+        });
+        
+        function refresh() {
+            refreshing = true;
+            
+            // Simulate refresh
+            setTimeout(() => {
+                loadContainers();
+                refreshing = false;
+                pullToRefresh.style.transform = 'translateX(-50%)';
+                pullToRefresh.classList.remove('active');
+            }, 1500);
+        }
+        
+        // View Management
+        function showView(viewName) {
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.nav-item').classList.add('active');
+            
+            // Update content based on view
+            switch(viewName) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'search':
+                    showSearchView();
+                    break;
+                case 'alerts':
+                    loadAlerts();
+                    break;
+                default:
+                    console.log('View:', viewName);
+            }
+        }
+        
+        function showSearchView() {
+            document.getElementById('dashboardView').style.display = 'none';
+            document.getElementById('searchView').style.display = 'block';
+            document.getElementById('searchInput').focus();
+        }
+        
+        // Container Loading
+        function loadContainers() {
+            const containers = [
+                {
+                    id: 'MSKU1234567',
+                    status: 'transit',
+                    destination: 'Los Angeles Port',
+                    eta: 'Jan 15, 2:30 PM'
+                },
+                {
+                    id: 'HLCU8765432',
+                    status: 'delivered',
+                    destination: 'Chicago Terminal',
+                    eta: 'Delivered'
+                },
+                {
+                    id: 'CMAU3456789',
+                    status: 'delayed',
+                    destination: 'Newark Port',
+                    eta: 'Delayed - Jan 16'
+                }
+            ];
+            
+            const containerList = document.getElementById('containerList');
+            containerList.innerHTML = containers.map(container => `
+                <div class="container-card" onclick="viewContainer('${container.id}')">
+                    <div class="container-icon status-${container.status}">
+                        <span class="material-icons">
+                            ${container.status === 'transit' ? 'local_shipping' : 
+                              container.status === 'delivered' ? 'check_circle' : 'warning'}
+                        </span>
+                    </div>
+                    <div class="container-info">
+                        <div class="container-id">${container.id}</div>
+                        <div class="container-details">${container.destination} • ${container.eta}</div>
+                    </div>
+                    <span class="material-icons container-arrow">chevron_right</span>
+                </div>
+            `).join('');
+        }
+        
+        // Initialize
+        loadContainers();
+        
+        // Push Notifications
+        if ('Notification' in window && navigator.serviceWorker) {
+            Notification.requestPermission();
+        }
+        
+        // Background Sync
+        async function syncData() {
+            if ('sync' in self.registration) {
+                try {
+                    await self.registration.sync.register('sync-containers');
+                    console.log('Background sync registered');
+                } catch (err) {
+                    console.error('Background sync failed:', err);
+                }
+            }
+        }
+        
+        // Quick Actions
+        function quickTrack() {
+            navigator.vibrate(50);
+            showSearchView();
+        }
+        
+        function scanQRCode() {
+            // In production, this would open camera for QR scanning
+            alert('QR Scanner would open here');
+        }
+        
+        function viewContainer(id) {
+            navigator.vibrate(50);
+            // Navigate to container details
+            console.log('View container:', id);
+        }
+        
+        // Share Target Handler
+        if (window.location.search.includes('share-target')) {
+            handleSharedData();
+        }
+        
+        function handleSharedData() {
+            const params = new URLSearchParams(window.location.search);
+            const title = params.get('title');
+            const text = params.get('text');
+            const url = params.get('url');
+            
+            // Process shared data
+            console.log('Shared:', { title, text, url });
+        }
+    </script>
+</body>
+</html>

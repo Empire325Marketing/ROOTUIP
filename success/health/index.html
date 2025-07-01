@@ -88,7 +88,7 @@
         }
 
         .header {
-            background: white;
+            background: var(--bg-dark);
             padding: 25px 30px;
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -151,7 +151,7 @@
         }
 
         .health-card {
-            background: white;
+            background: var(--bg-dark);
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -220,7 +220,7 @@
         }
 
         .trend-down {
-            background: #fff5f5;
+            background: var(--bg-dark)5f5;
             color: #f56565;
         }
 
@@ -243,7 +243,7 @@
 
         /* Customer Health Grid */
         .customer-health-section {
-            background: white;
+            background: var(--bg-dark);
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -273,7 +273,7 @@
             border: 1px solid #e2e8f0;
             border-radius: 6px;
             font-size: 0.9rem;
-            background: white;
+            background: var(--bg-dark);
         }
 
         .customer-grid {
@@ -329,12 +329,12 @@
         }
 
         .score-badge.at-risk {
-            background: #fffaf0;
+            background: var(--bg-dark)af0;
             color: #f6ad55;
         }
 
         .score-badge.critical {
-            background: #fff5f5;
+            background: var(--bg-dark)5f5;
             color: #f56565;
         }
 
@@ -378,7 +378,7 @@
         }
 
         .analytics-card {
-            background: white;
+            background: var(--bg-dark);
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -462,7 +462,7 @@
 
         /* Churn Risk */
         .risk-indicators {
-            background: white;
+            background: var(--bg-dark);
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -485,12 +485,12 @@
 
         .risk-item.high-risk {
             border-color: #f56565;
-            background: #fff5f5;
+            background: var(--bg-dark)5f5;
         }
 
         .risk-item.medium-risk {
             border-color: #f6ad55;
-            background: #fffaf0;
+            background: var(--bg-dark)af0;
         }
 
         .risk-item.low-risk {
@@ -561,6 +561,7 @@
   gtag('js', new Date());
   gtag('config', 'G-ROOTUIP2025');
 </script>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
 </head>
 <body>
     <div class="health-container">
@@ -760,7 +761,7 @@
                                 <td>5 days ago</td>
                                 <td>Mike Ross</td>
                                 <td>
-                                    <button class="btn btn-secondary" style="background: #fffaf0; color: #f6ad55;" onclick="event.stopPropagation(); createActionPlan('techcorp')">
+                                    <button class="btn btn-secondary" style="background: var(--bg-dark)af0; color: #f6ad55;" onclick="event.stopPropagation(); createActionPlan('techcorp')">
                                         ⚠️ Action Plan
                                     </button>
                                 </td>
@@ -802,7 +803,7 @@
                                 <td>2 weeks ago</td>
                                 <td>John Wilson</td>
                                 <td>
-                                    <button class="btn btn-secondary" style="background: #fff5f5; color: #f56565;" onclick="event.stopPropagation(); escalateAccount('megacorp')">
+                                    <button class="btn btn-secondary" style="background: var(--bg-dark)5f5; color: #f56565;" onclick="event.stopPropagation(); escalateAccount('megacorp')">
                                         🚨 Escalate
                                     </button>
                                 </td>

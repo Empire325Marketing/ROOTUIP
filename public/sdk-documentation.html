@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP SDK Documentation - JavaScript, Python, PHP & Node.js</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/rootuip-logo.svg">
+    <link rel="stylesheet" href="/assets/css/rootuip-design-system.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <style>
+        /* SDK Documentation Styles */
+        .sdk-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: 100vh;
+            background: var(--rootuip-background);
+        }
+        
+        /* Header */
+        .sdk-header {
+            grid-column: 1 / -1;
+            background: var(--bg-dark);
+            border-bottom: 1px solid var(--rootuip-border);
+            padding: var(--space-4) var(--space-6);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .sdk-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            font-size: var(--text-xl);
+            font-weight: 700;
+            color: var(--rootuip-primary);
+        }
+        
+        .language-selector {
+            display: flex;
+            background: var(--rootuip-gray-100);
+            border-radius: var(--radius-md);
+            padding: var(--space-1);
+        }
+        
+        .lang-button {
+            padding: var(--space-2) var(--space-4);
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+        }
+        
+        .lang-button:hover {
+            background: var(--rootuip-gray-200);
+        }
+        
+        .lang-button.active {
+            background: var(--rootuip-primary);
+            color: white;
+        }
+        
+        /* Sidebar */
+        .sdk-sidebar {
+            background: var(--bg-dark);
+            border-right: 1px solid var(--rootuip-border);
+            padding: var(--space-6);
+            overflow-y: auto;
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+        }
+        
+        .sidebar-section {
+            margin-bottom: var(--space-6);
+        }
+        
+        .section-title {
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--rootuip-text-secondary);
+            margin-bottom: var(--space-3);
+            letter-spacing: 0.05em;
+        }
+        
+        .nav-item {
+            display: block;
+            padding: var(--space-2) var(--space-3);
+            color: var(--rootuip-text);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-1);
+            font-size: var(--text-sm);
+            transition: all var(--transition-fast);
+        }
+        
+        .nav-item:hover {
+            background: var(--rootuip-gray-50);
+        }
+        
+        .nav-item.active {
+            background: var(--rootuip-primary-light);
+            color: var(--rootuip-primary);
+            font-weight: 500;
+        }
+        
+        /* Main Content */
+        .sdk-main {
+            padding: var(--space-8);
+            max-width: 900px;
+        }
+        
+        .sdk-hero {
+            text-align: center;
+            margin-bottom: var(--space-8);
+        }
+        
+        .hero-title {
+            font-size: var(--text-4xl);
+            font-weight: 700;
+            margin-bottom: var(--space-4);
+        }
+        
+        .hero-subtitle {
+            font-size: var(--text-xl);
+            color: var(--rootuip-text-secondary);
+            margin-bottom: var(--space-6);
+        }
+        
+        .installation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-4);
+            margin-bottom: var(--space-8);
+        }
+        
+        .install-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--rootuip-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            text-align: center;
+            transition: all var(--transition-fast);
+        }
+        
+        .install-card:hover {
+            border-color: var(--rootuip-primary);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .install-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto var(--space-3);
+            background: var(--rootuip-gray-100);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+        }
+        
+        .install-title {
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+        }
+        
+        .install-command {
+            background: var(--rootuip-gray-900);
+            color: var(--rootuip-gray-100);
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-md);
+            font-family: monospace;
+            font-size: var(--text-sm);
+            margin-top: var(--space-3);
+            position: relative;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            right: var(--space-2);
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--rootuip-gray-700);
+            border: none;
+            color: white;
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-xs);
+            cursor: pointer;
+        }
+        
+        /* Code Examples */
+        .code-example {
+            background: var(--bg-dark);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            margin: var(--space-6) 0;
+            overflow: hidden;
+        }
+        
+        .example-header {
+            background: var(--rootuip-gray-900);
+            color: white;
+            padding: var(--space-4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .example-title {
+            font-weight: 500;
+        }
+        
+        .example-actions {
+            display: flex;
+            gap: var(--space-2);
+        }
+        
+        .example-btn {
+            padding: var(--space-1) var(--space-3);
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            border-radius: var(--radius-sm);
+            font-size: var(--text-xs);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .example-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Method Documentation */
+        .method-doc {
+            background: var(--bg-dark);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin: var(--space-6) 0;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .method-signature {
+            background: var(--rootuip-gray-50);
+            border: 1px solid var(--rootuip-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            font-family: monospace;
+            margin-bottom: var(--space-4);
+        }
+        
+        .method-name {
+            color: var(--rootuip-primary);
+            font-weight: 600;
+        }
+        
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-4) 0;
+        }
+        
+        .param-table th {
+            text-align: left;
+            padding: var(--space-3);
+            background: var(--rootuip-gray-50);
+            border-bottom: 2px solid var(--rootuip-border);
+            font-weight: 600;
+            font-size: var(--text-sm);
+        }
+        
+        .param-table td {
+            padding: var(--space-3);
+            border-bottom: 1px solid var(--rootuip-border);
+            vertical-align: top;
+        }
+        
+        .param-type {
+            background: var(--rootuip-gray-100);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-sm);
+            font-family: monospace;
+            font-size: var(--text-xs);
+        }
+        
+        .param-required {
+            background: var(--rootuip-danger-light);
+            color: var(--rootuip-danger);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-xs);
+            font-weight: 600;
+        }
+        
+        .param-optional {
+            background: var(--rootuip-gray-200);
+            color: var(--rootuip-gray-700);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-xs);
+        }
+        
+        /* Response Examples */
+        .response-example {
+            margin-top: var(--space-4);
+        }
+        
+        .response-tabs {
+            display: flex;
+            background: var(--rootuip-gray-100);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            padding: var(--space-1);
+        }
+        
+        .response-tab {
+            padding: var(--space-2) var(--space-4);
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: var(--text-sm);
+            font-weight: 500;
+            transition: all var(--transition-fast);
+        }
+        
+        .response-tab.active {
+            background: var(--bg-dark);
+            color: var(--rootuip-primary);
+        }
+        
+        .response-content {
+            background: var(--rootuip-gray-900);
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+        }
+        
+        /* Error Handling */
+        .error-section {
+            background: var(--rootuip-danger-light);
+            border-left: 4px solid var(--rootuip-danger);
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            margin: var(--space-4) 0;
+        }
+        
+        .error-title {
+            color: var(--rootuip-danger);
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+        }
+        
+        /* SDK Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-4);
+            margin: var(--space-8) 0;
+        }
+        
+        .feature-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--rootuip-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            text-align: center;
+            transition: all var(--transition-fast);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--rootuip-primary-light);
+            border-radius: var(--radius-md);
+            margin: 0 auto var(--space-3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+        }
+        
+        .feature-description {
+            color: var(--rootuip-text-secondary);
+            font-size: var(--text-sm);
+        }
+        
+        /* Code Mirror Styling */
+        pre[class*="language-"] {
+            margin: 0;
+            padding: var(--space-4);
+            overflow-x: auto;
+            font-size: var(--text-sm);
+        }
+        
+        /* Content sections */
+        .content-section {
+            margin-bottom: var(--space-8);
+            padding-bottom: var(--space-6);
+            border-bottom: 1px solid var(--rootuip-border);
+        }
+        
+        .content-section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-header {
+            margin-bottom: var(--space-6);
+        }
+        
+        .section-header h2 {
+            font-size: var(--text-2xl);
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+        }
+        
+        .section-description {
+            color: var(--rootuip-text-secondary);
+            font-size: var(--text-lg);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sdk-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sdk-sidebar {
+                display: none;
+            }
+            
+            .installation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="sdk-layout">
+        <!-- Header -->
+        <header class="sdk-header">
+            <div class="header-content">
+                <div class="sdk-logo">
+                    <span>⚡</span>
+                    <span>ROOTUIP SDK</span>
+                </div>
+                
+                <div class="language-selector">
+                    <button class="lang-button active" data-lang="javascript">JavaScript</button>
+                    <button class="lang-button" data-lang="python">Python</button>
+                    <button class="lang-button" data-lang="php">PHP</button>
+                    <button class="lang-button" data-lang="go">Go</button>
+                </div>
+                
+                <div style="display: flex; gap: var(--space-3);">
+                    <a href="/documentation-portal.html" class="btn btn-secondary btn-sm">← Back to Docs</a>
+                    <a href="https://github.com/rootuip/sdk" class="btn btn-primary btn-sm">GitHub</a>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Sidebar -->
+        <nav class="sdk-sidebar">
+            <div class="sidebar-section">
+                <h3 class="section-title">Getting Started</h3>
+                <a href="#installation" class="nav-item active">Installation</a>
+                <a href="#authentication" class="nav-item">Authentication</a>
+                <a href="#quickstart" class="nav-item">Quick Start</a>
+                <a href="#configuration" class="nav-item">Configuration</a>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="section-title">Core Features</h3>
+                <a href="#containers" class="nav-item">Container Tracking</a>
+                <a href="#webhooks" class="nav-item">Webhooks</a>
+                <a href="#analytics" class="nav-item">Analytics</a>
+                <a href="#predictions" class="nav-item">Predictions</a>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="section-title">Advanced</h3>
+                <a href="#error-handling" class="nav-item">Error Handling</a>
+                <a href="#retries" class="nav-item">Retries & Backoff</a>
+                <a href="#testing" class="nav-item">Testing</a>
+                <a href="#performance" class="nav-item">Performance</a>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="section-title">Examples</h3>
+                <a href="#examples" class="nav-item">Code Examples</a>
+                <a href="#use-cases" class="nav-item">Use Cases</a>
+                <a href="#best-practices" class="nav-item">Best Practices</a>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="sdk-main">
+            <!-- Hero Section -->
+            <div class="sdk-hero">
+                <h1 class="hero-title">ROOTUIP JavaScript SDK</h1>
+                <p class="hero-subtitle">Official JavaScript SDK for integrating with the ROOTUIP container tracking platform</p>
+            </div>
+            
+            <!-- Installation -->
+            <div class="content-section" id="installation">
+                <div class="section-header">
+                    <h2>Installation</h2>
+                    <p class="section-description">Get started with the ROOTUIP SDK in your preferred environment</p>
+                </div>
+                
+                <div class="installation-grid">
+                    <div class="install-card">
+                        <div class="install-icon">📦</div>
+                        <h3 class="install-title">npm</h3>
+                        <p>For Node.js projects</p>
+                        <div class="install-command">
+                            npm install @rootuip/sdk
+                            <button class="copy-btn" onclick="copyText('npm install @rootuip/sdk')">Copy</button>
+                        </div>
+                    </div>
+                    
+                    <div class="install-card">
+                        <div class="install-icon">🧶</div>
+                        <h3 class="install-title">Yarn</h3>
+                        <p>Alternative package manager</p>
+                        <div class="install-command">
+                            yarn add @rootuip/sdk
+                            <button class="copy-btn" onclick="copyText('yarn add @rootuip/sdk')">Copy</button>
+                        </div>
+                    </div>
+                    
+                    <div class="install-card">
+                        <div class="install-icon">🌐</div>
+                        <h3 class="install-title">CDN</h3>
+                        <p>For browser usage</p>
+                        <div class="install-command">
+                            &lt;script src="https://cdn.rootuip.com/sdk/v3/rootuip.min.js"&gt;&lt;/script&gt;
+                            <button class="copy-btn" onclick="copyText('<script src=\"https://cdn.rootuip.com/sdk/v3/rootuip.min.js\"></script>')">Copy</button>
+                        </div>
+                    </div>
+                    
+                    <div class="install-card">
+                        <div class="install-icon">⚡</div>
+                        <h3 class="install-title">ESM</h3>
+                        <p>ES6 module import</p>
+                        <div class="install-command">
+                            import { RootuipClient } from '@rootuip/sdk'
+                            <button class="copy-btn" onclick="copyText('import { RootuipClient } from \'@rootuip/sdk\'')">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Start -->
+            <div class="content-section" id="quickstart">
+                <div class="section-header">
+                    <h2>Quick Start</h2>
+                    <p class="section-description">Initialize the SDK and start tracking containers in minutes</p>
+                </div>
+                
+                <div class="code-example">
+                    <div class="example-header">
+                        <span class="example-title">Basic Setup</span>
+                        <div class="example-actions">
+                            <button class="example-btn" onclick="copyCode(this)">Copy</button>
+                            <button class="example-btn" onclick="runExample(this)">Run Example</button>
+                        </div>
+                    </div>
+                    <pre><code class="language-javascript">// Import the SDK
+const { RootuipClient } = require('@rootuip/sdk');
+
+// Initialize the client
+const client = new RootuipClient({
+    apiKey: 'your_api_key_here',
+    environment: 'production', // or 'sandbox'
+    timeout: 30000,
+    retries: 3
+});
+
+// Track a container
+async function trackContainer() {
+    try {
+        const container = await client.containers.track({
+            containerNumber: 'MSKU1234567',
+            carrier: 'maersk',
+            referenceNumber: 'BOOK123456'
+        });
+        
+        console.log('Container tracked:', container.id);
+        console.log('Current status:', container.status);
+        console.log('Location:', container.currentLocation);
+        
+        return container;
+    } catch (error) {
+        console.error('Error tracking container:', error);
+    }
+}
+
+// Start tracking
+trackContainer();</code></pre>
+                </div>
+            </div>
+            
+            <!-- Container Tracking -->
+            <div class="content-section" id="containers">
+                <div class="section-header">
+                    <h2>Container Tracking</h2>
+                    <p class="section-description">Complete guide to tracking containers across all supported carriers</p>
+                </div>
+                
+                <div class="method-doc">
+                    <h3>track(options)</h3>
+                    <div class="method-signature">
+                        <span class="method-name">client.containers.track</span>(options: <span class="param-type">TrackingOptions</span>) → <span class="param-type">Promise&lt;Container&gt;</span>
+                    </div>
+                    
+                    <p>Start tracking a container by providing container details. The system will automatically detect the carrier if not specified.</p>
+                    
+                    <h4>Parameters</h4>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>containerNumber</code></td>
+                                <td><span class="param-type">string</span></td>
+                                <td><span class="param-required">Required</span></td>
+                                <td>The container identification number (11 characters)</td>
+                            </tr>
+                            <tr>
+                                <td><code>carrier</code></td>
+                                <td><span class="param-type">string</span></td>
+                                <td><span class="param-optional">Optional</span></td>
+                                <td>Carrier code (auto-detected if not provided)</td>
+                            </tr>
+                            <tr>
+                                <td><code>referenceNumber</code></td>
+                                <td><span class="param-type">string</span></td>
+                                <td><span class="param-optional">Optional</span></td>
+                                <td>Booking or Bill of Lading reference</td>
+                            </tr>
+                            <tr>
+                                <td><code>webhookUrl</code></td>
+                                <td><span class="param-type">string</span></td>
+                                <td><span class="param-optional">Optional</span></td>
+                                <td>URL to receive real-time updates</td>
+                            </tr>
+                            <tr>
+                                <td><code>customFields</code></td>
+                                <td><span class="param-type">object</span></td>
+                                <td><span class="param-optional">Optional</span></td>
+                                <td>Additional metadata to associate with the container</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="response-example">
+                        <h4>Response</h4>
+                        <div class="response-tabs">
+                            <button class="response-tab active">Success Response</button>
+                            <button class="response-tab">Error Response</button>
+                        </div>
+                        <div class="response-content">
+                            <pre><code class="language-javascript">{
+  "id": "cnt_1234567890",
+  "containerNumber": "MSKU1234567",
+  "carrier": "maersk",
+  "status": "in_transit",
+  "currentLocation": {
+    "port": "CNSHA",
+    "portName": "Shanghai, China",
+    "coordinates": {
+      "lat": 31.2304,
+      "lng": 121.4737
+    },
+    "arrivedAt": "2024-11-10T14:30:00Z"
+  },
+  "destination": {
+    "port": "USLAX", 
+    "portName": "Los Angeles, USA",
+    "eta": "2024-11-25T08:00:00Z"
+  },
+  "demurrageRisk": {
+    "level": "low",
+    "freeTimeRemaining": 5,
+    "estimatedCharges": 0,
+    "recommendations": []
+  },
+  "events": [
+    {
+      "timestamp": "2024-11-10T14:30:00Z",
+      "event": "arrived_at_port",
+      "location": "CNSHA",
+      "description": "Container arrived at Shanghai port"
+    }
+  ],
+  "customFields": {},
+  "createdAt": "2024-11-15T10:00:00Z",
+  "updatedAt": "2024-11-15T14:30:00Z"
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+                    <div class="example-header">
+                        <span class="example-title">Advanced Tracking Example</span>
+                        <div class="example-actions">
+                            <button class="example-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                    </div>
+                    <pre><code class="language-javascript">// Track multiple containers with real-time updates
+async function trackMultipleContainers() {
+    const containers = [
+        { containerNumber: 'MSKU1234567', carrier: 'maersk' },
+        { containerNumber: 'MSCU9876543', carrier: 'msc' },
+        { containerNumber: 'CMAU5555555', carrier: 'cma-cgm' }
+    ];
+    
+    // Track all containers
+    const trackingPromises = containers.map(container => 
+        client.containers.track({
+            ...container,
+            webhookUrl: 'https://your-app.com/webhooks/container-updates',
+            customFields: {
+                department: 'logistics',
+                priority: 'high'
+            }
+        })
+    );
+    
+    try {
+        const trackedContainers = await Promise.allSettled(trackingPromises);
+        
+        trackedContainers.forEach((result, index) => {
+            if (result.status === 'fulfilled') {
+                console.log(`✅ ${containers[index].containerNumber}: ${result.value.id}`);
+            } else {
+                console.error(`❌ ${containers[index].containerNumber}: ${result.reason.message}`);
+            }
+        });
+        
+        return trackedContainers;
+    } catch (error) {
+        console.error('Batch tracking failed:', error);
+    }
+}
+
+// Set up real-time subscriptions
+function subscribeToUpdates(containerId) {
+    return client.containers.subscribe(containerId, {
+        events: ['location_update', 'status_change', 'demurrage_risk'],
+        onUpdate: (update) => {
+            console.log('Container update:', update);
+            
+            // Handle different event types
+            switch (update.event) {
+                case 'demurrage_risk':
+                    if (update.data.level === 'high') {
+                        sendAlert(`HIGH D&D RISK: ${update.containerNumber}`);
+                    }
+                    break;
+                    
+                case 'arrived_at_destination':
+                    notifyTeam(`Container ${update.containerNumber} has arrived!`);
+                    break;
+            }
+        },
+        onError: (error) => {
+            console.error('Subscription error:', error);
+        }
+    });
+}</code></pre>
+                </div>
+            </div>
+            
+            <!-- Webhooks -->
+            <div class="content-section" id="webhooks">
+                <div class="section-header">
+                    <h2>Webhooks</h2>
+                    <p class="section-description">Receive real-time updates via webhooks</p>
+                </div>
+                
+                <div class="method-doc">
+                    <h3>createWebhook(options)</h3>
+                    <div class="method-signature">
+                        <span class="method-name">client.webhooks.create</span>(options: <span class="param-type">WebhookOptions</span>) → <span class="param-type">Promise&lt;Webhook&gt;</span>
+                    </div>
+                    
+                    <p>Create a webhook endpoint to receive real-time container updates.</p>
+                    
+                    <div class="code-example">
+                        <div class="example-header">
+                            <span class="example-title">Webhook Setup</span>
+                        </div>
+                        <pre><code class="language-javascript">// Create a webhook
+const webhook = await client.webhooks.create({
+    url: 'https://your-app.com/webhooks/rootuip',
+    events: [
+        'container.status_changed',
+        'container.location_updated', 
+        'container.demurrage_risk',
+        'container.eta_updated'
+    ],
+    secret: 'your_webhook_secret',
+    retryPolicy: {
+        maxRetries: 3,
+        backoffMultiplier: 2
+    }
+});
+
+// Webhook payload example
+const webhookPayload = {
+    "event": "container.status_changed",
+    "timestamp": "2024-11-15T14:30:00Z",
+    "data": {
+        "containerId": "cnt_1234567890",
+        "containerNumber": "MSKU1234567",
+        "previousStatus": "in_transit",
+        "newStatus": "arrived",
+        "location": {
+            "port": "USLAX",
+            "portName": "Los Angeles, USA"
+        }
+    },
+    "signature": "sha256=abc123..."
+};
+
+// Verify webhook signature
+function verifyWebhookSignature(payload, signature, secret) {
+    const crypto = require('crypto');
+    const expectedSignature = crypto
+        .createHmac('sha256', secret)
+        .update(payload)
+        .digest('hex');
+    
+    return `sha256=${expectedSignature}` === signature;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Error Handling -->
+            <div class="content-section" id="error-handling">
+                <div class="section-header">
+                    <h2>Error Handling</h2>
+                    <p class="section-description">Robust error handling and retry strategies</p>
+                </div>
+                
+                <div class="error-section">
+                    <div class="error-title">⚠️ Important</div>
+                    <p>Always implement proper error handling when working with external APIs. The SDK provides detailed error information to help you debug issues.</p>
+                </div>
+                
+                <div class="code-example">
+                    <div class="example-header">
+                        <span class="example-title">Error Handling Best Practices</span>
+                    </div>
+                    <pre><code class="language-javascript">// Comprehensive error handling
+async function trackContainerWithErrorHandling(containerNumber) {
+    try {
+        const container = await client.containers.track({
+            containerNumber,
+            carrier: 'auto-detect'
+        });
+        
+        return container;
+        
+    } catch (error) {
+        // Handle specific error types
+        switch (error.code) {
+            case 'INVALID_CONTAINER_NUMBER':
+                console.error('Invalid container format:', error.message);
+                throw new Error('Please check the container number format');
+                
+            case 'CARRIER_NOT_SUPPORTED':
+                console.error('Carrier not supported:', error.details.carrier);
+                // Try alternative tracking method
+                return await tryAlternativeTracking(containerNumber);
+                
+            case 'RATE_LIMIT_EXCEEDED':
+                console.warn('Rate limit hit, retrying after delay...');
+                await new Promise(resolve => setTimeout(resolve, error.retryAfter * 1000));
+                return await trackContainerWithErrorHandling(containerNumber);
+                
+            case 'AUTHENTICATION_FAILED':
+                console.error('API key invalid or expired');
+                throw new Error('Please check your API credentials');
+                
+            case 'NETWORK_ERROR':
+                console.error('Network issue:', error.message);
+                // Implement exponential backoff
+                return await retryWithBackoff(() => 
+                    client.containers.track({ containerNumber })
+                );
+                
+            default:
+                console.error('Unexpected error:', error);
+                throw error;
+        }
+    }
+}
+
+// Retry with exponential backoff
+async function retryWithBackoff(fn, maxRetries = 3, baseDelay = 1000) {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            return await fn();
+        } catch (error) {
+            if (attempt === maxRetries) throw error;
+            
+            const delay = baseDelay * Math.pow(2, attempt - 1);
+            console.log(`Retry ${attempt}/${maxRetries} after ${delay}ms`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+            
+            <!-- SDK Features -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3 class="feature-title">High Performance</h3>
+                    <p class="feature-description">Optimized for speed with built-in caching and connection pooling</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">Enterprise Security</h3>
+                    <p class="feature-description">OAuth 2.0, API key authentication, and webhook signature verification</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Real-time Updates</h3>
+                    <p class="feature-description">WebSocket connections and webhook support for instant notifications</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3 class="feature-title">Auto Retry</h3>
+                    <p class="feature-description">Intelligent retry logic with exponential backoff for reliability</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3 class="feature-title">TypeScript Support</h3>
+                    <p class="feature-description">Full TypeScript definitions for better developer experience</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🧪</div>
+                    <h3 class="feature-title">Testing Utilities</h3>
+                    <p class="feature-description">Mock clients and test helpers for easy unit testing</p>
+                </div>
+            </div>
+            
+            <!-- Testing -->
+            <div class="content-section" id="testing">
+                <div class="section-header">
+                    <h2>Testing</h2>
+                    <p class="section-description">Test your integration with mock clients and test utilities</p>
+                </div>
+                
+                <div class="code-example">
+                    <div class="example-header">
+                        <span class="example-title">Unit Testing Example</span>
+                    </div>
+                    <pre><code class="language-javascript">// Import test utilities
+const { MockRootuipClient, createTestContainer } = require('@rootuip/sdk/testing');
+
+describe('Container Tracking Service', () => {
+    let client;
+    let trackingService;
+    
+    beforeEach(() => {
+        // Use mock client for testing
+        client = new MockRootuipClient();
+        trackingService = new TrackingService(client);
+    });
+    
+    test('should track container successfully', async () => {
+        // Setup mock response
+        const mockContainer = createTestContainer({
+            containerNumber: 'MSKU1234567',
+            status: 'in_transit',
+            currentLocation: {
+                port: 'CNSHA',
+                portName: 'Shanghai, China'
+            }
+        });
+        
+        client.containers.track.mockResolvedValue(mockContainer);
+        
+        // Test the service
+        const result = await trackingService.track('MSKU1234567');
+        
+        expect(result.containerNumber).toBe('MSKU1234567');
+        expect(result.status).toBe('in_transit');
+        expect(client.containers.track).toHaveBeenCalledWith({
+            containerNumber: 'MSKU1234567',
+            carrier: 'auto-detect'
+        });
+    });
+    
+    test('should handle tracking errors gracefully', async () => {
+        // Setup mock error
+        client.containers.track.mockRejectedValue(
+            new Error('Invalid container number')
+        );
+        
+        // Test error handling
+        await expect(
+            trackingService.track('INVALID123')
+        ).rejects.toThrow('Invalid container number');
+    });
+    
+    test('should setup webhook correctly', async () => {
+        const webhookConfig = {
+            url: 'https://test.com/webhook',
+            events: ['container.status_changed']
+        };
+        
+        client.webhooks.create.mockResolvedValue({
+            id: 'webhook_123',
+            ...webhookConfig
+        });
+        
+        const webhook = await trackingService.setupWebhook(webhookConfig);
+        
+        expect(webhook.id).toBe('webhook_123');
+        expect(client.webhooks.create).toHaveBeenCalledWith(webhookConfig);
+    });
+});</code></pre>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Language switching
+        document.querySelectorAll('.lang-button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.lang-button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const lang = this.dataset.lang;
+                switchLanguage(lang);
+            });
+        });
+        
+        function switchLanguage(lang) {
+            // Update code examples based on selected language
+            console.log('Switching to language:', lang);
+            
+            // In a real implementation, this would update all code examples
+            // to show the appropriate language syntax
+        }
+        
+        // Copy functionality
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Show feedback
+                event.target.textContent = 'Copied!';
+                setTimeout(() => {
+                    event.target.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+        
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-example');
+            const code = codeBlock.querySelector('code').textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = 'Copied!';
+                button.style.background = 'rgba(0, 200, 83, 0.2)';
+                
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+        
+        function runExample(button) {
+            console.log('Running code example...');
+            // In a real implementation, this would execute the code in a sandbox
+        }
+        
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active nav item
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Scroll to section
+                const targetId = this.getAttribute('href').substring(1);
+                const target = document.getElementById(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+        
+        // Response tabs
+        document.querySelectorAll('.response-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const container = this.closest('.response-example');
+                container.querySelectorAll('.response-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Switch content (would be implemented with different response examples)
+                console.log('Switching to tab:', this.textContent);
+            });
+        });
+    </script>
+</body>
+</html>

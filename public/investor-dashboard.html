@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP - Series A Investor Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/countup.js@2.0.8/dist/countUp.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #4338CA;
+            --secondary: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --dark: #111827;
+            --gray: #6B7280;
+            --light: #F9FAFB;
+            --white: #FFFFFF;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .funding-badge {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-tab {
+            padding: 0.5rem 1rem;
+            color: var(--gray);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-tab:hover {
+            color: var(--dark);
+        }
+
+        .nav-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Key Metrics */
+        .key-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--gray);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .metric-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
+
+        .metric-change.positive {
+            background: #D1FAE5;
+            color: var(--secondary);
+        }
+
+        .metric-change.negative {
+            background: #FEE2E2;
+            color: var(--danger);
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Unit Economics */
+        .unit-economics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .unit-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .unit-metric {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .unit-label {
+            font-size: 1rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .unit-details {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .unit-detail {
+            text-align: center;
+        }
+
+        .unit-detail-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .unit-detail-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+        }
+
+        /* Tables */
+        .data-table {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .table-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: var(--gray);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--light);
+        }
+
+        td {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        tr:hover {
+            background: var(--light);
+        }
+
+        /* Tabs Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Financial Model */
+        .scenario-planner {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .slider-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #E5E7EB;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Market Analysis */
+        .market-visual {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .market-segment {
+            text-align: center;
+        }
+
+        .market-circle {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .tam { background: var(--primary); }
+        .sam { background: var(--secondary); }
+        .som { background: var(--warning); }
+
+        /* Compliance Status */
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .compliance-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .compliance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .compliance-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-complete {
+            background: #D1FAE5;
+            color: var(--secondary);
+        }
+
+        .status-progress {
+            background: #FEF3C7;
+            color: var(--warning);
+        }
+
+        .status-pending {
+            background: #E5E7EB;
+            color: var(--gray);
+        }
+
+        /* Progress Bars */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #E5E7EB;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.5s ease;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+            border: 1px solid #E5E7EB;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #E5E7EB;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .key-metrics {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                overflow-x: auto;
+                gap: 1rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1>ROOTUIP</h1>
+                <span class="funding-badge">Series A - $15M Target</span>
+            </div>
+            <div>
+                <button class="btn btn-primary" onclick="downloadPitchDeck()">
+                    📊 Download Pitch Deck
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Navigation Tabs -->
+        <nav>
+            <ul class="nav-tabs">
+                <li class="nav-tab active" onclick="switchTab('overview')">Overview</li>
+                <li class="nav-tab" onclick="switchTab('financials')">Financials</li>
+                <li class="nav-tab" onclick="switchTab('traction')">Traction</li>
+                <li class="nav-tab" onclick="switchTab('market')">Market</li>
+                <li class="nav-tab" onclick="switchTab('team')">Team</li>
+                <li class="nav-tab" onclick="switchTab('compliance')">Compliance</li>
+            </ul>
+        </nav>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <!-- Key Metrics -->
+            <div class="key-metrics" style="margin-top: 2rem;">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">Annual Recurring Revenue</span>
+                        <div class="metric-icon" style="background: #EDE9FE;">💰</div>
+                    </div>
+                    <div class="metric-value" id="arr">$0</div>
+                    <span class="metric-change positive">↑ 0% MoM</span>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">Total Customers</span>
+                        <div class="metric-icon" style="background: #D1FAE5;">👥</div>
+                    </div>
+                    <div class="metric-value" id="totalCustomers">0</div>
+                    <span class="metric-change positive">↑ 0 new this month</span>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">Cash Runway</span>
+                        <div class="metric-icon" style="background: #FEF3C7;">📅</div>
+                    </div>
+                    <div class="metric-value" id="runway">0</div>
+                    <span class="metric-change positive">months remaining</span>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">Burn Rate</span>
+                        <div class="metric-icon" style="background: #FEE2E2;">🔥</div>
+                    </div>
+                    <div class="metric-value" id="burnRate">$0</div>
+                    <span class="metric-change negative">monthly average</span>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">LTV:CAC Ratio</span>
+                        <div class="metric-icon" style="background: #E0E7FF;">📈</div>
+                    </div>
+                    <div class="metric-value" id="ltvCac">0</div>
+                    <span class="metric-change positive">↑ improving</span>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">Net Revenue Retention</span>
+                        <div class="metric-icon" style="background: #F3E8FF;">🎯</div>
+                    </div>
+                    <div class="metric-value" id="nrr">0%</div>
+                    <span class="metric-change positive">↑ expansion revenue</span>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Revenue Growth</h3>
+                        <select onchange="updateRevenueChart(this.value)">
+                            <option value="monthly">Monthly</option>
+                            <option value="quarterly">Quarterly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Cash Flow</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="cashFlowChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit Economics -->
+            <div class="unit-economics">
+                <div class="unit-card">
+                    <div class="unit-metric" id="ltv">$0</div>
+                    <div class="unit-label">Customer Lifetime Value</div>
+                    <div class="unit-details">
+                        <div class="unit-detail">
+                            <div class="unit-detail-value" id="avgLifetime">0</div>
+                            <div class="unit-detail-label">Avg Months</div>
+                        </div>
+                        <div class="unit-detail">
+                            <div class="unit-detail-value" id="avgMonthlyValue">$0</div>
+                            <div class="unit-detail-label">Monthly Value</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="unit-card">
+                    <div class="unit-metric" id="cac">$0</div>
+                    <div class="unit-label">Customer Acquisition Cost</div>
+                    <div class="unit-details">
+                        <div class="unit-detail">
+                            <div class="unit-detail-value" id="payback">0</div>
+                            <div class="unit-detail-label">Payback (months)</div>
+                        </div>
+                        <div class="unit-detail">
+                            <div class="unit-detail-value" id="salesEfficiency">0</div>
+                            <div class="unit-detail-label">Sales Efficiency</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="unit-card">
+                    <div class="unit-metric" id="grossMargin">0%</div>
+                    <div class="unit-label">Gross Margin</div>
+                    <div class="unit-details">
+                        <div class="unit-detail">
+                            <div class="unit-detail-value" id="operatingMargin">0%</div>
+                            <div class="unit-detail-label">Operating</div>
+                        </div>
+                        <div class="unit-detail">
+                            <div class="unit-detail-value" id="ebitda">0%</div>
+                            <div class="unit-detail-label">EBITDA</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financials Tab -->
+        <div id="financials" class="tab-content">
+            <div class="scenario-planner" style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1.5rem;">Financial Scenario Planner</h3>
+                
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Monthly Growth Rate</span>
+                        <span id="growthValue">15%</span>
+                    </div>
+                    <input type="range" class="slider" id="growthSlider" min="5" max="30" value="15" oninput="updateScenario()">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Churn Rate</span>
+                        <span id="churnValue">2%</span>
+                    </div>
+                    <input type="range" class="slider" id="churnSlider" min="1" max="5" value="2" oninput="updateScenario()">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>Sales Efficiency</span>
+                        <span id="efficiencyValue">1.2x</span>
+                    </div>
+                    <input type="range" class="slider" id="efficiencySlider" min="0.5" max="2.5" step="0.1" value="1.2" oninput="updateScenario()">
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Revenue Projections</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="projectionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Use of Funds</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="fundsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-table" style="margin-top: 2rem;">
+                <div class="table-header">
+                    <h3 class="table-title">Financial Projections (3 Years)</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Year 1</th>
+                            <th>Year 2</th>
+                            <th>Year 3</th>
+                        </tr>
+                    </thead>
+                    <tbody id="projectionTable">
+                        <tr>
+                            <td>Revenue</td>
+                            <td>$10M</td>
+                            <td>$35M</td>
+                            <td>$85M</td>
+                        </tr>
+                        <tr>
+                            <td>Gross Margin</td>
+                            <td>75%</td>
+                            <td>80%</td>
+                            <td>85%</td>
+                        </tr>
+                        <tr>
+                            <td>Operating Margin</td>
+                            <td>-45%</td>
+                            <td>-15%</td>
+                            <td>10%</td>
+                        </tr>
+                        <tr>
+                            <td>Cash Flow</td>
+                            <td>-$8M</td>
+                            <td>-$5M</td>
+                            <td>$5M</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Traction Tab -->
+        <div id="traction" class="tab-content">
+            <div class="charts-grid" style="margin-top: 2rem;">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Customer Growth</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="customerGrowthChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Revenue by Segment</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="segmentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-table" style="margin-top: 2rem;">
+                <div class="table-header">
+                    <h3 class="table-title">Key Enterprise Customers</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Industry</th>
+                            <th>Contract Value</th>
+                            <th>Status</th>
+                            <th>NPS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Maersk</strong></td>
+                            <td>Shipping</td>
+                            <td>$1.2M</td>
+                            <td><span class="compliance-status status-complete">Active</span></td>
+                            <td>85</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DHL</strong></td>
+                            <td>Logistics</td>
+                            <td>$950K</td>
+                            <td><span class="compliance-status status-complete">Active</span></td>
+                            <td>79</td>
+                        </tr>
+                        <tr>
+                            <td><strong>FedEx</strong></td>
+                            <td>Logistics</td>
+                            <td>$800K</td>
+                            <td><span class="compliance-status status-complete">Active</span></td>
+                            <td>82</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kuehne+Nagel</strong></td>
+                            <td>Freight</td>
+                            <td>$750K</td>
+                            <td><span class="compliance-status status-progress">Pilot</span></td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="data-table" style="margin-top: 2rem;">
+                <div class="table-header">
+                    <h3 class="table-title">Sales Pipeline</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stage</th>
+                            <th>Count</th>
+                            <th>Value</th>
+                            <th>Weighted Value</th>
+                            <th>Avg Deal Size</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Qualified</td>
+                            <td>45</td>
+                            <td>$18M</td>
+                            <td>$3.6M</td>
+                            <td>$400K</td>
+                        </tr>
+                        <tr>
+                            <td>Demo</td>
+                            <td>28</td>
+                            <td>$14M</td>
+                            <td>$4.2M</td>
+                            <td>$500K</td>
+                        </tr>
+                        <tr>
+                            <td>Negotiation</td>
+                            <td>12</td>
+                            <td>$7.2M</td>
+                            <td>$5.04M</td>
+                            <td>$600K</td>
+                        </tr>
+                        <tr>
+                            <td>Contract</td>
+                            <td>5</td>
+                            <td>$3.5M</td>
+                            <td>$3.15M</td>
+                            <td>$700K</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Market Tab -->
+        <div id="market" class="tab-content">
+            <div class="chart-card" style="margin-top: 2rem;">
+                <div class="chart-header">
+                    <h3 class="chart-title">Market Opportunity</h3>
+                </div>
+                <div class="market-visual">
+                    <div class="market-segment">
+                        <div class="market-circle tam">$45B</div>
+                        <h4>Total Addressable Market</h4>
+                        <p style="color: var(--gray);">Global supply chain visibility</p>
+                    </div>
+                    <div class="market-segment">
+                        <div class="market-circle sam">$12B</div>
+                        <h4>Serviceable Addressable Market</h4>
+                        <p style="color: var(--gray);">Enterprise container tracking</p>
+                    </div>
+                    <div class="market-segment">
+                        <div class="market-circle som">$1.2B</div>
+                        <h4>Serviceable Obtainable Market</h4>
+                        <p style="color: var(--gray);">5-year achievable</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Market Growth (18.5% CAGR)</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="marketGrowthChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Competitive Landscape</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="competitiveChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Tab -->
+        <div id="team" class="tab-content">
+            <div class="data-table" style="margin-top: 2rem;">
+                <div class="table-header">
+                    <h3 class="table-title">Leadership Team</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Background</th>
+                            <th>Equity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>John Smith</strong></td>
+                            <td>CEO & Founder</td>
+                            <td>Ex-Amazon Logistics, 15 years supply chain</td>
+                            <td>25%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sarah Johnson</strong></td>
+                            <td>CTO</td>
+                            <td>Ex-Google, MIT PhD in ML</td>
+                            <td>15%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Michael Chen</strong></td>
+                            <td>VP Sales</td>
+                            <td>Ex-Flexport, $100M+ in enterprise sales</td>
+                            <td>5%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lisa Wong</strong></td>
+                            <td>VP Engineering</td>
+                            <td>Ex-Uber, Built real-time systems at scale</td>
+                            <td>4%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="unit-economics" style="margin-top: 2rem;">
+                <div class="unit-card">
+                    <div class="unit-metric">85</div>
+                    <div class="unit-label">Total Team Size</div>
+                    <div class="unit-details">
+                        <div class="unit-detail">
+                            <div class="unit-detail-value">40</div>
+                            <div class="unit-detail-label">Engineering</div>
+                        </div>
+                        <div class="unit-detail">
+                            <div class="unit-detail-value">20</div>
+                            <div class="unit-detail-label">Sales</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="unit-card">
+                    <div class="unit-metric">12</div>
+                    <div class="unit-label">Previous Exits</div>
+                    <div class="unit-details">
+                        <div class="unit-detail">
+                            <div class="unit-detail-value">$2.5B</div>
+                            <div class="unit-detail-label">Total Value</div>
+                        </div>
+                        <div class="unit-detail">
+                            <div class="unit-detail-value">5</div>
+                            <div class="unit-detail-label">Patents</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="unit-card">
+                    <div class="unit-metric">15</div>
+                    <div class="unit-label">New Hires/Month</div>
+                    <div class="unit-details">
+                        <div class="unit-detail">
+                            <div class="unit-detail-value">95%</div>
+                            <div class="unit-detail-label">Retention</div>
+                        </div>
+                        <div class="unit-detail">
+                            <div class="unit-detail-value">4.8</div>
+                            <div class="unit-detail-label">Glassdoor</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compliance Tab -->
+        <div id="compliance" class="tab-content">
+            <div class="compliance-grid" style="margin-top: 2rem;">
+                <div class="compliance-card">
+                    <div class="compliance-header">
+                        <h3>SOC 2 Type II</h3>
+                        <span class="compliance-status status-complete">Complete</span>
+                    </div>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">Annual audit completed Q4 2023</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+
+                <div class="compliance-card">
+                    <div class="compliance-header">
+                        <h3>ISO 27001</h3>
+                        <span class="compliance-status status-complete">Complete</span>
+                    </div>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">Certified October 2023</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+
+                <div class="compliance-card">
+                    <div class="compliance-header">
+                        <h3>GDPR Compliance</h3>
+                        <span class="compliance-status status-complete">Complete</span>
+                    </div>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">Full compliance with EU regulations</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+
+                <div class="compliance-card">
+                    <div class="compliance-header">
+                        <h3>Financial Audit</h3>
+                        <span class="compliance-status status-progress">In Progress</span>
+                    </div>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">Expected completion Q1 2024</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                </div>
+
+                <div class="compliance-card">
+                    <div class="compliance-header">
+                        <h3>Penetration Testing</h3>
+                        <span class="compliance-status status-complete">Complete</span>
+                    </div>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">Quarterly testing by third party</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+
+                <div class="compliance-card">
+                    <div class="compliance-header">
+                        <h3>Data Room</h3>
+                        <span class="compliance-status status-complete">Ready</span>
+                    </div>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">All documents organized and accessible</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-table" style="margin-top: 2rem;">
+                <div class="table-header">
+                    <h3 class="table-title">Key Legal Documents</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Document</th>
+                            <th>Status</th>
+                            <th>Last Updated</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Certificate of Incorporation</td>
+                            <td><span class="compliance-status status-complete">Filed</span></td>
+                            <td>June 2021</td>
+                            <td><button class="btn btn-secondary">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>Cap Table</td>
+                            <td><span class="compliance-status status-complete">Current</span></td>
+                            <td>December 2023</td>
+                            <td><button class="btn btn-secondary">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>IP Portfolio</td>
+                            <td><span class="compliance-status status-complete">Filed</span></td>
+                            <td>November 2023</td>
+                            <td><button class="btn btn-secondary">View</button></td>
+                        </tr>
+                        <tr>
+                            <td>Customer Contracts</td>
+                            <td><span class="compliance-status status-complete">Executed</span></td>
+                            <td>Ongoing</td>
+                            <td><button class="btn btn-secondary">View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let charts = {};
+        let financialData = {};
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadFinancialData();
+            initializeCharts();
+            updateMetrics();
+            startRealtimeUpdates();
+        });
+
+        // Load financial data
+        async function loadFinancialData() {
+            try {
+                const response = await fetch('/api/financial/dashboard');
+                financialData = await response.json();
+            } catch (error) {
+                console.error('Error loading financial data:', error);
+                // Use demo data
+                financialData = getDemoData();
+            }
+        }
+
+        // Get demo data for display
+        function getDemoData() {
+            return {
+                current: {
+                    revenue: {
+                        arr: 8500000,
+                        mrr: 708333,
+                        growth: { mom: 15, yoy: 180 }
+                    },
+                    customers: {
+                        total: 156,
+                        new: 12,
+                        churnRate: 2
+                    },
+                    expenses: {
+                        total: 950000,
+                        sales: 380000,
+                        marketing: 285000,
+                        rd: 190000,
+                        operations: 95000
+                    }
+                },
+                unitEconomics: {
+                    ltv: { average: 450000, avgLifetimeMonths: 36 },
+                    cac: { average: 125000 },
+                    ratios: { ltvCac: 3.6, paybackPeriod: 10 }
+                },
+                cashFlow: {
+                    burnRate: { average: 650000 },
+                    runway: { months: 18 }
+                },
+                margins: {
+                    gross: 85,
+                    operating: -15,
+                    ebitda: -10
+                }
+            };
+        }
+
+        // Update metrics with animation
+        function updateMetrics() {
+            const data = financialData.current || getDemoData().current;
+            
+            // Animate counters
+            animateCounter('arr', 0, data.revenue.arr, '$', true);
+            animateCounter('totalCustomers', 0, data.customers.total);
+            animateCounter('runway', 0, financialData.cashFlow?.runway?.months || 18);
+            animateCounter('burnRate', 0, financialData.cashFlow?.burnRate?.average || 650000, '$', true);
+            animateCounter('ltvCac', 0, financialData.unitEconomics?.ratios?.ltvCac || 3.6, '', false, 1);
+            animateCounter('nrr', 0, 115, '%');
+            
+            // Update unit economics
+            animateCounter('ltv', 0, financialData.unitEconomics?.ltv?.average || 450000, '$', true);
+            animateCounter('cac', 0, financialData.unitEconomics?.cac?.average || 125000, '$', true);
+            animateCounter('avgLifetime', 0, financialData.unitEconomics?.ltv?.avgLifetimeMonths || 36);
+            animateCounter('avgMonthlyValue', 0, 12500, '$', true);
+            animateCounter('payback', 0, financialData.unitEconomics?.ratios?.paybackPeriod || 10);
+            animateCounter('salesEfficiency', 0, 1.2, '', false, 1);
+            
+            // Update margins
+            document.getElementById('grossMargin').textContent = '85%';
+            document.getElementById('operatingMargin').textContent = '-15%';
+            document.getElementById('ebitda').textContent = '-10%';
+        }
+
+        // Animate counter
+        function animateCounter(id, start, end, prefix = '', format = false, decimals = 0) {
+            const element = document.getElementById(id);
+            if (!element) return;
+            
+            const duration = 2000;
+            const startTime = Date.now();
+            
+            function update() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const current = start + (end - start) * easeOutCubic(progress);
+                
+                if (format) {
+                    element.textContent = prefix + formatNumber(current);
+                } else {
+                    element.textContent = prefix + current.toFixed(decimals);
+                }
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            update();
+        }
+
+        // Easing function
+        function easeOutCubic(t) {
+            return 1 - Math.pow(1 - t, 3);
+        }
+
+        // Format number
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(0) + 'K';
+            }
+            return num.toFixed(0);
+        }
+
+        // Initialize charts
+        function initializeCharts() {
+            // Revenue chart
+            const revenueCtx = document.getElementById('revenueChart');
+            if (revenueCtx) {
+                charts.revenue = new Chart(revenueCtx.getContext('2d'), {
+                    type: 'line',
+                    data: getRevenueChartData(),
+                    options: getLineChartOptions()
+                });
+            }
+
+            // Cash flow chart
+            const cashFlowCtx = document.getElementById('cashFlowChart');
+            if (cashFlowCtx) {
+                charts.cashFlow = new Chart(cashFlowCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: getCashFlowChartData(),
+                    options: getBarChartOptions()
+                });
+            }
+
+            // Customer growth chart
+            const customerCtx = document.getElementById('customerGrowthChart');
+            if (customerCtx) {
+                charts.customerGrowth = new Chart(customerCtx.getContext('2d'), {
+                    type: 'line',
+                    data: getCustomerGrowthData(),
+                    options: getLineChartOptions()
+                });
+            }
+
+            // Market growth chart
+            const marketCtx = document.getElementById('marketGrowthChart');
+            if (marketCtx) {
+                charts.marketGrowth = new Chart(marketCtx.getContext('2d'), {
+                    type: 'line',
+                    data: getMarketGrowthData(),
+                    options: getLineChartOptions()
+                });
+            }
+
+            // Competitive landscape
+            const competitiveCtx = document.getElementById('competitiveChart');
+            if (competitiveCtx) {
+                charts.competitive = new Chart(competitiveCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: getCompetitiveData(),
+                    options: getDoughnutOptions()
+                });
+            }
+
+            // Use of funds
+            const fundsCtx = document.getElementById('fundsChart');
+            if (fundsCtx) {
+                charts.funds = new Chart(fundsCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: getFundsData(),
+                    options: getDoughnutOptions()
+                });
+            }
+
+            // Revenue by segment
+            const segmentCtx = document.getElementById('segmentChart');
+            if (segmentCtx) {
+                charts.segment = new Chart(segmentCtx.getContext('2d'), {
+                    type: 'pie',
+                    data: getSegmentData(),
+                    options: getDoughnutOptions()
+                });
+            }
+
+            // Projection chart
+            const projectionCtx = document.getElementById('projectionChart');
+            if (projectionCtx) {
+                charts.projection = new Chart(projectionCtx.getContext('2d'), {
+                    type: 'line',
+                    data: getProjectionData(),
+                    options: getLineChartOptions()
+                });
+            }
+        }
+
+        // Chart data functions
+        function getRevenueChartData() {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const data = [250, 280, 320, 380, 450, 520, 600, 690, 790, 850, 920, 1000];
+            
+            return {
+                labels: months,
+                datasets: [{
+                    label: 'MRR ($K)',
+                    data: data,
+                    borderColor: '#4F46E5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    tension: 0.4
+                }]
+            };
+        }
+
+        function getCashFlowChartData() {
+            const months = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            return {
+                labels: months,
+                datasets: [{
+                    label: 'Cash In',
+                    data: [400, 450, 520, 580, 650, 720],
+                    backgroundColor: '#10B981'
+                }, {
+                    label: 'Cash Out',
+                    data: [-850, -880, -920, -950, -980, -1000],
+                    backgroundColor: '#EF4444'
+                }]
+            };
+        }
+
+        function getCustomerGrowthData() {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            return {
+                labels: months,
+                datasets: [{
+                    label: 'Total Customers',
+                    data: [45, 52, 61, 72, 85, 98, 112, 125, 138, 145, 152, 156],
+                    borderColor: '#4F46E5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'Enterprise',
+                    data: [5, 7, 9, 12, 15, 18, 22, 26, 30, 33, 36, 38],
+                    borderColor: '#10B981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.4
+                }]
+            };
+        }
+
+        function getMarketGrowthData() {
+            const years = ['2023', '2024', '2025', '2026', '2027', '2028'];
+            
+            return {
+                labels: years,
+                datasets: [{
+                    label: 'Market Size ($B)',
+                    data: [45, 53, 63, 75, 88, 105],
+                    borderColor: '#4F46E5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    tension: 0.4
+                }]
+            };
+        }
+
+        function getCompetitiveData() {
+            return {
+                labels: ['Legacy TMS', 'Visibility Platforms', 'In-house', 'ROOTUIP', 'Others'],
+                datasets: [{
+                    data: [45, 25, 20, 10, 5],
+                    backgroundColor: ['#6B7280', '#F59E0B', '#EF4444', '#4F46E5', '#E5E7EB']
+                }]
+            };
+        }
+
+        function getFundsData() {
+            return {
+                labels: ['Sales & Marketing', 'Engineering', 'Operations', 'Working Capital'],
+                datasets: [{
+                    data: [40, 35, 15, 10],
+                    backgroundColor: ['#4F46E5', '#10B981', '#F59E0B', '#6B7280']
+                }]
+            };
+        }
+
+        function getSegmentData() {
+            return {
+                labels: ['Enterprise', 'Mid-Market', 'SMB'],
+                datasets: [{
+                    data: [65, 25, 10],
+                    backgroundColor: ['#4F46E5', '#10B981', '#F59E0B']
+                }]
+            };
+        }
+
+        function getProjectionData() {
+            const quarters = ['Q1 24', 'Q2 24', 'Q3 24', 'Q4 24', 'Q1 25', 'Q2 25', 'Q3 25', 'Q4 25'];
+            
+            return {
+                labels: quarters,
+                datasets: [{
+                    label: 'Base Case',
+                    data: [2.5, 3.5, 5, 7, 10, 14, 20, 28],
+                    borderColor: '#4F46E5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'Conservative',
+                    data: [2.5, 3.2, 4.2, 5.5, 7, 9, 12, 16],
+                    borderColor: '#6B7280',
+                    backgroundColor: 'rgba(107, 114, 128, 0.1)',
+                    borderDash: [5, 5],
+                    tension: 0.4
+                }, {
+                    label: 'Aggressive',
+                    data: [2.5, 4, 6.5, 10, 15, 22, 32, 45],
+                    borderColor: '#10B981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderDash: [5, 5],
+                    tension: 0.4
+                }]
+            };
+        }
+
+        // Chart options
+        function getLineChartOptions() {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            };
+        }
+
+        function getBarChartOptions() {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            };
+        }
+
+        function getDoughnutOptions() {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            };
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active from nav
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Scenario planning
+        function updateScenario() {
+            const growth = document.getElementById('growthSlider').value;
+            const churn = document.getElementById('churnSlider').value;
+            const efficiency = document.getElementById('efficiencySlider').value;
+            
+            document.getElementById('growthValue').textContent = growth + '%';
+            document.getElementById('churnValue').textContent = churn + '%';
+            document.getElementById('efficiencyValue').textContent = efficiency + 'x';
+            
+            // Update projection chart with new values
+            updateProjectionChart(growth, churn, efficiency);
+        }
+
+        function updateProjectionChart(growth, churn, efficiency) {
+            if (!charts.projection) return;
+            
+            // Recalculate projections based on new parameters
+            const baseRevenue = 2.5;
+            const months = 8;
+            const newData = [];
+            
+            for (let i = 0; i < months; i++) {
+                const monthlyGrowth = 1 + (growth / 100);
+                const churnImpact = 1 - (churn / 100);
+                const value = baseRevenue * Math.pow(monthlyGrowth * churnImpact, i) * efficiency;
+                newData.push(value);
+            }
+            
+            charts.projection.data.datasets[0].data = newData;
+            charts.projection.update();
+        }
+
+        // Download pitch deck
+        async function downloadPitchDeck() {
+            try {
+                const response = await fetch('/api/investor/pitch-deck?format=pdf');
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'ROOTUIP_Series_A_Pitch_Deck.pdf';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Error downloading pitch deck:', error);
+                alert('Pitch deck download will be available soon');
+            }
+        }
+
+        // Real-time updates
+        function startRealtimeUpdates() {
+            // Update metrics every 30 seconds
+            setInterval(async () => {
+                await loadFinancialData();
+                updateMetrics();
+            }, 30000);
+        }
+    </script>
+</body>
+</html>

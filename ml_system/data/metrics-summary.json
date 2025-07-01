@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-06-28T17:57:44.998Z",
-  "uptime": "2h 35m 0s",
+  "timestamp": "2025-07-01T16:27:56.810Z",
+  "uptime": "3d 1h 5m",
   "documentProcessing": {
     "total": 0,
     "successful": 0,
@@ -29,10 +29,10 @@
     "accuracyScore": "94.2%"
   },
   "system": {
-    "currentCpu": "37.2%",
-    "avgCpu": "28.5%",
-    "currentMemory": "201MB",
-    "avgMemory": "250MB",
+    "currentCpu": "26.2%",
+    "avgCpu": "26.7%",
+    "currentMemory": "213MB",
+    "avgMemory": "249MB",
     "requestsPerMinute": 0,
     "errorRate": "0.00%",
     "avgResponseTime": "0ms"
@@ -40,11 +40,11 @@
   "performance": {
     "totalProcessed": 6,
     "overallSuccessRate": "100.00%",
-    "systemEfficiency": "77.8%",
+    "systemEfficiency": "100.0%",
     "scalabilityFactor": {
       "currentCapacity": "1200.00 ops/sec",
-      "estimatedMaxCapacity": "4215.18 ops/sec",
-      "scalabilityRatio": "3.51x",
+      "estimatedMaxCapacity": "4487.08 ops/sec",
+      "scalabilityRatio": "3.74x",
       "recommendation": "System can handle 2x current load"
     },
     "recommendedOptimizations": [

@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Pilot Results - Executive Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 3rem;
+            position: relative;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Title Slide */
+        .title-slide {
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            text-align: center;
+        }
+
+        .company-logo {
+            width: 200px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #4fd1c5, #63b3ed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #cbd5e0;
+            margin-bottom: 3rem;
+        }
+
+        .presentation-date {
+            font-size: 1.1rem;
+            color: #a0aec0;
+        }
+
+        /* Executive Summary */
+        .executive-summary {
+            background: #0f172a;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #4fd1c5;
+        }
+
+        .key-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .metric-box {
+            background: rgba(79, 209, 197, 0.1);
+            border: 2px solid #4fd1c5;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(79, 209, 197, 0.3);
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #4fd1c5;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 1.1rem;
+            color: #a0aec0;
+        }
+
+        /* Results Slide */
+        .results-slide {
+            background: #1e293b;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 12px;
+        }
+
+        .results-list {
+            list-style: none;
+        }
+
+        .results-list li {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .results-list li:last-child {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            background: #4fd1c5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* ROI Analysis */
+        .roi-slide {
+            background: #0f172a;
+        }
+
+        .roi-breakdown {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .roi-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .roi-item:last-child {
+            border-bottom: none;
+            padding-top: 2rem;
+            margin-top: 1rem;
+            border-top: 2px solid #4fd1c5;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .roi-label {
+            color: #cbd5e0;
+        }
+
+        .roi-value {
+            color: #4fd1c5;
+            font-weight: 600;
+        }
+
+        /* Success Stories */
+        .stories-slide {
+            background: #1e293b;
+        }
+
+        .story-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #4fd1c5;
+        }
+
+        .story-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .story-metric {
+            color: #4fd1c5;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        /* Future Vision */
+        .vision-slide {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .vision-timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .vision-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #4fd1c5;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3.4rem;
+            top: 2rem;
+            width: 12px;
+            height: 12px;
+            background: #4fd1c5;
+            border-radius: 50%;
+        }
+
+        .timeline-phase {
+            font-size: 0.9rem;
+            color: #4fd1c5;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        /* Call to Action */
+        .cta-slide {
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            text-align: center;
+        }
+
+        .cta-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: 12px;
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: #4fd1c5;
+            color: #1a365d;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(79, 209, 197, 0.4);
+        }
+
+        /* Navigation */
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .nav-button {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Print Styles */
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: auto;
+                padding: 2rem;
+            }
+            
+            .navigation {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .slide {
+                background: white !important;
+            }
+            
+            h1, h2, .metric-value, .roi-value {
+                color: #1a365d !important;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 2rem 1rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .key-metrics {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide title-slide" id="slide1">
+            <div class="company-logo">Customer Logo</div>
+            <h1>Pilot Success Report</h1>
+            <p class="subtitle">60-Day Results & ROI Analysis</p>
+            <p class="presentation-date">Presented: <span id="currentDate"></span></p>
+            <div class="slide-number">1 / 8</div>
+        </div>
+
+        <!-- Slide 2: Executive Summary -->
+        <div class="slide executive-summary" id="slide2">
+            <h2>Executive Summary</h2>
+            <p style="font-size: 1.3rem; line-height: 1.8; color: #cbd5e0;">
+                Over the past 60 days, ROOTUIP has demonstrated exceptional value in preventing 
+                detention and demurrage charges while streamlining operations.
+            </p>
+            <div class="key-metrics animate-in">
+                <div class="metric-box">
+                    <div class="metric-value">92.8%</div>
+                    <div class="metric-label">D&D Prevention Rate</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">$487K</div>
+                    <div class="metric-label">Total Savings</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">6.2:1</div>
+                    <div class="metric-label">ROI Achieved</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">1,847</div>
+                    <div class="metric-label">Shipments Protected</div>
+                </div>
+            </div>
+            <div class="slide-number">2 / 8</div>
+        </div>
+
+        <!-- Slide 3: Pilot Results -->
+        <div class="slide results-slide" id="slide3">
+            <h2>Pilot Performance Results</h2>
+            <div class="results-grid">
+                <div class="chart-container">
+                    <canvas id="performanceChart" width="400" height="300"></canvas>
+                </div>
+                <div>
+                    <ul class="results-list">
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>Exceeded 94% prevention target in Week 5</span>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>187ms average processing time (target: <2s)</span>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>99.8% system uptime maintained</span>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>82% user adoption rate achieved</span>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>Zero security incidents</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="slide-number">3 / 8</div>
+        </div>
+
+        <!-- Slide 4: ROI Analysis -->
+        <div class="slide roi-slide" id="slide4">
+            <h2>Return on Investment Analysis</h2>
+            <div class="roi-breakdown">
+                <div class="roi-item">
+                    <span class="roi-label">D&D Charges Prevented</span>
+                    <span class="roi-value">$425,000</span>
+                </div>
+                <div class="roi-item">
+                    <span class="roi-label">Operational Efficiency Gains</span>
+                    <span class="roi-value">$62,000</span>
+                </div>
+                <div class="roi-item">
+                    <span class="roi-label">Risk Mitigation Value</span>
+                    <span class="roi-value">$38,000</span>
+                </div>
+                <div class="roi-item">
+                    <span class="roi-label">Total Value Created (60 days)</span>
+                    <span class="roi-value">$525,000</span>
+                </div>
+                <div class="roi-item">
+                    <span class="roi-label">Pilot Investment</span>
+                    <span class="roi-value">($50,000)</span>
+                </div>
+                <div class="roi-item">
+                    <span class="roi-label">Net Benefit</span>
+                    <span class="roi-value">$475,000</span>
+                </div>
+                <div class="roi-item">
+                    <span class="roi-label">ROI Achievement</span>
+                    <span class="roi-value">9.5:1</span>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 2rem; font-size: 1.2rem; color: #4fd1c5;">
+                Projected Annual Savings: $3.15M
+            </p>
+            <div class="slide-number">4 / 8</div>
+        </div>
+
+        <!-- Slide 5: Success Stories -->
+        <div class="slide stories-slide" id="slide5">
+            <h2>Success Story Highlights</h2>
+            <div class="story-card">
+                <div class="story-header">
+                    <h3>Port Congestion Crisis Averted</h3>
+                    <span class="story-metric">$47,000 Saved</span>
+                </div>
+                <p>ML model predicted 85% D&D risk for 12 containers arriving LA/Long Beach. 
+                   Team rerouted to Oakland, avoiding 15-day delays.</p>
+            </div>
+            <div class="story-card">
+                <div class="story-header">
+                    <h3>Documentation Error Prevention</h3>
+                    <span class="story-metric">$28,000 Saved</span>
+                </div>
+                <p>OCR system detected missing customs forms 72 hours before arrival. 
+                   Corrections made prevented automatic 7-day hold.</p>
+            </div>
+            <div class="story-card">
+                <div class="story-header">
+                    <h3>Carrier Performance Optimization</h3>
+                    <span class="story-metric">32% Improvement</span>
+                </div>
+                <p>Analytics identified chronic delays with specific carrier routes. 
+                   Negotiated service improvements and alternative scheduling.</p>
+            </div>
+            <div class="slide-number">5 / 8</div>
+        </div>
+
+        <!-- Slide 6: User Feedback -->
+        <div class="slide feedback-slide" id="slide6" style="background: #0f172a;">
+            <h2>Team Feedback</h2>
+            <div style="text-align: center; margin: 3rem 0;">
+                <div style="font-size: 5rem; color: #4fd1c5; margin-bottom: 1rem;">4.8/5</div>
+                <div style="font-size: 1.2rem; color: #cbd5e0;">Average User Satisfaction</div>
+            </div>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <blockquote style="font-size: 1.3rem; line-height: 1.8; color: #cbd5e0; font-style: italic; margin: 2rem 0;">
+                    "ROOTUIP has transformed how we manage shipments. The predictive insights 
+                    have helped us prevent issues we didn't even know were coming. This is 
+                    exactly what our industry needs."
+                </blockquote>
+                <p style="text-align: right; color: #4fd1c5;">— Sarah Chen, VP Operations</p>
+            </div>
+            <div class="slide-number">6 / 8</div>
+        </div>
+
+        <!-- Slide 7: Future Vision -->
+        <div class="slide vision-slide" id="slide7">
+            <h2>Scaling for Greater Impact</h2>
+            <div class="vision-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-phase">Year 1</div>
+                    <div class="timeline-content">
+                        <h3>Foundation (Current → Month 12)</h3>
+                        <p>• Full deployment across all US ports</p>
+                        <p>• Integration with top 5 carriers</p>
+                        <p>• Projected savings: $3.15M</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-phase">Year 2</div>
+                    <div class="timeline-content">
+                        <h3>Expansion (Months 13-24)</h3>
+                        <p>• International port coverage</p>
+                        <p>• Advanced ML model customization</p>
+                        <p>• Projected savings: $4.8M</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-phase">Year 3</div>
+                    <div class="timeline-content">
+                        <h3>Optimization (Months 25-36)</h3>
+                        <p>• Full supply chain integration</p>
+                        <p>• Predictive capacity planning</p>
+                        <p>• Projected savings: $6.2M</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">7 / 8</div>
+        </div>
+
+        <!-- Slide 8: Call to Action -->
+        <div class="slide cta-slide" id="slide8">
+            <h2>Your Decision</h2>
+            <div class="cta-box">
+                <p style="font-size: 1.5rem; margin-bottom: 2rem;">
+                    The pilot has proven ROOTUIP's value with <strong>9.5:1 ROI</strong>
+                </p>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem; color: #cbd5e0;">
+                    Every day of delay costs approximately <strong>$8,750</strong> in missed savings
+                </p>
+                <div style="margin: 3rem 0;">
+                    <h3 style="margin-bottom: 1rem;">Recommended Next Steps:</h3>
+                    <ol style="text-align: left; max-width: 600px; margin: 0 auto; line-height: 2;">
+                        <li>Approve annual contract (credit pilot fee)</li>
+                        <li>Expand to all facilities by Q2</li>
+                        <li>Establish quarterly business reviews</li>
+                        <li>Join customer advisory board</li>
+                    </ol>
+                </div>
+                <a href="#" class="cta-button" onclick="scheduleCall()">Approve Contract</a>
+            </div>
+            <div class="slide-number">8 / 8</div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation">
+        <button class="nav-button" onclick="previousSlide()">Previous</button>
+        <button class="nav-button" onclick="nextSlide()">Next</button>
+        <button class="nav-button" onclick="window.print()">Print</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 8;
+
+        // Set current date
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Navigation functions
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach(slide => slide.style.display = 'none');
+            
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+            
+            document.getElementById(`slide${currentSlide}`).style.display = 'flex';
+            
+            // Initialize charts when visible
+            if (currentSlide === 3 && !window.chartInitialized) {
+                initializeChart();
+                window.chartInitialized = true;
+            }
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function previousSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+            if (e.key === 'Escape') showSlide(1);
+        });
+
+        // Initialize performance chart
+        function initializeChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+                    datasets: [{
+                        label: 'D&D Prevention Rate',
+                        data: [78, 82, 85, 88, 91, 92, 93, 92.8],
+                        borderColor: '#4fd1c5',
+                        backgroundColor: 'rgba(79, 209, 197, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Target (94%)',
+                        data: [94, 94, 94, 94, 94, 94, 94, 94],
+                        borderColor: '#e53e3e',
+                        borderDash: [5, 5],
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 70,
+                            max: 100,
+                            ticks: {
+                                color: '#ffffff',
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Schedule call function
+        function scheduleCall() {
+            alert('Opening calendar to schedule contract review call...');
+            // In production, this would open calendar scheduling
+        }
+
+        // Initialize
+        showSlide(1);
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) previousSlide();
+        }
+    </script>
+</body>
+</html>

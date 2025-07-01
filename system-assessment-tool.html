@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Your Ocean Freight System | ROOTUIP Assessment</title>
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/assets/css/brand-guidelines.css">
+    <style>
+        /* Assessment Tool Styles */
+        .assessment-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .assessment-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        
+        .grade-display {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            font-size: 48px;
+            font-weight: 700;
+            margin: 24px auto;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .grade-a { background: #10b981; color: white; }
+        .grade-b { background: #3b82f6; color: white; }
+        .grade-c { background: #f59e0b; color: white; }
+        .grade-d { background: #ef4444; color: white; }
+        .grade-f { background: #991b1b; color: white; }
+        
+        .assessment-form {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .question-section {
+            margin-bottom: 32px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .question-section:last-child {
+            border-bottom: none;
+        }
+        
+        .question-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--color-primary);
+            color: white;
+            border-radius: 50%;
+            font-weight: 600;
+            margin-right: 12px;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--color-text);
+        }
+        
+        .answer-options {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .answer-option {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .answer-option:hover {
+            border-color: var(--color-primary);
+            background: #f8fafc;
+        }
+        
+        .answer-option.selected {
+            border-color: var(--color-primary);
+            background: #eff6ff;
+        }
+        
+        .answer-radio {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+        }
+        
+        .answer-label {
+            flex: 1;
+            font-size: 16px;
+        }
+        
+        .answer-score {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin-left: 8px;
+        }
+        
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+        
+        .progress-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .progress-item::after {
+            content: '';
+            position: absolute;
+            top: 16px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: -1;
+        }
+        
+        .progress-item:last-child::after {
+            display: none;
+        }
+        
+        .progress-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .progress-item.completed .progress-circle {
+            background: var(--color-success);
+            color: white;
+        }
+        
+        .progress-item.active .progress-circle {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .progress-label {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+        }
+        
+        .results-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .results-section.show {
+            display: block;
+        }
+        
+        .score-breakdown {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+        
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .score-item:last-child {
+            border-bottom: none;
+        }
+        
+        .improvement-card {
+            background: var(--bg-dark);
+            border-left: 4px solid var(--color-accent);
+            padding: 20px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .improvement-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .improvement-description {
+            color: var(--color-text-secondary);
+            margin-bottom: 12px;
+        }
+        
+        .improvement-impact {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #fef3c7;
+            color: #92400e;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #0F3460 0%, #16213E 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .cta-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--color-success);
+            margin: 16px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .assessment-form {
+                padding: 24px;
+            }
+            
+            .question-text {
+                font-size: 16px;
+            }
+            
+            .answer-label {
+                font-size: 14px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="rootuip-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <svg class="logo" width="160" height="40" viewBox="0 0 160 40">
+                        <defs>
+                            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#0F3460;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#16213E;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M5 20 Q 10 10, 20 20 T 40 20 L 40 35 L 5 35 Z" fill="url(#waveGradient)"/>
+                        <rect x="15" y="15" width="10" height="15" fill="#FF6B35" rx="1"/>
+                        <text x="50" y="26" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="#0F3460">ROOTUIP</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="assessment-container">
+        <!-- Assessment Header -->
+        <div class="assessment-header">
+            <h1 class="display-2">Grade Your Ocean Freight System</h1>
+            <p class="lead">Answer 10 questions to see how your current system compares to industry best practices</p>
+            <div class="value-badges" style="display: flex; gap: 16px; justify-content: center; margin-top: 24px;">
+                <span class="value-badge">⏱️ 2 minutes</span>
+                <span class="value-badge">📊 Instant results</span>
+                <span class="value-badge">🎯 Custom recommendations</span>
+            </div>
+        </div>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker" id="progress-tracker">
+            <div class="progress-item active">
+                <div class="progress-circle">1</div>
+                <div class="progress-label">Visibility</div>
+            </div>
+            <div class="progress-item">
+                <div class="progress-circle">2</div>
+                <div class="progress-label">Tracking</div>
+            </div>
+            <div class="progress-item">
+                <div class="progress-circle">3</div>
+                <div class="progress-label">Alerts</div>
+            </div>
+            <div class="progress-item">
+                <div class="progress-circle">4</div>
+                <div class="progress-label">Integration</div>
+            </div>
+            <div class="progress-item">
+                <div class="progress-circle">5</div>
+                <div class="progress-label">Results</div>
+            </div>
+        </div>
+
+        <!-- Assessment Form -->
+        <div class="assessment-form" id="assessment-form">
+            <form id="system-assessment">
+                <!-- Section 1: Visibility -->
+                <div class="question-section" data-section="visibility">
+                    <div class="question-text">
+                        <span class="question-number">1</span>
+                        How often do you have real-time visibility into your container locations?
+                    </div>
+                    <div class="answer-options">
+                        <label class="answer-option">
+                            <input type="radio" name="container_visibility" value="real_time" class="answer-radio">
+                            <span class="answer-label">Real-time (live tracking)</span>
+                            <span class="answer-score">Excellent</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="container_visibility" value="daily" class="answer-radio">
+                            <span class="answer-label">Daily updates</span>
+                            <span class="answer-score">Good</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="container_visibility" value="weekly" class="answer-radio">
+                            <span class="answer-label">Weekly updates</span>
+                            <span class="answer-score">Needs improvement</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="container_visibility" value="manual" class="answer-radio">
+                            <span class="answer-label">Manual checks only</span>
+                            <span class="answer-score">Critical gap</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-section" data-section="visibility">
+                    <div class="question-text">
+                        <span class="question-number">2</span>
+                        How accurate is your container location data?
+                    </div>
+                    <div class="answer-options">
+                        <label class="answer-option">
+                            <input type="radio" name="data_accuracy" value="high" class="answer-radio">
+                            <span class="answer-label">95%+ accurate</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="data_accuracy" value="medium" class="answer-radio">
+                            <span class="answer-label">80-94% accurate</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="data_accuracy" value="low" class="answer-radio">
+                            <span class="answer-label">Less than 80% accurate</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Section 2: Tracking -->
+                <div class="question-section" data-section="tracking">
+                    <div class="question-text">
+                        <span class="question-number">3</span>
+                        How do you currently track detention and demurrage charges?
+                    </div>
+                    <div class="answer-options">
+                        <label class="answer-option">
+                            <input type="radio" name="detention_tracking" value="automated" class="answer-radio">
+                            <span class="answer-label">Fully automated system with predictions</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="detention_tracking" value="semi_automated" class="answer-radio">
+                            <span class="answer-label">Semi-automated with manual verification</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="detention_tracking" value="manual" class="answer-radio">
+                            <span class="answer-label">Manual spreadsheet tracking</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="detention_tracking" value="none" class="answer-radio">
+                            <span class="answer-label">No systematic tracking</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-section" data-section="tracking">
+                    <div class="question-text">
+                        <span class="question-number">4</span>
+                        How many data sources do you need to check for complete shipment visibility?
+                    </div>
+                    <div class="answer-options">
+                        <label class="answer-option">
+                            <input type="radio" name="data_sources" value="single" class="answer-radio">
+                            <span class="answer-label">Single unified platform</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="data_sources" value="few" class="answer-radio">
+                            <span class="answer-label">2-3 systems</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="data_sources" value="many" class="answer-radio">
+                            <span class="answer-label">4-6 systems</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="data_sources" value="numerous" class="answer-radio">
+                            <span class="answer-label">7+ different systems/websites</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Section 3: Alerts -->
+                <div class="question-section" data-section="alerts">
+                    <div class="question-text">
+                        <span class="question-number">5</span>
+                        When do you typically learn about potential detention charges?
+                    </div>
+                    <div class="answer-options">
+                        <label class="answer-option">
+                            <input type="radio" name="alert_timing" value="predictive" class="answer-radio">
+                            <span class="answer-label">Days in advance with predictive alerts</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="alert_timing" value="same_day" class="answer-radio">
+                            <span class="answer-label">Same day as free time expires</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="alert_timing" value="after" class="answer-radio">
+                            <span class="answer-label">After charges have started</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="alert_timing" value="invoice" class="answer-radio">
+                            <span class="answer-label">When we receive the invoice</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-section" data-section="alerts">
+                    <div class="question-text">
+                        <span class="question-number">6</span>
+                        How does your team receive critical shipment alerts?
+                    </div>
+                    <div class="answer-options">
+                        <label class="answer-option">
+                            <input type="radio" name="alert_system" value="proactive" class="answer-radio">
+                            <span class="answer-label">Automated multi-channel alerts (email, SMS, app)</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="alert_system" value="reactive" class="answer-radio">
+                            <span class="answer-label">Email notifications only</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="alert_system" value="none" class="answer-radio">
+                            <span class="answer-label">Manual checking required</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Section 4: Integration -->
+                <div class="question-section" data-section="integration">
+                    <div class="question-text">
+                        <span class="question-number">7</span>
+                        How well integrated is your container tracking with other systems?
+                    </div>
+                    <div class="answer-options">
+                        <label class="answer-option">
+                            <input type="radio" name="integration_level" value="full" class="answer-radio">
+                            <span class="answer-label">Fully integrated with ERP, TMS, and carriers</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="integration_level" value="partial" class="answer-radio">
+                            <span class="answer-label">Some integration, but gaps exist</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="integration_level" value="none" class="answer-radio">
+                            <span class="answer-label">Standalone systems with manual data entry</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-section" data-section="integration">
+                    <div class="question-text">
+                        <span class="question-number">8</span>
+                        How do you handle multi-carrier shipments?
+                    </div>
+                    <div class="answer-options">
+                        <label class="answer-option">
+                            <input type="radio" name="multicarrier" value="unified" class="answer-radio">
+                            <span class="answer-label">Single platform for all carriers</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="multicarrier" value="separate" class="answer-radio">
+                            <span class="answer-label">Separate systems per carrier</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="multicarrier" value="manual" class="answer-radio">
+                            <span class="answer-label">Manual tracking across carrier websites</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-section" data-section="integration">
+                    <div class="question-text">
+                        <span class="question-number">9</span>
+                        What percentage of detention/demurrage charges do you successfully dispute?
+                    </div>
+                    <div class="answer-options">
+                        <label class="answer-option">
+                            <input type="radio" name="dispute_rate" value="high" class="answer-radio">
+                            <span class="answer-label">Over 30% successfully disputed</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="dispute_rate" value="medium" class="answer-radio">
+                            <span class="answer-label">10-30% successfully disputed</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="dispute_rate" value="low" class="answer-radio">
+                            <span class="answer-label">Less than 10% disputed</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="dispute_rate" value="none" class="answer-radio">
+                            <span class="answer-label">Rarely dispute charges</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-section" data-section="integration">
+                    <div class="question-text">
+                        <span class="question-number">10</span>
+                        How much time does your team spend on container tracking weekly?
+                    </div>
+                    <div class="answer-options">
+                        <label class="answer-option">
+                            <input type="radio" name="time_spent" value="minimal" class="answer-radio">
+                            <span class="answer-label">Less than 5 hours (highly automated)</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="time_spent" value="moderate" class="answer-radio">
+                            <span class="answer-label">5-20 hours</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="time_spent" value="high" class="answer-radio">
+                            <span class="answer-label">20-40 hours</span>
+                        </label>
+                        <label class="answer-option">
+                            <input type="radio" name="time_spent" value="excessive" class="answer-radio">
+                            <span class="answer-label">Over 40 hours</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions" style="margin-top: 32px;">
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 18px;">
+                        Get My System Grade →
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="results-section">
+            <div class="assessment-form">
+                <div style="text-align: center;">
+                    <h2 style="margin-bottom: 24px;">Your Ocean Freight System Grade</h2>
+                    <div class="grade-display" id="grade-display">
+                        <span id="grade-letter">A</span>
+                    </div>
+                    <h3 id="grade-summary" style="margin-bottom: 8px;">Excellent System</h3>
+                    <p id="grade-description" style="color: var(--color-text-secondary); margin-bottom: 32px;">
+                        Your system is performing well above industry average
+                    </p>
+                </div>
+
+                <div class="score-breakdown">
+                    <h4 style="margin-bottom: 16px;">Score Breakdown</h4>
+                    <div class="score-item">
+                        <span>Container Visibility</span>
+                        <span id="visibility-score">85%</span>
+                    </div>
+                    <div class="score-item">
+                        <span>Tracking Efficiency</span>
+                        <span id="tracking-score">75%</span>
+                    </div>
+                    <div class="score-item">
+                        <span>Alert System</span>
+                        <span id="alert-score">60%</span>
+                    </div>
+                    <div class="score-item">
+                        <span>System Integration</span>
+                        <span id="integration-score">70%</span>
+                    </div>
+                    <div class="score-item" style="font-weight: 600;">
+                        <span>Overall Score</span>
+                        <span id="overall-score">72%</span>
+                    </div>
+                </div>
+
+                <div style="margin: 32px 0;">
+                    <h4 style="margin-bottom: 16px;">Top Improvement Opportunities</h4>
+                    <div id="improvements-list">
+                        <!-- Improvements will be dynamically added -->
+                    </div>
+                </div>
+
+                <div class="cta-section">
+                    <h3 style="font-size: 24px; margin-bottom: 16px;">
+                        Your Potential Annual Savings
+                    </h3>
+                    <div class="cta-value" id="potential-savings">$2.4M+</div>
+                    <p style="margin-bottom: 24px; opacity: 0.9;">
+                        Based on your current system gaps and industry benchmarks
+                    </p>
+                    <button class="btn btn-success" style="font-size: 18px; padding: 14px 32px;" onclick="getDetailedReport()">
+                        Get Your Detailed Report
+                    </button>
+                    <p style="margin-top: 16px; font-size: 14px; opacity: 0.7;">
+                        Includes custom recommendations and ROI analysis
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lead Capture Modal -->
+    <div class="modal" id="lead-modal" style="display: none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <h3 style="margin-bottom: 24px;">Get Your Detailed Assessment Report</h3>
+            <p style="margin-bottom: 24px;">We'll send you a comprehensive report with:</p>
+            <ul style="margin-bottom: 24px; padding-left: 24px;">
+                <li>Detailed score analysis</li>
+                <li>Custom improvement roadmap</li>
+                <li>ROI calculations for your fleet</li>
+                <li>Industry benchmark comparisons</li>
+            </ul>
+            <form id="report-form" onsubmit="submitReportRequest(event)">
+                <div class="form-group">
+                    <input type="email" class="form-input" name="email" placeholder="Work email" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-input" name="company" placeholder="Company name" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" class="form-input" name="phone" placeholder="Phone (optional)">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Send My Report
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Assessment scoring logic
+        const scoringWeights = {
+            container_visibility: { weight: 0.15, scores: { real_time: 100, daily: 70, weekly: 40, manual: 10 } },
+            data_accuracy: { weight: 0.10, scores: { high: 100, medium: 70, low: 30 } },
+            detention_tracking: { weight: 0.15, scores: { automated: 100, semi_automated: 70, manual: 40, none: 0 } },
+            data_sources: { weight: 0.10, scores: { single: 100, few: 70, many: 40, numerous: 10 } },
+            alert_timing: { weight: 0.15, scores: { predictive: 100, same_day: 60, after: 30, invoice: 0 } },
+            alert_system: { weight: 0.10, scores: { proactive: 100, reactive: 50, none: 0 } },
+            integration_level: { weight: 0.10, scores: { full: 100, partial: 60, none: 20 } },
+            multicarrier: { weight: 0.05, scores: { unified: 100, separate: 50, manual: 20 } },
+            dispute_rate: { weight: 0.05, scores: { high: 100, medium: 70, low: 40, none: 10 } },
+            time_spent: { weight: 0.05, scores: { minimal: 100, moderate: 70, high: 40, excessive: 10 } }
+        };
+
+        let assessmentData = {};
+        let leadId = null;
+
+        // Handle answer selection
+        document.querySelectorAll('.answer-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+                
+                // Remove selected class from siblings
+                this.parentElement.querySelectorAll('.answer-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Add selected class
+                this.classList.add('selected');
+            });
+        });
+
+        // Form submission
+        document.getElementById('system-assessment').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Collect answers
+            const formData = new FormData(e.target);
+            const answers = {};
+            
+            for (let [key, value] of formData.entries()) {
+                answers[key] = value;
+            }
+            
+            // Calculate scores
+            const results = calculateAssessmentScore(answers);
+            
+            // Display results
+            displayResults(results);
+            
+            // Submit to backend
+            try {
+                const response = await fetch('/api/lead-gen/assessment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        leadId: leadId,
+                        answers: answers
+                    })
+                });
+                
+                const data = await response.json();
+                assessmentData = data;
+                
+                // Track conversion
+                if (window.gtag) {
+                    gtag('event', 'assessment_completed', {
+                        event_category: 'engagement',
+                        event_label: results.grade,
+                        value: results.overallScore
+                    });
+                }
+                
+            } catch (error) {
+                console.error('Assessment submission error:', error);
+            }
+        });
+
+        function calculateAssessmentScore(answers) {
+            let totalScore = 0;
+            let categoryScores = {
+                visibility: { score: 0, weight: 0 },
+                tracking: { score: 0, weight: 0 },
+                alerts: { score: 0, weight: 0 },
+                integration: { score: 0, weight: 0 }
+            };
+            
+            // Calculate weighted scores
+            Object.entries(answers).forEach(([question, answer]) => {
+                if (scoringWeights[question]) {
+                    const weight = scoringWeights[question].weight;
+                    const score = scoringWeights[question].scores[answer] || 0;
+                    const weightedScore = score * weight;
+                    
+                    totalScore += weightedScore;
+                    
+                    // Categorize scores
+                    if (['container_visibility', 'data_accuracy'].includes(question)) {
+                        categoryScores.visibility.score += weightedScore;
+                        categoryScores.visibility.weight += weight;
+                    } else if (['detention_tracking', 'data_sources'].includes(question)) {
+                        categoryScores.tracking.score += weightedScore;
+                        categoryScores.tracking.weight += weight;
+                    } else if (['alert_timing', 'alert_system'].includes(question)) {
+                        categoryScores.alerts.score += weightedScore;
+                        categoryScores.alerts.weight += weight;
+                    } else {
+                        categoryScores.integration.score += weightedScore;
+                        categoryScores.integration.weight += weight;
+                    }
+                }
+            });
+            
+            // Calculate category percentages
+            Object.keys(categoryScores).forEach(category => {
+                if (categoryScores[category].weight > 0) {
+                    categoryScores[category].percentage = Math.round(
+                        (categoryScores[category].score / categoryScores[category].weight) 
+                    );
+                }
+            });
+            
+            // Determine grade
+            let grade, summary, description;
+            if (totalScore >= 90) {
+                grade = 'A';
+                summary = 'Excellent System';
+                description = 'Your system is performing well above industry average';
+            } else if (totalScore >= 80) {
+                grade = 'B';
+                summary = 'Good System';
+                description = 'Your system is above average with room for optimization';
+            } else if (totalScore >= 70) {
+                grade = 'C';
+                summary = 'Average System';
+                description = 'Your system meets basic needs but has significant gaps';
+            } else if (totalScore >= 60) {
+                grade = 'D';
+                summary = 'Below Average System';
+                description = 'Your system has major gaps impacting efficiency';
+            } else {
+                grade = 'F';
+                summary = 'Critical Gaps';
+                description = 'Your system needs immediate attention to avoid losses';
+            }
+            
+            // Identify improvements
+            const improvements = identifyImprovements(answers, totalScore);
+            
+            return {
+                overallScore: Math.round(totalScore),
+                grade,
+                summary,
+                description,
+                categoryScores,
+                improvements,
+                answers
+            };
+        }
+
+        function identifyImprovements(answers, score) {
+            const improvements = [];
+            
+            if (answers.container_visibility !== 'real_time') {
+                improvements.push({
+                    title: 'Implement Real-Time Container Tracking',
+                    description: 'Move from ' + answers.container_visibility.replace('_', ' ') + ' updates to live tracking',
+                    impact: 'High Impact: Save 2-3 days per container',
+                    priority: 1
+                });
+            }
+            
+            if (answers.detention_tracking === 'manual' || answers.detention_tracking === 'none') {
+                improvements.push({
+                    title: 'Automate Detention & Demurrage Tracking',
+                    description: 'Replace manual processes with automated charge prediction',
+                    impact: 'Critical: Prevent 75%+ of charges',
+                    priority: 1
+                });
+            }
+            
+            if (answers.alert_timing === 'after' || answers.alert_timing === 'invoice') {
+                improvements.push({
+                    title: 'Deploy Predictive Alert System',
+                    description: 'Get warnings 3-5 days before charges begin',
+                    impact: 'High Impact: Reduce charges by 60%',
+                    priority: 2
+                });
+            }
+            
+            if (answers.integration_level === 'none') {
+                improvements.push({
+                    title: 'Integrate Systems for Single Source of Truth',
+                    description: 'Connect tracking with ERP and carrier systems',
+                    impact: 'Medium Impact: Save 20+ hours/week',
+                    priority: 3
+                });
+            }
+            
+            if (answers.time_spent === 'high' || answers.time_spent === 'excessive') {
+                improvements.push({
+                    title: 'Reduce Manual Tracking Time by 80%',
+                    description: 'Automate data collection and reporting',
+                    impact: 'High Impact: Redeploy staff to strategic tasks',
+                    priority: 2
+                });
+            }
+            
+            return improvements.slice(0, 4); // Top 4 improvements
+        }
+
+        function displayResults(results) {
+            // Update progress
+            document.querySelectorAll('.progress-item').forEach(item => {
+                item.classList.add('completed');
+            });
+            
+            // Hide form, show results
+            document.getElementById('assessment-form').style.display = 'none';
+            document.getElementById('results-section').classList.add('show');
+            
+            // Update grade display
+            const gradeDisplay = document.getElementById('grade-display');
+            gradeDisplay.className = 'grade-display grade-' + results.grade.toLowerCase();
+            document.getElementById('grade-letter').textContent = results.grade;
+            document.getElementById('grade-summary').textContent = results.summary;
+            document.getElementById('grade-description').textContent = results.description;
+            
+            // Update scores
+            document.getElementById('overall-score').textContent = results.overallScore + '%';
+            document.getElementById('visibility-score').textContent = results.categoryScores.visibility.percentage + '%';
+            document.getElementById('tracking-score').textContent = results.categoryScores.tracking.percentage + '%';
+            document.getElementById('alert-score').textContent = results.categoryScores.alerts.percentage + '%';
+            document.getElementById('integration-score').textContent = results.categoryScores.integration.percentage + '%';
+            
+            // Display improvements
+            const improvementsList = document.getElementById('improvements-list');
+            improvementsList.innerHTML = results.improvements.map(improvement => `
+                <div class="improvement-card">
+                    <div class="improvement-title">${improvement.title}</div>
+                    <div class="improvement-description">${improvement.description}</div>
+                    <span class="improvement-impact">${improvement.impact}</span>
+                </div>
+            `).join('');
+            
+            // Calculate potential savings based on score
+            const savingsMultiplier = (100 - results.overallScore) / 100;
+            const baseSavings = 5000000; // $5M base
+            const potentialSavings = baseSavings * savingsMultiplier;
+            document.getElementById('potential-savings').textContent = 
+                '$' + (potentialSavings / 1000000).toFixed(1) + 'M+';
+            
+            // Scroll to results
+            document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getDetailedReport() {
+            document.getElementById('lead-modal').style.display = 'flex';
+        }
+
+        function submitReportRequest(event) {
+            event.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(event.target);
+            const contactInfo = {};
+            
+            for (let [key, value] of formData.entries()) {
+                contactInfo[key] = value;
+            }
+            
+            // Submit lead info with assessment results
+            fetch('/api/lead-gen/assessment-report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...contactInfo,
+                    assessmentData: assessmentData,
+                    leadId: leadId
+                })
+            });
+            
+            // Show success message
+            document.getElementById('lead-modal').innerHTML = `
+                <div class="modal-content" style="text-align: center; padding: 48px;">
+                    <div style="font-size: 48px; color: var(--color-success); margin-bottom: 24px;">✓</div>
+                    <h3 style="margin-bottom: 16px;">Report Sent!</h3>
+                    <p style="margin-bottom: 24px;">Check your email for your detailed assessment report.</p>
+                    <button class="btn btn-primary" onclick="location.href='/demo'">
+                        Schedule a Demo to Learn More
+                    </button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

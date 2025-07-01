@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROI Calculator - Calculate Your Ocean Freight Savings | ROOTUIP</title>
+    <meta name="description" content="Calculate how much your company could save with AI-powered detention & demurrage prevention. See potential savings of $25M+ annually with our enterprise ROI calculator.">
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link href="/assets/css/enterprise-design-system.css" rel="stylesheet">
+    <link href="/assets/css/roi-calculator-premium.css" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/assets/icons/favicon-32x32.png" type="image/png">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ROI Calculator - Calculate Your Ocean Freight Savings">
+    <meta property="og:description" content="See how much your company could save with AI-powered detention & demurrage prevention. Calculate your potential $25M+ annual savings.">
+    <meta property="og:image" content="/assets/images/roi-calculator-preview.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="ROI Calculator - Calculate Your Ocean Freight Savings">
+    <meta property="twitter:description" content="See how much your company could save with AI-powered detention & demurrage prevention.">
+    
+    <!-- Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+        
+        // Track calculator events
+        function trackCalculatorEvent(step, action, value) {
+            gtag('event', action, {
+                'event_category': 'ROI Calculator',
+                'event_label': step,
+                'value': value
+            });
+        }
+    </script>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="homepage-header">
+        <nav class="nav-wrapper container">
+            <a href="/index.html" class="logo-link">
+                <i class="fas fa-anchor"></i>
+                <span>ROOTUIP</span>
+            </a>
+            <div class="nav-menu">
+                <a href="/index.html" class="nav-link">Home</a>
+                <a href="/platform-navigator.html" class="nav-link">Platform</a>
+                <a href="/roi-calculator-premium.html" class="nav-link active">ROI Calculator</a>
+                <a href="/enterprise-demo-interface.html" class="nav-link">Demo</a>
+            </div>
+            <div class="nav-actions">
+                <a href="/login.html" class="btn btn-ghost">Login</a>
+                <a href="/enterprise-demo-interface.html" class="btn btn-primary">Get Demo</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" style="padding-top: 100px;">
+        <div id="roi-calculator-content">
+            <!-- ROI Calculator will be inserted here by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="homepage-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-company">
+                    <div class="footer-logo">
+                        <i class="fas fa-anchor"></i>
+                        <span>ROOTUIP</span>
+                    </div>
+                    <p>The leading AI-powered platform for preventing detention and demurrage charges in ocean freight operations.</p>
+                    <div class="footer-certifications">
+                        <div class="certification-badge">
+                            <i class="fas fa-shield-check"></i>
+                            <span>SOC 2</span>
+                        </div>
+                        <div class="certification-badge">
+                            <i class="fas fa-lock"></i>
+                            <span>ISO 27001</span>
+                        </div>
+                        <div class="certification-badge">
+                            <i class="fas fa-certificate"></i>
+                            <span>GDPR</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Platform</h4>
+                        <a href="/platform-navigator.html">Dashboard</a>
+                        <a href="/container-tracking-interface.html">Container Tracking</a>
+                        <a href="/analytics-revenue-dashboard.html">Analytics</a>
+                        <a href="/enterprise-monitoring-dashboard.html">Monitoring</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Solutions</h4>
+                        <a href="#retail">Retail & E-commerce</a>
+                        <a href="#manufacturing">Manufacturing</a>
+                        <a href="#automotive">Automotive</a>
+                        <a href="#pharmaceuticals">Pharmaceuticals</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <a href="/roi-calculator-premium.html">ROI Calculator</a>
+                        <a href="/enterprise-demo-interface.html">Platform Demo</a>
+                        <a href="/documentation-portal.html">Documentation</a>
+                        <a href="/help-system-interface.html">Support</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <a href="#about">About Us</a>
+                        <a href="#careers">Careers</a>
+                        <a href="#contact">Contact</a>
+                        <a href="#security">Security</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ROOTUIP. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#cookies">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/assets/js/roi-calculator-premium.js"></script>
+    
+    <!-- Initialize Calculator -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Insert calculator content
+            const container = document.getElementById('roi-calculator-content');
+            if (container) {
+                container.innerHTML = getROICalculatorContent();
+                
+                // Initialize calculator
+                ROICalculator.initROICalculator();
+                
+                // Track page view
+                trackCalculatorEvent('landing', 'page_view', 1);
+            }
+        });
+
+        // Track step progress
+        const originalNextStep = window.ROICalculator.nextStep;
+        window.ROICalculator.nextStep = function() {
+            trackCalculatorEvent(`step_${calculatorStep}`, 'step_completed', calculatorStep);
+            return originalNextStep.apply(this, arguments);
+        };
+
+        // Track form submission
+        document.addEventListener('submit', function(e) {
+            if (e.target.id === 'leadCaptureForm') {
+                trackCalculatorEvent('lead_capture', 'form_submitted', calculatorData.totalSavings);
+            }
+        });
+    </script>
+
+    <!-- Lead Capture Integration -->
+    <script>
+        // HubSpot Integration (replace with your actual HubSpot portal ID)
+        (function(h,u,b,s,p,o,t){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:YOUR_HUBSPOT_ID,hjsv:6};
+            p=u.createElement(s);p.async=1;
+            p.src='https://static.hotjar.com/c/hotjar-'+h._hjSettings.hjid+'.js?sv='+h._hjSettings.hjsv;
+            o=u.getElementsByTagName('head')[0];
+            o.appendChild(p);
+        })(window,document,'script');
+        
+        // Enhance lead capture with additional tracking
+        function enhancedLeadCapture(leadData) {
+            // Send to multiple systems
+            Promise.all([
+                sendToHubSpot(leadData),
+                sendToSalesforce(leadData),
+                sendToSlack(leadData)
+            ]).then(() => {
+                console.log('Lead successfully captured across all systems');
+            }).catch(error => {
+                console.error('Lead capture error:', error);
+            });
+        }
+        
+        async function sendToHubSpot(leadData) {
+            // HubSpot Forms API integration
+            return fetch('https://api.hsforms.com/submissions/v3/integration/submit/YOUR_PORTAL_ID/YOUR_FORM_ID', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    fields: [
+                        { name: 'email', value: leadData.email },
+                        { name: 'firstname', value: leadData.contactName.split(' ')[0] },
+                        { name: 'lastname', value: leadData.contactName.split(' ').slice(1).join(' ') },
+                        { name: 'company', value: leadData.companyName },
+                        { name: 'jobtitle', value: leadData.jobTitle },
+                        { name: 'roi_calculation', value: leadData.totalSavings },
+                        { name: 'annual_volume', value: leadData.annualVolume },
+                        { name: 'industry', value: leadData.industry },
+                        { name: 'urgency', value: leadData.urgency }
+                    ]
+                })
+            });
+        }
+        
+        async function sendToSalesforce(leadData) {
+            // Salesforce Web-to-Lead integration
+            const formData = new FormData();
+            formData.append('oid', 'YOUR_SALESFORCE_ORG_ID');
+            formData.append('first_name', leadData.contactName.split(' ')[0]);
+            formData.append('last_name', leadData.contactName.split(' ').slice(1).join(' '));
+            formData.append('email', leadData.email);
+            formData.append('company', leadData.companyName);
+            formData.append('title', leadData.jobTitle);
+            formData.append('lead_source', 'ROI Calculator');
+            
+            return fetch('https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8', {
+                method: 'POST',
+                body: formData
+            });
+        }
+        
+        async function sendToSlack(leadData) {
+            // Slack webhook for sales team notifications
+            const slackMessage = {
+                text: `🎯 New Qualified Lead from ROI Calculator`,
+                blocks: [
+                    {
+                        type: "section",
+                        text: {
+                            type: "mrkdwn",
+                            text: `*New High-Value Lead Alert!*\n\n*Company:* ${leadData.companyName}\n*Contact:* ${leadData.contactName} (${leadData.jobTitle})\n*Email:* ${leadData.email}\n*Potential Savings:* $${(leadData.totalSavings / 1000000).toFixed(1)}M\n*Volume:* ${leadData.annualVolume.toLocaleString()} containers/year\n*Industry:* ${leadData.industry}\n*Urgency:* ${leadData.urgency}`
+                        }
+                    },
+                    {
+                        type: "actions",
+                        elements: [
+                            {
+                                type: "button",
+                                text: {
+                                    type: "plain_text",
+                                    text: "Contact Lead"
+                                },
+                                style: "primary",
+                                url: `mailto:${leadData.email}`
+                            },
+                            {
+                                type: "button",
+                                text: {
+                                    type: "plain_text",
+                                    text: "View in CRM"
+                                },
+                                url: "https://your-crm.com/leads"
+                            }
+                        ]
+                    }
+                ]
+            };
+            
+            return fetch('YOUR_SLACK_WEBHOOK_URL', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(slackMessage)
+            });
+        }
+    </script>
+
+    <!-- Performance Monitoring -->
+    <script>
+        // Track calculator performance metrics
+        let calculatorLoadTime = performance.now();
+        let stepTimes = {};
+        
+        window.addEventListener('load', function() {
+            calculatorLoadTime = performance.now() - calculatorLoadTime;
+            gtag('event', 'timing_complete', {
+                'name': 'calculator_load',
+                'value': Math.round(calculatorLoadTime)
+            });
+        });
+        
+        // Track step completion times
+        function trackStepTime(step) {
+            if (!stepTimes[step]) {
+                stepTimes[step] = performance.now();
+            } else {
+                const timeSpent = performance.now() - stepTimes[step];
+                gtag('event', 'timing_complete', {
+                    'name': `step_${step}_time`,
+                    'value': Math.round(timeSpent)
+                });
+            }
+        }
+    </script>
+</body>
+</html>

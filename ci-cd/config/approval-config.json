@@ -1,0 +1,258 @@
+{
+  "environments": {
+    "development": {
+      "requireApproval": false,
+      "autoApprove": true,
+      "approvalTimeout": 3600,
+      "conditions": {
+        "businessHours": false,
+        "skipWeekends": false
+      }
+    },
+    "staging": {
+      "requireApproval": true,
+      "autoApprove": false,
+      "approvalTimeout": 86400,
+      "requiredApprovals": 2,
+      "approverGroups": ["team-leads", "qa-team"],
+      "conditions": {
+        "businessHours": false,
+        "skipWeekends": false,
+        "requireAllGroups": false
+      }
+    },
+    "production": {
+      "requireApproval": true,
+      "autoApprove": false,
+      "approvalTimeout": 172800,
+      "requiredApprovals": 3,
+      "approverGroups": ["senior-engineers", "product-owners", "security-team"],
+      "conditions": {
+        "businessHours": true,
+        "skipWeekends": true,
+        "requireAllGroups": true,
+        "emergencyBypass": {
+          "enabled": true,
+          "approvers": ["cto", "engineering-director"],
+          "requiredApprovals": 2,
+          "conditions": {
+            "businessHours": false,
+            "skipWeekends": false
+          }
+        }
+      }
+    }
+  },
+  "approvalTypes": {
+    "deployment": {
+      "name": "Standard Deployment",
+      "description": "Regular deployment to environment",
+      "template": "deployment-approval",
+      "requiredChecks": ["tests-passed", "security-scan", "code-review"],
+      "additionalApprovers": []
+    },
+    "release": {
+      "name": "Version Release",
+      "description": "New version release with customer impact",
+      "template": "release-approval",
+      "requiredChecks": ["tests-passed", "security-scan", "code-review", "changelog-review", "customer-notification"],
+      "additionalApprovers": ["product-owners"],
+      "additionalApprovals": 1
+    },
+    "hotfix": {
+      "name": "Emergency Hotfix",
+      "description": "Critical bug fix requiring immediate deployment",
+      "template": "hotfix-approval",
+      "expedited": true,
+      "approvalTimeout": 3600,
+      "requiredApprovals": 1,
+      "requiredChecks": ["hotfix-justification", "rollback-plan"],
+      "skipConditions": ["businessHours", "skipWeekends"]
+    },
+    "rollback": {
+      "name": "Production Rollback",
+      "description": "Rollback to previous stable version",
+      "template": "rollback-approval",
+      "expedited": true,
+      "approvalTimeout": 1800,
+      "requiredApprovals": 1,
+      "requiredChecks": ["incident-report"],
+      "skipConditions": ["businessHours", "skipWeekends"]
+    },
+    "security_patch": {
+      "name": "Security Patch",
+      "description": "Security vulnerability fix",
+      "template": "security-approval",
+      "requiredChecks": ["security-scan", "vulnerability-assessment", "penetration-test"],
+      "additionalApprovers": ["security-team"],
+      "requiredApprovals": 2,
+      "expedited": false
+    },
+    "config_change": {
+      "name": "Configuration Change",
+      "description": "Environment configuration update",
+      "template": "config-approval",
+      "requiredChecks": ["config-review", "backup-plan"],
+      "additionalApprovers": ["devops-team"],
+      "requiredApprovals": 1
+    }
+  },
+  "integrations": {
+    "github": {
+      "enabled": true,
+      "createIssue": true,
+      "assignReviewers": true,
+      "closeOnCompletion": true,
+      "labels": {
+        "approval": "approval-required",
+        "environment": "env:",
+        "type": "type:",
+        "emergency": "emergency",
+        "approved": "approved",
+        "rejected": "rejected"
+      }
+    },
+    "jira": {
+      "enabled": true,
+      "createTicket": true,
+      "project": "DEPLOY",
+      "issueType": "Approval",
+      "transitionOnApproval": true,
+      "approvedStatus": "Done",
+      "rejectedStatus": "Cancelled"
+    },
+    "slack": {
+      "enabled": true,
+      "channels": {
+        "development": "#dev-deployments",
+        "staging": "#staging-deployments", 
+        "production": "#production-deployments",
+        "security": "#security-alerts"
+      },
+      "mentionApprovers": true,
+      "threadUpdates": true
+    },
+    "teams": {
+      "enabled": true,
+      "webhook": true,
+      "adaptiveCards": true
+    },
+    "email": {
+      "enabled": true,
+      "includeDetails": true,
+      "htmlFormat": true,
+      "reminderSchedule": [3600, 14400, 86400]
+    },
+    "webhook": {
+      "enabled": true,
+      "endpoints": {
+        "created": "https://api.rootuip.com/webhooks/approval/created",
+        "approved": "https://api.rootuip.com/webhooks/approval/approved",
+        "rejected": "https://api.rootuip.com/webhooks/approval/rejected",
+        "expired": "https://api.rootuip.com/webhooks/approval/expired"
+      },
+      "authentication": {
+        "type": "bearer",
+        "secret": "WEBHOOK_SECRET"
+      }
+    }
+  },
+  "businessHours": {
+    "timezone": "America/New_York",
+    "monday": { "start": "09:00", "end": "17:00" },
+    "tuesday": { "start": "09:00", "end": "17:00" },
+    "wednesday": { "start": "09:00", "end": "17:00" },
+    "thursday": { "start": "09:00", "end": "17:00" },
+    "friday": { "start": "09:00", "end": "17:00" },
+    "saturday": null,
+    "sunday": null,
+    "holidays": [
+      "2024-01-01", "2024-07-04", "2024-12-25"
+    ]
+  },
+  "escalation": {
+    "enabled": true,
+    "levels": [
+      {
+        "after": 3600,
+        "notify": ["team-leads"],
+        "message": "Approval request pending for 1 hour"
+      },
+      {
+        "after": 14400,
+        "notify": ["senior-engineers"],
+        "message": "Approval request pending for 4 hours"
+      },
+      {
+        "after": 86400,
+        "notify": ["engineering-director"],
+        "message": "Approval request pending for 24 hours - immediate attention required"
+      }
+    ]
+  },
+  "audit": {
+    "enabled": true,
+    "logLevel": "detailed",
+    "includeMetadata": true,
+    "retention": {
+      "approvals": 2592000,
+      "rejections": 2592000,
+      "expirations": 1296000
+    },
+    "export": {
+      "enabled": true,
+      "formats": ["json", "csv"],
+      "schedule": "weekly"
+    }
+  },
+  "security": {
+    "requireMFA": true,
+    "sessionTimeout": 3600,
+    "ipWhitelist": {
+      "enabled": false,
+      "ranges": []
+    },
+    "encryption": {
+      "enabled": true,
+      "algorithm": "AES-256-GCM"
+    },
+    "auditLog": {
+      "enabled": true,
+      "includeIP": true,
+      "includeUserAgent": true
+    }
+  },
+  "notifications": {
+    "rateLimit": {
+      "enabled": true,
+      "maxPerHour": 10,
+      "maxPerDay": 50
+    },
+    "templates": {
+      "created": {
+        "subject": "Approval Required: {{title}}",
+        "priority": "normal"
+      },
+      "reminder": {
+        "subject": "Reminder: Approval Required - {{title}}",
+        "priority": "high"
+      },
+      "escalation": {
+        "subject": "URGENT: Approval Escalation - {{title}}",
+        "priority": "high"
+      },
+      "approved": {
+        "subject": "Approved: {{title}}",
+        "priority": "normal"
+      },
+      "rejected": {
+        "subject": "Rejected: {{title}}",
+        "priority": "normal"
+      },
+      "expired": {
+        "subject": "Expired: {{title}}",
+        "priority": "normal"
+      }
+    }
+  }
+}

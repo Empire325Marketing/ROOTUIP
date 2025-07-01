@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Customer Onboarding Wizard - Automated 30-60-90 Day Journey</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/rootuip-logo.svg">
+    <link rel="stylesheet" href="/assets/css/rootuip-design-system.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Onboarding Wizard Styles */
+        .wizard-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            padding: var(--space-6);
+        }
+        
+        .wizard-card {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--bg-dark);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        
+        /* Progress Header */
+        .wizard-header {
+            background: var(--rootuip-primary);
+            color: white;
+            padding: var(--space-6);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wizard-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .wizard-title {
+            font-size: var(--text-2xl);
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            position: relative;
+        }
+        
+        .wizard-subtitle {
+            opacity: 0.9;
+            position: relative;
+        }
+        
+        /* Progress Stepper */
+        .progress-stepper {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--space-6);
+            background: var(--rootuip-gray-50);
+            border-bottom: 1px solid var(--rootuip-border);
+            position: relative;
+        }
+        
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: var(--space-6);
+            right: var(--space-6);
+            height: 2px;
+            background: var(--rootuip-gray-300);
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+        
+        .progress-line-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: var(--rootuip-primary);
+            transition: width var(--transition-base);
+        }
+        
+        .step-item {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .step-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg-dark);
+            border: 3px solid var(--rootuip-gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            transition: all var(--transition-fast);
+        }
+        
+        .step-item.active .step-circle {
+            background: var(--rootuip-primary);
+            border-color: var(--rootuip-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .step-item.completed .step-circle {
+            background: var(--rootuip-accent);
+            border-color: var(--rootuip-accent);
+            color: white;
+        }
+        
+        .step-label {
+            font-size: var(--text-sm);
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        /* Wizard Content */
+        .wizard-content {
+            padding: var(--space-8);
+        }
+        
+        .step-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .step-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Form Sections */
+        .form-section {
+            margin-bottom: var(--space-8);
+        }
+        
+        .section-title {
+            font-size: var(--text-xl);
+            font-weight: 600;
+            margin-bottom: var(--space-4);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--rootuip-primary-light);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xl);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-6);
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            margin-bottom: var(--space-2);
+            color: var(--rootuip-text);
+        }
+        
+        .form-hint {
+            font-size: var(--text-xs);
+            color: var(--rootuip-text-secondary);
+            margin-top: var(--space-1);
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: var(--space-3) var(--space-4);
+            border: 1px solid var(--rootuip-gray-300);
+            border-radius: var(--radius-md);
+            font-size: var(--text-base);
+            transition: all var(--transition-fast);
+        }
+        
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--rootuip-primary);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* Carrier Selection */
+        .carrier-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-4);
+            margin-top: var(--space-4);
+        }
+        
+        .carrier-card {
+            border: 2px solid var(--rootuip-gray-300);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            position: relative;
+        }
+        
+        .carrier-card:hover {
+            border-color: var(--rootuip-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .carrier-card.selected {
+            border-color: var(--rootuip-primary);
+            background: var(--rootuip-primary-light);
+        }
+        
+        .carrier-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: var(--space-2);
+            right: var(--space-2);
+            width: 24px;
+            height: 24px;
+            background: var(--rootuip-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .carrier-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto var(--space-3);
+            background: var(--rootuip-gray-100);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+        }
+        
+        .carrier-name {
+            font-weight: 500;
+            margin-bottom: var(--space-1);
+        }
+        
+        .carrier-info {
+            font-size: var(--text-xs);
+            color: var(--rootuip-text-secondary);
+        }
+        
+        /* Success Metrics */
+        .metrics-preview {
+            background: var(--rootuip-gray-50);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin-top: var(--space-6);
+        }
+        
+        .metric-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-4);
+        }
+        
+        .metric-item {
+            text-align: center;
+            padding: var(--space-4);
+            background: var(--bg-dark);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .metric-value {
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            color: var(--rootuip-primary);
+            margin-bottom: var(--space-2);
+        }
+        
+        .metric-label {
+            font-size: var(--text-sm);
+            color: var(--rootuip-text-secondary);
+        }
+        
+        /* Timeline Preview */
+        .timeline-preview {
+            margin-top: var(--space-6);
+        }
+        
+        .timeline-phase {
+            display: flex;
+            gap: var(--space-6);
+            margin-bottom: var(--space-4);
+            padding: var(--space-4);
+            background: var(--rootuip-gray-50);
+            border-radius: var(--radius-md);
+        }
+        
+        .phase-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--rootuip-primary);
+            color: white;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+            flex-shrink: 0;
+        }
+        
+        .phase-content {
+            flex: 1;
+        }
+        
+        .phase-title {
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+        }
+        
+        .phase-description {
+            font-size: var(--text-sm);
+            color: var(--rootuip-text-secondary);
+            margin-bottom: var(--space-3);
+        }
+        
+        .phase-tasks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+        }
+        
+        .task-badge {
+            padding: var(--space-1) var(--space-3);
+            background: var(--bg-dark);
+            border-radius: var(--radius-full);
+            font-size: var(--text-xs);
+            border: 1px solid var(--rootuip-gray-300);
+        }
+        
+        /* Wizard Actions */
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--space-6);
+            background: var(--rootuip-gray-50);
+            border-top: 1px solid var(--rootuip-border);
+        }
+        
+        .action-group {
+            display: flex;
+            gap: var(--space-3);
+        }
+        
+        /* Validation */
+        .form-input.error,
+        .form-select.error {
+            border-color: var(--rootuip-danger);
+        }
+        
+        .error-message {
+            color: var(--rootuip-danger);
+            font-size: var(--text-sm);
+            margin-top: var(--space-1);
+        }
+        
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .loading-overlay.active {
+            display: flex;
+        }
+        
+        .loading-card {
+            background: var(--bg-dark);
+            padding: var(--space-6);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--rootuip-gray-200);
+            border-top-color: var(--rootuip-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto var(--space-4);
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Success State */
+        .success-container {
+            text-align: center;
+            padding: var(--space-8);
+            display: none;
+        }
+        
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            background: var(--rootuip-accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-5xl);
+            margin: 0 auto var(--space-6);
+            animation: scaleIn 0.5s ease-out;
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .success-title {
+            font-size: var(--text-3xl);
+            font-weight: 700;
+            margin-bottom: var(--space-4);
+        }
+        
+        .success-message {
+            font-size: var(--text-lg);
+            color: var(--rootuip-text-secondary);
+            margin-bottom: var(--space-6);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .carrier-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .metric-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .progress-stepper {
+                overflow-x: auto;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="wizard-container">
+        <div class="wizard-card">
+            <!-- Header -->
+            <div class="wizard-header">
+                <h1 class="wizard-title">Welcome to ROOTUIP Enterprise Onboarding</h1>
+                <p class="wizard-subtitle">Let's get your team set up for success with our automated 30-60-90 day journey</p>
+            </div>
+            
+            <!-- Progress Stepper -->
+            <div class="progress-stepper">
+                <div class="progress-line">
+                    <div class="progress-line-fill" style="width: 0%"></div>
+                </div>
+                
+                <div class="step-item active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <span class="step-label">Company Info</span>
+                </div>
+                
+                <div class="step-item" data-step="2">
+                    <div class="step-circle">2</div>
+                    <span class="step-label">Team Setup</span>
+                </div>
+                
+                <div class="step-item" data-step="3">
+                    <div class="step-circle">3</div>
+                    <span class="step-label">Integrations</span>
+                </div>
+                
+                <div class="step-item" data-step="4">
+                    <div class="step-circle">4</div>
+                    <span class="step-label">Success Goals</span>
+                </div>
+                
+                <div class="step-item" data-step="5">
+                    <div class="step-circle">5</div>
+                    <span class="step-label">Review & Launch</span>
+                </div>
+            </div>
+            
+            <!-- Wizard Content -->
+            <div class="wizard-content">
+                <!-- Step 1: Company Information -->
+                <div class="step-content active" data-step="1">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">🏢</div>
+                            <span>Company Information</span>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Company Name *</label>
+                                <input type="text" class="form-input" id="companyName" placeholder="Enter your company name">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Industry *</label>
+                                <select class="form-select" id="industry">
+                                    <option value="">Select your industry</option>
+                                    <option value="logistics">Logistics & Transportation</option>
+                                    <option value="retail">Retail & E-commerce</option>
+                                    <option value="manufacturing">Manufacturing</option>
+                                    <option value="automotive">Automotive</option>
+                                    <option value="food">Food & Beverage</option>
+                                    <option value="pharmaceutical">Pharmaceutical</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Company Size *</label>
+                                <select class="form-select" id="companySize">
+                                    <option value="">Select company size</option>
+                                    <option value="50-200">50-200 employees</option>
+                                    <option value="201-500">201-500 employees</option>
+                                    <option value="501-1000">501-1000 employees</option>
+                                    <option value="1001-5000">1001-5000 employees</option>
+                                    <option value="5000+">5000+ employees</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Annual Container Volume *</label>
+                                <select class="form-select" id="containerVolume">
+                                    <option value="">Select volume range</option>
+                                    <option value="100-500">100-500 containers/month</option>
+                                    <option value="501-1000">501-1000 containers/month</option>
+                                    <option value="1001-2500">1001-2500 containers/month</option>
+                                    <option value="2501-5000">2501-5000 containers/month</option>
+                                    <option value="5000+">5000+ containers/month</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Headquarters Location</label>
+                                <input type="text" class="form-input" id="headquarters" placeholder="City, Country">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Primary Business Contact *</label>
+                                <input type="email" class="form-input" id="primaryContact" placeholder="email@company.com">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" style="margin-top: var(--space-4);">
+                            <label class="form-label">What are your main challenges with container management?</label>
+                            <textarea class="form-textarea" id="challenges" placeholder="Tell us about your current pain points..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Team Setup -->
+                <div class="step-content" data-step="2">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">👥</div>
+                            <span>Team Setup</span>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Primary Administrator *</label>
+                                <input type="text" class="form-input" id="adminName" placeholder="Full Name">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Admin Email *</label>
+                                <input type="email" class="form-input" id="adminEmail" placeholder="admin@company.com">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Technical Contact</label>
+                                <input type="text" class="form-input" id="techContactName" placeholder="Full Name">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Technical Email</label>
+                                <input type="email" class="form-input" id="techContactEmail" placeholder="tech@company.com">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Number of Users *</label>
+                                <input type="number" class="form-input" id="userCount" placeholder="How many users will need access?">
+                                <span class="form-hint">You can add more users later</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">User Roles Needed</label>
+                                <select class="form-select" id="userRoles" multiple style="height: 120px;">
+                                    <option value="admin">System Administrator</option>
+                                    <option value="manager">Operations Manager</option>
+                                    <option value="analyst">Data Analyst</option>
+                                    <option value="operator">Container Operator</option>
+                                    <option value="finance">Finance Team</option>
+                                    <option value="customer">Customer Service</option>
+                                </select>
+                                <span class="form-hint">Hold Ctrl/Cmd to select multiple</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Carrier Integrations -->
+                <div class="step-content" data-step="3">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">🚢</div>
+                            <span>Select Your Shipping Carriers</span>
+                        </div>
+                        <p style="margin-bottom: var(--space-4); color: var(--rootuip-text-secondary);">
+                            Choose the carriers you work with. We'll help you set up automated tracking for each one.
+                        </p>
+                        
+                        <div class="carrier-grid">
+                            <div class="carrier-card" data-carrier="maersk">
+                                <div class="carrier-logo">🚢</div>
+                                <div class="carrier-name">Maersk</div>
+                                <div class="carrier-info">API Integration</div>
+                            </div>
+                            
+                            <div class="carrier-card" data-carrier="msc">
+                                <div class="carrier-logo">🚢</div>
+                                <div class="carrier-name">MSC</div>
+                                <div class="carrier-info">API Integration</div>
+                            </div>
+                            
+                            <div class="carrier-card" data-carrier="cma-cgm">
+                                <div class="carrier-logo">🚢</div>
+                                <div class="carrier-name">CMA CGM</div>
+                                <div class="carrier-info">API Integration</div>
+                            </div>
+                            
+                            <div class="carrier-card" data-carrier="hapag-lloyd">
+                                <div class="carrier-logo">🚢</div>
+                                <div class="carrier-name">Hapag-Lloyd</div>
+                                <div class="carrier-info">API Integration</div>
+                            </div>
+                            
+                            <div class="carrier-card" data-carrier="cosco">
+                                <div class="carrier-logo">🚢</div>
+                                <div class="carrier-name">COSCO</div>
+                                <div class="carrier-info">API Integration</div>
+                            </div>
+                            
+                            <div class="carrier-card" data-carrier="one">
+                                <div class="carrier-logo">🚢</div>
+                                <div class="carrier-name">ONE</div>
+                                <div class="carrier-info">API Integration</div>
+                            </div>
+                            
+                            <div class="carrier-card" data-carrier="evergreen">
+                                <div class="carrier-logo">🚢</div>
+                                <div class="carrier-name">Evergreen</div>
+                                <div class="carrier-info">Web Scraping</div>
+                            </div>
+                            
+                            <div class="carrier-card" data-carrier="yang-ming">
+                                <div class="carrier-logo">🚢</div>
+                                <div class="carrier-name">Yang Ming</div>
+                                <div class="carrier-info">Web Scraping</div>
+                            </div>
+                            
+                            <div class="carrier-card" data-carrier="zim">
+                                <div class="carrier-logo">🚢</div>
+                                <div class="carrier-name">ZIM</div>
+                                <div class="carrier-info">API Integration</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" style="margin-top: var(--space-6);">
+                            <label class="form-label">Additional Integration Requirements</label>
+                            <textarea class="form-textarea" id="integrationNotes" placeholder="Any specific systems or ERPs we should integrate with?"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 4: Success Goals -->
+                <div class="step-content" data-step="4">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">🎯</div>
+                            <span>Define Your Success Goals</span>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Primary Goal *</label>
+                                <select class="form-select" id="primaryGoal">
+                                    <option value="">What's your main objective?</option>
+                                    <option value="cost-reduction">Reduce D&D costs</option>
+                                    <option value="visibility">Improve shipment visibility</option>
+                                    <option value="automation">Automate manual processes</option>
+                                    <option value="compliance">Ensure compliance</option>
+                                    <option value="customer-service">Enhance customer service</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Expected ROI Timeline</label>
+                                <select class="form-select" id="roiTimeline">
+                                    <option value="">When do you expect to see ROI?</option>
+                                    <option value="3-months">Within 3 months</option>
+                                    <option value="6-months">Within 6 months</option>
+                                    <option value="12-months">Within 12 months</option>
+                                    <option value="18-months">Within 18 months</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Current D&D Costs (Monthly)</label>
+                                <input type="number" class="form-input" id="currentCosts" placeholder="$0">
+                                <span class="form-hint">Approximate is fine</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Target Cost Reduction %</label>
+                                <input type="number" class="form-input" id="targetReduction" placeholder="e.g., 30" min="0" max="100">
+                            </div>
+                        </div>
+                        
+                        <div class="metrics-preview">
+                            <h3 style="margin-bottom: var(--space-4);">Based on your inputs, here's what you can expect:</h3>
+                            <div class="metric-row">
+                                <div class="metric-item">
+                                    <div class="metric-value">$2.1M</div>
+                                    <div class="metric-label">Annual Savings Potential</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-value">45 days</div>
+                                    <div class="metric-label">Time to First Value</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-value">3.2x</div>
+                                    <div class="metric-label">Expected ROI</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-value">89%</div>
+                                    <div class="metric-label">Process Automation</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 5: Review & Launch -->
+                <div class="step-content" data-step="5">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <div class="section-icon">🚀</div>
+                            <span>Review Your Onboarding Plan</span>
+                        </div>
+                        
+                        <div class="timeline-preview">
+                            <div class="timeline-phase">
+                                <div class="phase-icon">📋</div>
+                                <div class="phase-content">
+                                    <h3 class="phase-title">Days 0-7: Kickoff Phase</h3>
+                                    <p class="phase-description">Get your team oriented and set up for success</p>
+                                    <div class="phase-tasks">
+                                        <span class="task-badge">Welcome call with Success Manager</span>
+                                        <span class="task-badge">Platform walkthrough</span>
+                                        <span class="task-badge">Account configuration</span>
+                                        <span class="task-badge">User provisioning</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-phase">
+                                <div class="phase-icon">⚙️</div>
+                                <div class="phase-content">
+                                    <h3 class="phase-title">Days 8-30: Implementation Phase</h3>
+                                    <p class="phase-description">Connect your carriers and start tracking</p>
+                                    <div class="phase-tasks">
+                                        <span class="task-badge">API integrations setup</span>
+                                        <span class="task-badge">Historical data import</span>
+                                        <span class="task-badge">Team training sessions</span>
+                                        <span class="task-badge">Workflow configuration</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-phase">
+                                <div class="phase-icon">📈</div>
+                                <div class="phase-content">
+                                    <h3 class="phase-title">Days 31-60: Adoption Phase</h3>
+                                    <p class="phase-description">Scale usage and identify first wins</p>
+                                    <div class="phase-tasks">
+                                        <span class="task-badge">Advanced features training</span>
+                                        <span class="task-badge">First cost savings report</span>
+                                        <span class="task-badge">Process optimization</span>
+                                        <span class="task-badge">Success metrics review</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-phase">
+                                <div class="phase-icon">🎯</div>
+                                <div class="phase-content">
+                                    <h3 class="phase-title">Days 61-90: Optimization Phase</h3>
+                                    <p class="phase-description">Maximize value and plan expansion</p>
+                                    <div class="phase-tasks">
+                                        <span class="task-badge">ROI documentation</span>
+                                        <span class="task-badge">Executive business review</span>
+                                        <span class="task-badge">Expansion planning</span>
+                                        <span class="task-badge">Success story creation</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info" style="margin-top: var(--space-6);">
+                            <span style="font-size: var(--text-xl); margin-right: var(--space-2);">ℹ️</span>
+                            <div>
+                                <strong>What happens next?</strong><br>
+                                Once you launch your onboarding, you'll receive:
+                                <ul style="margin-top: var(--space-2); margin-left: var(--space-4);">
+                                    <li>Welcome email with login credentials</li>
+                                    <li>Calendar invite for kickoff call</li>
+                                    <li>Dedicated Success Manager assignment</li>
+                                    <li>Access to training resources and documentation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Success State -->
+                <div class="success-container">
+                    <div class="success-icon">✓</div>
+                    <h2 class="success-title">Welcome to ROOTUIP!</h2>
+                    <p class="success-message">
+                        Your onboarding has been initiated successfully. Check your email for next steps.
+                    </p>
+                    <button class="btn btn-primary btn-lg" onclick="window.location.href='/dashboard'">
+                        Go to Dashboard
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Wizard Actions -->
+            <div class="wizard-actions">
+                <div class="action-group">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)" style="display: none;">
+                        ← Previous
+                    </button>
+                </div>
+                
+                <div class="action-group">
+                    <button class="btn btn-secondary" onclick="saveDraft()">
+                        Save Draft
+                    </button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="changeStep(1)">
+                        Next →
+                    </button>
+                    <button class="btn btn-primary" id="launchBtn" onclick="launchOnboarding()" style="display: none;">
+                        Launch Onboarding 🚀
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-card">
+            <div class="loading-spinner"></div>
+            <h3>Setting up your account...</h3>
+            <p style="color: var(--rootuip-text-secondary); margin-top: var(--space-2);">This may take a moment</p>
+        </div>
+    </div>
+    
+    <script>
+        let currentStep = 1;
+        const totalSteps = 5;
+        const formData = {};
+        
+        // Initialize carrier selection
+        document.querySelectorAll('.carrier-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                updateFormData();
+            });
+        });
+        
+        // Step navigation
+        function changeStep(direction) {
+            // Validate current step before moving forward
+            if (direction > 0 && !validateStep(currentStep)) {
+                return;
+            }
+            
+            // Save current step data
+            saveStepData(currentStep);
+            
+            // Update step
+            currentStep += direction;
+            if (currentStep < 1) currentStep = 1;
+            if (currentStep > totalSteps) currentStep = totalSteps;
+            
+            // Update UI
+            updateStepDisplay();
+        }
+        
+        function updateStepDisplay() {
+            // Update progress bar
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.querySelector('.progress-line-fill').style.width = progress + '%';
+            
+            // Update step indicators
+            document.querySelectorAll('.step-item').forEach((item, index) => {
+                const stepNum = index + 1;
+                item.classList.remove('active', 'completed');
+                
+                if (stepNum < currentStep) {
+                    item.classList.add('completed');
+                    item.querySelector('.step-circle').innerHTML = '✓';
+                } else if (stepNum === currentStep) {
+                    item.classList.add('active');
+                    item.querySelector('.step-circle').innerHTML = stepNum;
+                } else {
+                    item.querySelector('.step-circle').innerHTML = stepNum;
+                }
+            });
+            
+            // Show/hide content
+            document.querySelectorAll('.step-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelector(`.step-content[data-step="${currentStep}"]`).classList.add('active');
+            
+            // Update buttons
+            document.getElementById('prevBtn').style.display = currentStep === 1 ? 'none' : 'block';
+            document.getElementById('nextBtn').style.display = currentStep === totalSteps ? 'none' : 'block';
+            document.getElementById('launchBtn').style.display = currentStep === totalSteps ? 'block' : 'none';
+            
+            // Update metrics on step 4
+            if (currentStep === 4) {
+                updateMetricsPreview();
+            }
+        }
+        
+        function validateStep(step) {
+            let isValid = true;
+            const stepContent = document.querySelector(`.step-content[data-step="${step}"]`);
+            
+            // Clear previous errors
+            stepContent.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+            stepContent.querySelectorAll('.error-message').forEach(el => el.remove());
+            
+            // Validate required fields
+            stepContent.querySelectorAll('[required], .form-input, .form-select').forEach(field => {
+                if (field.value.trim() === '' && field.id && isRequiredField(field.id)) {
+                    field.classList.add('error');
+                    const error = document.createElement('div');
+                    error.className = 'error-message';
+                    error.textContent = 'This field is required';
+                    field.parentElement.appendChild(error);
+                    isValid = false;
+                }
+            });
+            
+            // Special validation for carriers
+            if (step === 3) {
+                const selectedCarriers = document.querySelectorAll('.carrier-card.selected');
+                if (selectedCarriers.length === 0) {
+                    alert('Please select at least one carrier');
+                    isValid = false;
+                }
+            }
+            
+            return isValid;
+        }
+        
+        function isRequiredField(fieldId) {
+            const requiredFields = [
+                'companyName', 'industry', 'companySize', 'containerVolume', 
+                'primaryContact', 'adminName', 'adminEmail', 'userCount', 'primaryGoal'
+            ];
+            return requiredFields.includes(fieldId);
+        }
+        
+        function saveStepData(step) {
+            const stepContent = document.querySelector(`.step-content[data-step="${step}"]`);
+            
+            stepContent.querySelectorAll('input, select, textarea').forEach(field => {
+                if (field.id) {
+                    formData[field.id] = field.value;
+                }
+            });
+            
+            // Save carrier selections
+            if (step === 3) {
+                formData.carriers = Array.from(document.querySelectorAll('.carrier-card.selected'))
+                    .map(card => card.dataset.carrier);
+            }
+        }
+        
+        function updateFormData() {
+            // Real-time form data update for metrics calculation
+            saveStepData(currentStep);
+        }
+        
+        function updateMetricsPreview() {
+            // Calculate metrics based on form data
+            const volume = parseInt(formData.containerVolume?.split('-')[0] || '0');
+            const currentCosts = parseFloat(formData.currentCosts || '0');
+            const targetReduction = parseFloat(formData.targetReduction || '30');
+            
+            // Update metric values
+            const annualSavings = (currentCosts * 12 * (targetReduction / 100)).toFixed(1);
+            document.querySelector('.metric-value').textContent = `$${annualSavings}K`;
+        }
+        
+        function saveDraft() {
+            saveStepData(currentStep);
+            localStorage.setItem('onboardingDraft', JSON.stringify({
+                step: currentStep,
+                data: formData,
+                timestamp: new Date().toISOString()
+            }));
+            alert('Draft saved! You can continue where you left off.');
+        }
+        
+        function loadDraft() {
+            const draft = localStorage.getItem('onboardingDraft');
+            if (draft) {
+                const parsed = JSON.parse(draft);
+                if (confirm('We found a saved draft. Would you like to continue where you left off?')) {
+                    formData = parsed.data;
+                    currentStep = parsed.step;
+                    
+                    // Restore form values
+                    Object.keys(formData).forEach(key => {
+                        const field = document.getElementById(key);
+                        if (field) {
+                            field.value = formData[key];
+                        }
+                    });
+                    
+                    // Restore carrier selections
+                    if (formData.carriers) {
+                        formData.carriers.forEach(carrier => {
+                            const card = document.querySelector(`[data-carrier="${carrier}"]`);
+                            if (card) card.classList.add('selected');
+                        });
+                    }
+                    
+                    updateStepDisplay();
+                }
+            }
+        }
+        
+        async function launchOnboarding() {
+            // Final validation
+            if (!validateStep(currentStep)) {
+                return;
+            }
+            
+            saveStepData(currentStep);
+            
+            // Show loading
+            document.getElementById('loadingOverlay').classList.add('active');
+            
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                // In real app, this would make API call:
+                // const response = await fetch('/api/onboarding/create', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify(formData)
+                // });
+                
+                // Hide loading
+                document.getElementById('loadingOverlay').classList.remove('active');
+                
+                // Show success
+                document.querySelector('.wizard-content').style.display = 'none';
+                document.querySelector('.wizard-actions').style.display = 'none';
+                document.querySelector('.success-container').style.display = 'block';
+                
+                // Clear draft
+                localStorage.removeItem('onboardingDraft');
+                
+            } catch (error) {
+                document.getElementById('loadingOverlay').classList.remove('active');
+                alert('An error occurred. Please try again.');
+            }
+        }
+        
+        // Add input listeners for real-time updates
+        document.querySelectorAll('input, select, textarea').forEach(field => {
+            field.addEventListener('input', updateFormData);
+            field.addEventListener('change', updateFormData);
+        });
+        
+        // Load draft on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadDraft();
+        });
+        
+        // Prevent accidental navigation
+        window.addEventListener('beforeunload', (e) => {
+            if (Object.keys(formData).length > 0 && currentStep < totalSteps) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
+</body>
+</html>

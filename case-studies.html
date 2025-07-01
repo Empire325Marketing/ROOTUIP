@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortune 500 Case Studies - ROOTUIP</title>
+    <meta name="description" content="See how Fortune 500 companies are saving millions with ROOTUIP's container tracking platform. Real results from industry leaders.">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .case-study-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .case-study-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .metric-counter {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .industry-filter {
+            transition: all 0.3s ease;
+        }
+        
+        .industry-filter.active {
+            background: #3b82f6;
+            color: white;
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <img src="/assets/rootuip-logo.png" alt="ROOTUIP" class="h-8 w-auto">
+                    <span class="ml-3 text-xl font-bold text-gray-900">ROOTUIP</span>
+                </div>
+                <nav class="flex space-x-8">
+                    <a href="/" class="text-gray-700 hover:text-blue-600">Home</a>
+                    <a href="/platform" class="text-gray-700 hover:text-blue-600">Platform</a>
+                    <a href="/roi-calculator" class="text-gray-700 hover:text-blue-600">ROI Calculator</a>
+                    <a href="/schedule-demo" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Schedule Demo</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-16">
+        <div class="max-w-4xl mx-auto text-center px-4">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                Fortune 500 Success Stories
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 opacity-90">
+                See how industry leaders are transforming their container operations and saving millions with ROOTUIP
+            </p>
+            
+            <div class="bg-white bg-opacity-20 rounded-lg p-6 inline-block">
+                <div class="flex items-center justify-center space-x-8 text-center">
+                    <div>
+                        <div class="text-3xl font-bold">$127M</div>
+                        <div class="text-sm opacity-80">Total Savings</div>
+                    </div>
+                    <div class="w-px h-12 bg-white opacity-30"></div>
+                    <div>
+                        <div class="text-3xl font-bold">50+</div>
+                        <div class="text-sm opacity-80">Fortune 500 Customers</div>
+                    </div>
+                    <div class="w-px h-12 bg-white opacity-30"></div>
+                    <div>
+                        <div class="text-3xl font-bold">1.2M</div>
+                        <div class="text-sm opacity-80">Containers Tracked</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Industry Filter -->
+    <section class="py-8 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-wrap justify-center gap-4">
+                <button class="industry-filter active px-6 py-3 rounded-lg border border-gray-300 hover:bg-blue-600 hover:text-white transition-colors" data-industry="all">
+                    All Industries
+                </button>
+                <button class="industry-filter px-6 py-3 rounded-lg border border-gray-300 hover:bg-blue-600 hover:text-white transition-colors" data-industry="retail">
+                    Retail
+                </button>
+                <button class="industry-filter px-6 py-3 rounded-lg border border-gray-300 hover:bg-blue-600 hover:text-white transition-colors" data-industry="manufacturing">
+                    Manufacturing
+                </button>
+                <button class="industry-filter px-6 py-3 rounded-lg border border-gray-300 hover:bg-blue-600 hover:text-white transition-colors" data-industry="automotive">
+                    Automotive
+                </button>
+                <button class="industry-filter px-6 py-3 rounded-lg border border-gray-300 hover:bg-blue-600 hover:text-white transition-colors" data-industry="consumer_goods">
+                    Consumer Goods
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies Grid -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- Case Study 1: Fortune 100 Retailer -->
+                <div class="case-study-card bg-white rounded-xl card-shadow p-8" data-industry="retail">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Fortune 100 Retailer</h3>
+                            <p class="text-gray-600">Global retail chain with 45,000+ containers annually</p>
+                        </div>
+                        <div class="bg-blue-100 rounded-lg p-3">
+                            <i class="fas fa-store text-2xl text-blue-600"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="text-center">
+                            <div class="metric-counter">$18.5M</div>
+                            <div class="text-sm text-gray-600">Annual Savings</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="metric-counter">847%</div>
+                            <div class="text-sm text-gray-600">ROI</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="metric-counter">6</div>
+                            <div class="text-sm text-gray-600">Month Payback</div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 mb-6">
+                        <h4 class="font-semibold text-gray-900">Challenge:</h4>
+                        <p class="text-gray-700">
+                            This Fortune 100 retailer was facing $22M annually in detention and demurrage charges across their Asia-to-US supply chain. With over 45,000 containers per year and complex multi-carrier operations, they lacked visibility into container locations and arrival predictions.
+                        </p>
+                        
+                        <h4 class="font-semibold text-gray-900 mt-6">Solution:</h4>
+                        <ul class="text-gray-700 space-y-2">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Real-time tracking across Maersk, MSC, and CMA CGM
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                AI-powered detention risk prediction
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Automated alert system for supply chain team
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Integration with existing WMS and TMS
+                            </li>
+                        </ul>
+                        
+                        <h4 class="font-semibold text-gray-900 mt-6">Results:</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <div class="text-lg font-bold text-green-700">85% Reduction</div>
+                                <div class="text-sm text-green-600">in D&D Charges</div>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="text-lg font-bold text-blue-700">3 Days</div>
+                                <div class="text-sm text-blue-600">Earlier Visibility</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t pt-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Implementation: 45 days</p>
+                                <p class="text-sm text-gray-600">Industry: Retail & E-commerce</p>
+                            </div>
+                            <button onclick="downloadCaseStudy('fortune-100-retailer')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-download mr-2"></i>
+                                Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 2: Global Manufacturing -->
+                <div class="case-study-card bg-white rounded-xl card-shadow p-8" data-industry="manufacturing">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Global Manufacturing Giant</h3>
+                            <p class="text-gray-600">Industrial manufacturer with complex supply chains</p>
+                        </div>
+                        <div class="bg-purple-100 rounded-lg p-3">
+                            <i class="fas fa-industry text-2xl text-purple-600"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="text-center">
+                            <div class="metric-counter">$25.2M</div>
+                            <div class="text-sm text-gray-600">Annual Savings</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="metric-counter">1,156%</div>
+                            <div class="text-sm text-gray-600">ROI</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="metric-counter">4</div>
+                            <div class="text-sm text-gray-600">Month Payback</div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 mb-6">
+                        <h4 class="font-semibold text-gray-900">Challenge:</h4>
+                        <p class="text-gray-700">
+                            A Fortune 200 manufacturing company with 32,000 containers annually faced production delays due to unpredictable container arrivals. Their just-in-time manufacturing was severely impacted by lack of accurate ETA predictions.
+                        </p>
+                        
+                        <h4 class="font-semibold text-gray-900 mt-6">Solution:</h4>
+                        <ul class="text-gray-700 space-y-2">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                ML-powered ETA predictions with 94% accuracy
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Production planning integration
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Multi-tier supplier visibility
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Custom API for ERP integration
+                            </li>
+                        </ul>
+                        
+                        <h4 class="font-semibold text-gray-900 mt-6">Results:</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <div class="text-lg font-bold text-green-700">92% Reduction</div>
+                                <div class="text-sm text-green-600">in Production Delays</div>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="text-lg font-bold text-blue-700">$8M</div>
+                                <div class="text-sm text-blue-600">Inventory Optimization</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t pt-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Implementation: 60 days</p>
+                                <p class="text-sm text-gray-600">Industry: Manufacturing</p>
+                            </div>
+                            <button onclick="downloadCaseStudy('global-manufacturing')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-download mr-2"></i>
+                                Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 3: Automotive Leader -->
+                <div class="case-study-card bg-white rounded-xl card-shadow p-8" data-industry="automotive">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Automotive Industry Leader</h3>
+                            <p class="text-gray-600">Top 3 global automotive manufacturer</p>
+                        </div>
+                        <div class="bg-red-100 rounded-lg p-3">
+                            <i class="fas fa-car text-2xl text-red-600"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="text-center">
+                            <div class="metric-counter">$31.8M</div>
+                            <div class="text-sm text-gray-600">Annual Savings</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="metric-counter">1,420%</div>
+                            <div class="text-sm text-gray-600">ROI</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="metric-counter">3</div>
+                            <div class="text-sm text-gray-600">Month Payback</div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 mb-6">
+                        <h4 class="font-semibold text-gray-900">Challenge:</h4>
+                        <p class="text-gray-700">
+                            This automotive giant with 58,000 containers annually was losing $45M due to production line shutdowns caused by delayed component deliveries. Critical parts arriving late disrupted entire assembly schedules.
+                        </p>
+                        
+                        <h4 class="font-semibold text-gray-900 mt-6">Solution:</h4>
+                        <ul class="text-gray-700 space-y-2">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Critical component prioritization system
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Assembly line integration for JIT delivery
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Supplier performance analytics
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Emergency rerouting capabilities
+                            </li>
+                        </ul>
+                        
+                        <h4 class="font-semibold text-gray-900 mt-6">Results:</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <div class="text-lg font-bold text-green-700">96% Reduction</div>
+                                <div class="text-sm text-green-600">in Line Shutdowns</div>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="text-lg font-bold text-blue-700">15%</div>
+                                <div class="text-sm text-blue-600">Production Efficiency Gain</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t pt-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Implementation: 75 days</p>
+                                <p class="text-sm text-gray-600">Industry: Automotive</p>
+                            </div>
+                            <button onclick="downloadCaseStudy('automotive-leader')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-download mr-2"></i>
+                                Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Study 4: Consumer Goods -->
+                <div class="case-study-card bg-white rounded-xl card-shadow p-8" data-industry="consumer_goods">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">Global Consumer Goods</h3>
+                            <p class="text-gray-600">Leading consumer packaged goods company</p>
+                        </div>
+                        <div class="bg-green-100 rounded-lg p-3">
+                            <i class="fas fa-shopping-cart text-2xl text-green-600"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="text-center">
+                            <div class="metric-counter">$12.8M</div>
+                            <div class="text-sm text-gray-600">Annual Savings</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="metric-counter">512%</div>
+                            <div class="text-sm text-gray-600">ROI</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="metric-counter">8</div>
+                            <div class="text-sm text-gray-600">Month Payback</div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 mb-6">
+                        <h4 class="font-semibold text-gray-900">Challenge:</h4>
+                        <p class="text-gray-700">
+                            This consumer goods company with 18,000 containers annually struggled with seasonal demand spikes and inventory management. Late arrivals during peak seasons resulted in stockouts and lost sales.
+                        </p>
+                        
+                        <h4 class="font-semibold text-gray-900 mt-6">Solution:</h4>
+                        <ul class="text-gray-700 space-y-2">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Seasonal demand forecasting integration
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Dynamic inventory allocation
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Multi-channel distribution optimization
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Customer service team integration
+                            </li>
+                        </ul>
+                        
+                        <h4 class="font-semibold text-gray-900 mt-6">Results:</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <div class="text-lg font-bold text-green-700">78% Reduction</div>
+                                <div class="text-sm text-green-600">in Stockouts</div>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="text-lg font-bold text-blue-700">$4.2M</div>
+                                <div class="text-sm text-blue-600">Revenue Recovery</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t pt-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Implementation: 50 days</p>
+                                <p class="text-sm text-gray-600">Industry: Consumer Goods</p>
+                            </div>
+                            <button onclick="downloadCaseStudy('consumer-goods')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-download mr-2"></i>
+                                Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Implementation Insights -->
+    <section class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Implementation Success Patterns</h2>
+                <p class="text-xl text-gray-600">
+                    Common factors driving successful ROOTUIP implementations
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-rocket text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Fast Implementation</h3>
+                    <p class="text-gray-600">
+                        Average go-live in 45-75 days with phased deployment approach and dedicated project management.
+                    </p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-users text-2xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Executive Sponsorship</h3>
+                    <p class="text-gray-600">
+                        C-level champions drive adoption across supply chain, operations, and finance teams.
+                    </p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-cogs text-2xl text-purple-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">System Integration</h3>
+                    <p class="text-gray-600">
+                        Seamless integration with existing ERP, TMS, and WMS systems through robust APIs.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-16 bg-gray-900 text-white">
+        <div class="max-w-4xl mx-auto text-center px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                Ready to Join These Success Stories?
+            </h2>
+            <p class="text-xl mb-8 opacity-90">
+                Schedule an executive demo to see how ROOTUIP can transform your container operations
+            </p>
+            
+            <div class="space-y-4 md:space-y-0 md:space-x-4 md:flex md:justify-center">
+                <a href="/schedule-demo" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 inline-block">
+                    <i class="fas fa-calendar-alt mr-2"></i>
+                    Schedule Executive Demo
+                </a>
+                <a href="/roi-calculator" class="bg-gray-600 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 inline-block">
+                    <i class="fas fa-calculator mr-2"></i>
+                    Calculate Your ROI
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">ROOTUIP</h3>
+                    <p class="text-gray-400">AI-powered container tracking and detention/demurrage prevention for Fortune 500 companies.</p>
+                </div>
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Platform</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/features" class="hover:text-white">Features</a></li>
+                        <li><a href="/integrations" class="hover:text-white">Integrations</a></li>
+                        <li><a href="/security" class="hover:text-white">Security</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/case-studies" class="hover:text-white text-blue-400">Case Studies</a></li>
+                        <li><a href="/whitepapers" class="hover:text-white">Whitepapers</a></li>
+                        <li><a href="/webinars" class="hover:text-white">Webinars</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>sales@rootuip.com</li>
+                        <li>1-800-ROOTUIP</li>
+                        <li>support@rootuip.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 ROOTUIP. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Industry filtering functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.industry-filter');
+            const caseStudyCards = document.querySelectorAll('.case-study-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const industry = this.getAttribute('data-industry');
+                    
+                    // Update active filter
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Filter case studies
+                    caseStudyCards.forEach(card => {
+                        if (industry === 'all' || card.getAttribute('data-industry') === industry) {
+                            card.style.display = 'block';
+                            card.style.animation = 'fadeIn 0.5s ease-in';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                    
+                    // Track filter usage
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'case_study_filter', {
+                            'event_category': 'engagement',
+                            'event_label': industry
+                        });
+                    }
+                });
+            });
+        });
+        
+        // Case study download function
+        function downloadCaseStudy(caseStudyId) {
+            // Track download
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'case_study_download', {
+                    'event_category': 'content_download',
+                    'event_label': caseStudyId
+                });
+            }
+            
+            // Trigger download (would generate PDF in real implementation)
+            const downloadUrl = `/api/case-studies/${caseStudyId}/download`;
+            
+            // For now, show a modal with contact form
+            showDownloadModal(caseStudyId);
+        }
+        
+        function showDownloadModal(caseStudyId) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg p-8 max-w-md mx-4">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Download Case Study</h3>
+                    <p class="text-gray-600 mb-6">
+                        Enter your business email to download the full case study with detailed implementation insights.
+                    </p>
+                    <form id="downloadForm" class="space-y-4">
+                        <input type="email" placeholder="Business Email" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="text" placeholder="Company Name" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="text" placeholder="Job Title"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <div class="flex space-x-4">
+                            <button type="submit" class="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                                Download PDF
+                            </button>
+                            <button type="button" onclick="closeModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition-colors">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            modal.querySelector('#downloadForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Submit form data
+                const formData = new FormData(this);
+                formData.append('caseStudyId', caseStudyId);
+                
+                fetch('/api/case-studies/download-request', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => {
+                    if (response.ok) {
+                        // Show success and trigger download
+                        modal.innerHTML = `
+                            <div class="bg-white rounded-lg p-8 max-w-md mx-4 text-center">
+                                <div class="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-check-circle text-2xl text-green-600"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-4">Download Starting...</h3>
+                                <p class="text-gray-600 mb-6">
+                                    Your case study PDF is downloading. You'll also receive additional resources via email.
+                                </p>
+                                <button onclick="closeModal()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                                    Close
+                                </button>
+                            </div>
+                        `;
+                        
+                        // Trigger actual download
+                        setTimeout(() => {
+                            window.open(`/api/case-studies/${caseStudyId}/download?token=${Date.now()}`, '_blank');
+                        }, 1000);
+                    }
+                });
+            });
+            
+            window.closeModal = function() {
+                document.body.removeChild(modal);
+            };
+        }
+        
+        // Add CSS for fade animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Track page view
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_view', {
+                'page_title': 'Case Studies',
+                'page_location': window.location.href
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Real-Time Dashboard</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e1a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .connection-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .status-indicator.disconnected {
+            background: #ef4444;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        
+        .card-full-width {
+            grid-column: span 3;
+        }
+        
+        .card-half-width {
+            grid-column: span 2;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .metric-change {
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+        
+        .metric-change.positive {
+            color: #10b981;
+        }
+        
+        .metric-change.negative {
+            color: #ef4444;
+        }
+        
+        .alerts-container {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .alert-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            border-left: 4px solid;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .alert-critical {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .alert-warning {
+            border-left-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+        
+        .alert-info {
+            border-left-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .alert-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 0.25rem;
+        }
+        
+        .containers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .container-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        
+        .container-id {
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+        
+        .container-status {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status-transit {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+        
+        .status-port {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+        
+        .status-delivered {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .risk-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .risk-bar {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .risk-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .risk-low { background: #10b981; }
+        .risk-medium { background: #f59e0b; }
+        .risk-high { background: #ef4444; }
+        
+        .chart-container {
+            position: relative;
+            height: 250px;
+            margin-top: 1rem;
+        }
+        
+        .notifications {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+        }
+        
+        .notification {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            min-width: 300px;
+            animation: slideIn 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-top: 2px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            
+            .card-full-width,
+            .card-half-width {
+                grid-column: span 1;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 ROOTUIP Real-Time Dashboard</h1>
+        <div class="connection-status">
+            <div class="status-indicator" id="connectionIndicator"></div>
+            <span id="connectionStatus">Connecting...</span>
+        </div>
+    </div>
+
+    <div class="main-grid">
+        <!-- Key Metrics -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">📊 Active Containers</h3>
+            </div>
+            <div class="metric-value" id="activeContainers">-</div>
+            <div class="metric-label">Currently Tracked</div>
+            <div class="metric-change" id="containersChange">-</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">💰 Revenue Today</h3>
+            </div>
+            <div class="metric-value" id="revenue">-</div>
+            <div class="metric-label">USD</div>
+            <div class="metric-change" id="revenueChange">-</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">⚡ System Health</h3>
+            </div>
+            <div class="metric-value" id="systemHealth">-</div>
+            <div class="metric-label">Uptime %</div>
+            <div class="metric-change" id="healthChange">-</div>
+        </div>
+
+        <!-- Performance Chart -->
+        <div class="card card-half-width">
+            <div class="card-header">
+                <h3 class="card-title">📈 Performance Metrics</h3>
+                <div class="loading" id="metricsLoading"></div>
+            </div>
+            <div class="chart-container">
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Alerts -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">🚨 Active Alerts</h3>
+                <span id="alertCount" class="metric-value" style="font-size: 1.2rem;">0</span>
+            </div>
+            <div class="alerts-container" id="alertsContainer">
+                <div style="text-align: center; opacity: 0.5; padding: 2rem;">
+                    No active alerts
+                </div>
+            </div>
+        </div>
+
+        <!-- Container Status -->
+        <div class="card card-full-width">
+            <div class="card-header">
+                <h3 class="card-title">🚢 Real-Time Container Tracking</h3>
+                <div class="loading" id="containersLoading"></div>
+            </div>
+            <div class="containers-grid" id="containersGrid">
+                <div style="text-align: center; opacity: 0.5; padding: 2rem; grid-column: span 2;">
+                    <div class="loading"></div>
+                    <div style="margin-top: 1rem;">Loading container data...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Business Intelligence Chart -->
+        <div class="card card-half-width">
+            <div class="card-header">
+                <h3 class="card-title">📊 Business Intelligence</h3>
+            </div>
+            <div class="chart-container">
+                <canvas id="businessChart"></canvas>
+            </div>
+        </div>
+
+        <!-- System Metrics -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">🖥️ System Status</h3>
+            </div>
+            <div style="display: grid; gap: 1rem;">
+                <div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>CPU Usage</span>
+                        <span id="cpuUsage">-%</span>
+                    </div>
+                    <div class="risk-bar">
+                        <div class="risk-fill risk-low" id="cpuBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Memory Usage</span>
+                        <span id="memoryUsage">-%</span>
+                    </div>
+                    <div class="risk-bar">
+                        <div class="risk-fill risk-medium" id="memoryBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Active Users</span>
+                        <span id="activeUsers">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notifications" id="notifications"></div>
+
+    <script>
+        class RealTimeDashboard {
+            constructor() {
+                this.socket = null;
+                this.isConnected = false;
+                this.charts = {};
+                this.data = {
+                    containers: [],
+                    alerts: [],
+                    metrics: {
+                        performance: {},
+                        business: {},
+                        system: {}
+                    }
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.connectWebSocket();
+                this.initializeCharts();
+                this.setupEventListeners();
+            }
+            
+            connectWebSocket() {
+                const wsUrl = window.location.protocol === 'https:' 
+                    ? `wss://${window.location.hostname}:3020` 
+                    : `ws://${window.location.hostname}:3020`;
+                
+                this.socket = io(wsUrl);
+                
+                this.socket.on('connect', () => {
+                    console.log('🔌 Connected to real-time server');
+                    this.isConnected = true;
+                    this.updateConnectionStatus(true);
+                    
+                    // Subscribe to channels
+                    this.socket.emit('subscribe', ['dashboard', 'metrics-performance', 'metrics-business', 'metrics-system']);
+                    this.socket.emit('subscribe-metrics', ['performance', 'business', 'system']);
+                });
+                
+                this.socket.on('disconnect', () => {
+                    console.log('🔌 Disconnected from real-time server');
+                    this.isConnected = false;
+                    this.updateConnectionStatus(false);
+                });
+                
+                this.socket.on('initial-data', (data) => {
+                    console.log('📡 Received initial data:', data);
+                    this.data = { ...this.data, ...data };
+                    this.updateDashboard();
+                });
+                
+                this.socket.on('container-update', (container) => {
+                    this.updateContainer(container);
+                });
+                
+                this.socket.on('container-list-update', (containers) => {
+                    this.data.containers = containers;
+                    this.updateContainersDisplay();
+                });
+                
+                this.socket.on('alert', (alert) => {
+                    this.addAlert(alert);
+                    this.showNotification(alert);
+                });
+                
+                this.socket.on('performance-update', (metrics) => {
+                    this.data.metrics.performance = metrics;
+                    this.updatePerformanceMetrics();
+                });
+                
+                this.socket.on('business-update', (metrics) => {
+                    this.data.metrics.business = metrics;
+                    this.updateBusinessMetrics();
+                });
+                
+                this.socket.on('system-update', (metrics) => {
+                    this.data.metrics.system = metrics;
+                    this.updateSystemMetrics();
+                });
+                
+                this.socket.on('notification', (notification) => {
+                    this.showNotification(notification);
+                });
+                
+                // Connection testing
+                setInterval(() => {
+                    if (this.isConnected) {
+                        this.socket.emit('ping');
+                    }
+                }, 30000);
+            }
+            
+            updateConnectionStatus(connected) {
+                const indicator = document.getElementById('connectionIndicator');
+                const status = document.getElementById('connectionStatus');
+                
+                if (connected) {
+                    indicator.classList.remove('disconnected');
+                    status.textContent = 'Connected - Live Updates Active';
+                } else {
+                    indicator.classList.add('disconnected');
+                    status.textContent = 'Disconnected - Attempting to reconnect...';
+                }
+            }
+            
+            initializeCharts() {
+                // Performance Chart
+                const perfCtx = document.getElementById('performanceChart').getContext('2d');
+                this.charts.performance = new Chart(perfCtx, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'CPU Usage %',
+                            data: [],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4
+                        }, {
+                            label: 'Memory Usage %',
+                            data: [],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#e2e8f0' }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: { color: '#94a3b8' },
+                                grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                            },
+                            y: {
+                                ticks: { color: '#94a3b8' },
+                                grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                                min: 0,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+                
+                // Business Chart
+                const bizCtx = document.getElementById('businessChart').getContext('2d');
+                this.charts.business = new Chart(bizCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['On-Time', 'Delayed', 'In Transit'],
+                        datasets: [{
+                            data: [70, 20, 10],
+                            backgroundColor: ['#10b981', '#f59e0b', '#3b82f6'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#e2e8f0' }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            updateDashboard() {
+                this.updateContainersDisplay();
+                this.updateAlertsDisplay();
+                this.updateMetricsDisplay();
+            }
+            
+            updateContainer(container) {
+                const index = this.data.containers.findIndex(c => c.id === container.id);
+                if (index !== -1) {
+                    this.data.containers[index] = container;
+                } else {
+                    this.data.containers.push(container);
+                }
+                this.updateContainersDisplay();
+            }
+            
+            updateContainersDisplay() {
+                const grid = document.getElementById('containersGrid');
+                const loading = document.getElementById('containersLoading');
+                
+                if (this.data.containers.length === 0) {
+                    grid.innerHTML = '<div style="text-align: center; opacity: 0.5; padding: 2rem; grid-column: span 2;">No containers being tracked</div>';
+                    return;
+                }
+                
+                loading.style.display = 'none';
+                
+                grid.innerHTML = this.data.containers.map(container => `
+                    <div class="container-card">
+                        <div class="container-id">${container.id}</div>
+                        <div class="container-status status-${this.getStatusClass(container.status)}">
+                            ${container.status}
+                        </div>
+                        <div style="font-size: 0.9rem; opacity: 0.8;">
+                            📍 ${container.location || 'Unknown'}<br>
+                            🚢 ${container.vessel || 'N/A'}<br>
+                            🌡️ ${container.temperature || 'N/A'}°C
+                        </div>
+                        <div class="risk-indicator">
+                            <span style="font-size: 0.8rem;">D&D Risk:</span>
+                            <div class="risk-bar">
+                                <div class="risk-fill ${this.getRiskClass(container.demurrageRisk)}" 
+                                     style="width: ${(container.demurrageRisk || 0) * 100}%"></div>
+                            </div>
+                            <span style="font-size: 0.8rem;">${((container.demurrageRisk || 0) * 100).toFixed(1)}%</span>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Update active containers count
+                document.getElementById('activeContainers').textContent = this.data.containers.length;
+            }
+            
+            addAlert(alert) {
+                this.data.alerts.unshift(alert);
+                if (this.data.alerts.length > 50) this.data.alerts.pop();
+                this.updateAlertsDisplay();
+            }
+            
+            updateAlertsDisplay() {
+                const container = document.getElementById('alertsContainer');
+                const count = document.getElementById('alertCount');
+                
+                const activeAlerts = this.data.alerts.filter(a => !a.resolved);
+                count.textContent = activeAlerts.length;
+                
+                if (activeAlerts.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; opacity: 0.5; padding: 2rem;">No active alerts</div>';
+                    return;
+                }
+                
+                container.innerHTML = activeAlerts.slice(0, 10).map(alert => `
+                    <div class="alert-item alert-${alert.type || alert.severity}">
+                        <div style="font-weight: 500;">${alert.name || 'Alert'}</div>
+                        <div style="font-size: 0.9rem; margin-top: 0.25rem;">${alert.message}</div>
+                        <div class="alert-time">${new Date(alert.timestamp).toLocaleTimeString()}</div>
+                    </div>
+                `).join('');
+            }
+            
+            updatePerformanceMetrics() {
+                const metrics = this.data.metrics.performance;
+                if (!metrics) return;
+                
+                // Update chart
+                const chart = this.charts.performance;
+                const now = new Date().toLocaleTimeString();
+                
+                if (chart.data.labels.length > 20) {
+                    chart.data.labels.shift();
+                    chart.data.datasets[0].data.shift();
+                    chart.data.datasets[1].data.shift();
+                }
+                
+                chart.data.labels.push(now);
+                chart.data.datasets[0].data.push(metrics.cpuUsage || 0);
+                chart.data.datasets[1].data.push(metrics.memoryUsage || 0);
+                chart.update('none');
+                
+                document.getElementById('metricsLoading').style.display = 'none';
+            }
+            
+            updateBusinessMetrics() {
+                const metrics = this.data.metrics.business;
+                if (!metrics) return;
+                
+                // Update revenue
+                if (metrics.revenue) {
+                    document.getElementById('revenue').textContent = 
+                        '$' + (metrics.revenue / 1000).toFixed(0) + 'K';
+                }
+                
+                // Update business chart
+                if (metrics.onTimeDelivery) {
+                    const delayed = 100 - metrics.onTimeDelivery;
+                    this.charts.business.data.datasets[0].data = [
+                        metrics.onTimeDelivery,
+                        delayed * 0.7,
+                        delayed * 0.3
+                    ];
+                    this.charts.business.update('none');
+                }
+            }
+            
+            updateSystemMetrics() {
+                const metrics = this.data.metrics.system;
+                if (!metrics) return;
+                
+                // Update system health
+                if (metrics.uptime) {
+                    document.getElementById('systemHealth').textContent = metrics.uptime.toFixed(2);
+                }
+                
+                // Update system bars
+                if (metrics.cpuUsage !== undefined) {
+                    document.getElementById('cpuUsage').textContent = metrics.cpuUsage.toFixed(1) + '%';
+                    document.getElementById('cpuBar').style.width = metrics.cpuUsage + '%';
+                }
+                
+                if (metrics.memoryUsage !== undefined) {
+                    document.getElementById('memoryUsage').textContent = metrics.memoryUsage.toFixed(1) + '%';
+                    document.getElementById('memoryBar').style.width = metrics.memoryUsage + '%';
+                }
+                
+                if (metrics.activeUsers !== undefined) {
+                    document.getElementById('activeUsers').textContent = metrics.activeUsers;
+                }
+            }
+            
+            updateMetricsDisplay() {
+                this.updatePerformanceMetrics();
+                this.updateBusinessMetrics();
+                this.updateSystemMetrics();
+            }
+            
+            showNotification(notification) {
+                const container = document.getElementById('notifications');
+                const div = document.createElement('div');
+                div.className = 'notification';
+                
+                const type = notification.type || notification.severity || 'info';
+                const icon = type === 'critical' ? '🚨' : type === 'warning' ? '⚠️' : 'ℹ️';
+                
+                div.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 0.25rem;">
+                                ${icon} ${notification.title || notification.name || 'Notification'}
+                            </div>
+                            <div style="font-size: 0.9rem; opacity: 0.9;">
+                                ${notification.message}
+                            </div>
+                        </div>
+                        <button onclick="this.parentElement.parentElement.remove()" 
+                                style="background: none; border: none; color: #94a3b8; cursor: pointer;">✕</button>
+                    </div>
+                `;
+                
+                container.appendChild(div);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (div.parentElement) {
+                        div.remove();
+                    }
+                }, 5000);
+            }
+            
+            getStatusClass(status) {
+                if (!status) return 'transit';
+                const s = status.toLowerCase();
+                if (s.includes('port') || s.includes('loading') || s.includes('unloading')) return 'port';
+                if (s.includes('delivered') || s.includes('discharged')) return 'delivered';
+                return 'transit';
+            }
+            
+            getRiskClass(risk) {
+                if (!risk) return 'risk-low';
+                if (risk >= 0.7) return 'risk-high';
+                if (risk >= 0.4) return 'risk-medium';
+                return 'risk-low';
+            }
+            
+            setupEventListeners() {
+                // Refresh data every 30 seconds as fallback
+                setInterval(() => {
+                    if (this.isConnected) {
+                        this.socket.emit('subscribe-metrics', ['performance', 'business', 'system']);
+                    }
+                }, 30000);
+            }
+        }
+        
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new RealTimeDashboard();
+        });
+    </script>
+</body>
+</html>

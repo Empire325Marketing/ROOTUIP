@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Job Management Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #2c3e50;
+        }
+        
+        /* Header */
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+        
+        /* Navigation */
+        .nav {
+            background: var(--bg-dark);
+            border-bottom: 1px solid #e1e8ed;
+            padding: 0 2rem;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tab:hover {
+            background: #f8f9fa;
+        }
+        
+        .nav-tab.active {
+            color: #3498db;
+            border-bottom-color: #3498db;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--bg-dark);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+        
+        .card-subtitle {
+            color: #7f8c8d;
+            font-size: 0.875rem;
+        }
+        
+        /* Status Colors */
+        .status-success { color: #27ae60; }
+        .status-warning { color: #f39c12; }
+        .status-danger { color: #e74c3c; }
+        .status-info { color: #3498db; }
+        
+        /* Queue Status */
+        .queue-status {
+            margin-bottom: 1rem;
+        }
+        
+        .queue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .queue-name {
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        
+        .queue-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            transition: width 0.3s ease;
+        }
+        
+        /* Job List */
+        .job-list {
+            background: var(--bg-dark);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .job-list-header {
+            padding: 1rem 1.5rem;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e1e8ed;
+            font-weight: 600;
+        }
+        
+        .job-item {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e1e8ed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+        
+        .job-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .job-info {
+            flex: 1;
+        }
+        
+        .job-id {
+            font-size: 0.875rem;
+            color: #7f8c8d;
+        }
+        
+        .job-name {
+            font-weight: 500;
+            margin: 0.25rem 0;
+        }
+        
+        .job-meta {
+            font-size: 0.875rem;
+            color: #7f8c8d;
+        }
+        
+        .job-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #229954;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #bdc3c7;
+            color: #2c3e50;
+        }
+        
+        .btn-outline:hover {
+            background: #ecf0f1;
+        }
+        
+        /* Charts Container */
+        .chart-container {
+            height: 300px;
+            margin-top: 1rem;
+        }
+        
+        /* Alert Box */
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .alert-warning {
+            background: var(--bg-dark)3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        /* Performance Metrics */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .metric-card {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            color: #7f8c8d;
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .job-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .job-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <header class="header">
+        <h1>ROOTUIP Job Management Dashboard</h1>
+    </header>
+    
+    <nav class="nav">
+        <ul class="nav-tabs">
+            <li class="nav-tab active" data-tab="overview">Overview</li>
+            <li class="nav-tab" data-tab="queues">Queues</li>
+            <li class="nav-tab" data-tab="jobs">Jobs</li>
+            <li class="nav-tab" data-tab="performance">Performance</li>
+            <li class="nav-tab" data-tab="alerts">Alerts</li>
+        </ul>
+    </nav>
+    
+    <main class="main-content">
+        <!-- Overview Tab -->
+        <div id="overview-tab" class="tab-content">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Total Jobs</h3>
+                        <span class="status-info">↑ 12.5%</span>
+                    </div>
+                    <div class="card-value">142,384</div>
+                    <div class="card-subtitle">Last 24 hours</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Active Jobs</h3>
+                        <div class="spinner"></div>
+                    </div>
+                    <div class="card-value status-warning">523</div>
+                    <div class="card-subtitle">Currently processing</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Success Rate</h3>
+                        <span class="status-success">Good</span>
+                    </div>
+                    <div class="card-value status-success">96.8%</div>
+                    <div class="card-subtitle">↑ 2.3% from yesterday</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Avg Processing Time</h3>
+                        <span class="status-success">↓ 16.7%</span>
+                    </div>
+                    <div class="card-value">3.5s</div>
+                    <div class="card-subtitle">Per job average</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">Queue Status Overview</h3>
+                <div style="margin-top: 1rem;">
+                    <div class="queue-status">
+                        <div class="queue-header">
+                            <span class="queue-name">Critical</span>
+                            <div class="queue-stats">
+                                <div class="stat">
+                                    <span class="stat-label">Waiting:</span>
+                                    <span class="stat-value">12</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Active:</span>
+                                    <span class="stat-value status-warning">8</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Failed:</span>
+                                    <span class="stat-value status-danger">2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 40%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="queue-status">
+                        <div class="queue-header">
+                            <span class="queue-name">High</span>
+                            <div class="queue-stats">
+                                <div class="stat">
+                                    <span class="stat-label">Waiting:</span>
+                                    <span class="stat-value">156</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Active:</span>
+                                    <span class="stat-value status-warning">42</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Failed:</span>
+                                    <span class="stat-value status-danger">8</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 21%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="queue-status">
+                        <div class="queue-header">
+                            <span class="queue-name">Normal</span>
+                            <div class="queue-stats">
+                                <div class="stat">
+                                    <span class="stat-label">Waiting:</span>
+                                    <span class="stat-value">892</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Active:</span>
+                                    <span class="stat-value status-warning">128</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Failed:</span>
+                                    <span class="stat-value status-danger">23</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 14%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Jobs Tab -->
+        <div id="jobs-tab" class="tab-content" style="display: none;">
+            <div class="dashboard-grid">
+                <div class="card" style="grid-column: span 2;">
+                    <div class="card-header">
+                        <h3 class="card-title">Active Jobs</h3>
+                        <button class="btn btn-primary btn-sm">Refresh</button>
+                    </div>
+                    <div class="job-list">
+                        <div class="job-item">
+                            <div class="job-info">
+                                <div class="job-id">#job_1735515634567_a1b2c3</div>
+                                <div class="job-name">process_container_batch</div>
+                                <div class="job-meta">Queue: high | Progress: 65% | Started: 2 min ago</div>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn btn-outline btn-sm">View</button>
+                                <button class="btn btn-danger btn-sm">Cancel</button>
+                            </div>
+                        </div>
+                        
+                        <div class="job-item">
+                            <div class="job-info">
+                                <div class="job-id">#job_1735515634568_d4e5f6</div>
+                                <div class="job-name">generate_report</div>
+                                <div class="job-meta">Queue: normal | Progress: 30% | Started: 5 min ago</div>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn btn-outline btn-sm">View</button>
+                                <button class="btn btn-danger btn-sm">Cancel</button>
+                            </div>
+                        </div>
+                        
+                        <div class="job-item">
+                            <div class="job-info">
+                                <div class="job-id">#job_1735515634569_g7h8i9</div>
+                                <div class="job-name">sync_carrier_data</div>
+                                <div class="job-meta">Queue: low | Progress: 90% | Started: 10 min ago</div>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn btn-outline btn-sm">View</button>
+                                <button class="btn btn-danger btn-sm">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Failed Jobs</h3>
+                    <div class="alert alert-danger">
+                        <span>23 jobs failed in the last hour</span>
+                    </div>
+                    <div class="job-list">
+                        <div class="job-item">
+                            <div class="job-info">
+                                <div class="job-id">#job_1735515634570_j1k2l3</div>
+                                <div class="job-name">send_email</div>
+                                <div class="job-meta">Error: Connection timeout</div>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn btn-success btn-sm">Retry</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 1.5rem;">
+                <h3 class="card-title">Scheduled Jobs</h3>
+                <div class="job-list">
+                    <div class="job-list-header">Recurring Jobs</div>
+                    <div class="job-item">
+                        <div class="job-info">
+                            <div class="job-name">daily_analytics</div>
+                            <div class="job-meta">Schedule: 0 2 * * * | Next run: in 4 hours</div>
+                        </div>
+                        <div class="job-actions">
+                            <button class="btn btn-outline btn-sm">Edit</button>
+                            <button class="btn btn-outline btn-sm">Pause</button>
+                        </div>
+                    </div>
+                    <div class="job-item">
+                        <div class="job-info">
+                            <div class="job-name">hourly_sync</div>
+                            <div class="job-meta">Schedule: 0 * * * * | Next run: in 23 minutes</div>
+                        </div>
+                        <div class="job-actions">
+                            <button class="btn btn-outline btn-sm">Edit</button>
+                            <button class="btn btn-outline btn-sm">Pause</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Performance Tab -->
+        <div id="performance-tab" class="tab-content" style="display: none;">
+            <div class="card">
+                <h3 class="card-title">Performance Metrics</h3>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Throughput</div>
+                        <div class="metric-value status-success">847/min</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">P95 Response Time</div>
+                        <div class="metric-value status-warning">8.2s</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Error Rate</div>
+                        <div class="metric-value status-success">1.2%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Queue Efficiency</div>
+                        <div class="metric-value status-success">92%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-grid" style="margin-top: 1.5rem;">
+                <div class="card">
+                    <h3 class="card-title">Resource Utilization</h3>
+                    <div class="metric-grid">
+                        <div class="metric-card">
+                            <div class="metric-label">CPU Usage</div>
+                            <div class="metric-value">67%</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Memory</div>
+                            <div class="metric-value">4.2GB</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Redis Connections</div>
+                            <div class="metric-value">42</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Active Workers</div>
+                            <div class="metric-value">84/100</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Optimization Recommendations</h3>
+                    <div style="margin-top: 1rem;">
+                        <div class="alert alert-warning">
+                            <div>
+                                <strong>Queue Imbalance Detected</strong><br>
+                                <small>Consider redistributing jobs across queues for better performance</small>
+                            </div>
+                        </div>
+                        <div class="alert alert-info">
+                            <div>
+                                <strong>Long Processing Times</strong><br>
+                                <small>Average job processing time exceeds 10 seconds. Consider optimization.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Alerts Tab -->
+        <div id="alerts-tab" class="tab-content" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Active Alerts</h3>
+                    <button class="btn btn-primary btn-sm">Configure Alerts</button>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <div class="alert alert-danger">
+                        <div>
+                            <strong>High Failure Rate</strong><br>
+                            <small>Failure rate: 8.5% - Critical queue affected</small>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning">
+                        <div>
+                            <strong>Queue Depth Warning</strong><br>
+                            <small>Normal queue has 892 waiting jobs</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 1.5rem;">
+                <h3 class="card-title">Alert Configuration</h3>
+                <div class="job-list">
+                    <div class="job-item">
+                        <div class="job-info">
+                            <div class="job-name">High Queue Depth</div>
+                            <div class="job-meta">Threshold: > 10,000 waiting | Severity: High</div>
+                        </div>
+                        <div class="job-actions">
+                            <button class="btn btn-outline btn-sm">Edit</button>
+                            <button class="btn btn-outline btn-sm">Disable</button>
+                        </div>
+                    </div>
+                    <div class="job-item">
+                        <div class="job-info">
+                            <div class="job-name">High Failure Rate</div>
+                            <div class="job-meta">Threshold: > 10% | Severity: Critical</div>
+                        </div>
+                        <div class="job-actions">
+                            <button class="btn btn-outline btn-sm">Edit</button>
+                            <button class="btn btn-outline btn-sm">Disable</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        // API Base URL
+        const API_BASE = '';
+        
+        // Tab Navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                const tabId = tab.dataset.tab + '-tab';
+                document.getElementById(tabId).style.display = 'block';
+                
+                // Load tab-specific data
+                loadTabData(tab.dataset.tab);
+            });
+        });
+        
+        // Load data for specific tab
+        async function loadTabData(tab) {
+            switch(tab) {
+                case 'overview':
+                    await loadOverview();
+                    break;
+                case 'jobs':
+                    await loadJobs();
+                    break;
+                case 'performance':
+                    await loadPerformance();
+                    break;
+                case 'alerts':
+                    await loadAlerts();
+                    break;
+            }
+        }
+        
+        // Load overview data
+        async function loadOverview() {
+            try {
+                const response = await fetch(`${API_BASE}/api/dashboard/overview`);
+                const data = await response.json();
+                
+                // Update total jobs
+                const totalJobsElement = document.querySelector('.card-value');
+                if (totalJobsElement && data.summary?.totalJobs) {
+                    totalJobsElement.textContent = data.summary.totalJobs.toLocaleString();
+                }
+                
+                // Update active jobs
+                const activeJobsElement = document.querySelector('.card-value.status-warning');
+                if (activeJobsElement && data.summary?.activeJobs) {
+                    activeJobsElement.textContent = data.summary.activeJobs;
+                }
+                
+                // Update queue status
+                await loadQueueStatus();
+            } catch (error) {
+                console.error('Failed to load overview:', error);
+            }
+        }
+        
+        // Load queue status
+        async function loadQueueStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/api/queues`);
+                const queues = await response.json();
+                
+                queues.forEach((queue, index) => {
+                    const queueElement = document.querySelectorAll('.queue-status')[index];
+                    if (queueElement) {
+                        queueElement.querySelector('.stat-value').textContent = queue.waiting;
+                        queueElement.querySelectorAll('.stat-value')[1].textContent = queue.active;
+                        queueElement.querySelectorAll('.stat-value')[2].textContent = queue.failed;
+                        
+                        const progressBar = queueElement.querySelector('.progress-fill');
+                        if (progressBar && queue.total > 0) {
+                            const progress = (queue.active / queue.total) * 100;
+                            progressBar.style.width = progress + '%';
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Failed to load queue status:', error);
+            }
+        }
+        
+        // Load jobs
+        async function loadJobs() {
+            try {
+                // Load active jobs
+                const activeResponse = await fetch(`${API_BASE}/api/queues/high/jobs/active`);
+                const activeJobs = await activeResponse.json();
+                
+                const jobList = document.querySelector('.job-list');
+                if (jobList && activeJobs.length > 0) {
+                    const jobItems = activeJobs.slice(0, 5).map(job => `
+                        <div class="job-item">
+                            <div class="job-info">
+                                <div class="job-id">#${job.id}</div>
+                                <div class="job-name">${job.name}</div>
+                                <div class="job-meta">Queue: high | Progress: ${job.progress || 0}% | Started: ${new Date(job.createdAt).toLocaleString()}</div>
+                            </div>
+                            <div class="job-actions">
+                                <button class="btn btn-outline btn-sm">View</button>
+                                <button class="btn btn-danger btn-sm" onclick="cancelJob('high', '${job.id}')">Cancel</button>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    jobList.innerHTML = jobItems;
+                }
+                
+                // Load failed jobs
+                const failedResponse = await fetch(`${API_BASE}/api/jobs/failed`);
+                const failedJobs = await failedResponse.json();
+                
+                if (failedJobs.length > 0) {
+                    document.querySelector('.alert-danger span').textContent = `${failedJobs.length} jobs failed in the last hour`;
+                }
+            } catch (error) {
+                console.error('Failed to load jobs:', error);
+            }
+        }
+        
+        // Load performance data
+        async function loadPerformance() {
+            try {
+                const response = await fetch(`${API_BASE}/api/performance?timeRange=1h`);
+                const data = await response.json();
+                
+                // Update metrics if available
+                if (data.resources) {
+                    const cpuElement = document.querySelector('.metric-value');
+                    if (cpuElement && data.resources.cpu) {
+                        const latestCpu = data.resources.cpu[data.resources.cpu.length - 1];
+                        cpuElement.textContent = Math.round(latestCpu.value) + '%';
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load performance:', error);
+            }
+        }
+        
+        // Load alerts
+        async function loadAlerts() {
+            try {
+                const response = await fetch(`${API_BASE}/api/alerts`);
+                const alerts = await response.json();
+                
+                // Update alert count
+                const alertContainer = document.querySelector('#alerts-tab .card');
+                if (alertContainer) {
+                    const alertHTML = alerts.map(alert => `
+                        <div class="alert alert-${alert.severity === 'critical' ? 'danger' : 'warning'}">
+                            <div>
+                                <strong>${alert.type.replace(/_/g, ' ').toUpperCase()}</strong><br>
+                                <small>${alert.message}</small>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    const existingAlerts = alertContainer.querySelector('div[style="margin-top: 1rem;"]');
+                    if (existingAlerts) {
+                        existingAlerts.innerHTML = alertHTML || '<p>No active alerts</p>';
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load alerts:', error);
+            }
+        }
+        
+        // Cancel job
+        async function cancelJob(queue, jobId) {
+            if (confirm('Are you sure you want to cancel this job?')) {
+                try {
+                    const response = await fetch(`${API_BASE}/api/jobs/${queue}/${jobId}`, {
+                        method: 'DELETE'
+                    });
+                    const result = await response.json();
+                    alert('Job cancelled successfully');
+                    loadJobs(); // Refresh jobs list
+                } catch (error) {
+                    alert('Failed to cancel job: ' + error.message);
+                }
+            }
+        }
+        
+        // Retry job
+        async function retryJob(queue, jobId) {
+            try {
+                const response = await fetch(`${API_BASE}/api/jobs/${queue}/${jobId}/retry`, {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                alert('Job queued for retry');
+                loadJobs(); // Refresh jobs list
+            } catch (error) {
+                alert('Failed to retry job: ' + error.message);
+            }
+        }
+        
+        // Initial load
+        loadOverview();
+        
+        // Auto-refresh every 5 seconds
+        setInterval(() => {
+            const activeTab = document.querySelector('.nav-tab.active');
+            if (activeTab) {
+                loadTabData(activeTab.dataset.tab);
+            }
+        }, 5000);
+        
+        // Button click handlers
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn')) {
+                const action = e.target.textContent;
+                console.log(`Button clicked: ${action}`);
+                
+                if (action === 'Refresh') {
+                    const activeTab = document.querySelector('.nav-tab.active');
+                    if (activeTab) {
+                        loadTabData(activeTab.dataset.tab);
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

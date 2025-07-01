@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Playground - ROOTUIP</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <style>
+        body {
+            background-color: #030712;
+            color: #F9FAFB;
+        }
+        
+        .glassmorphic {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .api-card {
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(17, 24, 39, 0.7) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .api-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+        
+        .method-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .method-get {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10B981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .method-post {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3B82F6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .method-put {
+            background: rgba(251, 191, 36, 0.2);
+            color: #F59E0B;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        .method-delete {
+            background: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .code-editor {
+            background: #1f2937;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 0.5rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            color: #F9FAFB;
+        }
+        
+        .code-editor:focus {
+            outline: none;
+            border-color: #6366F1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .response-container {
+            background: #111827;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .status-success {
+            color: #10B981;
+        }
+        
+        .status-error {
+            color: #EF4444;
+        }
+        
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .tab-button.active {
+            background: rgba(99, 102, 241, 0.2);
+            color: #6366F1;
+        }
+        
+        .tab-button:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+        
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .sidebar {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        
+        .sidebar-expanded {
+            width: 300px;
+        }
+        
+        .nav-item {
+            transition: all 0.2s ease;
+        }
+        
+        .nav-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366F1;
+        }
+        
+        .nav-item.active {
+            background: rgba(99, 102, 241, 0.2);
+            border-left: 4px solid #6366F1;
+        }
+        
+        .sidebar-text {
+            transition: opacity 0.2s ease;
+        }
+        
+        .endpoint-item {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .endpoint-item:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+        
+        .endpoint-item.selected {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 3px solid #6366F1;
+        }
+        
+        /* Sidebar */
+        .api-sidebar {
+            background: var(--rootuip-gray-800);
+            border-right: 1px solid var(--rootuip-gray-700);
+            overflow-y: auto;
+            color: white;
+        }
+        
+        .sidebar-header {
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--rootuip-gray-700);
+        }
+        
+        .sidebar-title {
+            font-size: var(--text-lg);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .api-search {
+            margin-top: var(--space-4);
+            position: relative;
+        }
+        
+        .api-search-input {
+            width: 100%;
+            padding: var(--space-2) var(--space-3);
+            padding-left: var(--space-8);
+            background: var(--rootuip-gray-700);
+            border: 1px solid var(--rootuip-gray-600);
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: var(--text-sm);
+        }
+        
+        .api-search-input::placeholder {
+            color: var(--rootuip-gray-400);
+        }
+        
+        .api-search-icon {
+            position: absolute;
+            left: var(--space-3);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--rootuip-gray-400);
+        }
+        
+        /* API Groups */
+        .api-group {
+            margin-bottom: var(--space-2);
+        }
+        
+        .group-header {
+            padding: var(--space-3) var(--space-4);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background var(--transition-fast);
+        }
+        
+        .group-header:hover {
+            background: var(--rootuip-gray-700);
+        }
+        
+        .group-name {
+            font-weight: 500;
+            font-size: var(--text-sm);
+        }
+        
+        .group-toggle {
+            transition: transform var(--transition-fast);
+        }
+        
+        .api-group.expanded .group-toggle {
+            transform: rotate(90deg);
+        }
+        
+        .api-endpoints {
+            display: none;
+        }
+        
+        .api-group.expanded .api-endpoints {
+            display: block;
+        }
+        
+        .endpoint-item {
+            padding: var(--space-2) var(--space-4) var(--space-2) var(--space-6);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: var(--text-sm);
+            transition: background var(--transition-fast);
+        }
+        
+        .endpoint-item:hover {
+            background: var(--rootuip-gray-700);
+        }
+        
+        .endpoint-item.active {
+            background: var(--rootuip-primary);
+        }
+        
+        .method-label {
+            padding: 2px 6px;
+            border-radius: var(--radius-sm);
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            width: 40px;
+            text-align: center;
+        }
+        
+        .method-label.get { background: #10b981; }
+        .method-label.post { background: #3b82f6; }
+        .method-label.put { background: #f59e0b; }
+        .method-label.delete { background: #ef4444; }
+        .method-label.patch { background: #8b5cf6; }
+        
+        .endpoint-path {
+            flex: 1;
+            color: var(--rootuip-gray-300);
+            font-family: monospace;
+            font-size: var(--text-xs);
+        }
+        
+        /* Request Panel */
+        .request-panel {
+            background: var(--rootuip-gray-800);
+            border-right: 1px solid var(--rootuip-gray-700);
+            display: flex;
+            flex-direction: column;
+            color: white;
+        }
+        
+        .panel-header {
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--rootuip-gray-700);
+            background: var(--rootuip-gray-900);
+        }
+        
+        .panel-title {
+            font-size: var(--text-base);
+            font-weight: 500;
+        }
+        
+        /* Request Builder */
+        .request-builder {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .url-bar {
+            padding: var(--space-4);
+            background: var(--rootuip-gray-700);
+            display: flex;
+            gap: var(--space-3);
+            align-items: center;
+        }
+        
+        .method-select {
+            padding: var(--space-2) var(--space-3);
+            background: var(--rootuip-gray-600);
+            border: 1px solid var(--rootuip-gray-500);
+            border-radius: var(--radius-md);
+            color: white;
+            font-weight: 500;
+            min-width: 100px;
+        }
+        
+        .url-input {
+            flex: 1;
+            padding: var(--space-2) var(--space-3);
+            background: var(--rootuip-gray-600);
+            border: 1px solid var(--rootuip-gray-500);
+            border-radius: var(--radius-md);
+            color: white;
+            font-family: monospace;
+            font-size: var(--text-sm);
+        }
+        
+        .send-button {
+            padding: var(--space-2) var(--space-4);
+            background: var(--rootuip-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            transition: all var(--transition-fast);
+        }
+        
+        .send-button:hover {
+            background: var(--rootuip-primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .send-button:active {
+            transform: translateY(0);
+        }
+        
+        .send-button.loading {
+            background: var(--rootuip-gray-600);
+            cursor: not-allowed;
+        }
+        
+        /* Request Tabs */
+        .request-tabs {
+            display: flex;
+            background: var(--rootuip-gray-900);
+            border-bottom: 1px solid var(--rootuip-gray-700);
+        }
+        
+        .request-tab {
+            padding: var(--space-3) var(--space-4);
+            background: none;
+            border: none;
+            color: var(--rootuip-gray-400);
+            font-size: var(--text-sm);
+            cursor: pointer;
+            position: relative;
+            transition: color var(--transition-fast);
+        }
+        
+        .request-tab:hover {
+            color: var(--rootuip-gray-200);
+        }
+        
+        .request-tab.active {
+            color: white;
+        }
+        
+        .request-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--rootuip-primary);
+        }
+        
+        .tab-content {
+            flex: 1;
+            overflow: auto;
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Headers Table */
+        .headers-table {
+            padding: var(--space-4);
+        }
+        
+        .header-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: var(--space-3);
+            margin-bottom: var(--space-3);
+        }
+        
+        .header-input {
+            padding: var(--space-2) var(--space-3);
+            background: var(--rootuip-gray-700);
+            border: 1px solid var(--rootuip-gray-600);
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: var(--text-sm);
+        }
+        
+        .header-remove {
+            padding: var(--space-2);
+            background: var(--rootuip-gray-700);
+            border: 1px solid var(--rootuip-gray-600);
+            border-radius: var(--radius-md);
+            color: var(--rootuip-gray-400);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .header-remove:hover {
+            color: var(--rootuip-danger);
+            border-color: var(--rootuip-danger);
+        }
+        
+        .add-header-btn {
+            padding: var(--space-2) var(--space-3);
+            background: transparent;
+            border: 1px dashed var(--rootuip-gray-600);
+            border-radius: var(--radius-md);
+            color: var(--rootuip-gray-400);
+            font-size: var(--text-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .add-header-btn:hover {
+            border-color: var(--rootuip-primary);
+            color: var(--rootuip-primary);
+        }
+        
+        /* CodeMirror Styling */
+        .CodeMirror {
+            height: 100%;
+            font-size: var(--text-sm);
+            background: var(--rootuip-gray-900);
+        }
+        
+        .CodeMirror-gutters {
+            background: var(--rootuip-gray-800);
+            border-right: 1px solid var(--rootuip-gray-700);
+        }
+        
+        /* Response Panel */
+        .response-panel {
+            background: var(--rootuip-gray-800);
+            display: flex;
+            flex-direction: column;
+            color: white;
+        }
+        
+        .response-tabs {
+            display: flex;
+            background: var(--rootuip-gray-900);
+            border-bottom: 1px solid var(--rootuip-gray-700);
+        }
+        
+        .response-tab {
+            padding: var(--space-3) var(--space-4);
+            background: none;
+            border: none;
+            color: var(--rootuip-gray-400);
+            font-size: var(--text-sm);
+            cursor: pointer;
+            position: relative;
+            transition: color var(--transition-fast);
+        }
+        
+        .response-tab:hover {
+            color: var(--rootuip-gray-200);
+        }
+        
+        .response-tab.active {
+            color: white;
+        }
+        
+        .response-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--rootuip-primary);
+        }
+        
+        .response-content {
+            flex: 1;
+            overflow: auto;
+        }
+        
+        /* Response Status */
+        .response-status {
+            padding: var(--space-4);
+            background: var(--rootuip-gray-700);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: var(--text-sm);
+        }
+        
+        .status-code {
+            font-weight: 600;
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-md);
+        }
+        
+        .status-code.success { background: var(--rootuip-accent); }
+        .status-code.error { background: var(--rootuip-danger); }
+        .status-code.warning { background: var(--rootuip-warning); }
+        
+        .response-time {
+            color: var(--rootuip-gray-400);
+        }
+        
+        /* Environment Selector */
+        .env-selector {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            background: var(--rootuip-gray-700);
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-md);
+        }
+        
+        .env-label {
+            font-size: var(--text-sm);
+            color: var(--rootuip-gray-400);
+        }
+        
+        .env-select {
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        /* History Panel */
+        .history-panel {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: var(--rootuip-gray-900);
+            border-left: 1px solid var(--rootuip-gray-700);
+            transition: right var(--transition-base);
+            z-index: 100;
+            overflow-y: auto;
+        }
+        
+        .history-panel.open {
+            right: 0;
+        }
+        
+        .history-header {
+            padding: var(--space-4);
+            background: var(--rootuip-gray-800);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .history-item {
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--rootuip-gray-800);
+            cursor: pointer;
+            transition: background var(--transition-fast);
+        }
+        
+        .history-item:hover {
+            background: var(--rootuip-gray-800);
+        }
+        
+        .history-method {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: var(--radius-sm);
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-right: var(--space-2);
+        }
+        
+        .history-url {
+            font-family: monospace;
+            font-size: var(--text-xs);
+            color: var(--rootuip-gray-400);
+            margin-top: var(--space-1);
+        }
+        
+        .history-time {
+            font-size: var(--text-xs);
+            color: var(--rootuip-gray-500);
+            margin-top: var(--space-1);
+        }
+        
+        /* Code Examples */
+        .code-examples {
+            position: fixed;
+            bottom: var(--space-4);
+            right: var(--space-4);
+            z-index: 50;
+        }
+        
+        .examples-button {
+            padding: var(--space-3) var(--space-4);
+            background: var(--rootuip-gray-700);
+            border: 1px solid var(--rootuip-gray-600);
+            border-radius: var(--radius-md);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            transition: all var(--transition-fast);
+        }
+        
+        .examples-button:hover {
+            background: var(--rootuip-gray-600);
+            transform: translateY(-2px);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .playground-layout {
+                grid-template-columns: 250px 1fr;
+            }
+            
+            .response-panel {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .playground-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .api-sidebar {
+                display: none;
+            }
+        }
+    </style>
+    </style>
+</head>
+<body class="font-sans antialiased">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar sidebar-expanded glassmorphic h-full overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-xl font-bold text-white">API Endpoints</h1>
+                    <button id="sidebarToggle" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                
+                <nav class="space-y-4">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Authentication</h3>
+                        <div class="space-y-1">
+                            <div class="endpoint-item p-2 rounded-lg text-sm" onclick="selectEndpoint('auth', 'login')">
+                                <span class="method-badge method-post">POST</span>
+                                <span class="ml-2">/api/auth/login</span>
+                            </div>
+                            <div class="endpoint-item p-2 rounded-lg text-sm" onclick="selectEndpoint('auth', 'register')">
+                                <span class="method-badge method-post">POST</span>
+                                <span class="ml-2">/api/auth/register</span>
+                            </div>
+                            <div class="endpoint-item p-2 rounded-lg text-sm" onclick="selectEndpoint('auth', 'user')">
+                                <span class="method-badge method-get">GET</span>
+                                <span class="ml-2">/api/user</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Container Tracking</h3>
+                        <div class="space-y-1">
+                            <div class="endpoint-item p-2 rounded-lg text-sm" onclick="selectEndpoint('tracking', 'containers')">
+                                <span class="method-badge method-get">GET</span>
+                                <span class="ml-2">/api/tracking/containers</span>
+                            </div>
+                            <div class="endpoint-item p-2 rounded-lg text-sm" onclick="selectEndpoint('tracking', 'track')">
+                                <span class="method-badge method-post">POST</span>
+                                <span class="ml-2">/api/tracking/track</span>
+                            </div>
+                            <div class="endpoint-item p-2 rounded-lg text-sm" onclick="selectEndpoint('tracking', 'stats')">
+                                <span class="method-badge method-get">GET</span>
+                                <span class="ml-2">/api/tracking/stats</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">ML Predictions</h3>
+                        <div class="space-y-1">
+                            <div class="endpoint-item p-2 rounded-lg text-sm" onclick="selectEndpoint('ml', 'predict')">
+                                <span class="method-badge method-post">POST</span>
+                                <span class="ml-2">/api/ml/predict</span>
+                            </div>
+                            <div class="endpoint-item p-2 rounded-lg text-sm" onclick="selectEndpoint('ml', 'models')">
+                                <span class="method-badge method-get">GET</span>
+                                <span class="ml-2">/api/ml/models</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Analytics</h3>
+                        <div class="space-y-1">
+                            <div class="endpoint-item p-2 rounded-lg text-sm" onclick="selectEndpoint('analytics', 'dashboard')">
+                                <span class="method-badge method-get">GET</span>
+                                <span class="ml-2">/api/analytics/dashboard</span>
+                            </div>
+                            <div class="endpoint-item p-2 rounded-lg text-sm" onclick="selectEndpoint('analytics', 'reports')">
+                                <span class="method-badge method-post">POST</span>
+                                <span class="ml-2">/api/analytics/reports</span>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <!-- Header -->
+            <header class="glassmorphic p-6 mb-6">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <a href="/dashboard.html" class="text-gray-400 hover:text-white transition">
+                            <i class="fas fa-arrow-left text-xl"></i>
+                        </a>
+                        <div>
+                            <h2 class="text-3xl font-bold mb-2">API Playground</h2>
+                            <p class="text-gray-400">Test and explore ROOTUIP API endpoints</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="glassmorphic px-4 py-2 rounded-lg">
+                            <span class="text-sm text-gray-400">Base URL:</span>
+                            <span class="text-sm font-mono" id="baseUrl">https://api.rootuip.com</span>
+                        </div>
+                        <button id="authBtn" class="glassmorphic px-4 py-2 rounded-lg hover:bg-gray-700 transition">
+                            <i class="fas fa-key mr-2"></i>
+                            Authenticate
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="p-6">
+                <!-- Request Panel -->
+                <div class="glassmorphic p-6 rounded-xl mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold">Request</h3>
+                        <button id="sendRequest" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition flex items-center">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Send Request
+                        </button>
+                    </div>
+                    
+                    <!-- Method and URL -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <select id="methodSelect" class="code-editor p-3 rounded-lg">
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                            <option value="PUT">PUT</option>
+                            <option value="DELETE">DELETE</option>
+                        </select>
+                        <input type="text" id="urlInput" placeholder="/api/endpoint" 
+                               class="code-editor p-3 rounded-lg col-span-3">
+                    </div>
+                    
+                    <!-- Tabs -->
+                    <div class="flex space-x-4 mb-4">
+                        <button class="tab-button active" onclick="switchTab('headers')">Headers</button>
+                        <button class="tab-button" onclick="switchTab('body')">Body</button>
+                        <button class="tab-button" onclick="switchTab('params')">Parameters</button>
+                    </div>
+                    
+                    <!-- Tab Content -->
+                    <div id="headersTab" class="tab-content">
+                        <textarea id="headersInput" placeholder='{"Content-Type": "application/json", "Authorization": "Bearer token"}' 
+                                  class="code-editor w-full h-32 p-4 rounded-lg resize-none"></textarea>
+                    </div>
+                    
+                    <div id="bodyTab" class="tab-content hidden">
+                        <textarea id="bodyInput" placeholder='{"key": "value"}' 
+                                  class="code-editor w-full h-32 p-4 rounded-lg resize-none"></textarea>
+                    </div>
+                    
+                    <div id="paramsTab" class="tab-content hidden">
+                        <textarea id="paramsInput" placeholder='{"limit": 10, "offset": 0}' 
+                                  class="code-editor w-full h-32 p-4 rounded-lg resize-none"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Response Panel -->
+                <div class="glassmorphic p-6 rounded-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold">Response</h3>
+                        <div class="flex items-center space-x-4">
+                            <span id="responseStatus" class="text-sm"></span>
+                            <span id="responseTime" class="text-sm text-gray-400"></span>
+                            <button id="copyResponse" class="text-gray-400 hover:text-white transition">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="response-container p-4">
+                        <pre id="responseContent" class="text-sm">
+<span class="text-gray-400">Response will appear here...</span>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Auth Modal -->
+    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="glassmorphic p-8 rounded-xl max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold">API Authentication</h3>
+                <button onclick="closeAuthModal()" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Authentication Type</label>
+                    <select id="authType" class="code-editor w-full p-3 rounded-lg">
+                        <option value="bearer">Bearer Token</option>
+                        <option value="basic">Basic Auth</option>
+                        <option value="api-key">API Key</option>
+                    </select>
+                </div>
+                
+                <div id="bearerAuth">
+                    <label class="block text-sm font-medium mb-2">Bearer Token</label>
+                    <input type="text" id="bearerToken" placeholder="Enter your token..." 
+                           class="code-editor w-full p-3 rounded-lg">
+                </div>
+                
+                <div id="basicAuth" class="hidden space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Username</label>
+                        <input type="text" id="basicUsername" 
+                               class="code-editor w-full p-3 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Password</label>
+                        <input type="password" id="basicPassword" 
+                               class="code-editor w-full p-3 rounded-lg">
+                    </div>
+                </div>
+                
+                <div id="apiKeyAuth" class="hidden space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">API Key</label>
+                        <input type="text" id="apiKey" 
+                               class="code-editor w-full p-3 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Header Name</label>
+                        <input type="text" id="apiKeyHeader" placeholder="X-API-Key" 
+                               class="code-editor w-full p-3 rounded-lg">
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-4 pt-4">
+                    <button onclick="closeAuthModal()" 
+                            class="px-4 py-2 text-gray-400 hover:text-white transition">
+                        Cancel
+                    </button>
+                    <button onclick="saveAuth()" 
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Global variables
+        let currentAuth = null;
+        let requestHistory = [];
+        
+        // Endpoint definitions
+        const endpoints = {
+            auth: {
+                login: {
+                    method: 'POST',
+                    url: '/api/auth/login',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: { email: 'user@example.com', password: 'password123' },
+                    description: 'Authenticate user and get access token'
+                },
+                register: {
+                    method: 'POST',
+                    url: '/api/auth/register',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: { 
+                        email: 'user@example.com', 
+                        password: 'password123',
+                        firstName: 'John',
+                        lastName: 'Doe'
+                    },
+                    description: 'Register new user account'
+                },
+                user: {
+                    method: 'GET',
+                    url: '/api/user',
+                    headers: { 'Authorization': 'Bearer your-token-here' },
+                    description: 'Get current user information'
+                }
+            },
+            tracking: {
+                containers: {
+                    method: 'GET',
+                    url: '/api/tracking/containers',
+                    headers: { 'Authorization': 'Bearer your-token-here' },
+                    description: 'Get list of tracked containers'
+                },
+                track: {
+                    method: 'POST',
+                    url: '/api/tracking/track',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer your-token-here'
+                    },
+                    body: { containerNumber: 'MSKU1234567' },
+                    description: 'Track a new container'
+                },
+                stats: {
+                    method: 'GET',
+                    url: '/api/tracking/stats',
+                    headers: { 'Authorization': 'Bearer your-token-here' },
+                    description: 'Get tracking statistics'
+                }
+            },
+            ml: {
+                predict: {
+                    method: 'POST',
+                    url: '/api/ml/predict',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer your-token-here'
+                    },
+                    body: {
+                        containerNumber: 'MSKU1234567',
+                        features: {
+                            port: 'USNYC',
+                            vessel: 'MAERSK ESSEX',
+                            cargo_type: 'GENERAL'
+                        }
+                    },
+                    description: 'Get ML predictions for container'
+                },
+                models: {
+                    method: 'GET',
+                    url: '/api/ml/models',
+                    headers: { 'Authorization': 'Bearer your-token-here' },
+                    description: 'Get available ML models'
+                }
+            },
+            analytics: {
+                dashboard: {
+                    method: 'GET',
+                    url: '/api/analytics/dashboard',
+                    headers: { 'Authorization': 'Bearer your-token-here' },
+                    description: 'Get dashboard analytics data'
+                },
+                reports: {
+                    method: 'POST',
+                    url: '/api/analytics/reports',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer your-token-here'
+                    },
+                    body: {
+                        type: 'performance',
+                        dateRange: {
+                            start: '2024-01-01',
+                            end: '2024-12-31'
+                        }
+                    },
+                    description: 'Generate analytics report'
+                }
+            }
+        };
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default headers
+            document.getElementById('headersInput').value = JSON.stringify({
+                'Content-Type': 'application/json'
+            }, null, 2);
+            
+            // Update base URL based on environment
+            const baseUrl = window.location.hostname === 'localhost' ? 
+                'http://localhost:3000' : 'https://api.rootuip.com';
+            document.getElementById('baseUrl').textContent = baseUrl;
+        });
+        
+        // Sidebar toggle
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarTexts = document.querySelectorAll('.sidebar-text');
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('sidebar-expanded');
+            sidebar.classList.toggle('sidebar-collapsed');
+            
+            sidebarTexts.forEach(text => {
+                if (sidebar.classList.contains('sidebar-collapsed')) {
+                    text.style.display = 'none';
+                } else {
+                    setTimeout(() => {
+                        text.style.display = 'block';
+                    }, 200);
+                }
+            });
+        });
+        
+        // Tab switching
+        function switchTab(tabName) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+        
+        // Select endpoint
+        function selectEndpoint(category, endpoint) {
+            // Remove previous selection
+            document.querySelectorAll('.endpoint-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Mark as selected
+            event.currentTarget.classList.add('selected');
+            
+            const endpointData = endpoints[category][endpoint];
+            
+            // Update form
+            document.getElementById('methodSelect').value = endpointData.method;
+            document.getElementById('urlInput').value = endpointData.url;
+            document.getElementById('headersInput').value = JSON.stringify(endpointData.headers || {}, null, 2);
+            document.getElementById('bodyInput').value = JSON.stringify(endpointData.body || {}, null, 2);
+        }
+        
+        // Send request
+        document.getElementById('sendRequest').addEventListener('click', async function() {
+            const btn = this;
+            const icon = btn.querySelector('i');
+            
+            // Show loading state
+            icon.className = 'fas fa-spinner loading-spinner mr-2';
+            btn.disabled = true;
+            
+            const method = document.getElementById('methodSelect').value;
+            const url = document.getElementById('urlInput').value;
+            const baseUrl = document.getElementById('baseUrl').textContent;
+            
+            let headers = {};
+            let body = null;
+            let params = {};
+            
+            try {
+                headers = JSON.parse(document.getElementById('headersInput').value || '{}');
+                if (method !== 'GET') {
+                    const bodyText = document.getElementById('bodyInput').value.trim();
+                    if (bodyText) {
+                        body = JSON.parse(bodyText);
+                    }
+                }
+                params = JSON.parse(document.getElementById('paramsInput').value || '{}');
+            } catch (e) {
+                showError('Invalid JSON in request data');
+                resetButton();
+                return;
+            }
+            
+            // Apply authentication
+            if (currentAuth) {
+                if (currentAuth.type === 'bearer') {
+                    headers['Authorization'] = `Bearer ${currentAuth.token}`;
+                } else if (currentAuth.type === 'basic') {
+                    headers['Authorization'] = `Basic ${btoa(currentAuth.username + ':' + currentAuth.password)}`;
+                } else if (currentAuth.type === 'api-key') {
+                    headers[currentAuth.header] = currentAuth.key;
+                }
+            }
+            
+            // Build URL with parameters
+            let fullUrl = baseUrl + url;
+            if (Object.keys(params).length > 0) {
+                const searchParams = new URLSearchParams(params);
+                fullUrl += '?' + searchParams.toString();
+            }
+            
+            const startTime = Date.now();
+            
+            try {
+                const response = await fetch(fullUrl, {
+                    method,
+                    headers,
+                    body: body ? JSON.stringify(body) : null,
+                    credentials: 'include'
+                });
+                
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+                
+                const responseText = await response.text();
+                let responseData;
+                
+                try {
+                    responseData = JSON.parse(responseText);
+                } catch {
+                    responseData = responseText;
+                }
+                
+                displayResponse(response.status, responseData, responseTime);
+                
+            } catch (error) {
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+                
+                displayResponse(0, { error: error.message }, responseTime);
+            }
+            
+            function resetButton() {
+                icon.className = 'fas fa-paper-plane mr-2';
+                btn.disabled = false;
+            }
+            
+            resetButton();
+        });
+        
+        // Display response
+        function displayResponse(status, data, responseTime) {
+            const statusElement = document.getElementById('responseStatus');
+            const timeElement = document.getElementById('responseTime');
+            const contentElement = document.getElementById('responseContent');
+            
+            // Update status
+            statusElement.textContent = `Status: ${status}`;
+            statusElement.className = status >= 200 && status < 300 ? 'text-sm status-success' : 'text-sm status-error';
+            
+            // Update response time
+            timeElement.textContent = `${responseTime}ms`;
+            
+            // Format and display response
+            const formattedData = typeof data === 'object' ? 
+                JSON.stringify(data, null, 2) : data;
+            
+            contentElement.textContent = formattedData;
+            
+            // Apply syntax highlighting
+            hljs.highlightElement(contentElement);
+        }
+        
+        // Show error
+        function showError(message) {
+            displayResponse(0, { error: message }, 0);
+        }
+        
+        // Auth modal functions
+        document.getElementById('authBtn').addEventListener('click', function() {
+            document.getElementById('authModal').classList.remove('hidden');
+        });
+        
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+        }
+        
+        // Auth type change
+        document.getElementById('authType').addEventListener('change', function() {
+            const authType = this.value;
+            
+            document.getElementById('bearerAuth').classList.toggle('hidden', authType !== 'bearer');
+            document.getElementById('basicAuth').classList.toggle('hidden', authType !== 'basic');
+            document.getElementById('apiKeyAuth').classList.toggle('hidden', authType !== 'api-key');
+        });
+        
+        // Save authentication
+        function saveAuth() {
+            const authType = document.getElementById('authType').value;
+            
+            if (authType === 'bearer') {
+                const token = document.getElementById('bearerToken').value.trim();
+                if (!token) {
+                    alert('Please enter a bearer token');
+                    return;
+                }
+                currentAuth = { type: 'bearer', token };
+            } else if (authType === 'basic') {
+                const username = document.getElementById('basicUsername').value.trim();
+                const password = document.getElementById('basicPassword').value.trim();
+                if (!username || !password) {
+                    alert('Please enter username and password');
+                    return;
+                }
+                currentAuth = { type: 'basic', username, password };
+            } else if (authType === 'api-key') {
+                const key = document.getElementById('apiKey').value.trim();
+                const header = document.getElementById('apiKeyHeader').value.trim() || 'X-API-Key';
+                if (!key) {
+                    alert('Please enter an API key');
+                    return;
+                }
+                currentAuth = { type: 'api-key', key, header };
+            }
+            
+            closeAuthModal();
+            
+            // Update auth button
+            const authBtn = document.getElementById('authBtn');
+            authBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Authenticated';
+            authBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+        }
+        
+        // Copy response
+        document.getElementById('copyResponse').addEventListener('click', function() {
+            const responseContent = document.getElementById('responseContent').textContent;
+            navigator.clipboard.writeText(responseContent).then(() => {
+                this.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-copy"></i>';
+                }, 2000);
+            });
+        });
+        
+        // Initialize syntax highlighting
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Onboarding Portal - ROOTUIP</title>
+    <meta name="description" content="Track your ROOTUIP implementation progress and access onboarding resources.">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .progress-ring {
+            transition: stroke-dasharray 0.8s ease-in-out;
+        }
+        
+        .phase-card {
+            transition: all 0.3s ease;
+        }
+        
+        .phase-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .timeline-line {
+            position: relative;
+        }
+        
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #e5e7eb;
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            background: var(--bg-dark);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 50%;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        
+        .timeline-item.completed::before {
+            background: #10b981;
+            border: 3px solid white;
+        }
+        
+        .timeline-item.in-progress::before {
+            background: #f59e0b;
+            border: 3px solid white;
+        }
+        
+        .timeline-item.pending::before {
+            background: #6b7280;
+            border: 3px solid white;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .success-badge {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <img src="/assets/rootuip-logo.png" alt="ROOTUIP" class="h-8 w-auto">
+                    <span class="ml-3 text-xl font-bold text-gray-900">ROOTUIP</span>
+                </div>
+                <nav class="flex space-x-8">
+                    <a href="/customer-portal" class="text-blue-600 font-medium">Onboarding Portal</a>
+                    <a href="/training" class="text-gray-700 hover:text-blue-600">Training</a>
+                    <a href="/support" class="text-gray-700 hover:text-blue-600">Support</a>
+                    <a href="/contact" class="text-gray-700 hover:text-blue-600">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Welcome Section -->
+    <section class="gradient-bg text-white py-12">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">
+                Welcome to Your ROOTUIP Implementation
+            </h1>
+            <p class="text-xl opacity-90 mb-6" id="welcome-message">
+                Track your progress and access resources for a successful deployment
+            </p>
+            
+            <!-- Progress Overview -->
+            <div class="bg-white bg-opacity-20 rounded-lg p-6 inline-block">
+                <div class="flex items-center justify-center space-x-8">
+                    <div class="text-center">
+                        <div class="relative w-24 h-24 mx-auto mb-2">
+                            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                <path class="text-white opacity-20" stroke="currentColor" stroke-width="3" 
+                                      fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831">
+                                </path>
+                                <path id="progress-circle" class="text-white progress-ring" stroke="currentColor" 
+                                      stroke-width="3" stroke-linecap="round" fill="none" 
+                                      stroke-dasharray="0, 100" 
+                                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831">
+                                </path>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span id="progress-percentage" class="text-2xl font-bold">0%</span>
+                            </div>
+                        </div>
+                        <div class="text-sm opacity-80">Overall Progress</div>
+                    </div>
+                    <div class="w-px h-20 bg-white opacity-30"></div>
+                    <div class="text-center">
+                        <div id="current-phase" class="text-2xl font-bold">Discovery</div>
+                        <div class="text-sm opacity-80">Current Phase</div>
+                    </div>
+                    <div class="w-px h-20 bg-white opacity-30"></div>
+                    <div class="text-center">
+                        <div id="days-remaining" class="text-2xl font-bold">35</div>
+                        <div class="text-sm opacity-80">Days Remaining</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Content -->
+    <section class="py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Timeline Column -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Implementation Timeline</h2>
+                        
+                        <div class="timeline-line" id="timeline-container">
+                            <!-- Timeline items will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Success Metrics -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Success Metrics</h2>
+                        
+                        <div class="grid md:grid-cols-3 gap-6" id="metrics-container">
+                            <!-- Metrics will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sidebar -->
+                <div class="space-y-6">
+                    <!-- Project Team -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Your Project Team</h3>
+                        
+                        <div class="space-y-4" id="team-container">
+                            <!-- Team members will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Upcoming Meetings -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Upcoming Meetings</h3>
+                        
+                        <div class="space-y-3" id="meetings-container">
+                            <!-- Meetings will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                        
+                        <div class="space-y-3">
+                            <button onclick="scheduleTraining()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-calendar-plus mr-2"></i>
+                                Schedule Training
+                            </button>
+                            <button onclick="downloadGuides()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                                <i class="fas fa-download mr-2"></i>
+                                Download Guides
+                            </button>
+                            <button onclick="contactSupport()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                                <i class="fas fa-headset mr-2"></i>
+                                Contact Support
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Training Resources -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Training Resources</h3>
+                        
+                        <div class="space-y-3">
+                            <a href="/training/admin-guide" class="flex items-center text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-book mr-2"></i>
+                                Administrator Guide
+                            </a>
+                            <a href="/training/user-manual" class="flex items-center text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-users mr-2"></i>
+                                User Manual
+                            </a>
+                            <a href="/training/api-docs" class="flex items-center text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-code mr-2"></i>
+                                API Documentation
+                            </a>
+                            <a href="/training/best-practices" class="flex items-center text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-lightbulb mr-2"></i>
+                                Best Practices
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p>&copy; 2024 ROOTUIP. All rights reserved.</p>
+            <p class="mt-2 text-gray-400">Need help? Contact your Customer Success Manager or email support@rootuip.com</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample data - in production this would come from API
+        let onboardingData = {
+            customer: {
+                name: "TechCorp Industries",
+                contact: "John Smith",
+                email: "john.smith@techcorp.com"
+            },
+            progress: {
+                percentage: 45,
+                currentPhase: "Integration Testing",
+                daysRemaining: 23
+            },
+            timeline: {
+                phases: [
+                    {
+                        key: "contract_signed",
+                        name: "Contract Execution",
+                        status: "completed",
+                        startDate: "2024-01-15",
+                        endDate: "2024-01-16",
+                        tasks: [
+                            { name: "Contract signature confirmation", status: "completed" },
+                            { name: "Technical requirements gathering", status: "completed" },
+                            { name: "Project team assignment", status: "completed" },
+                            { name: "Kickoff meeting scheduling", status: "completed" }
+                        ]
+                    },
+                    {
+                        key: "technical_discovery",
+                        name: "Technical Discovery",
+                        status: "completed",
+                        startDate: "2024-01-16",
+                        endDate: "2024-01-21",
+                        tasks: [
+                            { name: "System architecture review", status: "completed" },
+                            { name: "API credential setup", status: "completed" },
+                            { name: "Integration mapping", status: "completed" },
+                            { name: "Security requirements validation", status: "completed" },
+                            { name: "Data migration planning", status: "completed" }
+                        ]
+                    },
+                    {
+                        key: "environment_setup",
+                        name: "Environment Setup",
+                        status: "completed",
+                        startDate: "2024-01-21",
+                        endDate: "2024-01-31",
+                        tasks: [
+                            { name: "Development environment provisioning", status: "completed" },
+                            { name: "API integrations configuration", status: "completed" },
+                            { name: "Database schema deployment", status: "completed" },
+                            { name: "Security configuration", status: "completed" },
+                            { name: "Monitoring setup", status: "completed" }
+                        ]
+                    },
+                    {
+                        key: "data_migration",
+                        name: "Data Migration",
+                        status: "in-progress",
+                        startDate: "2024-01-31",
+                        endDate: "2024-02-07",
+                        tasks: [
+                            { name: "Historical data extraction", status: "completed" },
+                            { name: "Data validation and cleansing", status: "completed" },
+                            { name: "Migration testing", status: "in-progress" },
+                            { name: "Data integrity verification", status: "pending" },
+                            { name: "Rollback procedures testing", status: "pending" }
+                        ]
+                    },
+                    {
+                        key: "integration_testing",
+                        name: "Integration Testing",
+                        status: "pending",
+                        startDate: "2024-02-07",
+                        endDate: "2024-02-17",
+                        tasks: [
+                            { name: "Carrier API testing", status: "pending" },
+                            { name: "ERP system integration", status: "pending" },
+                            { name: "Real-time data flow validation", status: "pending" },
+                            { name: "Performance testing", status: "pending" },
+                            { name: "User acceptance testing", status: "pending" }
+                        ]
+                    }
+                ]
+            },
+            team: [
+                { name: "Sarah Johnson", role: "Project Manager", email: "sarah@rootuip.com", avatar: "SJ" },
+                { name: "Michael Chen", role: "Technical Lead", email: "michael@rootuip.com", avatar: "MC" },
+                { name: "Jessica Williams", role: "Customer Success", email: "jessica@rootuip.com", avatar: "JW" },
+                { name: "David Rodriguez", role: "Support Engineer", email: "david@rootuip.com", avatar: "DR" }
+            ],
+            meetings: [
+                { 
+                    type: "Weekly Check-in", 
+                    date: "2024-02-05T14:00:00Z", 
+                    attendees: ["John Smith", "Sarah Johnson"] 
+                },
+                { 
+                    type: "Technical Review", 
+                    date: "2024-02-07T16:00:00Z", 
+                    attendees: ["John Smith", "Michael Chen", "IT Team"] 
+                }
+            ],
+            metrics: [
+                { 
+                    name: "Implementation Progress", 
+                    value: 45, 
+                    unit: "%", 
+                    target: 100,
+                    icon: "fas fa-chart-line",
+                    color: "blue"
+                },
+                { 
+                    name: "Training Completion", 
+                    value: 2, 
+                    unit: "of 5", 
+                    target: 5,
+                    icon: "fas fa-graduation-cap",
+                    color: "green"
+                },
+                { 
+                    name: "Data Migration", 
+                    value: 78, 
+                    unit: "%", 
+                    target: 100,
+                    icon: "fas fa-database",
+                    color: "purple"
+                }
+            ]
+        };
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOnboardingData();
+            updateProgress();
+            renderTimeline();
+            renderTeam();
+            renderMeetings();
+            renderMetrics();
+        });
+
+        function loadOnboardingData() {
+            // In production, this would fetch from API using URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const onboardingId = urlParams.get('id');
+            
+            if (onboardingId) {
+                // Fetch data from API
+                // For demo, we use sample data
+            }
+            
+            // Update welcome message
+            document.getElementById('welcome-message').textContent = 
+                `Welcome back, ${onboardingData.customer.contact}! Here's your ${onboardingData.customer.name} implementation progress.`;
+        }
+
+        function updateProgress() {
+            const progress = onboardingData.progress;
+            
+            // Update progress circle
+            const circle = document.getElementById('progress-circle');
+            const percentage = progress.percentage;
+            const circumference = 2 * Math.PI * 15.9155;
+            const offset = circumference - (percentage / 100) * circumference;
+            circle.style.strokeDasharray = `${circumference}, ${circumference}`;
+            circle.style.strokeDashoffset = offset;
+            
+            // Update text values
+            document.getElementById('progress-percentage').textContent = `${percentage}%`;
+            document.getElementById('current-phase').textContent = progress.currentPhase;
+            document.getElementById('days-remaining').textContent = progress.daysRemaining;
+        }
+
+        function renderTimeline() {
+            const container = document.getElementById('timeline-container');
+            const phases = onboardingData.timeline.phases;
+            
+            container.innerHTML = phases.map(phase => `
+                <div class="timeline-item ${phase.status}">
+                    <div class="flex justify-between items-start mb-3">
+                        <h4 class="text-lg font-semibold text-gray-900">${phase.name}</h4>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium ${getStatusBadgeClass(phase.status)}">
+                            ${capitalizeFirst(phase.status.replace('-', ' '))}
+                        </span>
+                    </div>
+                    
+                    <div class="text-sm text-gray-600 mb-3">
+                        ${formatDate(phase.startDate)} - ${formatDate(phase.endDate)}
+                    </div>
+                    
+                    <div class="space-y-2">
+                        ${phase.tasks.map(task => `
+                            <div class="flex items-center text-sm">
+                                <i class="fas ${getTaskIcon(task.status)} mr-2 ${getTaskIconColor(task.status)}"></i>
+                                <span class="${task.status === 'completed' ? 'line-through text-gray-500' : ''}">${task.name}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderTeam() {
+            const container = document.getElementById('team-container');
+            const team = onboardingData.team;
+            
+            container.innerHTML = team.map(member => `
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium">
+                        ${member.avatar}
+                    </div>
+                    <div>
+                        <div class="font-medium text-gray-900">${member.name}</div>
+                        <div class="text-sm text-gray-600">${member.role}</div>
+                    </div>
+                    <a href="mailto:${member.email}" class="ml-auto text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        function renderMeetings() {
+            const container = document.getElementById('meetings-container');
+            const meetings = onboardingData.meetings;
+            
+            if (meetings.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-sm">No upcoming meetings</p>';
+                return;
+            }
+            
+            container.innerHTML = meetings.map(meeting => `
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <div class="font-medium text-gray-900">${meeting.type}</div>
+                    <div class="text-sm text-gray-600">${formatDateTime(meeting.date)}</div>
+                    <div class="text-xs text-gray-500">${meeting.attendees.join(', ')}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderMetrics() {
+            const container = document.getElementById('metrics-container');
+            const metrics = onboardingData.metrics;
+            
+            container.innerHTML = metrics.map(metric => `
+                <div class="metric-card p-4 rounded-lg text-center">
+                    <i class="${metric.icon} text-2xl mb-2"></i>
+                    <div class="text-2xl font-bold">${metric.value}${metric.unit}</div>
+                    <div class="text-sm opacity-80">${metric.name}</div>
+                    <div class="mt-2 bg-white bg-opacity-20 rounded-full h-2">
+                        <div class="bg-white rounded-full h-2" style="width: ${(metric.value / metric.target) * 100}%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Utility functions
+        function getStatusBadgeClass(status) {
+            switch (status) {
+                case 'completed': return 'bg-green-100 text-green-800';
+                case 'in-progress': return 'bg-yellow-100 text-yellow-800';
+                case 'pending': return 'bg-gray-100 text-gray-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+        function getTaskIcon(status) {
+            switch (status) {
+                case 'completed': return 'fa-check-circle';
+                case 'in-progress': return 'fa-clock';
+                case 'pending': return 'fa-circle';
+                default: return 'fa-circle';
+            }
+        }
+
+        function getTaskIconColor(status) {
+            switch (status) {
+                case 'completed': return 'text-green-500';
+                case 'in-progress': return 'text-yellow-500';
+                case 'pending': return 'text-gray-400';
+                default: return 'text-gray-400';
+            }
+        }
+
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function formatDateTime(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit'
+            });
+        }
+
+        // Action functions
+        function scheduleTraining() {
+            alert('Training scheduling feature coming soon! Please contact your Customer Success Manager.');
+        }
+
+        function downloadGuides() {
+            window.open('/downloads/implementation-guides.pdf', '_blank');
+        }
+
+        function contactSupport() {
+            window.location.href = 'mailto:support@rootuip.com?subject=Implementation Support Request';
+        }
+
+        // Auto-refresh data every 5 minutes
+        setInterval(() => {
+            loadOnboardingData();
+            updateProgress();
+            renderTimeline();
+            renderMeetings();
+            renderMetrics();
+        }, 300000);
+    </script>
+</body>
+</html>

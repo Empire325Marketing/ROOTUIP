@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Payment Portal - ROOTUIP</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <style>
+        body {
+            background: #030712;
+            color: #F9FAFB;
+        }
+        
+        .glassmorphic {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .payment-card {
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(17, 24, 39, 0.7) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .payment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .status-paid {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10B981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .status-pending {
+            background: rgba(251, 191, 36, 0.2);
+            color: #F59E0B;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        .status-overdue {
+            background: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #1F2937 0%, #111827 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 2rem;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+        }
+        
+        .payment-method {
+            background: rgba(17, 24, 39, 0.5);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .payment-method:hover {
+            border-color: #6366F1;
+            background: rgba(99, 102, 241, 0.1);
+        }
+        
+        .payment-method.selected {
+            border-color: #6366F1;
+            background: rgba(99, 102, 241, 0.2);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0.5rem;
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background: #6366F1;
+        }
+        
+        .timeline-item.completed::before {
+            background: #10B981;
+        }
+        
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 0.875rem;
+            top: 1.25rem;
+            width: 2px;
+            height: calc(100% - 1.25rem);
+            background: #374151;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="glassmorphic p-6 mb-8">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Enterprise Payment Portal</h1>
+                    <p class="text-gray-400">Manage your ROOTUIP licenses and payments</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-400">Welcome, Maersk Logistics</span>
+                    <img src="https://ui-avatars.com/api/?name=Maersk&background=6366F1&color=fff" 
+                         alt="Company" class="w-10 h-10 rounded-full">
+                </div>
+            </div>
+        </header>
+        
+        <div class="max-w-7xl mx-auto px-6">
+            <!-- Metrics Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="metric-card animate-slide-in">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-gray-400 text-sm">Active Vessels</p>
+                            <h3 class="text-3xl font-bold mt-2">47</h3>
+                        </div>
+                        <div class="bg-indigo-500 bg-opacity-20 p-3 rounded-lg">
+                            <i class="fas fa-ship text-indigo-500 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400">Licensed for 50 vessels</p>
+                </div>
+                
+                <div class="metric-card animate-slide-in" style="animation-delay: 0.1s">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-gray-400 text-sm">Contract Value</p>
+                            <h3 class="text-3xl font-bold mt-2">$23.5M</h3>
+                        </div>
+                        <div class="bg-green-500 bg-opacity-20 p-3 rounded-lg">
+                            <i class="fas fa-dollar-sign text-green-500 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400">3-year commitment</p>
+                </div>
+                
+                <div class="metric-card animate-slide-in" style="animation-delay: 0.2s">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-gray-400 text-sm">Next Payment</p>
+                            <h3 class="text-3xl font-bold mt-2">$7.83M</h3>
+                        </div>
+                        <div class="bg-yellow-500 bg-opacity-20 p-3 rounded-lg">
+                            <i class="fas fa-calendar text-yellow-500 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400">Due Jan 15, 2025</p>
+                </div>
+                
+                <div class="metric-card animate-slide-in" style="animation-delay: 0.3s">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-gray-400 text-sm">Savings</p>
+                            <h3 class="text-3xl font-bold mt-2">$2.5M</h3>
+                        </div>
+                        <div class="bg-purple-500 bg-opacity-20 p-3 rounded-lg">
+                            <i class="fas fa-percentage text-purple-500 text-xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400">Multi-year discount</p>
+                </div>
+            </div>
+            
+            <!-- Main Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left Column - Payment & Invoices -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Current Invoice -->
+                    <div class="glassmorphic p-6 rounded-xl">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-semibold">Current Invoice</h2>
+                            <span class="status-badge status-pending">Due in 15 days</span>
+                        </div>
+                        
+                        <div class="payment-card p-6 rounded-lg mb-4">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold">INV-2025-01-MAERSK</h3>
+                                    <p class="text-gray-400 text-sm">Annual License - 50 Vessels</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-2xl font-bold">$7,833,750</p>
+                                    <p class="text-sm text-gray-400">Due Jan 15, 2025</p>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t border-gray-700 pt-4 mt-4">
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-gray-400">Base License (50 vessels @ $500K)</span>
+                                    <span>$25,000,000</span>
+                                </div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-gray-400">Multi-vessel discount (15%)</span>
+                                    <span class="text-green-400">-$3,750,000</span>
+                                </div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-gray-400">3-year commitment discount (10%)</span>
+                                    <span class="text-green-400">-$2,125,000</span>
+                                </div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-gray-400">Subtotal</span>
+                                    <span>$19,125,000</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Tax (8.75%)</span>
+                                    <span>$1,673,438</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-3 mt-6">
+                                <button onclick="showPaymentOptions()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-lg transition">
+                                    <i class="fas fa-credit-card mr-2"></i>
+                                    Pay Now
+                                </button>
+                                <button onclick="downloadInvoice()" class="glassmorphic hover:bg-gray-700 py-3 px-4 rounded-lg transition">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Options Modal (Hidden by default) -->
+                    <div id="paymentModal" class="hidden glassmorphic p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold mb-4">Select Payment Method</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="payment-method p-4 rounded-lg" onclick="selectPaymentMethod('ach')">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-university text-2xl mr-4 text-indigo-500"></i>
+                                        <div>
+                                            <h4 class="font-semibold">ACH Transfer</h4>
+                                            <p class="text-sm text-gray-400">Bank transfer - 3-5 business days</p>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-check-circle text-green-500 hidden" id="ach-check"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-method p-4 rounded-lg" onclick="selectPaymentMethod('wire')">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-exchange-alt text-2xl mr-4 text-indigo-500"></i>
+                                        <div>
+                                            <h4 class="font-semibold">Wire Transfer</h4>
+                                            <p class="text-sm text-gray-400">International wire - 1-2 business days</p>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-check-circle text-green-500 hidden" id="wire-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="paymentInstructions" class="mt-6 hidden">
+                            <!-- Instructions will be shown here -->
+                        </div>
+                        
+                        <div class="flex space-x-3 mt-6">
+                            <button onclick="confirmPayment()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-lg transition">
+                                Confirm Payment Method
+                            </button>
+                            <button onclick="hidePaymentOptions()" class="glassmorphic hover:bg-gray-700 py-3 px-4 rounded-lg transition">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment History -->
+                    <div class="glassmorphic p-6 rounded-xl">
+                        <h2 class="text-xl font-semibold mb-4">Payment History</h2>
+                        
+                        <div class="space-y-3">
+                            <div class="payment-card p-4 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h4 class="font-medium">INV-2024-01-MAERSK</h4>
+                                        <p class="text-sm text-gray-400">Annual License Payment</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-semibold">$7,833,750</p>
+                                        <span class="status-badge status-paid">Paid</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center mt-3 text-sm text-gray-400">
+                                    <span>Jan 15, 2024</span>
+                                    <span>Wire Transfer</span>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-card p-4 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h4 class="font-medium">INV-2023-SETUP</h4>
+                                        <p class="text-sm text-gray-400">Implementation Fee</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-semibold">$50,000</p>
+                                        <span class="status-badge status-paid">Paid</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center mt-3 text-sm text-gray-400">
+                                    <span>Dec 1, 2023</span>
+                                    <span>ACH Transfer</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="w-full mt-4 glassmorphic hover:bg-gray-700 py-2 px-4 rounded-lg transition text-sm">
+                            View All Transactions
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Right Column - Contract & Usage -->
+                <div class="space-y-6">
+                    <!-- Contract Details -->
+                    <div class="glassmorphic p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold mb-4">Contract Details</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-sm text-gray-400">Contract ID</p>
+                                <p class="font-medium">CTR-2023-MAERSK-ENT</p>
+                            </div>
+                            
+                            <div>
+                                <p class="text-sm text-gray-400">Term</p>
+                                <p class="font-medium">3 Years (Jan 2024 - Dec 2026)</p>
+                            </div>
+                            
+                            <div>
+                                <p class="text-sm text-gray-400">Licensed Vessels</p>
+                                <p class="font-medium">50 vessels</p>
+                            </div>
+                            
+                            <div>
+                                <p class="text-sm text-gray-400">Total Contract Value</p>
+                                <p class="font-medium text-2xl">$23,501,250</p>
+                            </div>
+                            
+                            <div class="pt-4 border-t border-gray-700">
+                                <button class="w-full glassmorphic hover:bg-gray-700 py-2 px-4 rounded-lg transition">
+                                    <i class="fas fa-file-contract mr-2"></i>
+                                    View Contract
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Vessel Usage -->
+                    <div class="glassmorphic p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold mb-4">Vessel Usage</h3>
+                        
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-2">
+                                <span>Active Vessels</span>
+                                <span>47 / 50</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-indigo-600 h-2 rounded-full" style="width: 94%"></div>
+                            </div>
+                        </div>
+                        
+                        <canvas id="usageChart" class="w-full" height="200"></canvas>
+                        
+                        <div class="mt-4 space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-400">API Calls (Month)</span>
+                                <span>2.4M</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-400">Storage Used</span>
+                                <span>847 GB</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-400">Active Tracking</span>
+                                <span>12,483</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Schedule -->
+                    <div class="glassmorphic p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold mb-4">Payment Schedule</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="timeline-item completed">
+                                <div class="text-sm text-gray-400">Jan 15, 2024</div>
+                                <div class="font-medium">Year 1 Payment</div>
+                                <div class="text-sm">$7,833,750 - Paid</div>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="text-sm text-gray-400">Jan 15, 2025</div>
+                                <div class="font-medium">Year 2 Payment</div>
+                                <div class="text-sm">$7,833,750 - Due Soon</div>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="text-sm text-gray-400">Jan 15, 2026</div>
+                                <div class="font-medium">Year 3 Payment</div>
+                                <div class="text-sm">$7,833,750 - Scheduled</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tax Documents Section -->
+            <div class="glassmorphic p-6 rounded-xl mt-8">
+                <h2 class="text-xl font-semibold mb-4">Tax Documents</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="payment-card p-4 rounded-lg cursor-pointer">
+                        <div class="flex items-center">
+                            <i class="fas fa-file-invoice text-2xl mr-4 text-indigo-500"></i>
+                            <div>
+                                <h4 class="font-medium">2024 Tax Summary</h4>
+                                <p class="text-sm text-gray-400">Form 1099-MISC</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-card p-4 rounded-lg cursor-pointer">
+                        <div class="flex items-center">
+                            <i class="fas fa-receipt text-2xl mr-4 text-indigo-500"></i>
+                            <div>
+                                <h4 class="font-medium">Payment Receipts</h4>
+                                <p class="text-sm text-gray-400">All 2024 receipts</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-card p-4 rounded-lg cursor-pointer">
+                        <div class="flex items-center">
+                            <i class="fas fa-certificate text-2xl mr-4 text-indigo-500"></i>
+                            <div>
+                                <h4 class="font-medium">W-9 Form</h4>
+                                <p class="text-sm text-gray-400">Tax certification</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize usage chart
+        const ctx = document.getElementById('usageChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Active Vessels',
+                    data: [42, 43, 44, 44, 45, 45, 46, 46, 47, 47, 47, 47],
+                    borderColor: '#6366F1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 50,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#9CA3AF'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#9CA3AF'
+                        }
+                    }
+                }
+            }
+        });
+        
+        let selectedPaymentMethod = null;
+        
+        function showPaymentOptions() {
+            document.getElementById('paymentModal').classList.remove('hidden');
+        }
+        
+        function hidePaymentOptions() {
+            document.getElementById('paymentModal').classList.add('hidden');
+            document.getElementById('paymentInstructions').classList.add('hidden');
+            selectedPaymentMethod = null;
+            
+            // Reset selections
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+            document.querySelectorAll('[id$="-check"]').forEach(el => {
+                el.classList.add('hidden');
+            });
+        }
+        
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            
+            // Update UI
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+            document.querySelectorAll('[id$="-check"]').forEach(el => {
+                el.classList.add('hidden');
+            });
+            
+            event.currentTarget.classList.add('selected');
+            document.getElementById(`${method}-check`).classList.remove('hidden');
+        }
+        
+        function confirmPayment() {
+            if (!selectedPaymentMethod) {
+                alert('Please select a payment method');
+                return;
+            }
+            
+            const instructions = document.getElementById('paymentInstructions');
+            instructions.classList.remove('hidden');
+            
+            if (selectedPaymentMethod === 'ach') {
+                instructions.innerHTML = `
+                    <div class="bg-green-900 bg-opacity-20 border border-green-500 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">ACH Transfer Instructions</h4>
+                        <div class="space-y-2 text-sm">
+                            <p><strong>Bank:</strong> Bank of America</p>
+                            <p><strong>Routing Number:</strong> 121000358</p>
+                            <p><strong>Account Number:</strong> XXXX-XXXX-1234</p>
+                            <p><strong>Reference:</strong> INV-2025-01-MAERSK</p>
+                            <p><strong>Amount:</strong> $7,833,750.00</p>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-3">Processing time: 3-5 business days</p>
+                    </div>
+                `;
+            } else if (selectedPaymentMethod === 'wire') {
+                instructions.innerHTML = `
+                    <div class="bg-green-900 bg-opacity-20 border border-green-500 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Wire Transfer Instructions</h4>
+                        <div class="space-y-2 text-sm">
+                            <p><strong>Bank:</strong> Bank of America</p>
+                            <p><strong>SWIFT Code:</strong> BOFAUS3N</p>
+                            <p><strong>Account Number:</strong> XXXX-XXXX-1234</p>
+                            <p><strong>Beneficiary:</strong> ROOTUIP Inc.</p>
+                            <p><strong>Reference:</strong> INV-2025-01-MAERSK</p>
+                            <p><strong>Amount:</strong> USD 7,833,750.00</p>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-3">Processing time: 1-2 business days</p>
+                    </div>
+                `;
+            }
+            
+            // In production, this would trigger actual payment processing
+            setTimeout(() => {
+                alert('Payment instructions have been sent to your registered email.');
+            }, 1000);
+        }
+        
+        function downloadInvoice() {
+            // In production, this would download the actual invoice PDF
+            alert('Downloading invoice INV-2025-01-MAERSK.pdf...');
+        }
+    </script>
+</body>
+</html>

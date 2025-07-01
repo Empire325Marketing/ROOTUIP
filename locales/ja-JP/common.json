@@ -1,0 +1,161 @@
+{
+  "navigation": {
+    "dashboard": "ダッシュボード",
+    "containers": "コンテナ",
+    "analytics": "分析",
+    "billing": "請求",
+    "settings": "設定",
+    "support": "サポート",
+    "logout": "ログアウト"
+  },
+  "auth": {
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "signup": "新規登録",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "confirmPassword": "パスワード確認",
+    "forgotPassword": "パスワードを忘れましたか？",
+    "resetPassword": "パスワードリセット",
+    "rememberMe": "ログイン状態を保持する",
+    "loginSuccess": "お帰りなさい！",
+    "loginError": "メールアドレスまたはパスワードが無効です",
+    "signupSuccess": "アカウントが正常に作成されました",
+    "signupError": "アカウントの作成に失敗しました"
+  },
+  "dashboard": {
+    "title": "コンテナ追跡ダッシュボード",
+    "welcome": "ROOTUIPへようこそ",
+    "totalContainers": "総コンテナ数",
+    "activeShipments": "アクティブな出荷",
+    "alertsCount": "アクティブなアラート",
+    "recentActivity": "最近のアクティビティ",
+    "quickActions": "クイックアクション",
+    "addContainer": "コンテナを追加",
+    "viewReports": "レポートを表示",
+    "manageAlerts": "アラートを管理"
+  },
+  "containers": {
+    "title": "コンテナ管理",
+    "addContainer": "新しいコンテナを追加",
+    "editContainer": "コンテナを編集",
+    "deleteContainer": "コンテナを削除",
+    "containerNumber": "コンテナ番号",
+    "status": "ステータス",
+    "location": "現在地",
+    "destination": "目的地",
+    "eta": "到着予定時刻",
+    "lastUpdate": "最終更新",
+    "trackingHistory": "追跡履歴",
+    "details": "コンテナ詳細",
+    "dimensions": "寸法",
+    "weight": "重量",
+    "contents": "内容物"
+  },
+  "billing": {
+    "title": "請求・サブスクリプション",
+    "currentPlan": "現在のプラン",
+    "usage": "使用量",
+    "invoices": "請求書",
+    "paymentMethods": "支払い方法",
+    "billingHistory": "請求履歴",
+    "upgrade": "プランをアップグレード",
+    "downgrade": "プランをダウングレード",
+    "addPaymentMethod": "支払い方法を追加",
+    "updateBilling": "請求情報を更新",
+    "monthlyRecurring": "月次経常収益",
+    "annualRecurring": "年次経常収益",
+    "usageCharges": "使用料金",
+    "totalAmount": "合計金額"
+  },
+  "settings": {
+    "title": "設定",
+    "profile": "プロフィール",
+    "account": "アカウント",
+    "notifications": "通知",
+    "security": "セキュリティ",
+    "privacy": "プライバシー",
+    "language": "言語",
+    "timezone": "タイムゾーン",
+    "currency": "通貨",
+    "save": "変更を保存",
+    "cancel": "キャンセル",
+    "deleteAccount": "アカウントを削除",
+    "exportData": "データをエクスポート"
+  },
+  "notifications": {
+    "title": "通知",
+    "markAllRead": "すべて既読にする",
+    "noNotifications": "新しい通知はありません",
+    "containerAlert": "コンテナアラート",
+    "systemUpdate": "システム更新",
+    "billingNotice": "請求に関する通知",
+    "securityAlert": "セキュリティアラート"
+  },
+  "support": {
+    "title": "サポートセンター",
+    "contactUs": "お問い合わせ",
+    "documentation": "ドキュメント",
+    "faq": "よくある質問",
+    "submitTicket": "サポートチケットを送信",
+    "ticketNumber": "チケット番号",
+    "status": "ステータス",
+    "priority": "優先度",
+    "subject": "件名",
+    "description": "説明",
+    "attachments": "添付ファイル"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "view": "表示",
+    "search": "検索",
+    "filter": "フィルター",
+    "sort": "並び替え",
+    "export": "エクスポート",
+    "import": "インポート",
+    "refresh": "更新",
+    "close": "閉じる",
+    "next": "次へ",
+    "previous": "前へ",
+    "submit": "送信",
+    "confirm": "確認",
+    "yes": "はい",
+    "no": "いいえ",
+    "ok": "OK",
+    "error": "エラー",
+    "success": "成功",
+    "warning": "警告",
+    "info": "情報"
+  },
+  "errors": {
+    "generic": "予期しないエラーが発生しました",
+    "network": "ネットワーク接続エラー",
+    "unauthorized": "この操作を実行する権限がありません",
+    "notFound": "要求されたリソースが見つかりません",
+    "validation": "入力内容を確認してもう一度お試しください",
+    "serverError": "サーバーエラーです。後でもう一度お試しください"
+  },
+  "time": {
+    "now": "今",
+    "minuteAgo": "{{count}}分前",
+    "minuteAgo_other": "{{count}}分前",
+    "hourAgo": "{{count}}時間前",
+    "hourAgo_other": "{{count}}時間前",
+    "dayAgo": "{{count}}日前",
+    "dayAgo_other": "{{count}}日前",
+    "weekAgo": "{{count}}週間前",
+    "weekAgo_other": "{{count}}週間前"
+  },
+  "numbers": {
+    "containers": {
+      "other": "{{count}}個のコンテナ"
+    },
+    "items": {
+      "other": "{{count}}個のアイテム"
+    }
+  }
+}

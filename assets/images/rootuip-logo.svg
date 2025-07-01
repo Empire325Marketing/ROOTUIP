@@ -1,0 +1,33 @@
+<svg width="180" height="40" viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Modern Container Icon -->
+  <g id="logo-icon">
+    <!-- Container Base -->
+    <rect x="2" y="8" width="36" height="24" rx="2" fill="#1a73e8" stroke="#1a73e8" stroke-width="2"/>
+    
+    <!-- Container Lines -->
+    <line x1="2" y1="14" x2="38" y2="14" stroke="white" stroke-width="1.5" opacity="0.8"/>
+    <line x1="2" y1="20" x2="38" y2="20" stroke="white" stroke-width="1.5" opacity="0.6"/>
+    <line x1="2" y1="26" x2="38" y2="26" stroke="white" stroke-width="1.5" opacity="0.4"/>
+    
+    <!-- Connection Dots -->
+    <circle cx="10" cy="20" r="2" fill="white"/>
+    <circle cx="20" cy="20" r="2" fill="white"/>
+    <circle cx="30" cy="20" r="2" fill="white"/>
+    
+    <!-- Signal Waves -->
+    <path d="M38 8 C42 8, 44 12, 44 20 C44 28, 42 32, 38 32" stroke="#00c853" stroke-width="2" fill="none" opacity="0.8"/>
+    <path d="M38 12 C40 12, 41 16, 41 20 C41 24, 40 28, 38 28" stroke="#00c853" stroke-width="2" fill="none" opacity="0.6"/>
+  </g>
+  
+  <!-- Company Name -->
+  <g id="logo-text">
+    <text x="52" y="27" font-family="-apple-system, BlinkMacSystemFont, 'Inter', sans-serif" font-size="24" font-weight="700" fill="#202124">
+      ROOT<tspan fill="#1a73e8">UIP</tspan>
+    </text>
+  </g>
+  
+  <!-- Tagline (optional, can be hidden on smaller sizes) -->
+  <text x="52" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Inter', sans-serif" font-size="10" font-weight="500" fill="#5f6368" opacity="0.8">
+    Container Intelligence Platform
+  </text>
+</svg>

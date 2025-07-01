@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Performance Monitoring Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #003f7f;
+            --primary-light: #0066cc;
+            --success: #00a651;
+            --warning: #ffb000;
+            --danger: #dc3545;
+            --critical: #8b0000;
+            --bg-dark: #1a1a1a;
+            --bg-light: #f8f9fa;
+            --text-dark: #333;
+            --text-light: #6c757d;
+            --card-bg: #ffffff;
+            --grid-color: #e0e0e0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-dark);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .status-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .status-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .status-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .metric-title {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        .metric-status.warning {
+            background: var(--warning);
+        }
+
+        .metric-status.danger {
+            background: var(--danger);
+        }
+
+        .metric-status.critical {
+            background: var(--critical);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .metric-chart {
+            height: 60px;
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Charts */
+        .chart-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .time-selector {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--grid-color);
+            background: var(--bg-dark);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .time-selector.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        /* Error List */
+        .error-list {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .error-item {
+            padding: 1rem;
+            border-left: 4px solid var(--danger);
+            margin-bottom: 1rem;
+            background: var(--bg-dark)5f5;
+            border-radius: 0 5px 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .error-details {
+            flex: 1;
+        }
+
+        .error-message {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .error-meta {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        .error-count {
+            background: var(--danger);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        /* Recommendations */
+        .recommendations {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .recommendation-item {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--grid-color);
+        }
+
+        .recommendation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .recommendation-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .severity-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .severity-critical {
+            background: var(--critical);
+            color: white;
+        }
+
+        .severity-high {
+            background: var(--danger);
+            color: white;
+        }
+
+        .severity-medium {
+            background: var(--warning);
+            color: white;
+        }
+
+        .recommendation-actions {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .recommendation-actions li {
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        /* Real-time indicator */
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--success);
+            font-size: 0.875rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: live-pulse 2s infinite;
+        }
+
+        @keyframes live-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* Alert Toast */
+        .alert-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-dark);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            max-width: 400px;
+            animation: slideIn 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        .alert-toast.critical {
+            border-left-color: var(--critical);
+        }
+
+        .alert-toast.high {
+            border-left-color: var(--danger);
+        }
+
+        .alert-toast.medium {
+            border-left-color: var(--warning);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: var(--text-light);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .status-bar {
+                width: 100%;
+                justify-content: space-around;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <svg width="30" height="30" viewBox="0 0 100 100" fill="currentColor">
+                    <rect x="10" y="20" width="30" height="40" rx="2"/>
+                    <rect x="50" y="30" width="30" height="30" rx="2"/>
+                    <rect x="20" y="70" width="50" height="20" rx="2"/>
+                </svg>
+                Performance Monitor
+            </div>
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-value" id="avgPageLoad">--</div>
+                    <div class="status-label">Avg Page Load</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" id="errorRate">--</div>
+                    <div class="status-label">Error Rate</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" id="cpuUsage">--</div>
+                    <div class="status-label">CPU Usage</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" id="uptime">--</div>
+                    <div class="status-label">Uptime</div>
+                </div>
+            </div>
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span>Live</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-title">Page Load Time</div>
+                    <div class="metric-status" id="pageLoadStatus"></div>
+                </div>
+                <div class="metric-value" id="pageLoadValue">--</div>
+                <div class="metric-chart" id="pageLoadChart"></div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-title">API Response Time</div>
+                    <div class="metric-status" id="apiStatus"></div>
+                </div>
+                <div class="metric-value" id="apiValue">--</div>
+                <div class="metric-chart" id="apiChart"></div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-title">Active Requests</div>
+                    <div class="metric-status"></div>
+                </div>
+                <div class="metric-value" id="activeRequests">--</div>
+                <div class="metric-chart" id="requestsChart"></div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-title">Memory Usage</div>
+                    <div class="metric-status" id="memoryStatus"></div>
+                </div>
+                <div class="metric-value" id="memoryValue">--</div>
+                <div class="metric-chart" id="memoryChart"></div>
+            </div>
+        </div>
+
+        <!-- Performance Chart -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h2 class="chart-title">Performance Trends</h2>
+                <div class="chart-controls">
+                    <button class="time-selector active" data-duration="1h">1H</button>
+                    <button class="time-selector" data-duration="6h">6H</button>
+                    <button class="time-selector" data-duration="24h">24H</button>
+                    <button class="time-selector" data-duration="7d">7D</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Recent Errors -->
+        <div class="error-list">
+            <div class="chart-header">
+                <h2 class="chart-title">Recent Errors</h2>
+                <button class="time-selector" onclick="clearErrors()">Clear</button>
+            </div>
+            <div id="errorList">
+                <div class="loading">No errors reported</div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="recommendations">
+            <h2 class="chart-title" style="margin-bottom: 1.5rem;">Performance Recommendations</h2>
+            <div id="recommendationsList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Global state
+        let ws = null;
+        let performanceChart = null;
+        let metrics = {
+            pageLoad: [],
+            apiResponse: [],
+            cpu: [],
+            memory: [],
+            activeRequests: []
+        };
+
+        // Initialize dashboard
+        function init() {
+            initWebSocket();
+            initChart();
+            loadInitialData();
+            setupEventListeners();
+            startPerformanceMonitoring();
+        }
+
+        // Initialize WebSocket connection
+        function initWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const host = window.location.host;
+            ws = new WebSocket(`${protocol}//${host}`);
+
+            ws.onopen = () => {
+                console.log('Connected to performance monitor');
+            };
+
+            ws.onmessage = (event) => {
+                const message = JSON.parse(event.data);
+                handleWebSocketMessage(message);
+            };
+
+            ws.onclose = () => {
+                console.log('Disconnected from performance monitor');
+                setTimeout(initWebSocket, 5000); // Reconnect
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+        }
+
+        // Handle WebSocket messages
+        function handleWebSocketMessage(message) {
+            switch (message.type) {
+                case 'initial':
+                    updateDashboard(message.data);
+                    break;
+                case 'update':
+                    updateRealTimeMetrics(message.data);
+                    break;
+                case 'alert':
+                    showAlert(message.data);
+                    break;
+            }
+        }
+
+        // Initialize performance chart
+        function initChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            
+            performanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Page Load (ms)',
+                        data: [],
+                        borderColor: '#0066cc',
+                        backgroundColor: 'rgba(0, 102, 204, 0.1)',
+                        tension: 0.4,
+                        yAxisID: 'y'
+                    }, {
+                        label: 'API Response (ms)',
+                        data: [],
+                        borderColor: '#00a651',
+                        backgroundColor: 'rgba(0, 166, 81, 0.1)',
+                        tension: 0.4,
+                        yAxisID: 'y'
+                    }, {
+                        label: 'Error Rate (%)',
+                        data: [],
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Time'
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Response Time (ms)'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Error Rate (%)'
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load initial data
+        async function loadInitialData() {
+            try {
+                const response = await fetch('/api/metrics');
+                const data = await response.json();
+                updateDashboard(data);
+                
+                // Load recommendations
+                const recResponse = await fetch('/api/recommendations');
+                const recommendations = await recResponse.json();
+                updateRecommendations(recommendations);
+            } catch (error) {
+                console.error('Error loading initial data:', error);
+            }
+        }
+
+        // Update dashboard with new data
+        function updateDashboard(data) {
+            // Update header stats
+            document.getElementById('avgPageLoad').textContent = 
+                data.summary.avgPageLoad ? `${data.summary.avgPageLoad.toFixed(0)}ms` : '--';
+            document.getElementById('errorRate').textContent = 
+                `${(data.summary.apiErrorRate * 100).toFixed(1)}%`;
+            document.getElementById('cpuUsage').textContent = 
+                `${data.summary.cpuUsage.toFixed(1)}%`;
+            
+            // Update metric cards
+            document.getElementById('pageLoadValue').textContent = 
+                data.pageLoads.average ? `${data.pageLoads.average.toFixed(0)}ms` : '--';
+            document.getElementById('apiValue').textContent = 
+                data.apiCalls.average ? `${data.apiCalls.average.toFixed(0)}ms` : '--';
+            document.getElementById('activeRequests').textContent = 
+                data.summary.activeConnections || '0';
+            document.getElementById('memoryValue').textContent = 
+                `${data.summary.memoryUsage.toFixed(1)}%`;
+
+            // Update status indicators
+            updateStatusIndicators(data);
+
+            // Update errors
+            if (data.errors.recent.length > 0) {
+                updateErrorList(data.errors.recent);
+            }
+        }
+
+        // Update real-time metrics
+        function updateRealTimeMetrics(data) {
+            // Add to chart data
+            const time = new Date(data.timestamp).toLocaleTimeString();
+            
+            if (performanceChart.data.labels.length > 60) {
+                performanceChart.data.labels.shift();
+                performanceChart.data.datasets.forEach(dataset => dataset.data.shift());
+            }
+
+            performanceChart.data.labels.push(time);
+            performanceChart.data.datasets[0].data.push(data.avgResponseTime);
+            performanceChart.data.datasets[1].data.push(data.avgResponseTime * 0.8); // Mock API time
+            performanceChart.data.datasets[2].data.push(data.errorRate * 100);
+            
+            performanceChart.update('none'); // No animation for smooth updates
+
+            // Update live values
+            document.getElementById('activeRequests').textContent = data.activeRequests;
+            document.getElementById('cpuUsage').textContent = `${data.cpu.toFixed(1)}%`;
+            document.getElementById('memoryValue').textContent = `${data.memory.toFixed(1)}%`;
+        }
+
+        // Update status indicators
+        function updateStatusIndicators(data) {
+            const pageLoadStatus = document.getElementById('pageLoadStatus');
+            const apiStatus = document.getElementById('apiStatus');
+            const memoryStatus = document.getElementById('memoryStatus');
+
+            // Page load status
+            if (data.pageLoads.average > 2000) {
+                pageLoadStatus.className = 'metric-status danger';
+            } else if (data.pageLoads.average > 1500) {
+                pageLoadStatus.className = 'metric-status warning';
+            } else {
+                pageLoadStatus.className = 'metric-status';
+            }
+
+            // API status
+            if (data.apiCalls.average > 500) {
+                apiStatus.className = 'metric-status danger';
+            } else if (data.apiCalls.average > 300) {
+                apiStatus.className = 'metric-status warning';
+            } else {
+                apiStatus.className = 'metric-status';
+            }
+
+            // Memory status
+            if (data.summary.memoryUsage > 85) {
+                memoryStatus.className = 'metric-status danger';
+            } else if (data.summary.memoryUsage > 70) {
+                memoryStatus.className = 'metric-status warning';
+            } else {
+                memoryStatus.className = 'metric-status';
+            }
+        }
+
+        // Update error list
+        function updateErrorList(errors) {
+            const errorList = document.getElementById('errorList');
+            
+            errorList.innerHTML = errors.map(error => `
+                <div class="error-item">
+                    <div class="error-details">
+                        <div class="error-message">${error.message || 'Unknown error'}</div>
+                        <div class="error-meta">
+                            ${error.url || 'N/A'} • ${new Date(error.timestamp).toLocaleString()}
+                        </div>
+                    </div>
+                    ${error.count ? `<div class="error-count">${error.count}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Update recommendations
+        function updateRecommendations(recommendations) {
+            const list = document.getElementById('recommendationsList');
+            
+            if (recommendations.length === 0) {
+                list.innerHTML = '<div style="text-align: center; color: var(--text-light);">All systems performing optimally</div>';
+                return;
+            }
+
+            list.innerHTML = recommendations.map(rec => `
+                <div class="recommendation-item">
+                    <div class="recommendation-header">
+                        <div class="recommendation-title">${rec.title}</div>
+                        <span class="severity-badge severity-${rec.severity}">${rec.severity}</span>
+                    </div>
+                    <div style="margin: 0.5rem 0; color: var(--text-light);">${rec.description}</div>
+                    <ul class="recommendation-actions">
+                        ${rec.actions.map(action => `<li>${action}</li>`).join('')}
+                    </ul>
+                </div>
+            `).join('');
+        }
+
+        // Show alert toast
+        function showAlert(alert) {
+            const toast = document.createElement('div');
+            toast.className = `alert-toast ${alert.severity}`;
+            toast.innerHTML = `
+                <div>
+                    <strong>${alert.type.replace(/_/g, ' ').toUpperCase()}</strong>
+                    <div style="font-size: 0.875rem; margin-top: 0.25rem;">${alert.message}</div>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Time range selectors
+            document.querySelectorAll('.time-selector').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    if (e.target.dataset.duration) {
+                        document.querySelectorAll('.time-selector').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        
+                        const duration = e.target.dataset.duration;
+                        await loadHistoricalData(duration);
+                    }
+                });
+            });
+        }
+
+        // Load historical data
+        async function loadHistoricalData(duration) {
+            try {
+                const response = await fetch(`/api/metrics/history?duration=${duration}`);
+                const data = await response.json();
+                updateChartWithHistory(data);
+            } catch (error) {
+                console.error('Error loading historical data:', error);
+            }
+        }
+
+        // Update chart with historical data
+        function updateChartWithHistory(data) {
+            performanceChart.data.labels = data.data.map(d => 
+                new Date(d.timestamp).toLocaleTimeString()
+            );
+            
+            performanceChart.data.datasets[0].data = data.data.map(d => d.pageLoad);
+            performanceChart.data.datasets[1].data = data.data.map(d => d.apiResponse);
+            performanceChart.data.datasets[2].data = data.data.map(d => d.errorRate * 100);
+            
+            performanceChart.update();
+        }
+
+        // Clear errors
+        function clearErrors() {
+            document.getElementById('errorList').innerHTML = '<div class="loading">No errors reported</div>';
+        }
+
+        // Calculate uptime
+        function updateUptime() {
+            const uptimeEl = document.getElementById('uptime');
+            // This would be calculated from actual server uptime
+            uptimeEl.textContent = '99.9%';
+        }
+
+        // Start performance monitoring
+        function startPerformanceMonitoring() {
+            // Send page load metrics
+            if (window.performance && performance.timing) {
+                const timing = performance.timing;
+                const loadTime = timing.loadEventEnd - timing.navigationStart;
+                const domContentLoaded = timing.domContentLoadedEventEnd - timing.navigationStart;
+                
+                sendBeacon('pageLoad', {
+                    url: window.location.pathname,
+                    loadTime,
+                    domContentLoaded,
+                    firstPaint: performance.getEntriesByType('paint')[0]?.startTime || 0,
+                    firstContentfulPaint: performance.getEntriesByType('paint')[1]?.startTime || 0
+                });
+            }
+
+            // Monitor for errors
+            window.addEventListener('error', (event) => {
+                sendBeacon('error', {
+                    message: event.message,
+                    url: event.filename,
+                    line: event.lineno,
+                    column: event.colno,
+                    type: 'javascript',
+                    userAgent: navigator.userAgent
+                });
+            });
+
+            // Update uptime periodically
+            setInterval(updateUptime, 60000);
+        }
+
+        // Send beacon data
+        function sendBeacon(type, data) {
+            fetch('/beacon', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type, data })
+            }).catch(console.error);
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Help Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #2c3e50;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--bg-dark);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #3498db;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        /* Search Section */
+        .search-section {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .search-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .search-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .search-box {
+            position: relative;
+            background: var(--bg-dark);
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1.5rem 4rem 1.5rem 1.5rem;
+            border: none;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+        
+        .search-button {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #3498db;
+            border: none;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+        
+        .search-button:hover {
+            background: #2980b9;
+        }
+        
+        /* Quick Links */
+        .quick-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .quick-link {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+        
+        .quick-link:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+        
+        /* Categories */
+        .categories-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .category-card {
+            background: var(--bg-dark);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .category-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+        
+        .category-description {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+        
+        /* Articles Section */
+        .articles-section {
+            background: var(--bg-dark);
+            padding: 3rem 0;
+        }
+        
+        .articles-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .articles-tabs {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .tab {
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #7f8c8d;
+        }
+        
+        .tab.active {
+            color: #3498db;
+            border-bottom-color: #3498db;
+        }
+        
+        .articles-list {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .article-item {
+            padding: 1.5rem;
+            border: 1px solid #ecf0f1;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .article-item:hover {
+            border-color: #3498db;
+            background: #f8f9fa;
+        }
+        
+        .article-info {
+            flex: 1;
+        }
+        
+        .article-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+        
+        .article-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: #7f8c8d;
+        }
+        
+        .article-stats {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .helpful-count {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #27ae60;
+        }
+        
+        /* Chatbot Widget */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+        
+        .chatbot-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-button:hover {
+            transform: scale(1.1);
+        }
+        
+        .chatbot-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 380px;
+            height: 500px;
+            background: var(--bg-dark);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+        }
+        
+        .chatbot-window.open {
+            display: flex;
+        }
+        
+        .chatbot-header {
+            background: #3498db;
+            color: white;
+            padding: 1rem;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chatbot-title {
+            font-weight: 500;
+        }
+        
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .chatbot-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+        
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .message.user {
+            justify-content: flex-end;
+        }
+        
+        .message-bubble {
+            max-width: 70%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            background: var(--bg-dark);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .message.user .message-bubble {
+            background: #3498db;
+            color: white;
+        }
+        
+        .chatbot-input-container {
+            padding: 1rem;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .chatbot-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 0.95rem;
+        }
+        
+        .chatbot-send {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Search Results */
+        .search-results {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: none;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .results-count {
+            color: #7f8c8d;
+        }
+        
+        .results-list {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .result-item {
+            background: var(--bg-dark);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .result-item:hover {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .result-title {
+            font-size: 1.2rem;
+            color: #3498db;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+        
+        .result-excerpt {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: #95a5a6;
+        }
+        
+        /* Feedback */
+        .feedback-section {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .feedback-question {
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        .feedback-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .feedback-btn {
+            padding: 0.5rem 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            background: var(--bg-dark);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .feedback-btn:hover {
+            border-color: #3498db;
+            color: #3498db;
+        }
+        
+        .feedback-btn.selected {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-title {
+                font-size: 2rem;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chatbot-window {
+                width: 100%;
+                right: 0;
+                left: 0;
+                bottom: 0;
+                height: 100vh;
+                border-radius: 0;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">ROOTUIP Help Center</div>
+            <div class="header-actions">
+                <a href="#" style="color: #3498db; text-decoration: none;">Back to Dashboard</a>
+                <button class="feedback-btn">Contact Support</button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="search-container">
+            <h1 class="search-title">How can we help you?</h1>
+            <p class="search-subtitle">Search our knowledge base or browse categories below</p>
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search for articles, guides, or ask a question..." id="searchInput">
+                <button class="search-button" onclick="performSearch()">Search</button>
+            </div>
+            <div class="quick-links">
+                <a href="#" class="quick-link">Getting Started Guide</a>
+                <a href="#" class="quick-link">API Documentation</a>
+                <a href="#" class="quick-link">Video Tutorials</a>
+                <a href="#" class="quick-link">System Status</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Search Results -->
+    <section class="search-results" id="searchResults">
+        <div class="results-header">
+            <h2>Search Results</h2>
+            <span class="results-count" id="resultsCount">0 results found</span>
+        </div>
+        <div class="results-list" id="resultsList"></div>
+    </section>
+    
+    <!-- Categories -->
+    <section class="categories-section" id="categoriesSection">
+        <h2 class="section-title">Browse by Category</h2>
+        <div class="categories-grid">
+            <div class="category-card" onclick="showCategory('getting-started')">
+                <div class="category-icon">🚀</div>
+                <h3 class="category-title">Getting Started</h3>
+                <p class="category-description">Learn the basics and set up your account</p>
+            </div>
+            <div class="category-card" onclick="showCategory('container-tracking')">
+                <div class="category-icon">📍</div>
+                <h3 class="category-title">Container Tracking</h3>
+                <p class="category-description">Track and manage your shipments</p>
+            </div>
+            <div class="category-card" onclick="showCategory('billing')">
+                <div class="category-icon">💳</div>
+                <h3 class="category-title">Billing & Pricing</h3>
+                <p class="category-description">Invoices, payments, and plans</p>
+            </div>
+            <div class="category-card" onclick="showCategory('api-integration')">
+                <div class="category-icon">🔧</div>
+                <h3 class="category-title">API & Integration</h3>
+                <p class="category-description">Connect and automate with our API</p>
+            </div>
+            <div class="category-card" onclick="showCategory('troubleshooting')">
+                <div class="category-icon">🛠️</div>
+                <h3 class="category-title">Troubleshooting</h3>
+                <p class="category-description">Solve common issues quickly</p>
+            </div>
+            <div class="category-card" onclick="showCategory('account')">
+                <div class="category-icon">👤</div>
+                <h3 class="category-title">Account & Security</h3>
+                <p class="category-description">Manage users and security settings</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Articles Section -->
+    <section class="articles-section">
+        <div class="articles-container">
+            <h2 class="section-title">Popular Articles</h2>
+            <div class="articles-tabs">
+                <div class="tab active" onclick="showTab('popular')">Most Popular</div>
+                <div class="tab" onclick="showTab('recent')">Recently Updated</div>
+                <div class="tab" onclick="showTab('videos')">Video Tutorials</div>
+            </div>
+            <div class="articles-list" id="articlesList">
+                <div class="article-item" onclick="openArticle('art-001')">
+                    <div class="article-info">
+                        <h3 class="article-title">How to Track Your First Container</h3>
+                        <div class="article-meta">
+                            <span>5 min read</span>
+                            <span>Getting Started</span>
+                            <span>Updated 2 days ago</span>
+                        </div>
+                    </div>
+                    <div class="article-stats">
+                        <div class="helpful-count">
+                            <span>👍</span>
+                            <span>142</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="article-item" onclick="openArticle('art-002')">
+                    <div class="article-info">
+                        <h3 class="article-title">Understanding Real-Time Tracking</h3>
+                        <div class="article-meta">
+                            <span>8 min read</span>
+                            <span>Container Tracking</span>
+                            <span>Updated 1 week ago</span>
+                        </div>
+                    </div>
+                    <div class="article-stats">
+                        <div class="helpful-count">
+                            <span>👍</span>
+                            <span>89</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="article-item" onclick="openArticle('art-003')">
+                    <div class="article-info">
+                        <h3 class="article-title">API Authentication Guide</h3>
+                        <div class="article-meta">
+                            <span>12 min read</span>
+                            <span>API & Integration</span>
+                            <span>Updated 3 days ago</span>
+                        </div>
+                    </div>
+                    <div class="article-stats">
+                        <div class="helpful-count">
+                            <span>👍</span>
+                            <span>67</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget">
+        <button class="chatbot-button" onclick="toggleChatbot()">💬</button>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <span class="chatbot-title">ROOTUIP Assistant</span>
+                <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+            </div>
+            <div class="chatbot-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="message-bubble">
+                        Hello! I'm your ROOTUIP Assistant. How can I help you today?
+                    </div>
+                </div>
+            </div>
+            <div class="chatbot-input-container">
+                <input type="text" class="chatbot-input" id="chatInput" placeholder="Type your message...">
+                <button class="chatbot-send" onclick="sendMessage()">→</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Global variables
+        let currentCategory = null;
+        let currentTab = 'popular';
+        let chatbotOpen = false;
+        let sessionId = null;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set up enter key for search
+            document.getElementById('searchInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Set up enter key for chat
+            document.getElementById('chatInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+        
+        // Search functionality
+        async function performSearch() {
+            const query = document.getElementById('searchInput').value;
+            if (!query) return;
+            
+            // Show loading
+            document.getElementById('searchResults').style.display = 'block';
+            document.getElementById('categoriesSection').style.display = 'none';
+            document.getElementById('resultsList').innerHTML = '<div class="loading"></div>';
+            
+            try {
+                // Simulate API call
+                const results = await searchKnowledgeBase(query);
+                displaySearchResults(results);
+            } catch (error) {
+                console.error('Search failed:', error);
+            }
+        }
+        
+        // Simulate knowledge base search
+        async function searchKnowledgeBase(query) {
+            // In production, this would call the actual API
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            const mockResults = [
+                {
+                    id: 'art-001',
+                    title: 'How to Track Your First Container',
+                    excerpt: 'Learn the basics of container tracking in ROOTUIP. This guide covers adding containers, understanding status updates, and setting up notifications...',
+                    category: 'Getting Started',
+                    readTime: '5 min',
+                    helpful: 142
+                },
+                {
+                    id: 'art-004',
+                    title: 'Container Tracking Best Practices',
+                    excerpt: 'Optimize your container tracking workflow with these proven strategies. Includes tips on bulk operations, custom alerts, and API integration...',
+                    category: 'Container Tracking',
+                    readTime: '8 min',
+                    helpful: 89
+                }
+            ];
+            
+            return {
+                query,
+                results: mockResults,
+                totalResults: mockResults.length
+            };
+        }
+        
+        // Display search results
+        function displaySearchResults(data) {
+            const resultsCount = document.getElementById('resultsCount');
+            const resultsList = document.getElementById('resultsList');
+            
+            resultsCount.textContent = `${data.totalResults} results found for "${data.query}"`;
+            
+            if (data.results.length === 0) {
+                resultsList.innerHTML = `
+                    <div style="text-align: center; padding: 3rem;">
+                        <p style="font-size: 1.2rem; color: #7f8c8d;">No results found</p>
+                        <p style="margin-top: 1rem;">Try different keywords or <a href="#" onclick="toggleChatbot()" style="color: #3498db;">ask our assistant</a></p>
+                    </div>
+                `;
+                return;
+            }
+            
+            resultsList.innerHTML = data.results.map(result => `
+                <div class="result-item" onclick="openArticle('${result.id}')">
+                    <h3 class="result-title">${result.title}</h3>
+                    <p class="result-excerpt">${result.excerpt}</p>
+                    <div class="result-meta">
+                        <span>${result.category}</span>
+                        <span>${result.readTime} read</span>
+                        <span>👍 ${result.helpful} found helpful</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Show category
+        function showCategory(category) {
+            currentCategory = category;
+            console.log('Showing category:', category);
+            // In production, this would filter articles by category
+        }
+        
+        // Show tab
+        function showTab(tab) {
+            currentTab = tab;
+            
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update articles list based on tab
+            updateArticlesList(tab);
+        }
+        
+        // Update articles list
+        function updateArticlesList(tab) {
+            const articlesList = document.getElementById('articlesList');
+            
+            // In production, this would fetch articles based on the tab
+            if (tab === 'videos') {
+                articlesList.innerHTML = `
+                    <div class="article-item">
+                        <div class="article-info">
+                            <h3 class="article-title">📹 Getting Started with ROOTUIP (Video)</h3>
+                            <div class="article-meta">
+                                <span>10 min video</span>
+                                <span>Getting Started</span>
+                                <span>1.2k views</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Open article
+        function openArticle(articleId) {
+            console.log('Opening article:', articleId);
+            // In production, this would navigate to the article page
+            window.location.href = `#article/${articleId}`;
+        }
+        
+        // Toggle chatbot
+        function toggleChatbot() {
+            chatbotOpen = !chatbotOpen;
+            const chatWindow = document.getElementById('chatbotWindow');
+            
+            if (chatbotOpen) {
+                chatWindow.classList.add('open');
+                if (!sessionId) {
+                    startChatSession();
+                }
+            } else {
+                chatWindow.classList.remove('open');
+            }
+        }
+        
+        // Start chat session
+        async function startChatSession() {
+            sessionId = `session_${Date.now()}`;
+            // In production, this would call the API to start a session
+        }
+        
+        // Send message
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            // Add user message
+            addMessageToChat('user', message);
+            input.value = '';
+            
+            // Show typing indicator
+            const typingId = addMessageToChat('bot', '<div class="loading"></div>');
+            
+            try {
+                // Simulate API call
+                const response = await processUserMessage(message);
+                
+                // Remove typing indicator
+                document.getElementById(typingId).remove();
+                
+                // Add bot response
+                addMessageToChat('bot', response.message);
+                
+                // Add quick replies if any
+                if (response.quickReplies) {
+                    addQuickReplies(response.quickReplies);
+                }
+            } catch (error) {
+                console.error('Chat error:', error);
+            }
+        }
+        
+        // Process user message
+        async function processUserMessage(message) {
+            // In production, this would call the chatbot API
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Simple response logic
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('track') || lowerMessage.includes('container')) {
+                return {
+                    message: "I can help you track your container. Please provide the container ID or booking number.",
+                    quickReplies: [
+                        { label: "View tracking guide", action: "article:art-001" },
+                        { label: "Contact support", action: "escalate" }
+                    ]
+                };
+            } else if (lowerMessage.includes('bill') || lowerMessage.includes('invoice')) {
+                return {
+                    message: "For billing inquiries, you can view your invoices in the Billing section of your dashboard.",
+                    quickReplies: [
+                        { label: "Go to Billing", action: "navigate:/billing" },
+                        { label: "View pricing", action: "navigate:/pricing" }
+                    ]
+                };
+            } else {
+                return {
+                    message: "I'm here to help! You can ask me about container tracking, billing, API integration, or any other ROOTUIP features.",
+                    quickReplies: [
+                        { label: "Browse help articles", action: "close_chat" },
+                        { label: "Talk to an agent", action: "escalate" }
+                    ]
+                };
+            }
+        }
+        
+        // Add message to chat
+        function addMessageToChat(sender, content) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageId = `msg_${Date.now()}`;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.id = messageId;
+            messageDiv.innerHTML = `
+                <div class="message-bubble">${content}</div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            return messageId;
+        }
+        
+        // Add quick replies
+        function addQuickReplies(replies) {
+            const messagesContainer = document.getElementById('chatMessages');
+            
+            const repliesDiv = document.createElement('div');
+            repliesDiv.style.margin = '1rem 0';
+            repliesDiv.innerHTML = replies.map(reply => `
+                <button class="feedback-btn" style="margin: 0.25rem;" onclick="handleQuickReply('${reply.action}')">
+                    ${reply.label}
+                </button>
+            `).join('');
+            
+            messagesContainer.appendChild(repliesDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        // Handle quick reply
+        function handleQuickReply(action) {
+            if (action.startsWith('article:')) {
+                const articleId = action.split(':')[1];
+                openArticle(articleId);
+            } else if (action.startsWith('navigate:')) {
+                const path = action.split(':')[1];
+                window.location.href = path;
+            } else if (action === 'escalate') {
+                addMessageToChat('bot', "I'll connect you with a human agent right away. Please wait...");
+            } else if (action === 'close_chat') {
+                toggleChatbot();
+            }
+        }
+        
+        // Track article view
+        function trackArticleView(articleId) {
+            // In production, this would send analytics to the server
+            console.log('Tracking article view:', articleId);
+        }
+        
+        // Track feedback
+        function trackFeedback(articleId, helpful) {
+            // In production, this would send feedback to the server
+            console.log('Tracking feedback:', articleId, helpful);
+        }
+    </script>
+</body>
+</html>

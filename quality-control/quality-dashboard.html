@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Data Quality Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f0f2f5;
+            color: #1a1a1a;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .header-stat {
+            text-align: center;
+        }
+        
+        .header-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .header-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        /* Main Layout */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Quality Score Card */
+        .quality-score-card {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .score-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            position: relative;
+        }
+        
+        .score-circle svg {
+            transform: rotate(-90deg);
+        }
+        
+        .score-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        
+        .score-label {
+            position: absolute;
+            bottom: 35%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .score-details {
+            flex: 1;
+            padding-left: 3rem;
+        }
+        
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .score-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .score-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .score-icon.green { background: #d4f4dd; color: #2e7d32; }
+        .score-icon.yellow { background: var(--bg-dark)3cd; color: #856404; }
+        .score-icon.red { background: #f8d7da; color: #721c24; }
+        .score-icon.blue { background: #d1ecf1; color: #0c5460; }
+        
+        .score-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .score-info p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        /* Grid Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .card-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .badge-success { background: #d4f4dd; color: #2e7d32; }
+        .badge-warning { background: var(--bg-dark)3cd; color: #856404; }
+        .badge-danger { background: #f8d7da; color: #721c24; }
+        
+        /* Validation Metrics */
+        .metric-list {
+            list-style: none;
+        }
+        
+        .metric-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-name {
+            font-weight: 500;
+        }
+        
+        .metric-value {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .metric-bar {
+            width: 100px;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .metric-bar-fill {
+            height: 100%;
+            background: #28a745;
+            transition: width 0.3s ease;
+        }
+        
+        /* Integration Status */
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .integration-card {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .integration-card:hover {
+            border-color: #1e3c72;
+            transform: translateY(-2px);
+        }
+        
+        .integration-logo {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .integration-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .integration-score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        .integration-score.warning { color: #ffc107; }
+        .integration-score.danger { color: #dc3545; }
+        
+        /* Violations Table */
+        .violations-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .violations-table th {
+            text-align: left;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #666;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .violations-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .violations-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .severity-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .severity-critical { background: #dc3545; color: white; }
+        .severity-error { background: #f8d7da; color: #721c24; }
+        .severity-warning { background: var(--bg-dark)3cd; color: #856404; }
+        
+        /* Charts */
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+        
+        .trend-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 200px;
+            padding: 1rem 0;
+        }
+        
+        .trend-bar {
+            flex: 1;
+            background: #1e3c72;
+            margin: 0 2px;
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .trend-bar:hover {
+            background: #2a5298;
+        }
+        
+        .trend-bar-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        .trend-bar:hover .trend-bar-tooltip {
+            opacity: 1;
+        }
+        
+        /* Real-time Updates */
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #28a745;
+            font-size: 0.9rem;
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #28a745;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e9ecef;
+            margin-bottom: 2rem;
+        }
+        
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab:hover {
+            color: #1e3c72;
+        }
+        
+        .tab.active {
+            color: #1e3c72;
+            border-bottom-color: #1e3c72;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #1e3c72;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2a5298;
+        }
+        
+        .btn-secondary {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .score-main {
+                flex-direction: column;
+            }
+            
+            .score-details {
+                padding-left: 0;
+                padding-top: 2rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>🛡️ ROOTUIP Data Quality Dashboard</h1>
+            <div class="header-stats">
+                <div class="header-stat">
+                    <div class="header-stat-value">156,789</div>
+                    <div class="header-stat-label">Validations Today</div>
+                </div>
+                <div class="header-stat">
+                    <div class="header-stat-value">94.2%</div>
+                    <div class="header-stat-label">Quality Score</div>
+                </div>
+                <div class="header-stat">
+                    <div class="header-stat-value">
+                        <span class="live-indicator">
+                            <span class="live-dot"></span>
+                            Live
+                        </span>
+                    </div>
+                    <div class="header-stat-label">System Status</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Overall Quality Score -->
+        <div class="quality-score-card">
+            <div class="score-main">
+                <div class="score-circle">
+                    <svg width="180" height="180">
+                        <circle cx="90" cy="90" r="80" fill="none" stroke="#e9ecef" stroke-width="10"/>
+                        <circle cx="90" cy="90" r="80" fill="none" stroke="#28a745" stroke-width="10"
+                                stroke-dasharray="502" stroke-dashoffset="50" stroke-linecap="round"/>
+                    </svg>
+                    <div class="score-value">94.2</div>
+                    <div class="score-label">Quality Score</div>
+                </div>
+                
+                <div class="score-details">
+                    <h2 style="margin-bottom: 1.5rem;">Data Quality Overview</h2>
+                    <div class="score-breakdown">
+                        <div class="score-item">
+                            <div class="score-icon green">✓</div>
+                            <div class="score-info">
+                                <h3>Completeness</h3>
+                                <p>98.5% of required fields present</p>
+                            </div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-icon green">🎯</div>
+                            <div class="score-info">
+                                <h3>Accuracy</h3>
+                                <p>96.2% validation pass rate</p>
+                            </div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-icon yellow">⏱️</div>
+                            <div class="score-info">
+                                <h3>Timeliness</h3>
+                                <p>87.3% within SLA</p>
+                            </div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-icon green">🔄</div>
+                            <div class="score-info">
+                                <h3>Consistency</h3>
+                                <p>95.8% cross-source match</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('overview')">Overview</div>
+            <div class="tab" onclick="switchTab('validations')">Validations</div>
+            <div class="tab" onclick="switchTab('integrations')">Integrations</div>
+            <div class="tab" onclick="switchTab('compliance')">Compliance</div>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview-content" class="tab-content">
+            <div class="dashboard-grid">
+                <!-- Validation Metrics -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Validation Metrics</h3>
+                        <span class="card-badge badge-success">↑ 5.2%</span>
+                    </div>
+                    <ul class="metric-list">
+                        <li class="metric-item">
+                            <span class="metric-name">Container Numbers</span>
+                            <span class="metric-value">
+                                <div class="metric-bar">
+                                    <div class="metric-bar-fill" style="width: 98%"></div>
+                                </div>
+                                <span>98%</span>
+                            </span>
+                        </li>
+                        <li class="metric-item">
+                            <span class="metric-name">Port Codes</span>
+                            <span class="metric-value">
+                                <div class="metric-bar">
+                                    <div class="metric-bar-fill" style="width: 95%"></div>
+                                </div>
+                                <span>95%</span>
+                            </span>
+                        </li>
+                        <li class="metric-item">
+                            <span class="metric-name">Date/Time Fields</span>
+                            <span class="metric-value">
+                                <div class="metric-bar">
+                                    <div class="metric-bar-fill" style="width: 92%; background: #ffc107"></div>
+                                </div>
+                                <span>92%</span>
+                            </span>
+                        </li>
+                        <li class="metric-item">
+                            <span class="metric-name">Geographic Data</span>
+                            <span class="metric-value">
+                                <div class="metric-bar">
+                                    <div class="metric-bar-fill" style="width: 96%"></div>
+                                </div>
+                                <span>96%</span>
+                            </span>
+                        </li>
+                        <li class="metric-item">
+                            <span class="metric-name">Business Rules</span>
+                            <span class="metric-value">
+                                <div class="metric-bar">
+                                    <div class="metric-bar-fill" style="width: 94%"></div>
+                                </div>
+                                <span>94%</span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Data Sources -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Data Source Quality</h3>
+                        <span class="live-indicator">
+                            <span class="live-dot"></span>
+                            Real-time
+                        </span>
+                    </div>
+                    <ul class="metric-list">
+                        <li class="metric-item">
+                            <span class="metric-name">Carrier APIs</span>
+                            <span class="metric-value">
+                                <div class="metric-bar">
+                                    <div class="metric-bar-fill" style="width: 96%"></div>
+                                </div>
+                                <span>96%</span>
+                            </span>
+                        </li>
+                        <li class="metric-item">
+                            <span class="metric-name">EDI Messages</span>
+                            <span class="metric-value">
+                                <div class="metric-bar">
+                                    <div class="metric-bar-fill" style="width: 93%"></div>
+                                </div>
+                                <span>93%</span>
+                            </span>
+                        </li>
+                        <li class="metric-item">
+                            <span class="metric-name">OCR Documents</span>
+                            <span class="metric-value">
+                                <div class="metric-bar">
+                                    <div class="metric-bar-fill" style="width: 88%; background: #ffc107"></div>
+                                </div>
+                                <span>88%</span>
+                            </span>
+                        </li>
+                        <li class="metric-item">
+                            <span class="metric-name">Manual Entry</span>
+                            <span class="metric-value">
+                                <div class="metric-bar">
+                                    <div class="metric-bar-fill" style="width: 85%; background: #ffc107"></div>
+                                </div>
+                                <span>85%</span>
+                            </span>
+                        </li>
+                        <li class="metric-item">
+                            <span class="metric-name">IoT Devices</span>
+                            <span class="metric-value">
+                                <div class="metric-bar">
+                                    <div class="metric-bar-fill" style="width: 99%"></div>
+                                </div>
+                                <span>99%</span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quality Trend Chart -->
+            <div class="card" style="margin-top: 1.5rem;">
+                <div class="card-header">
+                    <h3 class="card-title">Quality Score Trend (Last 30 Days)</h3>
+                </div>
+                <div class="trend-chart" id="qualityTrend">
+                    <!-- Bars will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Validations Tab -->
+        <div id="validations-content" class="tab-content" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Recent Validation Violations</h3>
+                    <button class="btn btn-primary">Export Report</button>
+                </div>
+                <table class="violations-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Data Type</th>
+                            <th>Field</th>
+                            <th>Violation</th>
+                            <th>Severity</th>
+                            <th>Source</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2024-01-20 14:32:15</td>
+                            <td>Container</td>
+                            <td>containerId</td>
+                            <td>Invalid check digit</td>
+                            <td><span class="severity-badge severity-error">Error</span></td>
+                            <td>Maersk API</td>
+                            <td><button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.85rem;">Auto-fix</button></td>
+                        </tr>
+                        <tr>
+                            <td>2024-01-20 14:31:42</td>
+                            <td>Shipment</td>
+                            <td>departureDate</td>
+                            <td>Future date not allowed</td>
+                            <td><span class="severity-badge severity-error">Error</span></td>
+                            <td>EDI 315</td>
+                            <td><button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.85rem;">Review</button></td>
+                        </tr>
+                        <tr>
+                            <td>2024-01-20 14:30:28</td>
+                            <td>Location</td>
+                            <td>coordinates</td>
+                            <td>Location jump detected</td>
+                            <td><span class="severity-badge severity-warning">Warning</span></td>
+                            <td>GPS Tracking</td>
+                            <td><button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.85rem;">Investigate</button></td>
+                        </tr>
+                        <tr>
+                            <td>2024-01-20 14:29:55</td>
+                            <td>Document</td>
+                            <td>hsCode</td>
+                            <td>Invalid HS code format</td>
+                            <td><span class="severity-badge severity-error">Error</span></td>
+                            <td>OCR Extract</td>
+                            <td><button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.85rem;">Auto-fix</button></td>
+                        </tr>
+                        <tr>
+                            <td>2024-01-20 14:28:33</td>
+                            <td>Cargo</td>
+                            <td>weight</td>
+                            <td>Exceeds container limit</td>
+                            <td><span class="severity-badge severity-critical">Critical</span></td>
+                            <td>Manual Entry</td>
+                            <td><button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.85rem;">Escalate</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Anomaly Detection -->
+            <div class="card" style="margin-top: 1.5rem;">
+                <div class="card-header">
+                    <h3 class="card-title">Anomaly Detection</h3>
+                    <span class="card-badge badge-warning">5 Active</span>
+                </div>
+                <ul class="metric-list">
+                    <li class="metric-item">
+                        <div>
+                            <div class="metric-name">Unusual Transit Time Pattern</div>
+                            <div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">
+                                CNSHA → USOAK route showing 45% faster transit than average
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.85rem;">Analyze</button>
+                    </li>
+                    <li class="metric-item">
+                        <div>
+                            <div class="metric-name">Container Weight Anomaly</div>
+                            <div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">
+                                Multiple containers showing 3σ deviation from mean weight
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.85rem;">Analyze</button>
+                    </li>
+                    <li class="metric-item">
+                        <div>
+                            <div class="metric-name">Cargo Value Spike</div>
+                            <div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">
+                                Electronics shipments showing 200% value increase
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.85rem;">Analyze</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Integrations Tab -->
+        <div id="integrations-content" class="tab-content" style="display: none;">
+            <div class="integration-grid">
+                <div class="integration-card">
+                    <div class="integration-logo">🚢</div>
+                    <div class="integration-name">Maersk</div>
+                    <div class="integration-score">96.5</div>
+                    <div style="font-size: 0.85rem; color: #666;">API Quality</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">📦</div>
+                    <div class="integration-name">MSC</div>
+                    <div class="integration-score warning">92.3</div>
+                    <div style="font-size: 0.85rem; color: #666;">API Quality</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">🌊</div>
+                    <div class="integration-name">CMA CGM</div>
+                    <div class="integration-score">94.8</div>
+                    <div style="font-size: 0.85rem; color: #666;">API Quality</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">📄</div>
+                    <div class="integration-name">EDI Gateway</div>
+                    <div class="integration-score">93.1</div>
+                    <div style="font-size: 0.85rem; color: #666;">Message Quality</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">📷</div>
+                    <div class="integration-name">OCR Engine</div>
+                    <div class="integration-score warning">88.4</div>
+                    <div style="font-size: 0.85rem; color: #666;">Accuracy Rate</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">📡</div>
+                    <div class="integration-name">IoT Platform</div>
+                    <div class="integration-score">99.2</div>
+                    <div style="font-size: 0.85rem; color: #666;">Data Quality</div>
+                </div>
+            </div>
+            
+            <!-- Integration Details -->
+            <div class="card" style="margin-top: 1.5rem;">
+                <div class="card-header">
+                    <h3 class="card-title">Integration Performance Details</h3>
+                </div>
+                <table class="violations-table">
+                    <thead>
+                        <tr>
+                            <th>Integration</th>
+                            <th>Uptime</th>
+                            <th>Response Time</th>
+                            <th>Error Rate</th>
+                            <th>Data Quality</th>
+                            <th>Last Issue</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Maersk API</strong></td>
+                            <td>99.95%</td>
+                            <td>245ms</td>
+                            <td>0.12%</td>
+                            <td>96.5%</td>
+                            <td>2 days ago</td>
+                            <td><span class="severity-badge" style="background: #d4f4dd; color: #2e7d32;">Healthy</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>MSC API</strong></td>
+                            <td>99.82%</td>
+                            <td>512ms</td>
+                            <td>0.45%</td>
+                            <td>92.3%</td>
+                            <td>6 hours ago</td>
+                            <td><span class="severity-badge severity-warning">Degraded</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>CMA CGM API</strong></td>
+                            <td>99.91%</td>
+                            <td>198ms</td>
+                            <td>0.23%</td>
+                            <td>94.8%</td>
+                            <td>1 day ago</td>
+                            <td><span class="severity-badge" style="background: #d4f4dd; color: #2e7d32;">Healthy</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Compliance Tab -->
+        <div id="compliance-content" class="tab-content" style="display: none;">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">IMO Compliance</h3>
+                        <span class="card-badge badge-success">Compliant</span>
+                    </div>
+                    <ul class="metric-list">
+                        <li class="metric-item">
+                            <span class="metric-name">Container Numbers</span>
+                            <span class="metric-value">✓ Pass</span>
+                        </li>
+                        <li class="metric-item">
+                            <span class="metric-name">Dangerous Goods</span>
+                            <span class="metric-value">✓ Pass</span>
+                        </li>
+                        <li class="metric-item">
+                            <span class="metric-name">Weight Limits</span>
+                            <span class="metric-value">✓ Pass</span>
+                        </li>
+                    </ul>
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e9ecef;">
+                        <strong>Overall Score:</strong> 100%
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">US Customs</h3>
+                        <span class="card-badge badge-warning">Review</span>
+                    </div>
+                    <ul class="metric-list">
+                        <li class="metric-item">
+                            <span class="metric-name">Documentation</span>
+                            <span class="metric-value">✓ Pass</span>
+                        </li>
+                        <li class="metric-item">
+                            <span class="metric-name">Clearance Sequence</span>
+                            <span class="metric-value" style="color: #856404;">⚠ Warning</span>
+                        </li>
+                        <li class="metric-item">
+                            <span class="metric-name">Bill of Lading</span>
+                            <span class="metric-value">✓ Pass</span>
+                        </li>
+                    </ul>
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e9ecef;">
+                        <strong>Overall Score:</strong> 95%
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">EU Customs</h3>
+                        <span class="card-badge badge-success">Compliant</span>
+                    </div>
+                    <ul class="metric-list">
+                        <li class="metric-item">
+                            <span class="metric-name">Documentation</span>
+                            <span class="metric-value">✓ Pass</span>
+                        </li>
+                        <li class="metric-item">
+                            <span class="metric-name">Currency Validation</span>
+                            <span class="metric-value">✓ Pass</span>
+                        </li>
+                        <li class="metric-item">
+                            <span class="metric-name">HS Codes</span>
+                            <span class="metric-value">✓ Pass</span>
+                        </li>
+                    </ul>
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e9ecef;">
+                        <strong>Overall Score:</strong> 98%
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Business Rules Status -->
+            <div class="card" style="margin-top: 1.5rem;">
+                <div class="card-header">
+                    <h3 class="card-title">Business Rule Validation Status</h3>
+                </div>
+                <ul class="metric-list">
+                    <li class="metric-item">
+                        <span class="metric-name">Container Number Validation</span>
+                        <span class="metric-value">
+                            <span>156,234 validated</span>
+                            <span style="color: #28a745; margin-left: 1rem;">99.8% pass</span>
+                        </span>
+                    </li>
+                    <li class="metric-item">
+                        <span class="metric-name">Date/Time Consistency</span>
+                        <span class="metric-value">
+                            <span>89,456 validated</span>
+                            <span style="color: #28a745; margin-left: 1rem;">97.2% pass</span>
+                        </span>
+                    </li>
+                    <li class="metric-item">
+                        <span class="metric-name">Geographic Validation</span>
+                        <span class="metric-value">
+                            <span>67,890 validated</span>
+                            <span style="color: #28a745; margin-left: 1rem;">96.5% pass</span>
+                        </span>
+                    </li>
+                    <li class="metric-item">
+                        <span class="metric-name">Currency & Units</span>
+                        <span class="metric-value">
+                            <span>45,678 validated</span>
+                            <span style="color: #ffc107; margin-left: 1rem;">94.3% pass</span>
+                        </span>
+                    </li>
+                    <li class="metric-item">
+                        <span class="metric-name">Document Compliance</span>
+                        <span class="metric-value">
+                            <span>34,567 validated</span>
+                            <span style="color: #28a745; margin-left: 1rem;">95.8% pass</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="generateReport()">Generate Quality Report</button>
+            <button class="btn btn-secondary" onclick="exportData()">Export Data</button>
+            <button class="btn btn-secondary" onclick="configureAlerts()">Configure Alerts</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate quality trend chart
+            generateQualityTrend();
+            
+            // Update live data
+            setInterval(updateLiveData, 5000);
+            
+            // Initialize tooltips
+            initializeTooltips();
+        });
+        
+        // Generate quality trend chart
+        function generateQualityTrend() {
+            const chart = document.getElementById('qualityTrend');
+            const days = 30;
+            
+            for (let i = 0; i < days; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'trend-bar';
+                
+                // Generate random quality score between 85-98
+                const score = 85 + Math.random() * 13;
+                bar.style.height = `${score}%`;
+                
+                // Add tooltip
+                const tooltip = document.createElement('div');
+                tooltip.className = 'trend-bar-tooltip';
+                const date = new Date();
+                date.setDate(date.getDate() - (days - i - 1));
+                tooltip.textContent = `${date.toLocaleDateString()}: ${score.toFixed(1)}%`;
+                bar.appendChild(tooltip);
+                
+                chart.appendChild(bar);
+            }
+        }
+        
+        // Switch tabs
+        function switchTab(tabName) {
+            // Hide all content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected content
+            document.getElementById(tabName + '-content').style.display = 'block';
+            
+            // Add active class to selected tab
+            event.target.classList.add('active');
+        }
+        
+        // Update live data
+        function updateLiveData() {
+            // Update validation count
+            const validationCount = document.querySelector('.header-stat-value');
+            const currentCount = parseInt(validationCount.textContent.replace(/,/g, ''));
+            const newCount = currentCount + Math.floor(Math.random() * 50 + 10);
+            validationCount.textContent = newCount.toLocaleString();
+            
+            // Update quality score with small variations
+            const scoreElement = document.querySelector('.score-value');
+            const currentScore = parseFloat(scoreElement.textContent);
+            const variation = (Math.random() - 0.5) * 0.2;
+            const newScore = Math.max(90, Math.min(99, currentScore + variation));
+            scoreElement.textContent = newScore.toFixed(1);
+            
+            // Update header score too
+            const headerScore = document.querySelectorAll('.header-stat-value')[1];
+            headerScore.textContent = newScore.toFixed(1) + '%';
+            
+            // Update SVG circle
+            const circle = document.querySelector('circle[stroke="#28a745"]');
+            const dashOffset = 502 * (1 - newScore / 100);
+            circle.setAttribute('stroke-dashoffset', dashOffset);
+        }
+        
+        // Generate report
+        function generateReport() {
+            alert('Generating comprehensive quality report...\nThis will include:\n- Executive summary\n- Detailed metrics by data type\n- Integration performance\n- Compliance status\n- Recommendations');
+        }
+        
+        // Export data
+        function exportData() {
+            alert('Export options:\n- CSV format\n- Excel workbook\n- PDF report\n- API endpoint');
+        }
+        
+        // Configure alerts
+        function configureAlerts() {
+            alert('Configure quality alerts:\n- Quality score thresholds\n- Violation notifications\n- Anomaly detection alerts\n- Compliance warnings');
+        }
+        
+        // Initialize tooltips
+        function initializeTooltips() {
+            // Add hover effects and tooltips as needed
+        }
+    </script>
+</body>
+</html>

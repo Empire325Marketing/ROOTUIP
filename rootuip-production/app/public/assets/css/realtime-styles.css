@@ -1,0 +1,486 @@
+/**
+ * ROOTUIP Real-Time Styles
+ * Animations and styles for real-time updates
+ */
+
+/* Real-time update animations */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 5px rgba(26, 115, 232, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(26, 115, 232, 0.8), 0 0 30px rgba(26, 115, 232, 0.6);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(26, 115, 232, 0.5);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Updated elements */
+.updated {
+    animation: pulse 0.5s ease-in-out;
+    background-color: rgba(26, 115, 232, 0.1) !important;
+    transition: background-color 1s ease-out;
+}
+
+.metric-updated {
+    animation: glow 0.5s ease-in-out;
+    color: var(--rootuip-primary) !important;
+    font-weight: 600;
+    transition: all 0.3s ease-out;
+}
+
+/* Real-time connection indicator */
+.realtime-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-size: 12px;
+    transition: all 0.3s ease;
+}
+
+.realtime-indicator.connected {
+    border: 1px solid #10b981;
+}
+
+.realtime-indicator.disconnected {
+    border: 1px solid #ef4444;
+}
+
+.realtime-indicator.connecting {
+    border: 1px solid #f59e0b;
+}
+
+.realtime-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.realtime-status-dot.connected {
+    background-color: #10b981;
+}
+
+.realtime-status-dot.disconnected {
+    background-color: #ef4444;
+    animation: none;
+}
+
+.realtime-status-dot.connecting {
+    background-color: #f59e0b;
+}
+
+/* Real-time alerts container */
+.realtime-alerts-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    width: 400px;
+    max-width: 90vw;
+    z-index: 9999;
+}
+
+/* Alert styles */
+.realtime-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: slideInRight 0.3s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.realtime-alert::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+}
+
+.realtime-alert.alert-critical {
+    border-left: 4px solid #ef4444;
+}
+
+.realtime-alert.alert-critical::before {
+    background: #ef4444;
+}
+
+.realtime-alert.alert-warning {
+    border-left: 4px solid #f59e0b;
+}
+
+.realtime-alert.alert-warning::before {
+    background: #f59e0b;
+}
+
+.realtime-alert.alert-info {
+    border-left: 4px solid #3b82f6;
+}
+
+.realtime-alert.alert-info::before {
+    background: #3b82f6;
+}
+
+.alert-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 20px;
+}
+
+.alert-critical .alert-icon {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.alert-warning .alert-icon {
+    background: #fef3c7;
+    color: #f59e0b;
+}
+
+.alert-info .alert-icon {
+    background: #dbeafe;
+    color: #3b82f6;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.alert-message {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.alert-time {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.alert-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 4px;
+    font-size: 16px;
+    transition: color 0.2s;
+}
+
+.alert-close:hover {
+    color: #4b5563;
+}
+
+/* Real-time status badges */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.status-badge.status-departed {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-badge.status-in_transit {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.status-arriving {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-badge.status-delivered {
+    background: #e0e7ff;
+    color: #3730a3;
+}
+
+/* Risk indicators */
+.risk-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.risk-indicator.risk-low {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.risk-indicator.risk-medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.risk-indicator.risk-high {
+    background: #fee2e2;
+    color: #991b1b;
+    animation: pulse 2s infinite;
+}
+
+.risk-value {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.risk-factors {
+    font-size: 12px;
+    margin-top: 4px;
+    list-style: none;
+    padding: 0;
+}
+
+/* Live data indicators */
+.live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #10b981;
+}
+
+.live-indicator::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #10b981;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+/* Container update styles */
+.container-row {
+    transition: all 0.3s ease;
+}
+
+.container-row.updated {
+    background: rgba(26, 115, 232, 0.05);
+    transform: scale(1.01);
+}
+
+.container-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Real-time charts */
+.realtime-chart {
+    position: relative;
+}
+
+.realtime-chart-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 4px;
+    font-size: 11px;
+    color: #10b981;
+}
+
+.realtime-chart-overlay::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #10b981;
+    border-radius: 50%;
+    animation: pulse 1s infinite;
+}
+
+/* Presence indicators */
+.presence-list {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.presence-user {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: #f3f4f6;
+    border-radius: 16px;
+    font-size: 12px;
+}
+
+.presence-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--rootuip-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.presence-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-left: 4px;
+}
+
+.presence-status.active {
+    background: #10b981;
+}
+
+.presence-status.idle {
+    background: #f59e0b;
+}
+
+.presence-status.away {
+    background: #6b7280;
+}
+
+/* Loading states */
+.realtime-loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.realtime-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #e5e7eb;
+    border-top-color: var(--rootuip-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .realtime-alerts-container {
+        width: calc(100vw - 40px);
+        right: 20px;
+        left: 20px;
+    }
+    
+    .realtime-alert {
+        padding: 12px;
+    }
+    
+    .alert-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .realtime-alert {
+        background: #1f2937;
+        color: #f3f4f6;
+    }
+    
+    .alert-message {
+        color: #d1d5db;
+    }
+    
+    .alert-time {
+        color: #9ca3af;
+    }
+    
+    .realtime-indicator {
+        background: #1f2937;
+        color: #f3f4f6;
+    }
+}

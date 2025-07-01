@@ -1,0 +1,222 @@
+# ROOTUIP Infrastructure Scaling Configuration
+
+# Load Balancer Configuration
+load_balancer:
+  type: "nginx"
+  upstream_servers:
+    - server: "app1.rootuip.com:3000"
+      weight: 1
+      max_fails: 3
+      fail_timeout: 30s
+    - server: "app2.rootuip.com:3000"
+      weight: 1
+      max_fails: 3
+      fail_timeout: 30s
+    - server: "app3.rootuip.com:3000"
+      weight: 1
+      max_fails: 3
+      fail_timeout: 30s
+  
+  health_check:
+    interval: 10s
+    timeout: 5s
+    unhealthy_threshold: 3
+    healthy_threshold: 2
+    path: "/health"
+    
+  rate_limiting:
+    zone_size: 10m
+    rate: 100r/s
+    burst: 50
+    nodelay: true
+
+# Auto-scaling Configuration
+autoscaling:
+  min_instances: 3
+  max_instances: 20
+  target_cpu_utilization: 70
+  target_memory_utilization: 80
+  scale_up_cooldown: 300
+  scale_down_cooldown: 600
+  
+  metrics:
+    - type: "cpu"
+      target: 70
+    - type: "memory"
+      target: 80
+    - type: "requests_per_second"
+      target: 1000
+    - type: "response_time"
+      target: 100
+      
+  policies:
+    scale_up:
+      adjustment_type: "percent_change"
+      scaling_adjustment: 50
+      cooldown: 300
+    scale_down:
+      adjustment_type: "change_in_capacity"
+      scaling_adjustment: -1
+      cooldown: 600
+
+# Disaster Recovery Configuration
+disaster_recovery:
+  backup:
+    schedule: "0 2 * * *"  # Daily at 2 AM
+    retention_days: 30
+    destinations:
+      - type: "s3"
+        bucket: "rootuip-backups"
+        region: "us-east-1"
+      - type: "azure"
+        container: "rootuip-backups"
+        storage_account: "rootuipdr"
+    
+    databases:
+      postgresql:
+        method: "pg_dump"
+        compression: true
+        parallel: 4
+      redis:
+        method: "bgsave"
+        
+  replication:
+    primary_region: "us-east-1"
+    secondary_regions:
+      - "us-west-2"
+      - "eu-west-1"
+    replication_lag_threshold: 60
+    
+  recovery_objectives:
+    rto: 4  # Recovery Time Objective in hours
+    rpo: 1  # Recovery Point Objective in hours
+
+# Security Monitoring Configuration
+security:
+  vulnerability_scanning:
+    schedule: "0 0 * * 0"  # Weekly on Sunday
+    tools:
+      - name: "OWASP ZAP"
+        targets:
+          - "https://app.rootuip.com"
+          - "https://api.rootuip.com"
+      - name: "Trivy"
+        scan_images: true
+        scan_filesystem: true
+        
+  intrusion_detection:
+    enabled: true
+    rules:
+      - name: "SQL Injection Detection"
+        pattern: "(?i)(union.*select|select.*from|insert.*into|delete.*from)"
+        action: "block"
+      - name: "XSS Detection"
+        pattern: "(?i)(<script|javascript:|onerror=|onload=)"
+        action: "block"
+        
+  log_monitoring:
+    sources:
+      - "/var/log/nginx/access.log"
+      - "/var/log/nginx/error.log"
+      - "/var/log/postgresql/*.log"
+      - "/var/log/app/*.log"
+    alerts:
+      - pattern: "(?i)(error|critical|fatal)"
+        severity: "high"
+      - pattern: "(?i)(warning|warn)"
+        severity: "medium"
+
+# Performance Optimization Settings
+performance:
+  caching:
+    redis:
+      maxmemory: "4gb"
+      maxmemory_policy: "allkeys-lru"
+      tcp_keepalive: 60
+      timeout: 300
+      
+  database:
+    connection_pool:
+      min_size: 10
+      max_size: 100
+      acquisition_timeout: 5000
+    query_optimization:
+      statement_timeout: 5000
+      log_slow_queries: true
+      slow_query_threshold: 100
+      
+  cdn:
+    provider: "cloudflare"
+    cache_rules:
+      - path: "*.js"
+        ttl: 86400
+      - path: "*.css"
+        ttl: 86400
+      - path: "*.jpg|*.png|*.gif"
+        ttl: 2592000
+    purge_on_deploy: true
+
+# Monitoring and Alerting
+monitoring:
+  metrics_collection:
+    interval: 10s
+    retention: 90d
+    
+  alerts:
+    - name: "High CPU Usage"
+      condition: "cpu_usage > 80"
+      duration: "5m"
+      severity: "warning"
+      channels: ["email", "slack"]
+      
+    - name: "Low Disk Space"
+      condition: "disk_free < 20"
+      duration: "5m"
+      severity: "critical"
+      channels: ["email", "slack", "pagerduty"]
+      
+    - name: "API Response Time"
+      condition: "response_time_p95 > 200"
+      duration: "5m"
+      severity: "warning"
+      channels: ["email", "slack"]
+      
+    - name: "Error Rate High"
+      condition: "error_rate > 1"
+      duration: "5m"
+      severity: "critical"
+      channels: ["email", "slack", "pagerduty"]
+      
+  notification_channels:
+    email:
+      smtp_server: "smtp.sendgrid.net"
+      recipients:
+        - "ops@rootuip.com"
+        - "oncall@rootuip.com"
+    slack:
+      webhook_url: "${SLACK_WEBHOOK_URL}"
+      channel: "#alerts"
+    pagerduty:
+      integration_key: "${PAGERDUTY_KEY}"
+
+# Infrastructure as Code
+infrastructure:
+  terraform:
+    backend: "s3"
+    state_bucket: "rootuip-terraform-state"
+    lock_table: "terraform-locks"
+    
+  kubernetes:
+    cluster_name: "rootuip-prod"
+    node_pools:
+      - name: "general"
+        machine_type: "n2-standard-4"
+        min_nodes: 3
+        max_nodes: 10
+        autoscaling: true
+      - name: "ml-processing"
+        machine_type: "n2-highmem-8"
+        gpu_type: "nvidia-tesla-t4"
+        min_nodes: 1
+        max_nodes: 5
+        autoscaling: true

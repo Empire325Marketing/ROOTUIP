@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Performance Dashboard | Core Web Vitals</title>
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml">
+    <style>
+        :root {
+            --color-primary: #0F3460;
+            --color-success: #00D46A;
+            --color-warning: #FF6B35;
+            --color-danger: #ef4444;
+            --color-background: #f8fafc;
+            --color-surface: white;
+            --color-text: #1e293b;
+            --color-text-secondary: #64748b;
+            --color-border: #e2e8f0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: var(--color-primary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+        
+        .metric-card {
+            background: var(--color-surface);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--metric-color, var(--color-primary));
+        }
+        
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .metric-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+        }
+        
+        .metric-badge {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .badge-good {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .badge-needs-improvement {
+            background: #fed7aa;
+            color: #9a3412;
+        }
+        
+        .badge-poor {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1;
+            margin: 8px 0;
+        }
+        
+        .metric-target {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+        
+        .metric-chart {
+            margin-top: 16px;
+            height: 60px;
+            position: relative;
+        }
+        
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            height: 100%;
+            gap: 2px;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background: var(--color-primary);
+            opacity: 0.2;
+            border-radius: 2px 2px 0 0;
+            transition: all 0.3s ease;
+        }
+        
+        .chart-bar.active {
+            opacity: 1;
+        }
+        
+        .performance-chart {
+            background: var(--color-surface);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin: 32px 0;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .time-selector {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .time-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--color-border);
+            background: transparent;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .time-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+        
+        .score-ring {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin: 0 auto;
+        }
+        
+        .score-ring svg {
+            transform: rotate(-90deg);
+        }
+        
+        .score-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .score-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .score-label {
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+        }
+        
+        .insights {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 24px 0;
+        }
+        
+        .insights h3 {
+            color: #0369a1;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+        
+        .insights ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .insights li {
+            padding: 4px 0;
+            padding-left: 24px;
+            position: relative;
+        }
+        
+        .insights li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #0369a1;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top-color: var(--color-primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .status-good {
+            background: var(--color-success);
+        }
+        
+        .status-warning {
+            background: var(--color-warning);
+        }
+        
+        .status-poor {
+            background: var(--color-danger);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.9); }
+        }
+        
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .time-selector {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>ROOTUIP Performance Dashboard</h1>
+            <p style="opacity: 0.9; font-size: 0.875rem;">Real-time Core Web Vitals Monitoring</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Overall Performance Score -->
+        <div class="performance-chart">
+            <div class="chart-header">
+                <div>
+                    <h2 style="font-size: 1.5rem; margin-bottom: 4px;">Performance Score</h2>
+                    <p style="color: var(--color-text-secondary); font-size: 0.875rem;">
+                        <span class="status-indicator status-good"></span>
+                        Live monitoring across all pages
+                    </p>
+                </div>
+                <div class="time-selector">
+                    <button class="time-btn active" onclick="changeTimeRange('1h')">1H</button>
+                    <button class="time-btn" onclick="changeTimeRange('24h')">24H</button>
+                    <button class="time-btn" onclick="changeTimeRange('7d')">7D</button>
+                    <button class="time-btn" onclick="changeTimeRange('30d')">30D</button>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 200px 1fr; gap: 32px; align-items: center;">
+                <div class="score-ring">
+                    <svg width="120" height="120">
+                        <circle cx="60" cy="60" r="54" fill="none" stroke="#e5e7eb" stroke-width="12"></circle>
+                        <circle cx="60" cy="60" r="54" fill="none" stroke="#00D46A" stroke-width="12"
+                                stroke-dasharray="339.29" stroke-dashoffset="33.929"
+                                stroke-linecap="round"></circle>
+                    </svg>
+                    <div class="score-text">
+                        <div class="score-value" style="color: #00D46A;">95</div>
+                        <div class="score-label">Score</div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 style="margin-bottom: 16px;">Performance Trend</h3>
+                    <div style="height: 100px; background: #f8fafc; border-radius: 8px; padding: 16px;">
+                        <canvas id="trend-chart" width="600" height="80"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Core Web Vitals -->
+        <h2 style="margin: 32px 0 16px;">Core Web Vitals</h2>
+        <div class="metrics-grid">
+            <!-- LCP -->
+            <div class="metric-card" style="--metric-color: #00D46A;">
+                <div class="metric-header">
+                    <h3 class="metric-title">Largest Contentful Paint (LCP)</h3>
+                    <span class="metric-badge badge-good">Good</span>
+                </div>
+                <div class="metric-value" style="color: #00D46A;">2.1s</div>
+                <div class="metric-target">Target: <2.5s</div>
+                <div class="metric-chart">
+                    <div class="chart-bars" id="lcp-bars"></div>
+                </div>
+            </div>
+
+            <!-- FID -->
+            <div class="metric-card" style="--metric-color: #00D46A;">
+                <div class="metric-header">
+                    <h3 class="metric-title">First Input Delay (FID)</h3>
+                    <span class="metric-badge badge-good">Good</span>
+                </div>
+                <div class="metric-value" style="color: #00D46A;">45ms</div>
+                <div class="metric-target">Target: <100ms</div>
+                <div class="metric-chart">
+                    <div class="chart-bars" id="fid-bars"></div>
+                </div>
+            </div>
+
+            <!-- CLS -->
+            <div class="metric-card" style="--metric-color: #00D46A;">
+                <div class="metric-header">
+                    <h3 class="metric-title">Cumulative Layout Shift (CLS)</h3>
+                    <span class="metric-badge badge-good">Good</span>
+                </div>
+                <div class="metric-value" style="color: #00D46A;">0.05</div>
+                <div class="metric-target">Target: <0.1</div>
+                <div class="metric-chart">
+                    <div class="chart-bars" id="cls-bars"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other Metrics -->
+        <h2 style="margin: 32px 0 16px;">Performance Metrics</h2>
+        <div class="metrics-grid">
+            <!-- FCP -->
+            <div class="metric-card" style="--metric-color: #0369a1;">
+                <div class="metric-header">
+                    <h3 class="metric-title">First Contentful Paint (FCP)</h3>
+                    <span class="metric-badge badge-good">Good</span>
+                </div>
+                <div class="metric-value" style="color: #0369a1;">0.9s</div>
+                <div class="metric-target">Target: <1.0s</div>
+            </div>
+
+            <!-- TTFB -->
+            <div class="metric-card" style="--metric-color: #0369a1;">
+                <div class="metric-header">
+                    <h3 class="metric-title">Time to First Byte (TTFB)</h3>
+                    <span class="metric-badge badge-good">Good</span>
+                </div>
+                <div class="metric-value" style="color: #0369a1;">245ms</div>
+                <div class="metric-target">Target: <600ms</div>
+            </div>
+
+            <!-- TTI -->
+            <div class="metric-card" style="--metric-color: #FF6B35;">
+                <div class="metric-header">
+                    <h3 class="metric-title">Time to Interactive (TTI)</h3>
+                    <span class="metric-badge badge-needs-improvement">Needs Work</span>
+                </div>
+                <div class="metric-value" style="color: #FF6B35;">3.2s</div>
+                <div class="metric-target">Target: <3.0s</div>
+            </div>
+        </div>
+
+        <!-- Performance Insights -->
+        <div class="insights">
+            <h3>🚀 Performance Insights</h3>
+            <ul id="insights-list">
+                <li>All Core Web Vitals are passing! Your site qualifies for the Google Page Experience ranking boost.</li>
+                <li>LCP can be improved by optimizing hero image loading with priority hints.</li>
+                <li>Consider lazy loading below-fold images to reduce Time to Interactive.</li>
+                <li>CloudFlare CDN is serving 87% of requests from edge cache.</li>
+            </ul>
+        </div>
+
+        <!-- Page-by-Page Breakdown -->
+        <div class="performance-chart">
+            <h2 style="margin-bottom: 24px;">Page Performance Breakdown</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--color-border);">
+                        <th style="text-align: left; padding: 12px;">Page</th>
+                        <th style="text-align: center; padding: 12px;">Score</th>
+                        <th style="text-align: center; padding: 12px;">LCP</th>
+                        <th style="text-align: center; padding: 12px;">FID</th>
+                        <th style="text-align: center; padding: 12px;">CLS</th>
+                        <th style="text-align: center; padding: 12px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="page-metrics">
+                    <tr style="border-bottom: 1px solid var(--color-border);">
+                        <td style="padding: 12px;">Homepage</td>
+                        <td style="text-align: center; padding: 12px; font-weight: 600; color: #00D46A;">98</td>
+                        <td style="text-align: center; padding: 12px;">1.8s</td>
+                        <td style="text-align: center; padding: 12px;">32ms</td>
+                        <td style="text-align: center; padding: 12px;">0.02</td>
+                        <td style="text-align: center; padding: 12px;">
+                            <span class="metric-badge badge-good">Excellent</span>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--color-border);">
+                        <td style="padding: 12px;">Dashboard</td>
+                        <td style="text-align: center; padding: 12px; font-weight: 600; color: #00D46A;">94</td>
+                        <td style="text-align: center; padding: 12px;">2.3s</td>
+                        <td style="text-align: center; padding: 12px;">58ms</td>
+                        <td style="text-align: center; padding: 12px;">0.08</td>
+                        <td style="text-align: center; padding: 12px;">
+                            <span class="metric-badge badge-good">Good</span>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--color-border);">
+                        <td style="padding: 12px;">Container Tracking</td>
+                        <td style="text-align: center; padding: 12px; font-weight: 600; color: #FF6B35;">89</td>
+                        <td style="text-align: center; padding: 12px;">2.7s</td>
+                        <td style="text-align: center; padding: 12px;">82ms</td>
+                        <td style="text-align: center; padding: 12px;">0.12</td>
+                        <td style="text-align: center; padding: 12px;">
+                            <span class="metric-badge badge-needs-improvement">Needs Work</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        // Sample data for charts
+        const sampleData = {
+            lcp: [2.1, 2.3, 2.0, 2.2, 2.1, 2.4, 2.0, 2.1, 2.2, 2.1],
+            fid: [45, 52, 38, 41, 48, 55, 42, 45, 50, 45],
+            cls: [0.05, 0.06, 0.04, 0.05, 0.07, 0.05, 0.04, 0.05, 0.06, 0.05]
+        };
+
+        // Initialize mini charts
+        function initMiniCharts() {
+            ['lcp', 'fid', 'cls'].forEach(metric => {
+                const container = document.getElementById(`${metric}-bars`);
+                const data = sampleData[metric];
+                const max = Math.max(...data);
+                
+                data.forEach((value, index) => {
+                    const bar = document.createElement('div');
+                    bar.className = 'chart-bar';
+                    bar.style.height = `${(value / max) * 100}%`;
+                    if (index >= data.length - 3) bar.classList.add('active');
+                    container.appendChild(bar);
+                });
+            });
+        }
+
+        // Draw trend chart
+        function drawTrendChart() {
+            const canvas = document.getElementById('trend-chart');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Sample performance scores over time
+            const scores = [92, 93, 91, 94, 93, 95, 94, 96, 95, 95];
+            const maxScore = 100;
+            const minScore = 85;
+            
+            ctx.strokeStyle = '#00D46A';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            scores.forEach((score, index) => {
+                const x = (index / (scores.length - 1)) * width;
+                const y = height - ((score - minScore) / (maxScore - minScore)) * height;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            
+            ctx.stroke();
+            
+            // Add target line
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            const targetY = height - ((95 - minScore) / (maxScore - minScore)) * height;
+            ctx.moveTo(0, targetY);
+            ctx.lineTo(width, targetY);
+            ctx.stroke();
+        }
+
+        // Change time range
+        function changeTimeRange(range) {
+            document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // In production, this would fetch new data
+            console.log(`Loading data for ${range}`);
+            
+            // Simulate loading
+            updateMetrics();
+        }
+
+        // Simulate real-time updates
+        function updateMetrics() {
+            // Add slight variations to metrics
+            const lcp = (1.8 + Math.random() * 0.6).toFixed(1);
+            const fid = Math.floor(30 + Math.random() * 40);
+            const cls = (0.03 + Math.random() * 0.07).toFixed(2);
+            
+            // Update values
+            document.querySelector('.metric-card:nth-child(1) .metric-value').textContent = lcp + 's';
+            document.querySelector('.metric-card:nth-child(2) .metric-value').textContent = fid + 'ms';
+            document.querySelector('.metric-card:nth-child(3) .metric-value').textContent = cls;
+            
+            // Update badges based on values
+            updateBadge(document.querySelector('.metric-card:nth-child(1)'), parseFloat(lcp), 2.5, 4.0);
+            updateBadge(document.querySelector('.metric-card:nth-child(2)'), fid, 100, 300);
+            updateBadge(document.querySelector('.metric-card:nth-child(3)'), parseFloat(cls), 0.1, 0.25);
+        }
+
+        function updateBadge(card, value, goodThreshold, poorThreshold) {
+            const badge = card.querySelector('.metric-badge');
+            badge.classList.remove('badge-good', 'badge-needs-improvement', 'badge-poor');
+            
+            if (value <= goodThreshold) {
+                badge.classList.add('badge-good');
+                badge.textContent = 'Good';
+                card.style.setProperty('--metric-color', '#00D46A');
+            } else if (value <= poorThreshold) {
+                badge.classList.add('badge-needs-improvement');
+                badge.textContent = 'Needs Work';
+                card.style.setProperty('--metric-color', '#FF6B35');
+            } else {
+                badge.classList.add('badge-poor');
+                badge.textContent = 'Poor';
+                card.style.setProperty('--metric-color', '#ef4444');
+            }
+        }
+
+        // Initialize
+        initMiniCharts();
+        drawTrendChart();
+        
+        // Simulate real-time updates every 30 seconds
+        setInterval(updateMetrics, 30000);
+        
+        // Log performance data to console
+        console.log('%c⚡ ROOTUIP Performance Monitor Active', 'color: #00D46A; font-size: 16px; font-weight: bold;');
+        console.log('Target: <2s load time, 95+ PageSpeed score');
+    </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+name: Deploy Missing Files to ROOTUIP
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'dashboard.html'
+      - 'container-tracking-interface.html'
+      - 'api-playground.html'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y rsync sshpass
+        
+    - name: Deploy files to VPS
+      env:
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_USER: ${{ secrets.VPS_USER }}
+        VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+      run: |
+        echo "Deploying missing files to ROOTUIP VPS..."
+        
+        # Deploy dashboard.html
+        if [ -f "dashboard.html" ]; then
+          echo "Deploying dashboard.html..."
+          sshpass -p "$VPS_PASSWORD" rsync -avz dashboard.html $VPS_USER@$VPS_HOST:/var/www/rootuip/
+        fi
+        
+        # Deploy container-tracking-interface.html
+        if [ -f "container-tracking-interface.html" ]; then
+          echo "Deploying container-tracking-interface.html..."
+          sshpass -p "$VPS_PASSWORD" rsync -avz container-tracking-interface.html $VPS_USER@$VPS_HOST:/var/www/rootuip/
+        fi
+        
+        # Deploy api-playground.html
+        if [ -f "api-playground.html" ]; then
+          echo "Deploying api-playground.html..."
+          sshpass -p "$VPS_PASSWORD" rsync -avz api-playground.html $VPS_USER@$VPS_HOST:/var/www/rootuip/
+        fi
+        
+    - name: Test deployed files
+      run: |
+        echo "Testing deployed files..."
+        
+        # Wait for deployment to complete
+        sleep 10
+        
+        # Test each file
+        echo "Testing dashboard.html..."
+        curl -I https://rootuip.com/dashboard.html
+        
+        echo "Testing container-tracking-interface.html..."
+        curl -I https://rootuip.com/container-tracking-interface.html
+        
+        echo "Testing api-playground.html..."
+        curl -I https://rootuip.com/api-playground.html
+        
+    - name: Notification
+      run: |
+        echo "Deployment completed!"
+        echo "Files should now be accessible at:"
+        echo "- https://rootuip.com/dashboard.html"
+        echo "- https://rootuip.com/container-tracking-interface.html"
+        echo "- https://rootuip.com/api-playground.html"

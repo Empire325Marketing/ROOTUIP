@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Partner Portal - Developer Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f7fa;
+            color: #2c3e50;
+        }
+        
+        /* Layout */
+        .app-container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 2rem 0;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+        
+        .nav-item {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-item:hover {
+            background: #34495e;
+            color: white;
+        }
+        
+        .nav-item.active {
+            background: #34495e;
+            color: white;
+            border-left-color: #3498db;
+        }
+        
+        .nav-icon {
+            margin-right: 0.75rem;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        /* Header */
+        .main-header {
+            background: var(--bg-dark);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 5px;
+            border-radius: 10px;
+        }
+        
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 2rem;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--bg-dark);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-title {
+            color: #6c757d;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .stat-icon {
+            font-size: 1.5rem;
+            opacity: 0.6;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-change {
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .stat-change.positive {
+            color: #27ae60;
+        }
+        
+        .stat-change.negative {
+            color: #e74c3c;
+        }
+        
+        /* Charts */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-card {
+            background: var(--bg-dark);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .chart-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .chart-control {
+            padding: 0.25rem 0.75rem;
+            border: 1px solid #e9ecef;
+            background: var(--bg-dark);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        
+        .chart-control:hover,
+        .chart-control.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        /* Tables */
+        .table-card {
+            background: var(--bg-dark);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            background: #f8f9fa;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        td {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-secondary {
+            background: #e9ecef;
+            color: #2c3e50;
+        }
+        
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.85rem;
+        }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e9ecef;
+            margin-bottom: 2rem;
+        }
+        
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab:hover {
+            color: #3498db;
+        }
+        
+        .tab.active {
+            color: #3498db;
+            border-bottom-color: #3498db;
+        }
+        
+        /* Alert */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left: 4px solid #bee5eb;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #c3e6cb;
+        }
+        
+        /* Revenue Chart Placeholder */
+        .revenue-chart {
+            height: 300px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 1rem;
+        }
+        
+        .chart-bar {
+            background: #3498db;
+            width: 30px;
+            border-radius: 5px 5px 0 0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .chart-bar:hover {
+            background: #2980b9;
+        }
+        
+        /* API Usage Donut */
+        .api-usage-chart {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+        }
+        
+        .donut-chart {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #3498db 0deg 126deg,
+                #27ae60 126deg 234deg,
+                #e74c3c 234deg 306deg,
+                #f39c12 306deg
+            );
+            position: relative;
+        }
+        
+        .donut-hole {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: var(--bg-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .donut-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .donut-label {
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span>🌐</span>
+                    <span>Partner Portal</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active">
+                    <span class="nav-icon">📊</span>Dashboard
+                </a>
+                <a href="#integrations" class="nav-item">
+                    <span class="nav-icon">🔌</span>My Integrations
+                </a>
+                <a href="#analytics" class="nav-item">
+                    <span class="nav-icon">📈</span>Analytics
+                </a>
+                <a href="#revenue" class="nav-item">
+                    <span class="nav-icon">💰</span>Revenue
+                </a>
+                <a href="#api-docs" class="nav-item">
+                    <span class="nav-icon">📚</span>API Docs
+                </a>
+                <a href="#sandbox" class="nav-item">
+                    <span class="nav-icon">🧪</span>Sandbox
+                </a>
+                <a href="#certification" class="nav-item">
+                    <span class="nav-icon">🏆</span>Certification
+                </a>
+                <a href="#support" class="nav-item">
+                    <span class="nav-icon">💬</span>Support
+                </a>
+                <a href="#settings" class="nav-item">
+                    <span class="nav-icon">⚙️</span>Settings
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <h1 class="header-title">Partner Dashboard</h1>
+                <div class="header-actions">
+                    <div class="notification-bell">
+                        🔔
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <button class="btn btn-primary">
+                        + New Integration
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Welcome Alert -->
+                <div class="alert alert-info">
+                    <span>ℹ️</span>
+                    <div>
+                        <strong>Welcome to ROOTUIP Partner Portal!</strong> Complete your certification to unlock premium features.
+                        <a href="#certification" style="margin-left: 1rem;">Get Certified →</a>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Active Integrations</span>
+                            <span class="stat-icon">🔌</span>
+                        </div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-change positive">
+                            <span>↑</span> 1 this month
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Total API Calls</span>
+                            <span class="stat-icon">📡</span>
+                        </div>
+                        <div class="stat-value">156.7K</div>
+                        <div class="stat-change positive">
+                            <span>↑</span> 23.5% vs last month
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Active Customers</span>
+                            <span class="stat-icon">👥</span>
+                        </div>
+                        <div class="stat-value">487</div>
+                        <div class="stat-change positive">
+                            <span>↑</span> 45 new this month
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Revenue (MTD)</span>
+                            <span class="stat-icon">💵</span>
+                        </div>
+                        <div class="stat-value">$12,456</div>
+                        <div class="stat-change positive">
+                            <span>↑</span> 18.2% vs last month
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="chart-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Revenue Trend</h3>
+                            <div class="chart-controls">
+                                <button class="chart-control">7D</button>
+                                <button class="chart-control active">30D</button>
+                                <button class="chart-control">90D</button>
+                            </div>
+                        </div>
+                        <div class="revenue-chart">
+                            <div class="chart-bar" style="height: 60%"></div>
+                            <div class="chart-bar" style="height: 80%"></div>
+                            <div class="chart-bar" style="height: 70%"></div>
+                            <div class="chart-bar" style="height: 90%"></div>
+                            <div class="chart-bar" style="height: 85%"></div>
+                            <div class="chart-bar" style="height: 95%"></div>
+                            <div class="chart-bar" style="height: 100%"></div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">API Usage by Type</h3>
+                        </div>
+                        <div class="api-usage-chart">
+                            <div class="donut-chart">
+                                <div class="donut-hole">
+                                    <div class="donut-value">156.7K</div>
+                                    <div class="donut-label">Total Calls</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="width: 12px; height: 12px; background: #3498db; border-radius: 2px;"></span>
+                                    Tracking
+                                </span>
+                                <span>35%</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="width: 12px; height: 12px; background: #27ae60; border-radius: 2px;"></span>
+                                    Booking
+                                </span>
+                                <span>30%</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="width: 12px; height: 12px; background: #e74c3c; border-radius: 2px;"></span>
+                                    Documents
+                                </span>
+                                <span>20%</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="width: 12px; height: 12px; background: #f39c12; border-radius: 2px;"></span>
+                                    Other
+                                </span>
+                                <span>15%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Table -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>Recent Integration Activity</h3>
+                        <a href="#" class="btn btn-secondary btn-sm">View All</a>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Integration</th>
+                                <th>Customer</th>
+                                <th>Activity</th>
+                                <th>Status</th>
+                                <th>Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Maersk Tracking</strong></td>
+                                <td>Global Logistics Inc</td>
+                                <td>API Call - Container Track</td>
+                                <td><span style="color: #27ae60;">✓ Success</span></td>
+                                <td>2 min ago</td>
+                                <td><button class="btn btn-secondary btn-sm">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>DHL Forwarding</strong></td>
+                                <td>Express Shipping Co</td>
+                                <td>New Installation</td>
+                                <td><span style="color: #3498db;">⚡ Active</span></td>
+                                <td>15 min ago</td>
+                                <td><button class="btn btn-secondary btn-sm">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Customs Filing</strong></td>
+                                <td>Import Solutions Ltd</td>
+                                <td>Document Upload</td>
+                                <td><span style="color: #27ae60;">✓ Success</span></td>
+                                <td>1 hour ago</td>
+                                <td><button class="btn btn-secondary btn-sm">View</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Maersk Tracking</strong></td>
+                                <td>Ocean Freight Corp</td>
+                                <td>Webhook Event</td>
+                                <td><span style="color: #e74c3c;">⚠ Failed</span></td>
+                                <td>2 hours ago</td>
+                                <td><button class="btn btn-secondary btn-sm">Debug</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>DHL Forwarding</strong></td>
+                                <td>Fast Cargo Inc</td>
+                                <td>Rate Quote Request</td>
+                                <td><span style="color: #27ae60;">✓ Success</span></td>
+                                <td>3 hours ago</td>
+                                <td><button class="btn btn-secondary btn-sm">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Quick Actions -->
+                <div style="margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1.5rem;">Quick Actions</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <a href="#" class="btn btn-secondary" style="text-align: center; padding: 1.5rem;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📚</div>
+                            <div>View API Docs</div>
+                        </a>
+                        <a href="#" class="btn btn-secondary" style="text-align: center; padding: 1.5rem;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🧪</div>
+                            <div>Test in Sandbox</div>
+                        </a>
+                        <a href="#" class="btn btn-secondary" style="text-align: center; padding: 1.5rem;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">💳</div>
+                            <div>Payout Settings</div>
+                        </a>
+                        <a href="#" class="btn btn-secondary" style="text-align: center; padding: 1.5rem;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📊</div>
+                            <div>Download Reports</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update page title
+                const section = this.textContent.trim();
+                document.querySelector('.header-title').textContent = section;
+                
+                // Here you would load the appropriate content
+                console.log('Loading section:', section);
+            });
+        });
+
+        // Chart controls
+        document.querySelectorAll('.chart-control').forEach(control => {
+            control.addEventListener('click', function() {
+                document.querySelectorAll('.chart-control').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Here you would update the chart data
+                console.log('Updating chart for period:', this.textContent);
+            });
+        });
+
+        // Simulate real-time updates
+        setInterval(() => {
+            // Update API calls stat
+            const apiCallsStat = document.querySelector('.stat-value');
+            const currentValue = parseFloat(apiCallsStat.textContent.replace('K', ''));
+            const newValue = (currentValue + Math.random() * 0.1).toFixed(1);
+            apiCallsStat.textContent = newValue + 'K';
+        }, 5000);
+
+        // New Integration button
+        document.querySelector('.btn-primary').addEventListener('click', function() {
+            alert('This would open the new integration wizard');
+        });
+
+        // Notification bell
+        document.querySelector('.notification-bell').addEventListener('click', function() {
+            alert('You have 3 new notifications:\n\n1. New customer installed your integration\n2. Monthly payout processed: $12,456\n3. API rate limit warning for customer XYZ');
+        });
+    </script>
+</body>
+</html>

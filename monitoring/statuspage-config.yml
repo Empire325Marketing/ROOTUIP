@@ -1,0 +1,173 @@
+# StatusPage.io Configuration for status.rootuip.com
+# This configuration should be applied via StatusPage API or UI
+
+page:
+  name: "ROOTUIP System Status"
+  url: "https://status.rootuip.com"
+  time_zone: "America/New_York"
+  subdomain: "rootuip"
+
+components:
+  - name: "API Gateway"
+    description: "Main API endpoint for all services"
+    group: "Core Infrastructure"
+    showcase: true
+    
+  - name: "Authentication Service"
+    description: "User authentication and authorization"
+    group: "Core Infrastructure"
+    showcase: true
+    
+  - name: "ML Prediction Engine"
+    description: "D&D risk prediction service (94% accuracy)"
+    group: "ML Services"
+    showcase: true
+    
+  - name: "Document Processing"
+    description: "OCR and document analysis"
+    group: "ML Services"
+    showcase: true
+    
+  - name: "Web Application"
+    description: "Main web interface"
+    group: "User Interface"
+    showcase: true
+    
+  - name: "Demo Booking System"
+    description: "Schedule demo appointments"
+    group: "Business Features"
+    showcase: true
+    
+  - name: "ROI Calculator"
+    description: "Calculate potential savings"
+    group: "Business Features"
+    showcase: true
+    
+  - name: "Database"
+    description: "Primary data storage"
+    group: "Core Infrastructure"
+    showcase: false
+    
+  - name: "CDN"
+    description: "Content delivery network"
+    group: "Infrastructure"
+    showcase: false
+
+component_groups:
+  - name: "Core Infrastructure"
+    description: "Essential system components"
+    position: 1
+    
+  - name: "ML Services"
+    description: "Machine learning and AI features"
+    position: 2
+    
+  - name: "User Interface"
+    description: "Web and mobile interfaces"
+    position: 3
+    
+  - name: "Business Features"
+    description: "Business-specific functionality"
+    position: 4
+    
+  - name: "Infrastructure"
+    description: "Supporting infrastructure"
+    position: 5
+
+metrics:
+  - name: "API Response Time"
+    suffix: "ms"
+    y_axis_min: 0
+    y_axis_max: 2000
+    display: true
+    tooltip_description: "Average API response time"
+    
+  - name: "ML Prediction Accuracy"
+    suffix: "%"
+    y_axis_min: 90
+    y_axis_max: 100
+    display: true
+    tooltip_description: "Current D&D prevention accuracy"
+    
+  - name: "System Uptime"
+    suffix: "%"
+    y_axis_min: 99
+    y_axis_max: 100
+    display: true
+    tooltip_description: "Overall system availability"
+
+incident_templates:
+  - name: "Investigating Degraded Performance"
+    update: "We are currently investigating reports of degraded performance. Our team is working to identify and resolve the issue."
+    components: ["API Gateway"]
+    status: "investigating"
+    
+  - name: "Scheduled Maintenance"
+    update: "We will be performing scheduled maintenance on our systems. Some services may be temporarily unavailable."
+    components: ["all"]
+    status: "scheduled"
+    
+  - name: "Service Restored"
+    update: "The issue has been resolved and all services are operating normally. We apologize for any inconvenience."
+    components: ["affected"]
+    status: "resolved"
+
+automation:
+  webhook_notifications:
+    - url: "https://app.rootuip.com/webhooks/statuspage"
+      events: ["incident.create", "incident.update", "incident.resolve"]
+      
+  component_automation:
+    - component: "API Gateway"
+      automation_email: "api-health@rootuip.com"
+      
+    - component: "ML Prediction Engine"
+      automation_email: "ml-health@rootuip.com"
+
+scheduled_maintenances:
+  - name: "Weekly Database Optimization"
+    scheduled_for: "Every Sunday 2:00 AM EST"
+    scheduled_until: "Every Sunday 3:00 AM EST"
+    components: ["Database"]
+    message: "Routine database optimization and backup verification"
+    
+  - name: "Monthly Security Updates"
+    scheduled_for: "First Tuesday of each month, 3:00 AM EST"
+    scheduled_until: "First Tuesday of each month, 5:00 AM EST"
+    components: ["all"]
+    message: "Security patches and system updates"
+
+custom_css: |
+  /* ROOTUIP Brand Colors */
+  .unresolved-incident {
+    border-left-color: #e53e3e;
+  }
+  
+  .scheduled-maintenance {
+    border-left-color: #f6d55c;
+  }
+  
+  .operational {
+    background-color: #48bb78;
+  }
+  
+  .degraded-performance {
+    background-color: #ed8936;
+  }
+  
+  .partial-outage {
+    background-color: #e53e3e;
+  }
+  
+  .major-outage {
+    background-color: #9f1239;
+  }
+  
+  /* Custom header */
+  .page-header {
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+  }
+  
+  .page-header h1 {
+    color: #4fd1c5;
+  }

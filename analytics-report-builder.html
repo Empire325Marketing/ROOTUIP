@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Report Builder - Custom Analytics & Reporting</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/rootuip-logo.svg">
+    <link rel="stylesheet" href="/assets/css/rootuip-design-system.css">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* Report Builder Specific Styles */
+        .builder-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            height: 100vh;
+            background: var(--rootuip-gray-50);
+        }
+        
+        /* Components Panel */
+        .components-panel {
+            background: var(--rootuip-white);
+            border-right: 1px solid var(--rootuip-gray-200);
+            padding: var(--space-6);
+            overflow-y: auto;
+        }
+        
+        .component-category {
+            margin-bottom: var(--space-6);
+        }
+        
+        .category-title {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--rootuip-gray-600);
+            margin-bottom: var(--space-3);
+        }
+        
+        .component-item {
+            background: var(--rootuip-gray-50);
+            border: 2px solid var(--rootuip-gray-200);
+            border-radius: var(--radius-md);
+            padding: var(--space-3);
+            margin-bottom: var(--space-2);
+            cursor: move;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .component-item:hover {
+            border-color: var(--rootuip-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .component-item.dragging {
+            opacity: 0.5;
+        }
+        
+        .component-icon {
+            font-size: var(--text-xl);
+        }
+        
+        .component-info {
+            flex: 1;
+        }
+        
+        .component-name {
+            font-weight: 500;
+            font-size: var(--text-sm);
+        }
+        
+        .component-desc {
+            font-size: var(--text-xs);
+            color: var(--rootuip-gray-600);
+        }
+        
+        /* Canvas Area */
+        .canvas-area {
+            background: var(--rootuip-gray-100);
+            padding: var(--space-8);
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .canvas-header {
+            background: var(--rootuip-white);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .report-title-input {
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            border: none;
+            background: none;
+            width: 100%;
+            margin-bottom: var(--space-2);
+        }
+        
+        .report-desc-input {
+            font-size: var(--text-base);
+            border: none;
+            background: none;
+            width: 100%;
+            color: var(--rootuip-gray-600);
+            resize: none;
+        }
+        
+        .canvas-container {
+            min-height: 600px;
+            background: var(--rootuip-white);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            box-shadow: var(--shadow-sm);
+            border: 2px dashed var(--rootuip-gray-300);
+        }
+        
+        .canvas-container.drag-over {
+            border-color: var(--rootuip-primary);
+            background: var(--rootuip-gray-50);
+        }
+        
+        .drop-zone {
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--rootuip-gray-500);
+            font-size: var(--text-sm);
+        }
+        
+        /* Report Elements */
+        .report-element {
+            background: var(--rootuip-white);
+            border: 1px solid var(--rootuip-gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+            position: relative;
+            transition: all var(--transition-fast);
+        }
+        
+        .report-element:hover {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .report-element.selected {
+            border-color: var(--rootuip-primary);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+        
+        .element-toolbar {
+            position: absolute;
+            top: var(--space-3);
+            right: var(--space-3);
+            display: flex;
+            gap: var(--space-2);
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+        
+        .report-element:hover .element-toolbar {
+            opacity: 1;
+        }
+        
+        .toolbar-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--rootuip-gray-200);
+            background: var(--rootuip-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .toolbar-btn:hover {
+            background: var(--rootuip-gray-50);
+            border-color: var(--rootuip-gray-300);
+        }
+        
+        /* Properties Panel */
+        .properties-panel {
+            background: var(--rootuip-white);
+            border-left: 1px solid var(--rootuip-gray-200);
+            padding: var(--space-6);
+            overflow-y: auto;
+        }
+        
+        .property-group {
+            margin-bottom: var(--space-6);
+        }
+        
+        .property-label {
+            display: block;
+            font-size: var(--text-sm);
+            font-weight: 500;
+            color: var(--rootuip-gray-700);
+            margin-bottom: var(--space-2);
+        }
+        
+        .property-control {
+            width: 100%;
+            padding: var(--space-2) var(--space-3);
+            border: 1px solid var(--rootuip-gray-300);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+        }
+        
+        /* Action Bar */
+        .action-bar {
+            position: absolute;
+            top: var(--space-6);
+            right: var(--space-6);
+            display: flex;
+            gap: var(--space-3);
+            z-index: 10;
+        }
+        
+        /* Schedule Modal */
+        .schedule-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: var(--z-modal);
+        }
+        
+        .schedule-modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--rootuip-white);
+            border-radius: var(--radius-xl);
+            padding: var(--space-8);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-2xl);
+        }
+        
+        .modal-header {
+            margin-bottom: var(--space-6);
+        }
+        
+        .modal-title {
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            margin-bottom: var(--space-2);
+        }
+        
+        .frequency-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-3);
+            margin-bottom: var(--space-6);
+        }
+        
+        .frequency-option {
+            padding: var(--space-4);
+            border: 2px solid var(--rootuip-gray-200);
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .frequency-option:hover {
+            border-color: var(--rootuip-primary);
+        }
+        
+        .frequency-option.selected {
+            border-color: var(--rootuip-primary);
+            background: var(--rootuip-primary);
+            color: white;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .builder-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .components-panel,
+            .properties-panel {
+                display: none;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="builder-layout">
+        <!-- Components Panel -->
+        <aside class="components-panel">
+            <h2 class="text-xl font-bold mb-6">Report Components</h2>
+            
+            <div class="component-category">
+                <h3 class="category-title">Metrics</h3>
+                <div class="component-item" draggable="true" data-component="kpi-card">
+                    <span class="component-icon">📊</span>
+                    <div class="component-info">
+                        <div class="component-name">KPI Card</div>
+                        <div class="component-desc">Single metric display</div>
+                    </div>
+                </div>
+                <div class="component-item" draggable="true" data-component="metric-grid">
+                    <span class="component-icon">🎯</span>
+                    <div class="component-info">
+                        <div class="component-name">Metrics Grid</div>
+                        <div class="component-desc">Multiple KPIs</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="component-category">
+                <h3 class="category-title">Charts</h3>
+                <div class="component-item" draggable="true" data-component="line-chart">
+                    <span class="component-icon">📈</span>
+                    <div class="component-info">
+                        <div class="component-name">Line Chart</div>
+                        <div class="component-desc">Trend visualization</div>
+                    </div>
+                </div>
+                <div class="component-item" draggable="true" data-component="bar-chart">
+                    <span class="component-icon">📊</span>
+                    <div class="component-info">
+                        <div class="component-name">Bar Chart</div>
+                        <div class="component-desc">Comparison chart</div>
+                    </div>
+                </div>
+                <div class="component-item" draggable="true" data-component="pie-chart">
+                    <span class="component-icon">🥧</span>
+                    <div class="component-info">
+                        <div class="component-name">Pie Chart</div>
+                        <div class="component-desc">Distribution view</div>
+                    </div>
+                </div>
+                <div class="component-item" draggable="true" data-component="radar-chart">
+                    <span class="component-icon">🎯</span>
+                    <div class="component-info">
+                        <div class="component-name">Radar Chart</div>
+                        <div class="component-desc">Multi-axis analysis</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="component-category">
+                <h3 class="category-title">Tables</h3>
+                <div class="component-item" draggable="true" data-component="data-table">
+                    <span class="component-icon">📋</span>
+                    <div class="component-info">
+                        <div class="component-name">Data Table</div>
+                        <div class="component-desc">Detailed records</div>
+                    </div>
+                </div>
+                <div class="component-item" draggable="true" data-component="pivot-table">
+                    <span class="component-icon">🔄</span>
+                    <div class="component-info">
+                        <div class="component-name">Pivot Table</div>
+                        <div class="component-desc">Cross-tab analysis</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="component-category">
+                <h3 class="category-title">Text</h3>
+                <div class="component-item" draggable="true" data-component="text-block">
+                    <span class="component-icon">📝</span>
+                    <div class="component-info">
+                        <div class="component-name">Text Block</div>
+                        <div class="component-desc">Rich text content</div>
+                    </div>
+                </div>
+                <div class="component-item" draggable="true" data-component="summary">
+                    <span class="component-icon">📄</span>
+                    <div class="component-info">
+                        <div class="component-name">Summary</div>
+                        <div class="component-desc">Executive summary</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Canvas Area -->
+        <main class="canvas-area">
+            <div class="action-bar">
+                <button class="btn btn-secondary" onclick="previewReport()">
+                    <span>👁️</span> Preview
+                </button>
+                <button class="btn btn-secondary" onclick="scheduleReport()">
+                    <span>📅</span> Schedule
+                </button>
+                <button class="btn btn-primary" onclick="saveReport()">
+                    <span>💾</span> Save Report
+                </button>
+            </div>
+            
+            <div class="canvas-header">
+                <input type="text" class="report-title-input" placeholder="Report Title" value="Executive Business Intelligence Report">
+                <textarea class="report-desc-input" placeholder="Report description..." rows="2">Comprehensive analysis of key business metrics and performance indicators</textarea>
+            </div>
+            
+            <div class="canvas-container" id="reportCanvas">
+                <div class="drop-zone" id="dropZone">
+                    Drag components here to build your report
+                </div>
+            </div>
+        </main>
+        
+        <!-- Properties Panel -->
+        <aside class="properties-panel">
+            <h2 class="text-xl font-bold mb-6">Properties</h2>
+            
+            <div id="propertiesContent">
+                <div class="text-gray-500 text-sm">
+                    Select a component to edit its properties
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- Schedule Modal -->
+    <div class="schedule-modal" id="scheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Schedule Report Delivery</h3>
+                <p class="text-gray-600">Set up automated report distribution</p>
+            </div>
+            
+            <div class="property-group">
+                <label class="property-label">Frequency</label>
+                <div class="frequency-options">
+                    <div class="frequency-option" onclick="selectFrequency('daily')">Daily</div>
+                    <div class="frequency-option selected" onclick="selectFrequency('weekly')">Weekly</div>
+                    <div class="frequency-option" onclick="selectFrequency('monthly')">Monthly</div>
+                    <div class="frequency-option" onclick="selectFrequency('quarterly')">Quarterly</div>
+                </div>
+            </div>
+            
+            <div class="property-group">
+                <label class="property-label">Time</label>
+                <input type="time" class="property-control" value="09:00">
+            </div>
+            
+            <div class="property-group">
+                <label class="property-label">Recipients</label>
+                <textarea class="property-control" rows="3" placeholder="Enter email addresses, one per line">john.doe@company.com
+sarah.smith@company.com</textarea>
+            </div>
+            
+            <div class="property-group">
+                <label class="property-label">Format</label>
+                <select class="property-control">
+                    <option>PDF Attachment</option>
+                    <option>Excel Attachment</option>
+                    <option>Inline HTML</option>
+                    <option>Dashboard Link</option>
+                </select>
+            </div>
+            
+            <div class="property-group">
+                <label class="property-label">
+                    <input type="checkbox" checked> Include executive summary
+                </label>
+                <label class="property-label">
+                    <input type="checkbox" checked> White-label report
+                </label>
+            </div>
+            
+            <div class="flex gap-3 mt-6">
+                <button class="btn btn-primary flex-1" onclick="saveSchedule()">Save Schedule</button>
+                <button class="btn btn-secondary flex-1" onclick="closeScheduleModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize drag and drop
+        let draggedElement = null;
+        let selectedElement = null;
+        
+        // Component templates
+        const componentTemplates = {
+            'kpi-card': `
+                <div class="report-element kpi-element" data-type="kpi-card">
+                    <div class="element-toolbar">
+                        <button class="toolbar-btn" onclick="editElement(this)">✏️</button>
+                        <button class="toolbar-btn" onclick="duplicateElement(this)">📋</button>
+                        <button class="toolbar-btn" onclick="removeElement(this)">🗑️</button>
+                    </div>
+                    <div class="kpi-display">
+                        <div class="text-3xl font-bold">$8.5M</div>
+                        <div class="text-gray-600">Annual Recurring Revenue</div>
+                        <div class="text-green-600 text-sm">↑ 24.5% vs last month</div>
+                    </div>
+                </div>
+            `,
+            'line-chart': `
+                <div class="report-element chart-element" data-type="line-chart">
+                    <div class="element-toolbar">
+                        <button class="toolbar-btn" onclick="editElement(this)">✏️</button>
+                        <button class="toolbar-btn" onclick="duplicateElement(this)">📋</button>
+                        <button class="toolbar-btn" onclick="removeElement(this)">🗑️</button>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-4">Revenue Trend</h3>
+                    <canvas class="chart-canvas" height="200"></canvas>
+                </div>
+            `,
+            'data-table': `
+                <div class="report-element table-element" data-type="data-table">
+                    <div class="element-toolbar">
+                        <button class="toolbar-btn" onclick="editElement(this)">✏️</button>
+                        <button class="toolbar-btn" onclick="duplicateElement(this)">📋</button>
+                        <button class="toolbar-btn" onclick="removeElement(this)">🗑️</button>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-4">Customer Performance</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>ARR</th>
+                                <th>Health Score</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Maersk Corporation</td>
+                                <td>$1.2M</td>
+                                <td>98%</td>
+                                <td><span class="status status-success">Excellent</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            'text-block': `
+                <div class="report-element text-element" data-type="text-block">
+                    <div class="element-toolbar">
+                        <button class="toolbar-btn" onclick="editElement(this)">✏️</button>
+                        <button class="toolbar-btn" onclick="duplicateElement(this)">📋</button>
+                        <button class="toolbar-btn" onclick="removeElement(this)">🗑️</button>
+                    </div>
+                    <div contenteditable="true" class="text-content">
+                        <h3 class="text-lg font-semibold mb-2">Executive Summary</h3>
+                        <p>This report provides a comprehensive overview of our business performance...</p>
+                    </div>
+                </div>
+            `
+        };
+        
+        // Drag and drop handlers
+        document.querySelectorAll('.component-item').forEach(item => {
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragend', handleDragEnd);
+        });
+        
+        const dropZone = document.getElementById('dropZone');
+        const reportCanvas = document.getElementById('reportCanvas');
+        
+        reportCanvas.addEventListener('dragover', handleDragOver);
+        reportCanvas.addEventListener('drop', handleDrop);
+        reportCanvas.addEventListener('dragleave', handleDragLeave);
+        
+        function handleDragStart(e) {
+            draggedElement = e.target;
+            e.target.classList.add('dragging');
+        }
+        
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+            reportCanvas.classList.add('drag-over');
+        }
+        
+        function handleDragLeave(e) {
+            if (e.target === reportCanvas) {
+                reportCanvas.classList.remove('drag-over');
+            }
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            reportCanvas.classList.remove('drag-over');
+            
+            if (draggedElement) {
+                const componentType = draggedElement.getAttribute('data-component');
+                const template = componentTemplates[componentType];
+                
+                if (template) {
+                    // Remove drop zone if it exists
+                    const dropZone = document.getElementById('dropZone');
+                    if (dropZone) {
+                        dropZone.remove();
+                    }
+                    
+                    // Add new component
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = template;
+                    const newElement = tempDiv.firstElementChild;
+                    
+                    reportCanvas.appendChild(newElement);
+                    
+                    // Initialize chart if needed
+                    if (componentType.includes('chart')) {
+                        initializeChart(newElement);
+                    }
+                    
+                    // Make report elements sortable
+                    new Sortable(reportCanvas, {
+                        animation: 150,
+                        handle: '.report-element',
+                        ghostClass: 'opacity-50'
+                    });
+                }
+            }
+        }
+        
+        function initializeChart(element) {
+            const canvas = element.querySelector('.chart-canvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Revenue',
+                            data: [65, 72, 78, 85, 92, 98],
+                            borderColor: '#1a73e8',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+        }
+        
+        function editElement(btn) {
+            const element = btn.closest('.report-element');
+            selectElement(element);
+        }
+        
+        function selectElement(element) {
+            // Remove previous selection
+            document.querySelectorAll('.report-element').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Select new element
+            element.classList.add('selected');
+            selectedElement = element;
+            
+            // Update properties panel
+            updatePropertiesPanel(element);
+        }
+        
+        function updatePropertiesPanel(element) {
+            const type = element.getAttribute('data-type');
+            const propertiesContent = document.getElementById('propertiesContent');
+            
+            let propertiesHTML = '';
+            
+            switch(type) {
+                case 'kpi-card':
+                    propertiesHTML = `
+                        <div class="property-group">
+                            <label class="property-label">Metric</label>
+                            <select class="property-control">
+                                <option>Annual Recurring Revenue</option>
+                                <option>Monthly Recurring Revenue</option>
+                                <option>Customer Count</option>
+                                <option>Churn Rate</option>
+                            </select>
+                        </div>
+                        <div class="property-group">
+                            <label class="property-label">Time Period</label>
+                            <select class="property-control">
+                                <option>Current Month</option>
+                                <option>Last Month</option>
+                                <option>Quarter to Date</option>
+                                <option>Year to Date</option>
+                            </select>
+                        </div>
+                        <div class="property-group">
+                            <label class="property-label">Comparison</label>
+                            <select class="property-control">
+                                <option>vs Previous Period</option>
+                                <option>vs Same Period Last Year</option>
+                                <option>vs Target</option>
+                            </select>
+                        </div>
+                    `;
+                    break;
+                case 'line-chart':
+                    propertiesHTML = `
+                        <div class="property-group">
+                            <label class="property-label">Chart Title</label>
+                            <input type="text" class="property-control" value="Revenue Trend">
+                        </div>
+                        <div class="property-group">
+                            <label class="property-label">Data Source</label>
+                            <select class="property-control">
+                                <option>Revenue</option>
+                                <option>Customer Growth</option>
+                                <option>Container Volume</option>
+                                <option>API Usage</option>
+                            </select>
+                        </div>
+                        <div class="property-group">
+                            <label class="property-label">Time Range</label>
+                            <select class="property-control">
+                                <option>Last 6 Months</option>
+                                <option>Last 12 Months</option>
+                                <option>Year to Date</option>
+                                <option>All Time</option>
+                            </select>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            propertiesContent.innerHTML = propertiesHTML;
+        }
+        
+        function duplicateElement(btn) {
+            const element = btn.closest('.report-element');
+            const clone = element.cloneNode(true);
+            element.parentNode.insertBefore(clone, element.nextSibling);
+            
+            // Re-initialize chart if needed
+            if (clone.querySelector('.chart-canvas')) {
+                initializeChart(clone);
+            }
+        }
+        
+        function removeElement(btn) {
+            const element = btn.closest('.report-element');
+            element.remove();
+            
+            // Show drop zone if canvas is empty
+            if (reportCanvas.children.length === 0) {
+                reportCanvas.innerHTML = '<div class="drop-zone" id="dropZone">Drag components here to build your report</div>';
+            }
+        }
+        
+        function previewReport() {
+            console.log('Preview report');
+            // Implement preview functionality
+        }
+        
+        function scheduleReport() {
+            document.getElementById('scheduleModal').classList.add('show');
+        }
+        
+        function closeScheduleModal() {
+            document.getElementById('scheduleModal').classList.remove('show');
+        }
+        
+        function selectFrequency(freq) {
+            document.querySelectorAll('.frequency-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+        }
+        
+        function saveSchedule() {
+            console.log('Saving schedule...');
+            closeScheduleModal();
+            // Show success message
+            alert('Report schedule saved successfully!');
+        }
+        
+        function saveReport() {
+            console.log('Saving report...');
+            // Implement save functionality
+            alert('Report saved successfully!');
+        }
+        
+        // Click outside to close modal
+        document.getElementById('scheduleModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeScheduleModal();
+            }
+        });
+    </script>
+</body>
+</html>

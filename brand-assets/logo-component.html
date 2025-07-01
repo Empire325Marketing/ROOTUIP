@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Logo Component Library</title>
+    <link rel="stylesheet" href="brand-guidelines.css">
+    <style>
+        body {
+            font-family: var(--rootuip-font-primary);
+            background-color: var(--rootuip-gray-100);
+            padding: var(--rootuip-space-8);
+            margin: 0;
+        }
+        
+        .logo-showcase {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo-section {
+            background: var(--rootuip-white);
+            border-radius: var(--rootuip-radius-xl);
+            padding: var(--rootuip-space-8);
+            margin-bottom: var(--rootuip-space-8);
+            box-shadow: var(--rootuip-shadow-md);
+        }
+        
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--rootuip-space-6);
+            margin-top: var(--rootuip-space-6);
+        }
+        
+        .logo-item {
+            padding: var(--rootuip-space-6);
+            border: 1px solid var(--rootuip-gray-200);
+            border-radius: var(--rootuip-radius-lg);
+            text-align: center;
+        }
+        
+        .logo-item-dark {
+            background-color: var(--rootuip-primary);
+        }
+        
+        .logo-item h3 {
+            margin: 0 0 var(--rootuip-space-4) 0;
+            color: var(--rootuip-gray-700);
+            font-size: var(--rootuip-text-lg);
+        }
+        
+        .logo-item-dark h3 {
+            color: var(--rootuip-white);
+        }
+        
+        .usage-code {
+            background-color: var(--rootuip-gray-100);
+            border-radius: var(--rootuip-radius-md);
+            padding: var(--rootuip-space-4);
+            margin-top: var(--rootuip-space-4);
+            font-family: var(--rootuip-font-mono);
+            font-size: var(--rootuip-text-sm);
+            overflow-x: auto;
+        }
+        
+        .color-palette {
+            display: flex;
+            gap: var(--rootuip-space-4);
+            margin-top: var(--rootuip-space-6);
+            flex-wrap: wrap;
+        }
+        
+        .color-swatch {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+        }
+        
+        .color-box {
+            height: 100px;
+            border-radius: var(--rootuip-radius-lg);
+            margin-bottom: var(--rootuip-space-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: var(--rootuip-font-semibold);
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="logo-showcase">
+        <div class="logo-section">
+            <h1 class="rootuip-heading" style="font-size: var(--rootuip-text-4xl); margin-bottom: var(--rootuip-space-2);">
+                ROOTUIP Brand Identity
+            </h1>
+            <p class="rootuip-body" style="font-size: var(--rootuip-text-lg); margin-bottom: var(--rootuip-space-8);">
+                Enterprise Ocean Freight Intelligence Platform
+            </p>
+            
+            <!-- Primary Logo Variants -->
+            <h2 class="rootuip-heading" style="font-size: var(--rootuip-text-2xl); margin-bottom: var(--rootuip-space-4);">
+                Logo Variants
+            </h2>
+            
+            <div class="logo-grid">
+                <div class="logo-item">
+                    <h3>Primary Logo</h3>
+                    <img src="logo-primary.svg" alt="ROOTUIP Primary Logo" style="height: 60px;">
+                    <div class="usage-code">
+                        &lt;img src="logo-primary.svg" alt="ROOTUIP"&gt;
+                    </div>
+                </div>
+                
+                <div class="logo-item">
+                    <h3>Horizontal Logo</h3>
+                    <img src="logo-horizontal.svg" alt="ROOTUIP Horizontal Logo" style="height: 80px;">
+                    <div class="usage-code">
+                        &lt;img src="logo-horizontal.svg" alt="ROOTUIP"&gt;
+                    </div>
+                </div>
+                
+                <div class="logo-item">
+                    <h3>Vertical Logo</h3>
+                    <img src="logo-vertical.svg" alt="ROOTUIP Vertical Logo" style="height: 150px;">
+                    <div class="usage-code">
+                        &lt;img src="logo-vertical.svg" alt="ROOTUIP"&gt;
+                    </div>
+                </div>
+                
+                <div class="logo-item">
+                    <h3>Icon Logo</h3>
+                    <img src="logo-icon.svg" alt="ROOTUIP Icon" style="height: 60px;">
+                    <div class="usage-code">
+                        &lt;img src="logo-icon.svg" alt="ROOTUIP"&gt;
+                    </div>
+                </div>
+                
+                <div class="logo-item logo-item-dark">
+                    <h3>Logo on Dark</h3>
+                    <svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="whiteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#E0E4E8;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <g id="wave-symbol">
+                            <path d="M5,30 Q15,20 25,30 T45,30 Q55,20 65,30" 
+                                  stroke="#FFFFFF" 
+                                  stroke-width="3" 
+                                  fill="none" 
+                                  stroke-linecap="round"/>
+                            <path d="M10,35 Q20,25 30,35 T50,35 Q60,25 70,35" 
+                                  stroke="#00D46A" 
+                                  stroke-width="2" 
+                                  fill="none" 
+                                  stroke-linecap="round"/>
+                        </g>
+                        <text x="75" y="38" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#FFFFFF">
+                            ROOT<tspan fill="#00D46A">UIP</tspan>
+                        </text>
+                        <text x="75" y="50" font-family="Arial, sans-serif" font-size="10" fill="#CBD5E0" letter-spacing="0.5">
+                            OCEAN FREIGHT INTELLIGENCE
+                        </text>
+                        <rect x="185" y="25" width="10" height="15" fill="#FF6B35" opacity="0.8" rx="1"/>
+                        <rect x="185" y="22" width="10" height="2" fill="#FF6B35"/>
+                    </svg>
+                </div>
+                
+                <div class="logo-item">
+                    <h3>Favicon</h3>
+                    <img src="favicon.svg" alt="ROOTUIP Favicon" style="height: 32px;">
+                    <div class="usage-code">
+                        &lt;link rel="icon" href="favicon.svg"&gt;
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Color Palette -->
+        <div class="logo-section">
+            <h2 class="rootuip-heading" style="font-size: var(--rootuip-text-2xl); margin-bottom: var(--rootuip-space-4);">
+                Brand Colors
+            </h2>
+            
+            <div class="color-palette">
+                <div class="color-swatch">
+                    <div class="color-box" style="background-color: #0F3460;">#0F3460</div>
+                    <h4>Deep Ocean Blue</h4>
+                    <p>Primary Brand Color</p>
+                </div>
+                
+                <div class="color-swatch">
+                    <div class="color-box" style="background-color: #00D46A;">#00D46A</div>
+                    <h4>Success Green</h4>
+                    <p>Value & Growth</p>
+                </div>
+                
+                <div class="color-swatch">
+                    <div class="color-box" style="background-color: #FF6B35;">#FF6B35</div>
+                    <h4>Data Orange</h4>
+                    <p>Insights & Metrics</p>
+                </div>
+                
+                <div class="color-swatch">
+                    <div class="color-box" style="background-color: #5D7083; color: white;">#5D7083</div>
+                    <h4>Professional Gray</h4>
+                    <p>Text & UI Elements</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- React Component -->
+        <div class="logo-section">
+            <h2 class="rootuip-heading" style="font-size: var(--rootuip-text-2xl); margin-bottom: var(--rootuip-space-4);">
+                React Component
+            </h2>
+            
+            <div class="usage-code">
+// RootUILogo.jsx
+import React from 'react';
+
+const RootUILogo = ({ variant = 'primary', height = 60, className = '' }) => {
+  const logos = {
+    primary: '/brand-assets/logo-primary.svg',
+    horizontal: '/brand-assets/logo-horizontal.svg',
+    vertical: '/brand-assets/logo-vertical.svg',
+    icon: '/brand-assets/logo-icon.svg'
+  };
+  
+  return (
+    &lt;img 
+      src={logos[variant]} 
+      alt="ROOTUIP - Ocean Freight Intelligence"
+      style={{ height: `${height}px` }}
+      className={`rootuip-logo ${className}`}
+    /&gt;
+  );
+};
+
+// Usage
+&lt;RootUILogo variant="primary" height={60} /&gt;
+&lt;RootUILogo variant="icon" height={32} /&gt;
+            </div>
+        </div>
+        
+        <!-- Social Media Assets -->
+        <div class="logo-section">
+            <h2 class="rootuip-heading" style="font-size: var(--rootuip-text-2xl); margin-bottom: var(--rootuip-space-4);">
+                Social Media Assets
+            </h2>
+            
+            <div class="logo-grid">
+                <div class="logo-item">
+                    <h3>Social Square (1200x1200)</h3>
+                    <img src="social-media-square.svg" alt="Social Media Square" style="width: 100%; max-width: 300px;">
+                </div>
+                
+                <div class="logo-item">
+                    <h3>Social Banner (1500x500)</h3>
+                    <img src="social-media-banner.svg" alt="Social Media Banner" style="width: 100%; max-width: 300px;">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Usage Guidelines -->
+        <div class="logo-section">
+            <h2 class="rootuip-heading" style="font-size: var(--rootuip-text-2xl); margin-bottom: var(--rootuip-space-4);">
+                Usage Guidelines
+            </h2>
+            
+            <ul class="rootuip-body" style="line-height: 2;">
+                <li><strong>Clear Space:</strong> Maintain minimum clear space equal to the height of the "U" in ROOTUIP</li>
+                <li><strong>Minimum Size:</strong> Logo should never be displayed smaller than 120px wide (primary) or 24px (icon)</li>
+                <li><strong>Background:</strong> Use on white or light backgrounds. Use inverted version on dark backgrounds</li>
+                <li><strong>Value Proposition:</strong> When space permits, include "$500K per vessel" messaging</li>
+                <li><strong>Typography:</strong> Always use Arial or system fonts for consistency</li>
+                <li><strong>Colors:</strong> Never alter the brand colors. Use only approved color combinations</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

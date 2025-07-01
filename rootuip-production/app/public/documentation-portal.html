@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Documentation Portal - Technical Docs, API Reference & Training</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/rootuip-logo.svg">
+    <link rel="stylesheet" href="/assets/css/rootuip-design-system.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-graphql.min.js"></script>
+    <style>
+        /* Documentation Portal Styles */
+        :root {
+            --doc-sidebar-width: 280px;
+            --doc-toc-width: 240px;
+        }
+        
+        .doc-layout {
+            display: grid;
+            grid-template-columns: var(--doc-sidebar-width) 1fr var(--doc-toc-width);
+            min-height: 100vh;
+            background: var(--rootuip-background);
+        }
+        
+        /* Header */
+        .doc-header {
+            grid-column: 1 / -1;
+            background: var(--bg-dark);
+            border-bottom: 1px solid var(--rootuip-border);
+            padding: var(--space-4) var(--space-6);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .doc-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            font-size: var(--text-xl);
+            font-weight: 700;
+            color: var(--rootuip-primary);
+        }
+        
+        .version-selector {
+            padding: var(--space-2) var(--space-3);
+            border: 1px solid var(--rootuip-border);
+            border-radius: var(--radius-md);
+            font-size: var(--text-sm);
+            background: var(--bg-dark);
+        }
+        
+        .doc-search {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 var(--space-6);
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: var(--space-3) var(--space-4);
+            padding-left: var(--space-10);
+            border: 1px solid var(--rootuip-border);
+            border-radius: var(--radius-full);
+            font-size: var(--text-base);
+            background: var(--rootuip-gray-50);
+            transition: all var(--transition-fast);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--rootuip-primary);
+            background: var(--bg-dark);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: var(--space-4);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--rootuip-text-secondary);
+        }
+        
+        .search-shortcut {
+            position: absolute;
+            right: var(--space-3);
+            top: 50%;
+            transform: translateY(-50%);
+            padding: var(--space-1) var(--space-2);
+            background: var(--rootuip-gray-200);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-xs);
+            font-family: monospace;
+        }
+        
+        /* Sidebar Navigation */
+        .doc-sidebar {
+            background: var(--bg-dark);
+            border-right: 1px solid var(--rootuip-border);
+            padding: var(--space-6);
+            overflow-y: auto;
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+        }
+        
+        .nav-section {
+            margin-bottom: var(--space-6);
+        }
+        
+        .nav-title {
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--rootuip-text-secondary);
+            margin-bottom: var(--space-3);
+            letter-spacing: 0.05em;
+        }
+        
+        .nav-item {
+            display: block;
+            padding: var(--space-2) var(--space-3);
+            color: var(--rootuip-text);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-1);
+            transition: all var(--transition-fast);
+            position: relative;
+        }
+        
+        .nav-item:hover {
+            background: var(--rootuip-gray-50);
+            color: var(--rootuip-primary);
+        }
+        
+        .nav-item.active {
+            background: var(--rootuip-primary-light);
+            color: var(--rootuip-primary);
+            font-weight: 500;
+        }
+        
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 70%;
+            background: var(--rootuip-primary);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+        
+        .nav-badge {
+            display: inline-block;
+            padding: var(--space-1) var(--space-2);
+            background: var(--rootuip-accent);
+            color: white;
+            font-size: var(--text-xs);
+            font-weight: 600;
+            border-radius: var(--radius-full);
+            margin-left: var(--space-2);
+        }
+        
+        /* Main Content */
+        .doc-main {
+            padding: var(--space-8);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .doc-content {
+            background: var(--bg-dark);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .doc-title {
+            font-size: var(--text-4xl);
+            font-weight: 700;
+            margin-bottom: var(--space-4);
+            color: var(--rootuip-text);
+        }
+        
+        .doc-subtitle {
+            font-size: var(--text-xl);
+            color: var(--rootuip-text-secondary);
+            margin-bottom: var(--space-6);
+        }
+        
+        .doc-meta {
+            display: flex;
+            gap: var(--space-6);
+            padding: var(--space-4) 0;
+            border-bottom: 1px solid var(--rootuip-border);
+            margin-bottom: var(--space-6);
+            font-size: var(--text-sm);
+            color: var(--rootuip-text-secondary);
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        /* Content Styles */
+        .doc-content h2 {
+            font-size: var(--text-2xl);
+            font-weight: 600;
+            margin-top: var(--space-8);
+            margin-bottom: var(--space-4);
+            padding-top: var(--space-4);
+        }
+        
+        .doc-content h3 {
+            font-size: var(--text-xl);
+            font-weight: 600;
+            margin-top: var(--space-6);
+            margin-bottom: var(--space-3);
+        }
+        
+        .doc-content p {
+            line-height: 1.7;
+            margin-bottom: var(--space-4);
+        }
+        
+        .doc-content ul, .doc-content ol {
+            margin-bottom: var(--space-4);
+            padding-left: var(--space-6);
+        }
+        
+        .doc-content li {
+            margin-bottom: var(--space-2);
+            line-height: 1.6;
+        }
+        
+        /* Code Blocks */
+        .code-block {
+            background: #2d2d2d;
+            border-radius: var(--radius-md);
+            margin: var(--space-4) 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-3) var(--space-4);
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .code-language {
+            color: #888;
+            font-size: var(--text-sm);
+            font-family: monospace;
+        }
+        
+        .code-actions {
+            display: flex;
+            gap: var(--space-2);
+        }
+        
+        .code-action {
+            padding: var(--space-1) var(--space-3);
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #888;
+            font-size: var(--text-xs);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .code-action:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        pre[class*="language-"] {
+            margin: 0;
+            padding: var(--space-4);
+            overflow-x: auto;
+        }
+        
+        /* API Endpoint */
+        .api-endpoint {
+            background: var(--rootuip-gray-50);
+            border: 1px solid var(--rootuip-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            font-family: monospace;
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .method-badge {
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: var(--text-sm);
+        }
+        
+        .method-badge.get { background: #10b981; color: white; }
+        .method-badge.post { background: #3b82f6; color: white; }
+        .method-badge.put { background: #f59e0b; color: white; }
+        .method-badge.delete { background: #ef4444; color: white; }
+        
+        /* Interactive Examples */
+        .interactive-example {
+            background: var(--rootuip-gray-50);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin: var(--space-6) 0;
+        }
+        
+        .example-tabs {
+            display: flex;
+            gap: var(--space-2);
+            margin-bottom: var(--space-4);
+            border-bottom: 1px solid var(--rootuip-border);
+        }
+        
+        .example-tab {
+            padding: var(--space-3) var(--space-4);
+            background: none;
+            border: none;
+            color: var(--rootuip-text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            transition: all var(--transition-fast);
+        }
+        
+        .example-tab:hover {
+            color: var(--rootuip-text);
+        }
+        
+        .example-tab.active {
+            color: var(--rootuip-primary);
+        }
+        
+        .example-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--rootuip-primary);
+        }
+        
+        .try-it-btn {
+            background: var(--rootuip-primary);
+            color: white;
+            border: none;
+            padding: var(--space-3) var(--space-6);
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .try-it-btn:hover {
+            background: var(--rootuip-primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Table of Contents */
+        .doc-toc {
+            padding: var(--space-6);
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+        
+        .toc-title {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--rootuip-text-secondary);
+            margin-bottom: var(--space-3);
+            letter-spacing: 0.05em;
+        }
+        
+        .toc-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .toc-item {
+            margin-bottom: var(--space-2);
+        }
+        
+        .toc-link {
+            display: block;
+            padding: var(--space-2);
+            color: var(--rootuip-text-secondary);
+            text-decoration: none;
+            font-size: var(--text-sm);
+            border-left: 2px solid transparent;
+            transition: all var(--transition-fast);
+        }
+        
+        .toc-link:hover {
+            color: var(--rootuip-text);
+            border-color: var(--rootuip-gray-300);
+        }
+        
+        .toc-link.active {
+            color: var(--rootuip-primary);
+            border-color: var(--rootuip-primary);
+            font-weight: 500;
+        }
+        
+        .toc-item.level-2 {
+            padding-left: var(--space-4);
+        }
+        
+        .toc-item.level-3 {
+            padding-left: var(--space-8);
+        }
+        
+        /* Alert Boxes */
+        .alert {
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            margin: var(--space-4) 0;
+            display: flex;
+            gap: var(--space-3);
+        }
+        
+        .alert-info {
+            background: var(--rootuip-primary-light);
+            border: 1px solid var(--rootuip-primary);
+            color: var(--rootuip-primary-dark);
+        }
+        
+        .alert-warning {
+            background: var(--rootuip-warning-light);
+            border: 1px solid var(--rootuip-warning);
+            color: var(--rootuip-warning-dark);
+        }
+        
+        .alert-success {
+            background: var(--rootuip-accent-light);
+            border: 1px solid var(--rootuip-accent);
+            color: var(--rootuip-accent-dark);
+        }
+        
+        .alert-icon {
+            font-size: var(--text-xl);
+            flex-shrink: 0;
+        }
+        
+        /* Parameters Table */
+        .params-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-4) 0;
+        }
+        
+        .params-table th {
+            text-align: left;
+            padding: var(--space-3);
+            background: var(--rootuip-gray-50);
+            border-bottom: 2px solid var(--rootuip-border);
+            font-weight: 600;
+            font-size: var(--text-sm);
+        }
+        
+        .params-table td {
+            padding: var(--space-3);
+            border-bottom: 1px solid var(--rootuip-border);
+        }
+        
+        .param-name {
+            font-family: monospace;
+            font-weight: 500;
+        }
+        
+        .param-type {
+            display: inline-block;
+            padding: var(--space-1) var(--space-2);
+            background: var(--rootuip-gray-100);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-xs);
+            font-family: monospace;
+        }
+        
+        .param-required {
+            display: inline-block;
+            padding: var(--space-1) var(--space-2);
+            background: var(--rootuip-danger-light);
+            color: var(--rootuip-danger);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-xs);
+            font-weight: 600;
+        }
+        
+        /* Language Switcher */
+        .lang-switcher {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .lang-btn {
+            padding: var(--space-2) var(--space-3);
+            background: transparent;
+            border: 1px solid var(--rootuip-border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .lang-btn:hover {
+            background: var(--rootuip-gray-50);
+        }
+        
+        .lang-btn.active {
+            background: var(--rootuip-primary);
+            color: white;
+            border-color: var(--rootuip-primary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .doc-layout {
+                grid-template-columns: var(--doc-sidebar-width) 1fr;
+            }
+            
+            .doc-toc {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .doc-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .doc-sidebar {
+                display: none;
+            }
+            
+            .doc-search {
+                margin: 0;
+            }
+            
+            .header-content {
+                flex-wrap: wrap;
+                gap: var(--space-3);
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <div class="doc-layout">
+        <!-- Header -->
+        <header class="doc-header">
+            <div class="header-content">
+                <div class="doc-logo">
+                    <span>📚</span>
+                    <span>ROOTUIP Docs</span>
+                </div>
+                
+                <div class="doc-search">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Search documentation..." />
+                    <span class="search-shortcut">⌘K</span>
+                </div>
+                
+                <div class="header-actions" style="display: flex; align-items: center; gap: var(--space-4);">
+                    <select class="version-selector">
+                        <option>v3.0 (latest)</option>
+                        <option>v2.5</option>
+                        <option>v2.0</option>
+                    </select>
+                    
+                    <div class="lang-switcher">
+                        <button class="lang-btn active">EN</button>
+                        <button class="lang-btn">ES</button>
+                        <button class="lang-btn">ZH</button>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-sm">Sign In</button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Sidebar Navigation -->
+        <nav class="doc-sidebar">
+            <div class="nav-section">
+                <h3 class="nav-title">Getting Started</h3>
+                <a href="#overview" class="nav-item active">Overview</a>
+                <a href="#quickstart" class="nav-item">Quick Start Guide</a>
+                <a href="#installation" class="nav-item">Installation</a>
+                <a href="#first-steps" class="nav-item">First Steps</a>
+            </div>
+            
+            <div class="nav-section">
+                <h3 class="nav-title">API Reference</h3>
+                <a href="#api-intro" class="nav-item">Introduction</a>
+                <a href="#authentication" class="nav-item">Authentication</a>
+                <a href="#containers" class="nav-item">Containers API</a>
+                <a href="#tracking" class="nav-item">Tracking API</a>
+                <a href="#analytics" class="nav-item">Analytics API</a>
+                <a href="#webhooks" class="nav-item">Webhooks</a>
+                <a href="#graphql" class="nav-item">GraphQL <span class="nav-badge">NEW</span></a>
+            </div>
+            
+            <div class="nav-section">
+                <h3 class="nav-title">Integration Guides</h3>
+                <a href="#carrier-apis" class="nav-item">Carrier APIs</a>
+                <a href="#web-scraping" class="nav-item">Web Scraping</a>
+                <a href="#edi-integration" class="nav-item">EDI Integration</a>
+                <a href="#email-parsing" class="nav-item">Email Parsing</a>
+                <a href="#erp-systems" class="nav-item">ERP Systems</a>
+            </div>
+            
+            <div class="nav-section">
+                <h3 class="nav-title">User Guides</h3>
+                <a href="#dashboard" class="nav-item">Dashboard Overview</a>
+                <a href="#container-mgmt" class="nav-item">Container Management</a>
+                <a href="#reports" class="nav-item">Reports & Analytics</a>
+                <a href="#alerts" class="nav-item">Alerts & Notifications</a>
+                <a href="#team-mgmt" class="nav-item">Team Management</a>
+            </div>
+            
+            <div class="nav-section">
+                <h3 class="nav-title">Developer Resources</h3>
+                <a href="#sdk-overview" class="nav-item">SDK Overview</a>
+                <a href="#javascript-sdk" class="nav-item">JavaScript SDK</a>
+                <a href="#python-sdk" class="nav-item">Python SDK</a>
+                <a href="#postman" class="nav-item">Postman Collection</a>
+                <a href="#code-samples" class="nav-item">Code Samples</a>
+            </div>
+            
+            <div class="nav-section">
+                <h3 class="nav-title">Architecture & Security</h3>
+                <a href="#architecture" class="nav-item">System Architecture</a>
+                <a href="#security" class="nav-item">Security Overview</a>
+                <a href="#compliance" class="nav-item">Compliance</a>
+                <a href="#data-privacy" class="nav-item">Data Privacy</a>
+                <a href="#disaster-recovery" class="nav-item">Disaster Recovery</a>
+            </div>
+            
+            <div class="nav-section">
+                <h3 class="nav-title">Troubleshooting</h3>
+                <a href="#common-issues" class="nav-item">Common Issues</a>
+                <a href="#api-errors" class="nav-item">API Error Codes</a>
+                <a href="#debugging" class="nav-item">Debugging Guide</a>
+                <a href="#performance" class="nav-item">Performance Tips</a>
+                <a href="#support" class="nav-item">Getting Support</a>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="doc-main">
+            <article class="doc-content">
+                <h1 class="doc-title">Welcome to ROOTUIP Documentation</h1>
+                <p class="doc-subtitle">Everything you need to integrate and use the ROOTUIP platform effectively</p>
+                
+                <div class="doc-meta">
+                    <div class="meta-item">
+                        <span>📅</span>
+                        <span>Last updated: Nov 15, 2024</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>⏱️</span>
+                        <span>15 min read</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>🏷️</span>
+                        <span>Version 3.0</span>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <span class="alert-icon">ℹ️</span>
+                    <div>
+                        <strong>New in v3.0:</strong> GraphQL API support, enhanced ML predictions, and real-time collaboration features. 
+                        <a href="#whats-new" style="color: inherit; text-decoration: underline;">See what's new →</a>
+                    </div>
+                </div>
+                
+                <h2 id="overview">Overview</h2>
+                <p>
+                    ROOTUIP is an enterprise-grade container tracking and demurrage prevention platform that helps shipping companies 
+                    save millions in detention and demurrage fees. Our platform integrates with all major shipping carriers and provides 
+                    real-time visibility into your container movements.
+                </p>
+                
+                <h3>Key Features</h3>
+                <ul>
+                    <li><strong>Real-time Tracking:</strong> Monitor containers across 50+ carriers with unified visibility</li>
+                    <li><strong>D&D Prevention:</strong> AI-powered predictions prevent up to 90% of demurrage charges</li>
+                    <li><strong>Multi-source Integration:</strong> Connect via APIs, web scraping, EDI, and email parsing</li>
+                    <li><strong>Advanced Analytics:</strong> Comprehensive reporting and predictive insights</li>
+                    <li><strong>Enterprise Security:</strong> SOC 2 compliant with end-to-end encryption</li>
+                </ul>
+                
+                <h2 id="quickstart">Quick Start Guide</h2>
+                <p>Get up and running with ROOTUIP in just 5 minutes. Follow these steps to start tracking your first container:</p>
+                
+                <h3>1. Get Your API Key</h3>
+                <p>First, sign up for a ROOTUIP account and generate your API key from the dashboard:</p>
+                
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">bash</span>
+                        <div class="code-actions">
+                            <button class="code-action" onclick="copyCode(this)">Copy</button>
+                            <button class="code-action" onclick="runInTerminal(this)">Run</button>
+                        </div>
+                    </div>
+                    <pre><code class="language-bash"># Set your API key as an environment variable
+export ROOTUIP_API_KEY="your_api_key_here"
+
+# Or add to your .env file
+echo "ROOTUIP_API_KEY=your_api_key_here" >> .env</code></pre>
+                </div>
+                
+                <h3>2. Install the SDK</h3>
+                <p>Choose your preferred programming language and install the ROOTUIP SDK:</p>
+                
+                <div class="interactive-example">
+                    <div class="example-tabs">
+                        <button class="example-tab active" onclick="switchExample('npm')">npm</button>
+                        <button class="example-tab" onclick="switchExample('yarn')">yarn</button>
+                        <button class="example-tab" onclick="switchExample('pip')">pip</button>
+                        <button class="example-tab" onclick="switchExample('composer')">composer</button>
+                    </div>
+                    
+                    <div class="example-content" id="example-npm">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-language">bash</span>
+                                <div class="code-actions">
+                                    <button class="code-action" onclick="copyCode(this)">Copy</button>
+                                </div>
+                            </div>
+                            <pre><code class="language-bash">npm install @rootuip/sdk</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>3. Initialize the Client</h3>
+                <p>Create a new instance of the ROOTUIP client with your API key:</p>
+                
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">javascript</span>
+                        <div class="code-actions">
+                            <button class="code-action" onclick="copyCode(this)">Copy</button>
+                            <button class="code-action" onclick="tryItLive(this)">Try it Live</button>
+                        </div>
+                    </div>
+                    <pre><code class="language-javascript">const { RootuipClient } = require('@rootuip/sdk');
+
+// Initialize the client
+const client = new RootuipClient({
+    apiKey: process.env.ROOTUIP_API_KEY,
+    environment: 'production' // or 'sandbox' for testing
+});
+
+// Test the connection
+const status = await client.getStatus();
+console.log('Connected to ROOTUIP:', status);</code></pre>
+                </div>
+                
+                <h3>4. Track Your First Container</h3>
+                <p>Now you can start tracking containers with a simple API call:</p>
+                
+                <div class="api-endpoint">
+                    <span class="method-badge post">POST</span>
+                    <span>/api/v3/containers/track</span>
+                </div>
+                
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">javascript</span>
+                        <div class="code-actions">
+                            <button class="code-action" onclick="copyCode(this)">Copy</button>
+                        </div>
+                    </div>
+                    <pre><code class="language-javascript">// Track a container
+const container = await client.containers.track({
+    containerNumber: 'MSKU1234567',
+    carrier: 'maersk',
+    referenceNumber: 'BOOK123456'
+});
+
+console.log('Container status:', container.status);
+console.log('Current location:', container.currentLocation);
+console.log('ETA:', container.eta);
+
+// Set up real-time updates
+client.containers.subscribe(container.id, (update) => {
+    console.log('Container update:', update);
+});</code></pre>
+                </div>
+                
+                <h2 id="api-reference">API Reference</h2>
+                
+                <h3>Authentication</h3>
+                <p>All API requests must include your API key in the Authorization header:</p>
+                
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">http</span>
+                        <div class="code-actions">
+                            <button class="code-action" onclick="copyCode(this)">Copy</button>
+                        </div>
+                    </div>
+                    <pre><code class="language-http">Authorization: Bearer your_api_key_here
+Content-Type: application/json</code></pre>
+                </div>
+                
+                <h3>Container Tracking Endpoint</h3>
+                
+                <div class="api-endpoint">
+                    <span class="method-badge post">POST</span>
+                    <span>/api/v3/containers/track</span>
+                </div>
+                
+                <p>Start tracking a container by providing the container number and carrier information.</p>
+                
+                <h4>Request Parameters</h4>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="param-name">containerNumber</span></td>
+                            <td><span class="param-type">string</span></td>
+                            <td><span class="param-required">Required</span></td>
+                            <td>The container identification number</td>
+                        </tr>
+                        <tr>
+                            <td><span class="param-name">carrier</span></td>
+                            <td><span class="param-type">string</span></td>
+                            <td><span class="param-required">Required</span></td>
+                            <td>Carrier code (e.g., 'maersk', 'msc', 'cma-cgm')</td>
+                        </tr>
+                        <tr>
+                            <td><span class="param-name">referenceNumber</span></td>
+                            <td><span class="param-type">string</span></td>
+                            <td></td>
+                            <td>Booking or B/L reference number</td>
+                        </tr>
+                        <tr>
+                            <td><span class="param-name">webhookUrl</span></td>
+                            <td><span class="param-type">string</span></td>
+                            <td></td>
+                            <td>URL to receive real-time updates</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h4>Example Request</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">bash</span>
+                        <div class="code-actions">
+                            <button class="code-action" onclick="copyCode(this)">Copy</button>
+                            <button class="code-action" onclick="tryRequest(this)">Try Request</button>
+                        </div>
+                    </div>
+                    <pre><code class="language-bash">curl -X POST https://api.rootuip.com/v3/containers/track \
+  -H "Authorization: Bearer your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "containerNumber": "MSKU1234567",
+    "carrier": "maersk",
+    "referenceNumber": "BOOK123456",
+    "webhookUrl": "https://your-domain.com/webhooks/container-updates"
+  }'</code></pre>
+                </div>
+                
+                <h4>Example Response</h4>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">json</span>
+                        <div class="code-actions">
+                            <button class="code-action" onclick="copyCode(this)">Copy</button>
+                        </div>
+                    </div>
+                    <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "id": "cnt_1234567890",
+    "containerNumber": "MSKU1234567",
+    "carrier": "maersk",
+    "status": "in_transit",
+    "currentLocation": {
+      "port": "CNSHA",
+      "portName": "Shanghai, China",
+      "coordinates": {
+        "lat": 31.2304,
+        "lng": 121.4737
+      },
+      "arrivedAt": "2024-11-10T14:30:00Z"
+    },
+    "destination": {
+      "port": "USLAX",
+      "portName": "Los Angeles, USA",
+      "eta": "2024-11-25T08:00:00Z"
+    },
+    "events": [
+      {
+        "timestamp": "2024-11-10T14:30:00Z",
+        "event": "arrived_at_port",
+        "location": "CNSHA",
+        "description": "Container arrived at Shanghai port"
+      }
+    ],
+    "demurrageRisk": {
+      "level": "low",
+      "freeTimeRemaining": 5,
+      "estimatedCharges": 0,
+      "recommendations": []
+    },
+    "tracking": {
+      "lastUpdated": "2024-11-15T10:00:00Z",
+      "updateFrequency": "hourly",
+      "dataSource": "carrier_api"
+    }
+  }
+}</code></pre>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <strong>Rate Limits:</strong> API requests are limited to 1000 per hour for standard plans. 
+                        Enterprise plans have custom rate limits. Check the <code>X-RateLimit-*</code> headers in responses.
+                    </div>
+                </div>
+                
+                <button class="try-it-btn" onclick="openAPIPlayground()">
+                    Try it in API Playground →
+                </button>
+            </article>
+        </main>
+        
+        <!-- Table of Contents -->
+        <aside class="doc-toc">
+            <h3 class="toc-title">On This Page</h3>
+            <ul class="toc-list">
+                <li class="toc-item level-1">
+                    <a href="#overview" class="toc-link active">Overview</a>
+                </li>
+                <li class="toc-item level-2">
+                    <a href="#key-features" class="toc-link">Key Features</a>
+                </li>
+                <li class="toc-item level-1">
+                    <a href="#quickstart" class="toc-link">Quick Start Guide</a>
+                </li>
+                <li class="toc-item level-2">
+                    <a href="#get-api-key" class="toc-link">1. Get Your API Key</a>
+                </li>
+                <li class="toc-item level-2">
+                    <a href="#install-sdk" class="toc-link">2. Install the SDK</a>
+                </li>
+                <li class="toc-item level-2">
+                    <a href="#initialize" class="toc-link">3. Initialize the Client</a>
+                </li>
+                <li class="toc-item level-2">
+                    <a href="#first-track" class="toc-link">4. Track Your First Container</a>
+                </li>
+                <li class="toc-item level-1">
+                    <a href="#api-reference" class="toc-link">API Reference</a>
+                </li>
+                <li class="toc-item level-2">
+                    <a href="#authentication" class="toc-link">Authentication</a>
+                </li>
+                <li class="toc-item level-2">
+                    <a href="#container-endpoint" class="toc-link">Container Tracking Endpoint</a>
+                </li>
+            </ul>
+            
+            <div style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--rootuip-border);">
+                <p style="font-size: var(--text-sm); color: var(--rootuip-text-secondary); margin-bottom: var(--space-3);">
+                    Was this helpful?
+                </p>
+                <div style="display: flex; gap: var(--space-2);">
+                    <button class="btn btn-sm btn-secondary" onclick="sendFeedback('yes')">👍 Yes</button>
+                    <button class="btn btn-sm btn-secondary" onclick="sendFeedback('no')">👎 No</button>
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <script>
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('focus', function() {
+            // Open search modal
+            console.log('Opening search...');
+        });
+        
+        // Keyboard shortcut for search
+        document.addEventListener('keydown', function(e) {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                document.querySelector('.search-input').focus();
+            }
+        });
+        
+        // Code copy functionality
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block');
+            const code = codeBlock.querySelector('code').textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = 'var(--rootuip-accent)';
+                button.style.color = 'white';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                    button.style.color = '';
+                }, 2000);
+            });
+        }
+        
+        // Interactive examples
+        function switchExample(type) {
+            document.querySelectorAll('.example-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Switch content based on type
+            console.log('Switching to:', type);
+        }
+        
+        // Table of contents highlighting
+        const tocLinks = document.querySelectorAll('.toc-link');
+        const headings = document.querySelectorAll('h2, h3');
+        
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY + 100;
+            
+            let currentSection = '';
+            headings.forEach(heading => {
+                if (heading.offsetTop <= scrollPosition) {
+                    currentSection = heading.id;
+                }
+            });
+            
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        // Smooth scrolling for TOC links
+        tocLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const target = document.getElementById(targetId);
+                
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // API Playground
+        function openAPIPlayground() {
+            window.open('/api-playground', '_blank');
+        }
+        
+        function tryItLive(button) {
+            console.log('Opening live editor...');
+        }
+        
+        function tryRequest(button) {
+            console.log('Testing API request...');
+        }
+        
+        function runInTerminal(button) {
+            console.log('Running in terminal...');
+        }
+        
+        function sendFeedback(type) {
+            console.log('Feedback:', type);
+            alert(`Thank you for your feedback! ${type === 'yes' ? '😊' : 'We\'ll improve this page.'}`);
+        }
+        
+        // Navigation active state
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                navItems.forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+global:
+  # SMTP configuration for email alerts
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'alerts@rootuip.com'
+  smtp_auth_username: 'alerts@rootuip.com'
+  smtp_auth_password: 'your-smtp-app-password'
+  smtp_require_tls: true
+
+  # Slack webhook
+  slack_api_url: 'YOUR_SLACK_WEBHOOK_URL'
+
+  # PagerDuty
+  pagerduty_url: 'https://events.pagerduty.com/v2/enqueue'
+
+# Templates directory
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+# Route tree
+route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 12h
+  receiver: 'default'
+  
+  routes:
+    # Critical alerts go to PagerDuty
+    - match:
+        severity: critical
+      receiver: pagerduty-critical
+      continue: true
+      
+    # Security alerts
+    - match:
+        team: security
+      receiver: security-team
+      repeat_interval: 1h
+      
+    # Database alerts
+    - match:
+        team: database
+      receiver: database-team
+      
+    # ML/AI alerts
+    - match:
+        team: ml
+      receiver: ml-team
+      
+    # Business metrics alerts
+    - match:
+        team: business
+      receiver: business-team
+      repeat_interval: 4h
+
+# Receivers
+receivers:
+  - name: 'default'
+    email_configs:
+      - to: 'ops@rootuip.com'
+        headers:
+          Subject: '[ROOTUIP] {{ .GroupLabels.alertname }} - {{ .GroupLabels.severity }}'
+    slack_configs:
+      - channel: '#alerts'
+        title: 'ROOTUIP Alert'
+        text: '{{ range .Alerts }}{{ .Annotations.summary }}\n{{ end }}'
+
+  - name: 'pagerduty-critical'
+    pagerduty_configs:
+      - service_key: 'YOUR_PAGERDUTY_SERVICE_KEY'
+        description: '{{ .GroupLabels.alertname }}: {{ .CommonAnnotations.summary }}'
+        details:
+          severity: '{{ .CommonLabels.severity }}'
+          num_alerts: '{{ .Alerts | len }}'
+        client: 'ROOTUIP AlertManager'
+        client_url: '{{ template "pagerduty.default.clientURL" . }}'
+
+  - name: 'security-team'
+    email_configs:
+      - to: 'security@rootuip.com'
+        headers:
+          Subject: '[SECURITY] {{ .GroupLabels.alertname }}'
+          X-Priority: '1'
+    slack_configs:
+      - channel: '#security-alerts'
+        username: 'SecurityBot'
+        color: 'danger'
+        title: '🚨 Security Alert: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}'
+        send_resolved: true
+
+  - name: 'database-team'
+    email_configs:
+      - to: 'dba@rootuip.com'
+    slack_configs:
+      - channel: '#database-alerts'
+        username: 'DatabaseBot'
+        title: '🗄️ Database Alert: {{ .GroupLabels.alertname }}'
+
+  - name: 'ml-team'
+    email_configs:
+      - to: 'ml@rootuip.com'
+    slack_configs:
+      - channel: '#ml-alerts'
+        username: 'MLBot'
+        title: '🤖 ML System Alert: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}'
+
+  - name: 'business-team'
+    email_configs:
+      - to: 'business@rootuip.com'
+    slack_configs:
+      - channel: '#business-metrics'
+        username: 'BusinessBot'
+        title: '📊 Business Metric Alert: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}'
+
+# Inhibition rules
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'instance']

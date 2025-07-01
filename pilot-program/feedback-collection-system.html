@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Pilot Feedback System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #1a365d;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+
+        .feedback-form {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+        }
+
+        .required {
+            color: #e53e3e;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .rating-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .rating-item {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .rating-item:hover {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+
+        .rating-item input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .rating-item input[type="radio"]:checked + .rating-label {
+            color: #2b6cb0;
+            font-weight: 600;
+        }
+
+        .rating-item input[type="radio"]:checked ~ .rating-value {
+            color: #2b6cb0;
+        }
+
+        .rating-item.selected {
+            background: #ebf8ff;
+            border-color: #4299e1;
+        }
+
+        .rating-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #718096;
+            margin-bottom: 0.25rem;
+        }
+
+        .rating-label {
+            font-size: 0.85rem;
+            color: #718096;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .priority-select {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .priority-btn {
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .priority-btn:hover {
+            background: #f7fafc;
+        }
+
+        .priority-btn.selected {
+            background: #4299e1;
+            color: white;
+            border-color: #4299e1;
+        }
+
+        .submit-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: #4299e1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3182ce;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #4299e1;
+            border: 2px solid #4299e1;
+        }
+
+        .btn-secondary:hover {
+            background: #ebf8ff;
+        }
+
+        .save-draft {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .success-message {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .error-message {
+            background: #feb2b2;
+            color: #742a2a;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #4299e1;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .rating-group {
+                flex-direction: column;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .priority-select {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Pilot Feedback</h1>
+            <p>Help us improve ROOTUIP based on your experience</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            Thank you for your feedback! Your responses have been submitted successfully.
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            There was an error submitting your feedback. Please try again.
+        </div>
+
+        <form class="feedback-form" id="feedbackForm">
+            <!-- Basic Information -->
+            <div class="form-section">
+                <h2 class="section-title">Basic Information</h2>
+                
+                <div class="form-group">
+                    <label for="name">Your Name <span class="required">*</span></label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="role">Your Role <span class="required">*</span></label>
+                    <select id="role" name="role" required>
+                        <option value="">Select your role</option>
+                        <option value="operations_manager">Operations Manager</option>
+                        <option value="logistics_coordinator">Logistics Coordinator</option>
+                        <option value="supply_chain_analyst">Supply Chain Analyst</option>
+                        <option value="executive">Executive</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Overall Satisfaction -->
+            <div class="form-section">
+                <h2 class="section-title">Overall Satisfaction</h2>
+                
+                <div class="form-group">
+                    <label>How satisfied are you with ROOTUIP? <span class="required">*</span></label>
+                    <div class="rating-group">
+                        <div class="rating-item" onclick="selectRating(this, 'satisfaction', 1)">
+                            <input type="radio" name="satisfaction" value="1" id="sat1" required>
+                            <div class="rating-value">1</div>
+                            <div class="rating-label">Very Dissatisfied</div>
+                        </div>
+                        <div class="rating-item" onclick="selectRating(this, 'satisfaction', 2)">
+                            <input type="radio" name="satisfaction" value="2" id="sat2">
+                            <div class="rating-value">2</div>
+                            <div class="rating-label">Dissatisfied</div>
+                        </div>
+                        <div class="rating-item" onclick="selectRating(this, 'satisfaction', 3)">
+                            <input type="radio" name="satisfaction" value="3" id="sat3">
+                            <div class="rating-value">3</div>
+                            <div class="rating-label">Neutral</div>
+                        </div>
+                        <div class="rating-item" onclick="selectRating(this, 'satisfaction', 4)">
+                            <input type="radio" name="satisfaction" value="4" id="sat4">
+                            <div class="rating-value">4</div>
+                            <div class="rating-label">Satisfied</div>
+                        </div>
+                        <div class="rating-item" onclick="selectRating(this, 'satisfaction', 5)">
+                            <input type="radio" name="satisfaction" value="5" id="sat5">
+                            <div class="rating-value">5</div>
+                            <div class="rating-label">Very Satisfied</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>How likely are you to recommend ROOTUIP? <span class="required">*</span></label>
+                    <div class="rating-group">
+                        <div class="rating-item" onclick="selectRating(this, 'nps', 0)">
+                            <input type="radio" name="nps" value="0" id="nps0" required>
+                            <div class="rating-value">0</div>
+                        </div>
+                        <div class="rating-item" onclick="selectRating(this, 'nps', 1)">
+                            <input type="radio" name="nps" value="1" id="nps1">
+                            <div class="rating-value">1</div>
+                        </div>
+                        <div class="rating-item" onclick="selectRating(this, 'nps', 2)">
+                            <input type="radio" name="nps" value="2" id="nps2">
+                            <div class="rating-value">2</div>
+                        </div>
+                        <div class="rating-item" onclick="selectRating(this, 'nps', 3)">
+                            <input type="radio" name="nps" value="3" id="nps3">
+                            <div class="rating-value">3</div>
+                        </div>
+                        <div class="rating-item" onclick="selectRating(this, 'nps', 4)">
+                            <input type="radio" name="nps" value="4" id="nps4">
+                            <div class="rating-value">4</div>
+                        </div>
+                        <div class="rating-item" onclick="selectRating(this, 'nps', 5)">
+                            <input type="radio" name="nps" value="5" id="nps5">
+                            <div class="rating-value">5</div>
+                        </div>
+                        <div class="rating-item" onclick="selectRating(this, 'nps', 6)">
+                            <input type="radio" name="nps" value="6" id="nps6">
+                            <div class="rating-value">6</div>
+                        </div>
+                        <div class="rating-item" onclick="selectRating(this, 'nps', 7)">
+                            <input type="radio" name="nps" value="7" id="nps7">
+                            <div class="rating-value">7</div>
+                        </div>
+                        <div class="rating-item" onclick="selectRating(this, 'nps', 8)">
+                            <input type="radio" name="nps" value="8" id="nps8">
+                            <div class="rating-value">8</div>
+                        </div>
+                        <div class="rating-item" onclick="selectRating(this, 'nps', 9)">
+                            <input type="radio" name="nps" value="9" id="nps9">
+                            <div class="rating-value">9</div>
+                        </div>
+                        <div class="rating-item" onclick="selectRating(this, 'nps', 10)">
+                            <input type="radio" name="nps" value="10" id="nps10">
+                            <div class="rating-value">10</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Feedback -->
+            <div class="form-section">
+                <h2 class="section-title">Feature Feedback</h2>
+                
+                <div class="form-group">
+                    <label>Which features have been most valuable? (Select all that apply)</label>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <input type="checkbox" id="feature1" name="valuable_features" value="dd_predictions">
+                            <label for="feature1">D&D Risk Predictions</label>
+                        </div>
+                        <div class="feature-item">
+                            <input type="checkbox" id="feature2" name="valuable_features" value="real_time_alerts">
+                            <label for="feature2">Real-time Alerts</label>
+                        </div>
+                        <div class="feature-item">
+                            <input type="checkbox" id="feature3" name="valuable_features" value="analytics_dashboard">
+                            <label for="feature3">Analytics Dashboard</label>
+                        </div>
+                        <div class="feature-item">
+                            <input type="checkbox" id="feature4" name="valuable_features" value="route_optimization">
+                            <label for="feature4">Route Optimization</label>
+                        </div>
+                        <div class="feature-item">
+                            <input type="checkbox" id="feature5" name="valuable_features" value="document_processing">
+                            <label for="feature5">Document Processing</label>
+                        </div>
+                        <div class="feature-item">
+                            <input type="checkbox" id="feature6" name="valuable_features" value="reporting">
+                            <label for="feature6">Automated Reporting</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>What features or improvements would you like to see?</label>
+                    <textarea id="feature_requests" name="feature_requests" rows="4" 
+                        placeholder="Please describe any features or improvements you'd like..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Priority of requested improvements</label>
+                    <div class="priority-select">
+                        <button type="button" class="priority-btn" onclick="selectPriority(this, 'low')">Low</button>
+                        <button type="button" class="priority-btn" onclick="selectPriority(this, 'medium')">Medium</button>
+                        <button type="button" class="priority-btn" onclick="selectPriority(this, 'high')">High</button>
+                    </div>
+                    <input type="hidden" id="improvement_priority" name="improvement_priority">
+                </div>
+            </div>
+
+            <!-- Business Impact -->
+            <div class="form-section">
+                <h2 class="section-title">Business Impact</h2>
+                
+                <div class="form-group">
+                    <label>Has ROOTUIP helped reduce D&D charges? <span class="required">*</span></label>
+                    <select id="dd_reduction" name="dd_reduction" required>
+                        <option value="">Select an option</option>
+                        <option value="significant">Yes, significantly (>20%)</option>
+                        <option value="moderate">Yes, moderately (10-20%)</option>
+                        <option value="slight">Yes, slightly (<10%)</option>
+                        <option value="no_change">No noticeable change</option>
+                        <option value="too_early">Too early to tell</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>What has been the most significant benefit?</label>
+                    <textarea id="significant_benefit" name="significant_benefit" rows="3" 
+                        placeholder="Please describe the most significant benefit you've experienced..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Have you experienced any challenges?</label>
+                    <textarea id="challenges" name="challenges" rows="3" 
+                        placeholder="Please describe any challenges or issues..."></textarea>
+                </div>
+            </div>
+
+            <!-- Future Plans -->
+            <div class="form-section">
+                <h2 class="section-title">Future Plans</h2>
+                
+                <div class="form-group">
+                    <label>How likely are you to continue using ROOTUIP after the pilot? <span class="required">*</span></label>
+                    <select id="continuation_likelihood" name="continuation_likelihood" required>
+                        <option value="">Select an option</option>
+                        <option value="very_likely">Very likely</option>
+                        <option value="likely">Likely</option>
+                        <option value="neutral">Neutral</option>
+                        <option value="unlikely">Unlikely</option>
+                        <option value="very_unlikely">Very unlikely</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>What would make you more likely to continue?</label>
+                    <textarea id="continuation_factors" name="continuation_factors" rows="3" 
+                        placeholder="Please describe what would increase your likelihood to continue..."></textarea>
+                </div>
+            </div>
+
+            <!-- Additional Comments -->
+            <div class="form-section">
+                <h2 class="section-title">Additional Comments</h2>
+                
+                <div class="form-group">
+                    <label>Any other feedback or suggestions?</label>
+                    <textarea id="additional_comments" name="additional_comments" rows="4" 
+                        placeholder="Please share any other thoughts, suggestions, or feedback..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="follow_up" name="follow_up" value="yes">
+                        I'm willing to participate in a follow-up interview
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="case_study" name="case_study" value="yes">
+                        I'm willing to participate in a case study
+                    </label>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <div class="save-draft">
+                    <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save Draft</button>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Form progress tracking
+        function updateProgress() {
+            const form = document.getElementById('feedbackForm');
+            const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+            const filled = Array.from(inputs).filter(input => {
+                if (input.type === 'radio') {
+                    return form.querySelector(`input[name="${input.name}"]:checked`);
+                }
+                return input.value.trim() !== '';
+            });
+            
+            const progress = (filled.length / inputs.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Rating selection
+        function selectRating(element, name, value) {
+            // Clear previous selections
+            document.querySelectorAll(`.rating-item input[name="${name}"]`).forEach(item => {
+                item.closest('.rating-item').classList.remove('selected');
+            });
+            
+            // Select clicked item
+            element.classList.add('selected');
+            element.querySelector('input[type="radio"]').checked = true;
+            updateProgress();
+        }
+
+        // Priority selection
+        function selectPriority(element, priority) {
+            // Clear previous selections
+            document.querySelectorAll('.priority-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Select clicked item
+            element.classList.add('selected');
+            document.getElementById('improvement_priority').value = priority;
+        }
+
+        // Save draft
+        function saveDraft() {
+            const formData = new FormData(document.getElementById('feedbackForm'));
+            const data = Object.fromEntries(formData);
+            localStorage.setItem('feedbackDraft', JSON.stringify(data));
+            alert('Draft saved! Your responses will be restored when you return.');
+        }
+
+        // Load draft
+        function loadDraft() {
+            const draft = localStorage.getItem('feedbackDraft');
+            if (draft) {
+                const data = JSON.parse(draft);
+                const form = document.getElementById('feedbackForm');
+                
+                Object.entries(data).forEach(([key, value]) => {
+                    const field = form.elements[key];
+                    if (field) {
+                        if (field.type === 'checkbox' || field.type === 'radio') {
+                            field.checked = true;
+                            if (field.type === 'radio') {
+                                field.closest('.rating-item')?.classList.add('selected');
+                            }
+                        } else {
+                            field.value = value;
+                        }
+                    }
+                });
+                
+                updateProgress();
+            }
+        }
+
+        // Form submission
+        document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            // Get checked features
+            data.valuable_features = Array.from(
+                document.querySelectorAll('input[name="valuable_features"]:checked')
+            ).map(cb => cb.value);
+            
+            try {
+                const response = await fetch('/api/pilot/feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('feedbackForm').style.display = 'none';
+                    localStorage.removeItem('feedbackDraft');
+                    window.scrollTo(0, 0);
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (error) {
+                document.getElementById('errorMessage').style.display = 'block';
+                window.scrollTo(0, 0);
+            }
+        });
+
+        // Track form changes
+        document.getElementById('feedbackForm').addEventListener('input', updateProgress);
+        document.getElementById('feedbackForm').addEventListener('change', updateProgress);
+
+        // Load draft on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadDraft();
+            updateProgress();
+        });
+
+        // Auto-save draft
+        setInterval(saveDraft, 30000); // Auto-save every 30 seconds
+    </script>
+</body>
+</html>

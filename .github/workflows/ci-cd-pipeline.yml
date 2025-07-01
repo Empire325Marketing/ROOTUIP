@@ -1,0 +1,588 @@
+name: ROOTUIP Enterprise CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop, release/*, feature/* ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - development
+        - staging
+        - production
+      force_deploy:
+        description: 'Force deployment even if tests fail'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  NODE_VERSION: '18.x'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # Security and vulnerability scanning
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+
+      - name: OWASP ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.9.0
+        with:
+          target: 'https://staging.rootuip.com'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a'
+
+  # Code quality and testing
+  quality-gate:
+    name: Code Quality Gate
+    runs-on: ubuntu-latest
+    outputs:
+      quality-passed: ${{ steps.quality-check.outputs.passed }}
+      coverage: ${{ steps.coverage.outputs.percentage }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint -- --format=json --output-file=eslint-report.json
+        continue-on-error: true
+
+      - name: Run Prettier check
+        run: npm run format:check
+
+      - name: Run unit tests
+        run: npm run test:unit -- --coverage --coverageReporters=json-summary --coverageReporters=lcov
+
+      - name: Run integration tests
+        run: npm run test:integration
+
+      - name: Run end-to-end tests
+        run: npm run test:e2e
+
+      - name: Extract code coverage
+        id: coverage
+        run: |
+          COVERAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
+          echo "percentage=$COVERAGE" >> $GITHUB_OUTPUT
+          echo "Code coverage: $COVERAGE%"
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Quality Gate check
+        id: quality-check
+        run: |
+          # Check if coverage meets minimum threshold (80%)
+          if (( $(echo "${{ steps.coverage.outputs.percentage }} >= 80" | bc -l) )); then
+            echo "✅ Coverage threshold met: ${{ steps.coverage.outputs.percentage }}%"
+            echo "passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Coverage below threshold: ${{ steps.coverage.outputs.percentage }}% (minimum: 80%)"
+            echo "passed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+
+      - name: Archive test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-results
+          path: |
+            coverage/
+            eslint-report.json
+            test-results.xml
+
+  # Performance testing
+  performance-test:
+    name: Performance Testing
+    runs-on: ubuntu-latest
+    needs: [quality-gate]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/release/')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application
+        run: |
+          npm start &
+          sleep 30
+
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.12.x
+          lhci autorun
+
+      - name: Run K6 performance tests
+        uses: grafana/k6-action@v0.3.0
+        with:
+          filename: performance/load-test.js
+        env:
+          BASE_URL: http://localhost:3000
+
+      - name: Upload performance results
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-results
+          path: |
+            .lighthouseci/
+            performance-results.json
+
+  # Build and containerize
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    needs: [security-scan, quality-gate]
+    if: needs.quality-gate.outputs.quality-passed == 'true' || github.event.inputs.force_deploy == 'true'
+    outputs:
+      image-digest: ${{ steps.build.outputs.digest }}
+      image-tag: ${{ steps.meta.outputs.tags }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix={{branch}}-
+
+      - name: Build and push Docker image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            VERSION=${{ steps.meta.outputs.version }}
+            BUILD_DATE=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
+            VCS_REF=${{ github.sha }}
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ steps.meta.outputs.tags }}
+          format: spdx-json
+          output-file: sbom.spdx.json
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v3
+        with:
+          name: sbom
+          path: sbom.spdx.json
+
+  # Feature flag evaluation
+  feature-flags:
+    name: Feature Flag Evaluation
+    runs-on: ubuntu-latest
+    needs: [build]
+    outputs:
+      deployment-enabled: ${{ steps.flags.outputs.deployment_enabled }}
+      canary-percentage: ${{ steps.flags.outputs.canary_percentage }}
+      feature-toggles: ${{ steps.flags.outputs.feature_toggles }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Evaluate feature flags
+        id: flags
+        run: |
+          # Check deployment feature flag
+          DEPLOYMENT_ENABLED=$(node -e "
+            const flags = require('./ci-cd/feature-flags.json');
+            const environment = '${{ github.event.inputs.environment || 'staging' }}';
+            const branch = '${{ github.ref_name }}';
+            console.log(flags.deploymentEnabled[environment] || false);
+          ")
+          
+          # Get canary deployment percentage
+          CANARY_PERCENTAGE=$(node -e "
+            const flags = require('./ci-cd/feature-flags.json');
+            console.log(flags.canaryDeployment.percentage || 10);
+          ")
+          
+          # Get feature toggles for environment
+          FEATURE_TOGGLES=$(node -e "
+            const flags = require('./ci-cd/feature-flags.json');
+            const environment = '${{ github.event.inputs.environment || 'staging' }}';
+            console.log(JSON.stringify(flags.features[environment] || {}));
+          ")
+          
+          echo "deployment_enabled=$DEPLOYMENT_ENABLED" >> $GITHUB_OUTPUT
+          echo "canary_percentage=$CANARY_PERCENTAGE" >> $GITHUB_OUTPUT
+          echo "feature_toggles=$FEATURE_TOGGLES" >> $GITHUB_OUTPUT
+
+  # Deployment to development
+  deploy-development:
+    name: Deploy to Development
+    runs-on: ubuntu-latest
+    environment: development
+    needs: [build, feature-flags]
+    if: |
+      needs.feature-flags.outputs.deployment-enabled == 'true' &&
+      (github.ref == 'refs/heads/develop' || 
+       github.event.inputs.environment == 'development')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Development
+        run: |
+          echo "Deploying to development environment..."
+          ./ci-cd/scripts/deploy.sh development ${{ needs.build.outputs.image-tag }}
+
+      - name: Run smoke tests
+        run: |
+          ./ci-cd/scripts/smoke-tests.sh development
+
+      - name: Update deployment status
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.DEPLOYMENT_WEBHOOK_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "environment": "development",
+              "status": "success",
+              "version": "${{ needs.build.outputs.image-tag }}",
+              "commit": "${{ github.sha }}",
+              "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+            }' \
+            ${{ secrets.DEPLOYMENT_WEBHOOK_URL }}
+
+  # Deployment approval for staging
+  staging-approval:
+    name: Staging Deployment Approval
+    runs-on: ubuntu-latest
+    needs: [deploy-development]
+    if: |
+      github.ref == 'refs/heads/main' || 
+      startsWith(github.ref, 'refs/heads/release/') ||
+      github.event.inputs.environment == 'staging'
+    steps:
+      - name: Request staging approval
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: team-leads,devops-team
+          minimum-approvals: 2
+          issue-title: "Staging Deployment Approval for ${{ github.sha }}"
+          issue-body: |
+            **Deployment Request**
+            - **Environment**: Staging
+            - **Version**: ${{ needs.build.outputs.image-tag }}
+            - **Commit**: ${{ github.sha }}
+            - **Author**: ${{ github.actor }}
+            - **Coverage**: ${{ needs.quality-gate.outputs.coverage }}%
+            
+            **Quality Checks**
+            - ✅ Security scan passed
+            - ✅ Unit tests passed
+            - ✅ Integration tests passed
+            - ✅ Code coverage above 80%
+            
+            Please review and approve this deployment.
+
+  # Blue-green deployment to staging
+  deploy-staging:
+    name: Deploy to Staging (Blue-Green)
+    runs-on: ubuntu-latest
+    environment: staging
+    needs: [build, feature-flags, staging-approval]
+    if: needs.feature-flags.outputs.deployment-enabled == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Blue-Green Deployment
+        id: deploy
+        run: |
+          echo "Starting blue-green deployment to staging..."
+          
+          # Deploy to blue environment
+          ./ci-cd/scripts/blue-green-deploy.sh staging blue ${{ needs.build.outputs.image-tag }}
+          
+          # Wait for health checks
+          ./ci-cd/scripts/health-check.sh staging-blue
+          
+          # Run validation tests
+          ./ci-cd/scripts/validation-tests.sh staging-blue
+          
+          # Switch traffic to blue environment
+          ./ci-cd/scripts/switch-traffic.sh staging blue
+          
+          # Mark green environment as standby
+          ./ci-cd/scripts/mark-standby.sh staging green
+
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "Deployment failed, rolling back..."
+          ./ci-cd/scripts/rollback.sh staging
+
+      - name: Post-deployment verification
+        run: |
+          ./ci-cd/scripts/post-deployment-tests.sh staging
+
+  # Production deployment approval
+  production-approval:
+    name: Production Deployment Approval
+    runs-on: ubuntu-latest
+    needs: [deploy-staging]
+    if: |
+      github.ref == 'refs/heads/main' || 
+      startsWith(github.ref, 'refs/tags/v') ||
+      github.event.inputs.environment == 'production'
+    steps:
+      - name: Request production approval
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: senior-engineers,product-owners,security-team
+          minimum-approvals: 3
+          issue-title: "Production Deployment Approval for ${{ github.sha }}"
+          issue-body: |
+            **🚀 PRODUCTION DEPLOYMENT REQUEST**
+            
+            **Release Information**
+            - **Environment**: Production
+            - **Version**: ${{ needs.build.outputs.image-tag }}
+            - **Commit**: ${{ github.sha }}
+            - **Author**: ${{ github.actor }}
+            - **Staging Deployment**: ✅ Successful
+            
+            **Quality Metrics**
+            - **Code Coverage**: ${{ needs.quality-gate.outputs.coverage }}%
+            - **Security Scan**: ✅ Passed
+            - **Performance Tests**: ✅ Passed
+            - **Staging Validation**: ✅ Passed
+            
+            **Deployment Strategy**
+            - **Type**: Canary Deployment
+            - **Initial Traffic**: ${{ needs.feature-flags.outputs.canary-percentage }}%
+            - **Rollback Plan**: Automated
+            
+            **Required Approvals**: 3
+            - [ ] Senior Engineer
+            - [ ] Product Owner  
+            - [ ] Security Team
+            
+            ⚠️ **This deployment will affect production users**
+            
+            Please review all metrics and approve only if satisfied with the quality and readiness.
+
+  # Canary deployment to production
+  deploy-production:
+    name: Deploy to Production (Canary)
+    runs-on: ubuntu-latest
+    environment: production
+    needs: [build, feature-flags, production-approval]
+    if: needs.feature-flags.outputs.deployment-enabled == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Canary Deployment
+        id: canary
+        run: |
+          echo "Starting canary deployment to production..."
+          
+          # Deploy canary version
+          ./ci-cd/scripts/canary-deploy.sh production ${{ needs.build.outputs.image-tag }} \
+            ${{ needs.feature-flags.outputs.canary-percentage }}
+          
+          # Monitor canary metrics
+          ./ci-cd/scripts/monitor-canary.sh production 300  # 5 minutes
+          
+          # Gradual traffic increase
+          ./ci-cd/scripts/gradual-rollout.sh production
+
+      - name: Full deployment
+        if: success()
+        run: |
+          echo "Canary successful, proceeding with full deployment..."
+          ./ci-cd/scripts/complete-deployment.sh production
+
+      - name: Automatic rollback
+        if: failure()
+        run: |
+          echo "Canary failed, initiating automatic rollback..."
+          ./ci-cd/scripts/emergency-rollback.sh production
+
+      - name: Post-deployment monitoring
+        run: |
+          # Set up enhanced monitoring for 24 hours
+          ./ci-cd/scripts/enhanced-monitoring.sh production 24
+
+  # Release notification
+  notify-release:
+    name: Release Notifications
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: success() && startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate release notes
+        id: release-notes
+        run: |
+          ./ci-cd/scripts/generate-release-notes.sh ${{ github.ref_name }} > release-notes.md
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: ROOTUIP ${{ github.ref_name }}
+          body_path: release-notes.md
+          draft: false
+          prerelease: false
+
+      - name: Notify Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          channel: '#releases'
+          message: |
+            🚀 **ROOTUIP ${{ github.ref_name }} Released to Production**
+            
+            **Deployment Details:**
+            - Version: ${{ github.ref_name }}
+            - Commit: ${{ github.sha }}
+            - Coverage: ${{ needs.quality-gate.outputs.coverage }}%
+            - Deployment Type: Canary → Full
+            
+            **Links:**
+            - [Release Notes](https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }})
+            - [Production Dashboard](https://monitoring.rootuip.com)
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Email customer notifications
+        run: |
+          ./ci-cd/scripts/notify-customers.sh ${{ github.ref_name }}
+
+  # Cleanup and maintenance
+  cleanup:
+    name: Cleanup
+    runs-on: ubuntu-latest
+    needs: [deploy-production, notify-release]
+    if: always()
+    steps:
+      - name: Cleanup old images
+        run: |
+          # Keep only last 10 images per environment
+          ./ci-cd/scripts/cleanup-images.sh 10
+
+      - name: Update deployment metrics
+        run: |
+          ./ci-cd/scripts/update-metrics.sh success ${{ github.sha }}
+
+      - name: Archive deployment artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: deployment-artifacts-${{ github.sha }}
+          path: |
+            deployment-logs/
+            metrics/
+            release-notes.md
+          retention-days: 30

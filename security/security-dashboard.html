@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Security Operations Center</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0a0e1a;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a1f35 0%, #0f1420 100%);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #2a3f5f;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+        }
+        
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .security-status {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .threat-level {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .threat-level-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ff00;
+        }
+        
+        .threat-level-label {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+        }
+        
+        /* Navigation */
+        .nav-tabs {
+            background: #0f1420;
+            padding: 0 2rem;
+            border-bottom: 1px solid #2a3f5f;
+        }
+        
+        .nav-tabs ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .nav-tabs li {
+            padding: 1rem 0;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            color: #a0a0a0;
+        }
+        
+        .nav-tabs li.active {
+            color: #00d4ff;
+            border-bottom-color: #00d4ff;
+        }
+        
+        .nav-tabs li:hover {
+            color: #00d4ff;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Cards */
+        .card {
+            background: #1a1f35;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #2a3f5f;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0,212,255,0.1);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .card-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        
+        .card-subtitle {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+        
+        /* Status Colors */
+        .status-active { color: #00ff00; }
+        .status-warning { color: #ffaa00; }
+        .status-critical { color: #ff3838; }
+        .status-monitoring { color: #00d4ff; }
+        
+        /* Security Components */
+        .security-component {
+            background: #0f1420;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #2a3f5f;
+        }
+        
+        .component-name {
+            font-weight: 500;
+        }
+        
+        .component-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-active-bg {
+            background: rgba(0,255,0,0.2);
+            color: #00ff00;
+        }
+        
+        .status-mitigating {
+            background: rgba(255,170,0,0.2);
+            color: #ffaa00;
+        }
+        
+        /* Threat Feed */
+        .threat-feed {
+            background: #0f1420;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #2a3f5f;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .threat-item {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1f35;
+            border-left: 4px solid #ff3838;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .threat-critical {
+            border-left-color: #ff3838;
+        }
+        
+        .threat-high {
+            border-left-color: #ffaa00;
+        }
+        
+        .threat-medium {
+            border-left-color: #00d4ff;
+        }
+        
+        .threat-timestamp {
+            color: #606060;
+            font-size: 0.85rem;
+        }
+        
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
+        }
+        
+        /* Incidents */
+        .incident-card {
+            background: #1a1f35;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #2a3f5f;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .incident-card:hover {
+            background: #1f2540;
+            border-color: #00d4ff;
+        }
+        
+        .incident-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .incident-id {
+            font-size: 0.85rem;
+            color: #606060;
+        }
+        
+        .incident-severity {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .severity-critical {
+            background: rgba(255,56,56,0.2);
+            color: #ff3838;
+        }
+        
+        .severity-high {
+            background: rgba(255,170,0,0.2);
+            color: #ffaa00;
+        }
+        
+        .severity-medium {
+            background: rgba(0,212,255,0.2);
+            color: #00d4ff;
+        }
+        
+        /* Cyber Attack Animation */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(0,212,255,0.05) 25%, rgba(0,212,255,0.05) 26%, transparent 27%, transparent 74%, rgba(0,212,255,0.05) 75%, rgba(0,212,255,0.05) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(0,212,255,0.05) 25%, rgba(0,212,255,0.05) 26%, transparent 27%, transparent 74%, rgba(0,212,255,0.05) 75%, rgba(0,212,255,0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .security-status {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0f1420;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #2a3f5f;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3a4f6f;
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Cyber Grid Background -->
+    <div class="cyber-grid"></div>
+    
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <h1>🛡️ ROOTUIP Security Operations Center</h1>
+            <div class="security-status">
+                <div class="threat-level">
+                    <div class="threat-level-value status-active" id="threatLevel">LOW</div>
+                    <div class="threat-level-label">Threat Level</div>
+                </div>
+                <div class="threat-level">
+                    <div class="threat-level-value" id="activeIncidents">0</div>
+                    <div class="threat-level-label">Active Incidents</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <div class="nav-tabs">
+        <ul>
+            <li class="active" data-tab="overview">Overview</li>
+            <li data-tab="threats">Threat Detection</li>
+            <li data-tab="vulnerabilities">Vulnerabilities</li>
+            <li data-tab="incidents">Incidents</li>
+            <li data-tab="identity">Identity & Access</li>
+            <li data-tab="data">Data Protection</li>
+        </ul>
+    </div>
+    
+    <!-- Container -->
+    <div class="container">
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content">
+            <!-- Security Components Status -->
+            <div class="card" style="margin-bottom: 2rem;">
+                <h3 class="card-title">🔐 Security Components Status</h3>
+                <div id="componentsList">
+                    <div class="security-component">
+                        <span class="component-name">Web Application Firewall</span>
+                        <span class="component-status status-active-bg" id="wafStatus">Active</span>
+                    </div>
+                    <div class="security-component">
+                        <span class="component-name">DDoS Protection</span>
+                        <span class="component-status status-active-bg" id="ddosStatus">Monitoring</span>
+                    </div>
+                    <div class="security-component">
+                        <span class="component-name">Intrusion Detection System</span>
+                        <span class="component-status status-active-bg" id="idsStatus">Active</span>
+                    </div>
+                    <div class="security-component">
+                        <span class="component-name">Vulnerability Scanner</span>
+                        <span class="component-status status-active-bg" id="scannerStatus">Active</span>
+                    </div>
+                    <div class="security-component">
+                        <span class="component-name">Zero-Trust Identity</span>
+                        <span class="component-status status-active-bg" id="identityStatus">Active</span>
+                    </div>
+                    <div class="security-component">
+                        <span class="component-name">Data Protection & DLP</span>
+                        <span class="component-status status-active-bg" id="dataStatus">Active</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Metrics Grid -->
+            <div class="dashboard-grid">
+                <!-- Blocked Threats -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🚫 Blocked Threats</h3>
+                    </div>
+                    <div class="card-value status-warning" id="blockedThreats">0</div>
+                    <div class="card-subtitle">Last 24 hours</div>
+                </div>
+                
+                <!-- Active Scans -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🔍 Security Scans</h3>
+                    </div>
+                    <div class="card-value status-monitoring" id="activeScans">0</div>
+                    <div class="card-subtitle">Completed today</div>
+                </div>
+                
+                <!-- Authentication Events -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🔑 Auth Events</h3>
+                    </div>
+                    <div class="card-value status-active" id="authEvents">0</div>
+                    <div class="card-subtitle">Successful logins</div>
+                </div>
+                
+                <!-- Data Protected -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🔒 Data Encrypted</h3>
+                    </div>
+                    <div class="card-value status-active" id="dataEncrypted">0</div>
+                    <div class="card-subtitle">Objects protected</div>
+                </div>
+            </div>
+            
+            <!-- Live Threat Feed -->
+            <div class="card">
+                <h3 class="card-title">⚡ Live Threat Feed</h3>
+                <div class="threat-feed" id="threatFeed">
+                    <!-- Threats will be added here dynamically -->
+                </div>
+            </div>
+            
+            <!-- Security Trends Chart -->
+            <div class="card" style="margin-top: 2rem;">
+                <h3 class="card-title">📊 Security Trends</h3>
+                <div class="chart-container">
+                    <canvas id="securityTrendsChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Threats Tab -->
+        <div id="threats" class="tab-content" style="display: none;">
+            <div class="dashboard-grid">
+                <!-- WAF Statistics -->
+                <div class="card">
+                    <h3 class="card-title">🛡️ WAF Statistics</h3>
+                    <div id="wafStats"></div>
+                </div>
+                
+                <!-- DDoS Status -->
+                <div class="card">
+                    <h3 class="card-title">🌊 DDoS Protection</h3>
+                    <div id="ddosStats"></div>
+                </div>
+                
+                <!-- IDS Detections -->
+                <div class="card">
+                    <h3 class="card-title">🕵️ Intrusion Detection</h3>
+                    <div id="idsStats"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vulnerabilities Tab -->
+        <div id="vulnerabilities" class="tab-content" style="display: none;">
+            <div class="card">
+                <h3 class="card-title">🔍 Vulnerability Summary</h3>
+                <div id="vulnerabilitySummary"></div>
+            </div>
+            
+            <div class="card" style="margin-top: 1rem;">
+                <h3 class="card-title">📋 Recent Findings</h3>
+                <div id="vulnerabilityList"></div>
+            </div>
+        </div>
+        
+        <!-- Incidents Tab -->
+        <div id="incidents" class="tab-content" style="display: none;">
+            <div id="incidentsList"></div>
+        </div>
+        
+        <!-- Identity Tab -->
+        <div id="identity" class="tab-content" style="display: none;">
+            <div class="card">
+                <h3 class="card-title">👤 Identity Statistics</h3>
+                <div id="identityStats"></div>
+            </div>
+        </div>
+        
+        <!-- Data Protection Tab -->
+        <div id="data" class="tab-content" style="display: none;">
+            <div class="card">
+                <h3 class="card-title">🔐 Data Protection Statistics</h3>
+                <div id="dataStats"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Socket.IO
+        const socket = io();
+        
+        // Dashboard state
+        let metrics = {
+            blockedThreats: 0,
+            activeScans: 0,
+            authEvents: 0,
+            dataEncrypted: 0,
+            incidents: []
+        };
+        
+        // Tab navigation
+        document.querySelectorAll('.nav-tabs li').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tabs li').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.style.display = 'none';
+                });
+                document.getElementById(tab.dataset.tab).style.display = 'block';
+            });
+        });
+        
+        // Socket event handlers
+        socket.on('connect', () => {
+            console.log('Connected to Security Operations Center');
+            loadSecurityData();
+        });
+        
+        socket.on('security:status', (status) => {
+            updateComponentStatus(status.components);
+        });
+        
+        socket.on('waf:blocked', (event) => {
+            metrics.blockedThreats++;
+            updateMetrics();
+            addThreatToFeed({
+                type: 'WAF Block',
+                severity: 'medium',
+                message: `Blocked request from ${event.ip}`,
+                timestamp: new Date()
+            });
+        });
+        
+        socket.on('waf:threat', (threat) => {
+            addThreatToFeed({
+                type: 'WAF Threat',
+                severity: threat.severity || 'medium',
+                message: `Threat detected: ${threat.violations?.[0]?.category || 'Unknown'}`,
+                timestamp: new Date()
+            });
+        });
+        
+        socket.on('ddos:attack', (attack) => {
+            updateComponentStatus({ ddos: { status: 'mitigating' } });
+            addThreatToFeed({
+                type: 'DDoS Attack',
+                severity: attack.severity || 'critical',
+                message: `DDoS attack detected: ${attack.type}`,
+                timestamp: new Date()
+            });
+        });
+        
+        socket.on('ddos:ended', (attack) => {
+            updateComponentStatus({ ddos: { status: 'monitoring' } });
+            addThreatToFeed({
+                type: 'DDoS Mitigated',
+                severity: 'info',
+                message: 'DDoS attack successfully mitigated',
+                timestamp: new Date()
+            });
+        });
+        
+        socket.on('ids:threat', (threat) => {
+            addThreatToFeed({
+                type: 'Intrusion Detected',
+                severity: threat.severity || 'high',
+                message: `${threat.type}: ${threat.description || 'Suspicious activity'}`,
+                timestamp: new Date()
+            });
+        });
+        
+        socket.on('vulnerability:found', (vuln) => {
+            addThreatToFeed({
+                type: 'Vulnerability',
+                severity: vuln.severity || 'medium',
+                message: `${vuln.type}: ${vuln.description}`,
+                timestamp: new Date()
+            });
+        });
+        
+        socket.on('dlp:violation', (violation) => {
+            addThreatToFeed({
+                type: 'DLP Violation',
+                severity: violation.policy.severity || 'high',
+                message: `Data policy violation: ${violation.policy.name}`,
+                timestamp: new Date()
+            });
+        });
+        
+        socket.on('incident:created', (incident) => {
+            metrics.incidents.push(incident);
+            updateIncidentCount();
+            addThreatToFeed({
+                type: 'Security Incident',
+                severity: incident.severity,
+                message: incident.title,
+                timestamp: new Date()
+            });
+        });
+        
+        // Load security data
+        async function loadSecurityData() {
+            try {
+                const response = await fetch('/api/security/overview');
+                const data = await response.json();
+                
+                // Update metrics from loaded data
+                if (data.components) {
+                    metrics.blockedThreats = data.components.waf?.metrics?.blockedRequests || 0;
+                    metrics.activeScans = data.components.vulnerabilities?.metrics?.totalScans || 0;
+                    metrics.authEvents = data.components.identity?.metrics?.totalAuthentications || 0;
+                    metrics.dataEncrypted = data.components.dataProtection?.metrics?.dataEncrypted || 0;
+                }
+                
+                updateMetrics();
+                initializeCharts();
+                
+            } catch (error) {
+                console.error('Error loading security data:', error);
+            }
+        }
+        
+        // Update component status
+        function updateComponentStatus(components) {
+            if (components.waf) {
+                document.getElementById('wafStatus').textContent = 
+                    components.waf.status === 'active' ? 'Active' : 'Inactive';
+            }
+            if (components.ddos) {
+                const ddosEl = document.getElementById('ddosStatus');
+                ddosEl.textContent = 
+                    components.ddos.status === 'mitigating' ? 'Mitigating Attack' : 'Monitoring';
+                ddosEl.className = components.ddos.status === 'mitigating' ? 
+                    'component-status status-mitigating' : 'component-status status-active-bg';
+            }
+        }
+        
+        // Update metrics display
+        function updateMetrics() {
+            document.getElementById('blockedThreats').textContent = metrics.blockedThreats;
+            document.getElementById('activeScans').textContent = metrics.activeScans;
+            document.getElementById('authEvents').textContent = metrics.authEvents;
+            document.getElementById('dataEncrypted').textContent = metrics.dataEncrypted;
+        }
+        
+        // Update incident count
+        function updateIncidentCount() {
+            const activeCount = metrics.incidents.filter(i => i.status === 'open').length;
+            document.getElementById('activeIncidents').textContent = activeCount;
+            
+            // Update threat level
+            const threatLevelEl = document.getElementById('threatLevel');
+            if (activeCount === 0) {
+                threatLevelEl.textContent = 'LOW';
+                threatLevelEl.className = 'threat-level-value status-active';
+            } else if (activeCount < 3) {
+                threatLevelEl.textContent = 'MEDIUM';
+                threatLevelEl.className = 'threat-level-value status-warning';
+            } else {
+                threatLevelEl.textContent = 'HIGH';
+                threatLevelEl.className = 'threat-level-value status-critical';
+            }
+        }
+        
+        // Add threat to feed
+        function addThreatToFeed(threat) {
+            const feed = document.getElementById('threatFeed');
+            
+            const threatEl = document.createElement('div');
+            threatEl.className = `threat-item threat-${threat.severity}`;
+            threatEl.innerHTML = `
+                <div>
+                    <strong>${threat.type}</strong>
+                    <div style="color: #a0a0a0; font-size: 0.9rem; margin-top: 0.25rem;">
+                        ${threat.message}
+                    </div>
+                </div>
+                <div class="threat-timestamp">
+                    ${new Date(threat.timestamp).toLocaleTimeString()}
+                </div>
+            `;
+            
+            feed.insertBefore(threatEl, feed.firstChild);
+            
+            // Keep only last 20 items
+            while (feed.children.length > 20) {
+                feed.removeChild(feed.lastChild);
+            }
+        }
+        
+        // Initialize charts
+        function initializeCharts() {
+            const ctx = document.getElementById('securityTrendsChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: generateTimeLabels(24),
+                    datasets: [{
+                        label: 'Threats Blocked',
+                        data: generateRandomData(24, 0, 50),
+                        borderColor: '#ff3838',
+                        backgroundColor: 'rgba(255, 56, 56, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Authentication Events',
+                        data: generateRandomData(24, 20, 100),
+                        borderColor: '#00d4ff',
+                        backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Data Encrypted',
+                        data: generateRandomData(24, 10, 80),
+                        borderColor: '#00ff00',
+                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#a0a0a0'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: '#2a3f5f'
+                            },
+                            ticks: {
+                                color: '#a0a0a0'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: '#2a3f5f'
+                            },
+                            ticks: {
+                                color: '#a0a0a0'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Generate time labels
+        function generateTimeLabels(hours) {
+            const labels = [];
+            const now = new Date();
+            
+            for (let i = hours - 1; i >= 0; i--) {
+                const time = new Date(now - i * 3600000);
+                labels.push(time.getHours() + ':00');
+            }
+            
+            return labels;
+        }
+        
+        // Generate random data for demo
+        function generateRandomData(points, min, max) {
+            const data = [];
+            for (let i = 0; i < points; i++) {
+                data.push(Math.floor(Math.random() * (max - min + 1)) + min);
+            }
+            return data;
+        }
+        
+        // Initialize with demo data
+        setTimeout(() => {
+            // Add some demo threats
+            addThreatToFeed({
+                type: 'System Start',
+                severity: 'info',
+                message: 'Security systems initialized successfully',
+                timestamp: new Date()
+            });
+            
+            // Simulate some activity
+            setInterval(() => {
+                if (Math.random() < 0.3) {
+                    const threats = [
+                        {
+                            type: 'Port Scan',
+                            severity: 'medium',
+                            message: 'Port scanning detected from 192.168.1.100'
+                        },
+                        {
+                            type: 'Failed Login',
+                            severity: 'low',
+                            message: 'Multiple failed login attempts'
+                        },
+                        {
+                            type: 'SQL Injection',
+                            severity: 'high',
+                            message: 'SQL injection attempt blocked'
+                        }
+                    ];
+                    
+                    const threat = threats[Math.floor(Math.random() * threats.length)];
+                    threat.timestamp = new Date();
+                    addThreatToFeed(threat);
+                    
+                    metrics.blockedThreats++;
+                    updateMetrics();
+                }
+            }, 5000);
+            
+        }, 1000);
+    </script>
+</body>
+</html>

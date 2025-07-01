@@ -1,0 +1,153 @@
+# Automated Scaling Configuration for ROOTUIP
+# This config works with Prometheus metrics and webhook receivers
+
+scaling_policies:
+  # API Gateway Scaling
+  api_gateway:
+    metric: "rate(http_requests_total[5m])"
+    scale_up:
+      threshold: 100  # requests per second
+      duration: "5m"
+      action:
+        type: "webhook"
+        url: "http://localhost:9090/scale/api-gateway/up"
+        max_instances: 5
+    scale_down:
+      threshold: 20
+      duration: "15m"
+      action:
+        type: "webhook"
+        url: "http://localhost:9090/scale/api-gateway/down"
+        min_instances: 2
+    cooldown: "10m"
+
+  # ML Service Scaling
+  ml_service:
+    metric: "histogram_quantile(0.95, rate(ml_prediction_duration_seconds_bucket[5m]))"
+    scale_up:
+      threshold: 1.5  # seconds
+      duration: "3m"
+      action:
+        type: "webhook"
+        url: "http://localhost:9090/scale/ml-service/up"
+        max_instances: 3
+    scale_down:
+      threshold: 0.5
+      duration: "20m"
+      action:
+        type: "webhook"
+        url: "http://localhost:9090/scale/ml-service/down"
+        min_instances: 1
+    cooldown: "15m"
+
+  # Database Connection Pooling
+  database_connections:
+    metric: "pg_stat_database_numbackends / pg_settings_max_connections"
+    scale_up:
+      threshold: 0.8  # 80% utilization
+      duration: "2m"
+      action:
+        type: "pgbouncer"
+        max_connections: 200
+        pool_mode: "transaction"
+    scale_down:
+      threshold: 0.3
+      duration: "30m"
+      action:
+        type: "pgbouncer"
+        max_connections: 100
+    cooldown: "10m"
+
+  # Memory-based scaling
+  memory_scaling:
+    metric: "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes))"
+    scale_up:
+      threshold: 0.85  # 85% memory usage
+      duration: "5m"
+      action:
+        type: "alert"
+        notify: ["ops@rootuip.com"]
+        message: "High memory usage detected, manual intervention required"
+
+  # CPU-based scaling
+  cpu_scaling:
+    metric: "100 - (avg(irate(node_cpu_seconds_total{mode='idle'}[5m])) * 100)"
+    scale_up:
+      threshold: 80  # 80% CPU usage
+      duration: "5m"
+      action:
+        type: "process_manager"
+        command: "pm2 scale rootuip +1"
+    scale_down:
+      threshold: 30
+      duration: "20m"
+      action:
+        type: "process_manager"
+        command: "pm2 scale rootuip -1"
+
+# Traffic spike handling
+traffic_patterns:
+  business_hours:
+    schedule: "0 9 * * 1-5"  # 9 AM weekdays
+    preemptive_scale:
+      api_gateway: 3
+      ml_service: 2
+  
+  end_of_business:
+    schedule: "0 17 * * 1-5"  # 5 PM weekdays
+    scale_down:
+      api_gateway: 2
+      ml_service: 1
+
+# Prometheus Rules for Scaling
+prometheus_rules: |
+  groups:
+    - name: autoscaling
+      interval: 30s
+      rules:
+        - record: scaling:api_gateway:needed
+          expr: rate(http_requests_total[5m]) > 100
+          
+        - record: scaling:ml_service:needed
+          expr: histogram_quantile(0.95, rate(ml_prediction_duration_seconds_bucket[5m])) > 1.5
+          
+        - record: scaling:connections:needed
+          expr: pg_stat_database_numbackends / pg_settings_max_connections > 0.8
+
+# Scaling webhook receiver script
+webhook_script: |
+  #!/bin/bash
+  # Save as /home/iii/ROOTUIP/monitoring/scaling-webhook.sh
+  
+  SERVICE=$1
+  ACTION=$2
+  
+  case "$SERVICE" in
+    "api-gateway")
+      if [ "$ACTION" = "up" ]; then
+        # Start additional API gateway instance
+        pm2 start /home/iii/ROOTUIP/api-gateway.js --name "api-gateway-$(date +%s)" -i 1
+      elif [ "$ACTION" = "down" ]; then
+        # Stop last API gateway instance
+        pm2 delete $(pm2 list | grep api-gateway | tail -1 | awk '{print $2}')
+      fi
+      ;;
+      
+    "ml-service")
+      if [ "$ACTION" = "up" ]; then
+        # Start additional ML service instance
+        cd /home/iii/ROOTUIP/ml-system && \
+        pm2 start "uvicorn api:app --host 0.0.0.0 --port $(shuf -i 8001-8010 -n 1)" \
+          --name "ml-service-$(date +%s)"
+      elif [ "$ACTION" = "down" ]; then
+        # Stop last ML service instance
+        pm2 delete $(pm2 list | grep ml-service | tail -1 | awk '{print $2}')
+      fi
+      ;;
+  esac
+  
+  # Update nginx upstream configuration
+  /home/iii/ROOTUIP/monitoring/update-nginx-upstream.sh
+  
+  # Log scaling event
+  echo "[$(date)] Scaled $SERVICE $ACTION" >> /home/iii/ROOTUIP/logs/scaling.log

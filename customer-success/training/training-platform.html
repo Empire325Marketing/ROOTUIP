@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Training Platform | Enterprise Learning</title>
+    <link rel="icon" href="/assets/images/favicon.svg" type="image/svg+xml">
+    <style>
+        :root {
+            --color-primary: #0F3460;
+            --color-secondary: #16213E;
+            --color-success: #00D46A;
+            --color-warning: #FF6B35;
+            --color-danger: #ef4444;
+            --color-info: #3b82f6;
+            --color-background: #f8fafc;
+            --color-surface: white;
+            --color-text: #1e293b;
+            --color-text-secondary: #64748b;
+            --color-border: #e2e8f0;
+            --color-accent: #8b5cf6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            background: var(--color-surface);
+            border-bottom: 1px solid var(--color-border);
+            sticky: top: 0;
+            z-index: 100;
+        }
+
+        .nav-tabs-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            padding: 0 20px;
+        }
+
+        .nav-tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab:hover,
+        .nav-tab.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        /* Progress Overview */
+        .progress-overview {
+            background: var(--color-surface);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .progress-card {
+            background: var(--color-background);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--color-border);
+        }
+
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .progress-circle svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+
+        .progress-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-description {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Learning Paths */
+        .learning-paths {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .learning-path {
+            background: var(--color-surface);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .learning-path:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .path-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .path-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--path-color, var(--color-primary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .path-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .path-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+
+        .path-description {
+            margin-bottom: 1.5rem;
+            color: var(--color-text-secondary);
+        }
+
+        .path-modules {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .path-module {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .path-module:last-child {
+            border-bottom: none;
+        }
+
+        .module-status {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .module-status.completed {
+            background: var(--color-success);
+            color: white;
+        }
+
+        .module-status.in-progress {
+            background: var(--color-info);
+            color: white;
+        }
+
+        .module-status.pending {
+            background: var(--color-border);
+            color: var(--color-text-secondary);
+        }
+
+        .module-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .module-duration {
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+        }
+
+        .path-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--color-border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--path-color, var(--color-primary));
+            transition: width 0.5s ease;
+        }
+
+        .path-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-secondary);
+        }
+
+        .btn-secondary {
+            background: var(--color-surface);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-background);
+        }
+
+        /* Video Library */
+        .video-library {
+            display: none;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .video-card {
+            background: var(--color-surface);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            height: 180px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .video-content {
+            padding: 1.5rem;
+        }
+
+        .video-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-description {
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Certifications */
+        .certifications {
+            display: none;
+        }
+
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .cert-card {
+            background: var(--color-surface);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 2px solid var(--color-border);
+            transition: border-color 0.2s;
+        }
+
+        .cert-card.earned {
+            border-color: var(--color-success);
+        }
+
+        .cert-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cert-badge {
+            width: 60px;
+            height: 60px;
+            background: var(--cert-color, var(--color-accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .cert-badge.earned {
+            background: var(--color-success);
+        }
+
+        .cert-info h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .cert-level {
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .cert-requirements {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .cert-requirement {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .cert-requirement:last-child {
+            border-bottom: none;
+        }
+
+        .req-status {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--color-border);
+            flex-shrink: 0;
+        }
+
+        .req-status.completed {
+            background: var(--color-success);
+        }
+
+        /* Webinars */
+        .webinars {
+            display: none;
+        }
+
+        .webinar-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .webinar-card {
+            background: var(--color-surface);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .webinar-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .webinar-date {
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .webinar-description {
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .webinar-speakers {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+
+        .webinar-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            align-items: flex-end;
+        }
+
+        .webinar-status {
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .status-upcoming {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-live {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-recorded {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2rem;
+            }
+            
+            .nav-tabs-container {
+                flex-wrap: wrap;
+            }
+            
+            .nav-tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+            
+            .learning-paths {
+                grid-template-columns: 1fr;
+            }
+            
+            .webinar-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .webinar-actions {
+                align-items: center;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="header-title">ROOTUIP Training Platform</h1>
+            <p class="header-subtitle">Master the platform with role-based learning paths and expert instruction</p>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+        <div class="nav-tabs-container">
+            <button class="nav-tab active" onclick="showTab('learning-paths')">Learning Paths</button>
+            <button class="nav-tab" onclick="showTab('video-library')">Video Library</button>
+            <button class="nav-tab" onclick="showTab('certifications')">Certifications</button>
+            <button class="nav-tab" onclick="showTab('webinars')">Webinars</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Progress Overview -->
+        <div class="progress-overview">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">Your Learning Progress</h2>
+            <div class="progress-grid">
+                <div class="progress-card">
+                    <div class="progress-circle">
+                        <svg width="80" height="80">
+                            <circle cx="40" cy="40" r="36" fill="none" stroke="#e2e8f0" stroke-width="8"></circle>
+                            <circle cx="40" cy="40" r="36" fill="none" stroke="#00D46A" stroke-width="8"
+                                    stroke-dasharray="226" stroke-dashoffset="68" stroke-linecap="round"></circle>
+                        </svg>
+                        <div class="progress-text" style="color: #00D46A;">70%</div>
+                    </div>
+                    <div class="progress-label">Overall Progress</div>
+                    <div class="progress-description">23 of 33 modules completed</div>
+                </div>
+
+                <div class="progress-card">
+                    <div class="progress-circle">
+                        <svg width="80" height="80">
+                            <circle cx="40" cy="40" r="36" fill="none" stroke="#e2e8f0" stroke-width="8"></circle>
+                            <circle cx="40" cy="40" r="36" fill="none" stroke="#3b82f6" stroke-width="8"
+                                    stroke-dasharray="226" stroke-dashoffset="113" stroke-linecap="round"></circle>
+                        </svg>
+                        <div class="progress-text" style="color: #3b82f6;">50%</div>
+                    </div>
+                    <div class="progress-label">Certifications</div>
+                    <div class="progress-description">2 of 4 badges earned</div>
+                </div>
+
+                <div class="progress-card">
+                    <div class="progress-circle">
+                        <svg width="80" height="80">
+                            <circle cx="40" cy="40" r="36" fill="none" stroke="#e2e8f0" stroke-width="8"></circle>
+                            <circle cx="40" cy="40" r="36" fill="none" stroke="#8b5cf6" stroke-width="8"
+                                    stroke-dasharray="226" stroke-dashoffset="45" stroke-linecap="round"></circle>
+                        </svg>
+                        <div class="progress-text" style="color: #8b5cf6;">80%</div>
+                    </div>
+                    <div class="progress-label">Time Investment</div>
+                    <div class="progress-description">24 of 30 hours completed</div>
+                </div>
+
+                <div class="progress-card">
+                    <div class="progress-circle">
+                        <svg width="80" height="80">
+                            <circle cx="40" cy="40" r="36" fill="none" stroke="#e2e8f0" stroke-width="8"></circle>
+                            <circle cx="40" cy="40" r="36" fill="none" stroke="#FF6B35" stroke-width="8"
+                                    stroke-dasharray="226" stroke-dashoffset="23" stroke-linecap="round"></circle>
+                        </svg>
+                        <div class="progress-text" style="color: #FF6B35;">90%</div>
+                    </div>
+                    <div class="progress-label">Skill Assessment</div>
+                    <div class="progress-description">Excellent performance</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learning Paths Tab -->
+        <div id="learning-paths" class="learning-paths fade-in">
+            <!-- Executive Path -->
+            <div class="learning-path" style="--path-color: #0F3460;">
+                <div class="path-header">
+                    <div class="path-icon">👔</div>
+                    <div class="path-info">
+                        <h3>Executive Leadership Track</h3>
+                        <div class="path-meta">
+                            <span>⏱️ 4 hours</span>
+                            <span>📊 Strategic Focus</span>
+                            <span>🎯 C-Suite</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="path-description">
+                    Strategic overview of ROOTUIP's impact on business outcomes, ROI optimization, and executive decision-making frameworks.
+                </p>
+                <ul class="path-modules">
+                    <li class="path-module">
+                        <div class="module-status completed">✓</div>
+                        <span class="module-name">Platform ROI Overview</span>
+                        <span class="module-duration">45 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status completed">✓</div>
+                        <span class="module-name">Executive Dashboard Tour</span>
+                        <span class="module-duration">30 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status in-progress">2</div>
+                        <span class="module-name">Strategic Decision Making</span>
+                        <span class="module-duration">60 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status pending">3</div>
+                        <span class="module-name">Performance Optimization</span>
+                        <span class="module-duration">90 min</span>
+                    </li>
+                </ul>
+                <div class="path-progress">
+                    <span style="font-size: 0.875rem; font-weight: 600;">55% Complete</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 55%;"></div>
+                    </div>
+                    <span style="font-size: 0.875rem; color: var(--color-text-secondary);">2.2/4 hrs</span>
+                </div>
+                <div class="path-actions">
+                    <button class="btn btn-primary" onclick="resumeLearning('executive')">
+                        Continue Learning
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewCurriculum('executive')">
+                        View Curriculum
+                    </button>
+                </div>
+            </div>
+
+            <!-- Operations Path -->
+            <div class="learning-path" style="--path-color: #00D46A;">
+                <div class="path-header">
+                    <div class="path-icon">⚙️</div>
+                    <div class="path-info">
+                        <h3>Operations Specialist Track</h3>
+                        <div class="path-meta">
+                            <span>⏱️ 12 hours</span>
+                            <span>🔧 Hands-on</span>
+                            <span>🎯 Operations</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="path-description">
+                    Comprehensive training on day-to-day platform operations, container tracking, alert management, and workflow optimization.
+                </p>
+                <ul class="path-modules">
+                    <li class="path-module">
+                        <div class="module-status completed">✓</div>
+                        <span class="module-name">Platform Fundamentals</span>
+                        <span class="module-duration">90 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status completed">✓</div>
+                        <span class="module-name">Container Tracking Mastery</span>
+                        <span class="module-duration">120 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status completed">✓</div>
+                        <span class="module-name">Alert Configuration</span>
+                        <span class="module-duration">75 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status in-progress">4</div>
+                        <span class="module-name">Advanced Workflows</span>
+                        <span class="module-duration">105 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status pending">5</div>
+                        <span class="module-name">Integration Management</span>
+                        <span class="module-duration">90 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status pending">6</div>
+                        <span class="module-name">Troubleshooting & Support</span>
+                        <span class="module-duration">60 min</span>
+                    </li>
+                </ul>
+                <div class="path-progress">
+                    <span style="font-size: 0.875rem; font-weight: 600;">65% Complete</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%;"></div>
+                    </div>
+                    <span style="font-size: 0.875rem; color: var(--color-text-secondary);">7.8/12 hrs</span>
+                </div>
+                <div class="path-actions">
+                    <button class="btn btn-primary" onclick="resumeLearning('operations')">
+                        Continue Learning
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewCurriculum('operations')">
+                        View Curriculum
+                    </button>
+                </div>
+            </div>
+
+            <!-- IT Administrator Path -->
+            <div class="learning-path" style="--path-color: #3b82f6;">
+                <div class="path-header">
+                    <div class="path-icon">💻</div>
+                    <div class="path-info">
+                        <h3>IT Administrator Track</h3>
+                        <div class="path-meta">
+                            <span>⏱️ 8 hours</span>
+                            <span>🔐 Technical</span>
+                            <span>🎯 IT Teams</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="path-description">
+                    Technical implementation, system integration, security configuration, and platform administration training.
+                </p>
+                <ul class="path-modules">
+                    <li class="path-module">
+                        <div class="module-status completed">✓</div>
+                        <span class="module-name">System Architecture</span>
+                        <span class="module-duration">60 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status pending">2</div>
+                        <span class="module-name">API Integration</span>
+                        <span class="module-duration">90 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status pending">3</div>
+                        <span class="module-name">Security Configuration</span>
+                        <span class="module-duration">75 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status pending">4</div>
+                        <span class="module-name">User Management</span>
+                        <span class="module-duration">45 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status pending">5</div>
+                        <span class="module-name">Monitoring & Maintenance</span>
+                        <span class="module-duration">90 min</span>
+                    </li>
+                </ul>
+                <div class="path-progress">
+                    <span style="font-size: 0.875rem; font-weight: 600;">15% Complete</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 15%;"></div>
+                    </div>
+                    <span style="font-size: 0.875rem; color: var(--color-text-secondary);">1.2/8 hrs</span>
+                </div>
+                <div class="path-actions">
+                    <button class="btn btn-primary" onclick="resumeLearning('it')">
+                        Start Learning
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewCurriculum('it')">
+                        View Curriculum
+                    </button>
+                </div>
+            </div>
+
+            <!-- End User Path -->
+            <div class="learning-path" style="--path-color: #8b5cf6;">
+                <div class="path-header">
+                    <div class="path-icon">👥</div>
+                    <div class="path-info">
+                        <h3>End User Essentials</h3>
+                        <div class="path-meta">
+                            <span>⏱️ 6 hours</span>
+                            <span>🎓 Beginner</span>
+                            <span>🎯 All Users</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="path-description">
+                    Essential skills for daily platform usage, basic navigation, reporting, and best practices for all team members.
+                </p>
+                <ul class="path-modules">
+                    <li class="path-module">
+                        <div class="module-status completed">✓</div>
+                        <span class="module-name">Getting Started</span>
+                        <span class="module-duration">30 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status completed">✓</div>
+                        <span class="module-name">Navigation Basics</span>
+                        <span class="module-duration">45 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status completed">✓</div>
+                        <span class="module-name">Shipment Tracking</span>
+                        <span class="module-duration">60 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status completed">✓</div>
+                        <span class="module-name">Basic Reporting</span>
+                        <span class="module-duration">45 min</span>
+                    </li>
+                    <li class="path-module">
+                        <div class="module-status in-progress">5</div>
+                        <span class="module-name">Best Practices</span>
+                        <span class="module-duration">60 min</span>
+                    </li>
+                </ul>
+                <div class="path-progress">
+                    <span style="font-size: 0.875rem; font-weight: 600;">85% Complete</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%;"></div>
+                    </div>
+                    <span style="font-size: 0.875rem; color: var(--color-text-secondary);">5.1/6 hrs</span>
+                </div>
+                <div class="path-actions">
+                    <button class="btn btn-primary" onclick="resumeLearning('enduser')">
+                        Continue Learning
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewCurriculum('enduser')">
+                        View Curriculum
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Library Tab -->
+        <div id="video-library" class="video-library">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">Video Library</h2>
+            <div class="video-grid">
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <div class="play-button">
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                            </svg>
+                        </div>
+                        <div class="video-duration">15:24</div>
+                    </div>
+                    <div class="video-content">
+                        <h3 class="video-title">ROOTUIP Platform Overview</h3>
+                        <p class="video-description">Complete introduction to the ROOTUIP platform, covering core features and benefits for ocean freight optimization.</p>
+                        <div class="video-meta">
+                            <span>Sarah Johnson • Product Lead</span>
+                            <span>2,847 views</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <div class="play-button">
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                            </svg>
+                        </div>
+                        <div class="video-duration">22:17</div>
+                    </div>
+                    <div class="video-content">
+                        <h3 class="video-title">Container Tracking Deep Dive</h3>
+                        <p class="video-description">Advanced container tracking techniques, real-time monitoring, and proactive alert configuration.</p>
+                        <div class="video-meta">
+                            <span>Mike Chen • Solutions Architect</span>
+                            <span>1,523 views</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <div class="play-button">
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                            </svg>
+                        </div>
+                        <div class="video-duration">18:45</div>
+                    </div>
+                    <div class="video-content">
+                        <h3 class="video-title">ROI Optimization Strategies</h3>
+                        <p class="video-description">Learn how to maximize your return on investment through strategic platform usage and optimization techniques.</p>
+                        <div class="video-meta">
+                            <span>Lisa Rodriguez • Customer Success</span>
+                            <span>892 views</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <div class="play-button">
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                            </svg>
+                        </div>
+                        <div class="video-duration">12:33</div>
+                    </div>
+                    <div class="video-content">
+                        <h3 class="video-title">Integration Best Practices</h3>
+                        <p class="video-description">Step-by-step guide to integrating ROOTUIP with your existing systems and workflows.</p>
+                        <div class="video-meta">
+                            <span>David Kim • Integration Specialist</span>
+                            <span>1,247 views</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certifications Tab -->
+        <div id="certifications" class="certifications">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">Certification Program</h2>
+            <div class="cert-grid">
+                <div class="cert-card earned">
+                    <div class="cert-header">
+                        <div class="cert-badge earned">🏆</div>
+                        <div class="cert-info">
+                            <h3>ROOTUIP Fundamentals</h3>
+                            <div class="cert-level">Foundation Level</div>
+                        </div>
+                    </div>
+                    <p style="margin-bottom: 1.5rem; color: var(--color-text-secondary);">
+                        Demonstrates basic proficiency in platform navigation, container tracking, and reporting.
+                    </p>
+                    <ul class="cert-requirements">
+                        <li class="cert-requirement">
+                            <div class="req-status completed"></div>
+                            <span>Complete Platform Basics (4 modules)</span>
+                        </li>
+                        <li class="cert-requirement">
+                            <div class="req-status completed"></div>
+                            <span>Pass fundamentals assessment (80%)</span>
+                        </li>
+                        <li class="cert-requirement">
+                            <div class="req-status completed"></div>
+                            <span>Hands-on practical exercise</span>
+                        </li>
+                    </ul>
+                    <div class="path-actions">
+                        <button class="btn btn-secondary" disabled>
+                            ✓ Earned March 8, 2024
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cert-card earned">
+                    <div class="cert-header">
+                        <div class="cert-badge earned">⭐</div>
+                        <div class="cert-info">
+                            <h3>Operations Specialist</h3>
+                            <div class="cert-level">Intermediate Level</div>
+                        </div>
+                    </div>
+                    <p style="margin-bottom: 1.5rem; color: var(--color-text-secondary);">
+                        Advanced operational skills including workflow optimization and alert management.
+                    </p>
+                    <ul class="cert-requirements">
+                        <li class="cert-requirement">
+                            <div class="req-status completed"></div>
+                            <span>Complete Operations Track (6 modules)</span>
+                        </li>
+                        <li class="cert-requirement">
+                            <div class="req-status completed"></div>
+                            <span>Pass operations assessment (85%)</span>
+                        </li>
+                        <li class="cert-requirement">
+                            <div class="req-status completed"></div>
+                            <span>Case study presentation</span>
+                        </li>
+                    </ul>
+                    <div class="path-actions">
+                        <button class="btn btn-secondary" disabled>
+                            ✓ Earned March 12, 2024
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cert-card" style="--cert-color: #3b82f6;">
+                    <div class="cert-header">
+                        <div class="cert-badge">🔧</div>
+                        <div class="cert-info">
+                            <h3>Technical Administrator</h3>
+                            <div class="cert-level">Advanced Level</div>
+                        </div>
+                    </div>
+                    <p style="margin-bottom: 1.5rem; color: var(--color-text-secondary);">
+                        Technical expertise in system administration, integration, and advanced configuration.
+                    </p>
+                    <ul class="cert-requirements">
+                        <li class="cert-requirement">
+                            <div class="req-status"></div>
+                            <span>Complete IT Administrator Track (5 modules)</span>
+                        </li>
+                        <li class="cert-requirement">
+                            <div class="req-status"></div>
+                            <span>Pass technical assessment (90%)</span>
+                        </li>
+                        <li class="cert-requirement">
+                            <div class="req-status"></div>
+                            <span>Complete integration project</span>
+                        </li>
+                    </ul>
+                    <div class="path-actions">
+                        <button class="btn btn-primary" onclick="startCertification('technical')">
+                            Start Requirements
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cert-card" style="--cert-color: #8b5cf6;">
+                    <div class="cert-header">
+                        <div class="cert-badge">🎓</div>
+                        <div class="cert-info">
+                            <h3>ROOTUIP Expert</h3>
+                            <div class="cert-level">Master Level</div>
+                        </div>
+                    </div>
+                    <p style="margin-bottom: 1.5rem; color: var(--color-text-secondary);">
+                        Master-level certification demonstrating comprehensive platform expertise and leadership.
+                    </p>
+                    <ul class="cert-requirements">
+                        <li class="cert-requirement">
+                            <div class="req-status"></div>
+                            <span>Earn all previous certifications</span>
+                        </li>
+                        <li class="cert-requirement">
+                            <div class="req-status"></div>
+                            <span>Complete expert capstone project</span>
+                        </li>
+                        <li class="cert-requirement">
+                            <div class="req-status"></div>
+                            <span>Peer teaching demonstration</span>
+                        </li>
+                    </ul>
+                    <div class="path-actions">
+                        <button class="btn btn-secondary" disabled>
+                            Requires Previous Certifications
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Webinars Tab -->
+        <div id="webinars" class="webinars">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">Monthly Webinar Series</h2>
+            <div class="webinar-grid">
+                <div class="webinar-card">
+                    <div class="webinar-info">
+                        <h3>Advanced Analytics & Reporting</h3>
+                        <div class="webinar-date">March 28, 2024 • 2:00 PM EST</div>
+                        <p class="webinar-description">
+                            Deep dive into advanced analytics features, custom report building, and data-driven decision making with ROOTUIP insights.
+                        </p>
+                        <div class="webinar-speakers">
+                            <span>Speakers: Dr. Amanda Foster (Data Science) • Robert Chen (Product)</span>
+                        </div>
+                    </div>
+                    <div class="webinar-actions">
+                        <div class="webinar-status status-upcoming">Upcoming</div>
+                        <button class="btn btn-primary" onclick="registerWebinar('analytics')">
+                            Register Now
+                        </button>
+                        <button class="btn btn-secondary" onclick="addToCalendar('analytics')">
+                            Add to Calendar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="webinar-card">
+                    <div class="webinar-info">
+                        <h3>ROI Optimization Masterclass</h3>
+                        <div class="webinar-date">February 28, 2024 • 2:00 PM EST</div>
+                        <p class="webinar-description">
+                            Learn proven strategies to maximize your ROOTUIP ROI through advanced configuration, workflow optimization, and best practices from industry leaders.
+                        </p>
+                        <div class="webinar-speakers">
+                            <span>Speakers: Sarah Martinez (Customer Success) • John Davis (Solution Architect)</span>
+                        </div>
+                    </div>
+                    <div class="webinar-actions">
+                        <div class="webinar-status status-recorded">Recorded</div>
+                        <button class="btn btn-primary" onclick="watchRecording('roi')">
+                            Watch Recording
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadResources('roi')">
+                            Download Resources
+                        </button>
+                    </div>
+                </div>
+
+                <div class="webinar-card">
+                    <div class="webinar-info">
+                        <h3>Integration Patterns & Best Practices</h3>
+                        <div class="webinar-date">April 25, 2024 • 2:00 PM EST</div>
+                        <p class="webinar-description">
+                            Technical session covering API integration patterns, webhook configuration, and enterprise system connectivity for seamless operations.
+                        </p>
+                        <div class="webinar-speakers">
+                            <span>Speakers: Michael Zhang (Platform Engineering) • Lisa Thompson (DevOps)</span>
+                        </div>
+                    </div>
+                    <div class="webinar-actions">
+                        <div class="webinar-status status-upcoming">Upcoming</div>
+                        <button class="btn btn-primary" onclick="registerWebinar('integration')">
+                            Register Now
+                        </button>
+                        <button class="btn btn-secondary" onclick="addToCalendar('integration')">
+                            Add to Calendar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab navigation
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabs = ['learning-paths', 'video-library', 'certifications', 'webinars'];
+            tabs.forEach(tab => {
+                const element = document.getElementById(tab);
+                if (element) {
+                    element.style.display = 'none';
+                }
+            });
+
+            // Show selected tab
+            const selectedTab = document.getElementById(tabName);
+            if (selectedTab) {
+                selectedTab.style.display = 'block';
+                selectedTab.classList.add('fade-in');
+            }
+
+            // Update active tab button
+            document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Learning path actions
+        function resumeLearning(pathType) {
+            showNotification(`Resuming ${pathType} learning path...`, 'info');
+            // In production, navigate to specific module
+        }
+
+        function viewCurriculum(pathType) {
+            showNotification(`Opening ${pathType} curriculum...`, 'info');
+            // In production, show detailed curriculum modal
+        }
+
+        // Certification actions
+        function startCertification(certType) {
+            showNotification(`Starting ${certType} certification requirements...`, 'info');
+            // In production, navigate to certification flow
+        }
+
+        // Webinar actions
+        function registerWebinar(webinarType) {
+            showNotification(`Registering for ${webinarType} webinar...`, 'success');
+            // In production, integrate with webinar platform
+        }
+
+        function addToCalendar(webinarType) {
+            showNotification(`Adding ${webinarType} webinar to calendar...`, 'info');
+            // In production, generate calendar file
+        }
+
+        function watchRecording(recordingType) {
+            showNotification(`Loading ${recordingType} recording...`, 'info');
+            // In production, open video player
+        }
+
+        function downloadResources(resourceType) {
+            showNotification(`Downloading ${resourceType} resources...`, 'success');
+            // In production, trigger download
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const colors = {
+                info: 'var(--color-info)',
+                success: 'var(--color-success)',
+                warning: 'var(--color-warning)',
+                error: 'var(--color-danger)'
+            };
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${colors[type] || colors.info};
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                max-width: 400px;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add animation styles
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Simulate progress updates
+            setInterval(() => {
+                // Update progress circles with small animations
+                const progressCircles = document.querySelectorAll('.progress-circle svg circle:last-child');
+                progressCircles.forEach(circle => {
+                    // Small random variations to simulate real-time updates
+                });
+            }, 30000);
+        });
+    </script>
+</body>
+</html>

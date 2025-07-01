@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOTUIP Pilot Tracking Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .customer-info {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .customer-logo {
+            width: 120px;
+            height: 40px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #718096;
+        }
+
+        .pilot-status {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .days-remaining {
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .metric-title {
+            font-size: 0.9rem;
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .metric-icon {
+            width: 24px;
+            height: 24px;
+            opacity: 0.5;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-change {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .positive {
+            color: #38a169;
+        }
+
+        .negative {
+            color: #e53e3e;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .time-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .time-btn {
+            padding: 0.25rem 0.75rem;
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .time-btn:hover {
+            background: #f7fafc;
+        }
+
+        .time-btn.active {
+            background: #4299e1;
+            color: white;
+            border-color: #4299e1;
+        }
+
+        .success-criteria {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .criteria-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .criteria-item:last-child {
+            border-bottom: none;
+        }
+
+        .criteria-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .criteria-met {
+            background: #48bb78;
+            color: white;
+        }
+
+        .criteria-pending {
+            background: #e2e8f0;
+        }
+
+        .criteria-details {
+            flex: 1;
+        }
+
+        .criteria-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .criteria-progress {
+            font-size: 0.85rem;
+            color: #718096;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 2px solid #e2e8f0;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #718096;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .savings-highlight {
+            color: #38a169;
+            font-weight: 600;
+        }
+
+        .risk-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .risk-high {
+            background: #feb2b2;
+            color: #742a2a;
+        }
+
+        .risk-medium {
+            background: #faf089;
+            color: #744210;
+        }
+
+        .risk-low {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #4299e1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3182ce;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #4299e1;
+            border: 2px solid #4299e1;
+        }
+
+        .btn-secondary:hover {
+            background: #ebf8ff;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #718096;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #48bb78;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.2);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="customer-info">
+                <div class="customer-logo" id="customerLogo">Customer Logo</div>
+                <div>
+                    <h1 style="font-size: 1.5rem;">Pilot Tracking Dashboard</h1>
+                    <p style="color: #718096; font-size: 0.9rem;">Real-time performance metrics</p>
+                </div>
+            </div>
+            <div class="pilot-status">
+                <span class="status-badge status-active">ACTIVE PILOT</span>
+                <span class="days-remaining" id="daysRemaining">42 days remaining</span>
+                <div class="live-indicator">
+                    <span class="live-dot"></span>
+                    <span>Live data</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-header">
+                    <h3 class="metric-title">Total Savings Achieved</h3>
+                    <svg class="metric-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="metric-value positive" id="totalSavings">$125,420</div>
+                <div class="metric-change positive">
+                    <span>↑ 18%</span>
+                    <span>vs. target</span>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <h3 class="metric-title">D&D Prevention Rate</h3>
+                    <svg class="metric-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="metric-value" id="preventionRate">92.8%</div>
+                <div class="metric-change positive">
+                    <span>↑ 2.8%</span>
+                    <span>this week</span>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <h3 class="metric-title">Shipments Processed</h3>
+                    <svg class="metric-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path>
+                    </svg>
+                </div>
+                <div class="metric-value" id="shipmentsProcessed">1,847</div>
+                <div class="metric-change">
+                    <span>284 this week</span>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <h3 class="metric-title">ROI Achievement</h3>
+                    <svg class="metric-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                </div>
+                <div class="metric-value positive" id="roiAchievement">6.2:1</div>
+                <div class="metric-change positive">
+                    <span>Target: 5:1</span>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <h3 class="metric-title">User Adoption</h3>
+                    <svg class="metric-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </div>
+                <div class="metric-value" id="userAdoption">82%</div>
+                <div class="metric-change positive">
+                    <span>18 of 22 users active</span>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <h3 class="metric-title">Avg Processing Time</h3>
+                    <svg class="metric-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="metric-value" id="avgProcessingTime">187ms</div>
+                <div class="metric-change positive">
+                    <span>↓ 23ms</span>
+                    <span>improvement</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Savings Over Time Chart -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <h2 class="chart-title">Cumulative Savings & Efficiency Gains</h2>
+                <div class="time-selector">
+                    <button class="time-btn" onclick="updateTimeRange('week')">Week</button>
+                    <button class="time-btn active" onclick="updateTimeRange('month')">Month</button>
+                    <button class="time-btn" onclick="updateTimeRange('all')">All Time</button>
+                </div>
+            </div>
+            <canvas id="savingsChart" height="80"></canvas>
+        </div>
+
+        <!-- Success Criteria Progress -->
+        <div class="success-criteria">
+            <h2 class="chart-title" style="margin-bottom: 1.5rem;">Success Criteria Progress</h2>
+            
+            <div class="criteria-item">
+                <div class="criteria-checkbox criteria-met">✓</div>
+                <div class="criteria-details">
+                    <div class="criteria-name">D&D Prevention Rate ≥ 85%</div>
+                    <div class="criteria-progress">Current: 92.8% (Target exceeded)</div>
+                </div>
+            </div>
+            
+            <div class="criteria-item">
+                <div class="criteria-checkbox criteria-met">✓</div>
+                <div class="criteria-details">
+                    <div class="criteria-name">Prediction Accuracy ≥ 90%</div>
+                    <div class="criteria-progress">Current: 94.2% (Achieved)</div>
+                </div>
+            </div>
+            
+            <div class="criteria-item">
+                <div class="criteria-checkbox criteria-met">✓</div>
+                <div class="criteria-details">
+                    <div class="criteria-name">System Uptime ≥ 99.5%</div>
+                    <div class="criteria-progress">Current: 99.8% (Achieved)</div>
+                </div>
+            </div>
+            
+            <div class="criteria-item">
+                <div class="criteria-checkbox criteria-pending"></div>
+                <div class="criteria-details">
+                    <div class="criteria-name">20% Reduction in D&D Charges</div>
+                    <div class="criteria-progress">Current: 18.5% reduction (1.5% to go)</div>
+                </div>
+            </div>
+            
+            <div class="criteria-item">
+                <div class="criteria-checkbox criteria-met">✓</div>
+                <div class="criteria-details">
+                    <div class="criteria-name">ROI Demonstration ≥ 5:1</div>
+                    <div class="criteria-progress">Current: 6.2:1 (Target exceeded)</div>
+                </div>
+            </div>
+            
+            <div class="criteria-item">
+                <div class="criteria-checkbox criteria-met">✓</div>
+                <div class="criteria-details">
+                    <div class="criteria-name">User Adoption > 75%</div>
+                    <div class="criteria-progress">Current: 82% (18 of 22 users active daily)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Prevented D&D Events -->
+        <div class="table-container" style="margin-top: 2rem;">
+            <h2 class="chart-title" style="margin-bottom: 1.5rem;">Recent D&D Events Prevented</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Container</th>
+                        <th>Port</th>
+                        <th>Risk Score</th>
+                        <th>Action Taken</th>
+                        <th>Savings</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="preventedEvents">
+                    <tr>
+                        <td>MSKU7891234</td>
+                        <td>Los Angeles</td>
+                        <td><span class="risk-badge risk-high">High (85)</span></td>
+                        <td>Expedited clearance</td>
+                        <td class="savings-highlight">$4,250</td>
+                        <td>2 hours ago</td>
+                    </tr>
+                    <tr>
+                        <td>CMAU4567890</td>
+                        <td>Long Beach</td>
+                        <td><span class="risk-badge risk-medium">Medium (62)</span></td>
+                        <td>Documentation fix</td>
+                        <td class="savings-highlight">$2,800</td>
+                        <td>5 hours ago</td>
+                    </tr>
+                    <tr>
+                        <td>HLCU1234567</td>
+                        <td>New York</td>
+                        <td><span class="risk-badge risk-high">High (78)</span></td>
+                        <td>Carrier coordination</td>
+                        <td class="savings-highlight">$3,600</td>
+                        <td>Yesterday</td>
+                    </tr>
+                    <tr>
+                        <td>OOLU8901234</td>
+                        <td>Savannah</td>
+                        <td><span class="risk-badge risk-medium">Medium (55)</span></td>
+                        <td>Schedule adjustment</td>
+                        <td class="savings-highlight">$1,950</td>
+                        <td>Yesterday</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="generateReport()">Generate Full Report</button>
+            <button class="btn btn-secondary" onclick="scheduleReview()">Schedule Review Meeting</button>
+            <button class="btn btn-secondary" onclick="exportData()">Export Data</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize dashboard
+        let savingsChart;
+        let currentTimeRange = 'month';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            updateMetrics();
+            startRealTimeUpdates();
+            updateDaysRemaining();
+        });
+
+        // Initialize charts
+        function initializeCharts() {
+            const ctx = document.getElementById('savingsChart').getContext('2d');
+            
+            savingsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: generateDateLabels(30),
+                    datasets: [{
+                        label: 'D&D Charges Prevented',
+                        data: generateSavingsData(30),
+                        borderColor: '#4299e1',
+                        backgroundColor: 'rgba(66, 153, 225, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Operational Efficiency Gains',
+                        data: generateEfficiencyData(30),
+                        borderColor: '#48bb78',
+                        backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': $' + context.raw.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000).toFixed(0) + 'k';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Generate date labels
+        function generateDateLabels(days) {
+            const labels = [];
+            const today = new Date();
+            
+            for (let i = days - 1; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+            }
+            
+            return labels;
+        }
+
+        // Generate savings data
+        function generateSavingsData(days) {
+            const data = [];
+            let cumulative = 0;
+            
+            for (let i = 0; i < days; i++) {
+                cumulative += Math.random() * 5000 + 2000;
+                data.push(Math.round(cumulative));
+            }
+            
+            return data;
+        }
+
+        // Generate efficiency data
+        function generateEfficiencyData(days) {
+            const data = [];
+            let cumulative = 0;
+            
+            for (let i = 0; i < days; i++) {
+                cumulative += Math.random() * 2000 + 1000;
+                data.push(Math.round(cumulative));
+            }
+            
+            return data;
+        }
+
+        // Update time range
+        function updateTimeRange(range) {
+            currentTimeRange = range;
+            
+            // Update button states
+            document.querySelectorAll('.time-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update chart data
+            let days;
+            switch(range) {
+                case 'week':
+                    days = 7;
+                    break;
+                case 'month':
+                    days = 30;
+                    break;
+                case 'all':
+                    days = 42;
+                    break;
+            }
+            
+            savingsChart.data.labels = generateDateLabels(days);
+            savingsChart.data.datasets[0].data = generateSavingsData(days);
+            savingsChart.data.datasets[1].data = generateEfficiencyData(days);
+            savingsChart.update();
+        }
+
+        // Update metrics with real-time data
+        function updateMetrics() {
+            // Simulate real-time updates
+            const metrics = {
+                totalSavings: 125420 + Math.random() * 1000,
+                preventionRate: 92.8 + (Math.random() * 0.2 - 0.1),
+                shipmentsProcessed: 1847 + Math.floor(Math.random() * 5),
+                roiAchievement: 6.2 + (Math.random() * 0.1 - 0.05),
+                userAdoption: 82 + Math.floor(Math.random() * 2),
+                avgProcessingTime: 187 + Math.floor(Math.random() * 10 - 5)
+            };
+            
+            // Update DOM
+            document.getElementById('totalSavings').textContent = 
+                '$' + Math.round(metrics.totalSavings).toLocaleString();
+            document.getElementById('preventionRate').textContent = 
+                metrics.preventionRate.toFixed(1) + '%';
+            document.getElementById('shipmentsProcessed').textContent = 
+                metrics.shipmentsProcessed.toLocaleString();
+            document.getElementById('roiAchievement').textContent = 
+                metrics.roiAchievement.toFixed(1) + ':1';
+            document.getElementById('userAdoption').textContent = 
+                Math.round(metrics.userAdoption) + '%';
+            document.getElementById('avgProcessingTime').textContent = 
+                Math.round(metrics.avgProcessingTime) + 'ms';
+        }
+
+        // Start real-time updates
+        function startRealTimeUpdates() {
+            setInterval(updateMetrics, 5000);
+            setInterval(addNewPreventedEvent, 30000);
+        }
+
+        // Add new prevented event
+        function addNewPreventedEvent() {
+            const tbody = document.getElementById('preventedEvents');
+            const containers = ['MSKU', 'CMAU', 'HLCU', 'OOLU', 'TGHU'];
+            const ports = ['Los Angeles', 'Long Beach', 'New York', 'Savannah', 'Houston'];
+            const actions = ['Expedited clearance', 'Documentation fix', 'Carrier coordination', 'Schedule adjustment'];
+            
+            const newRow = tbody.insertRow(0);
+            const riskScore = Math.floor(Math.random() * 40) + 50;
+            const riskLevel = riskScore > 70 ? 'high' : 'medium';
+            
+            newRow.innerHTML = `
+                <td>${containers[Math.floor(Math.random() * containers.length)]}${Math.floor(Math.random() * 9000000) + 1000000}</td>
+                <td>${ports[Math.floor(Math.random() * ports.length)]}</td>
+                <td><span class="risk-badge risk-${riskLevel}">${riskLevel.charAt(0).toUpperCase() + riskLevel.slice(1)} (${riskScore})</span></td>
+                <td>${actions[Math.floor(Math.random() * actions.length)]}</td>
+                <td class="savings-highlight">$${(Math.random() * 4000 + 1000).toFixed(0).toLocaleString()}</td>
+                <td>Just now</td>
+            `;
+            
+            // Remove last row if more than 5
+            if (tbody.rows.length > 5) {
+                tbody.deleteRow(-1);
+            }
+        }
+
+        // Update days remaining
+        function updateDaysRemaining() {
+            const pilotEndDate = new Date();
+            pilotEndDate.setDate(pilotEndDate.getDate() + 42);
+            
+            const today = new Date();
+            const daysRemaining = Math.ceil((pilotEndDate - today) / (1000 * 60 * 60 * 24));
+            
+            document.getElementById('daysRemaining').textContent = 
+                `${daysRemaining} days remaining`;
+        }
+
+        // Generate report
+        function generateReport() {
+            alert('Generating comprehensive pilot report...\nThis will be emailed to stakeholders.');
+            
+            // In production, this would trigger API call
+            fetch('/api/pilot/generate-report', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    customerId: 'pilot-001',
+                    reportType: 'comprehensive'
+                })
+            });
+        }
+
+        // Schedule review meeting
+        function scheduleReview() {
+            alert('Opening calendar to schedule pilot review meeting...');
+            // In production, this would open calendar integration
+        }
+
+        // Export data
+        function exportData() {
+            alert('Exporting pilot data to Excel...\nFile will be downloaded shortly.');
+            // In production, this would trigger data export
+        }
+    </script>
+</body>
+</html>

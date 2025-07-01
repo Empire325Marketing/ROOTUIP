@@ -1,0 +1,59 @@
+# ROOTUIP Quick Deploy Commands
+# Copy and paste these commands for rapid deployment
+
+# 1. PREPARE LOCAL FILES (on your machine)
+cd /home/iii/ROOTUIP
+chmod +x deploy-to-production.sh
+
+# 2. RUN AUTOMATED DEPLOYMENT
+./deploy-to-production.sh
+
+# ===== OR MANUAL DEPLOYMENT =====
+
+# 3. UPLOAD TO VPS
+rsync -avz --exclude 'node_modules' --exclude '.git' /home/iii/ROOTUIP/ root@145.223.73.4:/var/www/rootuip/
+
+# 4. SSH TO VPS
+ssh root@145.223.73.4
+
+# 5. INSTALL SSL (on VPS)
+apt update && apt install -y certbot python3-certbot-nginx
+certbot certonly --standalone -d rootuip.com -d app.rootuip.com -d www.rootuip.com
+
+# 6. SETUP NGINX (on VPS)
+cp /var/www/rootuip/nginx-production.conf /etc/nginx/sites-available/rootuip
+ln -sf /etc/nginx/sites-available/rootuip /etc/nginx/sites-enabled/
+rm -f /etc/nginx/sites-enabled/default
+nginx -t && systemctl reload nginx
+
+# 7. INSTALL NODE DEPENDENCIES (on VPS)
+cd /var/www/rootuip
+npm install --production
+cp .env.production .env
+chown -R www-data:www-data /var/www/rootuip
+
+# 8. SETUP SERVICES (on VPS)
+cp *.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable rootuip-app rootuip-dashboard rootuip-crm
+systemctl start rootuip-app rootuip-dashboard rootuip-crm
+
+# 9. CREATE DATABASE (on VPS)
+sudo -u postgres psql -c "CREATE DATABASE uip_production;"
+sudo -u postgres psql -c "CREATE USER uip_user WITH PASSWORD 'secure_password';"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE uip_production TO uip_user;"
+
+# 10. VERIFY DEPLOYMENT
+systemctl status rootuip-app
+systemctl status rootuip-dashboard
+systemctl status rootuip-crm
+curl https://app.rootuip.com/health
+
+# MONITOR LOGS
+journalctl -u rootuip-app -f
+journalctl -u rootuip-dashboard -f
+
+# CHECK ENDPOINTS
+# Main App: https://app.rootuip.com
+# Landing: https://rootuip.com
+# ROI Calculator: https://rootuip.com/roi-calculator

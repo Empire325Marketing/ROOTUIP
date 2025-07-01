@@ -1,0 +1,286 @@
+/**
+ * ROOTUIP Brand Guidelines CSS
+ * Official brand colors, typography, and design system
+ * 
+ * Brand Promise: Enterprise ocean freight intelligence delivering $500K value per vessel
+ * Design Principles: Trust, Expertise, Innovation, Clarity
+ */
+
+:root {
+  /* ============================================
+     PRIMARY COLORS
+     ============================================ */
+  
+  /* Deep Ocean Blue - Primary brand color representing maritime expertise */
+  --rootuip-primary: #0F3460;
+  --rootuip-primary-light: #1e4d8b;
+  --rootuip-primary-dark: #0a2342;
+  --rootuip-primary-rgb: 15, 52, 96;
+  
+  /* Success Green - Representing value creation and positive ROI */
+  --rootuip-success: #00D46A;
+  --rootuip-success-light: #33dd89;
+  --rootuip-success-dark: #00a855;
+  --rootuip-success-rgb: 0, 212, 106;
+  
+  /* Data Orange - Highlighting insights and key metrics */
+  --rootuip-accent: #FF6B35;
+  --rootuip-accent-light: #ff8a5b;
+  --rootuip-accent-dark: #e54d1a;
+  --rootuip-accent-rgb: 255, 107, 53;
+  
+  /* ============================================
+     NEUTRAL COLORS
+     ============================================ */
+  
+  /* Professional Grays */
+  --rootuip-gray-900: #1A202C;  /* Darkest - high contrast text */
+  --rootuip-gray-800: #2D3748;  /* Dark text */
+  --rootuip-gray-700: #4A5568;  /* Secondary text */
+  --rootuip-gray-600: #5D7083;  /* Muted text */
+  --rootuip-gray-500: #718096;  /* Disabled state */
+  --rootuip-gray-400: #A0AEC0;  /* Placeholders */
+  --rootuip-gray-300: #CBD5E0;  /* Borders */
+  --rootuip-gray-200: #E0E4E8;  /* Dividers */
+  --rootuip-gray-100: #F7FAFC;  /* Backgrounds */
+  --rootuip-white: #FFFFFF;      /* Pure white */
+  
+  /* ============================================
+     SEMANTIC COLORS
+     ============================================ */
+  
+  --rootuip-info: var(--rootuip-primary);
+  --rootuip-warning: #F59E0B;
+  --rootuip-danger: #EF4444;
+  --rootuip-muted: var(--rootuip-gray-600);
+  
+  /* ============================================
+     TYPOGRAPHY
+     ============================================ */
+  
+  /* Font Families */
+  --rootuip-font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --rootuip-font-mono: 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  
+  /* Font Sizes */
+  --rootuip-text-xs: 0.75rem;    /* 12px */
+  --rootuip-text-sm: 0.875rem;   /* 14px */
+  --rootuip-text-base: 1rem;     /* 16px */
+  --rootuip-text-lg: 1.125rem;   /* 18px */
+  --rootuip-text-xl: 1.25rem;    /* 20px */
+  --rootuip-text-2xl: 1.5rem;    /* 24px */
+  --rootuip-text-3xl: 1.875rem;  /* 30px */
+  --rootuip-text-4xl: 2.25rem;   /* 36px */
+  --rootuip-text-5xl: 3rem;      /* 48px */
+  
+  /* Font Weights */
+  --rootuip-font-normal: 400;
+  --rootuip-font-medium: 500;
+  --rootuip-font-semibold: 600;
+  --rootuip-font-bold: 700;
+  
+  /* Line Heights */
+  --rootuip-leading-none: 1;
+  --rootuip-leading-tight: 1.25;
+  --rootuip-leading-snug: 1.375;
+  --rootuip-leading-normal: 1.5;
+  --rootuip-leading-relaxed: 1.625;
+  --rootuip-leading-loose: 2;
+  
+  /* Letter Spacing */
+  --rootuip-tracking-tighter: -0.05em;
+  --rootuip-tracking-tight: -0.025em;
+  --rootuip-tracking-normal: 0;
+  --rootuip-tracking-wide: 0.025em;
+  --rootuip-tracking-wider: 0.05em;
+  --rootuip-tracking-widest: 0.1em;
+  
+  /* ============================================
+     SPACING SYSTEM
+     ============================================ */
+  
+  --rootuip-space-1: 0.25rem;   /* 4px */
+  --rootuip-space-2: 0.5rem;    /* 8px */
+  --rootuip-space-3: 0.75rem;   /* 12px */
+  --rootuip-space-4: 1rem;      /* 16px */
+  --rootuip-space-5: 1.25rem;   /* 20px */
+  --rootuip-space-6: 1.5rem;    /* 24px */
+  --rootuip-space-8: 2rem;      /* 32px */
+  --rootuip-space-10: 2.5rem;   /* 40px */
+  --rootuip-space-12: 3rem;     /* 48px */
+  --rootuip-space-16: 4rem;     /* 64px */
+  --rootuip-space-20: 5rem;     /* 80px */
+  --rootuip-space-24: 6rem;     /* 96px */
+  
+  /* ============================================
+     BORDERS & RADIUS
+     ============================================ */
+  
+  --rootuip-border-width: 1px;
+  --rootuip-border-style: solid;
+  --rootuip-border-color: var(--rootuip-gray-300);
+  
+  --rootuip-radius-sm: 0.25rem;   /* 4px */
+  --rootuip-radius-md: 0.375rem;  /* 6px */
+  --rootuip-radius-lg: 0.5rem;    /* 8px */
+  --rootuip-radius-xl: 0.75rem;   /* 12px */
+  --rootuip-radius-2xl: 1rem;     /* 16px */
+  --rootuip-radius-full: 9999px;  /* Pill shape */
+  
+  /* ============================================
+     SHADOWS
+     ============================================ */
+  
+  --rootuip-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --rootuip-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --rootuip-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --rootuip-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --rootuip-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  /* Brand-specific shadows */
+  --rootuip-shadow-primary: 0 4px 14px 0 rgba(15, 52, 96, 0.3);
+  --rootuip-shadow-success: 0 4px 14px 0 rgba(0, 212, 106, 0.3);
+  --rootuip-shadow-accent: 0 4px 14px 0 rgba(255, 107, 53, 0.3);
+  
+  /* ============================================
+     TRANSITIONS
+     ============================================ */
+  
+  --rootuip-transition-fast: 150ms ease-in-out;
+  --rootuip-transition-base: 250ms ease-in-out;
+  --rootuip-transition-slow: 350ms ease-in-out;
+  
+  /* ============================================
+     Z-INDEX SCALE
+     ============================================ */
+  
+  --rootuip-z-0: 0;
+  --rootuip-z-10: 10;
+  --rootuip-z-20: 20;
+  --rootuip-z-30: 30;
+  --rootuip-z-40: 40;
+  --rootuip-z-50: 50;     /* Dropdowns */
+  --rootuip-z-modal: 1000; /* Modals */
+  --rootuip-z-toast: 1100; /* Toasts/Notifications */
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Brand Colors */
+.rootuip-bg-primary { background-color: var(--rootuip-primary); }
+.rootuip-bg-success { background-color: var(--rootuip-success); }
+.rootuip-bg-accent { background-color: var(--rootuip-accent); }
+
+.rootuip-text-primary { color: var(--rootuip-primary); }
+.rootuip-text-success { color: var(--rootuip-success); }
+.rootuip-text-accent { color: var(--rootuip-accent); }
+
+/* Typography */
+.rootuip-font-primary { font-family: var(--rootuip-font-primary); }
+.rootuip-font-mono { font-family: var(--rootuip-font-mono); }
+
+.rootuip-heading {
+  font-family: var(--rootuip-font-primary);
+  font-weight: var(--rootuip-font-bold);
+  line-height: var(--rootuip-leading-tight);
+  color: var(--rootuip-gray-900);
+}
+
+.rootuip-body {
+  font-family: var(--rootuip-font-primary);
+  font-weight: var(--rootuip-font-normal);
+  line-height: var(--rootuip-leading-normal);
+  color: var(--rootuip-gray-700);
+}
+
+/* Buttons */
+.rootuip-button {
+  font-family: var(--rootuip-font-primary);
+  font-weight: var(--rootuip-font-semibold);
+  padding: var(--rootuip-space-3) var(--rootuip-space-6);
+  border-radius: var(--rootuip-radius-lg);
+  transition: all var(--rootuip-transition-base);
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.rootuip-button-primary {
+  background-color: var(--rootuip-primary);
+  color: var(--rootuip-white);
+}
+
+.rootuip-button-primary:hover {
+  background-color: var(--rootuip-primary-dark);
+  box-shadow: var(--rootuip-shadow-primary);
+}
+
+.rootuip-button-success {
+  background-color: var(--rootuip-success);
+  color: var(--rootuip-white);
+}
+
+.rootuip-button-success:hover {
+  background-color: var(--rootuip-success-dark);
+  box-shadow: var(--rootuip-shadow-success);
+}
+
+/* Cards */
+.rootuip-card {
+  background-color: var(--rootuip-white);
+  border-radius: var(--rootuip-radius-xl);
+  box-shadow: var(--rootuip-shadow-md);
+  padding: var(--rootuip-space-6);
+  border: 1px solid var(--rootuip-gray-200);
+}
+
+/* Gradients */
+.rootuip-gradient-ocean {
+  background: linear-gradient(135deg, var(--rootuip-primary) 0%, var(--rootuip-primary-light) 100%);
+}
+
+.rootuip-gradient-value {
+  background: linear-gradient(135deg, var(--rootuip-success) 0%, var(--rootuip-accent) 100%);
+}
+
+/* Container Width Classes */
+.rootuip-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--rootuip-space-4);
+}
+
+/* Animation Classes */
+@keyframes rootuip-wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.rootuip-animate-wave {
+  animation: rootuip-wave 3s ease-in-out infinite;
+}
+
+/* Focus States */
+.rootuip-focus:focus {
+  outline: 2px solid var(--rootuip-primary);
+  outline-offset: 2px;
+}
+
+/* Media Query Helpers */
+@media (min-width: 640px) {
+  .rootuip-sm-text-lg { font-size: var(--rootuip-text-lg); }
+}
+
+@media (min-width: 768px) {
+  .rootuip-md-text-xl { font-size: var(--rootuip-text-xl); }
+}
+
+@media (min-width: 1024px) {
+  .rootuip-lg-text-2xl { font-size: var(--rootuip-text-2xl); }
+}

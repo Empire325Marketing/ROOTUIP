@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortune 100 Retailer Case Study - ROOTUIP Success Story</title>
+    
+    <!-- Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/assets/css/enterprise-design-system.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: var(--enterprise-white);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .case-study-header {
+            background: var(--enterprise-gradient-primary);
+            color: white;
+            padding: var(--space-12) 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .case-study-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.2;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+        }
+        
+        .company-badge {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius-full);
+            padding: var(--space-2) var(--space-4);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-6);
+            font-size: var(--text-sm);
+            font-weight: var(--font-medium);
+        }
+        
+        .case-study-title {
+            font-size: var(--text-6xl);
+            font-weight: var(--font-black);
+            margin-bottom: var(--space-4);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .case-study-subtitle {
+            font-size: var(--text-2xl);
+            opacity: 0.9;
+            margin-bottom: var(--space-8);
+            font-weight: var(--font-medium);
+        }
+        
+        .header-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-6);
+            margin-top: var(--space-8);
+        }
+        
+        .header-metric {
+            text-align: center;
+            padding: var(--space-4);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .metric-value {
+            font-size: var(--text-4xl);
+            font-weight: var(--font-black);
+            margin-bottom: var(--space-2);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .metric-label {
+            font-size: var(--text-base);
+            opacity: 0.9;
+            font-weight: var(--font-medium);
+        }
+        
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-12) var(--space-6);
+        }
+        
+        .content-section {
+            margin-bottom: var(--space-12);
+        }
+        
+        .section-header {
+            margin-bottom: var(--space-8);
+        }
+        
+        .section-title {
+            font-size: var(--text-4xl);
+            font-weight: var(--font-bold);
+            color: var(--enterprise-dark);
+            margin-bottom: var(--space-4);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .section-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--enterprise-primary);
+            color: white;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+        }
+        
+        .section-description {
+            font-size: var(--text-xl);
+            color: var(--enterprise-gray-600);
+            max-width: 800px;
+        }
+        
+        .challenge-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-8);
+        }
+        
+        .challenge-item {
+            padding: var(--space-6);
+            background: var(--enterprise-danger-subtle);
+            border: 2px solid var(--enterprise-danger);
+            border-radius: var(--radius-xl);
+            position: relative;
+        }
+        
+        .challenge-item::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: var(--enterprise-gradient-primary);
+            border-radius: var(--radius-xl);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+        
+        .challenge-item:hover::before {
+            opacity: 0.1;
+        }
+        
+        .challenge-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+        }
+        
+        .challenge-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--enterprise-danger);
+            color: white;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xl);
+        }
+        
+        .solution-timeline {
+            position: relative;
+            padding-left: var(--space-8);
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--enterprise-primary);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: var(--space-8);
+            padding: var(--space-6);
+            background: var(--enterprise-white);
+            border: 2px solid var(--enterprise-gray-200);
+            border-radius: var(--radius-xl);
+            margin-left: var(--space-6);
+        }
+        
+        .timeline-item:hover {
+            border-color: var(--enterprise-primary);
+            transform: translateX(4px);
+            transition: all var(--transition-base);
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            left: -46px;
+            top: 24px;
+            width: 40px;
+            height: 40px;
+            background: var(--enterprise-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: var(--font-bold);
+            border: 4px solid var(--enterprise-white);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .timeline-content h4 {
+            font-size: var(--text-xl);
+            font-weight: var(--font-bold);
+            color: var(--enterprise-dark);
+            margin-bottom: var(--space-3);
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-8);
+        }
+        
+        .result-card {
+            padding: var(--space-8);
+            background: var(--enterprise-success-subtle);
+            border: 3px solid var(--enterprise-success);
+            border-radius: var(--radius-xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--enterprise-gradient-primary);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+        
+        .result-card:hover::before {
+            opacity: 0.05;
+        }
+        
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--enterprise-success);
+            color: white;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-3xl);
+            margin: 0 auto var(--space-6);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .result-value {
+            font-size: var(--text-5xl);
+            font-weight: var(--font-black);
+            color: var(--enterprise-success);
+            margin-bottom: var(--space-2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .result-label {
+            font-size: var(--text-lg);
+            font-weight: var(--font-semibold);
+            color: var(--enterprise-dark);
+            margin-bottom: var(--space-3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .result-description {
+            color: var(--enterprise-gray-700);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testimonial-section {
+            background: var(--enterprise-gradient-subtle);
+            border: 3px solid var(--enterprise-primary);
+            border-radius: var(--radius-xl);
+            padding: var(--space-10);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .testimonial-quote {
+            font-size: var(--text-3xl);
+            font-weight: var(--font-medium);
+            font-style: italic;
+            color: var(--enterprise-dark);
+            margin-bottom: var(--space-8);
+            line-height: 1.4;
+            position: relative;
+        }
+        
+        .testimonial-quote::before,
+        .testimonial-quote::after {
+            content: '"';
+            font-size: var(--text-6xl);
+            color: var(--enterprise-primary);
+            position: absolute;
+            opacity: 0.3;
+        }
+        
+        .testimonial-quote::before {
+            top: -20px;
+            left: -20px;
+        }
+        
+        .testimonial-quote::after {
+            bottom: -40px;
+            right: -20px;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-4);
+        }
+        
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--enterprise-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-2xl);
+            font-weight: var(--font-bold);
+        }
+        
+        .author-info h4 {
+            font-size: var(--text-xl);
+            font-weight: var(--font-bold);
+            color: var(--enterprise-dark);
+            margin-bottom: var(--space-1);
+        }
+        
+        .author-info p {
+            font-size: var(--text-lg);
+            color: var(--enterprise-gray-600);
+            margin: 0;
+        }
+        
+        .implementation-details {
+            background: var(--enterprise-gray-50);
+            border-radius: var(--radius-xl);
+            padding: var(--space-8);
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-8);
+        }
+        
+        .detail-item {
+            padding: var(--space-6);
+            background: var(--enterprise-white);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--enterprise-gray-200);
+        }
+        
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+        }
+        
+        .detail-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--enterprise-primary);
+            color: white;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xl);
+        }
+        
+        .cta-section {
+            background: var(--enterprise-gradient-primary);
+            color: white;
+            padding: var(--space-10);
+            border-radius: var(--radius-xl);
+            text-align: center;
+            margin-top: var(--space-12);
+        }
+        
+        .cta-title {
+            font-size: var(--text-4xl);
+            font-weight: var(--font-bold);
+            margin-bottom: var(--space-4);
+        }
+        
+        .cta-description {
+            font-size: var(--text-xl);
+            opacity: 0.9;
+            margin-bottom: var(--space-8);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-4);
+            flex-wrap: wrap;
+        }
+        
+        .cta-button {
+            padding: var(--space-4) var(--space-8);
+            background: var(--enterprise-white);
+            color: var(--enterprise-primary);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: var(--text-lg);
+            font-weight: var(--font-bold);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            text-decoration: none;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .cta-button.secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .cta-button.secondary:hover {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 1024px) {
+            .header-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .challenge-grid,
+            .results-grid,
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .case-study-title {
+                font-size: var(--text-4xl);
+            }
+            
+            .section-title {
+                font-size: var(--text-2xl);
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .testimonial-quote {
+                font-size: var(--text-xl);
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/assets/css/rootuip-dark-theme.css">
+</head>
+<body>
+    <!-- Case Study Header -->
+    <div class="case-study-header">
+        <div class="header-content">
+            <div class="company-badge">
+                <i class="fas fa-store"></i>
+                <span>Fortune 100 Retailer</span>
+            </div>
+            <h1 class="case-study-title">$18M Annual Savings</h1>
+            <p class="case-study-subtitle">How a leading retailer prevented detention charges and optimized supply chain performance</p>
+            
+            <div class="header-metrics">
+                <div class="header-metric">
+                    <div class="metric-value">$18M</div>
+                    <div class="metric-label">Annual Savings</div>
+                </div>
+                <div class="header-metric">
+                    <div class="metric-value">98%</div>
+                    <div class="metric-label">Accuracy Rate</div>
+                </div>
+                <div class="header-metric">
+                    <div class="metric-value">45 Days</div>
+                    <div class="metric-label">Implementation</div>
+                </div>
+                <div class="header-metric">
+                    <div class="metric-value">847%</div>
+                    <div class="metric-label">ROI</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <!-- Challenge Section -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    The Challenge
+                </h2>
+                <p class="section-description">
+                    A Fortune 100 retailer was experiencing massive detention and demurrage charges, threatening their peak season profitability and customer satisfaction metrics.
+                </p>
+            </div>
+            
+            <div class="challenge-grid">
+                <div class="challenge-item">
+                    <div class="challenge-header">
+                        <div class="challenge-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <h3>$25M Annual D&D Charges</h3>
+                    </div>
+                    <p>Detention and demurrage costs were spiraling out of control, with peak season charges reaching $8M in Q4 alone, directly impacting profitability and cash flow.</p>
+                </div>
+                
+                <div class="challenge-item">
+                    <div class="challenge-header">
+                        <div class="challenge-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>72% Late Deliveries</h3>
+                    </div>
+                    <p>Manual tracking systems provided no visibility into container status, resulting in frequent stockouts and expedited shipping costs during critical selling periods.</p>
+                </div>
+                
+                <div class="challenge-item">
+                    <div class="challenge-header">
+                        <div class="challenge-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Limited Visibility</h3>
+                    </div>
+                    <p>Lack of real-time container tracking meant reactive decision-making, with teams only learning of delays after containers were already incurring charges.</p>
+                </div>
+                
+                <div class="challenge-item">
+                    <div class="challenge-header">
+                        <div class="challenge-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Manual Processes</h3>
+                    </div>
+                    <p>35+ supply chain professionals were manually tracking 45,000+ containers monthly using spreadsheets, leading to errors and missed opportunities.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Solution Section -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    The ROOTUIP Solution
+                </h2>
+                <p class="section-description">
+                    A comprehensive 45-day implementation transforming manual processes into AI-powered predictive intelligence.
+                </p>
+            </div>
+            
+            <div class="solution-timeline">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">1</div>
+                    <div class="timeline-content">
+                        <h4>Assessment & Integration (Days 1-15)</h4>
+                        <p>Comprehensive analysis of existing systems, data sources, and carrier integrations. Connected ROOTUIP to Maersk, MSC, and 8 other carriers via API, establishing real-time data feeds for 45,000+ containers.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">2</div>
+                    <div class="timeline-content">
+                        <h4>AI Model Training (Days 16-30)</h4>
+                        <p>Deployed machine learning algorithms using 2 years of historical shipping data, achieving 94% accuracy in detention prediction within the first week of operation.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">3</div>
+                    <div class="timeline-content">
+                        <h4>Dashboard Deployment (Days 31-40)</h4>
+                        <p>Launched executive dashboard with real-time KPIs, automated alert systems, and mobile-responsive interface for field operations teams.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">4</div>
+                    <div class="timeline-content">
+                        <h4>Full Production Launch (Days 41-45)</h4>
+                        <p>Complete platform activation with 24/7 monitoring, automated workflows, and integration with existing ERP and WMS systems.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    Quantified Results
+                </h2>
+                <p class="section-description">
+                    Measurable business impact achieved within 90 days of implementation.
+                </p>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="result-value">$18M</div>
+                    <div class="result-label">Annual Savings</div>
+                    <div class="result-description">72% reduction in detention and demurrage charges through proactive intervention and optimized pickup timing.</div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="result-value">98%</div>
+                    <div class="result-label">Prediction Accuracy</div>
+                    <div class="result-description">AI-powered delay prediction enabling proactive decision-making and risk mitigation strategies.</div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="result-value">89%</div>
+                    <div class="result-label">On-Time Delivery</div>
+                    <div class="result-description">Dramatic improvement from 28% to 89% on-time delivery rate, ensuring peak season inventory availability.</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Testimonial Section -->
+        <div class="content-section">
+            <div class="testimonial-section">
+                <div class="testimonial-quote">
+                    ROOTUIP's platform has transformed our supply chain operations. The $18M in savings we achieved in year one exceeded our most optimistic projections, and the visibility it provides has become mission-critical for our business.
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">JM</div>
+                    <div class="author-info">
+                        <h4>Jennifer Martinez</h4>
+                        <p>VP Supply Chain, Fortune 100 Retailer</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Implementation Details -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    Implementation Details
+                </h2>
+                <p class="section-description">
+                    Technical architecture and operational changes that enabled success.
+                </p>
+            </div>
+            
+            <div class="implementation-details">
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-header">
+                            <div class="detail-icon">
+                                <i class="fas fa-plug"></i>
+                            </div>
+                            <h4>System Integration</h4>
+                        </div>
+                        <ul>
+                            <li>Direct API connections to 10 major carriers</li>
+                            <li>ERP integration with SAP for inventory management</li>
+                            <li>WMS connectivity for warehouse operations</li>
+                            <li>Real-time data synchronization every 30 seconds</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-header">
+                            <div class="detail-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4>AI/ML Capabilities</h4>
+                        </div>
+                        <ul>
+                            <li>Predictive analytics for detention risk assessment</li>
+                            <li>Dynamic routing optimization algorithms</li>
+                            <li>Automated exception handling workflows</li>
+                            <li>Continuous learning from operational data</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-header">
+                            <div class="detail-icon">
+                                <i class="fas fa-shield-check"></i>
+                            </div>
+                            <h4>Security & Compliance</h4>
+                        </div>
+                        <ul>
+                            <li>SOC 2 Type II certified infrastructure</li>
+                            <li>Role-based access control (RBAC)</li>
+                            <li>End-to-end data encryption</li>
+                            <li>Comprehensive audit trail logging</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-header">
+                            <div class="detail-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h4>Team Training</h4>
+                        </div>
+                        <ul>
+                            <li>Executive dashboard training for leadership</li>
+                            <li>Operations team workflow certification</li>
+                            <li>24/7 technical support and monitoring</li>
+                            <li>Quarterly optimization reviews</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2 class="cta-title">Ready to Transform Your Supply Chain?</h2>
+            <p class="cta-description">
+                Join Fortune 500 companies already saving millions with ROOTUIP's AI-powered platform. Schedule your executive demo today.
+            </p>
+            <div class="cta-buttons">
+                <a href="/roi-calculator-premium.html" class="cta-button">
+                    <i class="fas fa-calculator"></i>
+                    Calculate Your Savings
+                </a>
+                <a href="/executive-demo-interface.html" class="cta-button secondary">
+                    <i class="fas fa-play"></i>
+                    Watch Platform Demo
+                </a>
+                <a href="mailto:enterprise-sales@rootuip.com" class="cta-button secondary">
+                    <i class="fas fa-envelope"></i>
+                    Contact Enterprise Sales
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Animate elements on scroll
+            const animatedElements = document.querySelectorAll('.challenge-item, .timeline-item, .result-card, .detail-item');
+            animatedElements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+                observer.observe(el);
+            });
+            
+            // Animate metrics counting
+            const metricValues = document.querySelectorAll('.metric-value, .result-value');
+            metricValues.forEach(metric => {
+                const finalValue = metric.textContent;
+                metric.textContent = '0';
+                
+                // Start counting animation when visible
+                const countObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            animateCounter(entry.target, finalValue);
+                            countObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                countObserver.observe(metric);
+            });
+        });
+        
+        function animateCounter(element, finalValue) {
+            const isPercentage = finalValue.includes('%');
+            const isDollar = finalValue.includes('$');
+            const isDays = finalValue.includes('Days');
+            
+            let numericValue = parseInt(finalValue.replace(/[^0-9]/g, ''));
+            
+            let current = 0;
+            const increment = numericValue / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= numericValue) {
+                    current = numericValue;
+                    clearInterval(timer);
+                }
+                
+                let displayValue = Math.floor(current);
+                if (isDollar) {
+                    if (displayValue >= 1000000) {
+                        displayValue = '$' + (displayValue / 1000000).toFixed(0) + 'M';
+                    } else {
+                        displayValue = '$' + displayValue.toLocaleString();
+                    }
+                } else if (isPercentage) {
+                    displayValue = displayValue + '%';
+                } else if (isDays) {
+                    displayValue = displayValue + ' Days';
+                } else {
+                    displayValue = displayValue.toLocaleString();
+                }
+                
+                element.textContent = displayValue;
+            }, 20);
+        }
+        
+        // Track engagement
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('cta-button')) {
+                const buttonText = event.target.textContent.trim();
+                
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'case_study_cta_click', {
+                        'button_text': buttonText,
+                        'case_study': 'fortune_100_retailer',
+                        'event_category': 'case_studies'
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

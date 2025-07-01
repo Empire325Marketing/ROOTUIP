@@ -1,0 +1,174 @@
+{
+  "services": {
+    "critical_infrastructure": {
+      "name": "ROOTUIP Critical Infrastructure",
+      "description": "Database, Auth Service, API Gateway",
+      "escalation_policy": "critical_escalation",
+      "integration_key": "YOUR_INTEGRATION_KEY_1",
+      "alert_creation": "create_alerts_and_incidents",
+      "urgency": "high"
+    },
+    "ml_system": {
+      "name": "ROOTUIP ML System",
+      "description": "ML predictions and document processing",
+      "escalation_policy": "ml_escalation",
+      "integration_key": "YOUR_INTEGRATION_KEY_2",
+      "alert_creation": "create_alerts_and_incidents",
+      "urgency": "high"
+    },
+    "business_metrics": {
+      "name": "ROOTUIP Business Metrics",
+      "description": "Demo bookings, ROI calculator, user registration",
+      "escalation_policy": "business_escalation",
+      "integration_key": "YOUR_INTEGRATION_KEY_3",
+      "alert_creation": "create_incidents",
+      "urgency": "low"
+    }
+  },
+  "escalation_policies": {
+    "critical_escalation": {
+      "name": "Critical Infrastructure Escalation",
+      "description": "24/7 on-call for critical issues",
+      "teams": ["infrastructure"],
+      "rules": [
+        {
+          "escalation_delay_in_minutes": 0,
+          "targets": [
+            {
+              "type": "user",
+              "id": "PRIMARY_ONCALL_USER_ID"
+            }
+          ]
+        },
+        {
+          "escalation_delay_in_minutes": 15,
+          "targets": [
+            {
+              "type": "user",
+              "id": "SECONDARY_ONCALL_USER_ID"
+            }
+          ]
+        },
+        {
+          "escalation_delay_in_minutes": 30,
+          "targets": [
+            {
+              "type": "schedule",
+              "id": "MANAGER_SCHEDULE_ID"
+            }
+          ]
+        }
+      ]
+    },
+    "ml_escalation": {
+      "name": "ML System Escalation",
+      "description": "ML team escalation during business hours",
+      "teams": ["ml-team"],
+      "rules": [
+        {
+          "escalation_delay_in_minutes": 0,
+          "targets": [
+            {
+              "type": "schedule",
+              "id": "ML_TEAM_SCHEDULE_ID"
+            }
+          ]
+        },
+        {
+          "escalation_delay_in_minutes": 30,
+          "targets": [
+            {
+              "type": "user",
+              "id": "ML_LEAD_USER_ID"
+            }
+          ]
+        }
+      ]
+    },
+    "business_escalation": {
+      "name": "Business Metrics Escalation",
+      "description": "Business team notification",
+      "teams": ["business"],
+      "rules": [
+        {
+          "escalation_delay_in_minutes": 0,
+          "targets": [
+            {
+              "type": "user",
+              "id": "BUSINESS_ANALYST_USER_ID"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "schedules": {
+    "primary_oncall": {
+      "name": "Primary On-Call",
+      "time_zone": "America/New_York",
+      "layers": [
+        {
+          "name": "Weekly Rotation",
+          "start": "2024-01-01T09:00:00-05:00",
+          "rotation_virtual_start": "2024-01-01T09:00:00-05:00",
+          "rotation_turn_length_seconds": 604800,
+          "users": [
+            "USER_ID_1",
+            "USER_ID_2",
+            "USER_ID_3"
+          ]
+        }
+      ]
+    }
+  },
+  "incident_priorities": [
+    {
+      "name": "P1 - Critical",
+      "description": "Service down, data loss risk, security breach"
+    },
+    {
+      "name": "P2 - High",
+      "description": "Performance degradation, partial outage"
+    },
+    {
+      "name": "P3 - Medium",
+      "description": "Non-critical feature issues"
+    },
+    {
+      "name": "P4 - Low",
+      "description": "Minor issues, cosmetic problems"
+    }
+  ],
+  "response_plays": {
+    "database_outage": {
+      "name": "Database Outage Response",
+      "description": "Steps to handle PostgreSQL outages",
+      "team": "infrastructure",
+      "subscribers": ["infrastructure-team"],
+      "runnability": "services",
+      "conference_number": "+1-xxx-xxx-xxxx",
+      "conference_url": "https://meet.google.com/xxx-xxxx-xxx",
+      "tasks": [
+        "Check PostgreSQL service status",
+        "Review recent configuration changes",
+        "Check disk space and system resources",
+        "Attempt service restart if safe",
+        "Initiate failover if available",
+        "Communicate status to stakeholders"
+      ]
+    },
+    "ml_degradation": {
+      "name": "ML Service Degradation",
+      "description": "Handle ML prediction service issues",
+      "team": "ml-team",
+      "tasks": [
+        "Check ML service health endpoint",
+        "Review model loading status",
+        "Check GPU/CPU utilization",
+        "Verify model files integrity",
+        "Switch to fallback model if needed",
+        "Scale horizontally if load-related"
+      ]
+    }
+  }
+}
